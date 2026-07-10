@@ -3,564 +3,464 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP - Provider Registry</title>
+<title>WMPP — Provider Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    background: #F5F5F5;
-    color: #1A1A1A;
-    width: 1500px;
-    height: 1100px;
-    overflow: hidden;
-  }
+:root {
+  --navy: #002060;
+  --navy-dark: #001A45;
+  --navy-light: #1a4080;
+  --navy-tint: #e8edf5;
+  --gold: #f0a010;
+  --gold-light: #f5c050;
+  --gold-dark: #c08000;
+  --gold-tint: #fdf5e6;
+  --green: #2E8B2E;
+  --green-tint: #e8f5e8;
+  --yellow: #D4A017;
+  --yellow-tint: #fff9e6;
+  --red: #C0392B;
+  --red-tint: #fcebe9;
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --ink-2: #555555;
+  --ink-3: #999999;
+  --border: #e0e0e0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,32,96,0.1);
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 16px;
+}
+.dashboard { max-width: 1468px; margin: 0 auto; }
 
-  /* ===== HEADER ===== */
-  .header {
-    height: 80px;
-    background: linear-gradient(135deg, #002060 0%, #001A45 100%);
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-  .header-logo { display: flex; align-items: center; }
-  .header-logo img { height: 40px; }
-  .header-title {
-    color: #FFFFFF;
-    font-size: 22px;
-    font-weight: 700;
-    margin-left: 24px;
-    letter-spacing: 1.5px;
-  }
-  .nav-buttons {
-    display: flex;
-    gap: 0;
-    margin-left: auto;
-  }
-  .nav-btn {
-    background: transparent;
-    border: none;
-    color: #c0c0d0;
-    padding: 10px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover { color: #f5c050; }
-  .nav-btn.active {
-    color: #FFFFFF;
-    border-bottom: 3px solid #f0a010;
-  }
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  border-radius: var(--radius);
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: var(--shadow-lg);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-left img { height: 36px; }
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.nav { display: flex; gap: 4px; }
+.nav a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.nav a.active {
+  color: #fff;
+  border-bottom: 2px solid var(--gold);
+  border-radius: 0;
+}
 
-  /* ===== FILTER BAR ===== */
-  .filter-bar {
-    background: #FFFFFF;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    gap: 24px;
-    border-bottom: 1px solid #D0D0D0;
-  }
-  .filter-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .filter-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .search-box {
-    flex: 1;
-    padding: 8px 14px;
-    border: 1px solid #D0D0D0;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #1A1A1A;
-    background: #F5F5F5;
-  }
-  .search-box::placeholder { color: #999; }
-  .filter-select {
-    padding: 6px 12px;
-    border: 1px solid #D0D0D0;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #1A1A1A;
-    background: #FFFFFF;
-    cursor: pointer;
-    min-width: 200px;
-  }
+/* ── Filter Bar ── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 12px;
+}
+.search-input {
+  padding: 6px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--ink);
+  width: 220px;
+  outline: none;
+}
+.search-input:focus { border-color: var(--navy-light); }
+.filter-dropdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.filter-dropdown .label { color: var(--ink-3); font-weight: 400; }
+.filter-dropdown .value { color: var(--navy); }
+.filter-dropdown::after {
+  content: '▾';
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.filter-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.refresh-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
 
-  /* ===== MAIN CONTENT ===== */
-  .main {
-    padding: 20px 32px;
-    height: calc(1100px - 80px - 52px);
-    overflow: hidden;
-  }
+/* ── KPI Cards ── */
+.kpi-row-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.kpi-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.kpi-card.navy::before { background: var(--navy); }
+.kpi-card.gold::before { background: var(--gold); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.yellow::before { background: var(--yellow); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-card.navy-light::before { background: var(--navy-light); }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+}
 
-  /* ===== KPI ROW 1 ===== */
-  .kpi-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .kpi-card {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    border-left: 4px solid #002060;
-    padding: 14px 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .kpi-card.navy { border-left-color: #002060; }
-  .kpi-card.gold { border-left-color: #f0a010; }
-  .kpi-card.light-navy { border-left-color: #1a4080; }
-  .kpi-value {
-    font-size: 32px;
-    font-weight: 700;
-    color: #002060;
-    line-height: 1.2;
-  }
-  .kpi-card.gold .kpi-value { color: #c08000; }
-  .kpi-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #555555;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 4px;
-  }
+/* ── R-Tag Badge ── */
+.rtag-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
 
-  /* ===== KPI ROW 2 ===== */
-  .kpi-row-2 {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .kpi-card-2 {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    border-left: 4px solid #1a4080;
-    padding: 14px 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .kpi-card-2 .kpi-value { color: #002060; }
+/* ── Charts ── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.chart-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chart-title .meta { font-size: 11px; font-weight: 400; color: var(--ink-3); }
 
-  /* ===== KPI ROW 3 (R-tags) ===== */
-  .kpi-row-rtag {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .kpi-card-rtag {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    border-left: 4px solid #f0a010;
-    padding: 14px 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .kpi-card-rtag.red-border { border-left-color: #C0392B; }
-  .kpi-card-rtag.yellow-border { border-left-color: #D4A017; }
-  .kpi-card-rtag.navy-border { border-left-color: #002060; }
-  .kpi-card-rtag .kpi-value { color: #002060; }
-  .kpi-card-rtag.red-border .kpi-value { color: #C0392B; }
-  .kpi-card-rtag.yellow-border .kpi-value { color: #D4A017; }
-  .r-tag {
-    display: inline-block;
-    background: #f0a010;
-    color: #002060;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
+/* Bar Chart */
+.bar-chart { display: flex; flex-direction: column; gap: 8px; }
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-label { width: 140px; font-size: 12px; color: var(--ink-2); text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 20px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 600; color: #fff; transition: width 0.3s; }
+.bar-fill.navy { background: var(--navy); }
 
-  /* ===== CHARTS ROW ===== */
-  .charts-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .chart-panel {
-    background: #FFFFFF;
-    border-radius: 6px;
-    padding: 20px 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .chart-left { flex: 0 0 450px; }
-  .chart-right { flex: 1; }
-  .panel-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #002060;
-    margin-bottom: 16px;
-  }
+/* Table */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  background: var(--navy);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 8px 12px;
+  text-align: left;
+}
+.data-table th:first-child { border-radius: 4px 0 0 0; }
+.data-table th:last-child { border-radius: 0 4px 0 0; }
+.data-table td {
+  padding: 8px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+}
+.data-table tr:nth-child(even) td { background: #fafafa; }
+.data-table tr:hover td { background: var(--navy-tint); }
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+}
+.status-active { background: var(--green-tint); color: var(--green); }
+.status-offer { background: var(--gold-tint); color: var(--gold-dark); }
+.status-awaiting { background: var(--yellow-tint); color: var(--yellow); }
+.status-closed { background: var(--red-tint); color: var(--red); }
+.qa-flag {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.qa-none { color: var(--ink-3); }
 
-  /* Bar chart */
-  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
-  .bar-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .bar-label {
-    width: 120px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-    text-align: right;
-  }
-  .bar-track {
-    flex: 1;
-    height: 24px;
-    background: #F5F5F5;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .bar-fill {
-    height: 100%;
-    background: #002060;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #FFFFFF;
-  }
-  .bar-fill.gold { background: #f0a010; color: #002060; }
-  .bar-fill.light-navy { background: #1a4080; }
+/* QA Mini Cards */
+.qa-mini-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.qa-mini-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  border-top: 3px solid;
+}
+.qa-mini-card.red { border-top-color: var(--red); }
+.qa-mini-card.yellow { border-top-color: var(--yellow); }
+.qa-mini-card.navy { border-top-color: var(--navy); }
+.qa-mini-card.green { border-top-color: var(--green); }
+.qa-mini-card .qa-num { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.qa-mini-card .qa-label { font-size: 11px; color: var(--ink-2); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
 
-  /* Table */
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12px;
-  }
-  .data-table thead th {
-    background: #002060;
-    color: #FFFFFF;
-    padding: 10px 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .data-table tbody td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #E0E0E0;
-    color: #1A1A1A;
-  }
-  .data-table tbody tr:hover { background: #F5F5F5; }
-  .status-badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
-  .status-badge.active { background: #e8f5e8; color: #2E8B2E; border: 1px solid #2E8B2E; }
-  .status-badge.review { background: #fff5e0; color: #D4A017; border: 1px solid #D4A017; }
-  .status-badge.flagged { background: #fce8e8; color: #C0392B; border: 1px solid #C0392B; }
-  .status-badge.pending { background: #e0e8f5; color: #002060; border: 1px solid #002060; }
-  .qa-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #C0392B;
-    margin-right: 6px;
-    vertical-align: middle;
-  }
+/* Full width row */
+.full-row { margin-top: 12px; }
 
-  /* ===== QA FLAG BREAKDOWN ===== */
-  .qa-section {
-    background: #FFFFFF;
-    border-radius: 6px;
-    padding: 16px 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .qa-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #002060;
-    margin-bottom: 12px;
-  }
-  .qa-title .r-tag { font-size: 10px; }
-  .qa-cards {
-    display: flex;
-    gap: 16px;
-  }
-  .qa-card {
-    flex: 1;
-    background: #F5F5F5;
-    border-radius: 6px;
-    padding: 12px 16px;
-    text-align: center;
-  }
-  .qa-card-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 6px;
-    vertical-align: middle;
-  }
-  .qa-card-dot.red { background: #C0392B; }
-  .qa-card-dot.yellow { background: #D4A017; }
-  .qa-card-dot.navy { background: #002060; }
-  .qa-card-dot.gold { background: #f0a010; }
-  .qa-card-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .qa-card-value {
-    font-size: 26px;
-    font-weight: 700;
-    color: #002060;
-    margin-top: 4px;
-  }
+@media (max-width: 768px) {
+  .kpi-row-4 { grid-template-columns: repeat(2, 1fr); }
+  .kpi-row-3 { grid-template-columns: repeat(1, 1fr); }
+  .qa-mini-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<div class="dashboard">
 
-<!-- ===== HEADER ===== -->
+<!-- Header -->
 <div class="header">
-  <div class="header-logo">
-    <img src="bct_logo.png" height="40" alt="BCT Logo">
+  <div class="header-left">
+    <img src="bct_logo.png" alt="BCT">
+    <h1>PROVIDER REGISTRY</h1>
   </div>
-  <div class="header-title">PROVIDER REGISTRY</div>
-  <div class="nav-buttons">
-    <button class="nav-btn">Dashboard</button>
-    <button class="nav-btn">Draft Offers</button>
-    <button class="nav-btn active">Provider Registry</button>
-    <button class="nav-btn">Placements</button>
-    <button class="nav-btn">Reports</button>
-    <button class="nav-btn">Admin</button>
+  <nav class="nav">
+    <a href="referrals.html">Referrals</a>
+    <a href="offers_overview.html">Offers</a>
+    <a href="ipa_overview.html">IPA</a>
+    <a href="draft_offers.html">Drafts</a>
+    <a href="provider_registry.html" class="active">Providers</a>
+  </nav>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <input type="text" class="search-input" placeholder="Search providers...">
+  <div class="filter-dropdown"><span class="label">Service:</span> <span class="value">All Types</span></div>
+  <div class="filter-dropdown"><span class="label">Status:</span> <span class="value">All</span></div>
+  <div class="filter-dropdown"><span class="label">QA:</span> <span class="value">All</span></div>
+  <span class="filter-count">42 providers</span>
+  <button class="refresh-btn">↻ Refresh</button>
+</div>
+
+<!-- KPI Row 1 -->
+<div class="kpi-row-4">
+  <div class="kpi-card navy">
+    <div class="kpi-label">Providers</div>
+    <div class="kpi-value">42</div>
+    <div class="kpi-sub">Total registered</div>
+  </div>
+  <div class="kpi-card navy">
+    <div class="kpi-label">Homes</div>
+    <div class="kpi-value">128</div>
+    <div class="kpi-sub">Across all providers</div>
+  </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">Fostering</div>
+    <div class="kpi-value">12</div>
+    <div class="kpi-sub">Fostering providers</div>
+  </div>
+  <div class="kpi-card navy-light">
+    <div class="kpi-label">Residential</div>
+    <div class="kpi-value">45</div>
+    <div class="kpi-sub">Residential homes</div>
   </div>
 </div>
 
-<!-- ===== FILTER BAR ===== -->
-<div class="filter-bar">
-  <div class="filter-item" style="flex:1;">
-    <input type="text" class="search-box" placeholder="Search providers...">
+<!-- KPI Row 2 -->
+<div class="kpi-row-3">
+  <div class="kpi-card green">
+    <div class="kpi-label">Supported Accom.</div>
+    <div class="kpi-value">35</div>
+    <div class="kpi-sub">Supported living homes</div>
   </div>
-  <div class="filter-item">
-    <span class="filter-label">Service Type:</span>
-    <select class="filter-select">
-      <option>All Service Types</option>
-      <option>Fostering</option>
-      <option>Residential</option>
-      <option>Supported Accommodation</option>
-      <option>Framework</option>
-      <option>Non-Framework</option>
-    </select>
+  <div class="kpi-card navy">
+    <div class="kpi-label">Framework</div>
+    <div class="kpi-value">38</div>
+    <div class="kpi-sub">On framework agreement</div>
+  </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">Non-Framework</div>
+    <div class="kpi-value">4</div>
+    <div class="kpi-sub">Spot purchase only</div>
   </div>
 </div>
 
-<!-- ===== MAIN CONTENT ===== -->
-<div class="main">
+<!-- KPI Row 3 (R-Tag) -->
+<div class="kpi-row-4">
+  <div class="kpi-card red">
+    <div class="rtag-badge">R41</div>
+    <div class="kpi-label">QA Flagged</div>
+    <div class="kpi-value">5</div>
+    <div class="kpi-sub">Requires attention</div>
+  </div>
+  <div class="kpi-card yellow">
+    <div class="rtag-badge">R49</div>
+    <div class="kpi-label">Due Diligence</div>
+    <div class="kpi-value">8</div>
+    <div class="kpi-sub">In progress</div>
+  </div>
+  <div class="kpi-card navy">
+    <div class="rtag-badge">R59</div>
+    <div class="kpi-label">Onboarding</div>
+    <div class="kpi-value">12</div>
+    <div class="kpi-sub">New providers</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="rtag-badge">R47</div>
+    <div class="kpi-label">Docs Expired</div>
+    <div class="kpi-value">7</div>
+    <div class="kpi-sub">Compliance lapse</div>
+  </div>
+</div>
 
-  <!-- KPI ROW 1 -->
-  <div class="kpi-row">
-    <div class="kpi-card navy">
-      <div class="kpi-value">42</div>
-      <div class="kpi-label">Providers</div>
-    </div>
-    <div class="kpi-card navy">
-      <div class="kpi-value">128</div>
-      <div class="kpi-label">Homes</div>
-    </div>
-    <div class="kpi-card gold">
-      <div class="kpi-value">12</div>
-      <div class="kpi-label">Fostering</div>
-    </div>
-    <div class="kpi-card light-navy">
-      <div class="kpi-value">45</div>
-      <div class="kpi-label">Residential</div>
+<!-- Charts Row -->
+<div class="chart-row">
+  <div class="chart-card">
+    <div class="chart-title">Providers by Service Type <span class="meta">42 total</span></div>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-label">Residential</div><div class="bar-track"><div class="bar-fill navy" style="width:100%;">18</div></div></div>
+      <div class="bar-row"><div class="bar-label">Fostering</div><div class="bar-track"><div class="bar-fill navy" style="width:67%;">12</div></div></div>
+      <div class="bar-row"><div class="bar-label">Supported Accom.</div><div class="bar-track"><div class="bar-fill navy" style="width:50%;">9</div></div></div>
+      <div class="bar-row"><div class="bar-label">Semi-Independent</div><div class="bar-track"><div class="bar-fill navy" style="width:17%;">3</div></div></div>
     </div>
   </div>
-
-  <!-- KPI ROW 2 -->
-  <div class="kpi-row-2">
-    <div class="kpi-card-2">
-      <div class="kpi-value">35</div>
-      <div class="kpi-label">Supported Accommodation</div>
-    </div>
-    <div class="kpi-card-2">
-      <div class="kpi-value">38</div>
-      <div class="kpi-label">Framework</div>
-    </div>
-    <div class="kpi-card-2">
-      <div class="kpi-value">4</div>
-      <div class="kpi-label">Non-Framework</div>
-    </div>
+  <div class="chart-card">
+    <div class="chart-title">Provider Directory <span class="meta">8 of 42 shown</span></div>
+    <table class="data-table">
+      <thead>
+        <tr><th>Provider</th><th>Status</th><th>Service</th><th>Homes</th><th>QA</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Bluebird Care</td><td><span class="status-badge status-active">Active</span></td><td>Residential</td><td>8</td><td><span class="qa-none">—</span></td></tr>
+        <tr><td>Safe Havens Ltd</td><td><span class="status-badge status-active">Active</span></td><td>Fostering</td><td>5</td><td><span class="qa-flag"></span></td></tr>
+        <tr><td>Horizon Homes</td><td><span class="status-badge status-offer">Review</span></td><td>Supported</td><td>6</td><td><span class="qa-flag"></span></td></tr>
+        <tr><td>Pioneer Fostering</td><td><span class="status-badge status-active">Active</span></td><td>Fostering</td><td>4</td><td><span class="qa-none">—</span></td></tr>
+        <tr><td>Greenfield Residential</td><td><span class="status-badge status-awaiting">Onboarding</span></td><td>Residential</td><td>3</td><td><span class="qa-flag"></span></td></tr>
+        <tr><td>Anchor Support</td><td><span class="status-badge status-active">Active</span></td><td>Supported</td><td>7</td><td><span class="qa-none">—</span></td></tr>
+        <tr><td>Cedar Park Homes</td><td><span class="status-badge status-closed">Suspended</span></td><td>Residential</td><td>2</td><td><span class="qa-flag"></span></td></tr>
+        <tr><td>Riverside Fostering</td><td><span class="status-badge status-active">Active</span></td><td>Fostering</td><td>3</td><td><span class="qa-none">—</span></td></tr>
+      </tbody>
+    </table>
   </div>
+</div>
 
-  <!-- KPI ROW 3 (R-tags) -->
-  <div class="kpi-row-rtag">
-    <div class="kpi-card-rtag red-border">
-      <div class="kpi-value">5 <span class="r-tag">R41</span></div>
-      <div class="kpi-label">QA Flagged</div>
-    </div>
-    <div class="kpi-card-rtag yellow-border">
-      <div class="kpi-value">8 <span class="r-tag">R49</span></div>
-      <div class="kpi-label">Due Diligence</div>
-    </div>
-    <div class="kpi-card-rtag navy-border">
-      <div class="kpi-value">12 <span class="r-tag">R59</span></div>
-      <div class="kpi-label">Onboarding</div>
-    </div>
-    <div class="kpi-card-rtag red-border">
-      <div class="kpi-value">7 <span class="r-tag">R47</span></div>
-      <div class="kpi-label">Docs Expired</div>
-    </div>
+<!-- QA Flag Type Breakdown -->
+<div class="qa-mini-row">
+  <div class="qa-mini-card red">
+    <div class="qa-num">2</div>
+    <div class="qa-label">Safeguarding</div>
   </div>
-
-  <!-- CHARTS ROW -->
-  <div class="charts-row">
-    <!-- LEFT: Bar Chart -->
-    <div class="chart-panel chart-left">
-      <div class="panel-title">Providers by Service Type</div>
-      <div class="bar-chart">
-        <div class="bar-row">
-          <div class="bar-label">Residential</div>
-          <div class="bar-track"><div class="bar-fill" style="width: 100%;">45</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Supported Acc</div>
-          <div class="bar-track"><div class="bar-fill light-navy" style="width: 78%;">35</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Framework</div>
-          <div class="bar-track"><div class="bar-fill" style="width: 84%;">38</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Fostering</div>
-          <div class="bar-track"><div class="bar-fill gold" style="width: 27%;">12</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bar-label">Non-Framework</div>
-          <div class="bar-track"><div class="bar-fill light-navy" style="width: 9%;">4</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Provider Directory Table -->
-    <div class="chart-panel chart-right">
-      <div class="panel-title">Provider Directory</div>
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Provider</th>
-            <th>Service Type</th>
-            <th>Homes</th>
-            <th>Status</th>
-            <th>QA</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="qa-dot"></span>Bluecorn Homes Ltd</td>
-            <td>Residential</td>
-            <td>8</td>
-            <td><span class="status-badge flagged">Flagged</span></td>
-            <td>QA-01</td>
-          </tr>
-          <tr>
-            <td>Care Pathways UK</td>
-            <td>Supported Acc</td>
-            <td>5</td>
-            <td><span class="status-badge active">Active</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td><span class="qa-dot"></span>Haven Care Group</td>
-            <td>Fostering</td>
-            <td>3</td>
-            <td><span class="status-badge review">Review</span></td>
-            <td>QA-02</td>
-          </tr>
-          <tr>
-            <td>Premium Foster Services</td>
-            <td>Fostering</td>
-            <td>4</td>
-            <td><span class="status-badge active">Active</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td><span class="qa-dot"></span>Sunrise Residential</td>
-            <td>Residential</td>
-            <td>6</td>
-            <td><span class="status-badge flagged">Flagged</span></td>
-            <td>QA-03</td>
-          </tr>
-          <tr>
-            <td>Thames Support Ltd</td>
-            <td>Supported Acc</td>
-            <td>7</td>
-            <td><span class="status-badge pending">Onboarding</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td>Unity Care Partners</td>
-            <td>Residential</td>
-            <td>5</td>
-            <td><span class="status-badge active">Active</span></td>
-            <td>—</td>
-          </tr>
-          <tr>
-            <td><span class="qa-dot"></span>Vanguard Fostering</td>
-            <td>Fostering</td>
-            <td>2</td>
-            <td><span class="status-badge review">Review</span></td>
-            <td>QA-04</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="qa-mini-card yellow">
+    <div class="qa-num">1</div>
+    <div class="qa-label">Compliance</div>
   </div>
-
-  <!-- QA FLAG TYPE BREAKDOWN -->
-  <div class="qa-section">
-    <div class="qa-title">QA Flag Type Breakdown <span class="r-tag">R41</span></div>
-    <div class="qa-cards">
-      <div class="qa-card">
-        <div class="qa-card-label"><span class="qa-card-dot red"></span>General</div>
-        <div class="qa-card-value">3</div>
-      </div>
-      <div class="qa-card">
-        <div class="qa-card-label"><span class="qa-card-dot yellow"></span>Fostering Spot</div>
-        <div class="qa-card-value">1</div>
-      </div>
-      <div class="qa-card">
-        <div class="qa-card-label"><span class="qa-card-dot gold"></span>Supported Acc</div>
-        <div class="qa-card-value">2</div>
-      </div>
-      <div class="qa-card">
-        <div class="qa-card-label"><span class="qa-card-dot navy"></span>Residential</div>
-        <div class="qa-card-value">1</div>
-      </div>
-    </div>
+  <div class="qa-mini-card navy">
+    <div class="qa-num">1</div>
+    <div class="qa-label">Quality Concern</div>
   </div>
+  <div class="qa-mini-card green">
+    <div class="qa-num">1</div>
+    <div class="qa-label">Resolved</div>
+  </div>
+</div>
 
 </div>
 </body>

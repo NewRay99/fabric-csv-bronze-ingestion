@@ -3,470 +3,416 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP - Draft Offers</title>
+<title>WMPP — Draft Offers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-    background: #F5F5F5;
-    color: #1A1A1A;
-    width: 1500px;
-    height: 1100px;
-    overflow: hidden;
-  }
+:root {
+  --navy: #002060;
+  --navy-dark: #001A45;
+  --navy-light: #1a4080;
+  --navy-tint: #e8edf5;
+  --gold: #f0a010;
+  --gold-light: #f5c050;
+  --gold-dark: #c08000;
+  --gold-tint: #fdf5e6;
+  --green: #2E8B2E;
+  --green-tint: #e8f5e8;
+  --yellow: #D4A017;
+  --yellow-tint: #fff9e6;
+  --red: #C0392B;
+  --red-tint: #fcebe9;
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --ink-2: #555555;
+  --ink-3: #999999;
+  --border: #e0e0e0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,32,96,0.1);
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 16px;
+}
+.dashboard { max-width: 1468px; margin: 0 auto; }
 
-  /* ===== HEADER ===== */
-  .header {
-    height: 80px;
-    background: linear-gradient(135deg, #002060 0%, #001A45 100%);
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-  .header-logo { display: flex; align-items: center; }
-  .header-logo img { height: 40px; }
-  .header-title {
-    color: #FFFFFF;
-    font-size: 22px;
-    font-weight: 700;
-    margin-left: 24px;
-    letter-spacing: 1.5px;
-  }
-  .nav-buttons {
-    display: flex;
-    gap: 0;
-    margin-left: auto;
-  }
-  .nav-btn {
-    background: transparent;
-    border: none;
-    color: #c0c0d0;
-    padding: 10px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s;
-  }
-  .nav-btn:hover { color: #f5c050; }
-  .nav-btn.active {
-    color: #FFFFFF;
-    border-bottom: 3px solid #f0a010;
-  }
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  border-radius: var(--radius);
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: var(--shadow-lg);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-left img { height: 36px; }
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.nav { display: flex; gap: 4px; }
+.nav a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.nav a.active {
+  color: #fff;
+  border-bottom: 2px solid var(--gold);
+  border-radius: 0;
+}
 
-  /* ===== FILTER BAR ===== */
-  .filter-bar {
-    background: #FFFFFF;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    padding: 0 32px;
-    gap: 24px;
-    border-bottom: 1px solid #D0D0D0;
-  }
-  .filter-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .filter-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .filter-select {
-    padding: 6px 12px;
-    border: 1px solid #D0D0D0;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #1A1A1A;
-    background: #FFFFFF;
-    cursor: pointer;
-  }
-  .filter-date {
-    padding: 6px 12px;
-    border: 1px solid #D0D0D0;
-    border-radius: 4px;
-    font-size: 13px;
-    color: #1A1A1A;
-  }
+/* ── Filter Bar ── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 12px;
+}
+.filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.filter-pill .label { color: var(--ink-3); font-weight: 400; }
+.filter-pill .value { color: var(--navy); }
+.filter-pill::after {
+  content: '▾';
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.filter-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.refresh-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
 
-  /* ===== MAIN CONTENT ===== */
-  .main {
-    padding: 20px 32px;
-    height: calc(1100px - 80px - 52px);
-    overflow: hidden;
-  }
+/* ── KPI Cards ── */
+.kpi-row-6 {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.kpi-row-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.kpi-card.navy::before { background: var(--navy); }
+.kpi-card.gold::before { background: var(--gold); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.yellow::before { background: var(--yellow); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-card.navy-light::before { background: var(--navy-light); }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.kpi-sub .up { color: var(--green); }
+.kpi-sub .down { color: var(--red); }
 
-  /* ===== KPI ROW 1 ===== */
-  .kpi-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .kpi-card {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    border-left: 4px solid #002060;
-    padding: 14px 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-  }
-  .kpi-card.yellow { border-left-color: #D4A017; }
-  .kpi-card.red { border-left-color: #C0392B; }
-  .kpi-card.green { border-left-color: #2E8B2E; }
-  .kpi-card.navy { border-left-color: #002060; }
-  .kpi-card.gold { border-left-color: #f0a010; }
-  .kpi-value {
-    font-size: 32px;
-    font-weight: 700;
-    color: #002060;
-    line-height: 1.2;
-  }
-  .kpi-card.red .kpi-value { color: #C0392B; }
-  .kpi-card.green .kpi-value { color: #2E8B2E; }
-  .kpi-card.yellow .kpi-value { color: #D4A017; }
-  .kpi-card.gold .kpi-value { color: #c08000; }
-  .kpi-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #555555;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 4px;
-  }
+/* ── R-Tag Badge ── */
+.rtag-badge {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--navy);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
 
-  /* ===== KPI ROW 2 (R-tag) ===== */
-  .kpi-row-rtag {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-  .kpi-card-rtag {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    border-left: 4px solid #f0a010;
-    padding: 14px 18px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    position: relative;
-  }
-  .kpi-card-rtag .kpi-value { color: #002060; }
-  .r-tag {
-    display: inline-block;
-    background: #f0a010;
-    color: #002060;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-    vertical-align: middle;
-  }
+/* ── Charts ── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.chart-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chart-title .meta { font-size: 11px; font-weight: 400; color: var(--ink-3); }
 
-  /* ===== CHART SECTION ===== */
-  .chart-section {
-    background: #FFFFFF;
-    border-radius: 6px;
-    padding: 20px 24px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    margin-bottom: 16px;
-  }
-  .chart-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #002060;
-    margin-bottom: 16px;
-  }
-  .chart-container {
-    position: relative;
-    height: 260px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    border-bottom: 2px solid #D0D0D0;
-    padding: 0 40px;
-  }
-  .bar-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 120px;
-  }
-  .bar {
-    width: 80px;
-    border-radius: 4px 4px 0 0;
-    position: relative;
-    transition: opacity 0.2s;
-  }
-  .bar.green { background: #2E8B2E; }
-  .bar.yellow { background: #D4A017; }
-  .bar.gold { background: #f0a010; }
-  .bar.red { background: #C0392B; }
-  .bar-value {
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 18px;
-    font-weight: 700;
-    color: #1A1A1A;
-  }
-  .bar-label {
-    margin-top: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555555;
-  }
-  /* Gridlines */
-  .gridline {
-    position: absolute;
-    left: 40px;
-    right: 40px;
-    border-top: 1px dashed #D0D0D0;
-    width: calc(100% - 80px);
-  }
-  .y-axis-label {
-    position: absolute;
-    left: 0;
-    font-size: 10px;
-    color: #999;
-  }
+/* Clustered Column Chart */
+.cluster-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  height: 200px;
+  padding: 0 8px 0 40px;
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.cluster-grid { position: absolute; left: 40px; right: 0; top: 0; bottom: 0; }
+.cluster-grid div {
+  border-top: 1px dashed var(--border);
+  height: 25%;
+}
+.cluster-group { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 4px; }
+.cluster-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.cluster-bar {
+  width: 56px;
+  border-radius: 3px 3px 0 0;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.cluster-bar:hover { opacity: 0.85; }
+.cluster-bar.green { background: var(--green); }
+.cluster-bar.yellow { background: var(--yellow); }
+.cluster-bar.gold { background: var(--gold); color: var(--navy); }
+.cluster-bar.red { background: var(--red); }
+.cluster-label { font-size: 11px; color: var(--ink-3); }
+.cluster-axis { position: absolute; left: 0; top: 0; bottom: 0; width: 36px; }
+.cluster-axis div { font-size: 9px; color: var(--ink-3); text-align: right; height: 25%; display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 4px; }
 
-  /* Chart legend */
-  .chart-legend {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 12px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    color: #555555;
-  }
-  .legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 2px;
-  }
-  .legend-dot.green { background: #2E8B2E; }
-  .legend-dot.yellow { background: #D4A017; }
-  .legend-dot.gold { background: #f0a010; }
-  .legend-dot.red { background: #C0392B; }
+/* Summary box */
+.summary-box {
+  background: var(--navy-tint);
+  border-left: 3px solid var(--navy);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.summary-box strong { color: var(--navy); }
 
-  /* ===== TEXT BOX ===== */
-  .summary-box {
-    background: #002060;
-    color: #FFFFFF;
-    border-radius: 6px;
-    padding: 14px 24px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    font-weight: 600;
-    text-align: center;
-    border-left: 4px solid #f0a010;
-  }
+/* Full width row */
+.full-row { margin-top: 12px; }
 
-  /* ===== AGE BAND LEGEND CARDS ===== */
-  .age-band-row {
-    display: flex;
-    gap: 16px;
-  }
-  .age-band-card {
-    flex: 1;
-    background: #FFFFFF;
-    border-radius: 6px;
-    padding: 12px 16px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    text-align: center;
-    border-top: 4px solid;
-  }
-  .age-band-card.green { border-top-color: #2E8B2E; }
-  .age-band-card.yellow { border-top-color: #D4A017; }
-  .age-band-card.gold { border-top-color: #f0a010; }
-  .age-band-card.red { border-top-color: #C0392B; }
-  .age-band-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #002060;
-  }
-  .age-band-range {
-    font-size: 11px;
-    color: #555555;
-    margin-top: 2px;
-  }
-  .age-band-count {
-    font-size: 22px;
-    font-weight: 700;
-    margin-top: 4px;
-  }
-  .age-band-card.green .age-band-count { color: #2E8B2E; }
-  .age-band-card.yellow .age-band-count { color: #D4A017; }
-  .age-band-card.gold .age-band-count { color: #c08000; }
-  .age-band-card.red .age-band-count { color: #C0392B; }
+@media (max-width: 768px) {
+  .kpi-row-6 { grid-template-columns: repeat(2, 1fr); }
+  .kpi-row-3 { grid-template-columns: repeat(1, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<div class="dashboard">
 
-<!-- ===== HEADER ===== -->
+<!-- Header -->
 <div class="header">
-  <div class="header-logo">
-    <img src="bct_logo.png" height="40" alt="BCT Logo">
+  <div class="header-left">
+    <img src="bct_logo.png" alt="BCT">
+    <h1>DRAFT OFFERS</h1>
   </div>
-  <div class="header-title">DRAFT OFFERS</div>
-  <div class="nav-buttons">
-    <button class="nav-btn">Dashboard</button>
-    <button class="nav-btn active">Draft Offers</button>
-    <button class="nav-btn">Provider Registry</button>
-    <button class="nav-btn">Placements</button>
-    <button class="nav-btn">Reports</button>
-    <button class="nav-btn">Admin</button>
+  <nav class="nav">
+    <a href="referrals.html">Referrals</a>
+    <a href="offers_overview.html">Offers</a>
+    <a href="ipa_overview.html">IPA</a>
+    <a href="draft_offers.html" class="active">Drafts</a>
+    <a href="provider_registry.html">Providers</a>
+  </nav>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <div class="filter-pill"><span class="label">Date:</span> <span class="value">01 Jan – 30 Apr 2025</span></div>
+  <div class="filter-pill"><span class="label">Age:</span> <span class="value">All</span></div>
+  <div class="filter-pill"><span class="label">Activity:</span> <span class="value">All</span></div>
+  <div class="filter-pill"><span class="label">Provider:</span> <span class="value">All</span></div>
+  <span class="filter-count">166 draft offers</span>
+  <button class="refresh-btn">↻ Refresh</button>
+</div>
+
+<!-- KPI Row 1 -->
+<div class="kpi-row-6">
+  <div class="kpi-card yellow">
+    <div class="kpi-label">Draft</div>
+    <div class="kpi-value">166</div>
+    <div class="kpi-sub">Total drafts</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">No Activity</div>
+    <div class="kpi-value">165</div>
+    <div class="kpi-sub">99.4% of drafts</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-label">With Activity</div>
+    <div class="kpi-value">1</div>
+    <div class="kpi-sub">0.6% of drafts</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">14+ Days</div>
+    <div class="kpi-value">114</div>
+    <div class="kpi-sub">68.7% stale</div>
+  </div>
+  <div class="kpi-card navy">
+    <div class="kpi-label">Avg Days</div>
+    <div class="kpi-value">23</div>
+    <div class="kpi-sub">Since last update</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">No Activity %</div>
+    <div class="kpi-value">99%</div>
+    <div class="kpi-sub"><span class="down">▼ critical</span></div>
   </div>
 </div>
 
-<!-- ===== FILTER BAR ===== -->
-<div class="filter-bar">
-  <div class="filter-item">
-    <span class="filter-label">Date:</span>
-    <input type="date" class="filter-date" value="2026-07-10">
+<!-- KPI Row 2 (R-Tag) -->
+<div class="kpi-row-3">
+  <div class="kpi-card red">
+    <div class="rtag-badge">R24</div>
+    <div class="kpi-label">Missing Dates</div>
+    <div class="kpi-value">8</div>
+    <div class="kpi-sub">Drafts without timestamps</div>
   </div>
-  <div class="filter-item">
-    <span class="filter-label">Placement Type:</span>
-    <select class="filter-select">
-      <option>All Placement Types</option>
-      <option>Fostering</option>
-      <option>Residential</option>
-      <option>Supported Accommodation</option>
-    </select>
+  <div class="kpi-card gold">
+    <div class="rtag-badge">R24</div>
+    <div class="kpi-label">Updated</div>
+    <div class="kpi-value">3</div>
+    <div class="kpi-sub">Modified this period</div>
   </div>
-  <div class="filter-item">
-    <span class="filter-label">Status:</span>
-    <select class="filter-select">
-      <option>All Statuses</option>
-      <option>Draft</option>
-      <option>Submitted</option>
-    </select>
+  <div class="kpi-card navy-light">
+    <div class="rtag-badge">R24</div>
+    <div class="kpi-label">Oldest</div>
+    <div class="kpi-value">67</div>
+    <div class="kpi-sub">Days since creation</div>
   </div>
 </div>
 
-<!-- ===== MAIN CONTENT ===== -->
-<div class="main">
-
-  <!-- KPI ROW 1 -->
-  <div class="kpi-row">
-    <div class="kpi-card yellow">
-      <div class="kpi-value">166</div>
-      <div class="kpi-label">Draft Count</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-value">165</div>
-      <div class="kpi-label">No Activity</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-value">1</div>
-      <div class="kpi-label">With Activity</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-value">114</div>
-      <div class="kpi-label">14+ Days</div>
-    </div>
-    <div class="kpi-card navy">
-      <div class="kpi-value">23</div>
-      <div class="kpi-label">Avg Days</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="kpi-value">99%</div>
-      <div class="kpi-label">No Activity %</div>
-    </div>
-  </div>
-
-  <!-- KPI ROW 2 (with R-tags) -->
-  <div class="kpi-row-rtag">
-    <div class="kpi-card-rtag">
-      <div class="kpi-value">8 <span class="r-tag">R24</span></div>
-      <div class="kpi-label">Missing Dates</div>
-    </div>
-    <div class="kpi-card-rtag">
-      <div class="kpi-value">3 <span class="r-tag">R24</span></div>
-      <div class="kpi-label">Updated</div>
-    </div>
-    <div class="kpi-card-rtag">
-      <div class="kpi-value">67 days <span class="r-tag">R24</span></div>
-      <div class="kpi-label">Oldest Draft</div>
-    </div>
-  </div>
-
-  <!-- CHART -->
-  <div class="chart-section">
-    <div class="chart-title">Age Distribution of Draft Offers</div>
-    <div class="chart-container">
-      <!-- Gridlines -->
-      <div class="gridline" style="bottom: 200px;"><span class="y-axis-label">80</span></div>
-      <div class="gridline" style="bottom: 150px;"><span class="y-axis-label">60</span></div>
-      <div class="gridline" style="bottom: 100px;"><span class="y-axis-label">40</span></div>
-      <div class="gridline" style="bottom: 50px;"><span class="y-axis-label">20</span></div>
-      <div class="gridline" style="bottom: 0;"><span class="y-axis-label">0</span></div>
-
-      <!-- Bars -->
-      <div class="bar-group">
-        <div class="bar green" style="height: 63px;"><span class="bar-value">25</span></div>
-        <div class="bar-label">0-7 days</div>
+<!-- Charts Row -->
+<div class="chart-row">
+  <div class="chart-card">
+    <div class="chart-title">Draft Age Distribution <span class="meta">166 total</span></div>
+    <div class="cluster-chart">
+      <div class="cluster-grid"><div></div><div></div><div></div><div></div></div>
+      <div class="cluster-axis"><div>80</div><div>60</div><div>40</div><div>20</div></div>
+      <div class="cluster-group">
+        <div class="cluster-bar-wrap">
+          <div class="cluster-bar green" style="height:31%;">25</div>
+        </div>
+        <div class="cluster-label">0–7d</div>
       </div>
-      <div class="bar-group">
-        <div class="bar yellow" style="height: 55px;"><span class="bar-value">22</span></div>
-        <div class="bar-label">8-14 days</div>
+      <div class="cluster-group">
+        <div class="cluster-bar-wrap">
+          <div class="cluster-bar yellow" style="height:28%;">22</div>
+        </div>
+        <div class="cluster-label">8–14d</div>
       </div>
-      <div class="bar-group">
-        <div class="bar gold" style="height: 113px;"><span class="bar-value">45</span></div>
-        <div class="bar-label">15-30 days</div>
+      <div class="cluster-group">
+        <div class="cluster-bar-wrap">
+          <div class="cluster-bar gold" style="height:56%;">45</div>
+        </div>
+        <div class="cluster-label">15–30d</div>
       </div>
-      <div class="bar-group">
-        <div class="bar red" style="height: 185px;"><span class="bar-value">74</span></div>
-        <div class="bar-label">30+ days</div>
+      <div class="cluster-group">
+        <div class="cluster-bar-wrap">
+          <div class="cluster-bar red" style="height:93%;">74</div>
+        </div>
+        <div class="cluster-label">30+d</div>
       </div>
     </div>
-    <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot green"></div> Healthy Pipeline</div>
-      <div class="legend-item"><div class="legend-dot yellow"></div> At Risk</div>
-      <div class="legend-item"><div class="legend-dot gold"></div> Outside Timeframe</div>
-      <div class="legend-item"><div class="legend-dot red"></div> Critical Pipeline</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;">
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--green);border-radius:2px;"></span> Healthy Pipeline</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--yellow);border-radius:2px;"></span> At Risk</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--gold);border-radius:2px;"></span> Outside Timeframe</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--red);border-radius:2px;"></span> Critical Pipeline</span>
     </div>
   </div>
-
-  <!-- SUMMARY TEXT BOX -->
-  <div class="summary-box">
-    Average Days in Draft: 23 &nbsp;|&nbsp; Oldest: 67 days &nbsp;|&nbsp; 99% no activity since creation
-  </div>
-
-  <!-- AGE BAND LEGEND CARDS -->
-  <div class="age-band-row">
-    <div class="age-band-card green">
-      <div class="age-band-title">Healthy Pipeline</div>
-      <div class="age-band-range">0-7 days</div>
-      <div class="age-band-count">25</div>
-    </div>
-    <div class="age-band-card yellow">
-      <div class="age-band-title">At Risk</div>
-      <div class="age-band-range">8-14 days</div>
-      <div class="age-band-count">22</div>
-    </div>
-    <div class="age-band-card gold">
-      <div class="age-band-title">Outside Timeframe</div>
-      <div class="age-band-range">15-30 days</div>
-      <div class="age-band-count">45</div>
-    </div>
-    <div class="age-band-card red">
-      <div class="age-band-title">Critical Pipeline</div>
-      <div class="age-band-range">30+ days</div>
-      <div class="age-band-count">74</div>
+  <div class="chart-card">
+    <div class="chart-title">Summary <span class="meta">Auto-generated</span></div>
+    <div class="summary-box">
+      <p><strong>166 draft offers</strong> are currently in the pipeline, with <strong>114 (68.7%)</strong> exceeding the 14-day SLA threshold.</p>
+      <br>
+      <p>The vast majority (<strong>165 drafts, 99.4%</strong>) show <strong>no activity</strong> — indicating they may be abandoned or awaiting provider response. Only <strong>1 draft</strong> has been recently updated.</p>
+      <br>
+      <p>The oldest draft is <strong>67 days old</strong>, and <strong>8 drafts</strong> are missing critical date fields (R24). Immediate review recommended for the <strong>74 drafts aged 30+ days</strong> in the critical pipeline segment.</p>
     </div>
   </div>
+</div>
 
 </div>
 </body>

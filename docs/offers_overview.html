@@ -3,257 +3,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP Offers Overview</title>
+<title>WMPP — Offers Overview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #002060;
-    --navy-dark: #001A45;
-    --navy-light: #1a4080;
-    --gold: #f0a010;
-    --gold-light: #f5c050;
-    --gold-dark: #c08000;
-    --bg: #FFFFFF;
-    --bg-light: #F5F5F5;
-    --fg: #1A1A1A;
-    --fg-sec: #555555;
-    --border: #D0D0D0;
-    --green: #2E8B2E;
-    --yellow: #D4A017;
-    --red: #C0392B;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg-light);
-    color: var(--fg);
-    width: 1500px;
-    margin: 0 auto;
-  }
-  /* HEADER */
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--navy);
-    height: 80px;
-    padding: 0 30px;
-  }
-  .header-left { display: flex; align-items: center; gap: 20px; }
-  .header-title {
-    color: #fff;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-  .nav-buttons { display: flex; gap: 8px; }
-  .nav-btn {
-    background: transparent;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    font-size: 13px;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: border-color 0.2s;
-  }
-  .nav-btn:hover { border-bottom-color: var(--gold); }
-  .nav-btn.active { border-bottom-color: var(--gold); }
+:root {
+  --navy: #002060;
+  --navy-dark: #001A45;
+  --navy-light: #1a4080;
+  --navy-tint: #e8edf5;
+  --gold: #f0a010;
+  --gold-light: #f5c050;
+  --gold-dark: #c08000;
+  --gold-tint: #fdf5e6;
+  --green: #2E8B2E;
+  --green-tint: #e8f5e8;
+  --yellow: #D4A017;
+  --yellow-tint: #fff9e6;
+  --red: #C0392B;
+  --red-tint: #fcebe9;
+  --bg: #f0f2f5;
+  --surface: #ffffff;
+  --ink: #1a1a1a;
+  --ink-2: #555555;
+  --ink-3: #999999;
+  --border: #e0e0e0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,32,96,0.1);
+  --radius: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 16px;
+}
+.dashboard { max-width: 1468px; margin: 0 auto; }
 
-  /* FILTER BAR */
-  .filter-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--bg);
-    padding: 14px 30px;
-    border-bottom: 1px solid var(--border);
-  }
-  .filter-pill {
-    background: var(--bg-light);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 6px 16px;
-    font-size: 12px;
-    color: var(--fg-sec);
-    cursor: pointer;
-  }
-  .filter-pill strong { color: var(--fg); margin-right: 4px; }
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
+  border-radius: var(--radius);
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: var(--shadow-lg);
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.header-left img { height: 36px; }
+.header h1 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+.nav { display: flex; gap: 4px; }
+.nav a {
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.nav a.active {
+  color: #fff;
+  border-bottom: 2px solid var(--gold);
+  border-radius: 0;
+}
 
-  /* CONTENT */
-  .content { padding: 20px 30px; }
+/* ── Filter Bar ── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 12px;
+}
+.filter-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.filter-pill .label { color: var(--ink-3); font-weight: 400; }
+.filter-pill .value { color: var(--navy); }
+.filter-pill::after {
+  content: '▾';
+  font-size: 10px;
+  color: var(--ink-3);
+}
+.filter-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.refresh-btn {
+  background: var(--navy);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
 
-  /* KPI CARDS */
-  .kpi-row { display: flex; gap: 14px; margin-bottom: 14px; }
-  .kpi-card {
-    flex: 1;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--navy);
-    border-radius: 6px;
-    padding: 14px 16px;
-    min-height: 76px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .kpi-card.gold-border { border-left-color: var(--gold); }
-  .kpi-card.green-border { border-left-color: var(--green); }
-  .kpi-card.red-border { border-left-color: var(--red); }
-  .kpi-card.yellow-border { border-left-color: var(--yellow); }
-  .kpi-label {
-    font-size: 10px;
-    color: var(--fg-sec);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-  .kpi-value {
-    font-family: 'DIN', 'Segoe UI', sans-serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--fg);
-  }
-  .kpi-value.green { color: var(--green); }
-  .kpi-value.red { color: var(--red); }
-  .kpi-value.gold { color: var(--gold-dark); }
-  .kpi-value.yellow { color: var(--yellow); }
+/* ── KPI Cards ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.kpi-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.kpi-card.navy::before { background: var(--navy); }
+.kpi-card.gold::before { background: var(--gold); }
+.kpi-card.green::before { background: var(--green); }
+.kpi-card.yellow::before { background: var(--yellow); }
+.kpi-card.red::before { background: var(--red); }
+.kpi-card.navy-light::before { background: var(--navy-light); }
+.kpi-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.kpi-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.kpi-sub .up { color: var(--green); }
+.kpi-sub .down { color: var(--red); }
 
-  /* CHARTS */
-  .chart-row { display: flex; gap: 14px; margin-bottom: 14px; }
-  .chart-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 16px;
-    flex: 1;
-  }
-  .chart-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 12px;
-  }
+/* ── Charts ── */
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 12px;
+}
+.chart-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.chart-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chart-title .meta { font-size: 11px; font-weight: 400; color: var(--ink-3); }
 
-  /* 100% STACKED COLUMN */
-  .stack-chart { display: flex; gap: 20px; height: 200px; align-items: stretch; padding: 10px 0; border-bottom: 2px solid var(--border); }
-  .stack-col { flex: 1; display: flex; flex-direction: column-reverse; border-radius: 4px; overflow: hidden; position: relative; }
-  .stack-seg { width: 100%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 600; }
-  .stack-seg.spot { background: var(--gold); color: var(--navy); }
-  .stack-seg.framework { background: var(--navy); }
-  .stack-label { position: absolute; bottom: -24px; left: 0; right: 0; text-align: center; font-size: 11px; color: var(--fg-sec); }
+/* 100% Stacked Column Chart */
+.stacked-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  height: 180px;
+  padding: 0 8px 0 40px;
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.stacked-grid { position: absolute; left: 40px; right: 0; top: 0; bottom: 0; }
+.stacked-grid div {
+  border-top: 1px dashed var(--border);
+  height: 25%;
+}
+.stacked-group { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 4px; }
+.stacked-bars {
+  display: flex;
+  flex-direction: column-reverse;
+  width: 48px;
+  height: 160px;
+  border-radius: 2px 2px 0 0;
+  overflow: hidden;
+}
+.stacked-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  transition: opacity 0.15s;
+}
+.stacked-seg:hover { opacity: 0.85; }
+.stacked-seg.gold { background: var(--gold); color: var(--navy); }
+.stacked-seg.navy { background: var(--navy); }
+.stacked-label { font-size: 11px; color: var(--ink-3); }
+.stacked-axis { position: absolute; left: 0; top: 0; bottom: 0; width: 36px; }
+.stacked-axis div { font-size: 9px; color: var(--ink-3); text-align: right; height: 25%; display: flex; align-items: flex-start; justify-content: flex-end; padding-right: 4px; }
 
-  /* BAR CHART */
-  .bar-chart { display: flex; flex-direction: column; gap: 8px; }
-  .bar-row { display: flex; align-items: center; gap: 10px; }
-  .bar-label { width: 140px; font-size: 11px; color: var(--fg-sec); text-align: right; }
-  .bar-track { flex: 1; background: var(--bg-light); border-radius: 4px; height: 20px; overflow: hidden; }
-  .bar-fill { height: 100%; background: var(--navy); border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #fff; font-size: 11px; font-weight: 600; }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
-  .legend-dot { width: 12px; height: 12px; border-radius: 3px; }
+/* Bar Chart */
+.bar-chart { display: flex; flex-direction: column; gap: 6px; }
+.bar-row { display: flex; align-items: center; gap: 8px; }
+.bar-label { width: 120px; font-size: 12px; color: var(--ink-2); text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; height: 18px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 600; color: #fff; transition: width 0.3s; }
+.bar-fill.navy { background: var(--navy); }
+
+/* Full width row */
+.full-row { margin-top: 12px; }
+
+@media (max-width: 768px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<div class="dashboard">
 
-<!-- HEADER -->
+<!-- Header -->
 <div class="header">
   <div class="header-left">
-    <img src="bct_logo.png" height="40" alt="BCT Logo">
-    <div class="header-title">OFFERS OVERVIEW</div>
+    <img src="bct_logo.png" alt="BCT">
+    <h1>OFFERS OVERVIEW</h1>
   </div>
-  <div class="nav-buttons">
-    <button class="nav-btn">Referrals</button>
-    <button class="nav-btn active">Offers</button>
-    <button class="nav-btn">IPA</button>
-    <button class="nav-btn">Reports</button>
+  <nav class="nav">
+    <a href="referrals.html">Referrals</a>
+    <a href="offers_overview.html" class="active">Offers</a>
+    <a href="ipa_overview.html">IPA</a>
+    <a href="draft_offers.html">Drafts</a>
+    <a href="provider_registry.html">Providers</a>
+  </nav>
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <div class="filter-pill"><span class="label">Date:</span> <span class="value">01 Jan – 31 May 2025</span></div>
+  <div class="filter-pill"><span class="label">Type:</span> <span class="value">All</span></div>
+  <div class="filter-pill"><span class="label">Status:</span> <span class="value">All</span></div>
+  <div class="filter-pill"><span class="label">Provider:</span> <span class="value">All</span></div>
+  <span class="filter-count">427 offers</span>
+  <button class="refresh-btn">↻ Refresh</button>
+</div>
+
+<!-- KPI Row 1 -->
+<div class="kpi-row">
+  <div class="kpi-card navy">
+    <div class="kpi-label">Active Referrals</div>
+    <div class="kpi-value">106</div>
+    <div class="kpi-sub"><span class="up">▲ 6%</span> vs last period</div>
+  </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">With Offers</div>
+    <div class="kpi-value">55</div>
+    <div class="kpi-sub">52% offer rate</div>
+  </div>
+  <div class="kpi-card yellow">
+    <div class="kpi-label">Awaiting Offers</div>
+    <div class="kpi-value">51</div>
+    <div class="kpi-sub"><span class="down">▼ 4%</span> vs last period</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-label">Offer Rate</div>
+    <div class="kpi-value">52%</div>
+    <div class="kpi-sub"><span class="up">▲ 2pp</span> vs last period</div>
   </div>
 </div>
 
-<!-- FILTER BAR -->
-<div class="filter-bar">
-  <div class="filter-pill"><strong>Date:</strong> Jan 2025 – May 2025 ▾</div>
-  <div class="filter-pill"><strong>Placement Type:</strong> All ▾</div>
+<!-- KPI Row 2 -->
+<div class="kpi-row">
+  <div class="kpi-card navy">
+    <div class="kpi-label">Total Offers</div>
+    <div class="kpi-value">427</div>
+    <div class="kpi-sub">Across all periods</div>
+  </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">Avg / Referral</div>
+    <div class="kpi-value">2.74</div>
+    <div class="kpi-sub">Offers per referral</div>
+  </div>
+  <div class="kpi-card navy-light">
+    <div class="kpi-label">Providers</div>
+    <div class="kpi-value">86</div>
+    <div class="kpi-sub">Active offer providers</div>
+  </div>
+  <div class="kpi-card navy">
+    <div class="kpi-label">Avg / Provider</div>
+    <div class="kpi-value">4.97</div>
+    <div class="kpi-sub">Offers per provider</div>
+  </div>
 </div>
 
-<!-- CONTENT -->
-<div class="content">
-
-  <!-- KPI ROW 1 -->
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-label">Active Referrals</div><div class="kpi-value">106</div></div>
-    <div class="kpi-card gold-border"><div class="kpi-label">With Offers</div><div class="kpi-value">55</div></div>
-    <div class="kpi-card"><div class="kpi-label">Awaiting</div><div class="kpi-value">51</div></div>
-    <div class="kpi-card gold-border"><div class="kpi-label">Offer Rate</div><div class="kpi-value">52%</div></div>
+<!-- KPI Row 3 -->
+<div class="kpi-row">
+  <div class="kpi-card green">
+    <div class="kpi-label">Successful</div>
+    <div class="kpi-value">10</div>
+    <div class="kpi-sub">2.3% of total</div>
   </div>
-
-  <!-- KPI ROW 2 -->
-  <div class="kpi-row">
-    <div class="kpi-card"><div class="kpi-label">Total Offers</div><div class="kpi-value">427</div></div>
-    <div class="kpi-card"><div class="kpi-label">Avg / Referral</div><div class="kpi-value">2.74</div></div>
-    <div class="kpi-card"><div class="kpi-label">Providers</div><div class="kpi-value">86</div></div>
-    <div class="kpi-card"><div class="kpi-label">Avg / Provider</div><div class="kpi-value">4.97</div></div>
+  <div class="kpi-card red">
+    <div class="kpi-label">Unsuccessful</div>
+    <div class="kpi-value">40</div>
+    <div class="kpi-sub">9.4% of total</div>
   </div>
-
-  <!-- KPI ROW 3 -->
-  <div class="kpi-row">
-    <div class="kpi-card green-border"><div class="kpi-label">Successful</div><div class="kpi-value green">10</div></div>
-    <div class="kpi-card red-border"><div class="kpi-label">Unsuccessful</div><div class="kpi-value red">40</div></div>
-    <div class="kpi-card yellow-border"><div class="kpi-label">Draft</div><div class="kpi-value yellow">162</div></div>
-    <div class="kpi-card gold-border"><div class="kpi-label">Pending</div><div class="kpi-value gold">377</div></div>
+  <div class="kpi-card yellow">
+    <div class="kpi-label">Draft</div>
+    <div class="kpi-value">162</div>
+    <div class="kpi-sub">38.0% of total</div>
   </div>
+  <div class="kpi-card gold">
+    <div class="kpi-label">Pending</div>
+    <div class="kpi-value">377</div>
+    <div class="kpi-sub">88.3% of total</div>
+  </div>
+</div>
 
-  <!-- CHART ROW: STACKED COLUMN + BAR -->
-  <div class="chart-row">
-    <div class="chart-card">
-      <div class="chart-title">Spot vs Framework — 100% Stacked (Jan – May)</div>
-      <div class="stack-chart" style="margin-bottom: 24px;">
-        <div class="stack-col">
-          <div class="stack-seg framework" style="height:60%;">60%</div>
-          <div class="stack-seg spot" style="height:40%;">40%</div>
-          <div class="stack-label">Jan</div>
-        </div>
-        <div class="stack-col">
-          <div class="stack-seg framework" style="height:55%;">55%</div>
-          <div class="stack-seg spot" style="height:45%;">45%</div>
-          <div class="stack-label">Feb</div>
-        </div>
-        <div class="stack-col">
-          <div class="stack-seg framework" style="height:65%;">65%</div>
-          <div class="stack-seg spot" style="height:35%;">35%</div>
-          <div class="stack-label">Mar</div>
-        </div>
-        <div class="stack-col">
-          <div class="stack-seg framework" style="height:50%;">50%</div>
-          <div class="stack-seg spot" style="height:50%;">50%</div>
-          <div class="stack-label">Apr</div>
-        </div>
-        <div class="stack-col">
-          <div class="stack-seg framework" style="height:58%;">58%</div>
-          <div class="stack-seg spot" style="height:42%;">42%</div>
-          <div class="stack-label">May</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:16px;justify-content:center;margin-top:8px;">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--gold);"></div> Spot</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--navy);"></div> Framework</div>
-      </div>
+<!-- Charts Row 1 -->
+<div class="chart-row">
+  <div class="chart-card">
+    <div class="chart-title">Spot vs Framework Offers <span class="meta">100% stacked · Jan – May 2025</span></div>
+    <div style="display:flex;gap:12px;margin-bottom:8px;">
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--gold);border-radius:2px;"></span> Spot</span>
+      <span style="font-size:11px;display:flex;align-items:center;gap:4px;"><span style="width:10px;height:10px;background:var(--navy);border-radius:2px;"></span> Framework</span>
     </div>
-
-    <div class="chart-card" style="flex: 0 0 520px;">
-      <div class="chart-title">Top 10 Providers by Offers</div>
-      <div class="bar-chart">
-        <div class="bar-row"><div class="bar-label">Provider A</div><div class="bar-track"><div class="bar-fill" style="width:100%;">15</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider B</div><div class="bar-track"><div class="bar-fill" style="width:86%;">13</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider C</div><div class="bar-track"><div class="bar-fill" style="width:73%;">11</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider D</div><div class="bar-track"><div class="bar-fill" style="width:60%;">9</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider E</div><div class="bar-track"><div class="bar-fill" style="width:53%;">8</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider F</div><div class="bar-track"><div class="bar-fill" style="width:46%;">7</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider G</div><div class="bar-track"><div class="bar-fill" style="width:40%;">6</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider H</div><div class="bar-track"><div class="bar-fill" style="width:33%;">5</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider I</div><div class="bar-track"><div class="bar-fill" style="width:26%;">4</div></div></div>
-        <div class="bar-row"><div class="bar-label">Provider J</div><div class="bar-track"><div class="bar-fill" style="width:20%;">3</div></div></div>
+    <div class="stacked-chart">
+      <div class="stacked-grid"><div></div><div></div><div></div><div></div></div>
+      <div class="stacked-axis"><div>100%</div><div>75%</div><div>50%</div><div>25%</div></div>
+      <div class="stacked-group">
+        <div class="stacked-bars">
+          <div class="stacked-seg gold" style="height:35%;">35%</div>
+          <div class="stacked-seg navy" style="height:65%;">65%</div>
+        </div>
+        <div class="stacked-label">Jan</div>
+      </div>
+      <div class="stacked-group">
+        <div class="stacked-bars">
+          <div class="stacked-seg gold" style="height:42%;">42%</div>
+          <div class="stacked-seg navy" style="height:58%;">58%</div>
+        </div>
+        <div class="stacked-label">Feb</div>
+      </div>
+      <div class="stacked-group">
+        <div class="stacked-bars">
+          <div class="stacked-seg gold" style="height:28%;">28%</div>
+          <div class="stacked-seg navy" style="height:72%;">72%</div>
+        </div>
+        <div class="stacked-label">Mar</div>
+      </div>
+      <div class="stacked-group">
+        <div class="stacked-bars">
+          <div class="stacked-seg gold" style="height:38%;">38%</div>
+          <div class="stacked-seg navy" style="height:62%;">62%</div>
+        </div>
+        <div class="stacked-label">Apr</div>
+      </div>
+      <div class="stacked-group">
+        <div class="stacked-bars">
+          <div class="stacked-seg gold" style="height:31%;">31%</div>
+          <div class="stacked-seg navy" style="height:69%;">69%</div>
+        </div>
+        <div class="stacked-label">May</div>
       </div>
     </div>
   </div>
+  <div class="chart-card">
+    <div class="chart-title">Top 10 Providers by Offers <span class="meta">86 active</span></div>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-label">Provider A</div><div class="bar-track"><div class="bar-fill navy" style="width:100%;">15</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider B</div><div class="bar-track"><div class="bar-fill navy" style="width:80%;">12</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider C</div><div class="bar-track"><div class="bar-fill navy" style="width:73%;">11</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider D</div><div class="bar-track"><div class="bar-fill navy" style="width:60%;">9</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider E</div><div class="bar-track"><div class="bar-fill navy" style="width:53%;">8</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider F</div><div class="bar-track"><div class="bar-fill navy" style="width:47%;">7</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider G</div><div class="bar-track"><div class="bar-fill navy" style="width:40%;">6</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider H</div><div class="bar-track"><div class="bar-fill navy" style="width:33%;">5</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider I</div><div class="bar-track"><div class="bar-fill navy" style="width:27%;">4</div></div></div>
+      <div class="bar-row"><div class="bar-label">Provider J</div><div class="bar-track"><div class="bar-fill navy" style="width:20%;">3</div></div></div>
+    </div>
+  </div>
+</div>
 
 </div>
 </body>
