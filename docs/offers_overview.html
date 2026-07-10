@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WMPP OFFERS OVERVIEW</title>
+<style>
+  /* ===== RESET ===== */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Segoe UI', Tahoma, Arial, sans-serif;
+    background:#F3F2F1;
+    color:#252423;
+    width:1500px;
+    height:1250px;
+    overflow:hidden;
+  }
+  @font-face {
+    font-family:'DIN';
+    src:local('DIN Alternate'), local('DIN'), local('Roboto Condensed'), local('Arial Narrow');
+  }
+
+  /* ===== HEADER (80px) ===== */
+  .header {
+    width:1500px; height:80px;
+    background:#12239E;
+    display:flex; align-items:center;
+    padding:0 24px;
+    border-bottom:2px solid #0F1B6E;
+  }
+  .logo {
+    font-family:'DIN','Segoe UI',sans-serif;
+    font-size:28px; font-weight:bold;
+    color:#FFFFFF;
+    letter-spacing:1px;
+    margin-right:32px;
+  }
+  .logo span { color:#118DFF; }
+  .header-title {
+    font-family:'Segoe UI',sans-serif;
+    font-size:22px; font-weight:600;
+    color:#FFFFFF;
+    letter-spacing:2px;
+    flex:1;
+  }
+  .nav-btn {
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#FFFFFF;
+    font-size:12px;
+    font-family:'Segoe UI',sans-serif;
+    padding:8px 16px;
+    border-radius:4px;
+    margin-left:8px;
+    cursor:default;
+    transition:background .2s;
+  }
+  .nav-btn.active {
+    background:#118DFF;
+    border-color:#118DFF;
+  }
+  .nav-btn:hover { background:rgba(255,255,255,0.25); }
+
+  /* ===== FILTER BAR (60px) ===== */
+  .filter-bar {
+    width:1500px; height:60px;
+    background:#FFFFFF;
+    border-bottom:1px solid #C8C6C4;
+    display:flex; align-items:center;
+    padding:0 24px;
+    gap:32px;
+  }
+  .slicer {
+    display:flex; align-items:center; gap:8px;
+  }
+  .slicer-label {
+    font-size:10px;
+    font-family:'Segoe UI',sans-serif;
+    color:#605E5C;
+    text-transform:uppercase;
+    font-weight:600;
+    letter-spacing:0.5px;
+  }
+  .slicer-dropdown {
+    background:#F3F2F1;
+    border:1px solid #C8C6C4;
+    border-radius:4px;
+    padding:6px 12px;
+    font-size:12px;
+    font-family:'Segoe UI',sans-serif;
+    color:#252423;
+    min-width:160px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .slicer-dropdown::after {
+    content:'▾';
+    color:#605E5C;
+    font-size:10px;
+    margin-left:8px;
+  }
+  .slicer-pills {
+    display:flex; gap:4px;
+  }
+  .pill {
+    font-size:11px;
+    font-family:'Segoe UI',sans-serif;
+    padding:5px 12px;
+    border:1px solid #C8C6C4;
+    border-radius:12px;
+    color:#605E5C;
+    cursor:default;
+  }
+  .pill.active {
+    background:#118DFF;
+    color:#FFFFFF;
+    border-color:#118DFF;
+  }
+  .refresh-icon {
+    margin-left:auto;
+    font-size:14px;
+    color:#605E5C;
+    cursor:default;
+  }
+
+  /* ===== CONTENT AREA ===== */
+  .content {
+    padding:16px 24px 0 24px;
+  }
+
+  /* ===== KPI ROWS ===== */
+  .kpi-row {
+    display:flex;
+    gap:12px;
+    margin-bottom:12px;
+  }
+  .kpi-card {
+    flex:1;
+    background:#FFFFFF;
+    border:1px solid #C8C6C4;
+    border-left:4px solid #118DFF;
+    border-radius:4px;
+    padding:12px 16px;
+    height:84px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .kpi-card.green  { border-left-color:#1AAB40; }
+  .kpi-card.red    { border-left-color:#D64554; }
+  .kpi-card.yellow { border-left-color:#D9B300; }
+  .kpi-card.orange { border-left-color:#E66C37; }
+  .kpi-card.darkblue { border-left-color:#12239E; }
+
+  .kpi-value {
+    font-family:'DIN','Arial Narrow','Segoe UI',sans-serif;
+    font-size:24px;
+    font-weight:bold;
+    color:#252423;
+    line-height:1.2;
+  }
+  .kpi-label {
+    font-family:'Segoe UI',sans-serif;
+    font-size:10px;
+    color:#605E5C;
+    text-transform:uppercase;
+    font-weight:600;
+    letter-spacing:0.3px;
+    margin-top:2px;
+  }
+  .kpi-sub {
+    font-size:9px;
+    color:#605E5C;
+    margin-top:1px;
+  }
+
+  /* ===== CHART SECTION TITLE ===== */
+  .section-title {
+    font-family:'Segoe UI',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:#252423;
+    margin-bottom:8px;
+    padding-left:4px;
+  }
+
+  /* ===== CHARTS ROW ===== */
+  .charts-row {
+    display:flex;
+    gap:16px;
+    margin-top:4px;
+  }
+
+  /* ===== 100% STACKED COLUMN CHART ===== */
+  .stacked-chart {
+    flex:1;
+    background:#FFFFFF;
+    border:1px solid #C8C6C4;
+    border-radius:4px;
+    padding:16px 20px 12px 20px;
+    height:380px;
+  }
+  .chart-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .chart-title {
+    font-family:'Segoe UI',sans-serif;
+    font-size:14px;
+    font-weight:600;
+    color:#252423;
+  }
+  .legend { display:flex; gap:16px; }
+  .legend-item {
+    display:flex; align-items:center; gap:6px;
+    font-size:11px; font-family:'Segoe UI',sans-serif; color:#605E5C;
+  }
+  .legend-swatch {
+    width:12px; height:12px; border-radius:2px;
+  }
+
+  .stacked-bars {
+    display:flex; gap:24px; align-items:flex-end;
+    height:260px;
+    border-bottom:2px solid #C8C6C4;
+    padding-bottom:0;
+    position:relative;
+  }
+  .stacked-col-group {
+    flex:1;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .stacked-col {
+    width:60%;
+    display:flex; flex-direction:column;
+    border-radius:4px 4px 0 0;
+    overflow:hidden;
+  }
+  .seg-spot {
+    background:#E66C37;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:#FFFFFF; font-weight:600;
+  }
+  .seg-framework {
+    background:#118DFF;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:#FFFFFF; font-weight:600;
+  }
+  .x-label {
+    font-size:11px; font-family:'Segoe UI',sans-serif; color:#605E5C;
+    text-align:center;
+  }
+
+  /* Dotted gridlines */
+  .gridlines {
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    pointer-events:none;
+  }
+  .gridline {
+    width:100%;
+    border-top:1px dotted #C8C6C4;
+  }
+
+  /* ===== CLUSTERED BAR CHART ===== */
+  .bar-chart {
+    flex:1;
+    background:#FFFFFF;
+    border:1px solid #C8C6C4;
+    border-radius:4px;
+    padding:16px 20px 12px 20px;
+    height:380px;
+  }
+  .bar-chart-area {
+    display:flex; flex-direction:column; gap:6px;
+    height:300px;
+    padding-top:8px;
+  }
+  .bar-row {
+    display:flex; align-items:center; gap:8px;
+  }
+  .bar-label {
+    width:24px;
+    text-align:right;
+    font-size:11px; font-family:'Segoe UI',sans-serif; color:#252423; font-weight:600;
+    flex-shrink:0;
+  }
+  .bar-track {
+    flex:1;
+    height:18px;
+    position:relative;
+  }
+  .bar-fill {
+    height:100%;
+    border-radius:2px;
+    display:flex; align-items:center; justify-content:flex-end;
+    padding-right:6px;
+    font-size:10px; font-family:'DIN',sans-serif; color:#FFFFFF; font-weight:600;
+  }
+
+  /* Y-axis labels for bar chart */
+  .bar-x-labels {
+    display:flex;
+    margin-top:4px;
+    padding-left:32px;
+  }
+  .bar-x-tick {
+    flex:1;
+    text-align:center;
+    font-size:9px; color:#605E5C;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+  <div class="logo">BCT<span>•</span></div>
+  <div class="header-title">OFFERS OVERVIEW</div>
+  <button class="nav-btn">Referrals</button>
+  <button class="nav-btn active">Offers</button>
+  <button class="nav-btn">Providers</button>
+  <button class="nav-btn">Placements</button>
+</div>
+
+<!-- ===== FILTER BAR ===== -->
+<div class="filter-bar">
+  <div class="slicer">
+    <span class="slicer-label">Date</span>
+    <div class="slicer-dropdown">Jan – May 2025</div>
+  </div>
+  <div class="slicer">
+    <span class="slicer-label">Placement Type</span>
+    <div class="slicer-pills">
+      <span class="pill active">All</span>
+      <span class="pill">Spot</span>
+      <span class="pill">Framework</span>
+    </div>
+  </div>
+  <div class="slicer">
+    <span class="slicer-label">Provider</span>
+    <div class="slicer-dropdown">All Providers</div>
+  </div>
+  <div class="refresh-icon">⟳</div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="content">
+
+  <!-- KPI ROW 1 -->
+  <div class="kpi-row">
+    <div class="kpi-card darkblue">
+      <div class="kpi-value">106</div>
+      <div class="kpi-label">Active Referrals</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">55</div>
+      <div class="kpi-label">With Offers</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-value">51</div>
+      <div class="kpi-label">Awaiting First Offer</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">52%</div>
+      <div class="kpi-label">Offer Rate</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW 2 -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-value">427</div>
+      <div class="kpi-label">Total Offers</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">2.74</div>
+      <div class="kpi-label">Avg Offers / Referral</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">86</div>
+      <div class="kpi-label">Providers Who Made Offers</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-value">4.97</div>
+      <div class="kpi-label">Avg Offers / Provider</div>
+    </div>
+  </div>
+
+  <!-- KPI ROW 3 (Status breakdown) -->
+  <div class="kpi-row">
+    <div class="kpi-card green">
+      <div class="kpi-value">10</div>
+      <div class="kpi-label">Successful</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-value">40</div>
+      <div class="kpi-label">Unsuccessful</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-value">162</div>
+      <div class="kpi-label">Draft</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-value">377</div>
+      <div class="kpi-label">Pending</div>
+    </div>
+  </div>
+
+  <!-- ===== CHARTS ROW ===== -->
+  <div class="charts-row">
+
+    <!-- 100% STACKED COLUMN CHART -->
+    <div class="stacked-chart">
+      <div class="chart-header">
+        <div class="chart-title">Spot vs Framework by Month</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-swatch" style="background:#E66C37;"></div>Spot</div>
+          <div class="legend-item"><div class="legend-swatch" style="background:#118DFF;"></div>Framework</div>
+        </div>
+      </div>
+
+      <div class="stacked-bars">
+        <!-- Dotted gridlines overlay -->
+        <div class="gridlines">
+          <div class="gridline" style="margin-top:0px;"></div>
+          <div class="gridline" style="margin-top:60px;"></div>
+          <div class="gridline" style="margin-top:60px;"></div>
+          <div class="gridline" style="margin-top:60px;"></div>
+          <div class="gridline" style="margin-top:60px;"></div>
+        </div>
+
+        <!-- Jan: 60% spot, 40% framework -->
+        <div class="stacked-col-group">
+          <div class="stacked-col" style="height:220px;">
+            <div class="seg-spot" style="height:40%;">60%</div>
+            <div class="seg-framework" style="height:60%;">40%</div>
+          </div>
+          <div class="x-label">Jan</div>
+        </div>
+
+        <!-- Feb: 45% spot, 55% framework -->
+        <div class="stacked-col-group">
+          <div class="stacked-col" style="height:220px;">
+            <div class="seg-spot" style="height:45%;">45%</div>
+            <div class="seg-framework" style="height:55%;">55%</div>
+          </div>
+          <div class="x-label">Feb</div>
+        </div>
+
+        <!-- Mar: 55% spot, 45% framework -->
+        <div class="stacked-col-group">
+          <div class="stacked-col" style="height:220px;">
+            <div class="seg-spot" style="height:55%;">55%</div>
+            <div class="seg-framework" style="height:45%;">45%</div>
+          </div>
+          <div class="x-label">Mar</div>
+        </div>
+
+        <!-- Apr: 35% spot, 65% framework -->
+        <div class="stacked-col-group">
+          <div class="stacked-col" style="height:220px;">
+            <div class="seg-spot" style="height:35%;">35%</div>
+            <div class="seg-framework" style="height:65%;">65%</div>
+          </div>
+          <div class="x-label">Apr</div>
+        </div>
+
+        <!-- May: 50% spot, 50% framework -->
+        <div class="stacked-col-group">
+          <div class="stacked-col" style="height:220px;">
+            <div class="seg-spot" style="height:50%;">50%</div>
+            <div class="seg-framework" style="height:50%;">50%</div>
+          </div>
+          <div class="x-label">May</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLUSTERED BAR CHART (Top 10 Providers) -->
+    <div class="bar-chart">
+      <div class="chart-header">
+        <div class="chart-title">Top 10 Providers by Offers</div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-swatch" style="background:#118DFF;"></div>Offers</div>
+        </div>
+      </div>
+
+      <div class="bar-chart-area">
+        <!-- A=15 -->
+        <div class="bar-row">
+          <div class="bar-label">A</div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%; background:#118DFF;">15</div></div>
+        </div>
+        <!-- B=13 -->
+        <div class="bar-row">
+          <div class="bar-label">B</div>
+          <div class="bar-track"><div class="bar-fill" style="width:86.7%; background:#3A9FFF;">13</div></div>
+        </div>
+        <!-- C=11 -->
+        <div class="bar-row">
+          <div class="bar-label">C</div>
+          <div class="bar-track"><div class="bar-fill" style="width:73.3%; background:#5AAAFF;">11</div></div>
+        </div>
+        <!-- D=10 -->
+        <div class="bar-row">
+          <div class="bar-label">D</div>
+          <div class="bar-track"><div class="bar-fill" style="width:66.7%; background:#7ABBFF;">10</div></div>
+        </div>
+        <!-- E=9 -->
+        <div class="bar-row">
+          <div class="bar-label">E</div>
+          <div class="bar-track"><div class="bar-fill" style="width:60%; background:#118DFF;">9</div></div>
+        </div>
+        <!-- F=8 -->
+        <div class="bar-row">
+          <div class="bar-label">F</div>
+          <div class="bar-track"><div class="bar-fill" style="width:53.3%; background:#3A9FFF;">8</div></div>
+        </div>
+        <!-- G=7 -->
+        <div class="bar-row">
+          <div class="bar-label">G</div>
+          <div class="bar-track"><div class="bar-fill" style="width:46.7%; background:#5AAAFF;">7</div></div>
+        </div>
+        <!-- H=6 -->
+        <div class="bar-row">
+          <div class="bar-label">H</div>
+          <div class="bar-track"><div class="bar-fill" style="width:40%; background:#7ABBFF;">6</div></div>
+        </div>
+        <!-- I=5 -->
+        <div class="bar-row">
+          <div class="bar-label">I</div>
+          <div class="bar-track"><div class="bar-fill" style="width:33.3%; background:#118DFF;">5</div></div>
+        </div>
+        <!-- J=3 -->
+        <div class="bar-row">
+          <div class="bar-label">J</div>
+          <div class="bar-track"><div class="bar-fill" style="width:20%; background:#3A9FFF;">3</div></div>
+        </div>
+      </div>
+
+      <!-- X-axis labels -->
+      <div class="bar-x-labels">
+        <div class="bar-x-tick">0</div>
+        <div class="bar-x-tick">3</div>
+        <div class="bar-x-tick">6</div>
+        <div class="bar-x-tick">9</div>
+        <div class="bar-x-tick">12</div>
+        <div class="bar-x-tick">15</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

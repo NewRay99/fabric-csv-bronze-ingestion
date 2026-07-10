@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMPP Dashboard — Brand Pack Mockups</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #F3F2F1;
+  color: #252423;
+  min-height: 100vh;
+  padding: 20px;
+}
+.header {
+  text-align: center;
+  padding: 40px 20px;
+  background: #12239E;
+  color: white;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+.header h1 { font-size: 24px; font-family: 'DIN', sans-serif; margin-bottom: 8px; }
+.header p { font-size: 14px; opacity: 0.85; }
+.header .badge {
+  display: inline-block;
+  background: #118DFF;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.card {
+  background: white;
+  border: 1px solid #C8C6C4;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: block;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.card-thumb {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+.card-body {
+  padding: 16px;
+}
+.card-body h3 {
+  font-size: 16px;
+  font-family: 'DIN', sans-serif;
+  margin-bottom: 4px;
+}
+.card-body p {
+  font-size: 12px;
+  color: #605E5C;
+  line-height: 1.5;
+}
+.card-body .tags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.card-body .tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: #F3F2F1;
+  color: #605E5C;
+}
+.footer {
+  text-align: center;
+  margin-top: 32px;
+  font-size: 12px;
+  color: #605E5C;
+}
+.footer a { color: #0078d4; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>WMPP PILOT DASHBOARD</h1>
+  <p>West Midlands Placement Portal — Brand Pack Visual Mockups</p>
+  <div class="badge">Birmingham Children's Trust</div>
+</div>
+
+<div class="cards">
+
+  <a class="card" href="referrals.html">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #118DFF, #DEEFFF);">📋</div>
+    <div class="card-body">
+      <h3>Referrals</h3>
+      <p>36 visuals — KPI cards, donut/column/bar charts, gender cards, referral table. NEW: Emergency & out-of-region KPIs.</p>
+      <div class="tags">
+        <span class="tag">R24</span><span class="tag">R51</span><span class="tag">R18</span><span class="tag">R22</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" href="offers_overview.html">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #12239E, #118DFF);">📊</div>
+    <div class="card-body">
+      <h3>Offers Overview</h3>
+      <p>12 KPI cards, 100% stacked Spot vs Framework chart, provider ranking bar chart, semantic status colours.</p>
+      <div class="tags">
+        <span class="tag">R25-R29</span><span class="tag">R67</span><span class="tag">R68</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" href="ipa_overview.html">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #6B007B, #118DFF);">🔻</div>
+    <div class="card-body">
+      <h3>IPA Overview</h3>
+      <p>IPA funnel chart, 12 KPI cards, IPA detail table with signatures, conversion rate trends. NEW: Finance & audit KPIs.</p>
+      <div class="tags">
+        <span class="tag">R35</span><span class="tag">R62</span><span class="tag">R20</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" href="draft_offers.html">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #D9B300, #E66C37);">⏳</div>
+    <div class="card-body">
+      <h3>Draft Offers</h3>
+      <p>9 KPI cards, clustered column chart with semantic age band colours (green→yellow→orange→red), legend cards.</p>
+      <div class="tags">
+        <span class="tag">R24</span>
+      </div>
+    </div>
+  </a>
+
+  <a class="card" href="provider_registry.html">
+    <div class="card-thumb" style="background: linear-gradient(135deg, #1AAB40, #118DFF);">🏥</div>
+    <div class="card-body">
+      <h3>Provider Registry</h3>
+      <p>11 KPI cards, provider directory table with QA flag indicators, QA flag type breakdown. NEW: QA & onboarding KPIs.</p>
+      <div class="tags">
+        <span class="tag">R41</span><span class="tag">R49</span><span class="tag">R59</span><span class="tag">R47</span>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <p>WMPP Dashboard Brand Pack — extracted from Power BI report theme (CY26SU02)</p>
+  <p><a href="https://github.com/NewRay99/fabric-csv-bronze-ingestion">View on GitHub</a></p>
+</div>
+
+</body>
+</html>
