@@ -8,28 +8,31 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #F3F2F1;
-  color: #252423;
+  background: #F5F5F5;
+  color: #1A1A1A;
   min-height: 100vh;
   padding: 20px;
 }
 .header {
   text-align: center;
   padding: 40px 20px;
-  background: #12239E;
+  background: linear-gradient(135deg, #002060, #001A45);
   color: white;
   border-radius: 12px;
   margin-bottom: 24px;
 }
-.header h1 { font-size: 24px; font-family: 'DIN', sans-serif; margin-bottom: 8px; }
+.header img { height: 50px; margin-bottom: 16px; }
+.header h1 { font-size: 24px; font-family: 'DIN', sans-serif; margin-bottom: 8px; color: #fff; }
 .header p { font-size: 14px; opacity: 0.85; }
 .header .badge {
   display: inline-block;
-  background: #118DFF;
+  background: #f0a010;
+  color: #002060;
   padding: 4px 12px;
   border-radius: 4px;
   font-size: 12px;
   margin-top: 8px;
+  font-weight: 600;
 }
 .cards {
   display: grid;
@@ -40,7 +43,7 @@ body {
 }
 .card {
   background: white;
-  border: 1px solid #C8C6C4;
+  border: 1px solid #D0D0D0;
   border-radius: 8px;
   overflow: hidden;
   text-decoration: none;
@@ -50,7 +53,8 @@ body {
 }
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,32,96,0.15);
+  border-color: #f0a010;
 }
 .card-thumb {
   height: 160px;
@@ -59,17 +63,16 @@ body {
   justify-content: center;
   font-size: 48px;
 }
-.card-body {
-  padding: 16px;
-}
+.card-body { padding: 16px; }
 .card-body h3 {
   font-size: 16px;
   font-family: 'DIN', sans-serif;
   margin-bottom: 4px;
+  color: #002060;
 }
 .card-body p {
   font-size: 12px;
-  color: #605E5C;
+  color: #555;
   line-height: 1.5;
 }
 .card-body .tags {
@@ -82,21 +85,23 @@ body {
   font-size: 10px;
   padding: 2px 8px;
   border-radius: 3px;
-  background: #F3F2F1;
-  color: #605E5C;
+  background: #f0a010;
+  color: #002060;
+  font-weight: 600;
 }
 .footer {
   text-align: center;
   margin-top: 32px;
   font-size: 12px;
-  color: #605E5C;
+  color: #555;
 }
-.footer a { color: #0078d4; text-decoration: none; }
+.footer a { color: #002060; text-decoration: none; font-weight: 600; }
 </style>
 </head>
 <body>
 
 <div class="header">
+  <img src="bct_logo.png" alt="Birmingham Children's Trust">
   <h1>WMPP PILOT DASHBOARD</h1>
   <p>West Midlands Placement Portal — Brand Pack Visual Mockups</p>
   <div class="badge">Birmingham Children's Trust</div>
@@ -105,7 +110,7 @@ body {
 <div class="cards">
 
   <a class="card" href="referrals.html">
-    <div class="card-thumb" style="background: linear-gradient(135deg, #118DFF, #DEEFFF);">📋</div>
+    <div class="card-thumb" style="background: linear-gradient(135deg, #002060, #1a4080);">📋</div>
     <div class="card-body">
       <h3>Referrals</h3>
       <p>36 visuals — KPI cards, donut/column/bar charts, gender cards, referral table. NEW: Emergency & out-of-region KPIs.</p>
@@ -116,7 +121,7 @@ body {
   </a>
 
   <a class="card" href="offers_overview.html">
-    <div class="card-thumb" style="background: linear-gradient(135deg, #12239E, #118DFF);">📊</div>
+    <div class="card-thumb" style="background: linear-gradient(135deg, #002060, #f0a010);">📊</div>
     <div class="card-body">
       <h3>Offers Overview</h3>
       <p>12 KPI cards, 100% stacked Spot vs Framework chart, provider ranking bar chart, semantic status colours.</p>
@@ -127,7 +132,7 @@ body {
   </a>
 
   <a class="card" href="ipa_overview.html">
-    <div class="card-thumb" style="background: linear-gradient(135deg, #6B007B, #118DFF);">🔻</div>
+    <div class="card-thumb" style="background: linear-gradient(135deg, #001A45, #1a4080);">🔻</div>
     <div class="card-body">
       <h3>IPA Overview</h3>
       <p>IPA funnel chart, 12 KPI cards, IPA detail table with signatures, conversion rate trends. NEW: Finance & audit KPIs.</p>
@@ -138,10 +143,10 @@ body {
   </a>
 
   <a class="card" href="draft_offers.html">
-    <div class="card-thumb" style="background: linear-gradient(135deg, #D9B300, #E66C37);">⏳</div>
+    <div class="card-thumb" style="background: linear-gradient(135deg, #f0a010, #D4A017);">⏳</div>
     <div class="card-body">
       <h3>Draft Offers</h3>
-      <p>9 KPI cards, clustered column chart with semantic age band colours (green→yellow→orange→red), legend cards.</p>
+      <p>9 KPI cards, clustered column chart with semantic age band colours (green→yellow→gold→red), legend cards.</p>
       <div class="tags">
         <span class="tag">R24</span>
       </div>
@@ -149,7 +154,7 @@ body {
   </a>
 
   <a class="card" href="provider_registry.html">
-    <div class="card-thumb" style="background: linear-gradient(135deg, #1AAB40, #118DFF);">🏥</div>
+    <div class="card-thumb" style="background: linear-gradient(135deg, #1a4080, #002060);">🏥</div>
     <div class="card-body">
       <h3>Provider Registry</h3>
       <p>11 KPI cards, provider directory table with QA flag indicators, QA flag type breakdown. NEW: QA & onboarding KPIs.</p>
@@ -162,7 +167,7 @@ body {
 </div>
 
 <div class="footer">
-  <p>WMPP Dashboard Brand Pack — extracted from Power BI report theme (CY26SU02)</p>
+  <p>WMPP Dashboard Brand Pack — Birmingham Children's Trust corporate branding (navy #002060 + gold #f0a010)</p>
   <p><a href="https://github.com/NewRay99/fabric-csv-bronze-ingestion">View on GitHub</a></p>
 </div>
 

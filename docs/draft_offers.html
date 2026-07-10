@@ -3,354 +3,471 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP – DRAFT OFFERS</title>
+<title>WMPP - Draft Offers</title>
 <style>
-  /* ── Brand palette ─────────────────────────────────────── */
-  :root{
-    --blue:#118DFF;  --orange:#E66C37; --green:#1AAB40;
-    --yellow:#D9B300; --red:#D64554;   --white:#FFFFFF;
-    --light:#F3F2F1;  --fg:#252423;    --secondary:#605E5C;
-    --border:#C8C6C4;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: #F5F5F5;
+    color: #1A1A1A;
+    width: 1500px;
+    height: 1100px;
+    overflow: hidden;
   }
 
-  /* ── Fonts ─────────────────────────────────────────────── */
-  @font-face{
-    font-family:'DIN';
-    src:local('DIN'),local('DIN Alternate'),local('DINCondensed-Bold'),
-        url('https://fonts.gstatic.com/s/dincondensed/v4/oxkPY2qPnK2B4g0g0g0g0g.woff2') format('woff2');
-    font-weight:bold; font-style:normal;
+  /* ===== HEADER ===== */
+  .header {
+    height: 80px;
+    background: linear-gradient(135deg, #002060 0%, #001A45 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{
-    font-family:'Segoe UI','Segoe UI Web','Helvetica Neue',Arial,sans-serif;
-    background:var(--light);
-    color:var(--fg);
-    width:1500px; height:1100px;
-    overflow:hidden;
+  .header-logo { display: flex; align-items: center; }
+  .header-logo img { height: 40px; }
+  .header-title {
+    color: #FFFFFF;
+    font-size: 22px;
+    font-weight: 700;
+    margin-left: 24px;
+    letter-spacing: 1.5px;
   }
-
-  /* ── Header (80px) ─────────────────────────────────────── */
-  .header{
-    height:80px; background:var(--white);
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; padding:0 24px;
-    gap:20px;
+  .nav-buttons {
+    display: flex;
+    gap: 0;
+    margin-left: auto;
   }
-  .logo{
-    font-size:22px; font-weight:700; color:var(--blue);
-    letter-spacing:1px; white-space:nowrap;
+  .nav-btn {
+    background: transparent;
+    border: none;
+    color: #c0c0d0;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
   }
-  .logo .sub{ font-size:12px; color:var(--secondary); font-weight:400; letter-spacing:0; }
-  .page-title{
-    font-size:20px; font-weight:600; color:var(--fg);
-    flex:1; text-align:center; letter-spacing:2px;
-  }
-  .nav-btn{
-    font-size:12px; color:var(--secondary);
-    border:1px solid var(--border); border-radius:4px;
-    padding:6px 14px; background:var(--white); cursor:pointer;
-    transition:.15s;
-  }
-  .nav-btn:hover{ background:var(--light); color:var(--fg); }
-  .nav-btn.active{ background:var(--blue); color:var(--white); border-color:var(--blue); }
-
-  /* ── Filter bar (60px) ─────────────────────────────────── */
-  .filter-bar{
-    height:60px; background:var(--white);
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; padding:0 24px; gap:16px;
-  }
-  .filter-label{
-    font-size:10px; color:var(--secondary); font-weight:600;
-    text-transform:uppercase; letter-spacing:.5px; margin-right:6px;
-  }
-  .filter-pill{
-    font-size:12px; color:var(--fg);
-    border:1px solid var(--border); border-radius:16px;
-    padding:5px 14px; background:var(--white); cursor:pointer;
-    display:flex; align-items:center; gap:6px;
-  }
-  .filter-pill .chev{ color:var(--secondary); font-size:10px; }
-  .filter-pill.selected{ border-color:var(--blue); color:var(--blue); background:#EAF4FF; }
-  .filter-spacer{ flex:1; }
-  .filter-meta{ font-size:11px; color:var(--secondary); }
-
-  /* ── KPI grid ──────────────────────────────────────────── */
-  .kpi-section{ padding:16px 24px 4px; }
-  .kpi-row{ display:flex; gap:12px; margin-bottom:12px; }
-  .kpi-card{
-    background:var(--white); border:1px solid var(--border);
-    border-radius:4px; padding:12px;
-    flex:1; position:relative; overflow:hidden;
-    display:flex; flex-direction:column; justify-content:center;
-  }
-  .kpi-card::before{
-    content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
-    background:var(--blue);
-  }
-  .kpi-card.yellow::before{ background:var(--yellow); }
-  .kpi-card.red::before{    background:var(--red);    }
-  .kpi-card.green::before{  background:var(--green);  }
-  .kpi-card.orange::before{ background:var(--orange); }
-  .kpi-card .label{
-    font-size:10px; color:var(--secondary); font-weight:600;
-    text-transform:uppercase; letter-spacing:.4px;
-    margin-bottom:4px;
-  }
-  .kpi-card .value{
-    font-family:'DIN','Segoe UI',sans-serif; font-size:24px; font-weight:700;
-    color:var(--fg); line-height:1;
-  }
-  .kpi-card .sub{
-    font-size:10px; color:var(--secondary); margin-top:3px;
-  }
-  .kpi-card .badge{
-    display:inline-block; font-size:9px; font-weight:700;
-    color:var(--blue); border:1px solid var(--blue); border-radius:8px;
-    padding:1px 6px; margin-left:6px; vertical-align:middle;
+  .nav-btn:hover { color: #f5c050; }
+  .nav-btn.active {
+    color: #FFFFFF;
+    border-bottom: 3px solid #f0a010;
   }
 
-  /* ── Chart section ─────────────────────────────────────── */
-  .chart-wrap{
-    background:var(--white); border:1px solid var(--border); border-radius:4px;
-    margin:8px 24px; padding:18px 22px;
-    height:340px; display:flex; flex-direction:column;
+  /* ===== FILTER BAR ===== */
+  .filter-bar {
+    background: #FFFFFF;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    gap: 24px;
+    border-bottom: 1px solid #D0D0D0;
   }
-  .chart-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-  .chart-title{ font-size:14px; font-weight:600; color:var(--fg); }
-  .chart-sub{ font-size:11px; color:var(--secondary); }
-  .legend{ display:flex; gap:14px; }
-  .legend-item{ display:flex; align-items:center; gap:5px; font-size:11px; color:var(--secondary); }
-  .legend-swatch{ width:12px; height:12px; border-radius:2px; }
+  .filter-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .filter-select {
+    padding: 6px 12px;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #1A1A1A;
+    background: #FFFFFF;
+    cursor: pointer;
+  }
+  .filter-date {
+    padding: 6px 12px;
+    border: 1px solid #D0D0D0;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #1A1A1A;
+  }
 
-  .chart-body{
-    flex:1; display:flex; align-items:flex-end;
-    position:relative; padding:30px 10px 28px 42px;
+  /* ===== MAIN CONTENT ===== */
+  .main {
+    padding: 20px 32px;
+    height: calc(1100px - 80px - 52px);
+    overflow: hidden;
   }
-  /* gridlines */
-  .gridlines{
-    position:absolute; left:42px; right:10px; top:0; bottom:28px;
-    display:flex; flex-direction:column; justify-content:space-between;
-    pointer-events:none;
-  }
-  .gridline{
-    border-top:1px dotted var(--border); height:0; position:relative;
-  }
-  .gridline span{
-    position:absolute; left:-34px; top:-7px; font-size:10px; color:var(--secondary);
-    width:30px; text-align:right;
-  }
-  .bars{ display:flex; align-items:flex-end; gap:40px; width:100%; justify-content:center; position:relative; z-index:1; }
-  .bar-col{ display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .bar-value{ font-family:'DIN','Segoe UI',sans-serif; font-size:16px; font-weight:700; color:var(--fg); }
-  .bar{
-    width:80px; border-radius:4px 4px 0 0; position:relative;
-    transition:height .4s ease;
-  }
-  .bar.green{  background:linear-gradient(180deg,#2EC858,var(--green)); }
-  .bar.yellow{ background:linear-gradient(180deg,#E8C633,var(--yellow)); }
-  .bar.orange{ background:linear-gradient(180deg,#F0824A,var(--orange)); }
-  .bar.red{    background:linear-gradient(180deg,#E25C6A,var(--red)); }
-  .bar-label{ font-size:11px; color:var(--secondary); font-weight:500; }
 
-  /* ── Info text box ─────────────────────────────────────── */
-  .info-box{
-    margin:4px 24px; background:var(--light); border:1px solid var(--border);
-    border-radius:4px; padding:10px 18px;
-    font-size:12px; color:var(--fg); display:flex; align-items:center; gap:8px;
+  /* ===== KPI ROW 1 ===== */
+  .kpi-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
   }
-  .info-box .dot{ width:6px; height:6px; border-radius:50%; background:var(--blue); }
-  .info-box .sep{ color:var(--border); margin:0 4px; }
-  .info-box strong{ color:var(--fg); font-weight:600; }
+  .kpi-card {
+    flex: 1;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border-left: 4px solid #002060;
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .kpi-card.yellow { border-left-color: #D4A017; }
+  .kpi-card.red { border-left-color: #C0392B; }
+  .kpi-card.green { border-left-color: #2E8B2E; }
+  .kpi-card.navy { border-left-color: #002060; }
+  .kpi-card.gold { border-left-color: #f0a010; }
+  .kpi-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #002060;
+    line-height: 1.2;
+  }
+  .kpi-card.red .kpi-value { color: #C0392B; }
+  .kpi-card.green .kpi-value { color: #2E8B2E; }
+  .kpi-card.yellow .kpi-value { color: #D4A017; }
+  .kpi-card.gold .kpi-value { color: #c08000; }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555555;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
 
-  /* ── Age band legend cards ─────────────────────────────── */
-  .band-cards{ display:flex; gap:12px; margin:4px 24px; }
-  .band-card{
-    flex:1; background:var(--white); border:1px solid var(--border); border-radius:4px;
-    padding:12px 14px; display:flex; align-items:center; gap:10px;
+  /* ===== KPI ROW 2 (R-tag) ===== */
+  .kpi-row-rtag {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
   }
-  .band-icon{ width:28px; height:28px; border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-  .band-icon.green{  background:#E6F7EC; }
-  .band-icon.yellow{ background:#FCF6D6; }
-  .band-icon.orange{ background:#FCE7DA; }
-  .band-icon.red{    background:#F8DEE0; }
-  .band-icon .dot{ width:10px; height:10px; border-radius:50%; }
-  .band-icon.green .dot{  background:var(--green);  }
-  .band-icon.yellow .dot{ background:var(--yellow); }
-  .band-icon.orange .dot{ background:var(--orange); }
-  .band-icon.red .dot{    background:var(--red);    }
-  .band-text .t{ font-size:12px; font-weight:600; color:var(--fg); }
-  .band-text .d{ font-size:10px; color:var(--secondary); margin-top:1px; }
+  .kpi-card-rtag {
+    flex: 1;
+    background: #FFFFFF;
+    border-radius: 6px;
+    border-left: 4px solid #f0a010;
+    padding: 14px 18px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    position: relative;
+  }
+  .kpi-card-rtag .kpi-value { color: #002060; }
+  .r-tag {
+    display: inline-block;
+    background: #f0a010;
+    color: #002060;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ===== CHART SECTION ===== */
+  .chart-section {
+    background: #FFFFFF;
+    border-radius: 6px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom: 16px;
+  }
+  .chart-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #002060;
+    margin-bottom: 16px;
+  }
+  .chart-container {
+    position: relative;
+    height: 260px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    border-bottom: 2px solid #D0D0D0;
+    padding: 0 40px;
+  }
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 120px;
+  }
+  .bar {
+    width: 80px;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .bar.green { background: #2E8B2E; }
+  .bar.yellow { background: #D4A017; }
+  .bar.gold { background: #f0a010; }
+  .bar.red { background: #C0392B; }
+  .bar-value {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    font-weight: 700;
+    color: #1A1A1A;
+  }
+  .bar-label {
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555555;
+  }
+  /* Gridlines */
+  .gridline {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    border-top: 1px dashed #D0D0D0;
+    width: calc(100% - 80px);
+  }
+  .y-axis-label {
+    position: absolute;
+    left: 0;
+    font-size: 10px;
+    color: #999;
+  }
+
+  /* Chart legend */
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #555555;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+  }
+  .legend-dot.green { background: #2E8B2E; }
+  .legend-dot.yellow { background: #D4A017; }
+  .legend-dot.gold { background: #f0a010; }
+  .legend-dot.red { background: #C0392B; }
+
+  /* ===== TEXT BOX ===== */
+  .summary-box {
+    background: #002060;
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 14px 24px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    border-left: 4px solid #f0a010;
+  }
+
+  /* ===== AGE BAND LEGEND CARDS ===== */
+  .age-band-row {
+    display: flex;
+    gap: 16px;
+  }
+  .age-band-card {
+    flex: 1;
+    background: #FFFFFF;
+    border-radius: 6px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    text-align: center;
+    border-top: 4px solid;
+  }
+  .age-band-card.green { border-top-color: #2E8B2E; }
+  .age-band-card.yellow { border-top-color: #D4A017; }
+  .age-band-card.gold { border-top-color: #f0a010; }
+  .age-band-card.red { border-top-color: #C0392B; }
+  .age-band-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #002060;
+  }
+  .age-band-range {
+    font-size: 11px;
+    color: #555555;
+    margin-top: 2px;
+  }
+  .age-band-count {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .age-band-card.green .age-band-count { color: #2E8B2E; }
+  .age-band-card.yellow .age-band-count { color: #D4A017; }
+  .age-band-card.gold .age-band-count { color: #c08000; }
+  .age-band-card.red .age-band-count { color: #C0392B; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
+<!-- ===== HEADER ===== -->
 <div class="header">
-  <div class="logo">BCT<span class="sub"> &nbsp;WMPP</span></div>
-  <div class="page-title">DRAFT OFFERS</div>
-  <button class="nav-btn">Summary</button>
-  <button class="nav-btn active">Draft Offers</button>
-  <button class="nav-btn">Placements</button>
-  <button class="nav-btn">Activity</button>
-  <button class="nav-btn">Reports</button>
+  <div class="header-logo">
+    <img src="bct_logo.png" height="40" alt="BCT Logo">
+  </div>
+  <div class="header-title">DRAFT OFFERS</div>
+  <div class="nav-buttons">
+    <button class="nav-btn">Dashboard</button>
+    <button class="nav-btn active">Draft Offers</button>
+    <button class="nav-btn">Provider Registry</button>
+    <button class="nav-btn">Placements</button>
+    <button class="nav-btn">Reports</button>
+    <button class="nav-btn">Admin</button>
+  </div>
 </div>
 
-<!-- ═══════════ FILTER BAR ═══════════ -->
+<!-- ===== FILTER BAR ===== -->
 <div class="filter-bar">
-  <span class="filter-label">Date</span>
-  <div class="filter-pill selected">Last 90 Days <span class="chev">▼</span></div>
-  <span class="filter-label">Placement Type</span>
-  <div class="filter-pill">All Types <span class="chev">▼</span></div>
-  <div class="filter-pill">Region <span class="chev">▼</span></div>
-  <div class="filter-pill">Status <span class="chev">▼</span></div>
-  <div class="filter-spacer"></div>
-  <span class="filter-meta">Data refreshed: 10 Jul 2026 08:15</span>
+  <div class="filter-item">
+    <span class="filter-label">Date:</span>
+    <input type="date" class="filter-date" value="2026-07-10">
+  </div>
+  <div class="filter-item">
+    <span class="filter-label">Placement Type:</span>
+    <select class="filter-select">
+      <option>All Placement Types</option>
+      <option>Fostering</option>
+      <option>Residential</option>
+      <option>Supported Accommodation</option>
+    </select>
+  </div>
+  <div class="filter-item">
+    <span class="filter-label">Status:</span>
+    <select class="filter-select">
+      <option>All Statuses</option>
+      <option>Draft</option>
+      <option>Submitted</option>
+    </select>
+  </div>
 </div>
 
-<!-- ═══════════ KPI ROW 1 ═══════════ -->
-<div class="kpi-section">
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main">
+
+  <!-- KPI ROW 1 -->
   <div class="kpi-row">
     <div class="kpi-card yellow">
-      <div class="label">Draft Count</div>
-      <div class="value">166</div>
-      <div class="sub">Total draft offers</div>
+      <div class="kpi-value">166</div>
+      <div class="kpi-label">Draft Count</div>
     </div>
     <div class="kpi-card red">
-      <div class="label">No Activity</div>
-      <div class="value">165</div>
-      <div class="sub">No changes since creation</div>
+      <div class="kpi-value">165</div>
+      <div class="kpi-label">No Activity</div>
     </div>
     <div class="kpi-card green">
-      <div class="label">With Activity</div>
-      <div class="value">1</div>
-      <div class="sub">Updated since creation</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-label">With Activity</div>
     </div>
     <div class="kpi-card red">
-      <div class="label">14+ Days in Draft</div>
-      <div class="value">114</div>
-      <div class="sub">Beyond SLA threshold</div>
+      <div class="kpi-value">114</div>
+      <div class="kpi-label">14+ Days</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Avg Days in Draft</div>
-      <div class="value">23</div>
-      <div class="sub">Mean age of all drafts</div>
+    <div class="kpi-card navy">
+      <div class="kpi-value">23</div>
+      <div class="kpi-label">Avg Days</div>
     </div>
     <div class="kpi-card red">
-      <div class="label">No Activity %</div>
-      <div class="value">99%</div>
-      <div class="sub">Of total draft count</div>
+      <div class="kpi-value">99%</div>
+      <div class="kpi-label">No Activity %</div>
     </div>
   </div>
 
-  <!-- ═══════════ KPI ROW 2 (NEW cards) ═══════════ -->
-  <div class="kpi-row">
-    <div class="kpi-card orange">
-      <div class="label">Missing Dates <span class="badge">R24</span></div>
-      <div class="value">8</div>
-      <div class="sub">Drafts with null date fields</div>
+  <!-- KPI ROW 2 (with R-tags) -->
+  <div class="kpi-row-rtag">
+    <div class="kpi-card-rtag">
+      <div class="kpi-value">8 <span class="r-tag">R24</span></div>
+      <div class="kpi-label">Missing Dates</div>
     </div>
-    <div class="kpi-card green">
-      <div class="label">Updated <span class="badge">R24</span></div>
-      <div class="value">3</div>
-      <div class="sub">Modified in last 24h</div>
+    <div class="kpi-card-rtag">
+      <div class="kpi-value">3 <span class="r-tag">R24</span></div>
+      <div class="kpi-label">Updated</div>
     </div>
-    <div class="kpi-card red">
-      <div class="label">Oldest <span class="badge">R24</span></div>
-      <div class="value">67</div>
-      <div class="sub">Days — oldest draft age</div>
+    <div class="kpi-card-rtag">
+      <div class="kpi-value">67 days <span class="r-tag">R24</span></div>
+      <div class="kpi-label">Oldest Draft</div>
     </div>
   </div>
-</div>
 
-<!-- ═══════════ CLUSTERED COLUMN CHART ═══════════ -->
-<div class="chart-wrap">
-  <div class="chart-head">
-    <div>
-      <div class="chart-title">Draft Offer Age Distribution</div>
-      <div class="chart-sub">Count of draft offers by age band (days since creation)</div>
-    </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--green)"></div>Healthy Pipeline</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--yellow)"></div>At Risk</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--orange)"></div>Outside Timeframe</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--red)"></div>Critical Pipeline</div>
-    </div>
-  </div>
-  <div class="chart-body">
-    <div class="gridlines">
-      <div class="gridline"><span>80</span></div>
-      <div class="gridline"><span>60</span></div>
-      <div class="gridline"><span>40</span></div>
-      <div class="gridline"><span>20</span></div>
-      <div class="gridline"><span>0</span></div>
-    </div>
-    <div class="bars">
-      <div class="bar-col">
-        <div class="bar-value">25</div>
-        <div class="bar green" style="height:125px"></div>
-        <div class="bar-label">0–7 days</div>
+  <!-- CHART -->
+  <div class="chart-section">
+    <div class="chart-title">Age Distribution of Draft Offers</div>
+    <div class="chart-container">
+      <!-- Gridlines -->
+      <div class="gridline" style="bottom: 200px;"><span class="y-axis-label">80</span></div>
+      <div class="gridline" style="bottom: 150px;"><span class="y-axis-label">60</span></div>
+      <div class="gridline" style="bottom: 100px;"><span class="y-axis-label">40</span></div>
+      <div class="gridline" style="bottom: 50px;"><span class="y-axis-label">20</span></div>
+      <div class="gridline" style="bottom: 0;"><span class="y-axis-label">0</span></div>
+
+      <!-- Bars -->
+      <div class="bar-group">
+        <div class="bar green" style="height: 63px;"><span class="bar-value">25</span></div>
+        <div class="bar-label">0-7 days</div>
       </div>
-      <div class="bar-col">
-        <div class="bar-value">22</div>
-        <div class="bar yellow" style="height:110px"></div>
-        <div class="bar-label">8–14 days</div>
+      <div class="bar-group">
+        <div class="bar yellow" style="height: 55px;"><span class="bar-value">22</span></div>
+        <div class="bar-label">8-14 days</div>
       </div>
-      <div class="bar-col">
-        <div class="bar-value">45</div>
-        <div class="bar orange" style="height:225px"></div>
-        <div class="bar-label">15–30 days</div>
+      <div class="bar-group">
+        <div class="bar gold" style="height: 113px;"><span class="bar-value">45</span></div>
+        <div class="bar-label">15-30 days</div>
       </div>
-      <div class="bar-col">
-        <div class="bar-value">74</div>
-        <div class="bar red" style="height:370px"></div>
+      <div class="bar-group">
+        <div class="bar red" style="height: 185px;"><span class="bar-value">74</span></div>
         <div class="bar-label">30+ days</div>
       </div>
     </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot green"></div> Healthy Pipeline</div>
+      <div class="legend-item"><div class="legend-dot yellow"></div> At Risk</div>
+      <div class="legend-item"><div class="legend-dot gold"></div> Outside Timeframe</div>
+      <div class="legend-item"><div class="legend-dot red"></div> Critical Pipeline</div>
+    </div>
   </div>
-</div>
 
-<!-- ═══════════ INFO TEXT BOX ═══════════ -->
-<div class="info-box">
-  <span class="dot"></span>
-  <strong>Average Days in Draft: 23</strong>
-  <span class="sep">|</span>
-  <strong>Oldest Draft Age: 67 days</strong>
-  <span class="sep">|</span>
-  <strong>99%</strong> have had no activity since creation
-</div>
+  <!-- SUMMARY TEXT BOX -->
+  <div class="summary-box">
+    Average Days in Draft: 23 &nbsp;|&nbsp; Oldest: 67 days &nbsp;|&nbsp; 99% no activity since creation
+  </div>
 
-<!-- ═══════════ AGE BAND LEGEND CARDS ═══════════ -->
-<div class="band-cards">
-  <div class="band-card">
-    <div class="band-icon green"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">0–7 days · Healthy Pipeline</div>
-      <div class="d">25 drafts — within normal processing window</div>
+  <!-- AGE BAND LEGEND CARDS -->
+  <div class="age-band-row">
+    <div class="age-band-card green">
+      <div class="age-band-title">Healthy Pipeline</div>
+      <div class="age-band-range">0-7 days</div>
+      <div class="age-band-count">25</div>
+    </div>
+    <div class="age-band-card yellow">
+      <div class="age-band-title">At Risk</div>
+      <div class="age-band-range">8-14 days</div>
+      <div class="age-band-count">22</div>
+    </div>
+    <div class="age-band-card gold">
+      <div class="age-band-title">Outside Timeframe</div>
+      <div class="age-band-range">15-30 days</div>
+      <div class="age-band-count">45</div>
+    </div>
+    <div class="age-band-card red">
+      <div class="age-band-title">Critical Pipeline</div>
+      <div class="age-band-range">30+ days</div>
+      <div class="age-band-count">74</div>
     </div>
   </div>
-  <div class="band-card">
-    <div class="band-icon yellow"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">8–14 days · At Risk</div>
-      <div class="d">22 drafts — approaching SLA threshold</div>
-    </div>
-  </div>
-  <div class="band-card">
-    <div class="band-icon orange"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">15–30 days · Outside Timeframe</div>
-      <div class="d">45 drafts — beyond recommended timeline</div>
-    </div>
-  </div>
-  <div class="band-card">
-    <div class="band-icon red"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">30+ days · Critical Pipeline</div>
-      <div class="d">74 drafts — immediate review required</div>
-    </div>
-  </div>
-</div>
 
+</div>
 </body>
 </html>
