@@ -1,0 +1,98 @@
+table dim_category
+	lineageTag: f50743b3-2581-42cb-b649-54a64f73a96f
+	sourceLineageTag: 82343e02-d4fe-43ab-b7ed-ec17dd52dddf
+
+	column framework_category_id
+		dataType: string
+		isNullable: false
+		lineageTag: bcc8b69c-3673-4b4c-9f83-539d809c17d6
+		sourceLineageTag: 57b71841-a86d-4e5f-b539-7ca43e0e19d4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		annotation SummarizationSetBy = User
+
+	column category_name
+		dataType: string
+		lineageTag: c21ba15f-8ccc-4faf-9659-7f9232b8365b
+		sourceLineageTag: 3a3e1379-ecc0-450f-9d9f-197d01578daa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: category_name
+
+		annotation SummarizationSetBy = User
+
+	column framework_code
+		dataType: string
+		lineageTag: 7c7b7a6c-a8ed-4c9c-b500-279aa40b9adc
+		sourceLineageTag: 60324921-d7ca-4fad-b623-635d694a56b4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = User
+
+	column framework_name
+		dataType: string
+		lineageTag: 43c2965d-b8d2-4f7c-9032-bc0152f187ee
+		sourceLineageTag: b6aadffd-d6a0-48e8-adbd-632dfa639c3b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_name
+
+		annotation SummarizationSetBy = User
+
+	column framework_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1ea0287f-44df-4e77-843b-9a37e4fea8c4
+		sourceLineageTag: c1137c27-eec8-4573-be3b-d8d4af2c3ef8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_start_date
+
+		variation Variation
+			isDefault
+			relationship: a410b30f-6785-4906-b745-521e4d705744
+			defaultHierarchy: LocalDateTable_1d1f28af-4ee0-445d-932d-406e35e3ffc7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column framework_end_date
+		dataType: string
+		lineageTag: 13d30cb8-9895-4860-bb63-8cc4f466f3cc
+		sourceLineageTag: e3ccb6bd-fa3f-4cca-85e0-4770d1cc3573
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_end_date
+
+		annotation SummarizationSetBy = User
+
+	column placement_type
+		dataType: string
+		lineageTag: a36cfb05-bca0-45fa-8ef1-4885c447c386
+		sourceLineageTag: a50db764-513a-46b5-be45-5994c72de522
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = User
+
+	column category_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 94b72b13-236c-4e5d-b843-ac21d1a0c6cc
+		sourceLineageTag: ef227b52-cbd1-4997-8ef6-01526854cf01
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: category_sk
+
+		annotation SummarizationSetBy = User
+
+	partition dim_category = entity
+		mode: directQuery
+		source
+			entityName: dim_category
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

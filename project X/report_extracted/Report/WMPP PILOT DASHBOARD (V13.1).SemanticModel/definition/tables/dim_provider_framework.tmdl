@@ -1,0 +1,68 @@
+table dim_provider_framework
+	lineageTag: b0996f64-a49a-4a6f-8d94-b8473455e88f
+	sourceLineageTag: a7724283-d1f2-495e-a25f-e4a75c8decd7
+
+	column provider_framework_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 0b59a7ed-e245-4539-ab76-aeb7606b9f31
+		sourceLineageTag: eaa0d96f-47c0-4b83-95aa-4a6610b2308c
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: provider_framework_id
+
+		annotation SummarizationSetBy = User
+
+	column provider_id
+		dataType: string
+		lineageTag: cc444b2a-2e78-42df-9008-3fcdb35f2c31
+		sourceLineageTag: 58fb8cee-7b47-40c7-8947-e8d4131b92dc
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = User
+
+	column framework_code
+		dataType: string
+		lineageTag: af1145d6-1e60-44a1-a0fb-4ec7ae0624b4
+		sourceLineageTag: 6f2e9884-5fe7-42a4-ace6-de2308f00d2c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = User
+
+	column qa_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a1be53da-c663-44dd-9b45-4867432f00b0
+		sourceLineageTag: 4d18c4b4-ca28-47cc-922e-df06f1a8f05f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f23055da-b46d-4a59-8e66-3e3d4c0ade54
+		sourceLineageTag: 9e7781c3-db13-4fd5-9301-89af4818d56f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 0e422e34-60ba-46b6-8e2a-e62ab9976ece
+			defaultHierarchy: LocalDateTable_efcb9c79-f5af-4d12-b2d3-95377a4b1c64.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	partition dim_provider_framework = entity
+		mode: directQuery
+		source
+			entityName: dim_provider_framework
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

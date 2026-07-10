@@ -1,0 +1,79 @@
+table dim_framework
+	lineageTag: 3efbb904-c326-4c46-88c0-c3cd77aa30d5
+	sourceLineageTag: ef170781-e5b2-41b2-9c81-8d4c1f5006d3
+
+	column framework_code
+		dataType: string
+		isNullable: false
+		lineageTag: 0bb539e1-cd12-47ff-8291-0db8f10ddf48
+		sourceLineageTag: 09681a6e-739b-4ecb-84a0-9aa9c5d492ae
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = User
+
+	column framework_name
+		dataType: string
+		lineageTag: 7b8c7dec-cf6d-4b61-970e-ea971c098862
+		sourceLineageTag: 2af231d3-9802-486c-ad40-c7c761036b7c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_name
+
+		annotation SummarizationSetBy = User
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 598ca818-a2fa-446d-b74f-976226a192ac
+		sourceLineageTag: af6f30cc-154a-4b83-bf0f-91a0f1fd6854
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: start_date
+
+		variation Variation
+			isDefault
+			relationship: 4667b1f0-7fe1-47c5-857f-1719bf372da2
+			defaultHierarchy: LocalDateTable_3c610ead-1ead-40e8-a8cd-e61d9fa02e4d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column end_date
+		dataType: string
+		lineageTag: 7d7230e5-93dd-4ebb-be01-4b233cd0ed24
+		sourceLineageTag: 834ff39c-03f8-494d-b732-2d1ce67b6eae
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: end_date
+
+		annotation SummarizationSetBy = User
+
+	column placement_type
+		dataType: string
+		isNullable: false
+		lineageTag: 11f47869-4d54-4b95-bb11-432e537d512f
+		sourceLineageTag: b86372d3-088b-46cc-be73-498ae684be59
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = User
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: 3de991e6-3600-4fa2-9bd2-0e1cb7c370b2
+		sourceLineageTag: bd9ccaa4-6483-44dd-ba16-71a130fe3a95
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = User
+
+	partition dim_framework = entity
+		mode: directQuery
+		source
+			entityName: dim_framework
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

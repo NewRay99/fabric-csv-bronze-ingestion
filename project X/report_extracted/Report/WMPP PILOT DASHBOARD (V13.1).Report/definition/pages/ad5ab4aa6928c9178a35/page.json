@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "ad5ab4aa6928c9178a35",
+  "displayName": "DRAFT OFFERS",
+  "displayOption": "FitToPage",
+  "height": 1100,
+  "width": 1500,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "ThemeDataColor": {
+                    "ColorId": 0,
+                    "Percent": 0
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "73D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "6040fdae007255ad4943",
+      "target": "d4628199112261992cbd",
+      "type": "DataFilter"
+    },
+    {
+      "source": "6040fdae007255ad4943",
+      "target": "374200eeb09c62499021",
+      "type": "DataFilter"
+    }
+  ]
+}

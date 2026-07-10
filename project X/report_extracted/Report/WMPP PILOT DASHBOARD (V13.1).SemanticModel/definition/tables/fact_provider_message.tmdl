@@ -1,0 +1,118 @@
+table fact_provider_message
+	lineageTag: 442fc124-d5b3-4026-9d3f-88e4c4bac3bb
+	sourceLineageTag: 71da728b-9fed-4684-8dbb-a7a4071f8f92
+
+	column message_id
+		dataType: string
+		lineageTag: e451fe9a-c327-406f-ad70-059acd83e294
+		sourceLineageTag: 3484b07c-bc8c-4e23-a2d0-b183d6eabe56
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 208b0c0d-8bdd-4f21-8397-e09c65f57ed3
+		sourceLineageTag: ef596525-d377-433b-9c85-1e80516ce0f1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = User
+
+	column message_read_by
+		dataType: string
+		lineageTag: d9f9c3e9-6114-4804-9257-b3d93635fd7d
+		sourceLineageTag: 59ce070c-d878-4e39-9ac2-4c8dbc6d46ef
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		annotation SummarizationSetBy = User
+
+	column message_read_timestamp
+		dataType: string
+		lineageTag: 21871a1f-72bc-4f57-bf4b-6956accf9c81
+		sourceLineageTag: 042101d7-6664-4c34-bc8d-3aa6fc953628
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		annotation SummarizationSetBy = User
+
+	column message_text
+		dataType: string
+		lineageTag: e642aac9-3433-47ab-9e87-98b766888aed
+		sourceLineageTag: d1229f37-292f-468b-a413-6d2c15393d73
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_text
+
+		annotation SummarizationSetBy = User
+
+	column created_timestamp
+		dataType: string
+		lineageTag: 1a2bda5f-cd4f-45b9-8f03-42ecda2b3710
+		sourceLineageTag: 6b912f0a-c11d-459e-90fa-f362c3cd619d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: 53b74247-a690-4d04-ba17-302f2565e914
+		sourceLineageTag: 75e417f5-18e1-4c3d-95a0-97138034e9c6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 96c282e9-14a1-49e1-a224-9c5b46c2afe1
+		sourceLineageTag: 8f342fe0-5bfc-46d8-9534-727bb7430cc1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: b9e1d730-c0c0-44a4-bce0-a5739997b4ac
+			defaultHierarchy: LocalDateTable_cb1f7675-6be0-4d04-b7a5-22ae1fed1cb5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column referral_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: b8bffcee-c8f8-4657-bc5c-61b5f6f8464f
+		sourceLineageTag: 782c11fa-41eb-44f9-ac8d-a447bd727520
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = User
+
+	column provider_home_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ce5e965e-13e5-4d9c-af84-a36252383ea1
+		sourceLineageTag: 735978ce-ddc7-4f58-88af-f8d784da8556
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: provider_home_sk
+
+		annotation SummarizationSetBy = User
+
+	partition fact_provider_message = entity
+		mode: directQuery
+		source
+			entityName: fact_provider_message
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

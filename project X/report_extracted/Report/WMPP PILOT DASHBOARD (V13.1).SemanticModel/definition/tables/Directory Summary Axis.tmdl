@@ -1,0 +1,20 @@
+table 'Directory Summary Axis'
+	lineageTag: 9f85c3c6-c167-498f-a343-5b7148b888c2
+	sourceLineageTag: 3e4c249a-58fb-416e-a307-c9e1a59ac6ed
+
+	column 'Display Type'
+		dataType: string
+		lineageTag: 880e5ee3-f4ef-49de-9e78-20d82df5ebcb
+		sourceLineageTag: 888fdbcd-1666-4753-8988-48c81abda9c0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Display Type
+
+		annotation SummarizationSetBy = User
+
+	partition 'Directory Summary Axis' = entity
+		mode: directQuery
+		source
+			entityName: Directory Summary Axis
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

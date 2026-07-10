@@ -1,0 +1,31 @@
+table 'Referral Closure Reason Summary'
+	lineageTag: 781ed9a5-fb1d-44a8-b6f6-7cb7901addfc
+	sourceLineageTag: aa4a171e-4e24-4254-b00a-1af2a743f284
+
+	column referral_id
+		dataType: string
+		isNullable: false
+		lineageTag: e55f79d5-1591-41d5-a60b-dda0b0976cbb
+		sourceLineageTag: fcc9b980-28ea-4f7e-bd3e-8d1c97f5484f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column 'Closed Referral Reason Bucket'
+		dataType: string
+		lineageTag: 885c1a99-1aba-4f11-9a63-10a1c6789d98
+		sourceLineageTag: 03bfcaf4-32dd-4233-a405-e77c14b673b4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Closed Referral Reason Bucket
+
+		annotation SummarizationSetBy = User
+
+	partition 'Referral Closure Reason Summary' = entity
+		mode: directQuery
+		source
+			entityName: Referral Closure Reason Summary
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

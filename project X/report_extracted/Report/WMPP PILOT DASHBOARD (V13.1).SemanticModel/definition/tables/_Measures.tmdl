@@ -1,0 +1,622 @@
+table _Measures
+	lineageTag: 88f2be75-18c6-4f0b-a336-02040da9972c
+	sourceLineageTag: 712bae27-868f-4173-abe7-64ce2ab38422
+
+	measure 'Total Referrals' = EXTERNALMEASURE("Total Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: c5d744d8-a350-4ce4-9160-59d14c5a4ec4
+		sourceLineageTag: 6323e309-be45-4771-93c9-b5940e7b3c14
+		dataCategory: Uncategorized
+
+	measure 'Referrals With Offers' = EXTERNALMEASURE("Referrals With Offers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: 53a07145-52f0-4855-8cb6-21f29e937526
+		sourceLineageTag: 7f0f7b0e-df90-400b-a2a9-a4955a71daa7
+		dataCategory: Uncategorized
+
+	measure 'Referrals Awaiting Offer' = EXTERNALMEASURE("Referrals Awaiting Offer", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: 242f460c-cca2-4f54-9190-a9c51abd8245
+		sourceLineageTag: 76689445-0377-4e72-9b3b-7b5fa4d9b1a7
+		dataCategory: Uncategorized
+
+	measure 'No. Providers Who Made Offers' = EXTERNALMEASURE("No. Providers Who Made Offers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: b63278c9-05f6-482c-b6b4-a086d933e6d4
+		sourceLineageTag: fa759a7d-4361-48b4-95f4-9f9397ce05ee
+		dataCategory: Uncategorized
+
+	measure 'Total Offers Made Historically' = EXTERNALMEASURE("Total Offers Made Historically", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 8bccae17-028a-4965-85bb-2f59a4ec1bed
+		sourceLineageTag: a60e7175-e2be-4aff-b11e-252839c54ae0
+		dataCategory: Uncategorized
+
+	measure 'Avg Offers per Referral Under Offer' = EXTERNALMEASURE("Avg Offers per Referral Under Offer", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Provider Activity KPIs
+		lineageTag: 41680e85-abd1-43dd-b9ec-1d739e5f7812
+		sourceLineageTag: bfe9a2e9-a57e-4984-b3ec-58bf784bf06f
+		dataCategory: Uncategorized
+
+	measure 'Avg Offers per Provider (Under Offer)' = EXTERNALMEASURE("Avg Offers per Provider (Under Offer)", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Provider Activity KPIs
+		lineageTag: 8da45b4f-bf76-448d-9b14-c3230bff832b
+		sourceLineageTag: 486d4d4c-7e13-4746-ba81-0bef2c94f802
+		dataCategory: Uncategorized
+
+	measure 'Referrals This Month' = EXTERNALMEASURE("Referrals This Month", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Timebased KPis
+		lineageTag: c66e476d-32d7-4b9e-9ce1-059b54a31f61
+		sourceLineageTag: 0bafd5c1-1f64-4057-a0ec-341c853b1be9
+		dataCategory: Uncategorized
+
+	measure 'Referrals This FY' = EXTERNALMEASURE("Referrals This FY", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Timebased KPis
+		lineageTag: bd266854-2cb3-4476-aefe-6d57bfd2fd9f
+		sourceLineageTag: 95988cf7-0c45-47c0-8c6b-31d8d3f50a47
+		dataCategory: Uncategorized
+
+	measure 'Successful Offers (Under Offer Referrals)' = EXTERNALMEASURE("Successful Offers (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 22997015-9411-47fe-a105-5eb925d21142
+		sourceLineageTag: a6249863-7e2a-4683-b336-3179a1a5e8d4
+		dataCategory: Uncategorized
+
+	measure 'Unsuccessful Offers (Under Offer Referrals)' = EXTERNALMEASURE("Unsuccessful Offers (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 125c3981-ae9c-4e2a-8a3b-d95717f3a3a0
+		sourceLineageTag: 6bb8307a-18f1-499f-8668-a1c37656ef15
+		dataCategory: Uncategorized
+
+	measure 'Offers in Draft (Under Offer Referrals)' = EXTERNALMEASURE("Offers in Draft (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 9d0aa391-c24b-4dce-93d3-64353316ea09
+		sourceLineageTag: 37f211b7-8a19-4974-9dae-24ba648ba00f
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers (Under Offer Referrals)' = EXTERNALMEASURE("Pending Offers (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 3d769a1e-cc2f-44d8-9723-46d1c7ce1022
+		sourceLineageTag: 182eb22f-a4c1-4db5-900e-a4cf02238260
+		dataCategory: Uncategorized
+
+	measure '(NEW)Total Offers Made' = EXTERNALMEASURE("(NEW)Total Offers Made", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Spot vs Framework
+		lineageTag: a1b5fbec-b8a6-4e24-a96f-70aa9066afb8
+		sourceLineageTag: a5dc703d-6c77-43ee-b34c-b839f0485060
+		dataCategory: Uncategorized
+
+	measure 'Male Referrals' = EXTERNALMEASURE("Male Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: d21ff7c6-f6b5-4ee6-95e6-0a6c50644004
+		sourceLineageTag: a4aa2582-6622-4eef-ba93-115ae9202322
+		dataCategory: Uncategorized
+
+	measure 'Female Referrals' = EXTERNALMEASURE("Female Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: b12c53d9-6a35-4f78-a489-62690f7242fd
+		sourceLineageTag: 280c6c44-518b-4185-8957-c1782dea4a4d
+		dataCategory: Uncategorized
+
+	measure 'Other Referrals' = EXTERNALMEASURE("Other Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: 30c9adfa-3848-4d43-b8e2-2976f5ce1bde
+		sourceLineageTag: 56b82b4c-567a-4e71-b09a-1242262ed977
+		dataCategory: Uncategorized
+
+	measure 'Dashboard Last Refreshed:' = EXTERNALMEASURE("Dashboard Last Refreshed:", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Dashboad Refresh DAX
+		lineageTag: b4cad160-b68a-4cde-b82b-ea112b290efb
+		sourceLineageTag: 9fa4e154-2c7f-47fd-ab67-2add00141cf3
+		dataCategory: Uncategorized
+
+	measure 'Placement Type Totals (Visual)' = EXTERNALMEASURE("Placement Type Totals (Visual)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Spot vs Framework
+		lineageTag: a706163c-6978-49f0-bcff-f723523d67e1
+		sourceLineageTag: 8d96a1fb-4822-49b0-bb9f-2a61324df1d0
+		dataCategory: Uncategorized
+
+	measure 'Latest Export per Offer' = EXTERNALMEASURE("Latest Export per Offer", DATETIME, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: General Number
+		displayFolder: Miscellaneous Queries
+		lineageTag: 3c300094-3bfc-4f0c-9460-9fdc24f9461d
+		sourceLineageTag: b74f81fa-64f8-47ee-bad4-8791963726dd
+		dataCategory: Uncategorized
+
+	measure 'Offer Count' = EXTERNALMEASURE("Offer Count", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: aa9da271-9503-4239-b9ce-b9406c0e8779
+		sourceLineageTag: 51c9956a-a206-404f-8311-145b3029ee56
+		dataCategory: Uncategorized
+
+	measure 'Latest Offer Status Count' = EXTERNALMEASURE("Latest Offer Status Count", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Miscellaneous Queries
+		lineageTag: 0d89b93e-ea18-412e-8f38-fbbca10b012e
+		sourceLineageTag: 19ad85dd-1b85-4f1f-a782-96b859621732
+		dataCategory: Uncategorized
+
+	measure 'Total Gendered Referrals' = EXTERNALMEASURE("Total Gendered Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: ca67c9c7-13f8-44bd-95fc-ac05d9395cff
+		sourceLineageTag: 79529786-b09c-4496-bc69-ff0f5bf8ed5d
+		dataCategory: Uncategorized
+
+	measure 'Provider Homes Registered' = EXTERNALMEASURE("Provider Homes Registered", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: #,0
+		displayFolder: Provider Registry
+		lineageTag: b5b9f3b7-40d0-431d-8937-9cb89ccc4ce0
+		sourceLineageTag: 53d92208-5d26-4a21-8b74-0a1ba2bb3637
+		dataCategory: Uncategorized
+
+	measure 'Providers Registered' = EXTERNALMEASURE("Providers Registered", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 4c756cce-7c9b-41ca-b94e-055b406d614a
+		sourceLineageTag: dca64fd9-3c14-48d2-af14-910c9d5119ad
+		dataCategory: Uncategorized
+
+	measure 'Referrals Currently Active' = EXTERNALMEASURE("Referrals Currently Active", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 54911e6e-cd90-443b-afbf-5a784e57ab78
+		sourceLineageTag: c38981f9-2b39-4084-ac10-c1e7f88f3f07
+		dataCategory: Uncategorized
+
+	measure 'Active Referrals Under Offer' = EXTERNALMEASURE("Active Referrals Under Offer", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 64a9274b-c181-490c-be50-049494472b28
+		sourceLineageTag: 238dd258-9c43-4841-8f2d-1e446ce2e72a
+		dataCategory: Uncategorized
+
+	measure 'Referrals Cancelled/Closed' = EXTERNALMEASURE("Referrals Cancelled/Closed", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 4dcac65c-1662-4dd1-989a-89119061ee2d
+		sourceLineageTag: c9646831-a1e8-4348-8da0-3729bc2aa106
+		dataCategory: Uncategorized
+
+	measure 'Active Referrals Awaiting Offers' = EXTERNALMEASURE("Active Referrals Awaiting Offers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 805cf404-a9c2-44bc-8178-3a02d81a56b9
+		sourceLineageTag: 4d514fb3-8116-4be6-8a8a-f4f2672976f5
+		dataCategory: Uncategorized
+
+	measure 'Referrals With One or More Offers' = EXTERNALMEASURE("Referrals With One or More Offers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 5bf2ec57-3173-4ac1-bd64-2065b45ce71c
+		sourceLineageTag: 7e1bb40e-dbc4-426e-957f-74fe1871955d
+		dataCategory: Uncategorized
+
+	measure 'Draft No Activity Since Creation (Under Offer Referrals)' = EXTERNALMEASURE("Draft No Activity Since Creation (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: d4e6382c-7317-48e7-92e3-74bdef3ea9b4
+		sourceLineageTag: 0805fd7c-83e1-4caa-9d97-cda725926c7a
+		dataCategory: Uncategorized
+
+	measure 'Draft Offers With Activity Since Creation' = EXTERNALMEASURE("Draft Offers With Activity Since Creation", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: ca776eee-9ade-4dd4-a65f-73cc6bc669de
+		sourceLineageTag: 7297ff37-222c-44ef-ac1c-119d63a20a60
+		dataCategory: Uncategorized
+
+	measure 'Draft Offers Missing Dates' = EXTERNALMEASURE("Draft Offers Missing Dates", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: 790424bf-bfbb-4973-a636-a4c2867eccc5
+		sourceLineageTag: 8c7fc1d9-b83b-4eaa-9fde-0fd8a713a2bb
+		dataCategory: Uncategorized
+
+	measure 'Draft Offers Updated After Creation' = EXTERNALMEASURE("Draft Offers Updated After Creation", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: c51cffee-066f-41e8-b261-34f2a7744ed9
+		sourceLineageTag: 436dda3c-963e-473b-8b41-f957d762de6d
+		dataCategory: Uncategorized
+
+	measure 'Draft No Activity 7+ Days' = EXTERNALMEASURE("Draft No Activity 7+ Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: 12d36cbd-b1a9-41be-acd1-26d4b7578462
+		sourceLineageTag: 8c6c5599-05ae-4005-a629-3732423e1120
+		dataCategory: Uncategorized
+
+	measure 'Drafts No Activity 14+ Days (Under Offer Referrals)' = EXTERNALMEASURE("Drafts No Activity 14+ Days (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: 21d4a6cb-8f23-4540-ad59-095320836b64
+		sourceLineageTag: 32521366-3a68-49be-9571-dc02df8807ba
+		dataCategory: Uncategorized
+
+	measure 'Average Days in Draft' = EXTERNALMEASURE("Average Days in Draft", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Draft/Pending Offers
+		lineageTag: 99722ab0-1d9f-47b2-ab07-0731ee6c1463
+		sourceLineageTag: 626c0f5e-b234-4358-a49f-338c3050cfec
+		dataCategory: Uncategorized
+
+	measure 'Oldest Draft Age (Days)' = EXTERNALMEASURE("Oldest Draft Age (Days)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: c8f75118-f12b-4e50-bf92-5737c8efb839
+		sourceLineageTag: 074b02a5-c5f5-4e9f-a1e7-b062981aa55b
+		dataCategory: Uncategorized
+
+	measure 'Draft Offer Count (Under Offer Referrals)' = EXTERNALMEASURE("Draft Offer Count (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Draft/Pending Offers
+		lineageTag: c6896b05-db00-44ba-aec1-09091a04ff0a
+		sourceLineageTag: 8562c005-0e24-4fd9-a7a5-e169eaaec9db
+		dataCategory: Uncategorized
+
+	measure 'Draft With No Activity Since Creation (%)' = EXTERNALMEASURE("Draft With No Activity Since Creation (%)", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Draft/Pending Offers
+		lineageTag: a2405534-6bc2-40c8-840f-668c48dc7151
+		sourceLineageTag: 2a730e36-425a-4be9-bced-20c5638c487e
+		dataCategory: Uncategorized
+
+	measure 'Drafts With No Activity 14+ Days' = EXTERNALMEASURE("Drafts With No Activity 14+ Days", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Draft/Pending Offers
+		lineageTag: 646cb76e-581f-4f43-8c34-0428eff23f22
+		sourceLineageTag: c087a28a-91b0-4a5b-abdb-a6bb7583017b
+		dataCategory: Uncategorized
+
+	measure 'Closed Referrals (by Reason)' = EXTERNALMEASURE("Closed Referrals (by Reason)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 137aca78-cbe4-432d-b922-71c4687d3197
+		sourceLineageTag: 2939d3a1-44af-4b29-b68c-0800d2780f52
+		dataCategory: Uncategorized
+
+	measure 'Providers - Fostering' = EXTERNALMEASURE("Providers - Fostering", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 90ebd991-3b24-4515-b1c0-b6ff83afd5b2
+		sourceLineageTag: 5a8fb78f-bb8a-4338-ab5a-00e89e70b32e
+		dataCategory: Uncategorized
+
+	measure 'Providers - Residential' = EXTERNALMEASURE("Providers - Residential", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 66039b85-68ed-46bd-9cc6-72e1d6d47864
+		sourceLineageTag: f2025bb7-e1a0-4551-ac06-fa769543c735
+		dataCategory: Uncategorized
+
+	measure 'Providers - Supported Accommodation' = EXTERNALMEASURE("Providers - Supported Accommodation", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 718a6275-283c-494e-b14c-551a6cc0cdcf
+		sourceLineageTag: a4dfe6f5-7890-4541-8246-8a92fc9478f0
+		dataCategory: Uncategorized
+
+	measure 'Framework Providers' = EXTERNALMEASURE("Framework Providers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 8fab5bd3-27a4-4af2-8d4b-25e8596475b1
+		sourceLineageTag: 1c7a53aa-ecc1-4a60-9937-d559ee58e1dd
+		dataCategory: Uncategorized
+
+	measure 'NON Framework Providers' = EXTERNALMEASURE("NON Framework Providers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 3c2d5d11-6c72-48ee-93f5-5b8f430eacf5
+		sourceLineageTag: 75b5f1e4-a107-42df-8f7e-62906d7cea09
+		dataCategory: Uncategorized
+
+	measure 'Is Non Framework Provider' = EXTERNALMEASURE("Is Non Framework Provider", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 6077de6a-2ac7-4450-b7f5-c776919d14cf
+		sourceLineageTag: 4e32101d-4700-4166-8295-37a7dd66f27a
+		dataCategory: Uncategorized
+
+	measure 'Directory Summary Count' = EXTERNALMEASURE("Directory Summary Count", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 910d4e2b-7d89-4d23-9533-07781b483a2e
+		sourceLineageTag: cceb583e-e6d7-4b00-a844-81dab59676d9
+		dataCategory: Uncategorized
+
+	measure 'Residential Homes' = EXTERNALMEASURE("Residential Homes", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 15dd5721-5ddb-4a87-8382-b1ca7dba4d66
+		sourceLineageTag: ca54c38c-17fd-4856-b4c8-325d7b46f263
+		dataCategory: Uncategorized
+
+	measure 'Supported Accommodation Homes' = EXTERNALMEASURE("Supported Accommodation Homes", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 8b38cf86-0a3b-4444-a68e-9abbb847fd22
+		sourceLineageTag: 3c6d0352-6a64-4dba-a8c4-42bd254313c8
+		dataCategory: Uncategorized
+
+	measure 'Fostering Providers' = EXTERNALMEASURE("Fostering Providers", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 02bb3a8b-056b-49a9-a7c9-d2ea3a430cd4
+		sourceLineageTag: 992d4cd7-962f-43f0-a2fc-da4018e4601d
+		dataCategory: Uncategorized
+
+	measure 'Fostering Chart Count' = EXTERNALMEASURE("Fostering Chart Count", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Registry
+		lineageTag: 2125efe8-36a3-410b-b08d-958ca833f79c
+		sourceLineageTag: dd2a461e-b3bc-4f5f-97c1-d7d470c45e87
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers by Age Bucket' = EXTERNALMEASURE("Pending Offers by Age Bucket", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 810f1d53-98f6-4de9-8ec0-39bae3376690
+		sourceLineageTag: 39c63440-21e5-4485-8766-7631d52f123a
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers 15–30 Days' = EXTERNALMEASURE("Pending Offers 15–30 Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 48eabd60-084c-4efc-a496-f62c7df94ece
+		sourceLineageTag: 817b25cc-af90-4835-9211-9d2ab26e6e25
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers 30+ Days' = EXTERNALMEASURE("Pending Offers 30+ Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 178f9731-7431-41ba-b230-f6c157791ea9
+		sourceLineageTag: 6ae703ee-2b7a-459b-b140-db57f0a3b3be
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers 0–7 Days' = EXTERNALMEASURE("Pending Offers 0–7 Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: c1febe8c-577c-4bf4-92a2-5588520bad44
+		sourceLineageTag: 2f93e1fc-0734-4d78-bf32-ad604513b698
+		dataCategory: Uncategorized
+
+	measure 'Pending Offers 8–14 Days' = EXTERNALMEASURE("Pending Offers 8–14 Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 702519dc-ebf7-467c-ba5b-ca610b12ca3e
+		sourceLineageTag: 202c659c-fee5-4153-8335-345c2e1f427a
+		dataCategory: Uncategorized
+
+	measure 'Provider with Offers over 30+ Days' = EXTERNALMEASURE("Provider with Offers over 30+ Days", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: c31780c7-3fd6-4e4f-a41d-7e1da25e23f3
+		sourceLineageTag: 6a876819-2f18-4c1e-87f9-b81032486248
+		dataCategory: Uncategorized
+
+	measure 'Offers At Risk (8–14 Days)' = EXTERNALMEASURE("Offers At Risk (8–14 Days)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 9e76a1b6-7154-41f1-9e7c-a2f5b2547112
+		sourceLineageTag: 2ba2fa3f-af10-4d17-a2e8-1c4d892b5ecc
+		dataCategory: Uncategorized
+
+	measure 'Offers Outside Timeframe (15–30 Days)' = EXTERNALMEASURE("Offers Outside Timeframe (15–30 Days)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 7dd093ac-dce1-49fc-870f-af12642a31ca
+		sourceLineageTag: e80ec6cb-7cf4-466b-8038-5c6186ffe562
+		dataCategory: Uncategorized
+
+	measure 'Critical Offers (30+ Days)' = EXTERNALMEASURE("Critical Offers (30+ Days)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Pending offers
+		lineageTag: 11cbccb5-22b4-47f8-9273-761ccf6d1486
+		sourceLineageTag: cf93c2c5-1385-4a68-bee7-c7d44d108f3d
+		dataCategory: Uncategorized
+
+	measure 'Referrals Not Yet Closed (Created in Period)' = EXTERNALMEASURE("Referrals Not Yet Closed (Created in Period)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: 4719923d-92be-40e8-a4ad-d34cc71ba716
+		sourceLineageTag: 347b6523-ebbf-400f-9b71-14dee5786bde
+		dataCategory: Uncategorized
+
+	measure 'Referrals With Offers (Created in Period)' = EXTERNALMEASURE("Referrals With Offers (Created in Period)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Volume KPIs
+		lineageTag: 32271909-737b-40c9-942c-289cca53276b
+		sourceLineageTag: ede895b8-586c-4c46-8261-7a0ce079aced
+		dataCategory: Uncategorized
+
+	measure 'Total Referrals That Recieved Offers' = EXTERNALMEASURE("Total Referrals That Recieved Offers", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Referral Volume KPIs
+		lineageTag: cc937258-261c-423e-afc2-2891d204224d
+		sourceLineageTag: c46113a1-36b4-4cad-8c63-853a362003e0
+		dataCategory: Uncategorized
+
+	measure 'Active Referrals With Provider Engagement' = EXTERNALMEASURE("Active Referrals With Provider Engagement", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 4be7da75-ec85-41e1-9370-58e4eba6e27e
+		sourceLineageTag: 23283daf-e03b-4c88-8fbe-5c9d54c93057
+		dataCategory: Uncategorized
+
+	measure 'Active Referral Engagement Rate' = EXTERNALMEASURE("Active Referral Engagement Rate", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Provider Activity KPIs
+		lineageTag: 0470570c-c0d8-4a53-8eac-af71c477f730
+		sourceLineageTag: cc628e4a-edf8-407f-b5dd-470706356c93
+		dataCategory: Uncategorized
+
+	measure 'Active Awaiting Offers (Engaged)' = EXTERNALMEASURE("Active Awaiting Offers (Engaged)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: 3cba4a23-4461-4145-84b1-3f3e7307b321
+		sourceLineageTag: 0584de65-d334-43eb-96ee-2bd6ef0da472
+		dataCategory: Uncategorized
+
+	measure 'Active Awaiting Offers (No Engagement)' = EXTERNALMEASURE("Active Awaiting Offers (No Engagement)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Provider Activity KPIs
+		lineageTag: b0e9a7ab-e344-451b-a725-99fc22fb4e35
+		sourceLineageTag: 64509714-cb8c-419c-97d7-2d49be8bd9c8
+		dataCategory: Uncategorized
+
+	measure 'Total Offers Made (Active Referrals Under Offer)' = EXTERNALMEASURE("Total Offers Made (Active Referrals Under Offer)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 8e4ff2b0-88be-4800-aed9-43cb6e8676e3
+		sourceLineageTag: 6fb317fd-0ade-47c0-8dd0-0312d2a6012d
+		dataCategory: Uncategorized
+
+	measure 'Offer IDs (Under Offer Referrals)' = EXTERNALMEASURE("Offer IDs (Under Offer Referrals)", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Referral Offers
+		lineageTag: db5b624c-e53c-4ace-a25b-b288595f3f6e
+		sourceLineageTag: 241fb00a-70fe-44fc-a1f9-42d787ab5d6b
+		dataCategory: Uncategorized
+
+	measure 'Offers per Provider (Under Offer Referrals)' = EXTERNALMEASURE("Offers per Provider (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: 38d36523-c88d-48f3-8e1d-1c5efbb7d9a0
+		sourceLineageTag: 5791ed90-5c15-4d99-b037-a85fc959dbbe
+		dataCategory: Uncategorized
+
+	measure 'Spot Offers (Under Offer Referrals)' = EXTERNALMEASURE("Spot Offers (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Spot vs Framework
+		lineageTag: 86f1f097-6a7b-444b-827a-ba7a9e04ed43
+		sourceLineageTag: 208782f4-b742-4576-afc3-65f5119cd817
+		dataCategory: Uncategorized
+
+	measure 'Framework Offers (Under Offer Referrals)' = EXTERNALMEASURE("Framework Offers (Under Offer Referrals)", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: Referral Offers
+		lineageTag: c71fc004-d099-4839-8c8a-0a7237c5b680
+		sourceLineageTag: 8758d6ad-10cd-4c0f-a71e-4c0da4a82d29
+		dataCategory: Uncategorized
+
+	measure 'IPA Exists' = EXTERNALMEASURE("IPA Exists", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: 44478ec9-58d9-408a-925e-c161ecc4b9c4
+		sourceLineageTag: c6f0d16d-500d-4960-8ed3-c8588d56355d
+		dataCategory: Uncategorized
+
+	measure 'Accepted Offers (Scoped Table)' = EXTERNALMEASURE("Accepted Offers (Scoped Table)", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: Referral Offers
+		lineageTag: 8a4742e5-28dd-48ac-bf3e-22c4b7740d79
+		sourceLineageTag: 045fc5f2-7b2b-4f9f-811c-ad4b948939c2
+		dataCategory: Uncategorized
+
+	measure 'Is In Accepted KPI' = EXTERNALMEASURE("Is In Accepted KPI", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: 305ddd2b-a926-4256-8cca-cbc609bdf5c6
+		sourceLineageTag: 6842c1b2-aaae-4202-971f-62a35840465c
+		dataCategory: Uncategorized
+
+	measure 'Accepted Offers Base' = EXTERNALMEASURE("Accepted Offers Base", STRING, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: 67c9ecc1-bd8b-4259-a454-f37cb0c5a921
+		sourceLineageTag: 56fce66f-aed5-4f75-8ebe-2099158f5312
+		dataCategory: Uncategorized
+
+	measure 'IPA Created' = EXTERNALMEASURE("IPA Created", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: 5a63d1de-aff4-46dc-ade3-f3d1f56f67ba
+		sourceLineageTag: b0bd7e49-2026-4d49-bbe0-45560de0937d
+		dataCategory: Uncategorized
+
+	measure 'IPA Completed' = EXTERNALMEASURE("IPA Completed", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: 158ea324-d475-4f34-aba5-011eb6357c7e
+		sourceLineageTag: 99782e69-a2fc-4d06-b1d2-4cd73bfced49
+		dataCategory: Uncategorized
+
+	measure 'IPAs Pending Completion' = EXTERNALMEASURE("IPAs Pending Completion", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: 9cf18993-fd0c-48c3-aa46-309a3e4be890
+		sourceLineageTag: 0c473b07-46d6-47ef-80fc-4ed8d69c38d1
+		dataCategory: Uncategorized
+
+	measure 'Offers Awaiting IPA Creation' = EXTERNALMEASURE("Offers Awaiting IPA Creation", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: de036986-4173-42d6-a14b-0d817af863ba
+		sourceLineageTag: 635fe8f7-f5ed-4383-a14b-bd2889938b07
+		dataCategory: Uncategorized
+
+	measure 'Is IPA Pending' = EXTERNALMEASURE("Is IPA Pending", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: 2c161ce3-9fc7-41bd-93f1-6907ffe27253
+		sourceLineageTag: c6dc9179-c710-49fd-8909-8cc69d8ceb38
+		dataCategory: Uncategorized
+
+	measure 'Is Awaiting IPA Creation' = EXTERNALMEASURE("Is Awaiting IPA Creation", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: baceba13-45e2-4a5b-a5dd-ec00e4894046
+		sourceLineageTag: 058b9fac-f4cd-492f-ac2d-39d20c70b376
+		dataCategory: Uncategorized
+
+	measure 'Is IPA Completed' = EXTERNALMEASURE("Is IPA Completed", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		displayFolder: IPA Measures
+		lineageTag: 520d9e1d-f342-4e32-ad19-4cbb6d8aceaf
+		sourceLineageTag: 5158372f-9e2a-4e4b-8dff-bb7776795aac
+		dataCategory: Uncategorized
+
+	measure 'Accepted Offer to IPA Conversion %' = EXTERNALMEASURE("Accepted Offer to IPA Conversion %", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: a2bc10e5-2c91-4392-bc97-18f12386a724
+		sourceLineageTag: 6905e0dd-36c7-495e-9c4f-739bed3a64b6
+		dataCategory: Uncategorized
+
+	measure 'Offers Still to Progress to IPA' = EXTERNALMEASURE("Offers Still to Progress to IPA", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: f615ee30-3475-4033-9aa8-0ff9ce7ef561
+		sourceLineageTag: 202fc7f6-a1af-4a44-b046-a81f7dac2b9a
+		dataCategory: Uncategorized
+
+	measure 'IPA Created to Completion %' = EXTERNALMEASURE("IPA Created to Completion %", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: 2b9bd918-9a2a-41ad-afb8-a8f6b5579412
+		sourceLineageTag: f5fda4ea-024a-4890-9c2c-48812dda6409
+		dataCategory: Uncategorized
+
+	measure 'Successful Offers to IPA Completed %' = EXTERNALMEASURE("Successful Offers to IPA Completed %", DOUBLE, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		displayFolder: IPA Measures
+		lineageTag: e0b7fabe-b066-4dd8-b41d-22a8517d3d38
+		sourceLineageTag: 4d78fd96-29ad-45a3-ab50-e4dddad3b585
+		dataCategory: Uncategorized
+
+	measure 'Overlap Referrals' = EXTERNALMEASURE("Overlap Referrals", INTEGER, "DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)")
+		formatString: 0
+		lineageTag: 01aa464a-9c40-48e0-b500-cda934600829
+		sourceLineageTag: 54c2b74a-7a4a-4821-8086-5a7d8d0e618c
+		dataCategory: Uncategorized
+
+	partition _Measures = entity
+		mode: directQuery
+		source
+			entityName: _Measures
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

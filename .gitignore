@@ -1,8 +1,3 @@
-# Report extracts and temp files
-project X/report_extracted/
-*.json
-!project X/*.csv
-
 # Python
 __pycache__/
 *.pyc

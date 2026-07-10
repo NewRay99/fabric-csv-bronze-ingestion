@@ -1,0 +1,33 @@
+table 'Draft Age Band Table'
+	lineageTag: 47dff303-99b3-4478-af02-e8a39ec987b3
+	sourceLineageTag: d7a65658-3dce-4b78-a567-3e8da107cdc5
+
+	column 'Draft Age Band'
+		dataType: string
+		isNullable: false
+		lineageTag: c7e36fce-be63-47a9-bc9f-ef36c8f8b66b
+		sourceLineageTag: a384f578-ed81-45cd-9643-2396a688a70c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Draft Age Band
+		sortByColumn: 'Sort Order'
+
+		annotation SummarizationSetBy = User
+
+	column 'Sort Order'
+		dataType: int64
+		formatString: 0
+		lineageTag: 939ccd11-7eb6-4794-8eb4-c494bc4d48dd
+		sourceLineageTag: e0d82512-4b72-494b-ae19-27e826aa1d46
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Sort Order
+
+		annotation SummarizationSetBy = User
+
+	partition 'Draft Age Band Table' = entity
+		mode: directQuery
+		source
+			entityName: Draft Age Band Table
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

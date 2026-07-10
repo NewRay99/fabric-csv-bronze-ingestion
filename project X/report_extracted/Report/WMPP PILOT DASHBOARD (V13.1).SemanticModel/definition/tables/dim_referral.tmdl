@@ -1,0 +1,195 @@
+table dim_referral
+	lineageTag: ffb38e0e-927c-4c2d-bd1a-fbf655d8d51c
+	sourceLineageTag: 3f12e8a8-67c3-4f37-a0dd-54ff22652e5d
+
+	column referral_id
+		dataType: string
+		isNullable: false
+		lineageTag: 15438fbc-c3c7-4b8b-b979-a4b49e16de0f
+		sourceLineageTag: df472d56-ff6a-40af-a0cc-08aebebfc8fa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column placement_type
+		dataType: string
+		lineageTag: 6e9f5b1b-7df7-4d77-9474-3c2bd723751a
+		sourceLineageTag: 9181c662-b404-41be-94db-05a369f9897b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = User
+
+	column required_start_date
+		dataType: string
+		lineageTag: 15faef4f-f6ef-49ab-9f37-fea934db0b85
+		sourceLineageTag: c6c2a037-8a44-46e5-b64a-9fdd03d1ab14
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: required_start_date
+
+		annotation SummarizationSetBy = User
+
+	column response_required_by_date
+		dataType: string
+		lineageTag: 436265f2-c65c-4ed8-a1e6-944f9ef7795f
+		sourceLineageTag: 48aff4c0-aeeb-41bf-b4c2-9d8e598dd78b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: response_required_by_date
+
+		annotation SummarizationSetBy = User
+
+	column is_sibling_placement
+		dataType: string
+		lineageTag: f4942faa-9c30-427a-a4d0-fe85818b2d8b
+		sourceLineageTag: 9831374a-03db-403c-8cbf-c7ef97a29d18
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_sibling_placement
+
+		annotation SummarizationSetBy = User
+
+	column sibling_count
+		dataType: string
+		lineageTag: d2be9ac7-f23d-4ed9-8262-c637c33b5d0a
+		sourceLineageTag: bbfa3caa-3a7e-496b-b832-b761cf06b081
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: sibling_count
+
+		annotation SummarizationSetBy = User
+
+	column is_parent_child_placement
+		dataType: string
+		lineageTag: d20af4e4-5729-42ee-a51c-65631c99a0ee
+		sourceLineageTag: c8e1760e-d820-454a-8f96-649a1ce5354a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_parent_child_placement
+
+		annotation SummarizationSetBy = User
+
+	column has_location_restriction
+		dataType: string
+		lineageTag: 06814efe-0ce7-45c2-a72f-686507dda557
+		sourceLineageTag: 2be60840-2b64-4562-9d64-810b175362ec
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: has_location_restriction
+
+		annotation SummarizationSetBy = User
+
+	column referral_created_date
+		dataType: string
+		lineageTag: a7868394-3131-4203-90af-a8e828520ad5
+		sourceLineageTag: 2b8623de-5ba5-45e1-8aff-45f37aa1f736
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_created_date
+
+		annotation SummarizationSetBy = User
+
+	column is_spot
+		dataType: string
+		lineageTag: eedf74e6-66ae-4c1b-b781-517a877bfa68
+		sourceLineageTag: 0a83166a-3ce5-4769-8a61-399c67fa9d39
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		annotation SummarizationSetBy = User
+
+	column referral_status
+		dataType: string
+		lineageTag: bbda5037-4658-41b5-93fe-eca7f2fc6c44
+		sourceLineageTag: 1603e612-b818-4096-bf20-ddaa71566bfa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_status
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: string
+		lineageTag: f413b839-4dec-446e-a309-a76d284aeede
+		sourceLineageTag: 98c0f12b-6ebc-482e-9b85-5860335ff3eb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = User
+
+	column 'Length Test'
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e8addca-80da-4d93-9e42-d00b8327201a
+		sourceLineageTag: d5e233f1-4ccd-47e5-8a2e-815d7f9e363d
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Length Test
+
+		annotation SummarizationSetBy = User
+
+	column 'Gender Clean'
+		dataType: string
+		lineageTag: 326ad5f1-5060-4f25-918e-228bb65bfe69
+		sourceLineageTag: 7dfd3788-158e-44ab-aca5-9b247b2380e9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Gender Clean
+
+		annotation SummarizationSetBy = User
+
+	column referral_date_only
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 5730ea9c-b617-4848-aac6-59ca4167a672
+		sourceLineageTag: b8bcfd03-9d12-4aa4-b67a-da733fa0e39f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_date_only
+
+		annotation SummarizationSetBy = User
+
+	column 'Response Required Date Clean'
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: bcf0569b-e225-49db-9174-0f834fa25e25
+		sourceLineageTag: 8602b2df-0762-4e8c-adab-aab5284b8cd0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Response Required Date Clean
+
+		variation Variation
+			isDefault
+			relationship: 5b35b3cf-63cb-4bd7-8300-06308d111442
+			defaultHierarchy: LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column 'Export Date Clean'
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: e730765c-3420-4dd6-9e4c-fb6ef6d4e869
+		sourceLineageTag: af167110-a11d-45ba-af71-2abac1f2533b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Export Date Clean
+
+		variation Variation
+			isDefault
+			relationship: 4cfe6fad-0aba-4141-a2ea-a876a0a8523e
+			defaultHierarchy: LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	partition dim_referral = entity
+		mode: directQuery
+		source
+			entityName: dim_referral
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

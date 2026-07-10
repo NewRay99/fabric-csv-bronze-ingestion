@@ -1,0 +1,75 @@
+table dim_offer_status
+	lineageTag: bc6c6238-d4c6-4a37-83c5-bd96a322df81
+	sourceLineageTag: 224d9222-55de-4c1c-ad04-539f9ea20868
+
+	column offer_status
+		dataType: string
+		isNullable: false
+		lineageTag: 256291e6-c81a-4143-8ea9-864bb80ee787
+		sourceLineageTag: 7b7ab8a8-d6bd-40e5-ab98-244d709508e3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_status
+
+		annotation SummarizationSetBy = User
+
+	column offer_status_label
+		dataType: string
+		lineageTag: bf1d19ee-57f9-4ff2-817e-96be8533af75
+		sourceLineageTag: 18824417-0fd9-453d-8294-07a78508224e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_status_label
+
+		annotation SummarizationSetBy = User
+
+	column is_active_offer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5cd15a1b-e7d9-450a-b313-4e3f54f4ce6d
+		sourceLineageTag: ce855631-6357-44d5-a8f0-bf831fcc1232
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_active_offer
+
+		annotation SummarizationSetBy = User
+
+	column is_accepted
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 8ffe0e6f-11e0-4b9c-ab2c-55420292f77b
+		sourceLineageTag: 88596358-3c18-4c94-8da8-23f29b07083f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_accepted
+
+		annotation SummarizationSetBy = User
+
+	column is_terminal
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f5f57593-8bb2-463b-89ec-6ae177589d9d
+		sourceLineageTag: 34567188-cc57-4602-bf00-ae3d8d856b47
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_terminal
+
+		annotation SummarizationSetBy = User
+
+	column offer_status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: facb7ef7-b76e-463b-a5cb-29bc1c0d63a7
+		sourceLineageTag: bd3f5348-e137-45c6-9e68-f38906e6ec51
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_status_sk
+
+		annotation SummarizationSetBy = User
+
+	partition dim_offer_status = entity
+		mode: directQuery
+		source
+			entityName: dim_offer_status
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

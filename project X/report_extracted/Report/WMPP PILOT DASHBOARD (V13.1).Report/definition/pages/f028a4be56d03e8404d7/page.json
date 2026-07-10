@@ -1,0 +1,47 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "f028a4be56d03e8404d7",
+  "displayName": "REFERRALS",
+  "displayOption": "FitToPage",
+  "height": 1500,
+  "width": 1500,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "ThemeDataColor": {
+                    "ColorId": 0,
+                    "Percent": 0
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "73D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "096babb2ce05747b020c",
+      "target": "817356520703d95da2d8",
+      "type": "DataFilter"
+    },
+    {
+      "source": "096babb2ce05747b020c",
+      "target": "ea000851ec6ed8a869b7",
+      "type": "DataFilter"
+    }
+  ]
+}

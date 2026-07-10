@@ -1,0 +1,11 @@
+expression 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)' =
+		let
+		    Source = AnalysisServices.Database("powerbi://api.powerbi.com/v1.0/myorg/WS_BCT_WMPP", "NEW WMPP PILOT DASHBOARD (V13)"),
+		    Cubes = Table.Combine(Source[Data]),
+		    Cube = Cubes{[Id="Model", Kind="Cube"]}[Data]
+		in
+		    Cube
+	lineageTag: befeb1ae-78d7-4bc3-96a3-94b8b398a6ba
+
+	annotation PBI_IncludeFutureArtifacts = True
+

@@ -1,0 +1,382 @@
+table fact_offer
+	lineageTag: 80590038-550e-46f3-a408-93283f9fceb6
+	sourceLineageTag: 398c30ae-e74e-410f-9c24-9a26ac527adf
+
+	column offer_id
+		dataType: string
+		lineageTag: dc58af4e-65e7-4213-94a3-be568dc1a880
+		sourceLineageTag: d9c2733c-e309-409c-9e56-7ee74e86cb19
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 923433f3-d94b-4e8b-85a8-b761450b1c29
+		sourceLineageTag: 1162ae02-35ad-43ad-991b-1347e63eea2f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = User
+
+	column id_number
+		dataType: string
+		lineageTag: 1153dee2-fac3-4e96-9064-49ebcf1a1a51
+		sourceLineageTag: e8f86174-94b8-4d27-891e-ce13fee9fc8b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: id_number
+
+		annotation SummarizationSetBy = User
+
+	column estimated_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ed018fd1-38ae-4a4c-ab52-4b6accf9573d
+		sourceLineageTag: 08cfff88-e9f2-4036-937b-675788ed5b4e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: estimated_start_date
+
+		variation Variation
+			isDefault
+			relationship: c2207f68-5909-479f-9309-87b953529ffd
+			defaultHierarchy: LocalDateTable_a7d1d006-5922-4cf6-9273-75b1c3c15f5b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column core_weekly_fee
+		dataType: string
+		lineageTag: 4b80113c-77e6-4422-9ec3-1876029ff9c9
+		sourceLineageTag: 9a4dd848-f32a-4faa-9826-ba3dd7b580c8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: core_weekly_fee
+
+		annotation SummarizationSetBy = User
+
+	column includes_education
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3e1bc0dd-446c-43a4-992b-f959131820e0
+		sourceLineageTag: 7819b9f8-865d-4829-8534-d80389e8f7ba
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: includes_education
+
+		annotation SummarizationSetBy = User
+
+	column child_summary_needs
+		dataType: string
+		lineageTag: 98b37021-9603-4fd2-a213-a705ca7c2567
+		sourceLineageTag: cad54817-ee7b-4e22-ae47-60cb12d63aa8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: child_summary_needs
+
+		annotation SummarizationSetBy = User
+
+	column offer_date
+		dataType: string
+		lineageTag: fcac7658-55ce-4273-8008-937d36555306
+		sourceLineageTag: 1942ccc1-d20e-4bd9-a44d-df1bcb56289e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_date
+
+		annotation SummarizationSetBy = User
+
+	column last_modified_date
+		dataType: string
+		lineageTag: a8132389-d4a0-4182-9c9a-7d6eee43e83d
+		sourceLineageTag: 5ca4635a-a622-4458-b110-6a7e90c7112f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: last_modified_date
+
+		annotation SummarizationSetBy = User
+
+	column decline_reason
+		dataType: string
+		lineageTag: 8973fb89-140c-4a00-9adb-b5cda85773b0
+		sourceLineageTag: 73ef33a8-4767-4c4d-ab8b-f82ac2481bca
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: decline_reason
+
+		annotation SummarizationSetBy = User
+
+	column decline_reason_other
+		dataType: string
+		lineageTag: 4ca182bb-fa87-405f-80fc-5cf2c924e9ea
+		sourceLineageTag: ddc3a14a-5e12-4b58-bade-381300bf3892
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: decline_reason_other
+
+		annotation SummarizationSetBy = User
+
+	column can_edit_offer
+		dataType: string
+		lineageTag: bf8ffd07-26c3-419d-abc6-c0c26f351f19
+		sourceLineageTag: 48b192cc-7e7b-4d58-bcdb-43a0402fe2d0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: can_edit_offer
+
+		annotation SummarizationSetBy = User
+
+	column withdraw_reason
+		dataType: string
+		lineageTag: 2eb56716-71f0-4369-8733-936b814379f1
+		sourceLineageTag: 0285d4dd-e952-46f4-b007-b1b12b064d86
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: withdraw_reason
+
+		annotation SummarizationSetBy = User
+
+	column withdraw_reason_other
+		dataType: string
+		lineageTag: 0f1afcd7-bee1-437c-9a90-cd2d2a6b1199
+		sourceLineageTag: a320feb7-e97c-4c2c-8580-0a10a1bc97b2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: withdraw_reason_other
+
+		annotation SummarizationSetBy = User
+
+	column offer_status
+		dataType: string
+		lineageTag: caba0dc4-b312-403f-86e7-8d2af5099f59
+		sourceLineageTag: f5c65448-f6d6-492a-883e-b87128191564
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_status
+
+		annotation SummarizationSetBy = User
+
+	column offer_type
+		dataType: string
+		lineageTag: 4fa3d607-92df-41a8-ad86-bef112515102
+		sourceLineageTag: 4802c93c-6e12-43bc-9a97-4189b4a91745
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_type
+
+		annotation SummarizationSetBy = User
+
+	column provider_home_id
+		dataType: string
+		lineageTag: 7811a2fa-68ba-4c20-88b4-7273c4db0d2a
+		sourceLineageTag: 45259916-bcd5-471f-b287-6401db83b07e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		annotation SummarizationSetBy = User
+
+	column category
+		dataType: string
+		lineageTag: b464856f-8de2-4e4b-ae49-cc9a3cbed9fa
+		sourceLineageTag: cae17eda-f1ed-4927-befb-3f31d4adb96f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = User
+
+	column category_code
+		dataType: string
+		lineageTag: 8cab403d-7251-40c2-a76a-bcdcad6faa43
+		sourceLineageTag: b58239c9-c0e4-43ad-9e8c-7e2b5eee9fff
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: category_code
+
+		annotation SummarizationSetBy = User
+
+	column education_weekly_fee
+		dataType: string
+		lineageTag: 9174f489-db6d-4249-a685-4883cda71006
+		sourceLineageTag: b9fb41cf-12f0-4d8e-9c91-d9b90930cc79
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: education_weekly_fee
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: fb327902-0efb-4ad1-ab2a-802224e44d15
+		sourceLineageTag: 370c80a7-0b45-4586-a76e-c8e8e0afced4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: cbde07fd-7976-4bc9-bc7d-1c32bee1fee5
+			defaultHierarchy: LocalDateTable_62f66eb0-ba0f-4926-a158-67ca75f4cea5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column offer_status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: a09b078e-90a6-4d01-8e17-88a484b7818d
+		sourceLineageTag: efcca94b-34af-4ac2-af72-44f8397cbf33
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: offer_status_sk
+
+		annotation SummarizationSetBy = User
+
+	column provider_home_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ef931dbe-9af5-442f-8276-cffa7cf079c2
+		sourceLineageTag: 4ddafd53-fbeb-4320-92b2-5f1787119010
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: provider_home_sk
+
+		annotation SummarizationSetBy = User
+
+	column referral_id
+		dataType: string
+		lineageTag: fb90d2b3-9263-4582-b675-6fa94e6fbbab
+		sourceLineageTag: 628a6b63-b57f-4e8e-a44a-a59f2a1d721e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_sk
+		dataType: string
+		lineageTag: 3c6e4ac6-377a-4d0b-a13e-e6da75c5b454
+		sourceLineageTag: 87c3c6a3-d4c4-4906-acea-78f4ddfd88dd
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = User
+
+	column Is_Latest_Record
+		dataType: int64
+		formatString: 0
+		lineageTag: 7dfde143-d4f6-457b-9975-9eeacd89988e
+		sourceLineageTag: 3a63b30b-f29a-450f-8cc2-e4da9b48225b
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Is_Latest_Record
+
+		annotation SummarizationSetBy = User
+
+	column offer_date_only
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 58bb2014-c1b2-4690-a131-7cc52f6f10c5
+		sourceLineageTag: 67c3423a-5dbc-4b0f-9c21-c2a639aef06c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_date_only
+
+		annotation SummarizationSetBy = User
+
+	column 'Draft Age Band'
+		dataType: string
+		lineageTag: 1f82a778-76a4-4565-a690-ead6d1990023
+		sourceLineageTag: 2c3d6c85-9521-46e6-b16e-02cad66f7949
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Draft Age Band
+
+		annotation SummarizationSetBy = User
+
+	column 'Pending Offer Age (Days)'
+		dataType: int64
+		formatString: 0
+		lineageTag: f9e1fc62-7437-4707-887d-4d1aa7df9abf
+		sourceLineageTag: 436a9ad4-72ae-40d9-b463-34c62f0ab8d2
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Pending Offer Age (Days)
+
+		annotation SummarizationSetBy = User
+
+	column 'Pending Offer Age Bucket'
+		dataType: string
+		lineageTag: 29fe4e9b-1e3f-4dab-b36e-8fcbe30777d9
+		sourceLineageTag: 74e54f46-23ed-42c5-be7b-82530229fc99
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Pending Offer Age Bucket
+
+		annotation SummarizationSetBy = User
+
+	column 'Last Update Age (Days)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 96d2fb25-18d1-43f9-b8bc-f34ed3af046e
+		sourceLineageTag: 15ee2006-5b16-4515-bb41-e116617fda7a
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Last Update Age (Days)
+
+		annotation SummarizationSetBy = User
+
+	column 'Pending Offer Age Bucket Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a43560a-e38f-4444-870b-3ef2eebfbe45
+		sourceLineageTag: 34c57e6d-939c-4080-936d-8183a3f41ccb
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Pending Offer Age Bucket Sort
+
+		annotation SummarizationSetBy = User
+
+	column 'Pending Offer Age Bucket Display'
+		dataType: string
+		lineageTag: 8202147a-8606-4b31-97f4-3982b72dc710
+		sourceLineageTag: f7c9b729-46b6-4caa-90b7-c843cae88638
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Pending Offer Age Bucket Display
+
+		annotation SummarizationSetBy = User
+
+	column 'Awaiting IPA Creation Flag'
+		dataType: int64
+		formatString: 0
+		lineageTag: 35313db3-e3c1-4594-a57a-0557f6a191b1
+		sourceLineageTag: f5439539-3f69-4c35-8d66-f678a28efd5b
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Awaiting IPA Creation Flag
+
+		annotation SummarizationSetBy = User
+
+	column 'Draft Age Band Sort'
+		dataType: int64
+		formatString: 0
+		lineageTag: a177e0df-3c41-4eca-8017-30a3ee062b7f
+		sourceLineageTag: d37903c0-a942-4862-ab01-5e933764a8d4
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Draft Age Band Sort
+
+		annotation SummarizationSetBy = User
+
+	partition fact_offer = entity
+		mode: directQuery
+		source
+			entityName: fact_offer
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "08ef33dc6a87d1b14392",
+  "displayName": "PROVIDER REGISTRY",
+  "displayOption": "FitToPage",
+  "height": 1100,
+  "width": 1500,
+  "objects": {
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "216L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

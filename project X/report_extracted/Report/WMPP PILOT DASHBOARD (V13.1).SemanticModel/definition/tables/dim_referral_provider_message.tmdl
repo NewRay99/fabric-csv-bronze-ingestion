@@ -1,0 +1,96 @@
+table dim_referral_provider_message
+	lineageTag: 7e3243dc-da00-4be3-8b41-7d8e8291241e
+	sourceLineageTag: 8bcb5e20-34d3-4854-b832-6d961b5e2c6a
+
+	column message_id
+		dataType: string
+		lineageTag: 79c0721f-6ab5-457c-a4a6-35188314faae
+		sourceLineageTag: f08cd3bc-20dd-45d4-8c0e-f88952c439eb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 19fa7c07-f86d-4789-9ef3-78243024db92
+		sourceLineageTag: 30b6e790-1bd0-48ce-a312-60206a1a69ea
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = User
+
+	column message_read_by
+		dataType: string
+		lineageTag: 27459e30-1bfa-4413-913d-8ac6d7e4b5d0
+		sourceLineageTag: 424db41c-a3a4-4a6c-be29-052077d7cb83
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		annotation SummarizationSetBy = User
+
+	column message_read_timestamp
+		dataType: string
+		lineageTag: 87a1a25d-729c-4ee3-8a17-298ac3b1bd5b
+		sourceLineageTag: b177166f-9451-4be9-b43d-4fe8d17fa914
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		annotation SummarizationSetBy = User
+
+	column message_text
+		dataType: string
+		lineageTag: 280ca3ae-063c-4c67-b192-9dffbb2dc964
+		sourceLineageTag: c7702919-4952-4de8-8071-aca3b9ab7afa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: message_text
+
+		annotation SummarizationSetBy = User
+
+	column created_timestamp
+		dataType: string
+		lineageTag: fb4900c7-20ea-461b-bc4c-2797376b8255
+		sourceLineageTag: 212ea539-0f38-480b-b4ca-ef6c01b62bd1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: 341a0c22-57c3-48a5-aab9-e2ab1a663d94
+		sourceLineageTag: 084fcf4d-7b3b-46e3-ba4e-5c548e571ad9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 85286e28-fcc1-4345-82b9-f43f1f3e8cc7
+		sourceLineageTag: b644a049-5ed9-434d-9f48-4f67b002d700
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: ff2e6282-a3d1-4592-889e-95b474e16901
+			defaultHierarchy: LocalDateTable_7a31c86c-072f-40cb-ba1c-e823599ebaec.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	partition dim_referral_provider_message = entity
+		mode: directQuery
+		source
+			entityName: dim_referral_provider_message
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

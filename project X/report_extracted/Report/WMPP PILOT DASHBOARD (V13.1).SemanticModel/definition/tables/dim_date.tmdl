@@ -1,0 +1,79 @@
+table dim_date
+	lineageTag: e4deeaf7-202d-47d3-b306-c1870b7b1fe5
+	sourceLineageTag: 031ca49f-6766-4403-98aa-ba96d3db3f5d
+
+	column Date
+		dataType: dateTime
+		isNullable: false
+		formatString: General Number
+		lineageTag: 48d030b4-972d-4fdf-8982-07af20a4c713
+		sourceLineageTag: b2877141-8213-43f7-baf1-752fb295107f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: ce93153d-59f6-4c2c-8978-ecd004ae6711
+			defaultHierarchy: LocalDateTable_bbbcde47-d5df-4426-b044-338ecb6b7c37.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: ed20ed5f-ae05-4903-8fd6-aea76746861e
+		sourceLineageTag: ad61dd13-95d7-4ea5-96ab-9b1eae7ea7de
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 27d5d7b7-e437-49a3-a2af-3f694341fcd2
+		sourceLineageTag: 259cdc23-c464-4305-a884-c246a15c2a94
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Month Number
+
+		annotation SummarizationSetBy = User
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: a7ee3faa-d1c8-4494-96bf-b1cc1b29d5e2
+		sourceLineageTag: f59bce03-c39d-4bc6-81a9-776a1c22c013
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Month Name
+
+		annotation SummarizationSetBy = User
+
+	column Quarter
+		dataType: string
+		lineageTag: 6f3fd023-c1ae-4b05-8f2b-b5014a1ce398
+		sourceLineageTag: d8893ff7-9439-46e5-ab8f-363b688ab4e4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = User
+
+	column 'Day of Week'
+		dataType: string
+		lineageTag: a5011ae4-4f61-4ddd-ae81-8f6a34328f47
+		sourceLineageTag: 633de414-16cd-44a5-bc89-df9676dc226c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Day of Week
+
+		annotation SummarizationSetBy = User
+
+	partition dim_date = entity
+		mode: directQuery
+		source
+			entityName: dim_date
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

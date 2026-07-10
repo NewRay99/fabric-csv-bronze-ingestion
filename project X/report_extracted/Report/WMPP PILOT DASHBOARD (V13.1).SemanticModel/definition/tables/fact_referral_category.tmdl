@@ -1,0 +1,67 @@
+table fact_referral_category
+	lineageTag: 3f637de3-fa6d-4f2d-909b-6fdd8aeecacb
+	sourceLineageTag: a6e9720a-574a-4988-b878-eb90c29f2e15
+
+	column referral_id
+		dataType: string
+		lineageTag: 3b69b821-5163-41fe-a9ec-ff3ccd149127
+		sourceLineageTag: 6e24ae2a-aedf-4101-8918-2aec8a66132d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column framework_category_id
+		dataType: string
+		lineageTag: 6e653849-72dc-4a2f-80d7-a6c7a3b3a782
+		sourceLineageTag: 9ca965d9-dc15-4ec6-bbf2-2e16488368c2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cc26e96d-18d9-4553-aa10-17efffa15183
+		sourceLineageTag: 6bbc3f3f-d364-4f89-b253-8c33c665f942
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: c827ad23-a706-4081-b0af-fef37874ae2b
+			defaultHierarchy: LocalDateTable_85241257-bd71-4f71-b4ab-c05eb501e49e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column referral_sk
+		dataType: string
+		lineageTag: 9ff0d75e-8eb6-4fcb-9b36-ff7b5308852c
+		sourceLineageTag: ac804870-1987-49b1-aea9-4210a71fadb9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = User
+
+	column category_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: aa976c0d-7b03-4a84-a183-020c0dfad601
+		sourceLineageTag: a6905b57-c04f-45a0-864d-bd09f801fa47
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: category_sk
+
+		annotation SummarizationSetBy = User
+
+	partition fact_referral_category = entity
+		mode: directQuery
+		source
+			entityName: fact_referral_category
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

@@ -1,0 +1,300 @@
+table fact_referral_offer
+	lineageTag: 1419bb36-84ac-4847-aca7-7d4b3feafc1d
+	sourceLineageTag: ab650187-b1ea-460d-b294-06293397d204
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 2d564981-d18b-4a64-849c-117dd8166387
+		sourceLineageTag: e136f6e2-5188-46f8-8127-3f08de0b826c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_id
+		dataType: string
+		lineageTag: 4901b42a-f4bb-489a-9d0d-88776586dcae
+		sourceLineageTag: 95e77830-4529-4c97-a003-994bef81ebab
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column provider_id
+		dataType: string
+		lineageTag: fb5311b8-17ae-43dd-810d-14c6ac9955c6
+		sourceLineageTag: ef9ca7f3-a364-430c-bb43-cdb24de239b8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = User
+
+	column is_excluded
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f634438f-a010-48ef-a58e-b4a8c0b060f5
+		sourceLineageTag: cb377c85-2489-4c38-bb77-24437cdfecc2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_excluded
+
+		annotation SummarizationSetBy = User
+
+	column is_declined
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: dbf40ce0-e695-4574-8ffd-119b5c35de59
+		sourceLineageTag: 933f6675-566f-49d5-9fb1-408a34e874d6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_declined
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: a70ee4c2-8296-4100-a518-6da4addac38c
+		sourceLineageTag: 40c02002-a339-4c4a-996c-770f3239c2f4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = User
+
+	column modified_by
+		dataType: string
+		lineageTag: e817288f-030a-4840-b01b-78286bd4b3f7
+		sourceLineageTag: 5692adec-7da6-4e1c-99c0-1718a41bcefa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: modified_by
+
+		annotation SummarizationSetBy = User
+
+	column created_date
+		dataType: string
+		lineageTag: 6c269778-5d7b-4de8-82c2-f0b0535ffbc7
+		sourceLineageTag: c4105aa2-6cb5-47bf-96e2-5d216c73ff67
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = User
+
+	column modified_date
+		dataType: string
+		lineageTag: ba6046aa-251e-427f-ada6-9e2abd92d0f4
+		sourceLineageTag: 680c22db-5c90-4004-a592-4aa9f2898c94
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: modified_date
+
+		annotation SummarizationSetBy = User
+
+	column is_cancelled
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4360019c-add0-4aa9-a98e-50bfd0636dd1
+		sourceLineageTag: 9a6322c5-1c41-49fb-b5ae-40375c16a5ed
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_cancelled
+
+		annotation SummarizationSetBy = User
+
+	column is_closed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 87aac9c2-7d5f-4c1c-ad9d-4b382f269bc7
+		sourceLineageTag: 2901d8dd-5bce-4088-8628-52faeea0f1f4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_closed
+
+		annotation SummarizationSetBy = User
+
+	column is_spot
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: e1c40b9a-8381-4e3d-afae-67fbb7b0a645
+		sourceLineageTag: 3de8bf20-74e0-4f37-811e-c9853d9b4014
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 070ec69b-f897-40b3-8b91-a95938377eb8
+		sourceLineageTag: a01af3f8-ecd0-4ccd-a396-8c23addb18d9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = User
+
+	column referral_sk
+		dataType: string
+		lineageTag: 6c804247-f478-4e78-8699-dd2080315e02
+		sourceLineageTag: 34dbbaac-4e02-49a7-b748-951c4721de78
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = User
+
+	column provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 22911b4b-5daf-48c2-94eb-e8e5f8c48c4c
+		sourceLineageTag: 3206ed4b-44b9-43a4-ba89-c2611377a51f
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: provider_sk
+
+		annotation SummarizationSetBy = User
+
+	column offer_id
+		dataType: string
+		lineageTag: 0a19d364-da33-4a47-97e3-5bcf75df2331
+		sourceLineageTag: 1da94f70-9d25-4c6a-83b7-e49c54e826e3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = User
+
+	column has_offer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d906929e-2159-44f4-b5df-f3a5039afc27
+		sourceLineageTag: f129fe16-5b60-483d-8e65-84d177a8f512
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: has_offer
+
+		annotation SummarizationSetBy = User
+
+	column referral_provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 61c4f39e-10a1-471f-aa1f-2b9ebe399a89
+		sourceLineageTag: c3583a27-036b-49dd-82d8-f11eeb98a581
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: referral_provider_sk
+
+		annotation SummarizationSetBy = User
+
+	column 'Length Test'
+		dataType: int64
+		formatString: 0
+		lineageTag: 36184234-c727-49d8-aa62-0425ae3f3ad5
+		sourceLineageTag: aac66184-a27f-421b-8881-9aa2cb086296
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: Length Test
+
+		annotation SummarizationSetBy = User
+
+	column offer_status_clean
+		dataType: string
+		lineageTag: e51584e2-e84c-4713-a7ae-da8cfb99c342
+		sourceLineageTag: 15309a1f-1756-4339-9197-9a170240c4fa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_status_clean
+
+		annotation SummarizationSetBy = User
+
+	column offer_cancel_reason
+		dataType: string
+		lineageTag: 80dfb762-614a-4958-9349-1a1da090395f
+		sourceLineageTag: 4fb553b3-3d97-454d-8f33-d4526c1a7477
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_cancel_reason
+
+		annotation SummarizationSetBy = User
+
+	column cancel_reason_other
+		dataType: string
+		lineageTag: bbe205ef-4c12-4dbe-bf04-7e234d787121
+		sourceLineageTag: 7a645f66-a12a-4c32-b125-9afc6691a2f9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: cancel_reason_other
+
+		annotation SummarizationSetBy = User
+
+	column offer_decline_reason
+		dataType: string
+		lineageTag: ecc59481-e722-4a99-b7f3-9a9fd979baf4
+		sourceLineageTag: a38a36e4-c2a9-4957-ac95-02dd6a6c1257
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_decline_reason
+
+		annotation SummarizationSetBy = User
+
+	column offer_decline_reason_other
+		dataType: string
+		lineageTag: 599cdda9-8f68-4961-8631-4fde0b4eb6bc
+		sourceLineageTag: 224aa76d-7125-4145-8327-f3baaf28a42b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_decline_reason_other
+
+		annotation SummarizationSetBy = User
+
+	column 'Closure Reason'
+		dataType: string
+		lineageTag: aa539db6-c0fc-4492-bd70-9aee19f913fb
+		sourceLineageTag: 7121d822-f999-48e7-ac7d-c723f378e034
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Closure Reason
+
+		annotation SummarizationSetBy = User
+
+	column 'Closure Reason Clean'
+		dataType: string
+		lineageTag: de405ffc-9e6f-47e4-8aef-1b8ab9fed6f5
+		sourceLineageTag: 2c94b718-7c30-48b5-bf2c-58ce61f8ed8a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Closure Reason Clean
+
+		annotation SummarizationSetBy = User
+
+	column 'Closure Reason Grouped'
+		dataType: string
+		lineageTag: 27d35fe2-4ccd-4e08-a3be-f04d4273d601
+		sourceLineageTag: b4536791-3e5f-4a74-87b4-cdb61e0555ee
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Closure Reason Grouped
+
+		annotation SummarizationSetBy = User
+
+	column 'Closed Referral Reason Bucket'
+		dataType: string
+		lineageTag: 31b90a3d-7a96-4344-a1db-41360c531c94
+		sourceLineageTag: 98dd4704-8de8-4813-afaa-9176dedccc29
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Closed Referral Reason Bucket
+
+		annotation SummarizationSetBy = User
+
+	partition fact_referral_offer = entity
+		mode: directQuery
+		source
+			entityName: fact_referral_offer
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

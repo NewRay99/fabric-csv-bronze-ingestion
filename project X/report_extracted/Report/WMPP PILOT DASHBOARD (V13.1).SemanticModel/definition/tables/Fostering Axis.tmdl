@@ -1,0 +1,20 @@
+table 'Fostering Axis'
+	lineageTag: 194b3619-732b-437e-9432-e37bcd323ae9
+	sourceLineageTag: c6bf257a-5948-417e-b5ae-9b720d3290c5
+
+	column 'Display Type'
+		dataType: string
+		lineageTag: bac806c9-f764-4510-9dd0-aafb0f7bbd15
+		sourceLineageTag: 4a05d50b-ef17-436e-9435-560d728f07fa
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Display Type
+
+		annotation SummarizationSetBy = User
+
+	partition 'Fostering Axis' = entity
+		mode: directQuery
+		source
+			entityName: Fostering Axis
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

@@ -1,0 +1,228 @@
+table fact_referral_person
+	lineageTag: 8b38c07b-7a24-4887-aa15-93bf655a3d37
+	sourceLineageTag: 6a003c9a-6a33-4310-88e7-6db7bc74c273
+
+	column person_id
+		dataType: string
+		lineageTag: a3d2caf6-b3e5-4aa9-8d1f-834a7a09aa8b
+		sourceLineageTag: 69f3ec81-e0d7-4968-aca2-071f8b4eb130
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: person_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_id
+		dataType: string
+		lineageTag: 66c2be5a-7554-4304-abcc-0ee00ed3bea3
+		sourceLineageTag: 0b583698-cc48-497f-89fc-48acdea4804a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column initials
+		dataType: string
+		lineageTag: 01dd55ac-0dbd-4b49-9ff5-91f7a170bdf8
+		sourceLineageTag: a6cb2d87-abf9-4357-9921-368404562f51
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: initials
+
+		annotation SummarizationSetBy = User
+
+	column age_value
+		dataType: string
+		lineageTag: 45ab6eb2-059c-4c8a-9e51-a736e47fd4f3
+		sourceLineageTag: 795e7e95-7db1-48bf-944e-0a2a4b0356cb
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: age_value
+
+		annotation SummarizationSetBy = User
+
+	column age_date_unit
+		dataType: string
+		lineageTag: bdb07684-0e6e-42b1-81ce-629dce1f6b97
+		sourceLineageTag: ff920917-0844-49ec-8ce7-c28c1e5fdffc
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: age_date_unit
+
+		annotation SummarizationSetBy = User
+
+	column has_restrictions
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 04fd789f-513d-433e-b6e9-2d01d1af5cf6
+		sourceLineageTag: 160bd2c0-0f0e-4819-9971-98487f8f2d97
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: has_restrictions
+
+		annotation SummarizationSetBy = User
+
+	column restriction_details
+		dataType: string
+		lineageTag: ee2121a1-7d26-4a9e-9812-b756dc8b45b3
+		sourceLineageTag: c5a76111-acd2-4331-9600-531f275e5ac2
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: restriction_details
+
+		annotation SummarizationSetBy = User
+
+	column source_reference_id
+		dataType: string
+		lineageTag: 95c2bfa9-b19c-42bb-b1d8-3e96ee7126a1
+		sourceLineageTag: 99a73c27-2799-47f5-92a1-de83c94b6160
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: source_reference_id
+
+		annotation SummarizationSetBy = User
+
+	column gender
+		dataType: string
+		lineageTag: 65091ccf-65cf-4354-90ec-5679f88146e8
+		sourceLineageTag: 289b0b2c-ef49-4c4a-a18c-d84c88f7f1e3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = User
+
+	column gender_other
+		dataType: string
+		lineageTag: 7209bdb0-6369-481e-ac65-905b292468e7
+		sourceLineageTag: 4d305793-ce70-49e4-aa13-1fb0f5716039
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: gender_other
+
+		annotation SummarizationSetBy = User
+
+	column ethnicity
+		dataType: string
+		lineageTag: 76d39fb1-887e-4e69-8c19-d3b10717b04e
+		sourceLineageTag: bb9adf02-6f03-4e79-a8f0-9894538c2dbe
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: ethnicity
+
+		annotation SummarizationSetBy = User
+
+	column ethnicity_other
+		dataType: string
+		lineageTag: 67ba3f8c-998e-4e02-a747-d881434175c3
+		sourceLineageTag: ba2a07a1-be98-4187-8d82-861ecb134f28
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: ethnicity_other
+
+		annotation SummarizationSetBy = User
+
+	column religion
+		dataType: string
+		lineageTag: 0beaab5e-100f-4957-9a89-7f998db5ce6d
+		sourceLineageTag: e32b9ce3-f43d-4eeb-a69c-a10081b8517f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: religion
+
+		annotation SummarizationSetBy = User
+
+	column religion_other
+		dataType: string
+		lineageTag: d2389a06-de39-423a-894c-51ac463eb91f
+		sourceLineageTag: e1e1f616-3150-44c9-b071-fc170a966f25
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: religion_other
+
+		annotation SummarizationSetBy = User
+
+	column preferred_language
+		dataType: string
+		lineageTag: 73b026f8-ea34-483a-a983-05a14bf7d114
+		sourceLineageTag: 8bb554f3-8cf3-4d9f-9a01-d1de8b86d08b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: preferred_language
+
+		annotation SummarizationSetBy = User
+
+	column preferred_language_other
+		dataType: string
+		lineageTag: d6bfe338-f242-4857-ae7f-71eb8b96e3a6
+		sourceLineageTag: dfb1c1bc-ffce-46d3-bb89-073846bfab41
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: preferred_language_other
+
+		annotation SummarizationSetBy = User
+
+	column child_index
+		dataType: string
+		lineageTag: 7e8802c4-b3cb-443b-a301-28f3ab304271
+		sourceLineageTag: 211bf236-b51a-41f0-98a3-5a553874d6f8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: child_index
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a9e26b04-5d56-4a96-9760-8c113fa10319
+		sourceLineageTag: 0b4a8425-2185-410c-bb18-4f22e209637d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 2dcda9b3-805b-4bb3-aab4-1e50bcf8ffe8
+			defaultHierarchy: LocalDateTable_9aee7af0-8a2a-46fe-8cbd-b666a98670f9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column support_need
+		dataType: string
+		lineageTag: 99cf1802-93a8-4cd5-af34-1873890be33b
+		sourceLineageTag: b7774566-4498-4768-888a-d1c0f065fb02
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: support_need
+
+		annotation SummarizationSetBy = User
+
+	column referral_sk
+		dataType: string
+		lineageTag: 113cdef5-7889-4b01-a0c5-7ecf2b70adc5
+		sourceLineageTag: 968c246f-7031-4749-b1c8-c6d0f33e0be9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = User
+
+	column person_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 425c7416-a813-4cac-83d4-4e7f806cd07d
+		sourceLineageTag: bcaeef0b-9cb6-4510-8f1b-be1be9431edb
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: person_sk
+
+		annotation SummarizationSetBy = User
+
+	partition fact_referral_person = entity
+		mode: directQuery
+		source
+			entityName: fact_referral_person
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

@@ -1,0 +1,170 @@
+table dim_provider
+	lineageTag: 23913649-607a-4719-b927-f8f9d4756592
+	sourceLineageTag: 358475f6-cc2e-4a3c-a4a7-93f8db93b750
+
+	column provider_id
+		dataType: string
+		isNullable: false
+		lineageTag: 3c3e5ade-b300-476e-b19b-152ff7bf155f
+		sourceLineageTag: 49b7bda5-ab55-4f63-ac4c-6cfe2fafc41d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = User
+
+	column holding_company_id
+		dataType: string
+		lineageTag: ebaeebaf-b7ee-4e45-8001-a8368fc03808
+		sourceLineageTag: 5ef14f34-97ab-42ec-a4f4-7312ec45b932
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: holding_company_id
+
+		annotation SummarizationSetBy = User
+
+	column provider_name
+		dataType: string
+		lineageTag: a6ab56b2-6ff7-4a6f-be5b-377897d71477
+		sourceLineageTag: 8836495f-fed8-42a3-b77f-c5950583653d
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		annotation SummarizationSetBy = User
+
+	column town_city
+		dataType: string
+		lineageTag: 711d5fa1-dcfc-4194-9566-250f29f37735
+		sourceLineageTag: 91227bbb-7216-4a06-95e4-d9773dce0e6f
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: town_city
+
+		annotation SummarizationSetBy = User
+
+	column county
+		dataType: string
+		lineageTag: 09246da9-86cb-4a8e-90ac-c7fd540c90e1
+		sourceLineageTag: 969c520c-3708-4de7-9218-bdb6153fd8da
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: county
+
+		annotation SummarizationSetBy = User
+
+	column postcode
+		dataType: string
+		lineageTag: e9abf5b3-7dd2-4ac2-94ae-24c0313e23a3
+		sourceLineageTag: 63cc078d-5dbb-4f8d-9e9f-7181b0dbbc44
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: postcode
+
+		annotation SummarizationSetBy = User
+
+	column provider_status
+		dataType: string
+		lineageTag: a96755a9-4197-4156-896e-e25c9dffd3e9
+		sourceLineageTag: a23ad82d-1f92-4e2c-9e57-26f8a698649e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_status
+
+		annotation SummarizationSetBy = User
+
+	column last_regulating_body_inspection_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: bd8dd8ed-5a44-49b3-afaa-1e0116cb288a
+		sourceLineageTag: b2c2adf8-19e1-4d64-9a75-ff3c661e27ef
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		variation Variation
+			isDefault
+			relationship: 9cf0d6cf-60fb-4831-b6a5-0e1cf31ed60e
+			defaultHierarchy: LocalDateTable_da8a63b0-82df-48d8-a6fc-361a373f5eb1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column inspection_outcome_rating
+		dataType: string
+		lineageTag: f3433fee-cbf0-4f1a-91cb-aef20c77cc5a
+		sourceLineageTag: 82a64d5f-0c98-4bbb-8fdb-0de1ed9f13a4
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		annotation SummarizationSetBy = User
+
+	column created_timestamp
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: af86700c-0ddb-47cc-b848-291ab13b64a1
+		sourceLineageTag: 62601099-307e-4fe8-9612-f578ad06b328
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		variation Variation
+			isDefault
+			relationship: d631b366-8186-4111-a907-572c633edca0
+			defaultHierarchy: LocalDateTable_028b54cc-b5ca-4596-92c3-03b7a602d970.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c3de8f2a-6096-4e54-b2ca-cfd842d582b7
+		sourceLineageTag: 9ffae6b0-210a-4cf8-a900-7e4f920f147a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 90d0c7d4-d661-425b-aab8-9978eac8cef3
+			defaultHierarchy: LocalDateTable_890337fe-8ea3-4060-a30b-2e84e230ab08.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column company_name
+		dataType: string
+		lineageTag: 76f12db3-771e-4b3a-a20f-c9dda44b09af
+		sourceLineageTag: 045cb582-10ae-45ca-897c-728db3ed98d6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: company_name
+
+		annotation SummarizationSetBy = User
+
+	column provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ef52cd16-c2b2-4c07-a5b7-a9d55715a88c
+		sourceLineageTag: 9db963e2-ffac-4449-9a88-101ed3f3b1fe
+		dataCategory: Uncategorized
+		summarizeBy: sum
+		sourceColumn: provider_sk
+
+		annotation SummarizationSetBy = User
+
+	column 'Service Type (Unified)'
+		dataType: string
+		lineageTag: 538075a9-6592-475c-ab61-ecb7bb0b20bd
+		sourceLineageTag: 51ba8a39-76f0-4916-8e96-9a1a8dde66a9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Service Type (Unified)
+
+		annotation SummarizationSetBy = User
+
+	partition dim_provider = entity
+		mode: directQuery
+		source
+			entityName: dim_provider
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

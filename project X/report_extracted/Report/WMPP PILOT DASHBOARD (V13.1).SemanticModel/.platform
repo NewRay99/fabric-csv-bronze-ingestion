@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "WMPP PILOT DASHBOARD (V13.1)"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c04dbdf6-c1d0-41b5-baf4-d7af54145bc4"
+  }
+}

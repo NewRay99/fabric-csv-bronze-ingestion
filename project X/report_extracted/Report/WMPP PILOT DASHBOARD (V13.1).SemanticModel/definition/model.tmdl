@@ -1,0 +1,67 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table dim_provider
+ref table dim_referral
+ref table dim_provider_home
+ref table dim_person
+ref table dim_framework
+ref table dim_category
+ref table dim_offer_status
+ref table fact_offer
+ref table fact_provider_message
+ref table fact_referral_category
+ref table fact_referral_person
+ref table fact_referral_offer
+ref table dim_date
+ref table _Measures
+ref table dim_referral_gender
+ref table tmp_referral_person_gender
+ref table fact_ipa
+ref table rpt_provider_registry
+ref table dim_provider_framework
+ref table rpt_provider_fostering
+ref table 'Directory Summary Axis'
+ref table 'Fostering Axis'
+ref table dim_referral_provider_message
+ref table 'Referral Closure Reason Summary'
+ref table 'Draft Age Band Table'
+ref table LocalDateTable_da8a63b0-82df-48d8-a6fc-361a373f5eb1
+ref table LocalDateTable_028b54cc-b5ca-4596-92c3-03b7a602d970
+ref table LocalDateTable_890337fe-8ea3-4060-a30b-2e84e230ab08
+ref table LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0
+ref table LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18
+ref table LocalDateTable_8f2a60c8-3c88-4eff-b199-beb431e63809
+ref table LocalDateTable_6d4ae097-14d6-4557-bdd5-62ecae22c3c2
+ref table LocalDateTable_06406ba6-a64f-4dbb-8f63-615e13ea27b3
+ref table LocalDateTable_3c610ead-1ead-40e8-a8cd-e61d9fa02e4d
+ref table LocalDateTable_1d1f28af-4ee0-445d-932d-406e35e3ffc7
+ref table LocalDateTable_a7d1d006-5922-4cf6-9273-75b1c3c15f5b
+ref table LocalDateTable_62f66eb0-ba0f-4926-a158-67ca75f4cea5
+ref table LocalDateTable_cb1f7675-6be0-4d04-b7a5-22ae1fed1cb5
+ref table LocalDateTable_85241257-bd71-4f71-b4ab-c05eb501e49e
+ref table LocalDateTable_9aee7af0-8a2a-46fe-8cbd-b666a98670f9
+ref table LocalDateTable_bbbcde47-d5df-4426-b044-338ecb6b7c37
+ref table LocalDateTable_5fb970bc-aa2a-4b57-9991-fc2ef569d2b3
+ref table LocalDateTable_3f4b0f03-f3b5-48c7-ae80-c033233778a8
+ref table LocalDateTable_e1ed68d9-90c8-434e-b7a1-065734bdd0f4
+ref table LocalDateTable_0dfd875d-78fe-44d7-be28-3cc950a23cd7
+ref table LocalDateTable_efcb9c79-f5af-4d12-b2d3-95377a4b1c64
+ref table LocalDateTable_ea69a351-efb4-4da7-9953-b0cb7b411e7e
+ref table LocalDateTable_35189341-4f41-416e-a7f2-179b0d5d0332
+ref table LocalDateTable_09a85944-f641-4f4a-a66d-cf7464a2c1a1
+ref table LocalDateTable_7a31c86c-072f-40cb-ba1c-e823599ebaec
+
+ref cultureInfo en-US
+

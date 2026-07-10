@@ -1,0 +1,31 @@
+table tmp_referral_person_gender
+	lineageTag: f643eed4-7ceb-4e1f-b15a-b53d9adbe044
+	sourceLineageTag: 8860ee34-46f7-40c5-85d4-488847871685
+
+	column referral_id
+		dataType: string
+		isNullable: false
+		lineageTag: dd065e99-4e6e-48fa-a52c-36833cda6735
+		sourceLineageTag: a06030d1-d142-40f0-9f27-a93923f56efd
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column 'Gender Clean'
+		dataType: string
+		lineageTag: 578916a7-e5d7-4b78-a064-ab9942848ae8
+		sourceLineageTag: 220cfe7a-f67e-417c-94aa-f0092bf5abd5
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Gender Clean
+
+		annotation SummarizationSetBy = User
+
+	partition tmp_referral_person_gender = entity
+		mode: directQuery
+		source
+			entityName: tmp_referral_person_gender
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

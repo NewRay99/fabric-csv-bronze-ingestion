@@ -1,0 +1,329 @@
+table rpt_provider_registry
+	lineageTag: 3b6327f0-a64f-4a59-a3a6-09809062c7da
+	sourceLineageTag: ee1ed7c3-8a7e-4347-ab18-7ac29dc2024e
+
+	column provider_home_id
+		dataType: string
+		isNullable: false
+		lineageTag: be0f9f1c-384a-4fa8-a6ea-223ddbf6ab26
+		sourceLineageTag: 18b11370-c5a3-4250-bfc6-611b9b59bbb3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		annotation SummarizationSetBy = User
+
+	column provider_id
+		dataType: string
+		lineageTag: 8de0c9ef-a491-4941-bf41-ddc0b80a4e08
+		sourceLineageTag: acba887e-de98-481a-b685-762544d8b759
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = User
+
+	column 'Provider Name'
+		dataType: string
+		lineageTag: 777c6045-e0e1-4c81-bbeb-cce7371d807e
+		sourceLineageTag: 1712d82a-0eac-4b58-93a2-f151899abecd
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Provider Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Provider Status'
+		dataType: string
+		lineageTag: 5b224ebe-de7c-412d-a380-88b6b4a65a89
+		sourceLineageTag: 05ae87e3-6e2e-43dc-b54b-81a9aa3e3f43
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Provider Status
+
+		annotation SummarizationSetBy = User
+
+	column 'Home Name'
+		dataType: string
+		lineageTag: 9c5bfe1f-7231-4dad-bb64-69ce3ed100b2
+		sourceLineageTag: 67ea8906-0d11-49ff-8264-989c6f4b3496
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Home Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Service Type'
+		dataType: string
+		lineageTag: 58af3449-2b49-4771-a9ba-ec6cabc20243
+		sourceLineageTag: 9b8bd8a9-a1ae-44f6-84d3-78a66a5c2c20
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Service Type
+
+		annotation SummarizationSetBy = User
+
+	column Town/City
+		dataType: string
+		lineageTag: 9d1c397d-b4d1-4796-8898-6d9dc4006fb0
+		sourceLineageTag: d0ff590b-f401-44e4-8392-c0867a1f4d07
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Town/City
+
+		annotation SummarizationSetBy = User
+
+	column Postcode
+		dataType: string
+		lineageTag: 578ab31b-41fb-4960-a481-338ee0abaed2
+		sourceLineageTag: 907f20e5-03e3-44f4-8d07-7b47c39c93b1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Postcode
+
+		annotation SummarizationSetBy = User
+
+	column 'Home Phone'
+		dataType: string
+		lineageTag: 75fd9309-65e1-4c2b-b628-8f696e62f972
+		sourceLineageTag: 38148fc1-456a-4c3e-ba91-9e228505c9d3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Home Phone
+
+		annotation SummarizationSetBy = User
+
+	column 'Home Email'
+		dataType: string
+		lineageTag: 1f99f7ac-c587-4839-870e-5bb10e3b1356
+		sourceLineageTag: 09e81cf0-8fcf-45a9-b2ea-8596dd22c298
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Home Email
+
+		annotation SummarizationSetBy = User
+
+	column 'Registered Manager'
+		dataType: string
+		lineageTag: 2852c51a-1c19-4e7c-a8ba-42a4540eb99e
+		sourceLineageTag: a1c40b27-e369-4317-83e5-9e13c38d554e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registered Manager
+
+		annotation SummarizationSetBy = User
+
+	column 'Registered Manager Number'
+		dataType: string
+		lineageTag: 8a43e59d-ea9c-43d5-af1c-40201c2e84b8
+		sourceLineageTag: 2dacbab4-3355-48e6-b16a-b2b622291324
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registered Manager Number
+
+		annotation SummarizationSetBy = User
+
+	column 'Registered Manager Email'
+		dataType: string
+		lineageTag: b993d016-8354-47c8-922c-f091559182bc
+		sourceLineageTag: 3ffa984b-46c5-46cb-a903-610a22d80cf3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registered Manager Email
+
+		annotation SummarizationSetBy = User
+
+	column last_regulating_body_inspection_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 388298ad-d7c9-46a0-9e2c-a0ecc20058a1
+		sourceLineageTag: a4e584da-9eda-4fb4-93f3-2ce233d484ed
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		variation Variation
+			isDefault
+			relationship: c18c03ea-6507-445d-ae57-031b51610001
+			defaultHierarchy: LocalDateTable_3f4b0f03-f3b5-48c7-ae80-c033233778a8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column inspection_outcome_rating
+		dataType: string
+		lineageTag: 683364e4-7b56-4eb2-9b96-1ea901e5f016
+		sourceLineageTag: 7d828586-c1ee-452a-92a3-252322dee54b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		annotation SummarizationSetBy = User
+
+	column 'Provider Email'
+		dataType: string
+		lineageTag: 76e962ff-fbda-48ba-8147-ebcae0f41636
+		sourceLineageTag: 2b06a8b1-4dfe-4c40-a53a-a0c890532fcd
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Provider Email
+
+		annotation SummarizationSetBy = User
+
+	column 'Provider Phone'
+		dataType: string
+		lineageTag: 50a3add6-d39c-43b2-8b36-b854226a5520
+		sourceLineageTag: 7ec512c3-db05-4def-9329-d5cf061fef83
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Provider Phone
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.last_regulating_body_inspection_date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: aec9deb2-682b-4b49-aecf-d12c621c0795
+		sourceLineageTag: 8dbfac46-bd08-4e58-8e99-261636460dec
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.last_regulating_body_inspection_date
+
+		variation Variation
+			isDefault
+			relationship: 16fa5146-8c89-4bb3-ab80-2459d9a4a92b
+			defaultHierarchy: LocalDateTable_e1ed68d9-90c8-434e-b7a1-065734bdd0f4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.regulatory_body_registration_reference'
+		dataType: string
+		lineageTag: 44a8ed0e-c341-4ebc-a6aa-eb5a0c5e4ae9
+		sourceLineageTag: 43d200a6-1330-47a1-8313-18f7cafcc660
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.regulatory_body_registration_reference
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.inspection_outcome_rating'
+		dataType: string
+		lineageTag: 1bc336e5-b7db-45e3-8acc-7ad6c570286d
+		sourceLineageTag: ac7d1731-edcf-47dd-ab7e-0246b5dff37e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.inspection_outcome_rating
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.responsible_individual_name'
+		dataType: string
+		lineageTag: e5a32d96-159b-4613-90eb-c137ff0a59a2
+		sourceLineageTag: 7697ea35-1080-4756-a391-f200691dd8c8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_name
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.responsible_individual_contact_number'
+		dataType: string
+		lineageTag: e416a906-6a01-478e-9630-4a35235f410f
+		sourceLineageTag: d833d30c-f684-4d1a-9744-c0827fe8c440
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_contact_number
+
+		annotation SummarizationSetBy = User
+
+	column 'stg_provider.responsible_individual_email_address'
+		dataType: string
+		lineageTag: 3ea2a5ce-0980-4952-aff6-8b2823a29e8b
+		sourceLineageTag: b788ad09-e993-49e0-ab41-e68efca9f9b3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_email_address
+
+		annotation SummarizationSetBy = User
+
+	column 'Registrant Name'
+		dataType: string
+		lineageTag: f73f44da-2008-4437-8e21-d35c0aea50d1
+		sourceLineageTag: 82983046-b48e-4bb4-bce4-db2dd41a3980
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registrant Name
+
+		annotation SummarizationSetBy = User
+
+	column 'Resistrant Role'
+		dataType: string
+		lineageTag: 00d90f97-f7fb-4d51-987e-b726ae74bc20
+		sourceLineageTag: 5124f40f-fe11-4b8c-b18b-bc1f87500cce
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Resistrant Role
+
+		annotation SummarizationSetBy = User
+
+	column 'Registrant Email'
+		dataType: string
+		lineageTag: ec4c9151-89b9-4294-b8b0-06594a96dd2f
+		sourceLineageTag: 51b0a398-7131-4873-82f4-0f64688158c1
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registrant Email
+
+		annotation SummarizationSetBy = User
+
+	column 'Registrant Phone'
+		dataType: string
+		lineageTag: 66844a34-fbb6-4fd6-841e-752ce5bc6770
+		sourceLineageTag: fdfcf9be-833d-48c6-b73d-54dc7054eb64
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: Registrant Phone
+
+		annotation SummarizationSetBy = User
+
+	column companies_house_registration_reference
+		dataType: string
+		lineageTag: f93217a6-ee3b-40aa-aadb-e30f100b4b59
+		sourceLineageTag: a16ba698-644a-47bb-ad03-c171f1e8d68b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: companies_house_registration_reference
+
+		annotation SummarizationSetBy = User
+
+	column created_by
+		dataType: string
+		lineageTag: 84e2ccc2-ddc4-427c-941e-1b0635ff36cd
+		sourceLineageTag: 25988cb4-4414-4772-80a8-0e9914f487db
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = User
+
+	column created_timestamp
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 864477f5-7559-47f3-b11c-e621daf262ab
+		sourceLineageTag: f21dba48-35f0-43be-812e-655edb1afb47
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 99256706-1a19-43d9-a5c3-c21c28bcc5d7
+			defaultHierarchy: LocalDateTable_0dfd875d-78fe-44d7-be28-3cc950a23cd7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	partition rpt_provider_registry = entity
+		mode: directQuery
+		source
+			entityName: rpt_provider_registry
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+

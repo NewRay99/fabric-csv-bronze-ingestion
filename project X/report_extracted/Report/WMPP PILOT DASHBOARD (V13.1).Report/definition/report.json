@@ -1,0 +1,104 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU02",
+      "reportVersionAtImport": {
+        "visual": "2.6.0",
+        "report": "3.1.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "multiInfoCards9D184BB3D4E44A139DA08142D76EFD36",
+    "searchBoxB49812217AE0495E948E1B8137A58E1A",
+    "textFilter25A4896A83E0487089E2B90C9AE57C8A"
+  ],
+  "resourcePackages": [
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "Asset_2@4x9645110718448802.png",
+          "path": "Asset_2@4x9645110718448802.png",
+          "type": "Image"
+        },
+        {
+          "name": "BCT_Logo-removebg-preview6284176795099707.png",
+          "path": "BCT_Logo-removebg-preview6284176795099707.png",
+          "type": "Image"
+        },
+        {
+          "name": "boy7123444918221673.png",
+          "path": "boy7123444918221673.png",
+          "type": "Image"
+        },
+        {
+          "name": "girl5491708265852747.png",
+          "path": "girl5491708265852747.png",
+          "type": "Image"
+        },
+        {
+          "name": "NEW_LOGO9378354189919752.jpg",
+          "path": "NEW_LOGO9378354189919752.jpg",
+          "type": "Image"
+        },
+        {
+          "name": "Unknown5811137082259169.png",
+          "path": "Unknown5811137082259169.png",
+          "type": "Image"
+        }
+      ]
+    },
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU02",
+          "path": "BaseThemes/CY26SU02.json",
+          "type": "BaseTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

@@ -1,0 +1,270 @@
+table fact_ipa
+	lineageTag: d13203b0-387d-462e-a25a-fa85433e2a5e
+	sourceLineageTag: bb31e970-15d3-4103-aeed-c211b588b902
+
+	column ipa_id
+		dataType: string
+		lineageTag: a55b733e-a9d8-4775-9667-43712cbf5e0b
+		sourceLineageTag: 5e452a7e-e9ca-458e-9883-6fd3846a7d40
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: ipa_id
+
+		annotation SummarizationSetBy = User
+
+	column offer_id
+		dataType: string
+		lineageTag: d898ae19-479c-4c33-a041-23792729f005
+		sourceLineageTag: fc8fecc5-e8cf-421a-b3f7-ff33f65d7517
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = User
+
+	column referral_id
+		dataType: string
+		lineageTag: 7d2fe198-c68a-4e6f-b245-4a2bbe5653a7
+		sourceLineageTag: f846ef50-e288-4b34-9bee-9ad856fd84f6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = User
+
+	column provider_id
+		dataType: string
+		lineageTag: 5427510f-a8b5-434f-9818-c7f3b5361a8b
+		sourceLineageTag: 1ceebe91-c562-4afb-b4a2-08e8d17da468
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = User
+
+	column la_name
+		dataType: string
+		lineageTag: b2805767-15ae-4251-9de9-cb03ca25da3c
+		sourceLineageTag: 2cb41429-2dd2-4938-98d1-1ba26ddd42e9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: la_name
+
+		annotation SummarizationSetBy = User
+
+	column provider_name
+		dataType: string
+		lineageTag: a871f2a9-db90-48ca-b68f-94087235341f
+		sourceLineageTag: a3304f11-2558-43f9-b73a-0ef911910378
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		annotation SummarizationSetBy = User
+
+	column provider_addr_town
+		dataType: string
+		lineageTag: 7b34dff0-3deb-45dd-9f2c-64769300c411
+		sourceLineageTag: d62edbfb-3c89-472f-9195-246508c75882
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: provider_addr_town
+
+		annotation SummarizationSetBy = User
+
+	column placement_framework_or_spot
+		dataType: string
+		lineageTag: a79f2612-89de-4fae-80c6-b80119772a73
+		sourceLineageTag: 17570ae4-2670-4272-92b1-34ac5c9a4a6c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_framework_or_spot
+
+		annotation SummarizationSetBy = User
+
+	column placement_service_type
+		dataType: string
+		lineageTag: ef311873-8929-48d4-a425-7f68a6b00d80
+		sourceLineageTag: b911d814-5113-4267-a8b7-d43fb59618a3
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_service_type
+
+		annotation SummarizationSetBy = User
+
+	column placement_type
+		dataType: string
+		lineageTag: ea986d19-cca3-4f02-8850-e9cfa9e163e4
+		sourceLineageTag: b17d402c-9e9b-4b35-ab29-010bcd8d2511
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = User
+
+	column home_name
+		dataType: string
+		lineageTag: 7e055d61-9802-45f8-9cfc-eb0087fa728b
+		sourceLineageTag: 644cc261-dfdc-45b6-bed9-0c49fb9fcf7b
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: home_name
+
+		annotation SummarizationSetBy = User
+
+	column costs_total_weekly_fee
+		dataType: string
+		lineageTag: 5919b569-6cdf-44aa-8a81-30ab5b4ee168
+		sourceLineageTag: 8026ec16-fc11-4b90-a4ab-14c957d2967c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: costs_total_weekly_fee
+
+		annotation SummarizationSetBy = User
+
+	column costs_total_core_costs_weekly_fee
+		dataType: string
+		lineageTag: 2b825513-1aea-4b22-b816-693efd9a6834
+		sourceLineageTag: 5401af57-6159-4b6c-bcd9-d043d5478c04
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: costs_total_core_costs_weekly_fee
+
+		annotation SummarizationSetBy = User
+
+	column core_cost_weekly_fee
+		dataType: string
+		lineageTag: 232827f6-b219-4de8-8f55-c7d0933897cf
+		sourceLineageTag: 9529a1be-71e5-4c48-8a76-903d75a9960a
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: core_cost_weekly_fee
+
+		annotation SummarizationSetBy = User
+
+	column payment_method
+		dataType: string
+		lineageTag: d50b5a79-dbe7-4310-aef8-9bc66b2af4d7
+		sourceLineageTag: 0e80ef48-9964-494d-b9f6-436954952bb8
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = User
+
+	column status
+		dataType: string
+		lineageTag: e6596261-c493-4d44-8497-a577187c6906
+		sourceLineageTag: 78d1b367-6d73-42a6-83e7-7b8aa28baaa0
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = User
+
+	column signed_by_local_authority
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7beefad6-cf52-4c6e-b7b3-cae20a700128
+		sourceLineageTag: 75672099-0a22-4ccc-8d34-8da17ecbad01
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: signed_by_local_authority
+
+		annotation SummarizationSetBy = User
+
+	column signed_datetime_for_local_authority
+		dataType: string
+		lineageTag: 608c7649-90ad-4173-bbc5-a827098ae016
+		sourceLineageTag: ebd1575e-9a78-4797-b9a1-002bf3bfbf12
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_local_authority
+
+		annotation SummarizationSetBy = User
+
+	column signed_by_provider
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1f5dfe87-532b-4355-a95e-754a2a134bfd
+		sourceLineageTag: 4618c27b-79c0-4ed9-af77-d3256ea5233c
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: signed_by_provider
+
+		annotation SummarizationSetBy = User
+
+	column signed_datetime_for_provider
+		dataType: string
+		lineageTag: ae381ea8-d820-499e-a7eb-0588d8f065aa
+		sourceLineageTag: 51566410-5c4e-48d6-bb26-a12eed381c93
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_provider
+
+		annotation SummarizationSetBy = User
+
+	column closed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4f60c108-e6a5-43a4-b78d-bb77f38c4818
+		sourceLineageTag: 0815566d-0d49-4c20-b615-ef438b8205c6
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: closed
+
+		annotation SummarizationSetBy = User
+
+	column closed_datetime
+		dataType: string
+		lineageTag: be710e0b-62dc-48b4-a091-9b008795f74c
+		sourceLineageTag: 65a36423-e4e4-42a1-ba2c-34e1692a0949
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: closed_datetime
+
+		annotation SummarizationSetBy = User
+
+	column created_datetime
+		dataType: string
+		lineageTag: 67b20491-e36c-4e8a-8329-6e0cdcb39c5e
+		sourceLineageTag: b1f6b0d7-2153-4e7c-8d8b-8056f208a6b9
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: created_datetime
+
+		annotation SummarizationSetBy = User
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 28920dba-20a4-49bc-95da-5992edb923dd
+		sourceLineageTag: 59123ccb-e56d-4a1b-bf2f-9a4ff6ce476e
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: ca3fa057-593b-48e0-b0f4-c2ebb66756f1
+			defaultHierarchy: LocalDateTable_5fb970bc-aa2a-4b57-9991-fc2ef569d2b3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = User
+
+	column ipa_date_only
+		dataType: dateTime
+		formatString: General Number
+		lineageTag: 4c043a7a-6daa-4d0a-ac54-42a21a355c16
+		sourceLineageTag: 7603866a-71fc-4734-b61d-0c2ff4821053
+		dataCategory: Uncategorized
+		summarizeBy: none
+		sourceColumn: ipa_date_only
+
+		annotation SummarizationSetBy = User
+
+	partition fact_ipa = entity
+		mode: directQuery
+		source
+			entityName: fact_ipa
+			expressionSource: 'DirectQuery to AS - NEW WMPP PILOT DASHBOARD (V13)'
+
