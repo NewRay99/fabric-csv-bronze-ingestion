@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Use this prompt to generate stunning, production-quality HTML mockups of Power BI dashboard pages. The AI has full creative freedom to make the report visually striking while adhering to the corporate brand system and KPI specifications provided.
+Use this prompt to generate stunning, production-quality HTML mockups of Power BI dashboard pages. The AI has full creative freedom to make the report visually striking while adhering to the BCT (Birmingham Children's Trust) brand system and KPI specifications provided.
 
 ---
 
@@ -11,122 +11,136 @@ Use this prompt to generate stunning, production-quality HTML mockups of Power B
 ```
 You are an expert UX/UI designer specializing in data visualization and Power BI dashboard design. You have been commissioned to create a stunning, high-fidelity HTML mockup of a Power BI dashboard page for a corporate reporting suite.
 
-## Corporate Brand System
+## Corporate Brand System — Birmingham Children's Trust (BCT)
 
-The following brand colours are MANDATORY — use them as the foundation of every visual decision:
+The following brand colours were extracted from pixel-level analysis of birminghamchildrenstrust.co.uk and are MANDATORY — use them as the foundation of every visual decision:
 
 Primary Palette:
-- Primary Navy: #002060 (headers, table headers, primary chart series, KPI accent borders for primary metrics)
-- Secondary Gold: #f0a010 (accents, R-tag badges, active nav indicators, highlight series)
-- Navy Dark: #001A45 (gradient depth, hover states)
-- Navy Light: #1a4080 (secondary chart series, tertiary elements)
-- Gold Light: #f5c050 (hover highlights, subtle accents)
-- Gold Dark: #c08000 (text on light backgrounds, emphasis)
+- Amber/Gold: #E8A020 (primary brand — nav strips, logo petals, KPI accent borders, table headers, active nav indicators, highlight series)
+- Pink/Magenta: #C82B5E (call-to-action — buttons, interactive elements, primary data series, chat/notification badges)
+- Blue Accent: #2972C4 (data visualisation — chart series, hyperlinks, decorative underlines, info badges)
+- Dark Charcoal: #1C1C1A (primary text — KPI values, headings, body text)
+- Burnt Orange: #D4601A (tertiary data series, warm highlight accents)
 
 Surface & Text:
-- Background: #f0f2f5 (page canvas — calm, professional)
-- Surface: #ffffff (cards, charts, tables)
-- Ink: #1a1a1a (primary text, KPI values)
-- Ink Secondary: #555555 (labels, descriptions)
-- Ink Tertiary: #999999 (metadata, axis labels)
-- Border: #e0e0e0 (subtle dividers)
+- Background: #F4EFE4 (warm cream page canvas — calm, approachable, child-friendly)
+- Surface: #FFFFFF (cards, charts, tables — white floating on cream)
+- Ink: #1C1C1A (primary text, KPI values)
+- Ink Secondary: #6B6862 (labels, descriptions)
+- Ink Tertiary: #A09D97 (metadata, axis labels)
+- Border: #E0DDD5 (warm subtle dividers)
 
 Semantic Colours (use purposefully, not decoratively):
-- Success Green: #2E8B2E (positive KPIs, completed, active status)
-- Warning Yellow: #D4A017 (at-risk, ageing, draft status)
+- Success Green: #3A8B6F (positive KPIs, completed, active status)
+- Warning Amber: #E8A020 (at-risk, ageing, draft status — same as primary)
 - Alert Red: #C0392B (critical, expired, closed, over-budget)
-- Each semantic colour has a tinted background variant for badges: green-tint #e8f5e8, yellow-tint #fff9e6, red-tint #fcebe9
+- Alert Orange: #D4601A (outside timeframe, approaching critical)
+- Each semantic colour has a tinted background variant for badges: green-tint #E8F5EE, amber-tint #FCF3E0, red-tint #FCEBE9, blue-tint #E8F0FA, pink-tint #FCE8EF
 
 Typography:
-- Primary font: Inter (Google Fonts) — use weights 300, 400, 500, 600, 700
-- KPI values: 28px, weight 700, font-variant-numeric: tabular-nums
-- Chart titles: 13px, weight 600
-- Table headers: 11px, weight 600, uppercase, letter-spacing 0.3px
-- Labels: 11px, weight 500
-- Metadata: 11px, weight 400, ink-tertiary
+- Primary font: Poppins (Google Fonts) — use weights 400, 500, 600, 700
+- Secondary font: Inter (Google Fonts) — use weights 300, 400, 500, 600, 700
+- KPI values: 28px, Poppins weight 700, font-variant-numeric: tabular-nums, colour #1C1C1A
+- Chart titles: 13px, Poppins weight 600, colour #1C1C1A
+- Table headers: 11px, Inter weight 600, uppercase, letter-spacing 0.3px, white text on amber bg
+- Labels: 11px, Inter weight 500, colour #6B6862
+- Metadata: 11px, Inter weight 400, colour #A09D97
 
-Logo: Use the provided logo image (bct_logo.png) in the header at 36px height.
+Google Fonts import:
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+Logo: Use the provided logo image (bct_logo.png) in the header at 36px height. If no logo image is available, use a CSS placeholder with the flower/mandala motif in amber tones.
 
 ## Design System Components
 
 ### Header Bar
-- Navy gradient: linear-gradient(135deg, #002060, #001A45)
-- Height: 64px
-- Logo on left, page title in white (18px, 600), nav links on right
-- Active nav: white text with 2px gold (#f0a010) bottom border
-- Inactive nav: rgba(255,255,255,0.65), hover to white with subtle bg
+- White (#FFFFFF) surface with 1px bottom border (#E0DDD5)
+- Height: 72px
+- Logo on left, page title in dark charcoal (18px Poppins, 600)
+- Nav links on right as pill-shaped buttons
+- Active nav: pink (#C82B5E) background, white text
+- Inactive nav: transparent bg, charcoal text, hover to amber-tint (#FCF3E0)
+
+### BCT Nav Strip (optional decorative element)
+- Amber (#E8A020) full-width strip below header, ~32px height
+- White text with chevron arrows (▸), matching birminghamchildrenstrust.co.uk navigation pattern
+- Example: "▸ Here for placement officers  ▸ Here for providers  ▸ Here for commissioners"
 
 ### Filter Bar
 - White surface with subtle shadow
 - Pill-shaped filters (border-radius: 20px) with label + value + dropdown caret
-- Refresh button: navy bg, white text, 4px radius
+- Refresh button: amber bg, white text, 24px radius (pill)
 
 ### KPI Cards
-- White surface, 6px border-radius, subtle shadow (0 1px 3px rgba(0,0,0,0.08))
-- 3px coloured left accent bar (navy/gold/green/yellow/red based on metric type)
-- Label: 11px uppercase, ink-secondary
-- Value: 28px bold, tabular-nums
-- Sub-text: 11px, ink-tertiary, with ▲ (green) / ▼ (red) trend indicators
-- Hover: lift with shadow-lg (0 4px 16px rgba(0,32,96,0.1))
+- White (#FFFFFF) surface, 8px border-radius, subtle shadow (0 2px 8px rgba(28,28,26,0.06))
+- 3px coloured left accent bar (amber/pink/blue/green/red/orange based on metric type)
+- Label: 11px uppercase, Inter, #6B6862
+- Value: 28px Poppins bold, tabular-nums, #1C1C1A
+- Sub-text: 11px Inter, #A09D97, with ▲ (green) / ▼ (red) trend indicators
+- Hover: lift with shadow (0 4px 16px rgba(200,43,94,0.12)) — pink-tinted hover glow
+- Reference label at bottom: cream (#F4EFE4) background, 8px bottom radius
 
 ### Chart Cards
-- White surface, same shadow and radius as KPI cards
-- Title row: 13px bold ink + 11px ink-tertiary metadata on right
+- White surface, same shadow and radius as KPI cards (8px)
+- Title row: 13px Poppins bold (#1C1C1A) + 11px Inter (#A09D97) metadata on right
 - Charts built with pure CSS — no JavaScript charting libraries
-- Dotted gridlines (1px dashed #e0e0e0)
+- Dotted gridlines (1px dashed #E0DDD5)
 - Legends with coloured dots/squares
+- Chart series colours: amber #E8A020, pink #C82B5E, blue #2972C4, orange #D4601A
 
 ### Tables
-- Navy (#002060) header row with white text
-- Alternating row colours (#ffffff / #fafafa)
-- Hover: navy-tint (#e8edf5) row background
+- Amber (#E8A020) header row with white text
+- Alternating row colours (#FFFFFF / #F9F5EC)
+- Hover: pink-tint (#FCE8EF) row background
 - Status badges: pill-shaped (border-radius: 10px) with tinted bg + semantic colour text
-- 1px solid #e0e0e0 bottom borders on rows
+- 1px solid #E0DDD5 bottom borders on rows
 
 ### R-Tag Badges (Functional Requirement References)
-- Gold (#f0a010) background, navy (#002060) text
-- 9px, weight 700, 3px radius, padding 2px 6px
+- Pink (#C82B5E) background, white text
+- 9px, Inter weight 700, 4px radius, padding 2px 6px
 - Placed above the KPI label
 
 ### Navigation Buttons / Slide Navigation
-- Include a horizontal slide/button nav at the bottom of each page
-- Each button: navy-tint background, navy text, 4px radius, 12px font, 8px 16px padding
-- Active button: navy background, white text, gold left border (3px)
-- Buttons link to the other dashboard pages
+- Pill-shaped buttons (border-radius: 24px)
+- Active: pink (#C82B5E) background, white text
+- Inactive: white bg, amber (#E8A020) border, charcoal text
 - Include arrow indicators (← Previous | Next →)
+- Buttons link to the other dashboard pages
 
 ## Creative Freedom
 
 Within the brand system above, you have FULL creative freedom to:
 
-1. **Choose the best chart type** for each data set — donut, bar, column, line, funnel, heatmap, treemap, gauge, or any CSS-constructable visual. Pick what communicates the data most effectively.
+1. **Choose the best chart type** for each data set — donut, bar, column, line, funnel, heatmap, treemap, gauge, or any CSS-constructable visual.
 
-2. **Design the layout** — you decide the grid structure. Use CSS Grid with whatever column spans make sense for the data. Break the grid when a visual needs more or less space. Asymmetric layouts are encouraged when they serve the data.
+2. **Design the layout** — use CSS Grid with whatever column spans make sense. Break the grid when a visual needs more or less space.
 
-3. **Add micro-interactions** — hover states, transitions, animated bar fills, tooltip-style info popovers. Make it feel alive. Use CSS transitions and transforms. Respect prefers-reduced-motion.
+3. **Add micro-interactions** — hover states, transitions, animated bar fills. Use CSS transitions and transforms. Respect prefers-reduced-motion.
 
-4. **Enhance with visual flourishes** — gradient accents, subtle texture, depth via shadows, glassmorphism on overlay elements (used sparingly and purposefully, not as default decoration).
+4. **Enhance with visual flourishes** — warm gradient accents (amber→pink), subtle texture, depth via shadows, rounded corners everywhere.
 
-5. **Invent data visualizations** — if a standard chart doesn't serve the data, create a custom CSS visual. Think: progress rings, funnel drops, sankey-style flows, calendar heatmaps, bullet charts.
+5. **Invent data visualizations** — progress rings, funnel drops, sankey-style flows, calendar heatmaps, bullet charts.
 
-6. **Use iconography** — Unicode symbols, CSS-drawn icons, or inline SVG for visual anchors. Keep them minimal and purposeful.
+6. **Use iconography** — Unicode symbols, CSS-drawn icons, or inline SVG for visual anchors.
 
-7. **Tell a story** — arrange the page so the eye flows from summary KPIs → trends → detail. Use visual hierarchy (size, colour, spacing) to guide attention.
+7. **Tell a story** — arrange the page so the eye flows from summary KPIs → trends → detail.
 
 ## What NOT to Do
 
-- Do NOT use emoji as data icons (unless the brand specifically uses them)
+- Do NOT use cold blue/grey palettes — BCT is warm and child-focused
+- Do NOT use navy blue backgrounds — use white headers on cream backgrounds
+- Do NOT use sharp corners — BCT design language uses rounded corners (8px minimum)
+- Do NOT use emoji as data icons
 - Do NOT use generic stock-photo placeholders
 - Do NOT create fake metrics that aren't in the KPI spec
-- Do NOT use rainbow palettes — stick to navy/gold + semantic colours
-- Do NOT make every section a card grid — vary the layout
-- Do NOT add decorative elements that don't serve comprehension
+- Do NOT use rainbow palettes — stick to amber/pink/blue + semantic colours
+- Do NOT use Segoe UI as the primary font — use Poppins
 - Do NOT use Lorem Ipsum — all text should be real, meaningful labels
 
 ## Technical Requirements
 
 - Single self-contained HTML file with inline CSS
-- Inter font loaded from Google Fonts
+- Poppins + Inter fonts loaded from Google Fonts
 - Mobile responsive (grid collapses gracefully on small screens)
 - CSS variables for all brand tokens
 - All charts constructed with pure CSS (no JS charting libraries)
@@ -141,19 +155,21 @@ For each page, you will receive:
 4. Tables list (columns, sample rows)
 5. Any NEW measures with functional requirement tags [R##]
 
-Interpret these as a guide, not a constraint. If you see a better way to visualize the data, do it. If a KPI would be more impactful as a progress ring instead of a card, transform it. If two charts would work better combined, merge them.
-
 The goal is a dashboard that a senior designer would be proud to put in their portfolio.
 
 ## Output
 
 Produce a single HTML file. Before returning it, verify:
 - File is complete and valid HTML
-- All CSS variables reference the brand system
-- Logo image path is correct (bct_logo.png, relative)
+- All CSS variables reference the BCT brand system
+- Logo image path is correct (bct_logo.png, relative) or CSS placeholder is used
 - All nav links point to valid pages
 - No JavaScript errors (if any JS is used for interactions)
 - Mobile breakpoint works
+- Background is cream #F4EFE4, not white or grey
+- All cards have 8px border radius
+- All buttons are pill-shaped (24px radius)
+- Typography uses Poppins for headings/values and Inter for body/labels
 ```
 
 ---
@@ -170,23 +186,23 @@ Produce a single HTML file. Before returning it, verify:
 Purpose: Referral demand monitoring and lifecycle overview
 
 KPI Cards:
-- Total Referrals: 161 (navy accent, ▲ 12% vs last period)
+- Total Referrals: 161 (amber accent, ▲ 12% vs last period)
 - Active: 72 (green accent, ▲ 8%)
-- Under Offer: 8 (gold accent, 2 new this week)
-- Awaiting Offers: 64 (yellow accent, ▼ 5%)
+- Under Offer: 8 (pink accent, 2 new this week)
+- Awaiting Offers: 64 (amber accent, ▼ 5%)
 - Closed/Cancelled: 42 (red accent, 17 placed · 25 withdrawn)
-- Offer Rate: 68% (navy accent, ▲ 3pp)
+- Offer Rate: 68% (blue accent, ▲ 3pp)
 
 Gender Cards:
-- Male: 89 (navy circle icon, 55.3%)
-- Female: 66 (gold circle icon, 41.0%)
-- Other: 6 (navy-light circle, 3.7%)
+- Male: 89 (blue circle icon, 55.3%)
+- Female: 66 (pink circle icon, 41.0%)
+- Other: 6 (amber circle, 3.7%)
 
 NEW KPIs (with R-tags):
 - Emergency Referrals: 12 [R18, R57] (red accent)
-- Emergency Rate: 7.5% [R57] (navy-light accent, target ≤10%)
-- Planned Referrals: 149 [R57] (navy accent)
-- Out-of-Region: 3 [R22] (gold accent)
+- Emergency Rate: 7.5% [R57] (blue accent, target ≤10%)
+- Planned Referrals: 149 [R57] (green accent)
+- Out-of-Region: 3 [R22] (pink accent)
 
 Charts:
 - Donut: Placement Type (Residential 40%, Fostering 35%, Supported 25%)
@@ -196,42 +212,11 @@ Charts:
 Table: Recent Referrals (8 rows, columns: ID, Type, Status, Date, Region)
 ```
 
-### Example 2: Generating All Pages at Once
-
-```
-[Paste the master prompt above]
-
-Generate all 5 dashboard pages as separate HTML files:
-
-1. referrals.html — 6 KPI cards + 3 gender cards + 4 R-tag cards + donut + column + bar + table
-2. offers_overview.html — 12 KPI cards (3 rows) + 100% stacked column + top-10 bar chart
-3. ipa_overview.html — 12 KPI cards + funnel chart + IPA detail table + conversion rates table
-4. draft_offers.html — 9 KPI cards + clustered column (age bands) + legend cards
-5. provider_registry.html — 11 KPI cards + bar chart + directory table + QA flag breakdown
-
-[Include KPI values and chart data for each page — see KPI Reference Guide]
-```
-
-### Example 3: Iterating on a Design
-
-```
-[Paste the master prompt above]
-
-## Iteration Request
-
-Take the existing referrals.html and make these improvements:
-- Replace the donut chart with a more visually striking radial progress visualization
-- Add a sparkline to each KPI card showing 7-day trend
-- Make the table collapsible with a "Show All" button
-- Add a gradient accent strip at the top of the page
-- Include a "last refreshed" timestamp with a subtle pulse animation
-```
-
 ---
 
 ## Notes for the User
 
-- **Model choice:** This prompt works best with a model that has strong visual design capabilities. Claude Sonnet/Opus produce the best HTML artifacts. GLM-5.2 will produce functional but less polished results.
-- **Iterating:** The prompt is designed to be reusable. Paste it again with revised specs to iterate on any page.
-- **Brand colours:** The navy (#002060) and gold (#f0a010) were extracted from pixel analysis of the actual BCT logo. If the brand changes, update the CSS variables in the prompt.
-- **Logo file:** Ensure `bct_logo.png` exists in the same directory as the generated HTML files.
+- **Brand colours:** The amber (#E8A020), pink (#C82B5E), blue (#2972C4), and cream (#F4EFE4) were extracted from pixel-level analysis of the Birmingham Children's Trust website (birminghamchildrenstrust.co.uk) screenshots.
+- **Typography:** Poppins and Inter are loaded from Google Fonts. In Power BI Desktop, use Poppins if installed, otherwise fall back to DIN then Segoe UI.
+- **Logo file:** Ensure `bct_logo.png` exists in the same directory as the generated HTML files. The BCT logo features a flower/mandala in amber and gold tones.
+- **Design philosophy:** BCT is a children's trust — the design should feel warm, approachable, and child-focused, NOT corporate/cold. Cream backgrounds, rounded corners, warm amber accents, and friendly typography achieve this.

@@ -1,63 +1,63 @@
 {
-  "name": "WMPP_Brand_Theme",
+  "name": "WMPP_Brand_Theme_BCT",
   "dataColors": [
-    "#118DFF",
-    "#12239E",
-    "#E66C37",
-    "#6B007B",
-    "#E044A7",
-    "#744EC2",
-    "#D9B300",
-    "#D64550",
-    "#197278",
-    "#1AAB40",
-    "#15C6F4",
-    "#4092FF",
-    "#FFA058",
-    "#BE5DC9",
-    "#F472D0",
-    "#B5A1FF",
-    "#C4A200",
-    "#FF8080",
-    "#00DBBC",
-    "#5BD667"
+    "#E8A020",
+    "#C82B5E",
+    "#2972C4",
+    "#1C1C1A",
+    "#D4601A",
+    "#7A4D9F",
+    "#3A8B6F",
+    "#C0392B",
+    "#1A6B9E",
+    "#E8C040",
+    "#D87090",
+    "#4FA0E0",
+    "#F0A050",
+    "#B05890",
+    "#5BD667",
+    "#A07030",
+    "#E04060",
+    "#20A090",
+    "#8060C0",
+    "#F0D050"
   ],
-  "background": "#FFFFFF",
-  "foreground": "#252423",
-  "tableAccent": "#118DFF",
-  "good": "#1AAB40",
-  "neutral": "#D9B300",
-  "bad": "#D64554",
-  "maximum": "#118DFF",
-  "center": "#D9B300",
-  "minimum": "#DEEFFF",
-  "null": "#FF7F48",
-  "hyperlink": "#0078d4",
-  "visitedHyperlink": "#0078d4",
-  "backgroundLight": "#F3F2F1",
-  "backgroundNeutral": "#C8C6C4",
-  "foregroundNeutralSecondary": "#605E5C",
-  "foregroundNeutralTertiary": "#B3B0AD",
+  "background": "#F4EFE4",
+  "foreground": "#1C1C1A",
+  "tableAccent": "#E8A020",
+  "good": "#3A8B6F",
+  "neutral": "#E8A020",
+  "bad": "#C0392B",
+  "maximum": "#C82B5E",
+  "center": "#E8A020",
+  "minimum": "#F4EFE4",
+  "null": "#C0C0C0",
+  "hyperlink": "#2972C4",
+  "visitedHyperlink": "#2972C4",
+  "backgroundLight": "#FFFFFF",
+  "backgroundNeutral": "#E0DDD5",
+  "foregroundNeutralSecondary": "#6B6862",
+  "foregroundNeutralTertiary": "#A09D97",
   "textClasses": {
     "callout": {
-      "fontSize": 24,
-      "fontFace": "DIN",
-      "color": "#252423"
+      "fontSize": 28,
+      "fontFace": "Poppins",
+      "color": "#1C1C1A"
     },
     "title": {
-      "fontSize": 12,
-      "fontFace": "DIN",
-      "color": "#252423"
+      "fontSize": 13,
+      "fontFace": "Poppins",
+      "color": "#1C1C1A"
     },
     "header": {
       "fontSize": 12,
-      "fontFace": "Segoe UI Semibold",
-      "color": "#252423"
+      "fontFace": "Poppins Semibold",
+      "color": "#1C1C1A"
     },
     "label": {
-      "fontSize": 10,
-      "fontFace": "Segoe UI",
-      "color": "#252423"
+      "fontSize": 11,
+      "fontFace": "Inter",
+      "color": "#6B6862"
     }
   },
   "visualStyles": {
@@ -111,14 +111,14 @@
           {
             "backgroundColor": {
               "solid": {
-                "color": "#ffffff"
+                "color": "#FFFFFF"
               }
             },
             "transparency": 0,
             "border": true,
             "borderColor": {
               "solid": {
-                "color": "#B3B0AD"
+                "color": "#E0DDD5"
               }
             }
           }
@@ -129,7 +129,7 @@
             "transparency": 0,
             "foregroundColor": {
               "solid": {
-                "color": "#252423"
+                "color": "#1C1C1A"
               }
             },
             "border": true
@@ -139,7 +139,7 @@
             "transparency": 0,
             "foregroundColor": {
               "solid": {
-                "color": "#252423"
+                "color": "#1C1C1A"
               }
             },
             "border": true
@@ -155,9 +155,9 @@
           },
           {
             "$id": "default",
-            "cellPadding": 12,
+            "cellPadding": 14,
             "paddingIndividual": false,
-            "paddingUniform": 12,
+            "paddingUniform": 14,
             "backgroundShow": true
           }
         ],
@@ -166,8 +166,8 @@
             "$id": "default",
             "position": "Left",
             "imageAreaSize": 20,
-            "padding": 12,
-            "rectangleRoundedCurve": 4,
+            "padding": 14,
+            "rectangleRoundedCurve": 8,
             "fit": "Normal",
             "fixedSize": false
           }
@@ -180,10 +180,10 @@
                 "color": "backgroundLight"
               }
             },
-            "paddingUniform": 12,
+            "paddingUniform": 14,
             "rectangleRoundedCurveCustomStyle": true,
-            "rectangleRoundedCurveLeftBottom": 4,
-            "rectangleRoundedCurveRightBottom": 4
+            "rectangleRoundedCurveLeftBottom": 8,
+            "rectangleRoundedCurveRightBottom": 8
           }
         ]
       }

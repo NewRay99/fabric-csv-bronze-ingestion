@@ -3,453 +3,673 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP — IPA Overview</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>IPA Overview — WMPP Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy: #002060;
-  --navy-dark: #001A45;
-  --navy-light: #1a4080;
-  --navy-tint: #e8edf5;
-  --gold: #f0a010;
-  --gold-light: #f5c050;
-  --gold-dark: #c08000;
-  --gold-tint: #fdf5e6;
-  --green: #2E8B2E;
-  --green-tint: #e8f5e8;
-  --yellow: #D4A017;
-  --yellow-tint: #fff9e6;
+  --amber: #E8A020;
+  --amber-dark: #D4601A;
+  --amber-light: #FCF3E0;
+  --pink: #C82B5E;
+  --pink-light: #FCE8EF;
+  --blue: #2972C4;
+  --blue-light: #E8F0FA;
+  --charcoal: #1C1C1A;
+  --cream: #F4EFE4;
+  --white: #FFFFFF;
+  --border: #E0DDD5;
+  --grey: #6B6862;
+  --grey-light: #A09D97;
+  --green: #3A8B6F;
+  --green-light: #E8F5EE;
   --red: #C0392B;
-  --red-tint: #fcebe9;
-  --bg: #f0f2f5;
-  --surface: #ffffff;
-  --ink: #1a1a1a;
-  --ink-2: #555555;
-  --ink-3: #999999;
-  --border: #e0e0e0;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-lg: 0 4px 16px rgba(0,32,96,0.1);
-  --radius: 6px;
+  --red-light: #FCEBE9;
+  --orange: #D4601A;
+  --orange-light: #FDF0E8;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-  padding: 16px;
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.5;
+  min-height: 100vh;
 }
-.dashboard { max-width: 1468px; margin: 0 auto; }
-
-/* ── Header ── */
+.dashboard {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+/* ===== HEADER ===== */
 .header {
+  background: var(--white);
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(135deg, var(--navy), var(--navy-dark));
-  border-radius: var(--radius);
-  padding: 0 24px;
-  height: 64px;
-  box-shadow: var(--shadow-lg);
+  padding: 0 28px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(28,28,26,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 .header-left { display: flex; align-items: center; gap: 16px; }
-.header-left img { height: 36px; }
-.header h1 {
+.logo-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
   font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--charcoal);
+  letter-spacing: -0.5px;
+}
+.header-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nav-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--grey);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-btn:hover { border-color: var(--pink); color: var(--pink); }
+.nav-btn.active { background: var(--pink); color: var(--white); border-color: var(--pink); }
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  background: var(--white);
+  margin: 16px 0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
   font-weight: 600;
-  color: #fff;
+  color: var(--grey);
+  text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.nav { display: flex; gap: 4px; }
-.nav a {
-  color: rgba(255,255,255,0.65);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: all 0.15s;
-}
-.nav a:hover { color: #fff; background: rgba(255,255,255,0.1); }
-.nav a.active {
-  color: #fff;
-  border-bottom: 2px solid var(--gold);
-  border-radius: 0;
-}
-
-/* ── Filter Bar ── */
-.filters {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-top: 12px;
-}
 .filter-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 20px;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  color: var(--ink-2);
+  padding: 6px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--charcoal);
   cursor: pointer;
+  transition: all 0.2s ease;
 }
-.filter-pill .label { color: var(--ink-3); font-weight: 400; }
-.filter-pill .value { color: var(--navy); }
-.filter-pill::after {
-  content: '▾';
-  font-size: 10px;
-  color: var(--ink-3);
+.filter-pill:hover { border-color: var(--amber); background: var(--amber-light); }
+.filter-pill.active { background: var(--amber); color: var(--white); border-color: var(--amber); }
+.filter-divider { width: 1px; height: 24px; background: var(--border); }
+/* ===== SECTIONS ===== */
+.section-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0 10px;
 }
-.filter-count {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--ink-3);
-}
-.refresh-btn {
-  background: var(--navy);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 12px;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-/* ── KPI Cards ── */
-.kpi-row-4 {
+/* ===== KPI ROWS ===== */
+.kpi-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 12px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
-.kpi-row-5 {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-top: 12px;
-}
-.kpi-row-3 {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 12px;
-}
+.kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-row-3 { grid-template-columns: repeat(3, 1fr); }
 .kpi-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
+  background: var(--white);
+  border-radius: 8px;
+  padding: 18px 20px 18px 23px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .kpi-card::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 3px;
+  border-radius: 8px 0 0 8px;
 }
-.kpi-card.navy::before { background: var(--navy); }
-.kpi-card.gold::before { background: var(--gold); }
-.kpi-card.green::before { background: var(--green); }
-.kpi-card.yellow::before { background: var(--yellow); }
-.kpi-card.red::before { background: var(--red); }
-.kpi-card.navy-light::before { background: var(--navy-light); }
+.kpi-card.accent-green::before { background: var(--green); }
+.kpi-card.accent-amber::before { background: var(--amber); }
+.kpi-card.accent-orange::before { background: var(--orange); }
+.kpi-card.accent-blue::before { background: var(--blue); }
+.kpi-card.accent-pink::before { background: var(--pink); }
+.kpi-card.accent-red::before { background: var(--red); }
 .kpi-label {
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 500;
-  color: var(--ink-2);
+  color: var(--grey);
   text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 6px;
+  letter-spacing: 0.5px;
 }
 .kpi-value {
+  font-family: 'Poppins', sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: var(--ink);
-  line-height: 1;
-  margin-bottom: 4px;
+  color: var(--charcoal);
   font-variant-numeric: tabular-nums;
-}
-.kpi-sub {
-  font-size: 11px;
-  color: var(--ink-3);
-}
-.kpi-sub .up { color: var(--green); }
-.kpi-sub .down { color: var(--red); }
-
-/* ── R-Tag Badge ── */
-.rtag-badge {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--navy);
-  font-size: 9px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-bottom: 6px;
-  letter-spacing: 0.3px;
-}
-
-/* ── Charts ── */
-.chart-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 12px;
-}
-.chart-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 16px;
-  box-shadow: var(--shadow);
-}
-.chart-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 16px;
+  line-height: 1.2;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
 }
-.chart-title .meta { font-size: 11px; font-weight: 400; color: var(--ink-3); }
-
-/* Funnel Chart */
-.funnel { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.kpi-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--grey-light);
+}
+.kpi-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.r-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--pink);
+  color: var(--white);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+/* ===== CHARTS ===== */
+.chart-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.chart-row-full { grid-template-columns: 1fr; }
+.chart-row-2 { grid-template-columns: 1fr 1fr; }
+.chart-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+}
+.chart-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+/* ===== FUNNEL CHART ===== */
+.funnel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+.funnel-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
+.funnel-bar-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
 .funnel-bar {
+  height: 56px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 52px;
-  border-radius: 4px;
-  margin: 0 auto;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
   font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  position: relative;
-  transition: opacity 0.15s;
+  color: var(--white);
+  transition: all 0.3s ease;
 }
-.funnel-bar:hover { opacity: 0.9; }
-.funnel-bar .funnel-label {
-  position: absolute;
-  left: -140px;
+.funnel-bar-1 { width: 100%; background: var(--amber); }
+.funnel-bar-2 { width: 60%; background: var(--amber-dark); }
+.funnel-bar-3 { width: 10%; background: var(--orange); font-size: 13px; min-width: 50px; }
+.funnel-label {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.funnel-label-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+.funnel-label-meta {
+  font-family: 'Inter', sans-serif;
   font-size: 11px;
   font-weight: 500;
-  color: var(--ink-2);
-  text-align: right;
-  width: 130px;
+  color: var(--grey);
 }
-.funnel-bar .funnel-count {
-  font-variant-numeric: tabular-nums;
+.funnel-label-meta strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: var(--charcoal);
 }
-.funnel-drop {
-  font-size: 10px;
-  color: var(--ink-3);
-  padding: 4px 0;
-  text-align: center;
-}
-.funnel-drop .pct { color: var(--red); font-weight: 600; }
-
-/* Table */
-.data-table { width: 100%; border-collapse: collapse; }
-.data-table th {
-  background: var(--navy);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  padding: 8px 12px;
-  text-align: left;
-}
-.data-table th:first-child { border-radius: 4px 0 0 0; }
-.data-table th:last-child { border-radius: 0 4px 0 0; }
-.data-table td {
-  padding: 8px 12px;
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
-  border-bottom: 1px solid var(--border);
-  color: var(--ink);
 }
-.data-table tr:nth-child(even) td { background: #fafafa; }
-.data-table tr:hover td { background: var(--navy-tint); }
-.status-badge {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 10px;
+.data-table thead th {
+  background: var(--amber);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
+}
+.data-table thead th:first-child { border-radius: 6px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 6px 0 0; }
+.data-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--charcoal);
+  font-size: 12px;
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--pink-light); }
+.status-pill {
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
   font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  white-space: nowrap;
 }
-.status-active { background: var(--green-tint); color: var(--green); }
-.status-offer { background: var(--gold-tint); color: var(--gold-dark); }
-.status-awaiting { background: var(--yellow-tint); color: var(--yellow); }
-.status-closed { background: var(--red-tint); color: var(--red); }
-.check-yes { color: var(--green); font-weight: 700; }
-.check-no { color: var(--red); font-weight: 700; }
-
-@media (max-width: 768px) {
+.status-completed { background: var(--green-light); color: var(--green); }
+.status-pending { background: var(--amber-light); color: var(--amber-dark); }
+.status-created { background: var(--blue-light); color: var(--blue); }
+.check-icon { color: var(--green); font-weight: 700; font-size: 14px; }
+.cross-icon { color: var(--red); font-weight: 700; font-size: 14px; }
+/* ===== CONVERSION TABLE ===== */
+.conversion-row { display: flex; align-items: center; gap: 8px; }
+.conversion-arrow {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 700;
+}
+.conversion-pct {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--charcoal);
+}
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+.nav-link:hover { border-color: var(--pink); color: var(--pink); }
+.nav-current {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
   .kpi-row-4 { grid-template-columns: repeat(2, 1fr); }
-  .kpi-row-5 { grid-template-columns: repeat(2, 1fr); }
-  .kpi-row-3 { grid-template-columns: repeat(1, 1fr); }
-  .chart-row { grid-template-columns: 1fr; }
+  .kpi-row-3 { grid-template-columns: repeat(2, 1fr); }
+  .chart-row-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .dashboard { padding: 0 12px 24px; }
+  .header { padding: 0 16px; height: 60px; }
+  .page-title { font-size: 18px; }
+  .kpi-row-4, .kpi-row-3 { grid-template-columns: 1fr; }
+  .kpi-value { font-size: 24px; }
+  .header-nav { display: none; }
+  .funnel-label { width: 120px; }
+  .funnel-row { flex-direction: column; align-items: stretch; }
+  .funnel-bar-wrap { justify-content: flex-start; }
+  .data-table { font-size: 11px; }
+  .data-table thead th, .data-table tbody td { padding: 7px 8px; }
 }
 </style>
 </head>
 <body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-circle">BCT</div>
+    <div class="page-title">IPA OVERVIEW</div>
+  </div>
+  <nav class="header-nav">
+    <a class="nav-btn" href="#">Offers Overview</a>
+    <a class="nav-btn active" href="#">IPA Overview</a>
+    <a class="nav-btn" href="#">Draft Offers</a>
+    <a class="nav-btn" href="#">Provider Registry</a>
+  </nav>
+</header>
+
 <div class="dashboard">
 
-<!-- Header -->
-<div class="header">
-  <div class="header-left">
-    <img src="bct_logo.png" alt="BCT">
-    <h1>IPA OVERVIEW</h1>
+  <!-- ===== FILTER BAR ===== -->
+  <div class="filter-bar">
+    <span class="filter-label">Filters:</span>
+    <button class="filter-pill active">All Providers</button>
+    <button class="filter-pill">All Regions</button>
+    <button class="filter-pill">All Statuses</button>
+    <div class="filter-divider"></div>
+    <button class="filter-pill">Last 30 Days</button>
+    <button class="filter-pill">All LA</button>
   </div>
-  <nav class="nav">
-    <a href="referrals.html">Referrals</a>
-    <a href="offers_overview.html">Offers</a>
-    <a href="ipa_overview.html" class="active">IPA</a>
-    <a href="draft_offers.html">Drafts</a>
-    <a href="provider_registry.html">Providers</a>
-  </nav>
-</div>
 
-<!-- Filters -->
-<div class="filters">
-  <div class="filter-pill"><span class="label">Date:</span> <span class="value">01 Jan – 30 Apr 2025</span></div>
-  <div class="filter-pill"><span class="label">Status:</span> <span class="value">All</span></div>
-  <div class="filter-pill"><span class="label">LA:</span> <span class="value">All</span></div>
-  <div class="filter-pill"><span class="label">Provider:</span> <span class="value">All</span></div>
-  <span class="filter-count">10 successful · 6 IPA</span>
-  <button class="refresh-btn">↻ Refresh</button>
-</div>
+  <!-- ===== KPI ROW 1 ===== -->
+  <div class="section-label">Pipeline Summary</div>
+  <div class="kpi-row kpi-row-4">
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Successful Offers</div>
+      <div class="kpi-value">10</div>
+      <div class="kpi-sub">Total offers accepted</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">IPA Created</div>
+      <div class="kpi-value">6</div>
+      <div class="kpi-sub">IPAs in progress</div>
+    </div>
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">IPA Completed</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-sub">Fully signed off</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">IPAs Pending</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub">Awaiting completion</div>
+    </div>
+  </div>
 
-<!-- KPI Row 1 -->
-<div class="kpi-row-4">
-  <div class="kpi-card green">
-    <div class="kpi-label">Successful</div>
-    <div class="kpi-value">10</div>
-    <div class="kpi-sub">Offers accepted</div>
+  <!-- ===== KPI ROW 2 ===== -->
+  <div class="kpi-row kpi-row-4">
+    <div class="kpi-card accent-orange">
+      <div class="kpi-label">Awaiting IPA Creation</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">Offers not yet started</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Accepted → IPA Created</div>
+      <div class="kpi-value">60%</div>
+      <div class="kpi-sub">6 of 10 offers</div>
+    </div>
+    <div class="kpi-card accent-orange">
+      <div class="kpi-label">Still to Progress</div>
+      <div class="kpi-value">40%</div>
+      <div class="kpi-sub">4 offers pending</div>
+    </div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Created → Completed</div>
+      <div class="kpi-value">17%</div>
+      <div class="kpi-sub">1 of 6 IPAs</div>
+    </div>
   </div>
-  <div class="kpi-card navy">
-    <div class="kpi-label">IPA Created</div>
-    <div class="kpi-value">6</div>
-    <div class="kpi-sub">60% of successful</div>
-  </div>
-  <div class="kpi-card green">
-    <div class="kpi-label">Completed</div>
-    <div class="kpi-value">1</div>
-    <div class="kpi-sub">17% of created</div>
-  </div>
-  <div class="kpi-card yellow">
-    <div class="kpi-label">Pending</div>
-    <div class="kpi-value">5</div>
-    <div class="kpi-sub">Awaiting completion</div>
-  </div>
-</div>
 
-<!-- KPI Row 2 -->
-<div class="kpi-row-5">
-  <div class="kpi-card yellow">
-    <div class="kpi-label">Awaiting IPA</div>
-    <div class="kpi-value">4</div>
-    <div class="kpi-sub">Not yet started</div>
-  </div>
-  <div class="kpi-card green">
-    <div class="kpi-label">Accepted → IPA</div>
-    <div class="kpi-value">60%</div>
-    <div class="kpi-sub">6 of 10</div>
-  </div>
-  <div class="kpi-card gold">
-    <div class="kpi-label">Still →</div>
-    <div class="kpi-value">40%</div>
-    <div class="kpi-sub">4 of 10</div>
-  </div>
-  <div class="kpi-card navy-light">
-    <div class="kpi-label">IPA → Completion</div>
-    <div class="kpi-value">17%</div>
-    <div class="kpi-sub">1 of 6</div>
-  </div>
-  <div class="kpi-card navy">
-    <div class="kpi-label">Successful → Completed</div>
-    <div class="kpi-value">10%</div>
-    <div class="kpi-sub">1 of 10</div>
-  </div>
-</div>
-
-<!-- KPI Row 3 (R-Tag) -->
-<div class="kpi-row-3">
-  <div class="kpi-card navy">
-    <div class="rtag-badge">R62</div>
-    <div class="kpi-label">Weekly Fee</div>
-    <div class="kpi-value">£12,450</div>
-    <div class="kpi-sub">Total across active IPAs</div>
-  </div>
-  <div class="kpi-card gold">
-    <div class="rtag-badge">R62</div>
-    <div class="kpi-label">Payment Methods</div>
-    <div class="kpi-value">3</div>
-    <div class="kpi-sub">BACS · Cheque · Invoice</div>
-  </div>
-  <div class="kpi-card navy-light">
-    <div class="rtag-badge">R20</div>
-    <div class="kpi-label">Signatures</div>
-    <div class="kpi-value">8</div>
-    <div class="kpi-sub">LA + Provider signed</div>
-  </div>
-</div>
-
-<!-- Charts Row: Funnel + Table -->
-<div class="chart-row">
-  <div class="chart-card">
-    <div class="chart-title">IPA Funnel <span class="meta">10 successful → 1 completed</span></div>
-    <div class="funnel" style="margin-top:8px;">
-      <div class="funnel-bar" style="width:100%;background:linear-gradient(135deg,var(--navy),var(--navy-dark));">
-        <span class="funnel-label">Successful Offers</span>
-        <span class="funnel-count">10</span>
+  <!-- ===== KPI ROW 3 — R-TAGGED ===== -->
+  <div class="section-label">Requirements Traceability (R-Tags)</div>
+  <div class="kpi-row kpi-row-3">
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Weekly Fee Liability</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">£48,250</span>
+        <span class="r-badge">R62</span>
       </div>
-      <div class="funnel-drop"><span class="pct">▼ 40%</span> 4 awaiting IPA</div>
-      <div class="funnel-bar" style="width:60%;background:linear-gradient(135deg,var(--navy-light),var(--navy));">
-        <span class="funnel-label">IPA Created</span>
-        <span class="funnel-count">6</span>
+      <div class="kpi-sub">Total weekly fee exposure</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Payment Methods</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">3 types</span>
+        <span class="r-badge">R62</span>
       </div>
-      <div class="funnel-drop"><span class="pct">▼ 17%</span> 5 pending</div>
-      <div class="funnel-bar" style="width:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));">
-        <span class="funnel-label">Pending</span>
-        <span class="funnel-count">5</span>
+      <div class="kpi-sub">BACS · Cheque · Direct Debit</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Signature Rate</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">85%</span>
+        <span class="r-badge">R20</span>
+        <span class="r-badge">R35</span>
       </div>
-      <div class="funnel-drop"><span class="pct">▼ 80%</span> 4 still pending</div>
-      <div class="funnel-bar" style="width:10%;background:linear-gradient(135deg,var(--green),#1a6b1a);">
-        <span class="funnel-label">Completed</span>
-        <span class="funnel-count">1</span>
+      <div class="kpi-sub">IPAs signed by both parties</div>
+    </div>
+  </div>
+
+  <!-- ===== CHART ROW 1 — FUNNEL ===== -->
+  <div class="chart-row chart-row-full">
+    <div class="chart-card">
+      <div class="chart-title">IPA Conversion Funnel</div>
+      <div class="funnel-container">
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-1" style="width: 100%;">10</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">Successful Offers</div>
+            <div class="funnel-label-meta"><strong>10</strong> · 100% baseline</div>
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-2" style="width: 60%;">6</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">IPA Created</div>
+            <div class="funnel-label-meta"><strong>6</strong> · 60% of offers</div>
+          </div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-3" style="width: 10%;">1</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">IPA Completed</div>
+            <div class="funnel-label-meta"><strong>1</strong> · 10% of offers</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="chart-card">
-    <div class="chart-title">IPA Detail <span class="meta">6 records</span></div>
-    <table class="data-table">
-      <thead>
-        <tr><th>IPA ID</th><th>Status</th><th>LA Signed</th><th>Provider Signed</th><th>Weekly Fee</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>IPA-006</td><td><span class="status-badge status-active">Completed</span></td><td><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td><td>£2,100</td></tr>
-        <tr><td>IPA-005</td><td><span class="status-badge status-offer">Created</span></td><td><span class="check-yes">✓</span></td><td><span class="check-yes">✓</span></td><td>£1,850</td></tr>
-        <tr><td>IPA-004</td><td><span class="status-badge status-awaiting">Pending</span></td><td><span class="check-yes">✓</span></td><td><span class="check-no">✗</span></td><td>£2,200</td></tr>
-        <tr><td>IPA-003</td><td><span class="status-badge status-awaiting">Pending</span></td><td><span class="check-no">✗</span></td><td><span class="check-yes">✓</span></td><td>£1,950</td></tr>
-        <tr><td>IPA-002</td><td><span class="status-badge status-awaiting">Pending</span></td><td><span class="check-no">✗</span></td><td><span class="check-no">✗</span></td><td>£2,300</td></tr>
-        <tr><td>IPA-001</td><td><span class="status-badge status-awaiting">Pending</span></td><td><span class="check-yes">✓</span></td><td><span class="check-no">✗</span></td><td>£2,050</td></tr>
-      </tbody>
-    </table>
+
+  <!-- ===== CHART ROW 2 — TABLES ===== -->
+  <div class="chart-row chart-row-2">
+    <!-- LEFT: IPA Detail List -->
+    <div class="chart-card">
+      <div class="chart-title">IPA Detail List</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>IPA ID</th>
+            <th>Offer ID</th>
+            <th>Status</th>
+            <th>LA Signed</th>
+            <th>Provider Signed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>IPA-001</td>
+            <td>OFF-1042</td>
+            <td><span class="status-pill status-completed">Completed</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="check-icon">✓</span></td>
+          </tr>
+          <tr>
+            <td>IPA-002</td>
+            <td>OFF-1056</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-003</td>
+            <td>OFF-1071</td>
+            <td><span class="status-pill status-pending">Pending</span></td>
+            <td><span class="cross-icon">✗</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-004</td>
+            <td>OFF-1083</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-005</td>
+            <td>OFF-1098</td>
+            <td><span class="status-pill status-pending">Pending</span></td>
+            <td><span class="cross-icon">✗</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-006</td>
+            <td>OFF-1105</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RIGHT: Conversion Rates -->
+    <div class="chart-card">
+      <div class="chart-title">Conversion Rates</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Stage Transition</th>
+            <th>Count</th>
+            <th>Rate</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>Successful Offers</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Created</span>
+              </div>
+            </td>
+            <td>6 / 10</td>
+            <td><span class="conversion-pct">60%</span></td>
+            <td><span style="color: var(--green); font-size: 14px;">▲</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>IPA Created</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Completed</span>
+              </div>
+            </td>
+            <td>1 / 6</td>
+            <td><span class="conversion-pct">17%</span></td>
+            <td><span style="color: var(--red); font-size: 14px;">▼</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>Offers</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Completed</span>
+              </div>
+            </td>
+            <td>1 / 10</td>
+            <td><span class="conversion-pct">10%</span></td>
+            <td><span style="color: var(--amber); font-size: 14px;">◆</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <div class="bottom-nav">
+    <a class="nav-link" href="offers_overview.html">← offers_overview.html</a>
+    <span class="nav-current">Page 2 of 4 — IPA Overview</span>
+    <a class="nav-link" href="draft_offers.html">draft_offers.html →</a>
+  </div>
 
 </div>
+
 </body>
 </html>

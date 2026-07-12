@@ -3,353 +3,718 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP – DRAFT OFFERS</title>
+<title>Draft Offers — WMPP Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ── Brand palette ─────────────────────────────────────── */
-  :root{
-    --blue:#118DFF;  --orange:#E66C37; --green:#1AAB40;
-    --yellow:#D9B300; --red:#D64554;   --white:#FFFFFF;
-    --light:#F3F2F1;  --fg:#252423;    --secondary:#605E5C;
-    --border:#C8C6C4;
-  }
-
-  /* ── Fonts ─────────────────────────────────────────────── */
-  @font-face{
-    font-family:'DIN';
-    src:local('DIN'),local('DIN Alternate'),local('DINCondensed-Bold'),
-        url('https://fonts.gstatic.com/s/dincondensed/v4/oxkPY2qPnK2B4g0g0g0g0g.woff2') format('woff2');
-    font-weight:bold; font-style:normal;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{
-    font-family:'Segoe UI','Segoe UI Web','Helvetica Neue',Arial,sans-serif;
-    background:var(--light);
-    color:var(--fg);
-    width:1500px; height:1100px;
-    overflow:hidden;
-  }
-
-  /* ── Header (80px) ─────────────────────────────────────── */
-  .header{
-    height:80px; background:var(--white);
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; padding:0 24px;
-    gap:20px;
-  }
-  .logo{
-    font-size:22px; font-weight:700; color:var(--blue);
-    letter-spacing:1px; white-space:nowrap;
-  }
-  .logo .sub{ font-size:12px; color:var(--secondary); font-weight:400; letter-spacing:0; }
-  .page-title{
-    font-size:20px; font-weight:600; color:var(--fg);
-    flex:1; text-align:center; letter-spacing:2px;
-  }
-  .nav-btn{
-    font-size:12px; color:var(--secondary);
-    border:1px solid var(--border); border-radius:4px;
-    padding:6px 14px; background:var(--white); cursor:pointer;
-    transition:.15s;
-  }
-  .nav-btn:hover{ background:var(--light); color:var(--fg); }
-  .nav-btn.active{ background:var(--blue); color:var(--white); border-color:var(--blue); }
-
-  /* ── Filter bar (60px) ─────────────────────────────────── */
-  .filter-bar{
-    height:60px; background:var(--white);
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; padding:0 24px; gap:16px;
-  }
-  .filter-label{
-    font-size:10px; color:var(--secondary); font-weight:600;
-    text-transform:uppercase; letter-spacing:.5px; margin-right:6px;
-  }
-  .filter-pill{
-    font-size:12px; color:var(--fg);
-    border:1px solid var(--border); border-radius:16px;
-    padding:5px 14px; background:var(--white); cursor:pointer;
-    display:flex; align-items:center; gap:6px;
-  }
-  .filter-pill .chev{ color:var(--secondary); font-size:10px; }
-  .filter-pill.selected{ border-color:var(--blue); color:var(--blue); background:#EAF4FF; }
-  .filter-spacer{ flex:1; }
-  .filter-meta{ font-size:11px; color:var(--secondary); }
-
-  /* ── KPI grid ──────────────────────────────────────────── */
-  .kpi-section{ padding:16px 24px 4px; }
-  .kpi-row{ display:flex; gap:12px; margin-bottom:12px; }
-  .kpi-card{
-    background:var(--white); border:1px solid var(--border);
-    border-radius:4px; padding:12px;
-    flex:1; position:relative; overflow:hidden;
-    display:flex; flex-direction:column; justify-content:center;
-  }
-  .kpi-card::before{
-    content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
-    background:var(--blue);
-  }
-  .kpi-card.yellow::before{ background:var(--yellow); }
-  .kpi-card.red::before{    background:var(--red);    }
-  .kpi-card.green::before{  background:var(--green);  }
-  .kpi-card.orange::before{ background:var(--orange); }
-  .kpi-card .label{
-    font-size:10px; color:var(--secondary); font-weight:600;
-    text-transform:uppercase; letter-spacing:.4px;
-    margin-bottom:4px;
-  }
-  .kpi-card .value{
-    font-family:'DIN','Segoe UI',sans-serif; font-size:24px; font-weight:700;
-    color:var(--fg); line-height:1;
-  }
-  .kpi-card .sub{
-    font-size:10px; color:var(--secondary); margin-top:3px;
-  }
-  .kpi-card .badge{
-    display:inline-block; font-size:9px; font-weight:700;
-    color:var(--blue); border:1px solid var(--blue); border-radius:8px;
-    padding:1px 6px; margin-left:6px; vertical-align:middle;
-  }
-
-  /* ── Chart section ─────────────────────────────────────── */
-  .chart-wrap{
-    background:var(--white); border:1px solid var(--border); border-radius:4px;
-    margin:8px 24px; padding:18px 22px;
-    height:340px; display:flex; flex-direction:column;
-  }
-  .chart-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-  .chart-title{ font-size:14px; font-weight:600; color:var(--fg); }
-  .chart-sub{ font-size:11px; color:var(--secondary); }
-  .legend{ display:flex; gap:14px; }
-  .legend-item{ display:flex; align-items:center; gap:5px; font-size:11px; color:var(--secondary); }
-  .legend-swatch{ width:12px; height:12px; border-radius:2px; }
-
-  .chart-body{
-    flex:1; display:flex; align-items:flex-end;
-    position:relative; padding:30px 10px 28px 42px;
-  }
-  /* gridlines */
-  .gridlines{
-    position:absolute; left:42px; right:10px; top:0; bottom:28px;
-    display:flex; flex-direction:column; justify-content:space-between;
-    pointer-events:none;
-  }
-  .gridline{
-    border-top:1px dotted var(--border); height:0; position:relative;
-  }
-  .gridline span{
-    position:absolute; left:-34px; top:-7px; font-size:10px; color:var(--secondary);
-    width:30px; text-align:right;
-  }
-  .bars{ display:flex; align-items:flex-end; gap:40px; width:100%; justify-content:center; position:relative; z-index:1; }
-  .bar-col{ display:flex; flex-direction:column; align-items:center; gap:6px; }
-  .bar-value{ font-family:'DIN','Segoe UI',sans-serif; font-size:16px; font-weight:700; color:var(--fg); }
-  .bar{
-    width:80px; border-radius:4px 4px 0 0; position:relative;
-    transition:height .4s ease;
-  }
-  .bar.green{  background:linear-gradient(180deg,#2EC858,var(--green)); }
-  .bar.yellow{ background:linear-gradient(180deg,#E8C633,var(--yellow)); }
-  .bar.orange{ background:linear-gradient(180deg,#F0824A,var(--orange)); }
-  .bar.red{    background:linear-gradient(180deg,#E25C6A,var(--red)); }
-  .bar-label{ font-size:11px; color:var(--secondary); font-weight:500; }
-
-  /* ── Info text box ─────────────────────────────────────── */
-  .info-box{
-    margin:4px 24px; background:var(--light); border:1px solid var(--border);
-    border-radius:4px; padding:10px 18px;
-    font-size:12px; color:var(--fg); display:flex; align-items:center; gap:8px;
-  }
-  .info-box .dot{ width:6px; height:6px; border-radius:50%; background:var(--blue); }
-  .info-box .sep{ color:var(--border); margin:0 4px; }
-  .info-box strong{ color:var(--fg); font-weight:600; }
-
-  /* ── Age band legend cards ─────────────────────────────── */
-  .band-cards{ display:flex; gap:12px; margin:4px 24px; }
-  .band-card{
-    flex:1; background:var(--white); border:1px solid var(--border); border-radius:4px;
-    padding:12px 14px; display:flex; align-items:center; gap:10px;
-  }
-  .band-icon{ width:28px; height:28px; border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-  .band-icon.green{  background:#E6F7EC; }
-  .band-icon.yellow{ background:#FCF6D6; }
-  .band-icon.orange{ background:#FCE7DA; }
-  .band-icon.red{    background:#F8DEE0; }
-  .band-icon .dot{ width:10px; height:10px; border-radius:50%; }
-  .band-icon.green .dot{  background:var(--green);  }
-  .band-icon.yellow .dot{ background:var(--yellow); }
-  .band-icon.orange .dot{ background:var(--orange); }
-  .band-icon.red .dot{    background:var(--red);    }
-  .band-text .t{ font-size:12px; font-weight:600; color:var(--fg); }
-  .band-text .d{ font-size:10px; color:var(--secondary); margin-top:1px; }
+:root {
+  --amber: #E8A020;
+  --amber-dark: #D4601A;
+  --amber-light: #FCF3E0;
+  --pink: #C82B5E;
+  --pink-light: #FCE8EF;
+  --blue: #2972C4;
+  --blue-light: #E8F0FA;
+  --charcoal: #1C1C1A;
+  --cream: #F4EFE4;
+  --white: #FFFFFF;
+  --border: #E0DDD5;
+  --grey: #6B6862;
+  --grey-light: #A09D97;
+  --green: #3A8B6F;
+  --green-light: #E8F5EE;
+  --red: #C0392B;
+  --red-light: #FCEBE9;
+  --orange: #D4601A;
+  --orange-light: #FDF0E8;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.dashboard {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+/* ===== HEADER ===== */
+.header {
+  background: var(--white);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(28,28,26,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--charcoal);
+  letter-spacing: -0.5px;
+}
+.header-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nav-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--grey);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-btn:hover { border-color: var(--pink); color: var(--pink); }
+.nav-btn.active { background: var(--pink); color: var(--white); border-color: var(--pink); }
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  background: var(--white);
+  margin: 16px 0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.filter-pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.filter-pill:hover { border-color: var(--amber); background: var(--amber-light); }
+.filter-pill.active { background: var(--amber); color: var(--white); border-color: var(--amber); }
+.filter-divider { width: 1px; height: 24px; background: var(--border); }
+/* ===== SECTIONS ===== */
+.section-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0 10px;
+}
+/* ===== KPI ROWS ===== */
+.kpi-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.kpi-row-6 { grid-template-columns: repeat(6, 1fr); }
+.kpi-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 18px 20px 18px 23px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 8px 0 0 8px;
+}
+.kpi-card.accent-green::before { background: var(--green); }
+.kpi-card.accent-amber::before { background: var(--amber); }
+.kpi-card.accent-orange::before { background: var(--orange); }
+.kpi-card.accent-blue::before { background: var(--blue); }
+.kpi-card.accent-pink::before { background: var(--pink); }
+.kpi-card.accent-red::before { background: var(--red); }
+.kpi-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.kpi-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--charcoal);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.kpi-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--grey-light);
+}
+/* ===== CHARTS ===== */
+.chart-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.chart-row-full { grid-template-columns: 1fr; }
+.chart-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+}
+.chart-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+/* ===== COLUMN CHART ===== */
+.col-chart-container {
+  padding: 8px 0 0;
+}
+.col-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 24px;
+  height: 280px;
+  position: relative;
+  padding-left: 48px;
+  padding-bottom: 0;
+  border-bottom: 2px solid var(--border);
+}
+.col-chart-gridlines {
+  position: absolute;
+  left: 48px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.gridline {
+  border-top: 1px dotted var(--border);
+  position: relative;
+  height: 0;
+}
+.gridline-label {
+  position: absolute;
+  left: -44px;
+  top: -8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--grey-light);
+  width: 40px;
+  text-align: right;
+}
+.col-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.col-bar {
+  width: 60%;
+  max-width: 80px;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+  min-height: 4px;
+}
+.col-bar-value {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--charcoal);
+  white-space: nowrap;
+}
+.col-bar-1 { background: var(--green); }
+.col-bar-2 { background: var(--amber); }
+.col-bar-3 { background: var(--orange); }
+.col-bar-4 { background: var(--red); }
+.col-x-label {
+  margin-top: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grey);
+  text-align: center;
+  white-space: nowrap;
+}
+.col-x-sublabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--grey-light);
+}
+.y-axis-title {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--grey-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+/* ===== INFO PANEL ===== */
+.info-panel {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 24px 28px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  border-left: 4px solid var(--amber);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.info-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.info-item-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.info-item-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--charcoal);
+  font-variant-numeric: tabular-nums;
+}
+.info-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+.info-panel-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--charcoal);
+  text-align: center;
+}
+.info-panel-text strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+}
+.data-table thead th {
+  background: var(--amber);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 14px;
+  text-align: left;
+  white-space: nowrap;
+}
+.data-table thead th:first-child { border-radius: 6px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 6px 0 0; }
+.data-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--charcoal);
+  font-size: 12px;
+  vertical-align: middle;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--pink-light); }
+.count-cell {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+}
+.pct-cell {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--charcoal);
+}
+.status-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: inline-block;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.badge-healthy { background: var(--green-light); color: var(--green); }
+.badge-risk { background: var(--amber-light); color: var(--amber-dark); }
+.badge-outside { background: var(--orange-light); color: var(--orange); }
+.badge-critical { background: var(--red-light); color: var(--red); }
+/* ===== BAR IN CELL ===== */
+.mini-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mini-bar {
+  height: 6px;
+  border-radius: 3px;
+  min-width: 30px;
+}
+.mini-bar-green { background: var(--green); }
+.mini-bar-amber { background: var(--amber); }
+.mini-bar-orange { background: var(--orange); }
+.mini-bar-red { background: var(--red); }
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  transition: all 0.2s ease;
+}
+.nav-link:hover { border-color: var(--pink); color: var(--pink); }
+.nav-current {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .kpi-row-6 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .kpi-row-6 { grid-template-columns: repeat(2, 1fr); }
+  .info-panel { gap: 16px; }
+  .info-divider { display: none; }
+}
+@media (max-width: 640px) {
+  .dashboard { padding: 0 12px 24px; }
+  .header { padding: 0 16px; height: 60px; }
+  .page-title { font-size: 18px; }
+  .kpi-row-6 { grid-template-columns: 1fr; }
+  .kpi-value { font-size: 24px; }
+  .header-nav { display: none; }
+  .col-chart { gap: 12px; padding-left: 36px; }
+  .col-chart-gridlines { left: 36px; }
+  .gridline-label { left: -34px; font-size: 9px; }
+  .col-bar { max-width: 50px; }
+  .info-panel-text { font-size: 13px; }
+  .data-table { font-size: 11px; }
+  .data-table thead th, .data-table tbody td { padding: 7px 8px; }
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════ HEADER ═══════════ -->
-<div class="header">
-  <div class="logo">BCT<span class="sub"> &nbsp;WMPP</span></div>
-  <div class="page-title">DRAFT OFFERS</div>
-  <button class="nav-btn">Summary</button>
-  <button class="nav-btn active">Draft Offers</button>
-  <button class="nav-btn">Placements</button>
-  <button class="nav-btn">Activity</button>
-  <button class="nav-btn">Reports</button>
-</div>
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-circle">BCT</div>
+    <div class="page-title">DRAFT OFFERS</div>
+  </div>
+  <nav class="header-nav">
+    <a class="nav-btn" href="#">Offers Overview</a>
+    <a class="nav-btn" href="#">IPA Overview</a>
+    <a class="nav-btn active" href="#">Draft Offers</a>
+    <a class="nav-btn" href="#">Provider Registry</a>
+  </nav>
+</header>
 
-<!-- ═══════════ FILTER BAR ═══════════ -->
-<div class="filter-bar">
-  <span class="filter-label">Date</span>
-  <div class="filter-pill selected">Last 90 Days <span class="chev">▼</span></div>
-  <span class="filter-label">Placement Type</span>
-  <div class="filter-pill">All Types <span class="chev">▼</span></div>
-  <div class="filter-pill">Region <span class="chev">▼</span></div>
-  <div class="filter-pill">Status <span class="chev">▼</span></div>
-  <div class="filter-spacer"></div>
-  <span class="filter-meta">Data refreshed: 10 Jul 2026 08:15</span>
-</div>
+<div class="dashboard">
 
-<!-- ═══════════ KPI ROW 1 ═══════════ -->
-<div class="kpi-section">
-  <div class="kpi-row">
-    <div class="kpi-card yellow">
-      <div class="label">Draft Count</div>
-      <div class="value">166</div>
-      <div class="sub">Total draft offers</div>
+  <!-- ===== FILTER BAR ===== -->
+  <div class="filter-bar">
+    <span class="filter-label">Filters:</span>
+    <button class="filter-pill active">All Providers</button>
+    <button class="filter-pill">All Regions</button>
+    <button class="filter-pill">All Age Bands</button>
+    <div class="filter-divider"></div>
+    <button class="filter-pill">Last 30 Days</button>
+    <button class="filter-pill">Include Inactive</button>
+  </div>
+
+  <!-- ===== KPI ROW 1 ===== -->
+  <div class="section-label">Draft Offer Summary</div>
+  <div class="kpi-row kpi-row-6">
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Draft Count</div>
+      <div class="kpi-value">166</div>
+      <div class="kpi-sub">Total in draft</div>
     </div>
-    <div class="kpi-card red">
-      <div class="label">No Activity</div>
-      <div class="value">165</div>
-      <div class="sub">No changes since creation</div>
+    <div class="kpi-card accent-red">
+      <div class="kpi-label">No Activity Since Creation</div>
+      <div class="kpi-value">165</div>
+      <div class="kpi-sub">Zero touch since draft</div>
     </div>
-    <div class="kpi-card green">
-      <div class="label">With Activity</div>
-      <div class="value">1</div>
-      <div class="sub">Updated since creation</div>
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">With Activity</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-sub">Recently updated</div>
     </div>
-    <div class="kpi-card red">
-      <div class="label">14+ Days in Draft</div>
-      <div class="value">114</div>
-      <div class="sub">Beyond SLA threshold</div>
+    <div class="kpi-card accent-red">
+      <div class="kpi-label">14+ Days</div>
+      <div class="kpi-value">114</div>
+      <div class="kpi-sub">Past SLA threshold</div>
     </div>
-    <div class="kpi-card">
-      <div class="label">Avg Days in Draft</div>
-      <div class="value">23</div>
-      <div class="sub">Mean age of all drafts</div>
+    <div class="kpi-card accent-orange">
+      <div class="kpi-label">Avg Days in Draft</div>
+      <div class="kpi-value">23</div>
+      <div class="kpi-sub">Mean age of drafts</div>
     </div>
-    <div class="kpi-card red">
-      <div class="label">No Activity %</div>
-      <div class="value">99%</div>
-      <div class="sub">Of total draft count</div>
+    <div class="kpi-card accent-red">
+      <div class="kpi-label">No Activity %</div>
+      <div class="kpi-value">99%</div>
+      <div class="kpi-sub">165 of 166 drafts</div>
     </div>
   </div>
 
-  <!-- ═══════════ KPI ROW 2 (NEW cards) ═══════════ -->
-  <div class="kpi-row">
-    <div class="kpi-card orange">
-      <div class="label">Missing Dates <span class="badge">R24</span></div>
-      <div class="value">8</div>
-      <div class="sub">Drafts with null date fields</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="label">Updated <span class="badge">R24</span></div>
-      <div class="value">3</div>
-      <div class="sub">Modified in last 24h</div>
-    </div>
-    <div class="kpi-card red">
-      <div class="label">Oldest <span class="badge">R24</span></div>
-      <div class="value">67</div>
-      <div class="sub">Days — oldest draft age</div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════ CLUSTERED COLUMN CHART ═══════════ -->
-<div class="chart-wrap">
-  <div class="chart-head">
-    <div>
+  <!-- ===== CHART ROW 1 — COLUMN CHART ===== -->
+  <div class="chart-row chart-row-full">
+    <div class="chart-card">
       <div class="chart-title">Draft Offer Age Distribution</div>
-      <div class="chart-sub">Count of draft offers by age band (days since creation)</div>
-    </div>
-    <div class="legend">
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--green)"></div>Healthy Pipeline</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--yellow)"></div>At Risk</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--orange)"></div>Outside Timeframe</div>
-      <div class="legend-item"><div class="legend-swatch" style="background:var(--red)"></div>Critical Pipeline</div>
-    </div>
-  </div>
-  <div class="chart-body">
-    <div class="gridlines">
-      <div class="gridline"><span>80</span></div>
-      <div class="gridline"><span>60</span></div>
-      <div class="gridline"><span>40</span></div>
-      <div class="gridline"><span>20</span></div>
-      <div class="gridline"><span>0</span></div>
-    </div>
-    <div class="bars">
-      <div class="bar-col">
-        <div class="bar-value">25</div>
-        <div class="bar green" style="height:125px"></div>
-        <div class="bar-label">0–7 days</div>
-      </div>
-      <div class="bar-col">
-        <div class="bar-value">22</div>
-        <div class="bar yellow" style="height:110px"></div>
-        <div class="bar-label">8–14 days</div>
-      </div>
-      <div class="bar-col">
-        <div class="bar-value">45</div>
-        <div class="bar orange" style="height:225px"></div>
-        <div class="bar-label">15–30 days</div>
-      </div>
-      <div class="bar-col">
-        <div class="bar-value">74</div>
-        <div class="bar red" style="height:370px"></div>
-        <div class="bar-label">30+ days</div>
-      </div>
-    </div>
-  </div>
-</div>
+      <div class="col-chart-container">
+        <div class="col-chart">
+          <!-- Gridlines -->
+          <div class="col-chart-gridlines">
+            <div class="gridline"><span class="gridline-label">100</span></div>
+            <div class="gridline"><span class="gridline-label">75</span></div>
+            <div class="gridline"><span class="gridline-label">50</span></div>
+            <div class="gridline"><span class="gridline-label">25</span></div>
+            <div class="gridline"><span class="gridline-label">0</span></div>
+          </div>
+          <div class="y-axis-title">Offer Count</div>
 
-<!-- ═══════════ INFO TEXT BOX ═══════════ -->
-<div class="info-box">
-  <span class="dot"></span>
-  <strong>Average Days in Draft: 23</strong>
-  <span class="sep">|</span>
-  <strong>Oldest Draft Age: 67 days</strong>
-  <span class="sep">|</span>
-  <strong>99%</strong> have had no activity since creation
-</div>
+          <!-- Column: 0-7 Days -->
+          <div class="col-group">
+            <div class="col-bar col-bar-1" style="height: 12%;">
+              <span class="col-bar-value">12</span>
+            </div>
+            <div class="col-x-label">0–7 Days</div>
+            <div class="col-x-sublabel">Healthy</div>
+          </div>
 
-<!-- ═══════════ AGE BAND LEGEND CARDS ═══════════ -->
-<div class="band-cards">
-  <div class="band-card">
-    <div class="band-icon green"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">0–7 days · Healthy Pipeline</div>
-      <div class="d">25 drafts — within normal processing window</div>
+          <!-- Column: 8-14 Days -->
+          <div class="col-group">
+            <div class="col-bar col-bar-2" style="height: 40%;">
+              <span class="col-bar-value">40</span>
+            </div>
+            <div class="col-x-label">8–14 Days</div>
+            <div class="col-x-sublabel">At Risk</div>
+          </div>
+
+          <!-- Column: 15-30 Days -->
+          <div class="col-group">
+            <div class="col-bar col-bar-3" style="height: 95%;">
+              <span class="col-bar-value">95</span>
+            </div>
+            <div class="col-x-label">15–30 Days</div>
+            <div class="col-x-sublabel">Outside Timeframe</div>
+          </div>
+
+          <!-- Column: 30+ Days -->
+          <div class="col-group">
+            <div class="col-bar col-bar-4" style="height: 19%;">
+              <span class="col-bar-value">19</span>
+            </div>
+            <div class="col-x-label">30+ Days</div>
+            <div class="col-x-sublabel">Critical</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="band-card">
-    <div class="band-icon yellow"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">8–14 days · At Risk</div>
-      <div class="d">22 drafts — approaching SLA threshold</div>
+
+  <!-- ===== CHART ROW 2 — INFO PANEL ===== -->
+  <div class="chart-row chart-row-full">
+    <div class="info-panel">
+      <div class="info-item">
+        <div class="info-item-label">Avg Days in Draft</div>
+        <div class="info-item-value">23</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-item">
+        <div class="info-item-label">Oldest Draft</div>
+        <div class="info-item-value">67 days</div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-item">
+        <div class="info-item-label">Total Inactive</div>
+        <div class="info-item-value">165 <span style="font-size:14px;color:var(--grey);">(99%)</span></div>
+      </div>
+      <div class="info-divider"></div>
+      <div class="info-panel-text">
+        <strong>Average Days in Draft: 23</strong> &nbsp;|&nbsp;
+        <strong>Oldest Draft: 67 days</strong> &nbsp;|&nbsp;
+        <strong>Total Inactive: 165 (99%)</strong>
+      </div>
     </div>
   </div>
-  <div class="band-card">
-    <div class="band-icon orange"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">15–30 days · Outside Timeframe</div>
-      <div class="d">45 drafts — beyond recommended timeline</div>
+
+  <!-- ===== CHART ROW 3 — PENDING OFFERS TABLE ===== -->
+  <div class="chart-row chart-row-full">
+    <div class="chart-card">
+      <div class="chart-title">Pending Offers Summary</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Age Band</th>
+            <th>Count</th>
+            <th>%</th>
+            <th>Distribution</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0–7 Days</td>
+            <td class="count-cell">12</td>
+            <td class="pct-cell">7.2%</td>
+            <td>
+              <div class="mini-bar-wrap">
+                <div class="mini-bar mini-bar-green" style="width: 60px;"></div>
+                <span style="font-size: 11px; color: var(--grey);">7%</span>
+              </div>
+            </td>
+            <td><span class="status-badge badge-healthy">Healthy</span></td>
+          </tr>
+          <tr>
+            <td>8–14 Days</td>
+            <td class="count-cell">40</td>
+            <td class="pct-cell">24.1%</td>
+            <td>
+              <div class="mini-bar-wrap">
+                <div class="mini-bar mini-bar-amber" style="width: 100px;"></div>
+                <span style="font-size: 11px; color: var(--grey);">24%</span>
+              </div>
+            </td>
+            <td><span class="status-badge badge-risk">At Risk</span></td>
+          </tr>
+          <tr>
+            <td>15–30 Days</td>
+            <td class="count-cell">95</td>
+            <td class="pct-cell">57.2%</td>
+            <td>
+              <div class="mini-bar-wrap">
+                <div class="mini-bar mini-bar-orange" style="width: 180px;"></div>
+                <span style="font-size: 11px; color: var(--grey);">57%</span>
+              </div>
+            </td>
+            <td><span class="status-badge badge-outside">Outside Timeframe</span></td>
+          </tr>
+          <tr>
+            <td>30+ Days</td>
+            <td class="count-cell">19</td>
+            <td class="pct-cell">11.5%</td>
+            <td>
+              <div class="mini-bar-wrap">
+                <div class="mini-bar mini-bar-red" style="width: 70px;"></div>
+                <span style="font-size: 11px; color: var(--grey);">12%</span>
+              </div>
+            </td>
+            <td><span class="status-badge badge-critical">Critical</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-  <div class="band-card">
-    <div class="band-icon red"><div class="dot"></div></div>
-    <div class="band-text">
-      <div class="t">30+ days · Critical Pipeline</div>
-      <div class="d">74 drafts — immediate review required</div>
-    </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <div class="bottom-nav">
+    <a class="nav-link" href="ipa_overview.html">← ipa_overview.html</a>
+    <span class="nav-current">Page 3 of 4 — Draft Offers</span>
+    <a class="nav-link" href="provider_registry.html">provider_registry.html →</a>
   </div>
+
 </div>
 
 </body>

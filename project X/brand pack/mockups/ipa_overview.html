@@ -3,875 +3,673 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WMPP — IPA Overview</title>
+<title>IPA Overview — WMPP Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ===== RESET & BASE ===== */
-*{margin:0;padding:0;box-sizing:border-box;}
-@font-face{font-family:'DIN';src:local('DIN Alternate'),local('DIN');}
-
-:root{
-  --blue:#118DFF;
-  --green:#1AAB40;
-  --yellow:#D9B300;
-  --red:#D64554;
-  --orange:#E66C37;
-  --white:#FFFFFF;
-  --light:#F3F2F1;
-  --fg:#252423;
-  --secondary:#605E5C;
-  --border:#C8C6C4;
+:root {
+  --amber: #E8A020;
+  --amber-dark: #D4601A;
+  --amber-light: #FCF3E0;
+  --pink: #C82B5E;
+  --pink-light: #FCE8EF;
+  --blue: #2972C4;
+  --blue-light: #E8F0FA;
+  --charcoal: #1C1C1A;
+  --cream: #F4EFE4;
+  --white: #FFFFFF;
+  --border: #E0DDD5;
+  --grey: #6B6862;
+  --grey-light: #A09D97;
+  --green: #3A8B6F;
+  --green-light: #E8F5EE;
+  --red: #C0392B;
+  --red-light: #FCEBE9;
+  --orange: #D4601A;
+  --orange-light: #FDF0E8;
 }
-
-body{
-  font-family:'Segoe UI','Segoe UI Web',sans-serif;
-  background:var(--light);
-  color:var(--fg);
-  width:1500px;
-  height:1500px;
-  overflow:hidden;
-  font-size:12px;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  line-height: 1.5;
+  min-height: 100vh;
 }
-
-/* ===== PAGE CONTAINER ===== */
-.page{
-  width:1500px;
-  height:1500px;
-  background:var(--light);
-  display:flex;
-  flex-direction:column;
-  position:relative;
+.dashboard {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
 }
-
-/* ===== HEADER (80px) ===== */
-.header{
-  height:80px;
-  background:var(--white);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  padding:0 24px;
-  justify-content:space-between;
-  flex-shrink:0;
+/* ===== HEADER ===== */
+.header {
+  background: var(--white);
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(28,28,26,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.header-left{display:flex;align-items:center;gap:16px;}
-.logo{
-  width:44px;height:44px;
-  background:var(--blue);
-  border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  color:var(--white);
-  font-weight:700;font-size:20px;
-  letter-spacing:1px;
+.header-left { display: flex; align-items: center; gap: 16px; }
+.logo-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amber), var(--pink));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
 }
-.header-title{
-  font-size:22px;font-weight:600;
-  color:var(--fg);
-  letter-spacing:.5px;
+.page-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--charcoal);
+  letter-spacing: -0.5px;
 }
-.header-subtitle{
-  font-size:10px;color:var(--secondary);
-  text-transform:uppercase;letter-spacing:1.5px;
-  margin-top:2px;
+.header-nav { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.nav-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--grey);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.header-right{display:flex;gap:8px;align-items:center;}
-.nav-btn{
-  padding:8px 16px;
-  border:1px solid var(--border);
-  border-radius:4px;
-  background:var(--white);
-  font-size:11px;font-family:'Segoe UI',sans-serif;
-  color:var(--fg);
-  cursor:pointer;
-  font-weight:400;
+.nav-btn:hover { border-color: var(--pink); color: var(--pink); }
+.nav-btn.active { background: var(--pink); color: var(--white); border-color: var(--pink); }
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  background: var(--white);
+  margin: 16px 0;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.nav-btn.active{
-  background:var(--blue);color:var(--white);border-color:var(--blue);
+.filter-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.nav-btn:hover{background:var(--light);}
-
-/* ===== FILTER BAR (60px) ===== */
-.filter-bar{
-  height:60px;
-  background:var(--white);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;
-  padding:0 24px;gap:24px;
-  flex-shrink:0;
+.filter-pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-.filter-group{display:flex;align-items:center;gap:8px;}
-.filter-label{
-  font-size:10px;
-  color:var(--secondary);
-  text-transform:uppercase;
-  letter-spacing:1px;
-  font-weight:600;
+.filter-pill:hover { border-color: var(--amber); background: var(--amber-light); }
+.filter-pill.active { background: var(--amber); color: var(--white); border-color: var(--amber); }
+.filter-divider { width: 1px; height: 24px; background: var(--border); }
+/* ===== SECTIONS ===== */
+.section-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0 10px;
 }
-.filter-select{
-  padding:6px 12px;
-  border:1px solid var(--border);
-  border-radius:4px;
-  font-size:11px;
-  background:var(--white);
-  color:var(--fg);
-  font-family:'Segoe UI',sans-serif;
-  min-width:140px;
+/* ===== KPI ROWS ===== */
+.kpi-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
 }
-.filter-select.calendar{min-width:180px;}
-.filter-divider{
-  width:1px;height:32px;
-  background:var(--border);
+.kpi-row-4 { grid-template-columns: repeat(4, 1fr); }
+.kpi-row-3 { grid-template-columns: repeat(3, 1fr); }
+.kpi-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 18px 20px 18px 23px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.filter-pill{
-  padding:4px 10px;
-  border-radius:12px;
-  background:var(--light);
-  font-size:10px;
-  color:var(--secondary);
-  border:1px solid var(--border);
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 8px 0 0 8px;
 }
-
-/* ===== KPI CARD BASE ===== */
-.kpi-card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:4px;
-  padding:12px;
-  position:relative;
-  overflow:hidden;
+.kpi-card.accent-green::before { background: var(--green); }
+.kpi-card.accent-amber::before { background: var(--amber); }
+.kpi-card.accent-orange::before { background: var(--orange); }
+.kpi-card.accent-blue::before { background: var(--blue); }
+.kpi-card.accent-pink::before { background: var(--pink); }
+.kpi-card.accent-red::before { background: var(--red); }
+.kpi-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.kpi-card::before{
-  content:'';
-  position:absolute;
-  left:0;top:0;bottom:0;
-  width:4px;
-  background:var(--blue);
+.kpi-value {
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--charcoal);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.kpi-card.green::before{background:var(--green);}
-.kpi-card.blue::before{background:var(--blue);}
-.kpi-card.yellow::before{background:var(--yellow);}
-.kpi-card.orange::before{background:var(--orange);}
-.kpi-card.red::before{background:var(--red);}
-
-.kpi-label{
-  font-size:10px;
-  color:var(--secondary);
-  text-transform:uppercase;
-  letter-spacing:.8px;
-  font-weight:600;
-  margin-bottom:6px;
-  line-height:1.3;
+.kpi-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--grey-light);
 }
-.kpi-value{
-  font-family:'DIN','DIN Alternate','Segoe UI',sans-serif;
-  font-size:24px;
-  font-weight:700;
-  color:var(--fg);
-  line-height:1;
+.kpi-value-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
-.kpi-sub{
-  font-size:9px;
-  color:var(--secondary);
-  margin-top:4px;
+.r-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--pink);
+  color: var(--white);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
 }
-.kpi-value.green{color:var(--green);}
-.kpi-value.blue{color:var(--blue);}
-.kpi-value.yellow{color:var(--yellow);}
-.kpi-value.orange{color:var(--orange);}
-.kpi-value.red{color:var(--red);}
-
-/* ===== KPI ROW 1 ===== */
-.kpi-row-1{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  padding:16px 24px 8px;
-  flex-shrink:0;
+/* ===== CHARTS ===== */
+.chart-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
 }
-
-/* ===== KPI ROW 2 ===== */
-.kpi-row-2{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:12px;
-  padding:8px 24px;
-  flex-shrink:0;
+.chart-row-full { grid-template-columns: 1fr; }
+.chart-row-2 { grid-template-columns: 1fr 1fr; }
+.chart-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 20px 24px;
+  box-shadow: 0 2px 8px rgba(28,28,26,0.06);
 }
-.kpi-pct{
-  font-size:9px;
-  color:var(--secondary);
-  margin-top:4px;
+.chart-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.trend-up{color:var(--green);font-size:10px;}
-.trend-down{color:var(--red);font-size:10px;}
-.trend-flat{color:var(--secondary);font-size:10px;}
-
-/* ===== KPI ROW 3 ===== */
-.kpi-row-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  padding:8px 24px;
-  flex-shrink:0;
-}
-
-/* Mini bar chart inside KPI */
-.mini-bar-chart{
-  display:flex;
-  align-items:flex-end;
-  gap:12px;
-  height:50px;
-  margin-top:8px;
-}
-.mini-bar-item{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-}
-.mini-bar{
-  border-radius:3px 3px 0 0;
-  min-width:28px;
-}
-.mini-bar-label{
-  font-size:8px;
-  color:var(--secondary);
-  text-align:center;
-  white-space:nowrap;
-}
-.mini-bar-value{
-  font-size:10px;
-  font-weight:600;
-  color:var(--fg);
-  font-family:'DIN','DIN Alternate',sans-serif;
-}
-
-/* Signature status dots */
-.sig-status{
-  display:flex;
-  gap:12px;
-  margin-top:8px;
-  justify-content:space-around;
-}
-.sig-item{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-}
-.sig-dot{
-  width:28px;height:28px;
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'DIN',sans-serif;
-  font-size:13px;font-weight:700;
-  color:var(--white);
-}
-.sig-dot.la{background:var(--blue);}
-.sig-dot.provider{background:var(--orange);}
-.sig-dot.both{background:var(--green);}
-.sig-label{
-  font-size:8px;
-  color:var(--secondary);
-  text-align:center;
-}
-
 /* ===== FUNNEL CHART ===== */
-.funnel-section{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:4px;
-  margin:8px 24px;
-  padding:16px 20px;
-  flex-shrink:0;
+.funnel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
 }
-.section-title{
-  font-size:12px;
-  font-weight:600;
-  color:var(--fg);
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  gap:8px;
+.funnel-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
 }
-.section-title::before{
-  content:'';
-  width:3px;height:14px;
-  background:var(--blue);
-  border-radius:2px;
+.funnel-bar-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
-.funnel-container{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:6px;
-  padding:8px 0;
+.funnel-bar {
+  height: 56px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--white);
+  transition: all 0.3s ease;
 }
-.funnel-row{
-  display:flex;
-  align-items:center;
-  width:100%;
-  justify-content:center;
-  position:relative;
+.funnel-bar-1 { width: 100%; background: var(--amber); }
+.funnel-bar-2 { width: 60%; background: var(--amber-dark); }
+.funnel-bar-3 { width: 10%; background: var(--orange); font-size: 13px; min-width: 50px; }
+.funnel-label {
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.funnel-bar{
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 16px;
-  color:var(--white);
-  font-family:'DIN','DIN Alternate',sans-serif;
-  font-weight:700;
-  border-radius:3px;
-  position:relative;
-  transition:all .3s ease;
+.funnel-label-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
 }
-.funnel-bar-label{
-  font-size:11px;
-  font-family:'Segoe UI',sans-serif;
-  font-weight:600;
-  letter-spacing:.3px;
+.funnel-label-meta {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grey);
 }
-.funnel-bar-count{
-  font-size:20px;
+.funnel-label-meta strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  color: var(--charcoal);
 }
-.funnel-bar.pct-100{
-  width:100%;
-  background:linear-gradient(135deg,#118DFF 0%,#0A6FCC 100%);
+/* ===== TABLES ===== */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
 }
-.funnel-bar.pct-60{
-  width:60%;
-  background:linear-gradient(135deg,#118DFF 0%,#3DAAFF 100%);
+.data-table thead th {
+  background: var(--amber);
+  color: var(--white);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 10px 12px;
+  text-align: left;
+  white-space: nowrap;
 }
-.funnel-bar.pct-50{
-  width:50%;
-  background:linear-gradient(135deg,#3DAAFF 0%,#7BC4FF 100%);
+.data-table thead th:first-child { border-radius: 6px 0 0 0; }
+.data-table thead th:last-child { border-radius: 0 6px 0 0; }
+.data-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--charcoal);
+  font-size: 12px;
+  vertical-align: middle;
 }
-.funnel-bar.pct-10{
-  width:10%;
-  background:linear-gradient(135deg,#1AAB40 0%,#4FC068 100%);
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--pink-light); }
+.status-pill {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  white-space: nowrap;
 }
-.funnel-dropoff{
-  position:absolute;
-  right:-90px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:10px;
-  color:var(--red);
-  font-weight:600;
-  white-space:nowrap;
-  display:flex;
-  align-items:center;
-  gap:4px;
+.status-completed { background: var(--green-light); color: var(--green); }
+.status-pending { background: var(--amber-light); color: var(--amber-dark); }
+.status-created { background: var(--blue-light); color: var(--blue); }
+.check-icon { color: var(--green); font-weight: 700; font-size: 14px; }
+.cross-icon { color: var(--red); font-weight: 700; font-size: 14px; }
+/* ===== CONVERSION TABLE ===== */
+.conversion-row { display: flex; align-items: center; gap: 8px; }
+.conversion-arrow {
+  color: var(--amber);
+  font-size: 14px;
+  font-weight: 700;
 }
-.funnel-dropoff-arrow{
-  font-size:14px;
+.conversion-pct {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--charcoal);
 }
-.funnel-axis{
-  width:100%;
-  display:flex;
-  justify-content:space-between;
-  font-size:9px;
-  color:var(--secondary);
-  padding:0 2px;
-  margin-top:4px;
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
 }
-
-/* ===== TABLES SECTION ===== */
-.tables-section{
-  display:grid;
-  grid-template-columns:1.4fr 1fr;
-  gap:12px;
-  padding:8px 24px 24px;
-  flex:1;
-  min-height:0;
+.nav-link {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--grey);
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  transition: all 0.2s ease;
 }
-.table-card{
-  background:var(--white);
-  border:1px solid var(--border);
-  border-radius:4px;
-  padding:12px 16px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
+.nav-link:hover { border-color: var(--pink); color: var(--pink); }
+.nav-current {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--charcoal);
 }
-.table-wrapper{
-  flex:1;
-  overflow:auto;
-  margin-top:8px;
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .kpi-row-4 { grid-template-columns: repeat(2, 1fr); }
+  .kpi-row-3 { grid-template-columns: repeat(2, 1fr); }
+  .chart-row-2 { grid-template-columns: 1fr; }
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:10px;
-  font-family:'Segoe UI',sans-serif;
-}
-thead th{
-  font-family:'Segoe UI Semibold','Segoe UI',sans-serif;
-  font-weight:600;
-  font-size:10px;
-  color:var(--fg);
-  text-align:left;
-  padding:8px 10px;
-  border-bottom:2px solid var(--border);
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  background:var(--white);
-  position:sticky;top:0;
-}
-tbody td{
-  padding:7px 10px;
-  border-bottom:1px dotted var(--border);
-  color:var(--fg);
-}
-tbody tr:hover{background:var(--light);}
-.status-badge{
-  display:inline-block;
-  padding:2px 8px;
-  border-radius:10px;
-  font-size:9px;
-  font-weight:600;
-  text-transform:uppercase;
-}
-.status-badge.created{background:#E3F2FD;color:#118DFF;}
-.status-badge.pending{background:#FFF8E1;color:#D9B300;}
-.status-badge.completed{background:#E8F5E9;color:#1AAB40;}
-.status-badge.awaiting{background:#FFF3E0;color:#E66C37;}
-
-.check-yes{color:var(--green);font-weight:700;font-size:13px;}
-.check-no{color:var(--red);font-weight:700;font-size:13px;}
-
-.fee-cell{
-  font-family:'DIN','DIN Alternate',sans-serif;
-  font-weight:600;
-  text-align:right;
-}
-
-/* Conversion rate table */
-.conv-rate{
-  font-family:'DIN','DIN Alternate',sans-serif;
-  font-size:16px;
-  font-weight:700;
-  text-align:right;
-}
-.conv-arrow{
-  font-size:14px;
-  text-align:center;
-}
-.conv-trend{
-  font-size:9px;
-  color:var(--secondary);
-  text-align:right;
-}
-
-/* Scrollbar styling */
-.table-wrapper::-webkit-scrollbar{width:6px;height:6px;}
-.table-wrapper::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-.table-wrapper::-webkit-scrollbar-track{background:var(--light);}
-
-/* R62 / R20 badges */
-.ref-badge{
-  display:inline-block;
-  font-size:8px;
-  font-weight:600;
-  color:var(--white);
-  background:var(--secondary);
-  border-radius:3px;
-  padding:1px 5px;
-  margin-left:6px;
-  vertical-align:middle;
-}
-
-/* Responsive footnote */
-.footnote{
-  position:absolute;
-  bottom:4px;right:24px;
-  font-size:8px;
-  color:var(--secondary);
-  opacity:.7;
+@media (max-width: 640px) {
+  .dashboard { padding: 0 12px 24px; }
+  .header { padding: 0 16px; height: 60px; }
+  .page-title { font-size: 18px; }
+  .kpi-row-4, .kpi-row-3 { grid-template-columns: 1fr; }
+  .kpi-value { font-size: 24px; }
+  .header-nav { display: none; }
+  .funnel-label { width: 120px; }
+  .funnel-row { flex-direction: column; align-items: stretch; }
+  .funnel-bar-wrap { justify-content: flex-start; }
+  .data-table { font-size: 11px; }
+  .data-table thead th, .data-table tbody td { padding: 7px 8px; }
 }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <!-- ===== HEADER ===== -->
-  <div class="header">
-    <div class="header-left">
-      <div class="logo">BCT</div>
-      <div>
-        <div class="header-title">IPA OVERVIEW</div>
-        <div class="header-subtitle">WMPP · Integrated Placement Agreement Dashboard</div>
-      </div>
-    </div>
-    <div class="header-right">
-      <button class="nav-btn">Dashboard</button>
-      <button class="nav-btn active">IPA Overview</button>
-      <button class="nav-btn">Offer Tracker</button>
-      <button class="nav-btn">Finance</button>
-      <button class="nav-btn">Reports</button>
-    </div>
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-left">
+    <div class="logo-circle">BCT</div>
+    <div class="page-title">IPA OVERVIEW</div>
   </div>
+  <nav class="header-nav">
+    <a class="nav-btn" href="#">Offers Overview</a>
+    <a class="nav-btn active" href="#">IPA Overview</a>
+    <a class="nav-btn" href="#">Draft Offers</a>
+    <a class="nav-btn" href="#">Provider Registry</a>
+  </nav>
+</header>
+
+<div class="dashboard">
 
   <!-- ===== FILTER BAR ===== -->
   <div class="filter-bar">
-    <div class="filter-group">
-      <span class="filter-label">📅 Date Range</span>
-      <select class="filter-select calendar">
-        <option>Last 30 days (01 Jun – 30 Jun 2026)</option>
-        <option>Last 7 days</option>
-        <option>This month</option>
-        <option>Last quarter</option>
-      </select>
-    </div>
+    <span class="filter-label">Filters:</span>
+    <button class="filter-pill active">All Providers</button>
+    <button class="filter-pill">All Regions</button>
+    <button class="filter-pill">All Statuses</button>
     <div class="filter-divider"></div>
-    <div class="filter-group">
-      <span class="filter-label">Placement Type</span>
-      <select class="filter-select">
-        <option>All Types</option>
-        <option>Long-term</option>
-        <option>Short-term</option>
-        <option>Temp-to-Perm</option>
-      </select>
-    </div>
-    <div class="filter-divider"></div>
-    <div class="filter-group">
-      <span class="filter-label">LA</span>
-      <select class="filter-select" style="min-width:100px;">
-        <option>All LAs</option>
-        <option>Westminster</option>
-        <option>Camden</option>
-        <option>Lambeth</option>
-      </select>
-    </div>
-    <div class="filter-divider"></div>
-    <span class="filter-pill">10 records</span>
-    <span class="filter-pill">Updated: 30 Jun 2026 14:32</span>
+    <button class="filter-pill">Last 30 Days</button>
+    <button class="filter-pill">All LA</button>
   </div>
 
-  <!-- ===== KPI ROW 1: 4 cards ===== -->
-  <div class="kpi-row-1">
-    <div class="kpi-card green">
+  <!-- ===== KPI ROW 1 ===== -->
+  <div class="section-label">Pipeline Summary</div>
+  <div class="kpi-row kpi-row-4">
+    <div class="kpi-card accent-green">
       <div class="kpi-label">Successful Offers</div>
-      <div class="kpi-value green">10</div>
+      <div class="kpi-value">10</div>
       <div class="kpi-sub">Total offers accepted</div>
     </div>
-    <div class="kpi-card blue">
+    <div class="kpi-card accent-amber">
       <div class="kpi-label">IPA Created</div>
-      <div class="kpi-value blue">6</div>
-      <div class="kpi-sub">60% of successful offers</div>
+      <div class="kpi-value">6</div>
+      <div class="kpi-sub">IPAs in progress</div>
     </div>
-    <div class="kpi-card green">
+    <div class="kpi-card accent-green">
       <div class="kpi-label">IPA Completed</div>
-      <div class="kpi-value green">1</div>
-      <div class="kpi-sub">Fully signed & processed</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-sub">Fully signed off</div>
     </div>
-    <div class="kpi-card yellow">
+    <div class="kpi-card accent-amber">
       <div class="kpi-label">IPAs Pending</div>
-      <div class="kpi-value yellow">5</div>
-      <div class="kpi-sub">Awaiting signatures</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub">Awaiting completion</div>
     </div>
   </div>
 
-  <!-- ===== KPI ROW 2: 5 cards ===== -->
-  <div class="kpi-row-2">
-    <div class="kpi-card orange">
-      <div class="kpi-label">Offers Awaiting IPA</div>
-      <div class="kpi-value orange">4</div>
-      <div class="kpi-sub">Not yet started</div>
+  <!-- ===== KPI ROW 2 ===== -->
+  <div class="kpi-row kpi-row-4">
+    <div class="kpi-card accent-orange">
+      <div class="kpi-label">Awaiting IPA Creation</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">Offers not yet started</div>
     </div>
-    <div class="kpi-card blue">
-      <div class="kpi-label">Accepted → IPA</div>
-      <div class="kpi-value blue">60%</div>
-      <div class="kpi-pct"><span class="trend-up">▲</span> +5% vs last period</div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Accepted → IPA Created</div>
+      <div class="kpi-value">60%</div>
+      <div class="kpi-sub">6 of 10 offers</div>
     </div>
-    <div class="kpi-card yellow">
-      <div class="kpi-label">Offers Still →</div>
-      <div class="kpi-value yellow">40%</div>
-      <div class="kpi-pct"><span class="trend-down">▼</span> -5% vs last period</div>
+    <div class="kpi-card accent-orange">
+      <div class="kpi-label">Still to Progress</div>
+      <div class="kpi-value">40%</div>
+      <div class="kpi-sub">4 offers pending</div>
     </div>
-    <div class="kpi-card blue">
-      <div class="kpi-label">IPA → Completion</div>
-      <div class="kpi-value blue">17%</div>
-      <div class="kpi-pct"><span class="trend-up">▲</span> +2% vs last period</div>
-    </div>
-    <div class="kpi-card green">
-      <div class="kpi-label">Successful → Completed</div>
-      <div class="kpi-value green">10%</div>
-      <div class="kpi-pct"><span class="trend-flat">▬</span> No change</div>
+    <div class="kpi-card accent-amber">
+      <div class="kpi-label">Created → Completed</div>
+      <div class="kpi-value">17%</div>
+      <div class="kpi-sub">1 of 6 IPAs</div>
     </div>
   </div>
 
-  <!-- ===== KPI ROW 3: 3 cards ===== -->
-  <div class="kpi-row-3">
-    <!-- Weekly Fee Liability -->
-    <div class="kpi-card blue">
-      <div class="kpi-label">Weekly Fee Liability <span class="ref-badge">R62</span></div>
-      <div class="kpi-value blue">£12,450</div>
-      <div class="kpi-sub">Across 6 active IPAs · Avg £2,075/wk</div>
-    </div>
-
-    <!-- Payment Methods mini bars -->
-    <div class="kpi-card orange">
-      <div class="kpi-label">Payment Methods <span class="ref-badge">R62</span></div>
-      <div class="mini-bar-chart">
-        <div class="mini-bar-item">
-          <div class="mini-bar-value">4</div>
-          <div class="mini-bar" style="height:40px;width:36px;background:var(--blue);"></div>
-          <div class="mini-bar-label">Bank<br>Transfer</div>
-        </div>
-        <div class="mini-bar-item">
-          <div class="mini-bar-value">2</div>
-          <div class="mini-bar" style="height:20px;width:36px;background:var(--orange);"></div>
-          <div class="mini-bar-label">Invoice</div>
-        </div>
+  <!-- ===== KPI ROW 3 — R-TAGGED ===== -->
+  <div class="section-label">Requirements Traceability (R-Tags)</div>
+  <div class="kpi-row kpi-row-3">
+    <div class="kpi-card accent-green">
+      <div class="kpi-label">Weekly Fee Liability</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">£48,250</span>
+        <span class="r-badge">R62</span>
       </div>
+      <div class="kpi-sub">Total weekly fee exposure</div>
     </div>
-
-    <!-- IPA Signature Status -->
-    <div class="kpi-card green">
-      <div class="kpi-label">IPA Signature Status <span class="ref-badge">R20</span></div>
-      <div class="sig-status">
-        <div class="sig-item">
-          <div class="sig-dot la">6</div>
-          <div class="sig-label">LA<br>Signed</div>
-        </div>
-        <div class="sig-item">
-          <div class="sig-dot provider">4</div>
-          <div class="sig-label">Provider<br>Signed</div>
-        </div>
-        <div class="sig-item">
-          <div class="sig-dot both">1</div>
-          <div class="sig-label">Both<br>Signed</div>
-        </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Payment Methods</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">3 types</span>
+        <span class="r-badge">R62</span>
       </div>
+      <div class="kpi-sub">BACS · Cheque · Direct Debit</div>
+    </div>
+    <div class="kpi-card accent-blue">
+      <div class="kpi-label">Signature Rate</div>
+      <div class="kpi-value-row">
+        <span class="kpi-value">85%</span>
+        <span class="r-badge">R20</span>
+        <span class="r-badge">R35</span>
+      </div>
+      <div class="kpi-sub">IPAs signed by both parties</div>
     </div>
   </div>
 
-  <!-- ===== FUNNEL CHART ===== -->
-  <div class="funnel-section">
-    <div class="section-title">IPA Funnel — Offer to Completion Pipeline</div>
-    <div class="funnel-container">
-      <!-- Stage 1: Successful Offers -->
-      <div class="funnel-row">
-        <div class="funnel-bar pct-100" style="width:100%;max-width:900px;">
-          <span class="funnel-bar-label">Successful Offers</span>
-          <span class="funnel-bar-count">10</span>
+  <!-- ===== CHART ROW 1 — FUNNEL ===== -->
+  <div class="chart-row chart-row-full">
+    <div class="chart-card">
+      <div class="chart-title">IPA Conversion Funnel</div>
+      <div class="funnel-container">
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-1" style="width: 100%;">10</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">Successful Offers</div>
+            <div class="funnel-label-meta"><strong>10</strong> · 100% baseline</div>
+          </div>
         </div>
-        <div class="funnel-dropoff">
-          <span class="funnel-dropoff-arrow">→</span> 40% drop-off
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-2" style="width: 60%;">6</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">IPA Created</div>
+            <div class="funnel-label-meta"><strong>6</strong> · 60% of offers</div>
+          </div>
         </div>
-      </div>
-      <!-- Stage 2: IPA Created -->
-      <div class="funnel-row">
-        <div class="funnel-bar pct-60" style="width:60%;max-width:540px;">
-          <span class="funnel-bar-label">IPA Created</span>
-          <span class="funnel-bar-count">6</span>
+        <div class="funnel-row">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar funnel-bar-3" style="width: 10%;">1</div>
+          </div>
+          <div class="funnel-label">
+            <div class="funnel-label-name">IPA Completed</div>
+            <div class="funnel-label-meta"><strong>1</strong> · 10% of offers</div>
+          </div>
         </div>
-        <div class="funnel-dropoff">
-          <span class="funnel-dropoff-arrow">→</span> 17% drop-off
-        </div>
-      </div>
-      <!-- Stage 3: IPA Pending -->
-      <div class="funnel-row">
-        <div class="funnel-bar pct-50" style="width:50%;max-width:450px;">
-          <span class="funnel-bar-label">IPA Pending</span>
-          <span class="funnel-bar-count">5</span>
-        </div>
-        <div class="funnel-dropoff">
-          <span class="funnel-dropoff-arrow">→</span> 80% drop-off
-        </div>
-      </div>
-      <!-- Stage 4: IPA Completed -->
-      <div class="funnel-row">
-        <div class="funnel-bar pct-10" style="width:10%;max-width:120px;">
-          <span class="funnel-bar-count">1</span>
-          <span class="funnel-bar-label" style="font-size:9px;">Completed</span>
-        </div>
-      </div>
-    </div>
-    <div class="funnel-axis">
-      <span>Stage 1</span>
-      <span>Stage 2</span>
-      <span>Stage 3</span>
-      <span>Stage 4</span>
-    </div>
-  </div>
-
-  <!-- ===== TABLES SECTION ===== -->
-  <div class="tables-section">
-
-    <!-- LEFT: IPA Detail Table -->
-    <div class="table-card">
-      <div class="section-title">IPA Detail</div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>IPA ID</th>
-              <th>Status</th>
-              <th>LA Signed</th>
-              <th>Provider Signed</th>
-              <th>Weekly Fee</th>
-              <th>Payment Method</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>IPA-2026-001</td>
-              <td><span class="status-badge completed">Completed</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td class="fee-cell">£2,100</td>
-              <td>Bank Transfer</td>
-            </tr>
-            <tr>
-              <td>IPA-2026-002</td>
-              <td><span class="status-badge created">Created</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£1,850</td>
-              <td>Bank Transfer</td>
-            </tr>
-            <tr>
-              <td>IPA-2026-003</td>
-              <td><span class="status-badge pending">Pending</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£2,300</td>
-              <td>Invoice</td>
-            </tr>
-            <tr>
-              <td>IPA-2026-004</td>
-              <td><span class="status-badge pending">Pending</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td class="fee-cell">£1,950</td>
-              <td>Bank Transfer</td>
-            </tr>
-            <tr>
-              <td>IPA-2026-005</td>
-              <td><span class="status-badge pending">Pending</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£2,200</td>
-              <td>Bank Transfer</td>
-            </tr>
-            <tr>
-              <td>IPA-2026-006</td>
-              <td><span class="status-badge created">Created</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td><span class="check-yes">✓</span></td>
-              <td class="fee-cell">£2,050</td>
-              <td>Invoice</td>
-            </tr>
-            <tr>
-              <td>OFF-2026-007</td>
-              <td><span class="status-badge awaiting">Awaiting IPA</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£1,750</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>OFF-2026-008</td>
-              <td><span class="status-badge awaiting">Awaiting IPA</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£2,400</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>OFF-2026-009</td>
-              <td><span class="status-badge awaiting">Awaiting IPA</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£1,600</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td>OFF-2026-010</td>
-              <td><span class="status-badge awaiting">Awaiting IPA</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td><span class="check-no">✗</span></td>
-              <td class="fee-cell">£1,980</td>
-              <td>—</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- RIGHT: Conversion Rates Table -->
-    <div class="table-card">
-      <div class="section-title">Conversion Rates &amp; Trends</div>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Metric</th>
-              <th style="text-align:right;">Rate</th>
-              <th style="text-align:center;">Trend</th>
-              <th style="text-align:right;">Δ Period</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Accepted → IPA</td>
-              <td class="conv-rate" style="color:var(--blue);">60%</td>
-              <td class="conv-arrow"><span class="trend-up">▲</span></td>
-              <td class="conv-trend" style="color:var(--green);">+5%</td>
-            </tr>
-            <tr>
-              <td>Offers Still →</td>
-              <td class="conv-rate" style="color:var(--yellow);">40%</td>
-              <td class="conv-arrow"><span class="trend-down">▼</span></td>
-              <td class="conv-trend" style="color:var(--red);">-5%</td>
-            </tr>
-            <tr>
-              <td>IPA → Completion</td>
-              <td class="conv-rate" style="color:var(--blue);">17%</td>
-              <td class="conv-arrow"><span class="trend-up">▲</span></td>
-              <td class="conv-trend" style="color:var(--green);">+2%</td>
-            </tr>
-            <tr>
-              <td>Successful → Completed</td>
-              <td class="conv-rate" style="color:var(--green);">10%</td>
-              <td class="conv-arrow"><span class="trend-flat">▬</span></td>
-              <td class="conv-trend" style="color:var(--secondary);">0%</td>
-            </tr>
-            <tr>
-              <td>LA Signature Rate</td>
-              <td class="conv-rate" style="color:var(--blue);">83%</td>
-              <td class="conv-arrow"><span class="trend-up">▲</span></td>
-              <td class="conv-trend" style="color:var(--green);">+8%</td>
-            </tr>
-            <tr>
-              <td>Provider Signature Rate</td>
-              <td class="conv-rate" style="color:var(--orange);">50%</td>
-              <td class="conv-arrow"><span class="trend-down">▼</span></td>
-              <td class="conv-trend" style="color:var(--red);">-3%</td>
-            </tr>
-            <tr>
-              <td>Avg Cycle Time (days)</td>
-              <td class="conv-rate" style="color:var(--fg);">12.3</td>
-              <td class="conv-arrow"><span class="trend-up">▲</span></td>
-              <td class="conv-trend" style="color:var(--red);">+1.2d</td>
-            </tr>
-            <tr>
-              <td>Fee Recovery Rate</td>
-              <td class="conv-rate" style="color:var(--green);">94%</td>
-              <td class="conv-arrow"><span class="trend-up">▲</span></td>
-              <td class="conv-trend" style="color:var(--green);">+2%</td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>
 
-  <div class="footnote">WMPP · IPA Overview · Page 1 of 1 · Data as of 30 Jun 2026</div>
+  <!-- ===== CHART ROW 2 — TABLES ===== -->
+  <div class="chart-row chart-row-2">
+    <!-- LEFT: IPA Detail List -->
+    <div class="chart-card">
+      <div class="chart-title">IPA Detail List</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>IPA ID</th>
+            <th>Offer ID</th>
+            <th>Status</th>
+            <th>LA Signed</th>
+            <th>Provider Signed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>IPA-001</td>
+            <td>OFF-1042</td>
+            <td><span class="status-pill status-completed">Completed</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="check-icon">✓</span></td>
+          </tr>
+          <tr>
+            <td>IPA-002</td>
+            <td>OFF-1056</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-003</td>
+            <td>OFF-1071</td>
+            <td><span class="status-pill status-pending">Pending</span></td>
+            <td><span class="cross-icon">✗</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-004</td>
+            <td>OFF-1083</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-005</td>
+            <td>OFF-1098</td>
+            <td><span class="status-pill status-pending">Pending</span></td>
+            <td><span class="cross-icon">✗</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+          <tr>
+            <td>IPA-006</td>
+            <td>OFF-1105</td>
+            <td><span class="status-pill status-created">Created</span></td>
+            <td><span class="check-icon">✓</span></td>
+            <td><span class="cross-icon">✗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RIGHT: Conversion Rates -->
+    <div class="chart-card">
+      <div class="chart-title">Conversion Rates</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Stage Transition</th>
+            <th>Count</th>
+            <th>Rate</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>Successful Offers</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Created</span>
+              </div>
+            </td>
+            <td>6 / 10</td>
+            <td><span class="conversion-pct">60%</span></td>
+            <td><span style="color: var(--green); font-size: 14px;">▲</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>IPA Created</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Completed</span>
+              </div>
+            </td>
+            <td>1 / 6</td>
+            <td><span class="conversion-pct">17%</span></td>
+            <td><span style="color: var(--red); font-size: 14px;">▼</span></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="conversion-row">
+                <span>Offers</span>
+                <span class="conversion-arrow">→</span>
+                <span>IPA Completed</span>
+              </div>
+            </td>
+            <td>1 / 10</td>
+            <td><span class="conversion-pct">10%</span></td>
+            <td><span style="color: var(--amber); font-size: 14px;">◆</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== BOTTOM NAV ===== -->
+  <div class="bottom-nav">
+    <a class="nav-link" href="offers_overview.html">← offers_overview.html</a>
+    <span class="nav-current">Page 2 of 4 — IPA Overview</span>
+    <a class="nav-link" href="draft_offers.html">draft_offers.html →</a>
+  </div>
 
 </div>
+
 </body>
 </html>
