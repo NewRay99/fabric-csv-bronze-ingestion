@@ -1,0 +1,616 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "6c94a34fe027bbba4aec",
+  "position": {
+    "x": 249.42540221844706,
+    "y": 205.29629259518336,
+    "z": 5000,
+    "height": 345.35824922554207,
+    "width": 1220.2658139302487,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Provider Name"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Provider Name",
+              "nativeQueryRef": "Provider Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Home Name"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Home Name",
+              "nativeQueryRef": "Home Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Service Type"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Service Type",
+              "nativeQueryRef": "Service Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Town/City"
+                }
+              },
+              "queryRef": "rpt_provider_registry.town_city",
+              "nativeQueryRef": "Town/City"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Postcode"
+                }
+              },
+              "queryRef": "rpt_provider_registry.postcode",
+              "nativeQueryRef": "Postcode"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Provider Email"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Provider Email",
+              "nativeQueryRef": "Provider Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Provider Phone"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Provider Phone",
+              "nativeQueryRef": "Provider Phone"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registered Manager"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registered Manager",
+              "nativeQueryRef": "Registered Manager"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registered Manager Email"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registered Manager Email",
+              "nativeQueryRef": "Registered Manager Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registered Manager Number"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registered Manager Number",
+              "nativeQueryRef": "Registered Manager Number"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Home Email"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Home Email",
+              "nativeQueryRef": "Home Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Home Phone"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Home Phone",
+              "nativeQueryRef": "Home Phone"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registrant Name"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registrant Name",
+              "nativeQueryRef": "Registrant Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Resistrant Role"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Resistrant Role",
+              "nativeQueryRef": "Resistrant Role"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registrant Email"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registrant Email",
+              "nativeQueryRef": "Registrant Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_registry"
+                    }
+                  },
+                  "Property": "Registrant Phone"
+                }
+              },
+              "queryRef": "rpt_provider_registry.Registrant Phone",
+              "nativeQueryRef": "Registrant Phone"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "rpt_provider_registry"
+                  }
+                },
+                "Property": "Home Email"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "grid": [
+        {
+          "properties": {
+            "gridVertical": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "181.16671199347294D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "rpt_provider_registry.Home Name"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'SA/Resi Provider Home Directory'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "19D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "45f7958062d3ec875a69",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Home Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1ac91cb5de7cca5a2b29",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Home Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "376d1ff6c240410b13a8",
+        "ordinal": 2,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Home Phone"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "92a6926ab110b1260913",
+        "ordinal": 3,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Postcode"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "15a59cf900c83290c01e",
+        "ordinal": 4,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Provider Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "0cd249c88e00e1d0d729",
+        "ordinal": 5,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Provider Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "36f50e81c9104d00050b",
+        "ordinal": 6,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Provider Phone"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "75c557717a4ce2e79001",
+        "ordinal": 7,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registered Manager"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5b8c82c37b79e81c4e63",
+        "ordinal": 8,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registered Manager Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1bff9cac186649172b98",
+        "ordinal": 9,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registered Manager Number"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "529448d7cb62d1d6db9c",
+        "ordinal": 10,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registrant Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f6478d03e091b20b7e72",
+        "ordinal": 11,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registrant Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "390e5bcde80ae0d04543",
+        "ordinal": 12,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Registrant Phone"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "f1fb157d6c8080141283",
+        "ordinal": 13,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Resistrant Role"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "dabb743a3789264ba85d",
+        "ordinal": 14,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Service Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "56684940a10c5c4281eb",
+        "ordinal": 15,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_registry"
+              }
+            },
+            "Property": "Town/City"
+          }
+        },
+        "type": "Categorical"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  }
+}

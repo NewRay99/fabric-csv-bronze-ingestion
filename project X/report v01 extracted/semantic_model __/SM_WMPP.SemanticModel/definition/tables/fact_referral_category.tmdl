@@ -1,0 +1,68 @@
+table fact_referral_category
+	lineageTag: a6e9720a-574a-4988-b878-eb90c29f2e15
+
+	column referral_id
+		dataType: string
+		lineageTag: 6e24ae2a-aedf-4101-8918-2aec8a66132d
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_category_id
+		dataType: string
+		lineageTag: 9ca965d9-dc15-4ec6-bbf2-2e16488368c2
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6bbc3f3f-d364-4f89-b253-8c33c665f942
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 38d1ee8d-d897-4daa-8cb3-e7c75a41e75e
+			defaultHierarchy: LocalDateTable_85241257-bd71-4f71-b4ab-c05eb501e49e.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column referral_sk
+		dataType: string
+		lineageTag: ac804870-1987-49b1-aea9-4210a71fadb9
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: a6905b57-c04f-45a0-864d-bd09f801fa47
+		summarizeBy: sum
+		sourceColumn: category_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_referral_category = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_category,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded dim_referral", {"framework_category_id"}, dim_category, {"framework_category_id"}, "dim_category", JoinKind.LeftOuter),
+				    #"Expanded dim_category" = Table.ExpandTableColumn(#"Merged Queries1", "dim_category", {"category_sk"}, {"category_sk"})
+				in
+				    #"Expanded dim_category"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

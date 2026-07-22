@@ -1,0 +1,87 @@
+table 'bronze supervising_social_worker'
+	isHidden
+	lineageTag: ca254783-c540-40e5-9700-b3bd42316815
+
+	column social_worker_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8eda264a-9379-4448-97f7-687cbc280bda
+		summarizeBy: none
+		sourceColumn: social_worker_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b94244cb-726e-4348-b354-54d9de53db29
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d836f4fb-f3b2-4f9d-b188-0e2e0727b3ad
+		summarizeBy: none
+		sourceColumn: full_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column phone_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 404eb4d3-0338-4c72-b4ea-39470228f6ee
+		summarizeBy: none
+		sourceColumn: phone_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column email_address
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6ed28ac2-5e5a-47c7-a0a9-edbce5f62ce0
+		summarizeBy: none
+		sourceColumn: email_address
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3e6ec722-3599-44fa-9637-854216842fe1
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze supervising_social_worker' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_supervising_social_worker = Source{[Schema="bronze",Item="supervising_social_worker"]}[Data]
+				in
+				    bronze_supervising_social_worker
+
+	changedProperty = IsHidden
+

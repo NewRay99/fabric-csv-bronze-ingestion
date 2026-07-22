@@ -1,0 +1,113 @@
+table fact_provider_message
+	lineageTag: 71da728b-9fed-4684-8dbb-a7a4071f8f92
+
+	column message_id
+		dataType: string
+		lineageTag: 3484b07c-bc8c-4e23-a2d0-b183d6eabe56
+		summarizeBy: none
+		sourceColumn: message_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: ef596525-d377-433b-9c85-1e80516ce0f1
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_by
+		dataType: string
+		lineageTag: 59ce070c-d878-4e39-9ac2-4c8dbc6d46ef
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_timestamp
+		dataType: string
+		lineageTag: 042101d7-6664-4c34-bc8d-3aa6fc953628
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_text
+		dataType: string
+		lineageTag: d1229f37-292f-468b-a413-6d2c15393d73
+		summarizeBy: none
+		sourceColumn: message_text
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		lineageTag: 6b912f0a-c11d-459e-90fa-f362c3cd619d
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 75e417f5-18e1-4c3d-95a0-97138034e9c6
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8f342fe0-5bfc-46d8-9534-727bb7430cc1
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 0295ada2-038b-421b-b0de-63fd270aa0ec
+			defaultHierarchy: LocalDateTable_cb1f7675-6be0-4d04-b7a5-22ae1fed1cb5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column referral_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 782c11fa-41eb-44f9-ac8d-a447bd727520
+		summarizeBy: sum
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 735978ce-ddc7-4f58-88af-f8d784da8556
+		summarizeBy: sum
+		sourceColumn: provider_home_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_provider_message = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_provider_message,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"referral_provider_id"}, stg_referral_provider, {"referral_provider_id"}, "stg_referral_provider", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_provider" = Table.ExpandTableColumn(#"Merged Queries", "stg_referral_provider", {"referral_id", "provider_id"}, {"referral_id", "provider_id"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded stg_referral_provider", {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries1", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_referral", {"provider_id"}, dim_provider_home, {"provider_id"}, "dim_provider_home", JoinKind.LeftOuter),
+				    #"Expanded dim_provider_home" = Table.ExpandTableColumn(#"Merged Queries2", "dim_provider_home", {"provider_home_sk"}, {"provider_home_sk"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded dim_provider_home",{{"referral_sk", Int64.Type}, {"provider_home_sk", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"referral_id", "provider_id"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

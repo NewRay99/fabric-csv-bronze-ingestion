@@ -1,0 +1,207 @@
+table 'bronze ipa_child'
+	isHidden
+	lineageTag: cb479d6a-829a-4281-a54b-dce24a2dc645
+
+	column ipa_child_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 2403c8c1-e758-47dc-a556-1b08502a668e
+		summarizeBy: none
+		sourceColumn: ipa_child_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ipa_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: af7a1b8e-cc96-4338-94b2-b07b67dfb465
+		summarizeBy: none
+		sourceColumn: ipa_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_full_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3317350d-c3a6-41bf-9693-3d2303520981
+		summarizeBy: none
+		sourceColumn: child_full_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_known_as
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 64aa1b75-8ed9-4c87-ad07-667d2c25969e
+		summarizeBy: none
+		sourceColumn: child_known_as
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_date_of_birth
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 70abe636-99c9-40a6-be93-b4d2e43c4884
+		summarizeBy: none
+		sourceColumn: child_date_of_birth
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_age_years
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d0d0873e-2d44-4fc4-afdf-66575dc90bd4
+		summarizeBy: none
+		sourceColumn: child_age_years
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_gender
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e37e7085-ac85-47d8-8376-865db51be978
+		summarizeBy: none
+		sourceColumn: child_gender
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_ethnicity
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6b24c83a-6420-4020-8b3f-f78ddd132851
+		summarizeBy: none
+		sourceColumn: child_ethnicity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_preferred_language
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7a7d8dbd-a065-4004-b593-9e2568ed81f3
+		summarizeBy: none
+		sourceColumn: child_preferred_language
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_religion
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 06e04bdf-b7aa-4614-b0b4-f88b8526e206
+		summarizeBy: none
+		sourceColumn: child_religion
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_legal_status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 117eaa2f-0094-494a-99e3-5e6a6c2239d6
+		summarizeBy: none
+		sourceColumn: child_legal_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_reference_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1a206805-963a-49ab-bd7a-11930876f5be
+		summarizeBy: none
+		sourceColumn: child_reference_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_support_needs_other_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f153ff81-2c5c-4a10-a903-ba920f04dc5a
+		summarizeBy: none
+		sourceColumn: child_support_needs_other_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column expected_destination_after_placement
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b377e369-dee9-4241-9692-a244fd81ec93
+		summarizeBy: none
+		sourceColumn: expected_destination_after_placement
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column expected_destination_other_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 62d8457c-e4db-47bb-bb04-dd885b5a0f9f
+		summarizeBy: none
+		sourceColumn: expected_destination_other_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bcd2b4f4-0d99-4f05-987d-37ff064efa88
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze ipa_child' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_ipa_child = Source{[Schema="bronze",Item="ipa_child"]}[Data]
+				in
+				    bronze_ipa_child
+
+	changedProperty = IsHidden
+

@@ -1,0 +1,234 @@
+table fact_ipa
+	lineageTag: bb31e970-15d3-4103-aeed-c211b588b902
+
+	column ipa_id
+		dataType: string
+		lineageTag: 5e452a7e-e9ca-458e-9883-6fd3846a7d40
+		summarizeBy: none
+		sourceColumn: ipa_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		lineageTag: fc8fecc5-e8cf-421a-b3f7-ff33f65d7517
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		lineageTag: f846ef50-e288-4b34-9bee-9ad856fd84f6
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: 1ceebe91-c562-4afb-b4a2-08e8d17da468
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_name
+		dataType: string
+		lineageTag: 2cb41429-2dd2-4938-98d1-1ba26ddd42e9
+		summarizeBy: none
+		sourceColumn: la_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_name
+		dataType: string
+		lineageTag: a3304f11-2558-43f9-b73a-0ef911910378
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_town
+		dataType: string
+		lineageTag: d62edbfb-3c89-472f-9195-246508c75882
+		summarizeBy: none
+		sourceColumn: provider_addr_town
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_framework_or_spot
+		dataType: string
+		lineageTag: 17570ae4-2670-4272-92b1-34ac5c9a4a6c
+		summarizeBy: none
+		sourceColumn: placement_framework_or_spot
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_service_type
+		dataType: string
+		lineageTag: b911d814-5113-4267-a8b7-d43fb59618a3
+		summarizeBy: none
+		sourceColumn: placement_service_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		lineageTag: b17d402c-9e9b-4b35-ab29-010bcd8d2511
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_name
+		dataType: string
+		lineageTag: 644cc261-dfdc-45b6-bed9-0c49fb9fcf7b
+		summarizeBy: none
+		sourceColumn: home_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column costs_total_weekly_fee
+		dataType: string
+		lineageTag: 8026ec16-fc11-4b90-a4ab-14c957d2967c
+		summarizeBy: none
+		sourceColumn: costs_total_weekly_fee
+
+		annotation SummarizationSetBy = Automatic
+
+	column costs_total_core_costs_weekly_fee
+		dataType: string
+		lineageTag: 5401af57-6159-4b6c-bcd9-d043d5478c04
+		summarizeBy: none
+		sourceColumn: costs_total_core_costs_weekly_fee
+
+		annotation SummarizationSetBy = Automatic
+
+	column core_cost_weekly_fee
+		dataType: string
+		lineageTag: 9529a1be-71e5-4c48-8a76-903d75a9960a
+		summarizeBy: none
+		sourceColumn: core_cost_weekly_fee
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		lineageTag: 0e80ef48-9964-494d-b9f6-436954952bb8
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 78d1b367-6d73-42a6-83e7-7b8aa28baaa0
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_local_authority
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 75672099-0a22-4ccc-8d34-8da17ecbad01
+		summarizeBy: none
+		sourceColumn: signed_by_local_authority
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_datetime_for_local_authority
+		dataType: string
+		lineageTag: ebd1575e-9a78-4797-b9a1-002bf3bfbf12
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_local_authority
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_provider
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4618c27b-79c0-4ed9-af77-d3256ea5233c
+		summarizeBy: none
+		sourceColumn: signed_by_provider
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_datetime_for_provider
+		dataType: string
+		lineageTag: 51566410-5c4e-48d6-bb26-a12eed381c93
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_provider
+
+		annotation SummarizationSetBy = Automatic
+
+	column closed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0815566d-0d49-4c20-b615-ef438b8205c6
+		summarizeBy: none
+		sourceColumn: closed
+
+		annotation SummarizationSetBy = Automatic
+
+	column closed_datetime
+		dataType: string
+		lineageTag: 65a36423-e4e4-42a1-ba2c-34e1692a0949
+		summarizeBy: none
+		sourceColumn: closed_datetime
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_datetime
+		dataType: string
+		lineageTag: b1f6b0d7-2153-4e7c-8d8b-8056f208a6b9
+		summarizeBy: none
+		sourceColumn: created_datetime
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 59123ccb-e56d-4a1b-bf2f-9a4ff6ce476e
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 299494df-5cc2-4214-a997-c69dc6695f2c
+			defaultHierarchy: LocalDateTable_5fb970bc-aa2a-4b57-9991-fc2ef569d2b3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ipa_date_only =
+			
+			DATE(
+			    VALUE(LEFT(fact_ipa[created_datetime], 4)),
+			    VALUE(MID(fact_ipa[created_datetime], 6, 2)),
+			    VALUE(MID(fact_ipa[created_datetime], 9, 2))
+			)
+		formatString: General Date
+		lineageTag: 7603866a-71fc-4734-b61d-0c2ff4821053
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_ipa = m
+		mode: import
+		source =
+				let
+				    Source = stg_ipa,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"la_addr_line1", "la_addr_line2", "la_addr_county", "la_addr_town", "la_addr_postcode", "la_phone", "la_email", "provider_addr_line1", "provider_addr_line2", "provider_addr_county", "provider_addr_postcode", "provider_phone", "provider_email", "provider_company_registration_number", "placement_category", "placement_admission_date", "placement_type_other_text", "placement_needs_summary", "home_addr_line1", "home_addr_line2", "home_addr_county", "home_addr_town", "home_addr_postcode", "home_phone", "home_email", "registered_manager_name", "registered_manager_phone", "registered_manager_email", "registered_manager_registration_number", "provider_urn", "education_included_with_referral", "education_provision_name", "education_addr_line1", "education_addr_line2", "education_addr_county", "education_addr_town", "education_addr_postcode", "education_location", "education_length_weeks", "education_provision_cost", "invoice_recipient_name", "invoice_recipient_team", "invoice_recipient_email", "invoice_addr_line1", "invoice_addr_line2", "invoice_addr_county", "invoice_addr_town", "invoice_addr_postcode", "schedule_contact_name", "schedule_contact_phone", "schedule_contact_email", "schedule_addr_line1", "schedule_addr_line2", "schedule_addr_county", "schedule_addr_town", "schedule_addr_postcode", "schedule_do_not_send_invoices_note", "signed_by_local_authority_name", "signed_by_provider_name", "can_sign", "can_sign_name", "can_sign_date", "created_by", "updated_datetime", "updated_by"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"signed_by_local_authority", type logical}, {"signed_by_provider", type logical}, {"closed", type logical}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Changed Type", {"ipa_id"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

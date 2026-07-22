@@ -1,0 +1,91 @@
+table 'bronze framework'
+	isHidden
+	lineageTag: 743cfb7c-2270-47f7-8c00-132996f00afd
+
+	column framework_code
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ac45ac7e-03c0-4212-9425-f32ba81befaa
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e267f87b-3dd9-4df6-b357-d6f4cf90aa54
+		summarizeBy: none
+		sourceColumn: framework_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 740d3ca7-c4db-4346-863b-4430afba4f9a
+		summarizeBy: none
+		sourceColumn: start_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column end_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6128e353-561b-40fe-9304-496522cb8814
+		summarizeBy: none
+		sourceColumn: end_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a5196de0-8713-492a-9fd3-d2b78f9f420c
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a26b29b4-42f4-487c-8c85-94557607d331
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze framework' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    Custom1 = Source{[Schema="bronze",Item="framework"]}[Data]
+				in
+				    Custom1
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

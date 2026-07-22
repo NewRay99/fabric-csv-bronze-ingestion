@@ -1,0 +1,75 @@
+table dim_framework
+	lineageTag: ef170781-e5b2-41b2-9c81-8d4c1f5006d3
+
+	column framework_code
+		dataType: string
+		lineageTag: 09681a6e-739b-4ecb-84a0-9aa9c5d492ae
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_name
+		dataType: string
+		lineageTag: 2af231d3-9802-486c-ad40-c7c761036b7c
+		summarizeBy: none
+		sourceColumn: framework_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: af6f30cc-154a-4b83-bf0f-91a0f1fd6854
+		summarizeBy: none
+		sourceColumn: start_date
+
+		variation Variation
+			isDefault
+			relationship: b7510f63-5489-4aec-a6d1-249ca4e44884
+			defaultHierarchy: LocalDateTable_3c610ead-1ead-40e8-a8cd-e61d9fa02e4d.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column end_date
+		dataType: string
+		lineageTag: 834ff39c-03f8-494d-b732-2d1ce67b6eae
+		summarizeBy: none
+		sourceColumn: end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		lineageTag: b86372d3-088b-46cc-be73-498ae684be59
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Index
+		dataType: int64
+		formatString: 0
+		lineageTag: bd9ccaa4-6483-44dd-ba16-71a130fe3a95
+		summarizeBy: sum
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_framework = m
+		mode: import
+		source =
+				let
+				    Source = stg_framework,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"export_date"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns", {"framework_code"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 1, 1, Int64.Type)
+				in
+				    #"Added Index"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

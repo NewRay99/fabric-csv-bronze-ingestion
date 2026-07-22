@@ -1,0 +1,101 @@
+table 'bronze referral_provider_decline_reason'
+	isHidden
+	lineageTag: fcb037a3-6909-48e1-b939-929ba2bfe7a6
+
+	column decline_reason_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d213e992-6e06-4b95-8397-c7599a3eb0af
+		summarizeBy: none
+		sourceColumn: decline_reason_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ac548e72-5ede-48d7-ae79-4054c07a9d9c
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0a6b1e45-df4f-437f-93ff-bc38fc090200
+		summarizeBy: none
+		sourceColumn: decline_reason
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason_other_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 62e6a475-34b8-4f14-8052-5c058285c70b
+		summarizeBy: none
+		sourceColumn: decline_reason_other_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d1853560-cc70-4177-9a8f-cca0dfa8a582
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3327a8db-5b22-42d4-8688-7f37bd17acde
+		summarizeBy: none
+		sourceColumn: created_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9ca975f0-9d49-48d9-8798-7e264923652b
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_provider_decline_reason' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_provider_decline_reason = Source{[Schema="bronze",Item="referral_provider_decline_reason"]}[Data]
+				in
+				    bronze_referral_provider_decline_reason
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

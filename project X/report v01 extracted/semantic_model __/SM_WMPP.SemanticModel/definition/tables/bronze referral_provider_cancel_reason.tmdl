@@ -1,0 +1,101 @@
+table 'bronze referral_provider_cancel_reason'
+	isHidden
+	lineageTag: 13f98c48-df57-4c69-9086-20622375b337
+
+	column cancel_reason_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b8bd650b-24d7-4cc8-8fc3-6cefa92aad35
+		summarizeBy: none
+		sourceColumn: cancel_reason_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3ba1ca38-cc8c-49f4-953e-d487b3013ba1
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column cancel_reason
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 656ecba4-605b-4444-bd78-975e22723499
+		summarizeBy: none
+		sourceColumn: cancel_reason
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column cancel_reason_other_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c9ff1eff-6915-410c-979f-e6c4da2e85d1
+		summarizeBy: none
+		sourceColumn: cancel_reason_other_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a7c32865-392e-48b9-9e3f-84c04bd6f131
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e68bd0b7-fb76-436e-a723-de4befd342f3
+		summarizeBy: none
+		sourceColumn: created_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b558ba9f-ce1f-4197-a42e-d41dcb81e3f7
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_provider_cancel_reason' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_provider_cancel_reason = Source{[Schema="bronze",Item="referral_provider_cancel_reason"]}[Data]
+				in
+				    bronze_referral_provider_cancel_reason
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

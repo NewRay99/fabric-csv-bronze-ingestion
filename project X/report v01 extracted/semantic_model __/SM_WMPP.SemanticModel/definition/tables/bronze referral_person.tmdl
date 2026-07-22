@@ -1,0 +1,233 @@
+table 'bronze referral_person'
+	isHidden
+	lineageTag: 57ba6a4d-f62d-4b84-ab46-4db6a7ad81b7
+
+	column person_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bcce1185-cbb0-47e6-aff3-a45db08863ed
+		summarizeBy: none
+		sourceColumn: person_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f491cf50-0159-47b9-b911-d8244b6fd9f3
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column initials
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3b087abc-ec56-44c7-b27d-7020bdddf987
+		summarizeBy: none
+		sourceColumn: initials
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_value
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 41c96cca-a67b-4cb3-bbcd-0d3b5646d11e
+		summarizeBy: none
+		sourceColumn: age_value
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_date_unit
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3beb1f7b-b6d0-45c3-a492-9c1c6e634662
+		summarizeBy: none
+		sourceColumn: age_date_unit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_restrictions
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 06520502-639d-4eea-8e23-439a88ff0de6
+		summarizeBy: none
+		sourceColumn: has_restrictions
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column restriction_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 04a7e435-2759-4108-ba01-3c94999f259f
+		summarizeBy: none
+		sourceColumn: restriction_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_reference_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: cf2653cb-f7ca-451b-ad36-cd66a642df07
+		summarizeBy: none
+		sourceColumn: source_reference_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bf6d2439-37e5-40d2-b106-c5aee7d8486d
+		summarizeBy: none
+		sourceColumn: gender
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e246f196-cc6f-4341-acba-72e46bc3f91e
+		summarizeBy: none
+		sourceColumn: gender_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ethnicity
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1ff7436b-78bb-4a20-9b49-525149dc2d36
+		summarizeBy: none
+		sourceColumn: ethnicity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ethnicity_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 10ba2521-5d0f-4787-9546-23777bda5ef0
+		summarizeBy: none
+		sourceColumn: ethnicity_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b9a0f5f1-cd74-4c50-844a-f16220905366
+		summarizeBy: none
+		sourceColumn: religion
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c68c8ec5-566e-42a8-9a77-255e460324a2
+		summarizeBy: none
+		sourceColumn: religion_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7f4b4068-1715-4159-bd2b-7c78a3fda8ed
+		summarizeBy: none
+		sourceColumn: preferred_language
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5a57ebaa-d60e-4aed-acb1-db6af7b3f366
+		summarizeBy: none
+		sourceColumn: preferred_language_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_index
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ad9a12d6-1eb7-4dcb-9a53-74edc5e64cdc
+		summarizeBy: none
+		sourceColumn: child_index
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3fc226e0-aec5-4678-a1db-7122b5f11cfc
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_person' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_person = Source{[Schema="bronze",Item="referral_person"]}[Data]
+				in
+				    bronze_referral_person
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

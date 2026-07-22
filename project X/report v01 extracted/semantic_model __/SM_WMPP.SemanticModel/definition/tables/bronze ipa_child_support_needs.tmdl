@@ -1,0 +1,51 @@
+table 'bronze ipa_child_support_needs'
+	isHidden
+	lineageTag: 0c1a6ba5-de58-4ec4-9dfb-32577012171c
+
+	column ipa_child_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3e39ba75-f121-4075-a0bd-d3731ce78856
+		summarizeBy: none
+		sourceColumn: ipa_child_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column support_need
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e0b9010a-bc81-40b4-947f-49cc071a10f6
+		summarizeBy: none
+		sourceColumn: support_need
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1fa7b8a6-0e9f-4344-99b9-42f40299e3f7
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze ipa_child_support_needs' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_ipa_child_support_needs = Source{[Schema="bronze",Item="ipa_child_support_needs"]}[Data]
+				in
+				    bronze_ipa_child_support_needs
+
+	changedProperty = IsHidden
+

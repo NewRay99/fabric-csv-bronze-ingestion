@@ -1,0 +1,285 @@
+table rpt_provider_registry
+	lineageTag: ee1ed7c3-8a7e-4347-ab18-7ac29dc2024e
+
+	column provider_home_id
+		dataType: string
+		lineageTag: 18b11370-c5a3-4250-bfc6-611b9b59bbb3
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: acba887e-de98-481a-b685-762544d8b759
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Provider Name'
+		dataType: string
+		lineageTag: 1712d82a-0eac-4b58-93a2-f151899abecd
+		summarizeBy: none
+		sourceColumn: Provider Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Provider Status'
+		dataType: string
+		lineageTag: 05ae87e3-6e2e-43dc-b54b-81a9aa3e3f43
+		summarizeBy: none
+		sourceColumn: Provider Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Home Name'
+		dataType: string
+		lineageTag: 67ea8906-0d11-49ff-8264-989c6f4b3496
+		summarizeBy: none
+		sourceColumn: Home Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Type'
+		dataType: string
+		lineageTag: 9b8bd8a9-a1ae-44f6-84d3-78a66a5c2c20
+		summarizeBy: none
+		sourceColumn: Service Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Town/City
+		dataType: string
+		lineageTag: d0ff590b-f401-44e4-8392-c0867a1f4d07
+		summarizeBy: none
+		sourceColumn: Town/City
+
+		annotation SummarizationSetBy = Automatic
+
+	column Postcode
+		dataType: string
+		lineageTag: 907f20e5-03e3-44f4-8d07-7b47c39c93b1
+		summarizeBy: none
+		sourceColumn: Postcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Home Phone'
+		dataType: string
+		lineageTag: 38148fc1-456a-4c3e-ba91-9e228505c9d3
+		summarizeBy: none
+		sourceColumn: Home Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Home Email'
+		dataType: string
+		lineageTag: 09e81cf0-8fcf-45a9-b2ea-8596dd22c298
+		summarizeBy: none
+		sourceColumn: Home Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registered Manager'
+		dataType: string
+		lineageTag: a1c40b27-e369-4317-83e5-9e13c38d554e
+		summarizeBy: none
+		sourceColumn: Registered Manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registered Manager Number'
+		dataType: string
+		lineageTag: 2dacbab4-3355-48e6-b16a-b2b622291324
+		summarizeBy: none
+		sourceColumn: Registered Manager Number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registered Manager Email'
+		dataType: string
+		lineageTag: 3ffa984b-46c5-46cb-a903-610a22d80cf3
+		summarizeBy: none
+		sourceColumn: Registered Manager Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_regulating_body_inspection_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a4e584da-9eda-4fb4-93f3-2ce233d484ed
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		variation Variation
+			isDefault
+			relationship: cf26d960-3435-4462-92ba-2310c3a00d95
+			defaultHierarchy: LocalDateTable_3f4b0f03-f3b5-48c7-ae80-c033233778a8.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column inspection_outcome_rating
+		dataType: string
+		lineageTag: 7d828586-c1ee-452a-92a3-252322dee54b
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Provider Email'
+		dataType: string
+		lineageTag: 2b06a8b1-4dfe-4c40-a53a-a0c890532fcd
+		summarizeBy: none
+		sourceColumn: Provider Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Provider Phone'
+		dataType: string
+		lineageTag: 7ec512c3-db05-4def-9329-d5cf061fef83
+		summarizeBy: none
+		sourceColumn: Provider Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.last_regulating_body_inspection_date'
+		dataType: string
+		lineageTag: 8dbfac46-bd08-4e58-8e99-261636460dec
+		summarizeBy: none
+		sourceColumn: stg_provider.last_regulating_body_inspection_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.regulatory_body_registration_reference'
+		dataType: string
+		lineageTag: 43d200a6-1330-47a1-8313-18f7cafcc660
+		summarizeBy: none
+		sourceColumn: stg_provider.regulatory_body_registration_reference
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.inspection_outcome_rating'
+		dataType: string
+		lineageTag: ac7d1731-edcf-47dd-ab7e-0246b5dff37e
+		summarizeBy: none
+		sourceColumn: stg_provider.inspection_outcome_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.responsible_individual_name'
+		dataType: string
+		lineageTag: 7697ea35-1080-4756-a391-f200691dd8c8
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.responsible_individual_contact_number'
+		dataType: string
+		lineageTag: d833d30c-f684-4d1a-9744-c0827fe8c440
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_contact_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'stg_provider.responsible_individual_email_address'
+		dataType: string
+		lineageTag: b788ad09-e993-49e0-ab41-e68efca9f9b3
+		summarizeBy: none
+		sourceColumn: stg_provider.responsible_individual_email_address
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registrant Name'
+		dataType: string
+		lineageTag: 82983046-b48e-4bb4-bce4-db2dd41a3980
+		summarizeBy: none
+		sourceColumn: Registrant Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Resistrant Role'
+		dataType: string
+		lineageTag: 5124f40f-fe11-4b8c-b18b-bc1f87500cce
+		summarizeBy: none
+		sourceColumn: Resistrant Role
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registrant Email'
+		dataType: string
+		lineageTag: 51b0a398-7131-4873-82f4-0f64688158c1
+		summarizeBy: none
+		sourceColumn: Registrant Email
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registrant Phone'
+		dataType: string
+		lineageTag: fdfcf9be-833d-48c6-b73d-54dc7054eb64
+		summarizeBy: none
+		sourceColumn: Registrant Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column companies_house_registration_reference
+		dataType: string
+		lineageTag: a16ba698-644a-47bb-ad03-c171f1e8d68b
+		summarizeBy: none
+		sourceColumn: companies_house_registration_reference
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 25988cb4-4414-4772-80a8-0e9914f487db
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		lineageTag: f21dba48-35f0-43be-812e-655edb1afb47
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	partition rpt_provider_registry = m
+		mode: import
+		source =
+				let
+				    Source = stg_provider_home,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"address_line_1", "address_line_2", "county", "country"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"home_contact_number", type text}}),
+				    #"Added Prefix" = Table.TransformColumns(#"Changed Type", {{"home_contact_number", each "0" & _, type text}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Prefix",{{"registered_manager_contact_number", type text}}),
+				    #"Added Prefix1" = Table.TransformColumns(#"Changed Type1", {{"registered_manager_contact_number", each "0" & _, type text}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Added Prefix1",{"number_of_registered_beds", "regulatory_body_registration_reference", "created_by", "modified_by", "created_timestamp", "modified_timestamp", "is_spot", "qa_flag", "qa_flag_spot", "export_date"}),
+				    #"Merged Queries" = Table.NestedJoin(#"Removed Columns1", {"provider_id"}, stg_provider, {"provider_id"}, "stg_provider", JoinKind.LeftOuter),
+				    #"Expanded stg_provider" = Table.ExpandTableColumn(#"Merged Queries", "stg_provider", {"provider_name", "provider_status", "provider_email_address", "provider_phone_number", "last_regulating_body_inspection_date", "regulatory_body_registration_reference", "inspection_outcome_rating", "responsible_individual_name", "responsible_individual_contact_number", "responsible_individual_email_address", "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number", "companies_house_registration_reference", "created_by", "created_timestamp"}, {"stg_provider.provider_name", "stg_provider.provider_status", "stg_provider.provider_email_address", "stg_provider.provider_phone_number", "stg_provider.last_regulating_body_inspection_date", "stg_provider.regulatory_body_registration_reference", "stg_provider.inspection_outcome_rating", "stg_provider.responsible_individual_name", "stg_provider.responsible_individual_contact_number", "stg_provider.responsible_individual_email_address", "stg_provider.registrant_name", "stg_provider.registrant_role", "stg_provider.registrant_email_address", "stg_provider.registrant_contact_number", "stg_provider.companies_house_registration_reference", "stg_provider.created_by", "stg_provider.created_timestamp"}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Expanded stg_provider",{{"stg_provider.provider_phone_number", type text}}),
+				    #"Added Prefix2" = Table.TransformColumns(#"Changed Type2", {{"stg_provider.provider_phone_number", each "0" & _, type text}}),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Added Prefix2",{{"stg_provider.responsible_individual_contact_number", type text}}),
+				    #"Added Prefix3" = Table.TransformColumns(#"Changed Type3", {{"stg_provider.responsible_individual_contact_number", each "0" & _, type text}}),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Added Prefix3",{{"stg_provider.registrant_contact_number", type text}}),
+				    #"Added Prefix4" = Table.TransformColumns(#"Changed Type4", {{"stg_provider.registrant_contact_number", each "0" & _, type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Prefix4",{{"home_name", "Home Name"}, {"service_type", "Service Type"}, {"home_contact_number", "Home Phone"}, {"home_email_address", "Home Email"}, {"registered_manager_name", "Registered Manager"}, {"registered_manager_contact_number", "Registered Manager Number"}, {"registered_manager_email_address", "Registered Manager Email"}, {"stg_provider.provider_name", "Provider Name"}, {"stg_provider.provider_email_address", "Provider Email"}, {"stg_provider.provider_phone_number", "Provider Phone"}, {"stg_provider.registrant_name", "Registrant Name"}, {"stg_provider.registrant_role", "Resistrant Role"}, {"stg_provider.registrant_email_address", "Registrant Email"}, {"stg_provider.registrant_contact_number", "Registrant Phone"}, {"stg_provider.provider_status", "Provider Status"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"provider_home_id", "provider_id", "Provider Name", "Provider Status", "Home Name", "Service Type", "town_city", "postcode", "Home Phone", "Home Email", "Registered Manager", "Registered Manager Number", "Registered Manager Email", "last_regulating_body_inspection_date", "inspection_outcome_rating", "Provider Email", "Provider Phone", "stg_provider.last_regulating_body_inspection_date", "stg_provider.regulatory_body_registration_reference", "stg_provider.inspection_outcome_rating", "stg_provider.responsible_individual_name", "stg_provider.responsible_individual_contact_number", "stg_provider.responsible_individual_email_address", "Registrant Name", "Resistrant Role", "Registrant Email", "Registrant Phone", "stg_provider.companies_house_registration_reference", "stg_provider.created_by", "stg_provider.created_timestamp"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Reordered Columns",{{"Provider Name", Text.Trim, type text}, {"Home Name", Text.Trim, type text}, {"Service Type", Text.Trim, type text}, {"town_city", Text.Trim, type text}, {"postcode", Text.Trim, type text}, {"Home Email", Text.Trim, type text}, {"Registered Manager", Text.Trim, type text}, {"Registered Manager Email", Text.Trim, type text}, {"Provider Email", Text.Trim, type text}, {"Registrant Name", Text.Trim, type text}, {"Resistrant Role", Text.Trim, type text}, {"Registrant Email", Text.Trim, type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Trimmed Text",null,"Not Supplied",Replacer.ReplaceValue,{"Home Phone", "Home Email", "Registered Manager Number", "Registered Manager Email", "Provider Email", "Provider Phone", "Registrant Email", "Registrant Phone"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","","Not Supplied",Replacer.ReplaceValue,{"Home Phone", "Home Email", "Registered Manager Number", "Registered Manager Email", "Provider Email", "Provider Phone", "Registrant Email", "Registrant Phone"}),
+				    #"Sorted Rows" = Table.Sort(#"Replaced Value1",{{"Provider Name", Order.Ascending}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows", {"provider_home_id"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Duplicates",{{"postcode", "Postcode"}, {"town_city", "Town/City"}, {"stg_provider.companies_house_registration_reference", "companies_house_registration_reference"}, {"stg_provider.created_by", "created_by"}, {"stg_provider.created_timestamp", "created_timestamp"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,173 @@
+table 'bronze referral_provider'
+	isHidden
+	lineageTag: 52ed9e33-246b-4b97-9f71-e0a3bb975ab2
+
+	column referral_provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 2a5feb80-c71e-4e8d-b6a2-2555b6f4733a
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b8ca8ab1-aed7-453e-8a4f-aa30457f26c6
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 16c974b1-6c45-48a9-89ed-0367312ba532
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_excluded
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f55d93be-3a37-4ec1-85ba-cfa3a3168f09
+		summarizeBy: none
+		sourceColumn: is_excluded
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_declined
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e233181b-ce7e-4558-b3b1-683e3d318bdd
+		summarizeBy: none
+		sourceColumn: is_declined
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a4a5bf36-101b-4015-963d-87c98ff0fe18
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 053a78c2-93e0-4f6b-957c-02618e06f5de
+		summarizeBy: none
+		sourceColumn: modified_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0296f249-c125-4c2d-8f2f-9583a07650de
+		summarizeBy: none
+		sourceColumn: created_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 66d42cb1-38ef-4b83-9edc-1baf5c09dad3
+		summarizeBy: none
+		sourceColumn: modified_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_cancelled
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6ebba876-4b41-47af-8523-df148ec5713b
+		summarizeBy: none
+		sourceColumn: is_cancelled
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_closed
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8da307d7-e5bf-49c4-974b-b04e7273db18
+		summarizeBy: none
+		sourceColumn: is_closed
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e5465f3e-8ccd-415d-aa18-266a027cbc4d
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f03fd396-813c-424a-8a20-01e0a63fd3de
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_provider' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_provider = Source{[Schema="bronze",Item="referral_provider"]}[Data]
+				in
+				    bronze_referral_provider
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

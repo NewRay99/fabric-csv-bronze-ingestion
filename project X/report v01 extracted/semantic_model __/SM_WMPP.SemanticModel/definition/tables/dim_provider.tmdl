@@ -1,0 +1,169 @@
+table dim_provider
+	lineageTag: 358475f6-cc2e-4a3c-a4a7-93f8db93b750
+
+	column provider_id
+		dataType: string
+		lineageTag: 49b7bda5-ab55-4f63-ac4c-6cfe2fafc41d
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column holding_company_id
+		dataType: string
+		lineageTag: 5ef14f34-97ab-42ec-a4f4-7312ec45b932
+		summarizeBy: none
+		sourceColumn: holding_company_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_name
+		dataType: string
+		lineageTag: 8836495f-fed8-42a3-b77f-c5950583653d
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column town_city
+		dataType: string
+		lineageTag: 91227bbb-7216-4a06-95e4-d9773dce0e6f
+		summarizeBy: none
+		sourceColumn: town_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column county
+		dataType: string
+		lineageTag: 969c520c-3708-4de7-9218-bdb6153fd8da
+		summarizeBy: none
+		sourceColumn: county
+
+		annotation SummarizationSetBy = Automatic
+
+	column postcode
+		dataType: string
+		lineageTag: 63cc078d-5dbb-4f8d-9e9f-7181b0dbbc44
+		summarizeBy: none
+		sourceColumn: postcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_status
+		dataType: string
+		lineageTag: a23ad82d-1f92-4e2c-9e57-26f8a698649e
+		summarizeBy: none
+		sourceColumn: provider_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_regulating_body_inspection_date
+		dataType: string
+		lineageTag: b2c2adf8-19e1-4d64-9a75-ff3c661e27ef
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column inspection_outcome_rating
+		dataType: string
+		lineageTag: 82a64d5f-0c98-4bbb-8fdb-0de1ed9f13a4
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		lineageTag: 62601099-307e-4fe8-9612-f578ad06b328
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9ffae6b0-210a-4cf8-a900-7e4f920f147a
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 80a5a762-8d6d-42dd-b0fb-a6f24b399f0e
+			defaultHierarchy: LocalDateTable_890337fe-8ea3-4060-a30b-2e84e230ab08.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column company_name
+		dataType: string
+		lineageTag: 045cb582-10ae-45ca-897c-728db3ed98d6
+		summarizeBy: none
+		sourceColumn: company_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 9db963e2-ffac-4449-9a88-101ed3f3b1fe
+		summarizeBy: sum
+		sourceColumn: provider_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Type (Unified)' = ```
+			
+			VAR HasFrameworkFostering =
+			    CALCULATE(
+			        COUNTROWS(dim_provider_framework),
+			        dim_framework[placement_type] = "Fostering"
+			    )
+			VAR HasResidential =
+			    CALCULATE(
+			        COUNTROWS(dim_provider_home),
+			        dim_provider_home[service_type] = "PLCM-REST"
+			    )
+			VAR HasSupported =
+			    CALCULATE(
+			        COUNTROWS(dim_provider_home),
+			        dim_provider_home[service_type] = "PLCM-SUPA"
+			    )
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    HasFrameworkFostering > 0, "Fostering",
+			    HasResidential > 0, "Residential",
+			    HasSupported > 0, "Supported Accommodation",
+			    "Unclassified"
+			)
+			
+			```
+		lineageTag: 51ba8a39-76f0-4916-8e96-9a1a8dde66a9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_provider = m
+		mode: import
+		source =
+				let
+				    Source = stg_provider,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"holding_company_id"}, stg_holding_company, {"holding_company_id"}, "stg_holding_company", JoinKind.LeftOuter),
+				    #"Expanded stg_holding_company" = Table.ExpandTableColumn(#"Merged Queries", "stg_holding_company", {"company_name"}, {"company_name"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Expanded stg_holding_company", each true),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows",{"address_line_1", "address_line_2", "country", "provider_email_address", "provider_phone_number", "regulatory_body_registration_reference", "responsible_individual_name", "responsible_individual_contact_number", "responsible_individual_email_address", "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number", "companies_house_registration_reference", "national_contract_external_link", "created_by", "modified_by", "modified_timestamp", "qa_flag", "qa_flag_fostering_spot", "qa_flag_sup_acc", "qa_flag_resi"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Removed Columns", each true),
+				    #"Added Index" = Table.AddIndexColumn(#"Filtered Rows1", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "provider_sk"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"provider_id"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Duplicates",{{"provider_name", "provider_name"}, {"town_city", "town_city"}, {"postcode", "postcode"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

@@ -1,0 +1,111 @@
+table 'bronze additional_fee'
+	isHidden
+	lineageTag: 6f426ead-d992-49a0-89fd-515fd8b2510e
+
+	column additional_fee_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9c24a6e8-0583-4615-a4f5-8e926fb73a9c
+		summarizeBy: none
+		sourceColumn: additional_fee_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 201b9060-c82e-4a5f-9228-f8780050ff6d
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fee_title
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1aa630a2-d0ae-4e5b-9c00-23354b23dd51
+		summarizeBy: none
+		sourceColumn: fee_title
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column number_of_hours
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9aa8b2a9-2ec4-4da6-8923-b9855f464e42
+		summarizeBy: none
+		sourceColumn: number_of_hours
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column other_fee_title
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 108d0743-e35a-4784-97c0-2d6f1fa29b9b
+		summarizeBy: none
+		sourceColumn: other_fee_title
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column fee_frequency
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 00b5258e-b656-4b95-9c55-a422cd29bf8f
+		summarizeBy: none
+		sourceColumn: fee_frequency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column rate
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 18c1a44d-5282-455c-9cff-101eeac51ca0
+		summarizeBy: none
+		sourceColumn: rate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 063c94cf-fb48-429e-aa8d-e6b70265b76f
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze additional_fee' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_additional_fee = Source{[Schema="bronze",Item="additional_fee"]}[Data]
+				in
+				    bronze_additional_fee
+
+	changedProperty = IsHidden
+

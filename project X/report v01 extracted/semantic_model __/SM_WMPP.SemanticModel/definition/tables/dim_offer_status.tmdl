@@ -1,0 +1,77 @@
+table dim_offer_status
+	lineageTag: 224d9222-55de-4c1c-ad04-539f9ea20868
+
+	column offer_status
+		dataType: string
+		lineageTag: 7b7ab8a8-d6bd-40e5-ab98-244d709508e3
+		summarizeBy: none
+		sourceColumn: offer_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_status_label
+		dataType: string
+		lineageTag: 18824417-0fd9-453d-8294-07a78508224e
+		summarizeBy: none
+		sourceColumn: offer_status_label
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_active_offer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: ce855631-6357-44d5-a8f0-bf831fcc1232
+		summarizeBy: none
+		sourceColumn: is_active_offer
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_accepted
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 88596358-3c18-4c94-8da8-23f29b07083f
+		summarizeBy: none
+		sourceColumn: is_accepted
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_terminal
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 34567188-cc57-4602-bf00-ae3d8d856b47
+		summarizeBy: none
+		sourceColumn: is_terminal
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: bd3f5348-e137-45c6-9e68-f38906e6ec51
+		summarizeBy: none
+		sourceColumn: offer_status_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_offer_status = m
+		mode: import
+		source =
+				let
+				    Source = stg_offer,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"offer_status"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"offer_status", "offer_status_code"}}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Renamed Columns", "offer_status_label", each if [offer_status_code] = "OFFER_SUCCESSFUL" then "Accepted" else if [offer_status_code] = "DRAFT" then "Draft" else if [offer_status_code] = "OFFER_MADE" then "Pending" else if [offer_status_code] = "OFFER_UNSUCCESSFUL" then "Unsuccessful" else if [offer_status_code] = "OFFER_WITHDRAWN" then "Withdrawn" else null),
+				    #"Added Conditional Column1" = Table.AddColumn(#"Added Conditional Column", "is_active_offer", each if [offer_status_code] = "OFFER_MADE" then true else false),
+				    #"Added Conditional Column2" = Table.AddColumn(#"Added Conditional Column1", "is_accepted", each if [offer_status_code] = "OFFER_SUCCESSFUL" then true else false),
+				    #"Added Conditional Column3" = Table.AddColumn(#"Added Conditional Column2", "is_terminal", each if [offer_status_code] = "OFFER_UNSUCCESSFUL" then true else if [offer_status_code] = "OFFER_WITHDRAWN" then true else false),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Added Conditional Column3",{{"is_active_offer", type logical}, {"is_accepted", type logical}, {"is_terminal", type logical}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Index",{{"Index", "offer_status_sk"}, {"offer_status_code", "offer_status"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "1f33996970651e846183",
+  "displayName": "OFFERS OVERVIEW",
+  "displayOption": "FitToPage",
+  "height": 1250,
+  "width": 1500,
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "ThemeDataColor": {
+                    "ColorId": 0,
+                    "Percent": 0
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "73D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "width": {
+            "expr": {
+              "Literal": {
+                "Value": "182L"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "213319067504a6a67539",
+      "target": "6605cc45a936d950a597",
+      "type": "DataFilter"
+    },
+    {
+      "source": "213319067504a6a67539",
+      "target": "d7101bd5235d4c9c1919",
+      "type": "DataFilter"
+    }
+  ]
+}

@@ -1,0 +1,1085 @@
+table 'bronze ipa'
+	isHidden
+	lineageTag: 92260b10-e82d-4792-a649-37a0fd827171
+
+	column ipa_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a8c901a1-9971-40b5-9445-622ca06542da
+		summarizeBy: none
+		sourceColumn: ipa_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0de4c935-3d8c-4a21-8aa8-d9ba9db6008a
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b6fb6de6-e781-4e91-9bb5-2ac710b058e9
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e7c59d9e-92c6-421a-a7b4-3aed2f03954d
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 233a443b-e4db-4f26-9384-a310391f6f1e
+		summarizeBy: none
+		sourceColumn: la_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 32ace21b-9131-4b36-9ca4-ef91cba4cf0f
+		summarizeBy: none
+		sourceColumn: la_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7c827361-6a09-4efa-912c-103fde65985d
+		summarizeBy: none
+		sourceColumn: la_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1bc86e08-43c4-4213-8986-bfc0b663d87d
+		summarizeBy: none
+		sourceColumn: la_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8ed6d3a1-e109-4b37-b2c8-8cfb5247d9a3
+		summarizeBy: none
+		sourceColumn: la_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c947b6ce-0625-41e8-bb56-2bfa77833054
+		summarizeBy: none
+		sourceColumn: la_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_phone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 291d21ce-8cb5-4609-a8f2-ea2111d59c37
+		summarizeBy: none
+		sourceColumn: la_phone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7ad28685-8365-4cba-bb30-9d34f6247718
+		summarizeBy: none
+		sourceColumn: la_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0cb432f0-7c0c-40e9-94a3-93b888a57f10
+		summarizeBy: none
+		sourceColumn: provider_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f4c38e3a-11c0-46c7-ac56-1cf0065721d4
+		summarizeBy: none
+		sourceColumn: provider_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: fd549f15-d703-4693-98ab-2d1e32ea3c96
+		summarizeBy: none
+		sourceColumn: provider_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 47df4ad0-96cc-4bff-9595-f1d6dede12d0
+		summarizeBy: none
+		sourceColumn: provider_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1c5e9358-f384-4d1e-bdd8-f74d3ff4c34d
+		summarizeBy: none
+		sourceColumn: provider_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e546d95f-9644-4d36-be0c-91c3127f753a
+		summarizeBy: none
+		sourceColumn: provider_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_phone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d4a8c394-857a-445b-a801-a96b77ed4db3
+		summarizeBy: none
+		sourceColumn: provider_phone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a670989e-3f31-4ef9-9351-32cf58b2344d
+		summarizeBy: none
+		sourceColumn: provider_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_company_registration_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bd540cda-a618-40ca-b8cb-08b3c66f7a35
+		summarizeBy: none
+		sourceColumn: provider_company_registration_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_framework_or_spot
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f8198c0f-975d-4f98-80e9-d5437a302ace
+		summarizeBy: none
+		sourceColumn: placement_framework_or_spot
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_service_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 4442a31b-e8e9-4afd-8f03-41cda369d06f
+		summarizeBy: none
+		sourceColumn: placement_service_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_category
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b50df6b2-eda5-4b83-9601-607218348b33
+		summarizeBy: none
+		sourceColumn: placement_category
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_admission_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0907eccb-8991-4e11-85a8-af79f13190a2
+		summarizeBy: none
+		sourceColumn: placement_admission_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d690a41f-0a6e-4147-bcc7-2283583a167b
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type_other_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c131fa71-8ff1-4c5f-b58f-e6a87e188a7f
+		summarizeBy: none
+		sourceColumn: placement_type_other_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_needs_summary
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 47135b7a-bde9-43f6-a21b-de5d26781b6c
+		summarizeBy: none
+		sourceColumn: placement_needs_summary
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 4c8819d0-faaf-475b-beed-74ccd1b75e04
+		summarizeBy: none
+		sourceColumn: home_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0e081419-94f5-464a-95b1-c8f419cb0cf0
+		summarizeBy: none
+		sourceColumn: home_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f57dc17d-0d6e-4922-a047-e747f73adf7d
+		summarizeBy: none
+		sourceColumn: home_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 75b5ab15-3d95-40ce-9cbf-3a39156d29a3
+		summarizeBy: none
+		sourceColumn: home_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d0be97d6-9fd1-4015-8788-f939bd6f9e66
+		summarizeBy: none
+		sourceColumn: home_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 663b74d6-6e5c-42f7-95e2-c1ebee6cebf6
+		summarizeBy: none
+		sourceColumn: home_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_phone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 47a87f2e-8077-4347-b522-a0019fe61ae3
+		summarizeBy: none
+		sourceColumn: home_phone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bd54af2d-f931-427c-bbcb-5793f981206e
+		summarizeBy: none
+		sourceColumn: home_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7f065fd9-e488-4a34-90f9-da4641b56538
+		summarizeBy: none
+		sourceColumn: registered_manager_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_phone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 238774b7-f341-45f6-844d-bfcebfe8a914
+		summarizeBy: none
+		sourceColumn: registered_manager_phone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: aa6e1a36-81a8-42d9-a299-4e54527c66dd
+		summarizeBy: none
+		sourceColumn: registered_manager_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_registration_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: cece4636-0468-40b2-90f7-c65a598f9bac
+		summarizeBy: none
+		sourceColumn: registered_manager_registration_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_urn
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 50837d48-aabf-4a94-8141-ef40c90cbc68
+		summarizeBy: none
+		sourceColumn: provider_urn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_included_with_referral
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0b0d12e2-5ae8-46cb-a8d2-3fbfb60f17ac
+		summarizeBy: none
+		sourceColumn: education_included_with_referral
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_provision_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 98b0ce6e-f27e-4244-b97c-fda177b7cfcf
+		summarizeBy: none
+		sourceColumn: education_provision_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 264586b3-f1fd-4722-bf85-87db30467441
+		summarizeBy: none
+		sourceColumn: education_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f56b0ffe-9095-41c1-ab16-46b5f09780e1
+		summarizeBy: none
+		sourceColumn: education_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 61e6cca2-81f2-488c-8949-d97aee97f395
+		summarizeBy: none
+		sourceColumn: education_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 294b30f0-82b7-452b-a2d7-33cb71937ea6
+		summarizeBy: none
+		sourceColumn: education_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 230bb0ea-595b-4608-9425-d559b3f60e36
+		summarizeBy: none
+		sourceColumn: education_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_location
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9dd00709-d07c-4385-ae8b-11db381ef96a
+		summarizeBy: none
+		sourceColumn: education_location
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_length_weeks
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: cda2262a-a7c1-415b-831f-533ebf32a3ad
+		summarizeBy: none
+		sourceColumn: education_length_weeks
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_provision_cost
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ddb7c15b-06b1-40b4-95ae-99995e522fa4
+		summarizeBy: none
+		sourceColumn: education_provision_cost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column costs_total_weekly_fee
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b65435fc-0f96-4e01-bc0a-d74879e01513
+		summarizeBy: none
+		sourceColumn: costs_total_weekly_fee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column costs_total_core_costs_weekly_fee
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 2141f2b9-d373-45a5-bc7e-d5ce00576961
+		summarizeBy: none
+		sourceColumn: costs_total_core_costs_weekly_fee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column core_cost_weekly_fee
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 86a917fb-b124-4b5d-bf33-17c776080ab0
+		summarizeBy: none
+		sourceColumn: core_cost_weekly_fee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column payment_method
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ced5c8cc-c496-44b2-89c3-20a7f18f2ab5
+		summarizeBy: none
+		sourceColumn: payment_method
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_recipient_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a35838ca-e6cc-4fa7-9364-069c72678ccb
+		summarizeBy: none
+		sourceColumn: invoice_recipient_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_recipient_team
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 46e4be37-ad50-4748-9ede-21bdda3d1253
+		summarizeBy: none
+		sourceColumn: invoice_recipient_team
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_recipient_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 29c544f6-3ad1-48b3-873e-eaafd3712c08
+		summarizeBy: none
+		sourceColumn: invoice_recipient_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9c180672-7aeb-412f-9fc0-6810674ef7dd
+		summarizeBy: none
+		sourceColumn: invoice_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 4196f2aa-5043-4b5c-bfe6-2e1b46953804
+		summarizeBy: none
+		sourceColumn: invoice_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 44e6bf90-244e-4850-9d10-665ec4dd9916
+		summarizeBy: none
+		sourceColumn: invoice_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 713e26c7-d7a3-498a-ad2a-54646024d1b9
+		summarizeBy: none
+		sourceColumn: invoice_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoice_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 858a70d1-1c44-4061-a8ef-53f2a0690b63
+		summarizeBy: none
+		sourceColumn: invoice_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_contact_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ad9cc5f8-d5ba-430d-9c8d-e1b1aaf729d1
+		summarizeBy: none
+		sourceColumn: schedule_contact_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_contact_phone
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 4f4a42dd-be16-472c-adaa-6dea69872af2
+		summarizeBy: none
+		sourceColumn: schedule_contact_phone
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_contact_email
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 2c505f6f-28ef-42f9-85ad-b4732bd954ea
+		summarizeBy: none
+		sourceColumn: schedule_contact_email
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_addr_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 25214667-9ab4-454c-84fc-bdb50589390b
+		summarizeBy: none
+		sourceColumn: schedule_addr_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_addr_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0a7140a3-e8b0-4032-b5ff-1530da942e8e
+		summarizeBy: none
+		sourceColumn: schedule_addr_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_addr_county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6469a1fa-6b26-4a2a-8b6e-d27e4f63f960
+		summarizeBy: none
+		sourceColumn: schedule_addr_county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_addr_town
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0b1696b4-cfe5-424c-a687-bb6eeb1723f6
+		summarizeBy: none
+		sourceColumn: schedule_addr_town
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_addr_postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 47632bbc-1f3a-4b83-bf5d-0a6d89b8c7c9
+		summarizeBy: none
+		sourceColumn: schedule_addr_postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column schedule_do_not_send_invoices_note
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c8345e0d-cc84-459a-ac5f-c71ee28a9503
+		summarizeBy: none
+		sourceColumn: schedule_do_not_send_invoices_note
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 322ee5c6-0c8d-4a61-99e8-7449f1676bff
+		summarizeBy: none
+		sourceColumn: status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_local_authority
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 039412bb-2b44-44c7-a023-5245bf09c3a4
+		summarizeBy: none
+		sourceColumn: signed_by_local_authority
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_datetime_for_local_authority
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9141d120-61dd-494c-9df1-06fa704eba36
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_local_authority
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_provider
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a5b8f710-c278-4adf-8f5f-ead2e28e1b86
+		summarizeBy: none
+		sourceColumn: signed_by_provider
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_datetime_for_provider
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: de80f85e-9d30-4b56-aa81-253bead60981
+		summarizeBy: none
+		sourceColumn: signed_datetime_for_provider
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_local_authority_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b4c5fd1b-b1c0-4198-b782-946261b2f650
+		summarizeBy: none
+		sourceColumn: signed_by_local_authority_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column signed_by_provider_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0b030fe7-d345-4a64-b129-63f83d76b1b7
+		summarizeBy: none
+		sourceColumn: signed_by_provider_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column can_sign
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7dc11b28-bd8e-4686-b628-ac12917eb6ef
+		summarizeBy: none
+		sourceColumn: can_sign
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column can_sign_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a2501a26-cc38-435f-8d82-a7acadbe0b2a
+		summarizeBy: none
+		sourceColumn: can_sign_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column can_sign_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e97e579c-b02c-40fd-8b48-fe9cc2846e5d
+		summarizeBy: none
+		sourceColumn: can_sign_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column closed
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: beb37dc6-1006-49f2-b64f-c0b36a2d2350
+		summarizeBy: none
+		sourceColumn: closed
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column closed_datetime
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a725d6b3-d5b2-4f9c-9f2d-3096e23d06f4
+		summarizeBy: none
+		sourceColumn: closed_datetime
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_datetime
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 61366ee6-7251-4af5-80cb-c4896187663a
+		summarizeBy: none
+		sourceColumn: created_datetime
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 640dd7d1-ad11-4f27-b483-84599c57a79e
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_datetime
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 61ffa514-9e71-4731-851c-dff211753b9b
+		summarizeBy: none
+		sourceColumn: updated_datetime
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column updated_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 01fd06ca-bb22-4a5f-ae4c-5b5154c7c574
+		summarizeBy: none
+		sourceColumn: updated_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c6237f74-bb53-4d85-94ec-0c37db25b175
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze ipa' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_ipa = Source{[Schema="bronze",Item="ipa"]}[Data]
+				in
+				    bronze_ipa
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

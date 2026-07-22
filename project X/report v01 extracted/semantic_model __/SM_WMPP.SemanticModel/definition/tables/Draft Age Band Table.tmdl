@@ -1,0 +1,38 @@
+table 'Draft Age Band Table'
+	lineageTag: d7a65658-3dce-4b78-a567-3e8da107cdc5
+
+	column 'Draft Age Band'
+		lineageTag: a384f578-ed81-45cd-9643-2396a688a70c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Draft Age Band]
+		sortByColumn: 'Sort Order'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort Order'
+		formatString: 0
+		lineageTag: e0d82512-4b72-494b-ae19-27e826aa1d46
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Sort Order]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Draft Age Band Table' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Draft Age Band", STRING,
+				    "Sort Order", INTEGER,
+				    {
+				        {"0-7 days", 1},
+				        {"8-14 days", 2},
+				        {"15-30 days", 3},
+				        {"31+ days", 4}
+				    }
+				)
+
+	annotation PBI_Id = 2abfa912c9da4ae4bee2255a70405c25
+

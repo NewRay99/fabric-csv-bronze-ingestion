@@ -1,7 +1,9 @@
 # Measures Comparison Checklist — PBI Report vs Functional Specification
 
 **Project:** WMPP (West Midlands Placement Portal)  
-**Report:** WMPP PILOT DASHBOARD (V13.1)  
+**Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
+**Semantic model:** `SM_WMPP` — 95 measures in the current TMDL
+**Current catalogue:** [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md)
 **Date:** 10 July 2026  
 **Prepared by:** Hermes Agent  
 
@@ -9,7 +11,7 @@
 
 ## Overview
 
-This checklist compares the **90 measures** found in the Power BI semantic model (`_Measures.tmdl`) against the **functional specification** (`functional spec.md` / `am_functional_specification.csv`) and the **KPI Logic Document** (`WMPP_Dashboard_Overview_and_KPI_Logic_Final_Pack.md`).
+This checklist is retained as a comparison of the legacy functional-specification mapping. The v01 semantic model is the current source of truth and contains **95 measures**, not the older 90-measure inventory. Use the generated catalogue linked above for the exact current names and display folders.
 
 Each measure is checked for:
 - ✅ **Implemented** — exists in the PBI model AND maps to a functional requirement

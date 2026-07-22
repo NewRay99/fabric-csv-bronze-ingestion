@@ -1,0 +1,77 @@
+table 'bronze provider_framework'
+	isHidden
+	lineageTag: 1f6afcb2-79ed-45f5-bb79-40f37f600071
+
+	column provider_framework_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 036c3059-41eb-48ac-b90b-486d34942e29
+		summarizeBy: none
+		sourceColumn: provider_framework_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3902fbb3-3f3a-4f18-a5fe-14636ce7af37
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_code
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8396de11-33ae-435b-b124-9c7d54f90fbd
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column qa_flag
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3bb60f0a-e9dc-455d-9e28-adf24ccf8343
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b9b87767-c2ef-4535-8b18-aaecfe0579dd
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze provider_framework' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_provider_framework = Source{[Schema="bronze",Item="provider_framework"]}[Data]
+				in
+				    bronze_provider_framework
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

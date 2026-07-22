@@ -1,0 +1,381 @@
+expression stg_additional_fee =
+		let
+		    Source = #"bronze additional_fee",
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"additional_fee_id", type text}, {"offer_id", type text}, {"fee_title", type text}, {"number_of_hours", type text}, {"other_fee_title", type text}, {"fee_frequency", type text}, {"rate", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 15d263e9-048d-46fb-9ec9-f70434340003
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_framework =
+		let
+		    Source = #"bronze framework",
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"framework_code", type text}, {"framework_name", type text}, {"start_date", type text}, {"end_date", type text}, {"placement_type", type text}, {"export_date", type text}}),
+		    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"start_date", type date}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type1", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 7e07d241-8836-48aa-8555-956ba61cdacc
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_framework_category =
+		let
+		    Source = #"bronze framework_category",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(Source, {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: af449d57-1bfb-49d3-a205-23d23fc73e08
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_holding_company =
+		let
+		    Source = #"bronze holding_company",
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"holding_company_id", type text}, {"company_name", type text}, {"address_line_1", type text}, {"address_line_2", type text}, {"town_city", type text}, {"county", type text}, {"postcode", type text}, {"country", type any}, {"company_phone_number", Int64.Type}, {"company_email_address", type text}, {"contact_person_name", type any}, {"contact_person_phone_number", type any}, {"contact_person_email_address", type any}, {"companies_house_details", type text}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 56a73ac9-4389-4538-a935-6bc841837a7b
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_ipa =
+		let
+		    Source = #"bronze ipa",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(Source, {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: c4cc7041-d90e-4f8a-af87-a2106e30529b
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_ipa_child =
+		let
+		    Source = #"bronze ipa_child",
+		    #"Changed Type1" = Table.TransformColumnTypes(Source,{{"child_date_of_birth", type date}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type1", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 7fdbf7b0-76a3-47f7-b6f7-ceb024b88828
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_ipa_child_support_needs =
+		let
+		    Source = #"bronze ipa_child_support_needs",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(Source, {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: a36e7869-2e83-4e46-b61a-d7d23f62ddf2
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_offer =
+		let
+		    Source = #"bronze offer",
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"offer_id", type text}, {"referral_provider_id", type text}, {"id_number", type text},  {"core_weekly_fee", type text}, {"includes_education", type text}, {"child_summary_needs", type text}, {"offer_date", type text}, {"last_modified_date", type text}, {"decline_reason", type text}, {"decline_reason_other", type text}, {"can_edit_offer", type text}, {"withdraw_reason", type text}, {"withdraw_reason_other", type text}, {"offer_status", type text}, {"offer_type", type text}, {"provider_home_id", type text}, {"category", type text}, {"category_code", type text}, {"education_weekly_fee", type text}, {"export_date", type text}, {"estimated_start_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: c2102b34-3a3d-4c5e-942a-276648b8651d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_offer_updates =
+		let
+		    Source = #"bronze offer_updates",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(Source, {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: cda526ad-08fa-4b53-a1b4-7b0770c1a99a
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_offer_view_updates =
+		let
+		    Source = #"bronze offer_view_history",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(Source, {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 6efe48c3-b541-40eb-87f3-36db45f63700
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider =
+		let
+		    Source = #"bronze provider",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"bronze provider", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 79780646-574c-46d5-b792-2a33e87cec80
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_education_provision =
+		let
+		    Source = #"bronze provider_education_provision",
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"bronze provider_education_provision", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 7fb2cc05-ab0a-4899-b074-4c36cbe11e40
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_framework =
+		let
+		    Source = #"bronze provider_framework",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_framework",{{"provider_framework_id", Int64.Type}, {"provider_id", type text}, {"framework_code", type text}, {"qa_flag", type logical}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: dd0c8167-0013-486d-b85d-aac93db3fd5d
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_home =
+		let
+		    Source = #"bronze provider_home",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_home",{{"provider_home_id", type text}, {"provider_id", type text}, {"service_type", type text}, {"home_name", type text}, {"address_line_1", type text}, {"address_line_2", type text}, {"town_city", type text}, {"county", type text}, {"postcode", type text}, {"country", type any}, {"home_contact_number", Int64.Type}, {"home_email_address", type text}, {"registered_manager_name", type text}, {"registered_manager_contact_number", Int64.Type}, {"registered_manager_email_address", type text}, {"number_of_registered_beds", Int64.Type}, {"regulatory_body_registration_reference", type text}, {"last_regulating_body_inspection_date", type date}, {"inspection_outcome_rating", type text}, {"created_by", type text}, {"modified_by", type any}, {"created_timestamp", type datetime}, {"modified_timestamp", type datetime}, {"is_spot", type logical}, {"qa_flag", type logical}, {"qa_flag_spot", type logical}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 537d829b-a5c1-4de3-8341-117f41c466a3
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_home_age =
+		let
+		    Source = #"bronze provider_home_age",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_home_age",{{"provider_home_age_id", Int64.Type}, {"provider_home_id", type text}, {"max_age", Int64.Type}, {"min_age", Int64.Type}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 941afb4f-a476-46b9-8372-8b7359a0dcfb
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_home_category =
+		let
+		    Source = #"bronze provider_home_category",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_home_category",{{"provider_home_category_id", Int64.Type}, {"framework_category_id", Int64.Type}, {"provider_home_id", type text}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: fc53cdef-94ff-4226-b40a-e786adb87985
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_home_gender =
+		let
+		    Source = #"bronze provider_home_gender",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_home_gender",{{"provider_home_gender_id", Int64.Type}, {"provider_home_id", type text}, {"supported_gender", type any}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 864b7b81-37d1-403d-a291-147c7b7a8271
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_home_spot_category =
+		let
+		    Source = #"bronze provider_home_spot_category",
+		    #"Changed Type" = Table.TransformColumnTypes( #"bronze provider_home_spot_category",{{"provider_home_spot_category_id", Int64.Type}, {"provider_home_id", type text}, {"spot_category_code", type text}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 42c3be7f-8fe9-4e96-bf1a-0147553d4d16
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_sic_codes =
+		let
+		    Source = #"bronze provider_sic_codes",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_sic_codes",{{"provider_id", type text}, {"sic_code", Int64.Type}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 00fc2ea2-19b6-4be4-8fd7-80148b94b2c1
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_provider_submission_docs =
+		let
+		    Source = #"bronze provider_submission_docs",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze provider_submission_docs",{{"document_id", type text}, {"submission_id", type text}, {"s3_file_metadata_id", type text}, {"document_name", type text}, {"document_type", type text}, {"expiry_date", type date}, {"last_updated", type date}, {"next_review_date", type date}, {"service_type", type text}, {"home_id", type text}, {"start_date", type date}, {"export_date", type date}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 2d07982f-835a-44a6-928f-862902f895bf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral =
+		let
+		    Source = #"bronze referral",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral",{{"referral_id", type text}, {"placement_type", type text}, {"required_start_date", type text}, {"response_required_by_date", type text}, {"is_sibling_placement", type text}, {"sibling_count", type text}, {"is_parent_child_placement", type text}, {"has_location_preferrence", type text}, {"location_preference_details", type text}, {"has_location_restriction", type text}, {"location_restriction_details", type text}, {"additional_information", type text}, {"referral_created_date", type text}, {"referral_modified_date", type text}, {"is_spot", type text}, {"referral_created_by", type text}, {"referral_updated_by", type text}, {"referral_status", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 85408035-33eb-4e48-82d1-9b6ba38b0da7
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_category =
+		let
+		    Source = #"bronze referral_category",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_category",{{"referral_id", type text}, {"framework_category_id", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 3be3bc9d-39d9-4db0-8d60-73e7e5082827
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_person =
+		let
+		    Source = #"bronze referral_person",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_person",{{"person_id", type text}, {"referral_id", type text}, {"initials", type text}, {"age_value", type text}, {"age_date_unit", type text}, {"has_restrictions", type text}, {"restriction_details", type text}, {"source_reference_id", type text}, {"gender", type text}, {"gender_other", type text}, {"ethnicity", type text}, {"ethnicity_other", type text}, {"religion", type text}, {"religion_other", type text}, {"preferred_language", type text}, {"preferred_language_other", type text}, {"child_index", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 72a088e7-a5dc-4e37-8784-ac71ee4b6770
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_person_support_needs =
+		let
+		    Source = #"bronze referral_person_support_needs",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_person_support_needs",{{"person_id", type text}, {"support_need", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: c9def163-9eb9-4da0-93c1-a1c2eccb90e4
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_provider =
+		let
+		    Source = #"bronze referral_provider",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_provider",{{"referral_provider_id", type text}, {"referral_id", type text}, {"provider_id", type text}, {"is_excluded", type text}, {"is_declined", type text}, {"created_by", type text}, {"modified_by", type text}, {"created_date", type text}, {"modified_date", type text}, {"is_cancelled", type text}, {"is_closed", type text}, {"is_spot", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: c0a7e1c9-9ab8-4214-b5c1-324686d735ba
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_provider_cancel_reason =
+		let
+		    Source = #"bronze referral_provider_cancel_reason",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_provider_cancel_reason",{{"cancel_reason_id", type text}, {"referral_provider_id", type text}, {"cancel_reason", type text}, {"cancel_reason_other_text", type text}, {"created_by", type text}, {"created_date", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB"),
+		    #"Sorted Rows" = Table.Sort(#"Changed Type with Locale",{{"created_date", Order.Descending}}),
+		    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_provider_id"}, {{"All Rows", each _, type table [cancel_reason_id=nullable text, referral_provider_id=nullable text, cancel_reason=nullable text, cancel_reason_other_text=nullable text, created_by=nullable text, created_date=nullable text, export_date=nullable date]}}),
+		    #"Added Custom1" = Table.AddColumn(#"Grouped Rows", "Latest Record", each Table.First([All Rows])),
+		    #"Expanded Latest Record" = Table.ExpandRecordColumn(#"Added Custom1", "Latest Record", {"cancel_reason", "cancel_reason_other_text", "created_date"}, {"cancel_reason", "cancel_reason_other_text", "created_date"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded Latest Record",{"All Rows"})
+		in
+		    #"Removed Columns"
+	lineageTag: db8f0d96-f703-4dc9-96e8-5f5f2e2b7f6a
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_provider_decline_reason =
+		let
+		    Source = #"bronze referral_provider_decline_reason",
+		    #"Changed Type" = Table.TransformColumnTypes( #"bronze referral_provider_decline_reason",{{"decline_reason_id", type text}, {"referral_provider_id", type text}, {"decline_reason", type text}, {"decline_reason_other_text", type text}, {"created_by", type text}, {"created_date", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB"),
+		    #"Sorted Rows" = Table.Sort(#"Changed Type with Locale",{{"created_date", Order.Descending}}),
+		    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_provider_id"}, {{"All Rows", each _, type table [decline_reason_id=nullable text, referral_provider_id=nullable text, decline_reason=nullable text, decline_reason_other_text=nullable text, created_by=nullable text, created_date=nullable text, export_date=nullable date]}}),
+		    #"Added Custom1" = Table.AddColumn(#"Grouped Rows", "Latest Record", each Table.First([All Rows])),
+		    #"Expanded Latest Record" = Table.ExpandRecordColumn(#"Added Custom1", "Latest Record", {"decline_reason", "decline_reason_other_text", "created_date"}, {"decline_reason", "decline_reason_other_text", "created_date"}),
+		    #"Removed Columns" = Table.RemoveColumns(#"Expanded Latest Record",{"All Rows"})
+		in
+		    #"Removed Columns"
+	lineageTag: 03e0f3a2-8542-4ebb-a8c6-f842a0d04855
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_spot_category =
+		let
+		    Source = #"bronze referral_spot_category",
+		    #"Changed Type" = Table.TransformColumnTypes( #"bronze referral_spot_category",{{"referral_spot_category_id", type text}, {"referral_id", type text}, {"spot_category", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 074bed89-5d66-4bab-860e-33fd07ec2c94
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression stg_referral_provider_message =
+		let
+		    Source = #"bronze referral_provider_message",
+		    #"Changed Type" = Table.TransformColumnTypes(#"bronze referral_provider_message",{{"message_id", type text}, {"referral_provider_id", type text}, {"message_read_by", type text}, {"message_read_timestamp", type text}, {"message_text", type text}, {"created_timestamp", type text}, {"created_by", type text}, {"export_date", type text}}),
+		    #"Changed Type with Locale" = Table.TransformColumnTypes(#"Changed Type", {{"export_date", type date}}, "en-GB")
+		in
+		    #"Changed Type with Locale"
+	lineageTag: 7e3b19f7-b76b-46c0-a170-f66efc652b07
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

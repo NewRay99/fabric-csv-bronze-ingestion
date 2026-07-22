@@ -14,9 +14,9 @@ This folder contains the formal client documentation pack for the WMPP data engi
 |---|----------|-------------|----------|
 | 00 | **README** (this file) | Document index and reading guide | All |
 | 01 | **Client Discovery Questionnaire** | Structured questions for first contact — Azure estate, current architecture, security, compliance, future state | Client SRO, Technical Lead |
-| 02 | **As-Is Assessment Report** | Current state analysis of the PBI report (V13.1), 90 measures, network-drive architecture, coverage gaps | Client SRO, Project Sponsor, Technical Lead |
-| 03 | **Gap Analysis Report** | As-is vs to-be gap analysis — 17 functional gaps, architecture gaps, data quality issues, sprint plan | Client SRO, Product Owner, Technical Lead |
-| 04 | **Proposed Solution & Architecture** | Bronze-silver-gold Fabric lakehouse architecture, data pipeline design, 117 KPIs, security, migration strategy | Client Technical Lead, Architecture Review |
+| 02 | **As-Is Assessment Report** | Current state analysis of the v01 PBI report, 95 measures, network-drive architecture, coverage gaps | Client SRO, Project Sponsor, Technical Lead |
+| 03 | **Gap Analysis Report** | As-is vs to-be gap analysis — functional gaps, architecture gaps, data quality issues, sprint plan | Client SRO, Product Owner, Technical Lead |
+| 04 | **Proposed Solution & Architecture** | Bronze-silver-gold Fabric lakehouse architecture, data pipeline design, proposed KPI expansion, security, migration strategy | Client Technical Lead, Architecture Review |
 | 05 | **HOLD Register** | Assumptions, Constraints, Dependencies, Decisions, Open Items | Client SRO, Technical Lead, Consultant Team |
 | 06 | **Statement of Work** | Formal engagement document — scope, deliverables, timeline, roles, acceptance criteria, commercial terms | Client SRO, Procurement, Legal |
 
@@ -45,12 +45,15 @@ This folder contains the formal client documentation pack for the WMPP data engi
 
 | Metric | Value |
 |--------|-------|
-| Current PBI measures | 90 |
+| Current v01 PBI measures | 95 |
+| Current v01 model tables | 79 |
+| Current v01 model columns | 850 |
+| Current v01 relationships | 48 |
 | Functional requirements (R1–R87) | 87 |
-| Measures implemented correctly | 75 (83%) |
-| Functional gaps identified | 17 (8 high, 6 medium, 3 low) |
-| Duplicate measures | 5 |
-| Proposed total KPIs (after enhancement) | 117 (90 existing + 27 new) |
+| Measures implemented correctly | 75 (legacy comparison — revalidate against v01) |
+| Functional gaps identified | 17 (legacy assessment — revalidate against v01) |
+| Duplicate measures | 5 (legacy assessment — revalidate against v01) |
+| Proposed total KPIs (after enhancement) | 117 (planning target) |
 | QA Officer coverage (current) | 25% — lowest |
 | Finance Officer coverage (current) | 0% — missing entirely |
 | Current data source | Network drive CSV files |
@@ -58,6 +61,8 @@ This folder contains the formal client documentation pack for the WMPP data engi
 | Proposed architecture | Bronze-Silver-Gold (medallion) |
 | Proposed PBI connection | Direct Lake mode |
 | Estimated delivery timeline | 12 weeks (3 phases) |
+
+For the exact v01 measure inventory and `Closed_Date` logic, see [`../brand pack/WMPP_Semantic_Model_Measures.md`](../brand%20pack/WMPP_Semantic_Model_Measures.md).
 
 ---
 

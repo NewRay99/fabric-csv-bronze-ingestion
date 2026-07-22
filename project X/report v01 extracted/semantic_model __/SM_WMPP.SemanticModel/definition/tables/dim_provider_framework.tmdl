@@ -1,0 +1,65 @@
+table dim_provider_framework
+	lineageTag: a7724283-d1f2-495e-a25f-e4a75c8decd7
+
+	column provider_framework_id
+		dataType: int64
+		formatString: 0
+		lineageTag: eaa0d96f-47c0-4b83-95aa-4a6610b2308c
+		summarizeBy: sum
+		sourceColumn: provider_framework_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: 58fb8cee-7b47-40c7-8947-e8d4131b92dc
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_code
+		dataType: string
+		lineageTag: 6f2e9884-5fe7-42a4-ace6-de2308f00d2c
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column qa_flag
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4d18c4b4-ca28-47cc-922e-df06f1a8f05f
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 9e7781c3-db13-4fd5-9301-89af4818d56f
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: bba30d3c-cdcc-42db-b3b4-4deb0c9d1800
+			defaultHierarchy: LocalDateTable_efcb9c79-f5af-4d12-b2d3-95377a4b1c64.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dim_provider_framework = m
+		mode: import
+		source =
+				let
+				    Source = #"stg_provider_framework"
+				in
+				   Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

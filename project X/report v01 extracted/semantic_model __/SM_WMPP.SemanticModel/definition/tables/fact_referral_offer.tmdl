@@ -1,0 +1,373 @@
+table fact_referral_offer
+	lineageTag: ab650187-b1ea-460d-b294-06293397d204
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: e136f6e2-5188-46f8-8127-3f08de0b826c
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		lineageTag: 95e77830-4529-4c97-a003-994bef81ebab
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: ef9ca7f3-a364-430c-bb43-cdb24de239b8
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_excluded
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: cb377c85-2489-4c38-bb77-24437cdfecc2
+		summarizeBy: none
+		sourceColumn: is_excluded
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_declined
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 933f6675-566f-49d5-9fb1-408a34e874d6
+		summarizeBy: none
+		sourceColumn: is_declined
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 40c02002-a339-4c4a-996c-770f3239c2f4
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_by
+		dataType: string
+		lineageTag: 5692adec-7da6-4e1c-99c0-1718a41bcefa
+		summarizeBy: none
+		sourceColumn: modified_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_date
+		dataType: string
+		lineageTag: c4105aa2-6cb5-47bf-96e2-5d216c73ff67
+		summarizeBy: none
+		sourceColumn: created_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_date
+		dataType: string
+		lineageTag: 680c22db-5c90-4004-a592-4aa9f2898c94
+		summarizeBy: none
+		sourceColumn: modified_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_cancelled
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9a6322c5-1c41-49fb-b5ae-40375c16a5ed
+		summarizeBy: none
+		sourceColumn: is_cancelled
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_closed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2901d8dd-5bce-4088-8628-52faeea0f1f4
+		summarizeBy: none
+		sourceColumn: is_closed
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3de8bf20-74e0-4f37-811e-c9853d9b4014
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a01af3f8-ecd0-4ccd-a396-8c23addb18d9
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column referral_sk
+		dataType: string
+		lineageTag: 34dbbaac-4e02-49a7-b748-951c4721de78
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 3206ed4b-44b9-43a4-ba89-c2611377a51f
+		summarizeBy: sum
+		sourceColumn: provider_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		lineageTag: 1da94f70-9d25-4c6a-83b7-e49c54e826e3
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_offer
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f129fe16-5b60-483d-8e65-84d177a8f512
+		summarizeBy: none
+		sourceColumn: has_offer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Closed_Date =
+			IF(
+			    fact_referral_offer[has_offer] = TRUE(),
+			    IFERROR(DATEVALUE(LEFT(fact_referral_offer[modified_date], 10)), BLANK()),
+			    BLANK()
+			)
+		formatString: General Date
+		lineageTag: e592759b-3c03-416c-a8ad-dbac1db553d0
+		summarizeBy: none
+
+	column referral_provider_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: c3583a27-036b-49dd-82d8-f11eeb98a581
+		summarizeBy: sum
+		sourceColumn: referral_provider_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Length Test' = LEN(fact_referral_offer[referral_id])
+		formatString: 0
+		lineageTag: aac66184-a27f-421b-8881-9aa2cb086296
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_status_clean
+		dataType: string
+		lineageTag: 15309a1f-1756-4339-9197-9a170240c4fa
+		summarizeBy: none
+		sourceColumn: offer_status_clean
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_cancel_reason
+		dataType: string
+		lineageTag: 4fb553b3-3d97-454d-8f33-d4526c1a7477
+		summarizeBy: none
+		sourceColumn: offer_cancel_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column cancel_reason_other
+		dataType: string
+		lineageTag: 7a645f66-a12a-4c32-b125-9afc6691a2f9
+		summarizeBy: none
+		sourceColumn: cancel_reason_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_decline_reason
+		dataType: string
+		lineageTag: a38a36e4-c2a9-4957-ac95-02dd6a6c1257
+		summarizeBy: none
+		sourceColumn: offer_decline_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_decline_reason_other
+		dataType: string
+		lineageTag: 224aa76d-7125-4145-8327-f3baaf28a42b
+		summarizeBy: none
+		sourceColumn: offer_decline_reason_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Closure Reason' =
+			
+			COALESCE(
+			    fact_referral_offer[cancel_reason_other],
+			    fact_referral_offer[offer_cancel_reason],
+			    fact_referral_offer[offer_decline_reason_other],
+			    fact_referral_offer[offer_decline_reason],
+			    "No reason recorded"
+			)
+		lineageTag: 7121d822-f999-48e7-ac7d-c723f378e034
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Closure Reason Clean' =
+			
+			VAR ReasonText =
+			    COALESCE(
+			        fact_referral_offer[cancel_reason_other],
+			        fact_referral_offer[offer_cancel_reason],
+			        fact_referral_offer[offer_decline_reason_other],
+			        fact_referral_offer[offer_decline_reason]
+			    )
+			VAR CleanReason =
+			    TRIM(ReasonText)
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    ISBLANK(CleanReason) || CleanReason = "", "No reason recorded",
+			    LOWER(CleanReason) = "test", BLANK(),
+			    CleanReason
+			)
+		lineageTag: 2c94b718-7c30-48b5-bf2c-58ce61f8ed8a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Closure Reason Grouped' = ```
+			
+			VAR R = LOWER(
+			    COALESCE(
+			        fact_referral_offer[Closure Reason Clean],
+			        "no reason recorded"
+			    )
+			)
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    // No reason captured
+			    R = "no reason recorded", "No reason recorded",
+			
+			    // Location / matching issues
+			    CONTAINSSTRING(R, "location"), "Location / Matching issue",
+			
+			    // Off-portal / alternative placements
+			    CONTAINSSTRING(R, "off portal"), "Off-portal / alternative placement",
+			    CONTAINSSTRING(R, "not on the portal"), "Off-portal / alternative placement",
+			    CONTAINSSTRING(R, "doesn't have access"), "Off-portal / alternative placement",
+			
+			    // Placement found elsewhere
+			    CONTAINSSTRING(R, "placed"), "Placement found elsewhere",
+			    CONTAINSSTRING(R, "moved"), "Placement found elsewhere",
+			
+			    // Case / admin closure
+			    CONTAINSSTRING(R, "case closed"), "Case / administrative closure",
+			    CONTAINSSTRING(R, "remove"), "Case / administrative closure",
+			    CONTAINSSTRING(R, "update"), "Case / administrative closure",
+			
+			    // Offer / system issues
+			    CONTAINSSTRING(R, "email"), "System / process issue",
+			    CONTAINSSTRING(R, "portal not working"), "System / process issue",
+			
+			    // Fallback
+			    "Other"
+			)
+			
+			```
+		lineageTag: b4536791-3e5f-4a74-87b4-cdb61e0555ee
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Closed Referral Reason Bucket' =
+			
+			VAR R =
+			    LOWER(
+			        TRIM(
+			            COALESCE(fact_referral_offer[Closure Reason Clean], "")
+			        )
+			    )
+			
+			RETURN
+			SWITCH(
+			    TRUE(),
+			
+			    R = "", "No reason recorded",
+			
+			    CONTAINSSTRING(R, "location"), "Location / Matching issue",
+			
+			    CONTAINSSTRING(R, "off portal")
+			        || CONTAINSSTRING(R, "not on the portal")
+			        || CONTAINSSTRING(R, "doesn't have access"),
+			        "Off-portal / alternative placement",
+			
+			    CONTAINSSTRING(R, "placed")
+			        || CONTAINSSTRING(R, "moved"),
+			        "Placement found elsewhere",
+			
+			    CONTAINSSTRING(R, "case closed")
+			        || CONTAINSSTRING(R, "remove")
+			        || CONTAINSSTRING(R, "update"),
+			        "Case / administrative closure",
+			
+			    CONTAINSSTRING(R, "email")
+			        || CONTAINSSTRING(R, "portal not working"),
+			        "System / process issue",
+			
+			    "Other"
+			)
+		lineageTag: 98dd4704-8de8-4813-afaa-9176dedccc29
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_referral_offer = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_provider,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded dim_referral", {"provider_id"}, dim_provider, {"provider_id"}, "dim_provider", JoinKind.LeftOuter),
+				    #"Expanded dim_provider" = Table.ExpandTableColumn(#"Merged Queries1", "dim_provider", {"provider_sk"}, {"provider_sk"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_provider", {"referral_provider_id"}, stg_offer, {"referral_provider_id"}, "stg_offer", JoinKind.LeftOuter),
+				    #"Expanded stg_offer" = Table.ExpandTableColumn(#"Merged Queries2", "stg_offer", {"offer_id"}, {"offer_id"}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Expanded stg_offer", "has_offer", each if [offer_id] = "" then false else true),
+				    #"Added Index" = Table.AddIndexColumn(#"Added Conditional Column", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "referral_provider_sk"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"has_offer", type logical}, {"is_spot", type logical}, {"is_cancelled", type logical}, {"is_closed", type logical}, {"is_excluded", type logical}, {"is_declined", type logical}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Changed Type",{{"referral_id", Text.Trim, type text}}),
+				    #"Cleaned Text" = Table.TransformColumns(#"Trimmed Text",{{"referral_id", Text.Clean, type text}}),
+				    #"Added Custom" = Table.AddColumn(#"Cleaned Text", "offer_status_clean", each if [is_closed] = true then "Successful"
+				else if [is_declined] = true or [is_cancelled] = true then "Unsuccessful"
+				else if [has_offer] = false then "Draft"
+				else "Pending"),
+				    #"Merged Queries3" = Table.NestedJoin(#"Added Custom", {"referral_provider_id"}, stg_referral_provider_cancel_reason, {"referral_provider_id"}, "stg_referral_provider_cancel_reason", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_provider_cancel_reason" = Table.ExpandTableColumn(#"Merged Queries3", "stg_referral_provider_cancel_reason", {"cancel_reason", "cancel_reason_other_text"}, {"cancel_reason", "cancel_reason_other_text"}),
+				    #"Merged Queries4" = Table.NestedJoin(#"Expanded stg_referral_provider_cancel_reason", {"referral_provider_id"}, stg_referral_provider_decline_reason, {"referral_provider_id"}, "stg_referral_provider_decline_reason", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_provider_decline_reason" = Table.ExpandTableColumn(#"Merged Queries4", "stg_referral_provider_decline_reason", {"decline_reason", "decline_reason_other_text"}, {"decline_reason", "decline_reason_other_text"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Expanded stg_referral_provider_decline_reason",{{"decline_reason_other_text", "offer_decline_reason_other"}, {"decline_reason", "offer_decline_reason"}, {"cancel_reason_other_text", "cancel_reason_other"}, {"cancel_reason", "offer_cancel_reason"}})
+				in
+				    #"Renamed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

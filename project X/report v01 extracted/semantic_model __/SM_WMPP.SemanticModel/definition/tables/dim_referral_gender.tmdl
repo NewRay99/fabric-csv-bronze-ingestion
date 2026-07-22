@@ -1,0 +1,47 @@
+table dim_referral_gender
+	lineageTag: c1ce20f0-b339-461d-84e9-6ea2bf3f9e00
+
+	column referral_id
+		dataType: string
+		lineageTag: 299a5f43-6adc-4039-b33e-b85361365d06
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gender Clean'
+		dataType: string
+		lineageTag: 5b4a3f66-1f90-49e8-85b0-abc429311fad
+		summarizeBy: none
+		sourceColumn: Gender Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_referral_gender = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_person,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"person_id"}, stg_referral_person_support_needs, {"person_id"}, "stg_referral_person_support_needs", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_person_support_needs" = Table.ExpandTableColumn(#"Merged Queries", "stg_referral_person_support_needs", {"support_need"}, {"support_need"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded stg_referral_person_support_needs", {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries1", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_referral", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+				    #"Expanded dim_person" = Table.ExpandTableColumn(#"Merged Queries2", "dim_person", {"person_sk"}, {"person_sk"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded dim_person",{{"has_restrictions", type logical}}),
+				    #"Merged Queries3" = Table.NestedJoin(#"Changed Type", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+				    #"Expanded dim_person1" = Table.ExpandTableColumn(#"Merged Queries3", "dim_person", {"Gender Clean"}, {"Gender Clean"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded dim_person1",{"initials", "age_value", "age_date_unit", "has_restrictions", "restriction_details", "source_reference_id", "gender", "gender_other", "ethnicity", "ethnicity_other", "religion", "religion_other", "preferred_language", "preferred_language_other", "child_index", "export_date", "support_need", "referral_sk", "person_sk"}),
+				    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"referral_id", Order.Ascending}, {"person_id", Order.Ascending}}),
+				    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_id"}, {{"All Rows", each _, type table [person_id=nullable text, referral_id=nullable text, Gender Clean=text]}}),
+				    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Primary Row", each Table.FirstN([All Rows], 1)),
+				    #"Expanded Primary Row2" = Table.ExpandTableColumn(#"Added Custom", "Primary Row", {"Gender Clean"}, {"Gender Clean"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Expanded Primary Row2",{"All Rows"}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Removed Columns1",null,"Unknown",Replacer.ReplaceValue,{"Gender Clean"})
+				in
+				    #"Replaced Value"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

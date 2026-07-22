@@ -1,0 +1,412 @@
+table fact_offer
+	lineageTag: 398c30ae-e74e-410f-9c24-9a26ac527adf
+
+	column offer_id
+		dataType: string
+		lineageTag: d9c2733c-e309-409c-9e56-7ee74e86cb19
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 1162ae02-35ad-43ad-991b-1347e63eea2f
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_number
+		dataType: string
+		lineageTag: e8f86174-94b8-4d27-891e-ce13fee9fc8b
+		summarizeBy: none
+		sourceColumn: id_number
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 08cfff88-e9f2-4036-937b-675788ed5b4e
+		summarizeBy: none
+		sourceColumn: estimated_start_date
+
+		variation Variation
+			isDefault
+			relationship: e6669a00-9eec-4e0c-b3bb-331e550ae09c
+			defaultHierarchy: LocalDateTable_a7d1d006-5922-4cf6-9273-75b1c3c15f5b.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column core_weekly_fee
+		dataType: string
+		lineageTag: 9a4dd848-f32a-4faa-9826-ba3dd7b580c8
+		summarizeBy: none
+		sourceColumn: core_weekly_fee
+
+		annotation SummarizationSetBy = Automatic
+
+	column includes_education
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7819b9f8-865d-4829-8534-d80389e8f7ba
+		summarizeBy: none
+		sourceColumn: includes_education
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_summary_needs
+		dataType: string
+		lineageTag: cad54817-ee7b-4e22-ae47-60cb12d63aa8
+		summarizeBy: none
+		sourceColumn: child_summary_needs
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_date
+		dataType: string
+		lineageTag: 1942ccc1-d20e-4bd9-a44d-df1bcb56289e
+		summarizeBy: none
+		sourceColumn: offer_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_modified_date
+		dataType: string
+		lineageTag: 5ca4635a-a622-4458-b110-6a7e90c7112f
+		summarizeBy: none
+		sourceColumn: last_modified_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason
+		dataType: string
+		lineageTag: 73ef33a8-4767-4c4d-ab8b-f82ac2481bca
+		summarizeBy: none
+		sourceColumn: decline_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason_other
+		dataType: string
+		lineageTag: ddc3a14a-5e12-4b58-bade-381300bf3892
+		summarizeBy: none
+		sourceColumn: decline_reason_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column can_edit_offer
+		dataType: string
+		lineageTag: 48b192cc-7e7b-4d58-bcdb-43a0402fe2d0
+		summarizeBy: none
+		sourceColumn: can_edit_offer
+
+		annotation SummarizationSetBy = Automatic
+
+	column withdraw_reason
+		dataType: string
+		lineageTag: 0285d4dd-e952-46f4-b007-b1b12b064d86
+		summarizeBy: none
+		sourceColumn: withdraw_reason
+
+		annotation SummarizationSetBy = Automatic
+
+	column withdraw_reason_other
+		dataType: string
+		lineageTag: a320feb7-e97c-4c2c-8580-0a10a1bc97b2
+		summarizeBy: none
+		sourceColumn: withdraw_reason_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_status
+		dataType: string
+		lineageTag: f5c65448-f6d6-492a-883e-b87128191564
+		summarizeBy: none
+		sourceColumn: offer_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_type
+		dataType: string
+		lineageTag: 4802c93c-6e12-43bc-9a97-4189b4a91745
+		summarizeBy: none
+		sourceColumn: offer_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_id
+		dataType: string
+		lineageTag: 45259916-bcd5-471f-b287-6401db83b07e
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: cae17eda-f1ed-4927-befb-3f31d4adb96f
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_code
+		dataType: string
+		lineageTag: b58239c9-c0e4-43ad-9e8c-7e2b5eee9fff
+		summarizeBy: none
+		sourceColumn: category_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_weekly_fee
+		dataType: string
+		lineageTag: b9fb41cf-12f0-4d8e-9c91-d9b90930cc79
+		summarizeBy: none
+		sourceColumn: education_weekly_fee
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 370c80a7-0b45-4586-a76e-c8e8e0afced4
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 5ac16e22-333c-4bd7-b496-10cf992d13fb
+			defaultHierarchy: LocalDateTable_62f66eb0-ba0f-4926-a158-67ca75f4cea5.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column offer_status_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: efcca94b-34af-4ac2-af72-44f8397cbf33
+		summarizeBy: sum
+		sourceColumn: offer_status_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ddafd53-fbeb-4320-92b2-5f1787119010
+		summarizeBy: sum
+		sourceColumn: provider_home_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		lineageTag: 628a6b63-b57f-4e8e-a44a-a59f2a1d721e
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_sk
+		dataType: string
+		lineageTag: 87c3c6a3-d4c4-4906-acea-78f4ddfd88dd
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column Is_Latest_Record =
+			
+			VAR LatestDate =
+			    CALCULATE(
+			        MAX(fact_offer[export_date]),
+			        ALLEXCEPT(fact_offer, fact_offer[offer_id])
+			    )
+			RETURN
+			IF(fact_offer[export_date] = LatestDate, 1, 0)
+		formatString: 0
+		lineageTag: 3a63b30b-f29a-450f-8cc2-e4da9b48225b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_date_only =
+			
+			DATE(
+			    VALUE(LEFT(fact_offer[offer_date], 4)),
+			    VALUE(MID(fact_offer[offer_date], 6, 2)),
+			    VALUE(MID(fact_offer[offer_date], 9, 2))
+			)
+		formatString: General Date
+		lineageTag: 67c3423a-5dbc-4b0f-9c21-c2a639aef06c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Draft Age Band' =
+			
+			VAR OfferDateText = LEFT(fact_offer[offer_date], 10)
+			VAR DaysOld =
+			    IF(
+			        NOT ISBLANK(fact_offer[offer_date]),
+			        DATEDIFF(
+			            DATEVALUE(OfferDateText),
+			            TODAY(),
+			            DAY
+			        )
+			    )
+			RETURN
+			SWITCH(
+			    TRUE(),
+			    fact_offer[Is_Latest_Record] <> 1, BLANK(),
+			    RELATED(dim_offer_status[offer_status_label]) <> "Draft", BLANK(),
+			    ISBLANK(fact_offer[offer_date]), "Missing offer date",
+			    DaysOld <= 7, "0-7 days",
+			    DaysOld <= 14, "8-14 days",
+			    DaysOld <= 30, "15-30 days",
+			    "31+ days"
+			)
+		lineageTag: 2c3d6c85-9521-46e6-b16e-02cad66f7949
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pending Offer Age (Days)' =
+			
+			DATEDIFF(
+			    DATEVALUE(LEFT(fact_offer[offer_date], 10)),
+			    TODAY(),
+			    DAY
+			)
+		formatString: 0
+		lineageTag: 436a9ad4-72ae-40d9-b463-34c62f0ab8d2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pending Offer Age Bucket' = ```
+			
+			SWITCH(
+			    TRUE(),
+			    fact_offer[Pending Offer Age (Days)] <= 3, "0–3 days",
+			    fact_offer[Pending Offer Age (Days)] <= 7, "4–7 days",
+			    fact_offer[Pending Offer Age (Days)] <= 14, "8–14 days",
+			    fact_offer[Pending Offer Age (Days)] <= 30, "15–30 days",
+			    "30+ days"
+			)
+			
+			```
+		lineageTag: 74e54f46-23ed-42c5-be7b-82530229fc99
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last Update Age (Days)' =
+			
+			DATEDIFF(
+			    DATEVALUE(LEFT(fact_offer[last_modified_date],10)),
+			    TODAY(),
+			    DAY
+			)
+		formatString: 0
+		lineageTag: 15ee2006-5b16-4515-bb41-e116617fda7a
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pending Offer Age Bucket Sort' =
+			
+			SWITCH(
+			    TRUE(),
+			    fact_offer[Pending Offer Age Bucket] = "0–3 days", 1,
+			    fact_offer[Pending Offer Age Bucket] = "4–7 days", 2,
+			    fact_offer[Pending Offer Age Bucket] = "8–14 days", 3,
+			    fact_offer[Pending Offer Age Bucket] = "15–30 days", 4,
+			    fact_offer[Pending Offer Age Bucket] = "30+ days", 5
+			)
+		formatString: 0
+		lineageTag: 34c57e6d-939c-4080-936d-8183a3f41ccb
+		summarizeBy: sum
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Pending Offer Age Bucket Display' =
+			
+			SWITCH(
+			    TRUE(),
+			    fact_offer[Pending Offer Age (Days)] <= 3, "A 0–3 days",
+			    fact_offer[Pending Offer Age (Days)] <= 7, "B 4–7 days",
+			    fact_offer[Pending Offer Age (Days)] <= 14, "C 8–14 days",
+			    fact_offer[Pending Offer Age (Days)] <= 30, "D 15–30 days",
+			    "E 30+ days"
+			)
+		lineageTag: f7c9b729-46b6-4caa-90b7-c843cae88638
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Awaiting IPA Creation Flag' =
+			
+			IF(
+			    fact_offer[offer_id] IN VALUES(fact_ipa[offer_id]),
+			    0,
+			    1
+			)
+		formatString: 0
+		lineageTag: f5439539-3f69-4c35-8d66-f678a28efd5b
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Draft Age Band Sort' = ```
+			
+			SWITCH(
+			    TRUE(),
+			    fact_offer[Draft Age Band] = "0-7 days", 1,
+			    fact_offer[Draft Age Band] = "8-14 days", 2,
+			    fact_offer[Draft Age Band] = "15-30 days", 3,
+			    fact_offer[Draft Age Band] = "31+ days", 4,
+			    99
+			)
+			
+			```
+		formatString: 0
+		lineageTag: d37903c0-a942-4862-ab01-5e933764a8d4
+		summarizeBy: sum
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_offer = m
+		mode: import
+		source =
+				let
+				    Source = stg_offer,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"offer_status"}, dim_offer_status, {"offer_status"}, "dim_offer_status", JoinKind.LeftOuter),
+				    #"Expanded dim_offer_status" = Table.ExpandTableColumn(#"Merged Queries", "dim_offer_status", {"offer_status_sk"}, {"offer_status_sk"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded dim_offer_status", {"provider_home_id"}, dim_provider_home, {"provider_home_id"}, "dim_provider_home", JoinKind.LeftOuter),
+				    #"Expanded dim_provider_home" = Table.ExpandTableColumn(#"Merged Queries1", "dim_provider_home", {"provider_home_sk"}, {"provider_home_sk"}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Expanded dim_provider_home",{{"referral_provider_id", Text.Trim, type text}}),
+				    #"Lowercased Text" = Table.TransformColumns(#"Trimmed Text",{{"referral_provider_id", Text.Lower, type text}}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Lowercased Text", {"referral_provider_id"}, stg_referral_provider, {"referral_provider_id"}, "stg_referral_provider", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_provider" = Table.ExpandTableColumn(#"Merged Queries2", "stg_referral_provider", {"referral_id"}, {"referral_id"}),
+				    #"Merged Queries3" = Table.NestedJoin(#"Expanded stg_referral_provider", {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries3", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded dim_referral",{{"referral_sk", "referral_sk"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"includes_education", type logical}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Changed Type", {"offer_id", "offer_status"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

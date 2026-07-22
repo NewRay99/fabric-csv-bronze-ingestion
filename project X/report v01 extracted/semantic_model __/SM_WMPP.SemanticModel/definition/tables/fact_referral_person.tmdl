@@ -1,0 +1,200 @@
+table fact_referral_person
+	lineageTag: 6a003c9a-6a33-4310-88e7-6db7bc74c273
+
+	column person_id
+		dataType: string
+		lineageTag: 69f3ec81-e0d7-4968-aca2-071f8b4eb130
+		summarizeBy: none
+		sourceColumn: person_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		lineageTag: 0b583698-cc48-497f-89fc-48acdea4804a
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column initials
+		dataType: string
+		lineageTag: a6cb2d87-abf9-4357-9921-368404562f51
+		summarizeBy: none
+		sourceColumn: initials
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_value
+		dataType: string
+		lineageTag: 795e7e95-7db1-48bf-944e-0a2a4b0356cb
+		summarizeBy: none
+		sourceColumn: age_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_date_unit
+		dataType: string
+		lineageTag: ff920917-0844-49ec-8ce7-c28c1e5fdffc
+		summarizeBy: none
+		sourceColumn: age_date_unit
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_restrictions
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 160bd2c0-0f0e-4819-9971-98487f8f2d97
+		summarizeBy: none
+		sourceColumn: has_restrictions
+
+		annotation SummarizationSetBy = Automatic
+
+	column restriction_details
+		dataType: string
+		lineageTag: c5a76111-acd2-4331-9600-531f275e5ac2
+		summarizeBy: none
+		sourceColumn: restriction_details
+
+		annotation SummarizationSetBy = Automatic
+
+	column source_reference_id
+		dataType: string
+		lineageTag: 99a73c27-2799-47f5-92a1-de83c94b6160
+		summarizeBy: none
+		sourceColumn: source_reference_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: 289b0b2c-ef49-4c4a-a18c-d84c88f7f1e3
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender_other
+		dataType: string
+		lineageTag: 4d305793-ce70-49e4-aa13-1fb0f5716039
+		summarizeBy: none
+		sourceColumn: gender_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column ethnicity
+		dataType: string
+		lineageTag: bb9adf02-6f03-4e79-a8f0-9894538c2dbe
+		summarizeBy: none
+		sourceColumn: ethnicity
+
+		annotation SummarizationSetBy = Automatic
+
+	column ethnicity_other
+		dataType: string
+		lineageTag: ba2a07a1-be98-4187-8d82-861ecb134f28
+		summarizeBy: none
+		sourceColumn: ethnicity_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion
+		dataType: string
+		lineageTag: e32b9ce3-f43d-4eeb-a69c-a10081b8517f
+		summarizeBy: none
+		sourceColumn: religion
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion_other
+		dataType: string
+		lineageTag: e1e1f616-3150-44c9-b071-fc170a966f25
+		summarizeBy: none
+		sourceColumn: religion_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language
+		dataType: string
+		lineageTag: 8bb554f3-8cf3-4d9f-9a01-d1de8b86d08b
+		summarizeBy: none
+		sourceColumn: preferred_language
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language_other
+		dataType: string
+		lineageTag: dfb1c1bc-ffce-46d3-bb89-073846bfab41
+		summarizeBy: none
+		sourceColumn: preferred_language_other
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_index
+		dataType: string
+		lineageTag: 211bf236-b51a-41f0-98a3-5a553874d6f8
+		summarizeBy: none
+		sourceColumn: child_index
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0b4a8425-2185-410c-bb18-4f22e209637d
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: cd1f6f28-e73b-4908-9b8b-1344afa64900
+			defaultHierarchy: LocalDateTable_9aee7af0-8a2a-46fe-8cbd-b666a98670f9.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column support_need
+		dataType: string
+		lineageTag: b7774566-4498-4768-888a-d1c0f065fb02
+		summarizeBy: none
+		sourceColumn: support_need
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_sk
+		dataType: string
+		lineageTag: 968c246f-7031-4749-b1c8-c6d0f33e0be9
+		summarizeBy: none
+		sourceColumn: referral_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column person_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: bcaeef0b-9cb6-4510-8f1b-be1be9431edb
+		summarizeBy: sum
+		sourceColumn: person_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_referral_person = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_person,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"person_id"}, stg_referral_person_support_needs, {"person_id"}, "stg_referral_person_support_needs", JoinKind.LeftOuter),
+				    #"Expanded stg_referral_person_support_needs" = Table.ExpandTableColumn(#"Merged Queries", "stg_referral_person_support_needs", {"support_need"}, {"support_need"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded stg_referral_person_support_needs", {"referral_id"}, dim_referral, {"referral_id"}, "dim_referral", JoinKind.LeftOuter),
+				    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries1", "dim_referral", {"referral_sk"}, {"referral_sk"}),
+				    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_referral", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+				    #"Expanded dim_person" = Table.ExpandTableColumn(#"Merged Queries2", "dim_person", {"person_sk"}, {"person_sk"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Expanded dim_person",{{"has_restrictions", type logical}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

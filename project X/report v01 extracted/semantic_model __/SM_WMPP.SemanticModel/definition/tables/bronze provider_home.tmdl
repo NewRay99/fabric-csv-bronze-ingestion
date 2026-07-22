@@ -1,0 +1,341 @@
+table 'bronze provider_home'
+	isHidden
+	lineageTag: 2116affc-647d-4ee0-88e9-f0aeb4802231
+
+	column provider_home_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 08da84e7-c319-41bc-b13a-59e395115623
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f325ccce-3bea-4330-b4dc-43972c8ba106
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3a31af8b-0a81-45ea-9233-3c14c0c246cb
+		summarizeBy: none
+		sourceColumn: service_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 50e7d45d-3166-4861-8559-4b1ad7a5595d
+		summarizeBy: none
+		sourceColumn: home_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column address_line_1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: efa0065c-9089-44e4-a8df-a67449ca0d71
+		summarizeBy: none
+		sourceColumn: address_line_1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column address_line_2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f0eefbdf-d91a-4f9a-a030-a02a85b9e271
+		summarizeBy: none
+		sourceColumn: address_line_2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column town_city
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9d610703-0787-4385-9d89-d29cb846d79b
+		summarizeBy: none
+		sourceColumn: town_city
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3dbbd6cd-065c-4d35-846e-40b0ba0ac50d
+		summarizeBy: none
+		sourceColumn: county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a965d299-d96b-4fbe-92ab-0a9260afb4ec
+		summarizeBy: none
+		sourceColumn: postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1a7e6f6b-4411-4700-8b11-5db8640cd79b
+		summarizeBy: none
+		sourceColumn: country
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_contact_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3470a26d-feab-47f9-b0b9-02ea1979473a
+		summarizeBy: none
+		sourceColumn: home_contact_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_email_address
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9820d5fc-edeb-4e12-894c-926ee173ca1b
+		summarizeBy: none
+		sourceColumn: home_email_address
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_name
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 40ec0994-1797-4265-858e-e1aea3388989
+		summarizeBy: none
+		sourceColumn: registered_manager_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_contact_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d86f4e52-c5a5-4ea2-b249-d3eba265e61b
+		summarizeBy: none
+		sourceColumn: registered_manager_contact_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column registered_manager_email_address
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 310978d3-10af-46aa-bc00-de35d0517538
+		summarizeBy: none
+		sourceColumn: registered_manager_email_address
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column number_of_registered_beds
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a0c51c04-bed8-41f3-9f74-1e3b602215f1
+		summarizeBy: none
+		sourceColumn: number_of_registered_beds
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column regulatory_body_registration_reference
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a1b92f90-41a7-4437-85f2-e73e01294a8e
+		summarizeBy: none
+		sourceColumn: regulatory_body_registration_reference
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_regulating_body_inspection_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9c41bcba-6d7c-4cbb-b4de-5e0760554d9d
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column inspection_outcome_rating
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c3e40edb-cdc8-4d45-9758-e6d1bffde78f
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5ec30fc9-6dd9-41eb-ac24-472c325765b9
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ca5373eb-fa85-4a75-b678-ff653917c387
+		summarizeBy: none
+		sourceColumn: modified_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 97bbed11-df5b-45e1-b829-8a4ac0d3a571
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column modified_timestamp
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 12501b22-beef-4a87-8b2a-580fa1122b90
+		summarizeBy: none
+		sourceColumn: modified_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 21035155-acea-46ad-90e7-4a2bff06cf2e
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column qa_flag
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 90fd67e1-0e0f-45f0-83d6-071c35e37ae3
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column qa_flag_spot
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 37ea7c0a-d249-427b-a62b-2bfcd320b10f
+		summarizeBy: none
+		sourceColumn: qa_flag_spot
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 8c5f4cba-c9b0-4f0b-881f-a1429e3ced89
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze provider_home' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_provider_home = Source{[Schema="bronze",Item="provider_home"]}[Data]
+				in
+				    bronze_provider_home
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

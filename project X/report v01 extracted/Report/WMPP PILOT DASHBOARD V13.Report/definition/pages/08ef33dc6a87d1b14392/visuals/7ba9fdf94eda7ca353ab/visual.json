@@ -1,0 +1,586 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "7ba9fdf94eda7ca353ab",
+  "position": {
+    "x": 246.4805952422538,
+    "y": 212.94582037936215,
+    "z": 4000,
+    "height": 323.61057742690468,
+    "width": 1229.04949872498,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Provider Name"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.provider_name",
+              "nativeQueryRef": "Provider Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Home Name"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.Home Name",
+              "nativeQueryRef": "Home Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Service Type"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.service_type",
+              "nativeQueryRef": "Service Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Town/City"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.town_city",
+              "nativeQueryRef": "Town/City"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Postcode"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.postcode",
+              "nativeQueryRef": "Postcode"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Provider Email"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.provider_email_address",
+              "nativeQueryRef": "Provider Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Provider Phone"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.Provider Phone Number",
+              "nativeQueryRef": "Provider Phone"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Responsible Individual Name"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.responsible_individual_name",
+              "nativeQueryRef": "Responsible Individual Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Responsible Individual Email Address"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.responsible_individual_email_address",
+              "nativeQueryRef": "Responsible Individual Email Address"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Responsible Individual Contact Number"
+                }
+              },
+              "queryRef": "Sum(rpt_provider_fostering.responsible_individual_contact_number)",
+              "nativeQueryRef": "Responsible Individual Contact Number"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Registrant Name"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.registrant_name",
+              "nativeQueryRef": "Registrant Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Registrant Role"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.registrant_role",
+              "nativeQueryRef": "Registrant Role"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Registrant Email"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.registrant_email_address",
+              "nativeQueryRef": "Registrant Email"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "rpt_provider_fostering"
+                    }
+                  },
+                  "Property": "Registrant Contact Number"
+                }
+              },
+              "queryRef": "rpt_provider_fostering.Registrant Contact Number",
+              "nativeQueryRef": "Registrant Contact Number"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "rpt_provider_fostering"
+                  }
+                },
+                "Property": "Provider Name"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "287.6804440816402D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "rpt_provider_fostering.provider_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "118.7079182060547D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "rpt_provider_fostering.town_city"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Fostering Provider Directory'"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "19D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f654c01d2740bece4de8",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Home Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1ab82a8c24dd58c930dc",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Postcode"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c2345cc9723b97daba73",
+        "ordinal": 2,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Provider Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2a2386d085e08026c905",
+        "ordinal": 3,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Provider Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "101d850f03540449b367",
+        "ordinal": 4,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Provider Phone"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e582e5b25dd00025517c",
+        "ordinal": 5,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Registrant Contact Number"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ebc7964c2db134bc0b65",
+        "ordinal": 6,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Registrant Email"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "cf9261d30832be24984e",
+        "ordinal": 7,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Registrant Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "594d7b29aec5e0b1c73b",
+        "ordinal": 8,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Registrant Role"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "a958d267582c833c8ee1",
+        "ordinal": 9,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Responsible Individual Contact Number"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "59bd3b95d9602d5016d1",
+        "ordinal": 10,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Responsible Individual Email Address"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "cfde298011aebed8b518",
+        "ordinal": 11,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Responsible Individual Name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "1fb8e752a5c0cb8a521d",
+        "ordinal": 12,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Service Type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "a6a955eea69edc948c92",
+        "ordinal": 13,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "rpt_provider_fostering"
+              }
+            },
+            "Property": "Town/City"
+          }
+        },
+        "type": "Categorical"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  },
+  "isHidden": true
+}

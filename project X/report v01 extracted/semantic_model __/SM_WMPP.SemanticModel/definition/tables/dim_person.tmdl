@@ -1,0 +1,128 @@
+table dim_person
+	lineageTag: d9f2cce5-1401-4be2-9e84-e8771ab4fd98
+
+	column person_id
+		dataType: string
+		lineageTag: 0d42a7f1-d2e5-4fe8-adad-74bd41a53bba
+		summarizeBy: none
+		sourceColumn: person_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column initials
+		dataType: string
+		lineageTag: 34014d74-eed2-447d-9cc5-b6383ebcf27c
+		summarizeBy: none
+		sourceColumn: initials
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_value
+		dataType: string
+		lineageTag: f07e231d-809a-4633-b73d-899b9de5e6e8
+		summarizeBy: none
+		sourceColumn: age_value
+
+		annotation SummarizationSetBy = Automatic
+
+	column age_date_unit
+		dataType: string
+		lineageTag: 5fa6cbc7-a458-430d-89a1-dcc6cf5df7b5
+		summarizeBy: none
+		sourceColumn: age_date_unit
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_restrictions
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 63076328-dabf-40f5-ad42-8b9d258d4382
+		summarizeBy: none
+		sourceColumn: has_restrictions
+
+		annotation SummarizationSetBy = Automatic
+
+	column gender
+		dataType: string
+		lineageTag: e5463875-afac-4a3e-b933-89b49b8d000e
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column ethnicity
+		dataType: string
+		lineageTag: 5b13703c-c53e-4eb3-8852-406b3f3c4ff7
+		summarizeBy: none
+		sourceColumn: ethnicity
+
+		annotation SummarizationSetBy = Automatic
+
+	column religion
+		dataType: string
+		lineageTag: aecf98cd-b1a2-45b9-9a7e-8c11145e1e11
+		summarizeBy: none
+		sourceColumn: religion
+
+		annotation SummarizationSetBy = Automatic
+
+	column preferred_language
+		dataType: string
+		lineageTag: 04b6463d-bd98-409f-bc2a-11fbf259fef7
+		summarizeBy: none
+		sourceColumn: preferred_language
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 18a8a820-156e-432e-a793-d69e82d38ce4
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 076fe7e4-c82d-4a80-b1d4-6cfd7cb72dfe
+			defaultHierarchy: LocalDateTable_06406ba6-a64f-4dbb-8f63-615e13ea27b3.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column person_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: 08baeded-6dc4-45d2-a0e0-d2b31465029e
+		summarizeBy: sum
+		sourceColumn: person_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gender Clean'
+		dataType: string
+		lineageTag: 97f97341-b105-49a2-bc34-cb04816fe406
+		summarizeBy: none
+		sourceColumn: Gender Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_person = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_person,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"restriction_details", "source_reference_id", "gender_other", "ethnicity_other", "religion_other", "preferred_language_other", "child_index"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "person_sk"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"person_id"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Removed Duplicates",{"referral_id"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns1",{{"has_restrictions", type logical}}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Changed Type", "Gender Clean", each if [gender] = "Male" then "Male" else if [gender] = "Female" then "Female" else if [gender] = "Another Gender" then "Other" else if [gender] = "Other" then "Other" else "Unknown")
+				in
+				    #"Added Conditional Column"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

@@ -1,0 +1,26 @@
+table 'Directory Summary Axis'
+	lineageTag: 3e4c249a-58fb-416e-a307-c9e1a59ac6ed
+
+	column 'Display Type'
+		lineageTag: 888fdbcd-1666-4753-8988-48c81abda9c0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Display Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Directory Summary Axis' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Display Type", STRING,
+				    {
+				        { "Residential Homes" },
+				        { "Supported Accommodation Homes" },
+				        { "Fostering Providers" }
+				    }
+				)
+
+	annotation PBI_Id = 18a83d9aba014d4cab720a9b020c225b
+

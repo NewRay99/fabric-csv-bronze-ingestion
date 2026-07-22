@@ -1,0 +1,53 @@
+table 'bronze referral_person_support_needs'
+	isHidden
+	lineageTag: 1c0df09d-ab8e-4203-bcb6-2480a2388dea
+
+	column person_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9514ce3d-8696-43dc-8834-919f172414b5
+		summarizeBy: none
+		sourceColumn: person_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column support_need
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e5a2855d-0f27-4277-9555-677281999553
+		summarizeBy: none
+		sourceColumn: support_need
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d1847a06-8704-4bdd-8f57-0b4a84194ae5
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_person_support_needs' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_person_support_needs = Source{[Schema="bronze",Item="referral_person_support_needs"]}[Data]
+				in
+				    bronze_referral_person_support_needs
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

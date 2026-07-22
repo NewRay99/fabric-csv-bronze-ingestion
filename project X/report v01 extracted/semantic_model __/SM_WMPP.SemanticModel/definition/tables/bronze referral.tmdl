@@ -1,0 +1,245 @@
+table 'bronze referral'
+	isHidden
+	lineageTag: 9cf53761-cc07-43a0-bf14-d58da035d8d5
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 33f8e38f-209f-4471-8a62-055aabcb0d4a
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7fb21170-8fc0-483c-a9d8-d87cec7bfdc1
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column required_start_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3708c443-3e3a-4c5f-90ef-da0ed21277c6
+		summarizeBy: none
+		sourceColumn: required_start_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column response_required_by_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 741270cd-29fb-4201-a8b4-4a78b948e80f
+		summarizeBy: none
+		sourceColumn: response_required_by_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_sibling_placement
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: ae3bcca8-44aa-475e-9e31-e0d9e31452cb
+		summarizeBy: none
+		sourceColumn: is_sibling_placement
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sibling_count
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b16b4787-afb1-4bdb-b318-4cb832d329a6
+		summarizeBy: none
+		sourceColumn: sibling_count
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_parent_child_placement
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d5ae6f83-046a-4c11-9e1b-68f480f6e4a4
+		summarizeBy: none
+		sourceColumn: is_parent_child_placement
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_location_preferrence
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f91d2ac0-a0ea-46fa-85be-fc28c0a077cc
+		summarizeBy: none
+		sourceColumn: has_location_preferrence
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_preference_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f34217f3-1673-4913-931f-0562b288bfe9
+		summarizeBy: none
+		sourceColumn: location_preference_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_location_restriction
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9c86e5ec-1d35-4161-9f6c-8dc3931a6b3b
+		summarizeBy: none
+		sourceColumn: has_location_restriction
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column location_restriction_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1263ae72-5519-4842-a5bb-f45162c828bc
+		summarizeBy: none
+		sourceColumn: location_restriction_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column additional_information
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 34d8bd29-3bff-4451-95ac-5e2ef95285c6
+		summarizeBy: none
+		sourceColumn: additional_information
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_created_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 2f9b32d4-5d98-42a2-904f-6df978682bd2
+		summarizeBy: none
+		sourceColumn: referral_created_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_modified_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 96947d09-e2bd-4bac-95b2-49e34e71b837
+		summarizeBy: none
+		sourceColumn: referral_modified_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c799a26a-3db3-4ed8-84ed-64d1f6178c3b
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9a78ce2b-403c-4a40-b965-a334053c98b9
+		summarizeBy: none
+		sourceColumn: referral_created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_updated_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1b0368d9-28ff-4370-98bf-9c8731c9358c
+		summarizeBy: none
+		sourceColumn: referral_updated_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f016e807-6318-4716-a5ca-1e1ac212c70e
+		summarizeBy: none
+		sourceColumn: referral_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e3a75fd4-eb96-42be-9c29-07e9cc086610
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral = Source{[Schema="bronze",Item="referral"]}[Data]
+				in
+				    bronze_referral
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

@@ -1,0 +1,53 @@
+table 'bronze referral_category'
+	isHidden
+	lineageTag: 04cf7c9d-7ae7-47f3-bdbe-e1034bf1bedc
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b6230417-01bc-4ff6-99ac-edcc29b003d8
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_category_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c637c486-4a30-4195-97e8-72679167d03b
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 349c9c72-6cc4-4ddc-9be6-a87f5d033451
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_category' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_category = Source{[Schema="bronze",Item="referral_category"]}[Data]
+				in
+				    bronze_referral_category
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

@@ -1,0 +1,96 @@
+table dim_category
+	lineageTag: 82343e02-d4fe-43ab-b7ed-ec17dd52dddf
+
+	column framework_category_id
+		dataType: string
+		lineageTag: 57b71841-a86d-4e5f-b539-7ca43e0e19d4
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_name
+		dataType: string
+		lineageTag: 3a3e1379-ecc0-450f-9d9f-197d01578daa
+		summarizeBy: none
+		sourceColumn: category_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_code
+		dataType: string
+		lineageTag: 60324921-d7ca-4fad-b623-635d694a56b4
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_name
+		dataType: string
+		lineageTag: b6aadffd-d6a0-48e8-adbd-632dfa639c3b
+		summarizeBy: none
+		sourceColumn: framework_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_start_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c1137c27-eec8-4573-be3b-d8d4af2c3ef8
+		summarizeBy: none
+		sourceColumn: framework_start_date
+
+		variation Variation
+			isDefault
+			relationship: bede70d8-608b-44f5-9076-8b8dd085cfa3
+			defaultHierarchy: LocalDateTable_1d1f28af-4ee0-445d-932d-406e35e3ffc7.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column framework_end_date
+		dataType: string
+		lineageTag: e3ccb6bd-fa3f-4cca-85e0-4770d1cc3573
+		summarizeBy: none
+		sourceColumn: framework_end_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		lineageTag: a50db764-513a-46b5-be45-5994c72de522
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: ef227b52-cbd1-4997-8ef6-01526854cf01
+		summarizeBy: sum
+		sourceColumn: category_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_category = m
+		mode: import
+		source =
+				let
+				    Source = stg_framework_category,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"framework_code"}, stg_framework, {"framework_code"}, "stg_framework", JoinKind.LeftOuter),
+				    #"Expanded stg_framework" = Table.ExpandTableColumn(#"Merged Queries", "stg_framework", {"framework_name", "start_date", "end_date", "placement_type"}, {"framework_name", "start_date", "end_date", "placement_type"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded stg_framework",{{"start_date", "framework_start_date"}, {"end_date", "framework_end_date"}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Renamed Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Added Index",{{"Index", "category_sk"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns1", {"framework_category_id"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Removed Duplicates",{"export_date"}),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Removed Columns",{{"framework_category_id", "framework_category_id"}})
+				in
+				    #"Renamed Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

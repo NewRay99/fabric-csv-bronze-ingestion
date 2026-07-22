@@ -2,9 +2,9 @@
 
 **Project:** West Midlands Placement Portal (WMPP)  
 **Organisation:** Birmingham Children's Trust (BCT)  
-**Report:** WMPP PILOT DASHBOARD (V13.1)  
-**Date:** 12 July 2026 (updated from 10 July 2026)  
-**Source:** Extracted from pixel-level analysis of birminghamchildrenstrust.co.uk website screenshots and the Power BI report visual structure
+**Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
+**Semantic model:** `SM_WMPP` — 79 tables, 850 columns, 48 relationships, 95 measures
+**Source:** BCT Brand Guidelines v1 PDF, the supplied `brand pack/ideas` imagery, and the v01 PBIP report project
 
 ---
 
@@ -14,7 +14,7 @@
 Birmingham Children's Trust is the organisation hosting the WMPP platform on behalf of the 14 West Midlands Local Authorities. The report carries the BCT logo and branding.
 
 ### Brand Source
-All colours in this brand pack were extracted from pixel-level analysis of the Birmingham Children's Trust website (birminghamchildrenstrust.co.uk). The BCT brand uses warm, approachable tones — cream backgrounds, golden amber accents, pink-magenta calls-to-action, and a clean blue for data visualisation. This is deliberately different from corporate blue/grey palettes; the warm tones reflect BCT's child-focused, caring mission.
+The colour system is anchored to the official **BCT Brand Guidelines v1** supplied in this repository. The mandala specifies four primary colours: gold `#FCBF00`, orange `#F59E00`, deep orange `#EF7911`, and pale yellow `#FFE672`. The `brand pack/ideas` images add a deep navy `#2E3E71`, sky blue `#AFD9FF`, illustration tint `#F1F8FF`, and a warm orange highlight `#F9B234`. These colours are used for the report theme and the v01 visual overrides.
 
 ### Logo Assets (from report)
 The report uses the following image assets:
@@ -37,56 +37,50 @@ The BCT logo features a flower/mandala shape in warm amber and gold tones with a
 
 ## 2. Colour Palette
 
-All colours are extracted from pixel-level analysis of the Birmingham Children's Trust website.
+The palette below combines the four official mandala colours from BCT003 Brand Guidelines v1 with the blue/navy accents sampled from the supplied WMPP systems illustration. The first four colours must remain the dominant BCT identity colours; the supporting colours provide readable data series and status states.
 
-### Primary Colours
-
-| Colour | Hex | Usage |
-|--------|-----|-------|
-| 🟡 Amber/Gold | `#E8A020` | Primary brand colour — navigation strips, logo petals, KPI accent borders, table accents, active nav indicators |
-| 🩷 Pink/Magenta | `#C82B5E` | Call-to-action — buttons, interactive elements, primary data series, chat/notification badges |
-| 🔵 Blue Accent | `#2972C4` | Data visualisation — chart series, hyperlinks, decorative underlines, link-coloured text |
-| ⚫ Dark Charcoal | `#1C1C1A` | Primary text colour — KPI values, headings, body text |
-| 🟠 Burnt Orange | `#D4601A` | Tertiary data series, warm highlight accents |
-
-### Surface & Background Colours
+### Official BCT colours
 
 | Colour | Hex | Usage |
 |--------|-----|-------|
-| 🟤 Warm Cream | `#F4EFE4` | Page background — warm, approachable, child-friendly |
-| ⬜ White | `#FFFFFF` | Card backgrounds, chart surfaces, header bar |
-| 🩶 Light Grey | `#E0DDD5` | Borders, dividers, subtle separators |
-| 🩶 Mid Grey | `#6B6862` | Secondary text, labels, descriptions |
-| 🩶 Light Grey Text | `#A09D97` | Tertiary text, metadata, axis labels |
+| Mandala gold | `#FCBF00` | Primary navigation, headline accents, main data series |
+| Mandala orange | `#F59E00` | Secondary data series, active selections, warm emphasis |
+| Mandala deep orange | `#EF7911` | Tertiary series, hover/pressed states, escalation accent |
+| Mandala pale yellow | `#FFE672` | Soft highlights, low-severity bands, background tint |
 
-### Semantic Colours
+### Idea-image supporting colours
 
 | Colour | Hex | Usage |
 |--------|-----|-------|
-| 🟢 Success Green | `#3A8B6F` | Positive KPIs, successful outcomes, completed status |
-| 🟡 Warning Amber | `#E8A020` | At-risk items, aging alerts, draft status (same as primary) |
-| 🔴 Alert Red | `#C0392B` | Critical alerts, failures, expired docs, closed status |
-| 🟠 Alert Orange | `#D4601A` | Outside timeframe, approaching critical |
-| 🔵 Info Blue | `#2972C4` | Informational badges, neutral status |
+| Systems navy | `#2E3E71` | KPI values, headings on light surfaces, hyperlinks |
+| Sky blue | `#AFD9FF` | Informational series, illustration accents |
+| Illustration tint | `#F1F8FF` | Light blue surfaces and information badges |
+| Warm orange highlight | `#F9B234` | Decorative bands inspired by `wmcpp-background.jpg` |
+| Charcoal | `#1C1C1A` | Body text, labels, high-contrast values |
+| White | `#FFFFFF` | Report canvas and card surfaces |
 
-### Semantic Tints (for badges/pills)
+### Semantic colours
 
-| Tint | Hex | Usage |
-|------|-----|-------|
-| Green tint | `#E8F5EE` | Success badge backgrounds |
-| Amber tint | `#FCF3E0` | Warning badge backgrounds |
-| Red tint | `#FCEBE9` | Alert badge backgrounds |
-| Blue tint | `#E8F0FA` | Info badge backgrounds |
-| Pink tint | `#FCE8EF` | CTA badge backgrounds |
+| Colour | Hex | Usage |
+|--------|-----|-------|
+| Success green | `#3A8B6F` | Positive/completed outcomes |
+| Warning gold | `#FCBF00` | At-risk or ageing items |
+| Critical red | `#C0392B` | Critical alerts and failed outcomes |
+| Border neutral | `#E6E1D7` | Dividers and visual outlines |
+| Secondary text | `#5C5A56` | Labels and supporting text |
 
-### Full Data Colour Sequence (20 colours)
-Used in order for charts with many categories — derived from the BCT warm palette:
+### Full data colour sequence
+
+Use this sequence for visuals with multiple categories:
+
+```text
+#FCBF00, #F59E00, #EF7911, #FFE672, #2E3E71, #AFD9FF,
+#C82B5E, #3A8B6F, #C0392B, #1C1C1A, #F9B234, #F1F8FF
 ```
-#E8A020, #C82B5E, #2972C4, #1C1C1A, #D4601A,
-#7A4D9F, #3A8B6F, #C0392B, #1A6B9E, #E8C040,
-#D87090, #4FA0E0, #F0A050, #B05890, #5BD667,
-#A07030, #E04060, #20A090, #8060C0, #F0D050
-```
+
+### Accessibility note
+
+Use charcoal or systems navy for small text. Do not use white text on `#FCBF00` or `#F59E00` for small labels; use charcoal instead. Never rely on colour alone—retain text labels, icons, and status descriptions.
 
 ---
 
@@ -129,15 +123,21 @@ The BCT brand is warm, approachable, and child-focused. The design language refl
 ### Page Layout Standards
 
 #### Page Dimensions
-| Page | Width | Height | Canvas |
-|------|-------|--------|--------|
-| WMPP HOMEPAGE | 1284 | 1000 | Landscape 16:9 |
-| REFERRALS | 1500 | 1500 | Large landscape |
-| OFFERS OVERVIEW | 1500 | 1250 | Landscape |
-| DRAFT OFFERS | 1500 | 1100 | Landscape |
-| IPA OVERVIEW | 1500 | 1500 | Large landscape |
-| PROVIDER REGISTRY | 1500 | 1100 | Landscape |
-| Historic | 1280 | 720 | Standard 16:9 |
+
+The v01 report contains ten pages. Power BI stores the canvas dimensions in the page definition; use those page definitions as the source of truth when editing layout.
+
+| Page | Page ID |
+|------|---------|
+| PROVIDER REGISTRY | `08ef33dc6a87d1b14392` |
+| Duplicate of REFERRALS | `0b9ca7bdee6979c44204` |
+| OFFERS OVERVIEW | `1f33996970651e846183` |
+| Duplicate of REFERRALS | `285db1ac6285737d2d5b` |
+| WMPP HOMEPAGE | `364f2cdd67ba7822850c` |
+| IPA OVERVIEW | `58d36c775c032a42e01b` |
+| Historic | `7b4c90309550bd42911c` |
+| DRAFT OFFERS | `ad5ab4aa6928c9178a35` |
+| Page 1 | `ea102595f4e9d503f186` |
+| REFERRALS | `f028a4be56d03e8404d7` |
 
 #### Standard Page Structure
 ```
@@ -167,24 +167,25 @@ The BCT brand is warm, approachable, and child-focused. The design language refl
 
 ## 5. Visual Type Catalogue
 
-The report uses the following visual types (135 total across 7 pages):
+The v01 report contains **184 visuals across 10 pages**:
 
 | Visual Type | Count | Purpose |
-|------------|-------|---------|
-| **cardVisual** | 43 | KPI metric cards with large numbers |
-| **image** | 18 | Logos, icons (boy/girl), decorative shapes |
-| **shape** | 17 | Section dividers, header bars, decorative panels |
-| **actionButton** | 12 | Navigation buttons between pages |
-| **slicer** | 10 | Date range, placement type, status filters |
-| **textbox** | 8 | Page titles, section headers, descriptive text |
-| **tableEx** | 5 | Detailed data tables with sorting |
-| **clusteredBarChart** | 4 | Provider rankings, category comparisons |
-| **donutChart** | 1 | Referral placement type distribution |
-| **columnChart** | 1 | Monthly referral activity trends |
-| **clusteredColumnChart** | 1 | Draft offer age distribution |
-| **hundredPercentStackedColumnChart** | 1 | Spot vs Framework comparison |
-| **funnel** | 1 | IPA conversion funnel |
-| **textFilter** | 1 | Free-text search filter for provider directory |
+|------------|------:|---------|
+| **cardVisual** | 61 | KPI metric cards |
+| **image** | 24 | Logos, people icons, and decorative assets |
+| **shape** | 22 | Header bars, dividers, and layout panels |
+| **actionButton** | 14 | Navigation and report actions |
+| **slicer** | 16 | Date, status, placement, and operational filters |
+| **textbox** | 11 | Titles, explanations, and narrative text |
+| **tableEx** | 7 | Detail tables |
+| **clusteredBarChart** | 5 | Provider/category comparisons |
+| **columnChart** | 3 | Activity and engagement trends |
+| **donutChart** | 2 | Composition and distribution |
+| **clusteredColumnChart** | 1 | Age-band distribution |
+| **hundredPercentStackedColumnChart** | 1 | Spot vs framework comparison |
+| **funnel** | 1 | IPA conversion workflow |
+| **textFilter** | 1 | Provider directory search |
+| **Other/legacy containers** | 15 | Containers retained in the v01 PBIR definition |
 
 ---
 
@@ -292,7 +293,7 @@ Amber `#E8A020` background strips with chevron arrows, matching the BCT website 
 
 ## 9. Slicers / Filters
 
-### Standard Slicers (10 total across report)
+### Standard Slicers (16 total across report)
 | Slicer Type | Pages Used On | Purpose |
 |------------|---------------|---------|
 | Date range | All data pages | Filter by referral/offer date period |
@@ -463,11 +464,14 @@ This will apply all colours, fonts, and visual styles defined in this brand pack
 |------|---------------------|------------------------|
 | WMPP HOMEPAGE | R24 | — |
 | REFERRALS | R24, R51, R13 | R18, R57, R22 (emergency/out-of-region) |
+| Duplicate of REFERRALS (0b9c…) | Same as REFERRALS | Confirm whether retained for authoring only |
+| Duplicate of REFERRALS (285d…) | Same as REFERRALS | Confirm whether retained for authoring only |
 | OFFERS OVERVIEW | R24-R29, R51, R67, R68 | R14 (messaging KPIs) |
 | DRAFT OFFERS | R24 | — |
 | IPA OVERVIEW | R28, R35 | R62, R20 (finance, audit) |
 | PROVIDER REGISTRY | R91, R93, R95, R96 | R41, R49, R59 (QA, diligence, onboarding) |
 | Historic | — | R47, R48 (document compliance) |
+| Page 1 | — | Confirm whether retained as a working page |
 
 ---
 
@@ -476,19 +480,20 @@ This will apply all colours, fonts, and visual styles defined in this brand pack
 - [ ] Import `WMPP_Brand_Theme.json` into Power BI Desktop
 - [ ] Upload BCT logo to report as image resource
 - [ ] Upload boy/girl icons for gender cards
-- [ ] Create 7 pages with correct dimensions from Section 4
-- [ ] Add header bar with BCT logo on each page (white bg, not navy)
-- [ ] Add pill-shaped navigation buttons (amber bg, white text)
+- [ ] Validate the 10 v01 pages and their page IDs from Section 4
+- [ ] Add header bar with BCT logo on each page (white/cream surface)
+- [ ] Add pill-shaped navigation buttons (gold/orange background, charcoal text)
 - [ ] Create KPI cards per page specifications (8px radius, 3px accent bar)
-- [ ] Apply semantic colours (green/amber/red) to status-based cards
+- [ ] Apply semantic colours (green/gold/red) to status-based cards
 - [ ] Add pill-shaped slicers to all data pages
-- [ ] Create charts per page specifications (amber/pink/blue palette)
-- [ ] Set table headers to amber background with white text
+- [ ] Create charts using the BCT gold/orange/deep-orange and idea-image navy/blue sequence
+- [ ] Set table headers to gold/orange background with charcoal text
 - [ ] Verify colour contrast meets WCAG AA standards
 - [ ] Add text labels to all colour-coded visuals
 - [ ] Test text filter on Provider Registry page
 - [ ] Add new KPIs for functional gaps (emergency, QA, finance, docs)
-- [ ] Verify all 117 gold layer measures have corresponding visuals
+- [ ] Verify all 95 v01 semantic-model measures are documented in `WMPP_Semantic_Model_Measures.md`
+- [ ] Validate `Closed_Date` remains blank when no related `has_offer = TRUE()` row exists
 - [ ] Publish to Fabric workspace and connect to gold lakehouse tables
 
 ---
@@ -499,21 +504,19 @@ This will apply all colours, fonts, and visual styles defined in this brand pack
 ┌──────────────────────────────────────────────┐
 │  BCT BRAND PALETTE                            │
 │                                               │
-│  ████████  Amber/Gold     #E8A020  Primary   │
-│  ████████  Pink/Magenta   #C82B5E  CTA       │
-│  ████████  Blue           #2972C4  Data viz  │
-│  ████████  Dark Charcoal  #1C1C1A  Text      │
-│  ████████  Burnt Orange   #D4601A  Tertiary  │
-│  ████████  Cream          #F4EFE4  Background│
-│  ████████  White          #FFFFFF  Cards     │
-│  ████████  Success Green  #3A8B6F  Positive  │
-│  ████████  Alert Red      #C0392B  Critical  │
-│  ████████  Border Grey    #E0DDD5  Dividers  │
+│  ████████  Mandala Gold      #FCBF00  Primary │
+│  ████████  Mandala Orange    #F59E00  Warm    │
+│  ████████  Deep Orange       #EF7911  Accent  │
+│  ████████  Pale Yellow       #FFE672  Soft    │
+│  ████████  Systems Navy      #2E3E71  KPI     │
+│  ████████  Sky Blue          #AFD9FF  Info    │
+│  ████████  Charcoal          #1C1C1A  Text    │
+│  ████████  Success Green     #3A8B6F  Positive│
+│  ████████  Critical Red      #C0392B  Alert   │
+│  ████████  White             #FFFFFF  Canvas  │
 │                                               │
 │  Typography: Poppins (headings) / Inter (body)│
 └──────────────────────────────────────────────┘
 ```
 
----
-
-*Brand pack updated from pixel-level analysis of birminghamchildrenstrust.co.uk website screenshots. Previous version used Microsoft CY26SU02 theme defaults (#118DFF / #12239E) which do not reflect the actual BCT corporate identity.*
+The complete current measure catalogue and `Closed_Date` implementation note are in [`WMPP_Semantic_Model_Measures.md`](WMPP_Semantic_Model_Measures.md). The importable theme is [`WMPP_Brand_Theme.json`](WMPP_Brand_Theme.json), and the report project contains the same palette in its embedded base theme.

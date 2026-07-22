@@ -1,0 +1,3 @@
+# Power BI-generated TMDL preserves tab-only DAX spacer lines and blank EOF lines.
+# Keep the exported source byte-faithful while excluding those generated lines from Git whitespace checks.
+*.tmdl -whitespace

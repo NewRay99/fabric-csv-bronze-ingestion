@@ -1,0 +1,69 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "32401127b80dbd4bba6d",
+  "position": {
+    "x": 320,
+    "y": 993.33333333333326,
+    "z": 8000,
+    "height": 506.66666666666669,
+    "width": 378.33333333333337,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "referral_id"
+                }
+              },
+              "queryRef": "Count(fact_referral_offer.referral_id)",
+              "nativeQueryRef": "referral_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "export_date"
+                }
+              },
+              "queryRef": "fact_referral_offer.export_date",
+              "nativeQueryRef": "export_date"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_referral_offer"
+                  }
+                },
+                "Property": "export_date"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

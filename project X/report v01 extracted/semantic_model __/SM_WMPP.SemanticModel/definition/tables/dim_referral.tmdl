@@ -1,0 +1,219 @@
+table dim_referral
+	lineageTag: 3f12e8a8-67c3-4f37-a0dd-54ff22652e5d
+
+	column referral_id
+		dataType: string
+		lineageTag: df472d56-ff6a-40af-a0cc-08aebebfc8fa
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column placement_type
+		dataType: string
+		lineageTag: 9181c662-b404-41be-94db-05a369f9897b
+		summarizeBy: none
+		sourceColumn: placement_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column required_start_date
+		dataType: string
+		lineageTag: c6c2a037-8a44-46e5-b64a-9fdd03d1ab14
+		summarizeBy: none
+		sourceColumn: required_start_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column response_required_by_date
+		dataType: string
+		lineageTag: 48aff4c0-aeeb-41bf-b4c2-9d8e598dd78b
+		summarizeBy: none
+		sourceColumn: response_required_by_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_sibling_placement
+		dataType: string
+		lineageTag: 9831374a-03db-403c-8cbf-c7ef97a29d18
+		summarizeBy: none
+		sourceColumn: is_sibling_placement
+
+		annotation SummarizationSetBy = Automatic
+
+	column sibling_count
+		dataType: string
+		lineageTag: bbfa3caa-3a7e-496b-b832-b761cf06b081
+		summarizeBy: none
+		sourceColumn: sibling_count
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_parent_child_placement
+		dataType: string
+		lineageTag: c8e1760e-d820-454a-8f96-649a1ce5354a
+		summarizeBy: none
+		sourceColumn: is_parent_child_placement
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_location_restriction
+		dataType: string
+		lineageTag: 2be60840-2b64-4562-9d64-810b175362ec
+		summarizeBy: none
+		sourceColumn: has_location_restriction
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_created_date
+		dataType: string
+		lineageTag: 2b8623de-5ba5-45e1-8aff-45f37aa1f736
+		summarizeBy: none
+		sourceColumn: referral_created_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: string
+		lineageTag: 0a83166a-3ce5-4769-8a61-399c67fa9d39
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_status
+		dataType: string
+		lineageTag: 1603e612-b818-4096-bf20-ddaa71566bfa
+		summarizeBy: none
+		sourceColumn: referral_status
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		lineageTag: 98c0f12b-6ebc-482e-9b85-5860335ff3eb
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Length Test' = ```
+			LEN(dim_referral[referral_id])
+			
+			```
+		formatString: 0
+		lineageTag: d5e233f1-4ccd-47e5-8a2e-815d7f9e363d
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gender Clean' =
+			
+			LOOKUPVALUE(
+			    dim_referral_gender[Gender Clean],
+			    dim_referral_gender[referral_id],
+			    dim_referral[referral_id]
+			)
+		lineageTag: 7dfd3788-158e-44ab-aca5-9b247b2380e9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_date_only =
+			
+			DATE(
+			    YEAR(dim_referral[referral_created_date]),
+			    MONTH(dim_referral[referral_created_date]),
+			    DAY(dim_referral[referral_created_date])
+			)
+		formatString: General Date
+		lineageTag: b8bcfd03-9d12-4aa4-b67a-da733fa0e39f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Response Required Date Clean' =
+			
+			IFERROR(
+			    DATEVALUE(LEFT(dim_referral[response_required_by_date], 10)),
+			    BLANK()
+			)
+		formatString: General Date
+		lineageTag: 8602b2df-0762-4e8c-adab-aab5284b8cd0
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: ba575f16-d2b3-4818-b0f1-f82a24d9a142
+			defaultHierarchy: LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Export Date Clean' = ```
+			
+			IFERROR(
+			    DATEVALUE(LEFT(dim_referral[export_date], 10)),
+			    BLANK()
+			)
+			
+			```
+		formatString: General Date
+		lineageTag: af167110-a11d-45ba-af71-2abac1f2533b
+		summarizeBy: none
+
+		variation Variation
+			isDefault
+			relationship: e138e6ea-f561-4693-ab1d-682dadfca512
+			defaultHierarchy: LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Closed_Date =
+			MAXX(
+			    FILTER(
+			        RELATEDTABLE(fact_referral_offer),
+			        fact_referral_offer[has_offer] = TRUE()
+			    ),
+			    fact_referral_offer[Closed_Date]
+			)
+		formatString: General Date
+		lineageTag: 1757ac57-3fbe-4320-b548-5ef2236d9991
+		summarizeBy: none
+
+	partition dim_referral = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"has_location_preferrence", "location_preference_details", "location_restriction_details", "additional_information"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Columns",{{"referral_created_date", type datetime}}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Changed Type",{"referral_modified_date", "referral_created_by", "referral_updated_by"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Columns1", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "referral_sk"}}),
+				    #"Trimmed Text" = Table.TransformColumns(#"Renamed Columns",{{"referral_id", Text.Trim, type text}}),
+				    #"Lowercased Text" = Table.TransformColumns(#"Trimmed Text",{{"referral_id", Text.Lower, type text}}),
+				    #"Trimmed Text1" = Table.TransformColumns(#"Lowercased Text",{{"referral_id", Text.Trim, type text}}),
+				    #"Lowercased Text1" = Table.TransformColumns(#"Trimmed Text1",{{"referral_id", Text.Lower, type text}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Lowercased Text1",{{"is_parent_child_placement", type logical}, {"has_location_restriction", type logical}, {"is_spot", type logical}}),
+				    #"Trimmed Text2" = Table.TransformColumns(#"Changed Type1",{{"referral_id", Text.Trim, type text}}),
+				    #"Cleaned Text" = Table.TransformColumns(#"Trimmed Text2",{{"referral_id", Text.Clean, type text}}),
+				    #"Sorted Rows" = Table.Sort(
+				    #"Cleaned Text",
+				    {
+				        {"referral_id", Order.Ascending},
+				        {"export_date", Order.Descending}
+				    }
+				),
+				    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_id"}, {{"All rows", each _, type table [referral_id=text, placement_type=nullable text, required_start_date=nullable text, response_required_by_date=nullable text, is_sibling_placement=nullable text, sibling_count=nullable text, is_parent_child_placement=nullable logical, has_location_restriction=nullable logical, referral_created_date=nullable datetime, is_spot=nullable logical, referral_status=nullable text, export_date=nullable date, referral_sk=number]}}),
+				    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "LatestRow", each Table.First(
+				    Table.Sort([All rows], {{"export_date", Order.Descending}})
+				)),
+				    #"Expanded LatestRow" = Table.ExpandRecordColumn(#"Added Custom", "LatestRow", {"placement_type", "required_start_date", "response_required_by_date", "is_sibling_placement", "sibling_count", "is_parent_child_placement", "has_location_restriction", "referral_created_date", "is_spot", "referral_status", "export_date"}, {"placement_type", "required_start_date", "response_required_by_date", "is_sibling_placement", "sibling_count", "is_parent_child_placement", "has_location_restriction", "referral_created_date", "is_spot", "referral_status", "export_date"}),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Expanded LatestRow",{"All rows"})
+				in
+				    #"Removed Columns2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

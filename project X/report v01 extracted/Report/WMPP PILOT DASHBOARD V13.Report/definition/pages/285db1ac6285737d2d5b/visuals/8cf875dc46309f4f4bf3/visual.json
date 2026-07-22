@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "8cf875dc46309f4f4bf3",
+  "position": {
+    "x": 310,
+    "y": 560,
+    "z": 9000,
+    "height": 377.77777777777777,
+    "width": 378.88888888888886,
+    "tabOrder": 10000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_offer"
+                    }
+                  },
+                  "Property": "referral_id"
+                }
+              },
+              "queryRef": "fact_offer.referral_id",
+              "nativeQueryRef": "referral_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_offer"
+                    }
+                  },
+                  "Property": "offer_date_only"
+                }
+              },
+              "queryRef": "fact_offer.offer_date_only",
+              "nativeQueryRef": "offer_date_only"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_offer"
+                  }
+                },
+                "Property": "offer_date_only"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "6f1d08a149ac866e6035",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_offer"
+              }
+            },
+            "Property": "referral_id"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5fa4666f92f328eb38d1",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_offer"
+              }
+            },
+            "Property": "offer_date_only"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

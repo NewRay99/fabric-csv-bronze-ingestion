@@ -1,0 +1,113 @@
+table 'bronze referral_provider_message'
+	isHidden
+	lineageTag: 1874eb5b-5869-4d97-b344-070d68432f9b
+
+	column message_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bf62cd58-27f0-46f0-a5ad-15baa3ed0e63
+		summarizeBy: none
+		sourceColumn: message_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5d0e7587-7d18-4af4-83e6-fb5484ab3fe4
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 00fcc972-35b9-4982-8815-1d5d98171482
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_timestamp
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: aae6b3bf-16ae-4852-a925-9084b78fb73a
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_text
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: efb01fba-a84b-4fde-819c-112fc28bb59a
+		summarizeBy: none
+		sourceColumn: message_text
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1e8100be-34f2-4f1f-bfa0-f82689adb223
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 59aa0864-d7a6-4334-8dfc-2ecb2f826a82
+		summarizeBy: none
+		sourceColumn: created_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9fa3a6fa-fbe3-4350-8dba-454b26d617d5
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_provider_message' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_provider_message = Source{[Schema="bronze",Item="referral_provider_message"]}[Data]
+				in
+				    bronze_referral_provider_message
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

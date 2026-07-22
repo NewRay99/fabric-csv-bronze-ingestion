@@ -1,0 +1,51 @@
+table 'bronze provider_sic_codes'
+	isHidden
+	lineageTag: d770f2af-32c2-4f53-a2e8-5f22b6a9739c
+
+	column provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 56264a54-d071-4734-bc74-a3e962a7289f
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column sic_code
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5d92b3f9-48d5-4992-8f2a-4905e9d108aa
+		summarizeBy: none
+		sourceColumn: sic_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 050b2cdb-e474-407c-8348-e0a6a1a20db6
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze provider_sic_codes' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_provider_sic_codes = Source{[Schema="bronze",Item="provider_sic_codes"]}[Data]
+				in
+				    bronze_provider_sic_codes
+
+	changedProperty = IsHidden
+

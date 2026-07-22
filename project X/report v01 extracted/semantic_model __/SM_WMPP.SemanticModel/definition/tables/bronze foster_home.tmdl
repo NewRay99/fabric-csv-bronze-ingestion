@@ -1,0 +1,135 @@
+table 'bronze foster_home'
+	isHidden
+	lineageTag: a31e105c-67aa-443e-af17-3d2859ef9d78
+
+	column foster_home_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1dbbfe6c-36cf-4fd7-b7f0-f5921dbcf129
+		summarizeBy: none
+		sourceColumn: foster_home_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 71b8323b-769a-48df-a3cb-5a4eb44411a8
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column address_line1
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 1c9e3629-35a2-4efd-8bed-64949b8fc0ed
+		summarizeBy: none
+		sourceColumn: address_line1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column address_line2
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 801aa7d8-80d2-47c1-be6c-a25d8044d7bf
+		summarizeBy: none
+		sourceColumn: address_line2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column town_or_city
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0f5b400d-f90f-42c7-b5d6-97c534257ad3
+		summarizeBy: none
+		sourceColumn: town_or_city
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column county
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f2560c4d-afbf-4fbe-8a3b-2afc6bfefea8
+		summarizeBy: none
+		sourceColumn: county
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column postcode
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5873d932-cff7-43cf-af59-1be610eef1b4
+		summarizeBy: none
+		sourceColumn: postcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column has_pets
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 69f53fb6-dc2b-42c1-9bcc-0e2bd243e112
+		summarizeBy: none
+		sourceColumn: has_pets
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column pets_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 914bc74d-2068-4a4f-8efd-2ec8b3a33598
+		summarizeBy: none
+		sourceColumn: pets_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 055107e1-5ade-471f-9d8b-750a06b06d6c
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze foster_home' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_foster_home = Source{[Schema="bronze",Item="foster_home"]}[Data]
+				in
+				    bronze_foster_home
+
+	changedProperty = IsHidden
+

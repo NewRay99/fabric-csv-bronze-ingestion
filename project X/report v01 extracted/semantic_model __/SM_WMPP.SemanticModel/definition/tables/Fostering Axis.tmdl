@@ -1,0 +1,24 @@
+table 'Fostering Axis'
+	lineageTag: c6bf257a-5948-417e-b5ae-9b720d3290c5
+
+	column 'Display Type'
+		lineageTag: 4a05d50b-ef17-436e-9435-560d728f07fa
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Display Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fostering Axis' = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Display Type", STRING,
+				    {
+				        { "Fostering Providers" }
+				    }
+				)
+
+	annotation PBI_Id = 2a558cee2228462788d73379047d8792
+

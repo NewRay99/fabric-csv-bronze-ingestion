@@ -1,0 +1,412 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "33bbc8c0008d696692c0",
+  "position": {
+    "x": 225.61434732014513,
+    "y": 549.79806968307207,
+    "z": 10000,
+    "height": 240.94736121568897,
+    "width": 1244.1645560955576,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_ipa"
+                    }
+                  },
+                  "Property": "offer_id"
+                }
+              },
+              "queryRef": "fact_ipa.offer_id",
+              "nativeQueryRef": "offer_id"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_ipa"
+                    }
+                  },
+                  "Property": "provider_name"
+                }
+              },
+              "queryRef": "fact_ipa.provider_name",
+              "nativeQueryRef": "provider_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_ipa"
+                    }
+                  },
+                  "Property": "home_name"
+                }
+              },
+              "queryRef": "fact_ipa.home_name",
+              "nativeQueryRef": "home_name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_ipa"
+                    }
+                  },
+                  "Property": "placement_service_type"
+                }
+              },
+              "queryRef": "fact_ipa.placement_service_type",
+              "nativeQueryRef": "placement_service_type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_ipa"
+                    }
+                  },
+                  "Property": "placement_framework_or_spot"
+                }
+              },
+              "queryRef": "fact_ipa.placement_framework_or_spot",
+              "nativeQueryRef": "placement_framework_or_spot"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_ipa"
+                  }
+                },
+                "Property": "offer_id"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "246.85008071105443D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_ipa.provider_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "197.5936128079645D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_ipa.home_name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "282.9613053730728D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_ipa.offer_id"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "234.27540301748377D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_ipa.placement_framework_or_spot"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "239D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_ipa.placement_service_type"
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "19D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'IPA''s Pending Completion'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "90c082d69b7dedee287c",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_ipa"
+              }
+            },
+            "Property": "home_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "aa071cbce1c5681eda50",
+        "ordinal": 1,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "IPAs Pending Completion"
+          }
+        },
+        "type": "Advanced",
+        "howCreated": "User"
+      },
+      {
+        "name": "73620aee38372e481ac9",
+        "ordinal": 2,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_ipa"
+              }
+            },
+            "Property": "offer_id"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "75eaa9d100d334a92f9c",
+        "ordinal": 3,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_ipa"
+              }
+            },
+            "Property": "placement_framework_or_spot"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "4652f865c2909a736a0c",
+        "ordinal": 4,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_ipa"
+              }
+            },
+            "Property": "placement_service_type"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "be689033d189f66f466d",
+        "ordinal": 5,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fact_ipa"
+              }
+            },
+            "Property": "provider_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c0cad75b0ebb4038c79a",
+        "ordinal": 6,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Is IPA Pending"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "_",
+              "Entity": "_Measures",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 0,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "_"
+                        }
+                      },
+                      "Property": "Is IPA Pending"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "1L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  }
+}

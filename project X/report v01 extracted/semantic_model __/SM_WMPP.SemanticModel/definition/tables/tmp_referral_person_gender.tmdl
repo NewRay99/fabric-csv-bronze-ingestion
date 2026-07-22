@@ -1,0 +1,39 @@
+table tmp_referral_person_gender
+	lineageTag: 8860ee34-46f7-40c5-85d4-488847871685
+
+	column referral_id
+		dataType: string
+		lineageTag: a06030d1-d142-40f0-9f27-a93923f56efd
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Gender Clean'
+		dataType: string
+		lineageTag: 220cfe7a-f67e-417c-94aa-f0092bf5abd5
+		summarizeBy: none
+		sourceColumn: Gender Clean
+
+		annotation SummarizationSetBy = Automatic
+
+	partition tmp_referral_person_gender = m
+		mode: import
+		source =
+				let
+				    Source = fact_referral_person,
+				    #"Merged Queries" = Table.NestedJoin(Source, {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+				    #"Expanded dim_person" = Table.ExpandTableColumn(#"Merged Queries", "dim_person", {"Gender Clean"}, {"Gender Clean"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded dim_person",{"initials", "age_value", "age_date_unit", "has_restrictions", "restriction_details", "source_reference_id", "gender", "gender_other", "ethnicity", "ethnicity_other", "religion", "religion_other", "preferred_language", "preferred_language_other", "child_index", "export_date", "support_need", "referral_sk", "person_sk"}),
+				    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"person_id", Order.Ascending}, {"referral_id", Order.Ascending}}),
+				    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_id"}, {{"All Rows", each _, type table [person_id=nullable text, referral_id=nullable text, Gender Clean=text]}}),
+				    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Primary Row", each Table.FirstN([All Rows], 1)),
+				    #"Expanded Primary Row" = Table.ExpandTableColumn(#"Added Custom", "Primary Row", {"Gender Clean"}, {"Gender Clean"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Expanded Primary Row",{"All Rows"})
+				in
+				    #"Removed Columns1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

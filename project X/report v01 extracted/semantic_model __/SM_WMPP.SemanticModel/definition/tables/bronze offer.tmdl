@@ -1,0 +1,269 @@
+table 'bronze offer'
+	isHidden
+	lineageTag: 1e827a26-76ec-4f2f-ae1c-cc736d986a8a
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a919da09-5f9f-4101-b5eb-6be85b5f16bc
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7f58b469-2fbb-49d6-a01d-e2362313c74c
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_number
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f1d1fd76-248f-4000-987b-50c8f3811f46
+		summarizeBy: none
+		sourceColumn: id_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimated_start_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: f8db89c5-097f-4211-a125-423501bf8d85
+		summarizeBy: none
+		sourceColumn: estimated_start_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column core_weekly_fee
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 22151d6a-2074-4f3a-9839-3e86dbe1412f
+		summarizeBy: none
+		sourceColumn: core_weekly_fee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column includes_education
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 516a1c94-c0b4-4b4a-b18f-dbe7fdc6da13
+		summarizeBy: none
+		sourceColumn: includes_education
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column child_summary_needs
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3a7dc7d3-bc6b-4e28-b229-ba8b60750713
+		summarizeBy: none
+		sourceColumn: child_summary_needs
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bb31996d-38e4-4385-8e77-447280810fb3
+		summarizeBy: none
+		sourceColumn: offer_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_modified_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 03a359b0-9a55-456c-8db9-a37bbc764075
+		summarizeBy: none
+		sourceColumn: last_modified_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6a85d59e-96e7-43c0-bc44-b7600a14f7cc
+		summarizeBy: none
+		sourceColumn: decline_reason
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column decline_reason_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: d9c38846-4e15-41f5-a77a-67e1fd8d825e
+		summarizeBy: none
+		sourceColumn: decline_reason_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column can_edit_offer
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: e0fed042-2907-4bd6-9b3e-300afe0fe21d
+		summarizeBy: none
+		sourceColumn: can_edit_offer
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column withdraw_reason
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9b3f7be5-869b-485e-90b6-51a2a21e5a8f
+		summarizeBy: none
+		sourceColumn: withdraw_reason
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column withdraw_reason_other
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: fb39fc6e-ec3f-430f-8d48-2c552f765e24
+		summarizeBy: none
+		sourceColumn: withdraw_reason_other
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_status
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a2522a96-2915-4d18-b043-f15b0c804bad
+		summarizeBy: none
+		sourceColumn: offer_status
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_type
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9e511ad6-3525-4cdf-b8a1-2942a030fa17
+		summarizeBy: none
+		sourceColumn: offer_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 3bad8b28-6959-4c8b-95f6-05ca6bf402a8
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: edbb53ef-692d-4692-be2f-c17d811cc0a2
+		summarizeBy: none
+		sourceColumn: category
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column category_code
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: bd086bb6-7bdb-442e-aef5-a4fc4801618b
+		summarizeBy: none
+		sourceColumn: category_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column education_weekly_fee
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: a97e3800-3df1-413f-86b4-061b12b62432
+		summarizeBy: none
+		sourceColumn: education_weekly_fee
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c8ccf02e-d8e6-4be1-95b4-f8645f5a50a4
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze offer' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_offer = Source{[Schema="bronze",Item="offer"]}[Data]
+				in
+				    bronze_offer
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Exception
+

@@ -251,3 +251,5 @@ This dashboard and accompanying logic pack provide both a user-friendly reportin
 ---
 
 *WMPP Dashboard Overview and KPI Logic Document – Final Pack*
+
+> **v01 semantic-model note:** The current `SM_WMPP` project contains 95 measures. The exact measure inventory, display folders, table/relationship counts, and `Closed_Date` derivation are maintained in [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md).

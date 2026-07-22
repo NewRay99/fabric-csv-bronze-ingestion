@@ -1,0 +1,87 @@
+table dim_referral_provider_message
+	lineageTag: 8bcb5e20-34d3-4854-b832-6d961b5e2c6a
+
+	column message_id
+		dataType: string
+		lineageTag: f08cd3bc-20dd-45d4-8c0e-f88952c439eb
+		summarizeBy: none
+		sourceColumn: message_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 30b6e790-1bd0-48ce-a312-60206a1a69ea
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_by
+		dataType: string
+		lineageTag: 424db41c-a3a4-4a6c-be29-052077d7cb83
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_timestamp
+		dataType: string
+		lineageTag: b177166f-9451-4be9-b43d-4fe8d17fa914
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_text
+		dataType: string
+		lineageTag: c7702919-4952-4de8-8071-aca3b9ab7afa
+		summarizeBy: none
+		sourceColumn: message_text
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		lineageTag: 212ea539-0f38-480b-b4ca-ef6c01b62bd1
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 084fcf4d-7b3b-46e3-ba4e-5c548e571ad9
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b644a049-5ed9-434d-9f48-4f67b002d700
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: ec45a54e-d71a-476d-be85-ff1ab6f82395
+			defaultHierarchy: LocalDateTable_7a31c86c-072f-40cb-ba1c-e823599ebaec.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition dim_referral_provider_message = m
+		mode: import
+		source =
+				let
+				    Source = stg_referral_provider_message
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

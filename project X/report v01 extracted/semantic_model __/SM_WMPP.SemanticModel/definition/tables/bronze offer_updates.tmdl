@@ -1,0 +1,87 @@
+table 'bronze offer_updates'
+	isHidden
+	lineageTag: 97618f25-a01c-489d-af54-a62097327297
+
+	column offer_update_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9e0e081d-821e-460f-85d3-f9473059c995
+		summarizeBy: none
+		sourceColumn: offer_update_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b77dcb28-5eed-4a76-9ca2-a992a4eada22
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_updates_requested
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 96ddf268-0da5-4cf4-a4b2-2b734972f767
+		summarizeBy: none
+		sourceColumn: offer_updates_requested
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 07ee50d6-50e8-44aa-9d46-be2fb748115a
+		summarizeBy: none
+		sourceColumn: message_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_updates_requested_at
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7082a080-93d9-4fd1-8944-3c86cf9f191b
+		summarizeBy: none
+		sourceColumn: offer_updates_requested_at
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 7f7f550c-290b-4894-abf0-6781a97cb99b
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze offer_updates' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_offer_updates = Source{[Schema="bronze",Item="offer_updates"]}[Data]
+				in
+				    bronze_offer_updates
+
+	changedProperty = IsHidden
+

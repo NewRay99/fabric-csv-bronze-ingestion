@@ -1,0 +1,142 @@
+table dim_provider_home
+	lineageTag: 05285aba-5e0f-4db1-9c86-e2efa90a0372
+
+	column provider_home_id
+		dataType: string
+		lineageTag: 74f02b65-77f6-45e5-bc45-c91f0073f2b2
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: 70042f03-3a7a-4934-bcd8-1904f00fccdb
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column service_type
+		dataType: string
+		lineageTag: 58b5cd3c-d2b4-404d-b779-ab6ca6949aa1
+		summarizeBy: none
+		sourceColumn: service_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column home_name
+		dataType: string
+		lineageTag: ca2d8e3b-756c-4c47-bfff-33bca525b271
+		summarizeBy: none
+		sourceColumn: home_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column town_city
+		dataType: string
+		lineageTag: 3e2dc373-1b34-41de-b8ba-5b75a8b5ed69
+		summarizeBy: none
+		sourceColumn: town_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column county
+		dataType: string
+		lineageTag: 1bbf87ae-d4fd-4469-984a-0cab02b5116c
+		summarizeBy: none
+		sourceColumn: county
+
+		annotation SummarizationSetBy = Automatic
+
+	column postcode
+		dataType: string
+		lineageTag: 9aae7fe4-93df-43cc-88e3-a3e8289bae3f
+		summarizeBy: none
+		sourceColumn: postcode
+
+		annotation SummarizationSetBy = Automatic
+
+	column number_of_registered_beds
+		dataType: int64
+		formatString: 0
+		lineageTag: 38a75739-12c1-4b9b-96e1-188c059c63c3
+		summarizeBy: sum
+		sourceColumn: number_of_registered_beds
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_regulating_body_inspection_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b13bf350-6d6d-41fc-b587-dc47336cf6f6
+		summarizeBy: none
+		sourceColumn: last_regulating_body_inspection_date
+
+		variation Variation
+			isDefault
+			relationship: eb5ca590-19b5-4426-b024-1221f9315792
+			defaultHierarchy: LocalDateTable_8f2a60c8-3c88-4eff-b199-beb431e63809.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column inspection_outcome_rating
+		dataType: string
+		lineageTag: b0d45f61-c9bf-41b8-b4cf-d12846397a9e
+		summarizeBy: none
+		sourceColumn: inspection_outcome_rating
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_spot
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5449b449-2c7c-4069-8c30-ad11529032d2
+		summarizeBy: none
+		sourceColumn: is_spot
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 02c3577f-e885-4d28-ba56-ff9109b57251
+		summarizeBy: none
+		sourceColumn: export_date
+
+		variation Variation
+			isDefault
+			relationship: 5257f6df-d640-4d4d-9bd4-cee624f6e2b0
+			defaultHierarchy: LocalDateTable_6d4ae097-14d6-4557-bdd5-62ecae22c3c2.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column provider_home_sk
+		dataType: int64
+		formatString: 0
+		lineageTag: f6ad66f8-8bcc-4b1d-91ac-4fffd989090c
+		summarizeBy: sum
+		sourceColumn: provider_home_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_provider_home = m
+		mode: import
+		source =
+				let
+				    Source = stg_provider_home,
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"address_line_1", "address_line_2", "country", "home_contact_number", "home_email_address", "registered_manager_name", "registered_manager_contact_number", "registered_manager_email_address", "regulatory_body_registration_reference", "created_by", "modified_by", "created_timestamp", "modified_timestamp", "qa_flag", "qa_flag_spot"}),
+				    #"Added Index" = Table.AddIndexColumn(#"Removed Columns", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "provider_home_sk"}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Renamed Columns", {"provider_home_id"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

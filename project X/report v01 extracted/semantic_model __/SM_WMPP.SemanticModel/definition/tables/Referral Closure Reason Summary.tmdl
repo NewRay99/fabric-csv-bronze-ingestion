@@ -1,0 +1,38 @@
+table 'Referral Closure Reason Summary'
+	lineageTag: aa4a171e-4e24-4254-b00a-1af2a743f284
+
+	column referral_id
+		lineageTag: fcc9b980-28ea-4f7e-bd3e-8d1c97f5484f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: fact_referral_offer[referral_id]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Closed Referral Reason Bucket'
+		lineageTag: 03bfcaf4-32dd-4233-a405-e77c14b673b4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Closed Referral Reason Bucket]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Referral Closure Reason Summary' = calculated
+		mode: import
+		source = ```
+				
+				ADDCOLUMNS(
+				    SUMMARIZE(
+				        fact_referral_offer,
+				        fact_referral_offer[referral_id]
+				    ),
+				    "Closed Referral Reason Bucket",
+				        CALCULATE(
+				            MAX(fact_referral_offer[Closed Referral Reason Bucket])
+				        )
+				)
+				
+				```
+
+	annotation PBI_Id = 53d7c7e7572e41d09a5e5e7763ad3413
+

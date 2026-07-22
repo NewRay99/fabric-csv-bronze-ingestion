@@ -1,0 +1,75 @@
+table 'bronze offer_view_history'
+	isHidden
+	lineageTag: 2487badd-3fcc-4af2-ba2b-2fbfa7e16770
+
+	column offer_view_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: eeac2285-accb-4934-9b8f-c3cd155b9915
+		summarizeBy: none
+		sourceColumn: offer_view_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: cda4b683-d417-4d17-881a-af889cf8e81c
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_viewed_by
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: fab5e16d-b4a7-4235-94d1-bab1c537b43e
+		summarizeBy: none
+		sourceColumn: offer_viewed_by
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_viewed_at
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 678c353b-714e-40a9-a947-5d8a0042188a
+		summarizeBy: none
+		sourceColumn: offer_viewed_at
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 588f3835-e5c3-4990-a97e-b05520de2721
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze offer_view_history' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_offer_view_history = Source{[Schema="bronze",Item="offer_view_history"]}[Data]
+				in
+				    bronze_offer_view_history
+
+	changedProperty = IsHidden
+

@@ -1,0 +1,63 @@
+table 'bronze referral_spot_category'
+	isHidden
+	lineageTag: f865a989-f8e4-45a7-9baf-750deeb4372d
+
+	column referral_spot_category_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 4b538304-6aa7-43f1-aae3-75990be4e689
+		summarizeBy: none
+		sourceColumn: referral_spot_category_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 299767da-24e3-4d27-9017-1054aae4ac8a
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column spot_category
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 9a1d2dcf-ea4e-400b-a5ef-f7a02bd6539a
+		summarizeBy: none
+		sourceColumn: spot_category
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 07acb49d-2dab-4d2f-86b8-38947338bb30
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze referral_spot_category' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_referral_spot_category = Source{[Schema="bronze",Item="referral_spot_category"]}[Data]
+				in
+				    bronze_referral_spot_category
+
+	changedProperty = IsHidden
+

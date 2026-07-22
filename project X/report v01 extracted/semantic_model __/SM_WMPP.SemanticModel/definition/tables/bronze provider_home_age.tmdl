@@ -1,0 +1,75 @@
+table 'bronze provider_home_age'
+	isHidden
+	lineageTag: e3431e5f-9e0b-4a61-8063-7cdb153b02f3
+
+	column provider_home_age_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 86ee0657-c1bb-4b67-85bd-6eef87e148e3
+		summarizeBy: none
+		sourceColumn: provider_home_age_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 843b0d11-3560-421a-b592-727b3ce42b43
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column max_age
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 60bd0ecc-c010-4c7d-8933-87e21aafd3c5
+		summarizeBy: none
+		sourceColumn: max_age
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column min_age
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: c334d983-c73e-4d14-b8de-12d5caeab562
+		summarizeBy: none
+		sourceColumn: min_age
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 542ad13c-9442-4485-ad44-2576559442c2
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze provider_home_age' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_provider_home_age = Source{[Schema="bronze",Item="provider_home_age"]}[Data]
+				in
+				    bronze_provider_home_age
+
+	changedProperty = IsHidden
+

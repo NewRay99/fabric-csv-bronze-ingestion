@@ -1,0 +1,63 @@
+table 'bronze provider_home_category'
+	isHidden
+	lineageTag: de09a5f6-b5d6-47e7-9085-ec8745c46aa6
+
+	column provider_home_category_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 0c202cbd-b40a-47bf-857b-9b4ff81d7638
+		summarizeBy: none
+		sourceColumn: provider_home_category_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_category_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: b4ec9bb3-65f6-443b-b6b7-99727c06bed7
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_home_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5a5465aa-268c-4c62-9017-5f6457adf011
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 5a13beaa-dc65-4803-ada4-e744ff29120e
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze provider_home_category' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_provider_home_category = Source{[Schema="bronze",Item="provider_home_category"]}[Data]
+				in
+				    bronze_provider_home_category
+
+	changedProperty = IsHidden
+

@@ -1,0 +1,99 @@
+table 'bronze foster_transport'
+	isHidden
+	lineageTag: da0ac9f9-b7a2-4d21-9082-5be17f306f43
+
+	column foster_transport_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 615140e7-b976-4209-b2b4-9be567c3ae78
+		summarizeBy: none
+		sourceColumn: foster_transport_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_id
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 93ead878-f1a4-4980-bebb-38d28c975770
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_transport_provision
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 44b1fa2f-bcdb-4154-ba9b-8e51a7b33a19
+		summarizeBy: none
+		sourceColumn: school_transport_provision
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column school_transport_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 24f2c82a-bcbb-4584-b6ca-cd2156b74fc3
+		summarizeBy: none
+		sourceColumn: school_transport_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column family_transport_provision
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 6d3f44f0-6ddf-49bb-861b-029739f5e958
+		summarizeBy: none
+		sourceColumn: family_transport_provision
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column family_transport_details
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: 379fb056-696e-4ede-a088-346fa70c2163
+		summarizeBy: none
+		sourceColumn: family_transport_details
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(8000)
+		lineageTag: fff495d7-fcd9-471d-9087-ffed14488746
+		summarizeBy: none
+		sourceColumn: export_date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'bronze foster_transport' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_foster_transport = Source{[Schema="bronze",Item="foster_transport"]}[Data]
+				in
+				    bronze_foster_transport
+
+	changedProperty = IsHidden
+
