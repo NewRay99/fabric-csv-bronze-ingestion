@@ -14,6 +14,10 @@
 
 ---
 
+> **Baseline control note — 23 July 2026:** The archived v01 semantic model contains 95 measures and 48 relationships. This draft retains its commercial baseline of 90 migrated plus 27 new measures (117 total) until the client classifies the five v01 additions through the change-control process in Section 10. See [WMPP-DE-CHG-001](07_Semantic_Model_Changelog_v00_to_v01.md) for the archive evidence, affected clauses, count options, and required relationship regression tests. This note does not itself amend scope, fees, timeline, deliverables, or acceptance criteria.
+
+---
+
 ## 1. Engagement Overview
 
 ### 1.1 Project Background

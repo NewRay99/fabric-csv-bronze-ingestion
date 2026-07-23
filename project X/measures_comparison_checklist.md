@@ -4,6 +4,7 @@
 **Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
 **Semantic model:** `SM_WMPP` — 95 measures in the current TMDL
 **Current catalogue:** [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md)
+**v00 → v01 changelog:** [`client documentation/07_Semantic_Model_Changelog_v00_to_v01.md`](client%20documentation/07_Semantic_Model_Changelog_v00_to_v01.md)
 **Date:** 10 July 2026  
 **Prepared by:** Hermes Agent  
 
@@ -11,7 +12,7 @@
 
 ## Overview
 
-This checklist is retained as a comparison of the legacy functional-specification mapping. The v01 semantic model is the current source of truth and contains **95 measures**, not the older 90-measure inventory. Use the generated catalogue linked above for the exact current names and display folders.
+This checklist is retained as a comparison of the legacy functional-specification mapping. The v01 semantic model is the current source of truth and contains **95 measures**, not the older 90-measure inventory. Sections 1–9 classify the 90 names retained from v00; the five v01 additions are recorded separately in WMPP-DE-CHG-001 and remain unclassified pending stakeholder validation. Use the generated catalogue linked above for the exact current names and display folders.
 
 Each measure is checked for:
 - ✅ **Implemented** — exists in the PBI model AND maps to a functional requirement
@@ -229,12 +230,16 @@ These are functional requirements from the spec that have **no corresponding mea
 
 | Metric | Count |
 |--------|-------|
-| Total PBI measures | 90 |
-| ✅ Implemented (measure maps to requirement) | 75 |
+| Legacy measures classified in Sections 1–9 | 90 |
+| v01 additions pending classification | 5 |
+| Current v01 semantic-model measures | 95 |
+| ✅ Implemented (measure maps to requirement) | 85 |
 | ⚠️ Partial (measure exists but gap in requirement coverage) | 2 |
-| 📋 Extra (PBI measure, no functional requirement) | 4 |
-| 🔁 Duplicate (same logic, different measure name) | 5 |
+| 📋 Extra (PBI measure, no functional requirement) | 3 |
+| 🔁 Exact-DAX duplicate groups (non-exclusive) | 5 groups: 11 measures, 6 redundant definitions |
 | ❌ Missing (requirement exists, no PBI measure) | 8 high + 6 medium + 3 low = 17 |
+
+The first three status rows reconcile the 90 legacy catalogue entries (85 + 2 + 3 = 90). Duplicate grouping is a separate, non-exclusive source comparison: some measures marked implemented or extra share the same archived v01 DAX.
 
 ### Coverage by Functional Area
 
@@ -274,4 +279,4 @@ These are functional requirements from the spec that have **no corresponding mea
 
 ---
 
-*Generated from: Power BI semantic model TMDL (90 measures), functional spec.md (87 requirements), am_functional_specification.csv (81 requirements), and WMPP KPI Logic Document.*
+*Legacy classification generated from: v00 Power BI semantic-model TMDL (90 `EXTERNALMEASURE` declarations), functional spec.md (87 requirements), am_functional_specification.csv (81 requirements), and WMPP KPI Logic Document. The archived v01 model contains 95 measures; see WMPP-DE-CHG-001 for the controlled delta.*
