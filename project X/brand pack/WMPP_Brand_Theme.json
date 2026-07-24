@@ -1,63 +1,88 @@
 {
-  "name": "WMPP_Brand_Theme_BCT_v1",
+  "name": "WMPP — Birmingham Children's Trust",
   "dataColors": [
     "#FCBF00",
     "#F59E00",
     "#EF7911",
     "#FFE672",
-    "#2E3E71",
-    "#AFD9FF",
-    "#C82B5E",
+    "#575756",
+    "#1D1D1B",
     "#3A8B6F",
-    "#C0392B",
-    "#1C1C1A",
-    "#F9B234",
-    "#F1F8FF"
+    "#C0392B"
   ],
-  "background": "#FFFDF8",
-  "foreground": "#1C1C1A",
-  "tableAccent": "#F59E00",
+  "background": "#EDEDED",
+  "foreground": "#1D1D1B",
+  "tableAccent": "#FCBF00",
   "good": "#3A8B6F",
-  "neutral": "#FCBF00",
+  "neutral": "#F59E00",
   "bad": "#C0392B",
-  "maximum": "#F59E00",
+  "maximum": "#EF7911",
   "center": "#FCBF00",
   "minimum": "#FFE672",
-  "null": "#A7A4A0",
-  "hyperlink": "#2E3E71",
-  "visitedHyperlink": "#2E3E71",
+  "null": "#B9B9B7",
+  "hyperlink": "#575756",
+  "visitedHyperlink": "#575756",
   "backgroundLight": "#FFFFFF",
-  "backgroundNeutral": "#E6E1D7",
-  "foregroundNeutralSecondary": "#5C5A56",
-  "foregroundNeutralTertiary": "#8A8780",
+  "backgroundNeutral": "#EDEDED",
+  "foregroundNeutralSecondary": "#575756",
+  "foregroundNeutralTertiary": "#777775",
   "textClasses": {
     "callout": {
-      "fontSize": 28,
-      "fontFace": "Poppins",
-      "color": "#1C1C1A"
+      "fontSize": 30,
+      "fontFace": "Lato",
+      "color": "#1D1D1B"
     },
     "title": {
       "fontSize": 13,
-      "fontFace": "Poppins",
-      "color": "#1C1C1A"
+      "fontFace": "Lato",
+      "color": "#1D1D1B"
     },
     "header": {
       "fontSize": 12,
-      "fontFace": "Poppins Semibold",
-      "color": "#1C1C1A"
+      "fontFace": "Lato",
+      "color": "#1D1D1B"
     },
     "label": {
       "fontSize": 11,
-      "fontFace": "Inter",
-      "color": "#5C5A56"
+      "fontFace": "Lato",
+      "color": "#575756"
     }
   },
   "visualStyles": {
     "*": {
       "*": {
-        "*": [
+        "background": [
           {
-            "wordWrap": true
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "show": true,
+            "color": {
+              "solid": {
+                "color": "#D6D6D4"
+              }
+            },
+            "radius": 4
+          }
+        ],
+        "title": [
+          {
+            "show": true,
+            "fontFace": "Lato",
+            "fontSize": 13,
+            "fontColor": {
+              "solid": {
+                "color": "#1D1D1B"
+              }
+            }
           }
         ],
         "categoryAxis": [
@@ -72,170 +97,52 @@
             "showAxisTitle": true,
             "gridlineStyle": "dotted"
           }
-        ],
-        "line": [
+        ]
+      }
+    },
+    "card": {
+      "*": {
+        "labels": [
           {
-            "transparency": 0
-          }
-        ],
-        "outline": [
-          {
-            "transparency": 0
-          }
-        ],
-        "plotArea": [
-          {
-            "transparency": 0
-          }
-        ],
-        "background": [
-          {
-            "show": true,
-            "transparency": 0
-          }
-        ],
-        "border": [
-          {
-            "width": 1
-          }
-        ],
-        "outspacePane": [
-          {
-            "backgroundColor": {
+            "fontFace": "Lato",
+            "fontSize": 30,
+            "color": {
               "solid": {
-                "color": "#FFFFFF"
-              }
-            },
-            "transparency": 0,
-            "border": true,
-            "borderColor": {
-              "solid": {
-                "color": "#E0DDD5"
+                "color": "#1D1D1B"
               }
             }
           }
         ],
-        "filterCard": [
-          {
-            "$id": "Applied",
-            "transparency": 0,
-            "foregroundColor": {
-              "solid": {
-                "color": "#1C1C1A"
-              }
-            },
-            "border": true
-          },
-          {
-            "$id": "Available",
-            "transparency": 0,
-            "foregroundColor": {
-              "solid": {
-                "color": "#1C1C1A"
-              }
-            },
-            "border": true
-          }
-        ]
-      }
-    },
-    "cardVisual": {
-      "*": {
-        "layout": [
-          {
-            "maxTiles": 3
-          },
-          {
-            "$id": "default",
-            "cellPadding": 14,
-            "paddingIndividual": false,
-            "paddingUniform": 14,
-            "backgroundShow": true
-          }
-        ],
-        "image": [
-          {
-            "$id": "default",
-            "position": "Left",
-            "imageAreaSize": 20,
-            "padding": 14,
-            "rectangleRoundedCurve": 8,
-            "fit": "Normal",
-            "fixedSize": false
-          }
-        ],
-        "referenceLabel": [
-          {
-            "$id": "default",
-            "backgroundColor": {
-              "solid": {
-                "color": "backgroundLight"
-              }
-            },
-            "paddingUniform": 14,
-            "rectangleRoundedCurveCustomStyle": true,
-            "rectangleRoundedCurveLeftBottom": 8,
-            "rectangleRoundedCurveRightBottom": 8
-          }
-        ]
-      }
-    },
-    "donutChart": {
-      "*": {
-        "legend": [
+        "categoryLabels": [
           {
             "show": true,
-            "position": "RightCenter"
-          }
-        ],
-        "labels": [
-          {
-            "labelStyle": "Data value, percent of total"
-          }
-        ]
-      }
-    },
-    "pieChart": {
-      "*": {
-        "legend": [
-          {
-            "show": true,
-            "position": "RightCenter"
-          }
-        ],
-        "labels": [
-          {
-            "labelStyle": "Data value, percent of total"
+            "fontFace": "Lato",
+            "fontSize": 11,
+            "color": {
+              "solid": {
+                "color": "#575756"
+              }
+            }
           }
         ]
       }
     },
-    "pivotTable": {
+    "tableEx": {
       "*": {
-        "rowHeaders": [
+        "columnHeaders": [
           {
-            "showExpandCollapseButtons": true,
-            "legacyStyleDisabled": true
-          }
-        ]
-      }
-    },
-    "multiRowCard": {
-      "*": {
-        "card": [
-          {
-            "outlineWeight": 2,
-            "barShow": true,
-            "barWeight": 2
-          }
-        ]
-      }
-    },
-    "kpi": {
-      "*": {
-        "trendline": [
-          {
-            "transparency": 20
+            "fontFace": "Lato",
+            "fontSize": 11,
+            "fontColor": {
+              "solid": {
+                "color": "#1D1D1B"
+              }
+            },
+            "backColor": {
+              "solid": {
+                "color": "#FCBF00"
+              }
+            }
           }
         ]
       }
