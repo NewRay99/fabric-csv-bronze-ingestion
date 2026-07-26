@@ -1,0 +1,1 @@
+Change Indicator = IF([Day Change] > 0, "▲", IF([Day Change] < 0, "▼", "–"))
