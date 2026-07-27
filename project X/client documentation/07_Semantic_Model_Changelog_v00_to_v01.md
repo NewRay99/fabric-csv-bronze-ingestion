@@ -238,4 +238,94 @@ Until the client chooses an option, the Statement of Work retains its draft comm
 
 ---
 
+## 8. Addendum — report v02 to report v03
+
+### 8.1 Scope and source controls
+
+This addendum records a direct, read-only comparison of the **last preceding Power BI solution archive**, `project X/reoprt v02.zip` (the filename is retained as committed), against `project X/report v03.zip`. It is additive to the v00-to-v01 reconciliation above; it does not alter the earlier baseline decision or commercial count controls.
+
+| Version | Source archive | Semantic-model path inside archive | SHA-256 | Archive members |
+|---|---|---|---|---:|
+| v02 | `project X/reoprt v02.zip` | `SM test/SM_WMPP.SemanticModel/definition/` | `39b1c4c8b3a368b6d0a6fc0d128355d62051f343495a2b099438d1ff70b7746e` | 623 |
+| v03 | `project X/report v03.zip` | `SM Test v2/SM_WMPP.SemanticModel/definition/` | `4580a23493767e94039f5a636e7bf9efb8cf6d4164c68303951b2b4ebfbf4fa1` | 707 |
+
+The comparison was performed against ZIP members, not an extracted working tree. The semantic-model root directory was renamed from `SM test` to `SM Test v2`; the root-name change is not treated as a semantic-model change.
+
+### 8.2 Semantic-model summary
+
+| Metric | v02 | v03 | Delta |
+|---|---:|---:|---:|
+| Table TMDL files | 80 | 80 | 0 |
+| Tables added / removed | 0 / 0 | 0 / 0 | 0 |
+| Table TMDL files changed | — | 1 (`_Measures`) | 1 |
+| Measure declarations | 98 | 139 | +41 |
+| Measures removed | — | 0 | 0 |
+| Relationships | 49 | 49 | 0 net |
+| Relationship additions / removals / property changes | — | 1 / 1 / 1 | See §8.4 |
+
+`model.tmdl` and `database.tmdl` are byte-equivalent between the two archives. No table is added or removed; the only changed table definition is `_Measures.tmdl`.
+
+### 8.3 Measures added in v03
+
+All **98** v02 measure names are retained in v03. v03 adds **41** measures, predominantly previous-month comparisons, variances, and presentational indicator/color helpers for referral, offer, and provider-contact KPIs.
+
+| Measure family | Added measures | Count |
+|---|---|---:|
+| Active-referral engagement | `Active Referral Engagement Rate Indicator`; `Active Referral Engagement Rate Previous Month`; `Active Referral Engagement Rate Variance`; `Active Referral Engagement Rate Variance Indicator Color` | 4 |
+| Active referrals awaiting offers | `Active Referrals Awaiting Offers Previous Month`; `Active Referrals Awaiting Offers Variance`; `Active Referrals Awaiting Offers Variance Indicator`; `Active Referrals Awaiting Offers Variance Indicator Color` | 4 |
+| Active referrals under offer | `Active Referrals Under Offer Indicator`; `Active Referrals Under Offer Previous Month`; `Active Referrals Under Offer Variance`; `Active Referrals Under Offer Variance Indicator Color` | 4 |
+| Closed / cancelled referrals | `Closed Referral Change Indicator`; `Closed Referral Change Indicator Color`; `Closed Referrals Variance`; `Referrals Cancelled/Closed Indicator`; `Referrals Cancelled/Closed Previous Month`; `Referrals Cancelled/Closed Variance` | 6 |
+| Open referrals | `Open Referral Change Indicator`; `Open Referral Change Indicator Color`; `Open Referrals Variance` | 3 |
+| Provider-contact referrals | `Provider Contact Referral Indicator`; `Provider Contact Referral Indicator Color`; `Provider Contact Referral Variance` | 3 |
+| Current referrals / referrals with offers | `Referrals Currently Active Indicator`; `Referrals Currently Active Previous Month`; `Referrals Currently Active Variance`; `Referrals With Offers Indicator`; `Referrals With Offers Previous Month`; `Referrals With Offers Variance` | 6 |
+| Total offers | `Total Offers Made Previous Month`; `Total Offers Made Variance`; `Total Offers Made Variance Color`; `Total Offers Made Variance Indicator` | 4 |
+| Total referrals / received offers | `Total Referrals Previous Month`; `Total Referrals Variance`; `Total Referrals Variance Indicator`; `Total Referrals Variance Indicator Color`; `Total Referrals That Recieved Offers Previous Month`; `Total Referrals That Recieved Offers Variance`; `Total Referrals That Recieved Offers Variance Indicator Color` | 7 |
+
+The v02 measure `Provider Contact Referrals MoM %` has the same DAX expression, display folder, lineage tag, and format annotation in both archives. It is recorded as a non-functional serialization/table-file difference, not a changed calculation.
+
+### 8.4 Relationship changes
+
+The total relationship count remains **49**, but the offer-to-referral filter path changes materially.
+
+| Change | v02 | v03 | Consequence / test focus |
+|---|---|---|---|
+| Removed | `fact_offer.referral_id` → `dim_referral.referral_id`, bidirectional | Removed | Direct offer-to-referral propagation is no longer available through this relationship. |
+| Added | — | `fact_offer.referral_provider_id` → `fact_referral_offer.referral_provider_id`, bidirectional, many-to-many | Validate ambiguity and propagation between offers, provider/referral offers, providers, and referrals. |
+| Modified | `fact_referral_offer.referral_id` → `dim_referral.referral_id`, default single direction | Same endpoints, **bidirectional** | Referral filters can now propagate from `fact_referral_offer` back to `dim_referral`; test totals and cross-filter interactions. |
+
+**Required v03 regression tests:**
+
+1. Reconcile all 41 new previous-month, variance, indicator, and color measures in unfiltered and month-filtered contexts.
+2. Test `fact_offer`, `fact_referral_offer`, `dim_referral`, and `dim_provider` slicers independently and in combination for double-counting or ambiguous filter paths.
+3. Validate visuals that use the new indicator/color helper measures for blank, zero, positive, and negative prior-period outcomes.
+4. Confirm the many-to-many offer/provider-referral relationship produces expected totals for providers with multiple offers or referrals.
+
+### 8.5 Primary dashboard report impact
+
+The primary dashboard report was identified as `report v14/WMPP DASHBOARD.Report/`: both archives contain the same **10 pages**, while the small `SM_WMPP.Report` is a semantic-model authoring shell.
+
+| Primary-report metric | v02 | v03 | Delta |
+|---|---:|---:|---:|
+| Pages | 10 | 10 | 0 |
+| Visual containers | 204 | 240 | +36 net |
+| Visual IDs added | — | 47 | +47 |
+| Visual IDs removed | — | 11 | -11 |
+| Added visual IDs on `REFERRALS` page | — | 47 | +47 |
+
+The 47 additions on `REFERRALS` comprise **18 shapes, 13 cards, 7 visual containers without a declared visual type, 6 action buttons, 2 KPIs, and 1 image**. The 11 removals comprise **6 untyped visual containers, 2 shapes, 2 images, and 1 KPI**. No report page is added or removed. Because visual display names and titles are not consistently declared in the PBIR members, this is a structural inventory; functional UAT must verify the intended user-facing KPI labels, navigation, and data interactions.
+
+### 8.6 v03 verification record
+
+| Check | Result |
+|---|---|
+| v02/v03 archive hashes captured | Pass |
+| Semantic-model roots selected directly from ZIP members | Pass |
+| `model.tmdl` and `database.tmdl` byte comparison | Pass — unchanged |
+| Table inventory reconciled | Pass — 80 in each archive; no table add/remove |
+| Measure inventory reconciled | Pass — 98 retained, 41 added, 0 removed |
+| Relationship inventory reconciled | Pass — 49 in each archive; 1 added, 1 removed, 1 property change |
+| Primary dashboard identified and page inventory reconciled | Pass — 10 pages in each archive |
+| Primary-report visual inventory reconciled | Pass — 204 to 240, with 47 added and 11 removed visual IDs |
+| Runtime DAX evaluation / business-output equivalence | Not performed — requires a refreshed model and controlled test data/filter contexts |
+
 *This document is Commercial in Confidence and should not be distributed outside the authorised stakeholder group without written approval.*
