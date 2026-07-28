@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1.0">
+<title>WMPP Dashboard — v14 Redesign</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* BCT Core */
+  --cream: #F4EFE4;
+  --amber: #E8A020;
+  --pink: #C82B5E;
+  --blue: #2972C4;
+  --charcoal: #1C1C1A;
+  --green: #3A8B6F;
+  --red: #C0392B;
+  /* Expanded */
+  --mint: #7BD3B8;
+  --mint-dark: #5DB89A;
+  --mint-light: #B8F0DE;
+  --pastel-purple: #B8A9E8;
+  --pastel-purple-dark: #9B8AD4;
+  --pastel-purple-light: #D8D0F4;
+  /* Neutrals */
+  --surface: #FFFFFF;
+  --surface-dim: #F8F5F0;
+  --border: #E8E4D8;
+  --text-secondary: #6B6B63;
+  --text-tertiary: #9E9E91;
+  /* Semantic */
+  --positive: #3A8B6F;
+  --warning: #E8A020;
+  --negative: #C0392B;
+  --info: #2972C4;
+  --new-accent: #7BD3B8;
+  --review-accent: #B8A9E8;
+  /* Layout */
+  --header-h: 56px;
+  --nav-w: 220px;
+  --canvas: 1920px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: var(--charcoal);
+  display: flex; justify-content: center; align-items: center;
+  min-height: 100vh; color: var(--charcoal);
+}
+.canvas {
+  width: var(--canvas); height: 1080px;
+  background: var(--cream);
+  display: flex; flex-direction: column;
+  border-radius: 4px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+}
+
+/* HEADER */
+.header {
+  height: var(--header-h); background: var(--charcoal);
+  display: flex; align-items: center; padding: 0 24px;
+  gap: 16px; z-index: 10;
+}
+.header-logo {
+  font-family: 'Poppins', sans-serif; font-size: 13px;
+  font-weight: 700; color: var(--cream);
+  letter-spacing: .5px;
+}
+.header-logo span { color: var(--amber); }
+.header-nav { display: flex; gap: 4px; margin-left: 32px; }
+.header-nav button {
+  font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 500;
+  padding: 6px 14px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-tertiary); cursor: pointer;
+  transition: all .15s;
+}
+.header-nav button:hover { color: var(--cream); background: rgba(255,255,255,.06); }
+.header-nav button.active { color: var(--cream); background: rgba(255,255,255,.1); font-weight: 600; }
+.header-actions { margin-left: auto; display: flex; gap: 10px; align-items: center; }
+.header-badge {
+  font-size: 10px; padding: 4px 10px; border-radius: 100px;
+  font-weight: 600; letter-spacing: .3px;
+}
+.badge-live { background: var(--green); color: #fff; }
+
+/* MAIN LAYOUT */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--nav-w); background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 16px 0; display: flex; flex-direction: column;
+  gap: 2px;
+}
+.sidebar-section {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: var(--text-tertiary);
+  padding: 12px 20px 6px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px; font-size: 11.5px; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: all .12s;
+}
+.sidebar-item:hover { background: var(--surface-dim); color: var(--charcoal); }
+.sidebar-item.active { background: var(--surface-dim); color: var(--charcoal); font-weight: 600; border-left-color: var(--blue); }
+
+/* CONTENT */
+.content { flex: 1; overflow-y: auto; padding: 24px 28px 28px; display: flex; flex-direction: column; gap: 20px; }
+
+.page-title { font-family: 'Poppins', sans-serif; font-size: 22px; font-weight: 700; color: var(--charcoal); }
+.page-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* KPI ROW */
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.kpi-card {
+  background: var(--surface); border-radius: 10px; padding: 18px 20px;
+  border: 1px solid var(--border); position: relative;
+  transition: box-shadow .2s;
+}
+.kpi-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.06); }
+.kpi-label { font-size: 10.5px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .4px; }
+.kpi-value { font-family: 'Poppins', sans-serif; font-size: 34px; font-weight: 700; color: var(--charcoal); margin: 4px 0 6px; line-height: 1; }
+.kpi-sub { display: flex; align-items: center; gap: 8px; font-size: 11px; }
+.kpi-delta { font-weight: 600; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; }
+.kpi-delta.pos { background: var(--mint-light); color: var(--mint-dark); }
+.kpi-delta.neg { background: #FDE8EC; color: var(--pink); }
+.kpi-delta.neutral { background: var(--surface-dim); color: var(--text-secondary); }
+.kpi-compare { color: var(--text-tertiary); font-size: 10px; }
+.kpi-accent-stripe { position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 10px 10px 0 0; }
+.stripe-amber { background: var(--amber); }
+.stripe-blue { background: var(--blue); }
+.stripe-green { background: var(--green); }
+.stripe-mint { background: var(--mint); }
+.stripe-purple { background: var(--pastel-purple); }
+
+/* CHART ROW */
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.chart-card {
+  background: var(--surface); border-radius: 10px;
+  border: 1px solid var(--border); padding: 20px 24px;
+}
+.chart-title { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; color: var(--charcoal); margin-bottom: 14px; }
+.chart-area { height: 240px; display: flex; align-items: flex-end; gap: 6px; padding-top: 8px; }
+.bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar { width: 100%; max-width: 48px; border-radius: 4px 4px 0 0; transition: all .2s; cursor: pointer; position: relative; min-height: 4px; }
+.bar:hover { filter: brightness(.9); transform: scaleY(1.02); transform-origin: bottom; }
+.bar-label { font-size: 9px; color: var(--text-secondary); font-weight: 500; }
+
+/* TABLE ROW */
+.table-card {
+  background: var(--surface); border-radius: 10px;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.table-header { padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.table-header h3 { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 600; }
+.table-header .filter { font-size: 11px; color: var(--blue); cursor: pointer; font-weight: 500; }
+table { width: 100%; border-collapse: collapse; font-size: 11px; }
+thead th {
+  background: var(--charcoal); color: var(--cream); font-weight: 600;
+  text-align: left; padding: 10px 16px; font-size: 10px;
+  text-transform: uppercase; letter-spacing: .5px;
+}
+tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: var(--charcoal); }
+tbody tr:nth-child(even) { background: var(--surface-dim); }
+tbody tr:hover { background: var(--mint-light); }
+.status-badge {
+  font-size: 9.5px; font-weight: 700; padding: 3px 10px;
+  border-radius: 100px; text-transform: uppercase;
+  letter-spacing: .3px;
+}
+.status-open { background: var(--mint-light); color: var(--mint-dark); }
+.status-uo { background: var(--pastel-purple-light); color: var(--pastel-purple-dark); }
+.status-closed { background: var(--surface-dim); color: var(--text-secondary); }
+.status-critical { background: #FDE8EC; color: var(--pink); }
+
+/* FOOTER */
+.footer {
+  height: 28px; background: var(--charcoal);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px; font-size: 9.5px; color: var(--text-tertiary);
+}
+
+/* DONUT MINI */
+.donut-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+.mini-donut-card {
+  background: var(--surface); border-radius: 10px;
+  border: 1px solid var(--border); padding: 20px 24px;
+  display: flex; gap: 20px; align-items: center;
+}
+.donut-svg { width: 90px; height: 90px; }
+.donut-info { flex: 1; }
+.donut-info h4 { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; color: var(--charcoal); margin-bottom: 6px; }
+.donut-info .big-num { font-size: 26px; font-weight: 700; color: var(--charcoal); }
+.donut-info .label { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+.donut-legend { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+.donut-legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-secondary); }
+.donut-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="canvas">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">WMPP <span>DASHBOARD</span></div>
+    <div class="header-nav">
+      <button class="active">File</button>
+      <button>Home</button>
+      <button>View</button>
+      <button>Help</button>
+    </div>
+    <div class="header-actions">
+      <span class="header-badge badge-live">LIVE</span>
+      <span style="font-size:10px;color:var(--text-tertiary)">Last refresh: 20 Jul 2026, 09:42</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-section">Overview</div>
+      <div class="sidebar-item active">📊 Summary Dashboard</div>
+      <div class="sidebar-section">Referrals</div>
+      <div class="sidebar-item">📋 Referral Volume</div>
+      <div class="sidebar-item">🔄 Referral Offers</div>
+      <div class="sidebar-section">Providers</div>
+      <div class="sidebar-item">🏥 Provider Activity</div>
+      <div class="sidebar-item">📁 Provider Registry</div>
+      <div class="sidebar-section">Offers</div>
+      <div class="sidebar-item">📝 Draft &amp; Pending</div>
+      <div class="sidebar-item">✅ IPA Tracking</div>
+      <div class="sidebar-section">Analysis</div>
+      <div class="sidebar-item">📐 Spot vs Framework</div>
+      <div class="sidebar-item">⏱ Time-Based KPIs</div>
+    </div>
+
+    <div class="content">
+      <div>
+        <div class="page-title">Summary Dashboard</div>
+        <div class="page-subtitle">Key performance indicators across all referral, offer, and provider workflows</div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="kpi-row">
+        <div class="kpi-card">
+          <div class="kpi-accent-stripe stripe-amber"></div>
+          <div class="kpi-label">Total Referrals</div>
+          <div class="kpi-value">2,847</div>
+          <div class="kpi-sub">
+            <span class="kpi-delta pos">+8.3%</span>
+            <span class="kpi-compare">vs prev. quarter</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent-stripe stripe-blue"></div>
+          <div class="kpi-label">Referrals With Offers</div>
+          <div class="kpi-value">1,623</div>
+          <div class="kpi-sub">
+            <span class="kpi-delta pos">+5.1%</span>
+            <span class="kpi-compare">57.0% conversion</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent-stripe stripe-mint"></div>
+          <div class="kpi-label">Active Referrals</div>
+          <div class="kpi-value" style="color:var(--mint-dark)">742</div>
+          <div class="kpi-sub">
+            <span class="kpi-delta neutral">—</span>
+            <span class="kpi-compare">Awaiting action</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent-stripe stripe-purple"></div>
+          <div class="kpi-label">IPAs Completed</div>
+          <div class="kpi-value" style="color:var(--pastel-purple-dark)">418</div>
+          <div class="kpi-sub">
+            <span class="kpi-delta pos">+12.7%</span>
+            <span class="kpi-compare">vs. last month</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent-stripe stripe-green"></div>
+          <div class="kpi-label">Provider Engagement</div>
+          <div class="kpi-value" style="color:var(--green)">84.2%</div>
+          <div class="kpi-sub">
+            <span class="kpi-delta pos">+2.4%</span>
+            <span class="kpi-compare">Active engagement rate</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Row -->
+      <div class="chart-row">
+        <!-- Referral Volume by Month -->
+        <div class="chart-card">
+          <div class="chart-title">Referral Volume — Last 7 Months</div>
+          <div class="chart-area" id="ref-chart"></div>
+        </div>
+        <!-- Offers by Status (Donut row replaced with gender split) -->
+        <div class="chart-card">
+          <div class="chart-title">Referrals by Gender</div>
+          <div class="chart-area" id="gender-chart"></div>
+        </div>
+      </div>
+
+      <!-- Donut Row: Age Buckets, Offer Status, IPA Progress -->
+      <div class="donut-row">
+        <div class="mini-donut-card">
+          <svg class="donut-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface-dim)" stroke-width="12"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--mint)" stroke-width="12"
+              stroke-dasharray="143 239" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <text x="50" y="46" text-anchor="middle" font-family="Poppins" font-size="18" font-weight="700" fill="var(--charcoal)">382</text>
+            <text x="50" y="62" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--text-secondary)">Under Offer</text>
+          </svg>
+          <div class="donut-info">
+            <h4>Offers Under Active</h4>
+            <div class="big-num">382</div>
+            <div class="label">Active referrals under offer</div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--mint)"></span> 0–7 days: 187</div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--pastel-purple)"></span> 8–14 days: 124</div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--pink)"></span> 15+ days: 71</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-donut-card">
+          <svg class="donut-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface-dim)" stroke-width="12"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--blue)" stroke-width="12"
+              stroke-dasharray="179 239" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <text x="50" y="46" text-anchor="middle" font-family="Poppins" font-size="18" font-weight="700" fill="var(--charcoal)">45%</text>
+            <text x="50" y="62" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--text-secondary)">Conversion</text>
+          </svg>
+          <div class="donut-info">
+            <h4>Offer Conversion Rate</h4>
+            <div class="big-num">45.2%</div>
+            <div class="label">Referrals resulting in offer</div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--blue)"></span> With offers: 1,623</div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--surface-dim)"></span> Awaiting: 1,224</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mini-donut-card">
+          <svg class="donut-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface-dim)" stroke-width="12"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="var(--pastel-purple)" stroke-width="12"
+              stroke-dasharray="160 239" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+            <text x="50" y="46" text-anchor="middle" font-family="Poppins" font-size="18" font-weight="700" fill="var(--charcoal)">418</text>
+            <text x="50" y="62" text-anchor="middle" font-family="Inter" font-size="8" fill="var(--text-secondary)">Completed</text>
+          </svg>
+          <div class="donut-info">
+            <h4>IPA Completion</h4>
+            <div class="big-num" style="color:var(--pastel-purple-dark)">418</div>
+            <div class="label">IPAs fully signed off</div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--pastel-purple)"></span> Completed: 418</div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--amber)"></span> Pending: 203</div>
+              <div class="donut-legend-item"><span class="donut-legend-dot" style="background:var(--pink)"></span> Not started: 94</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <h3>Active Referrals by Status — Detail View</h3>
+          <span class="filter">Filter &amp; Export →</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Referral ID</th><th>Provider</th><th>Referral Date</th><th>Status</th><th>Offers</th><th>Days Since</th><th>IPA Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight:600">REF-2026-0842</td><td>Sunrise Fostering</td><td>12 Jun 2026</td>
+              <td><span class="status-badge status-uo">Under Offer</span></td><td>3</td><td>38</td>
+              <td><span class="status-badge status-open">Pending</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">REF-2026-0891</td><td>Oakwood Residential</td><td>18 Jun 2026</td>
+              <td><span class="status-badge status-open">Open</span></td><td>1</td><td>32</td>
+              <td><span class="status-badge status-open">—</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">REF-2026-0903</td><td>Willow Care Homes</td><td>02 Jul 2026</td>
+              <td><span class="status-badge status-uo">Under Offer</span></td><td>5</td><td>18</td>
+              <td><span class="status-badge status-closed">Completed</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">REF-2026-0917</td><td>Birmingham Children's</td><td>08 Jul 2026</td>
+              <td><span class="status-badge status-open">Open</span></td><td>0</td><td>12</td>
+              <td><span class="status-badge status-open">—</span></td>
+            </tr>
+            <tr>
+              <td style="font-weight:600">REF-2026-0924</td><td>SafeHaven Supported Accomm.</td><td>14 Jul 2026</td>
+              <td><span class="status-badge status-critical">Critical</span></td><td>2</td><td>6</td>
+              <td><span class="status-badge status-critical">Overdue</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>WMPP Dashboard v14.1 · Birmingham Children's Trust · 20 Jul 2026</span>
+    <span>Data source: Fabric Lakehouse Gold · Next refresh: 08:00</span>
+  </div>
+</div>
+
+<script>
+// Chart: Referral Volume by Month
+(function(){
+  const data = [
+    {month: 'Jan', referrals: 380, offers: 195, color: 'var(--blue)'},
+    {month: 'Feb', referrals: 410, offers: 210, color: 'var(--blue)'},
+    {month: 'Mar', referrals: 425, offers: 230, color: 'var(--blue)'},
+    {month: 'Apr', referrals: 390, offers: 205, color: 'var(--amber)'},
+    {month: 'May', referrals: 445, offers: 240, color: 'var(--amber)'},
+    {month: 'Jun', referrals: 420, offers: 225, color: 'var(--mint)'},
+    {month: 'Jul', referrals: 465, offers: 250, color: 'var(--pastel-purple)'}
+  ];
+  const max = 500;
+  const container = document.getElementById('ref-chart');
+  data.forEach(d => {
+    const group = document.createElement('div'); group.className='bar-group';
+    const offersBar = document.createElement('div');
+    offersBar.className = 'bar'; offersBar.style.height = (d.offers/max * 220) + 'px';
+    offersBar.style.background = d.color;
+    const refBar = document.createElement('div');
+    refBar.className = 'bar'; refBar.style.height = ((d.referrals-d.offers)/max * 220) + 'px';
+    refBar.style.background = 'var(--text-secondary)'; refBar.style.opacity = '.3';
+    const label = document.createElement('div'); label.className='bar-label'; label.textContent = d.month;
+    group.appendChild(refBar); group.appendChild(offersBar); group.appendChild(label);
+    container.appendChild(group);
+  });
+})();
+
+// Chart: Gender Split
+(function(){
+  const data = [
+    {label: 'Male', value: 1480, color: 'var(--blue)'},
+    {label: 'Female', value: 1050, color: 'var(--pink)'},
+    {label: 'Other', value: 317, color: 'var(--pastel-purple)'}
+  ];
+  const max = 1600;
+  const container = document.getElementById('gender-chart');
+  data.forEach(d => {
+    const group = document.createElement('div'); group.className='bar-group';
+    const bar = document.createElement('div');
+    bar.className = 'bar'; bar.style.height = (d.value/max * 220) + 'px';
+    bar.style.background = d.color; bar.style.maxWidth = '60px';
+    const label = document.createElement('div'); label.className='bar-label'; label.textContent = d.label;
+    const val = document.createElement('div'); val.style.cssText = 'font-size:10px;font-weight:600;color:var(--charcoal)';
+    val.textContent = d.value.toLocaleString();
+    group.appendChild(bar); group.appendChild(label); group.appendChild(val);
+    container.appendChild(group);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+{
+  "name": "WMPP Dashboard — BCT Expanded (Mint + Pastel Purple)",
+  "description": "Birmingham Children's Trust palette extended with mint (#7BD3B8) and pastel purple (#B8A9E8) for enhanced KPI visual hierarchy. Approved for WMPP Dashboard v14+.",
+  "version": "2.0.0",
+
+  "dataColors": [
+    "#2972C4",
+    "#E8A020",
+    "#3A8B6F",
+    "#C82B5E",
+    "#7BD3B8",
+    "#B8A9E8",
+    "#1C1C1A",
+    "#F4EFE4"
+  ],
+
+  "sentimentColors": {
+    "positive": "#3A8B6F",
+    "neutral": "#E8A020",
+    "negative": "#C0392B"
+  },
+
+  "foreground": "#1C1C1A",
+  "foregroundNeutralSecondary": "#6B6B63",
+  "foregroundNeutralTertiary": "#9E9E91",
+  "backgroundLight": "#F4EFE4",
+  "background": "#FFFFFF",
+  "backgroundNeutral": "#F8F5F0",
+  "tableAccent": "#7BD3B8",
+
+  "maximumEntropy": {
+    "sentimentColors": {
+      "positive": "#3A8B6F",
+      "neutral": "#E8A020",
+      "negative": "#C0392B"
+    }
+  },
+
+  "visualStyles": {
+    "*": {
+      "*": {
+        "*": [
+          {
+            "fontFamily": "Inter, Segoe UI, Arial, sans-serif",
+            "fontSize": 10,
+            "color": { "solid": {} }
+          }
+        ],
+        "categoryAxis": [
+          {
+            "color": { "solid": { "color": "#6B6B63" } },
+            "fontSize": 9
+          }
+        ],
+        "valueAxis": [
+          {
+            "color": { "solid": { "color": "#6B6B63" } },
+            "fontSize": 9
+          }
+        ],
+        "title": [
+          {
+            "fontFamily": "Poppins, Segoe UI, Arial, sans-serif",
+            "fontSize": 12,
+            "color": { "solid": { "color": "#1C1C1A" } }
+          }
+        ],
+        "labels": [
+          {
+            "color": { "solid": { "color": "#1C1C1A" } },
+            "fontSize": 9
+          }
+        ],
+        "legend": [
+          {
+            "color": { "solid": { "color": "#6B6B63" } },
+            "fontSize": 9
+          }
+        ],
+        "background": [
+          {
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "color": { "solid": { "color": "#E8E4D8" } },
+            "show": true
+          }
+        ],
+        "tooltip": [
+          {
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "titleFontColor": { "solid": { "color": "#1C1C1A" } },
+            "valueFontColor": { "solid": { "color": "#1C1C1A" } }
+          }
+        ],
+        "header": [
+          {
+            "fontFamily": "Inter, Segoe UI, Arial, sans-serif",
+            "fontSize": 10,
+            "color": { "solid": { "color": "#FFFFFF" } },
+            "backColor": { "solid": { "color": "#1C1C1A" } }
+          }
+        ],
+        "outspacePane": [
+          {
+            "backgroundColor": { "solid": { "color": "#F8F5F0" } },
+            "foregroundColor": { "solid": { "color": "#1C1C1A" } }
+          }
+        ],
+        "filterCard": [
+          {
+            "backgroundColor": { "solid": { "color": "#FFFFFF" } },
+            "foregroundColor": { "solid": { "color": "#1C1C1A" } },
+            "transparency": 0
+          }
+        ]
+      },
+      "page": {
+        "*": [
+          {
+            "background": [
+              {
+                "color": { "solid": { "color": "#F4EFE4" } },
+                "transparency": 0
+              }
+            ],
+            "outspace": [
+              {
+                "color": { "solid": { "color": "#F8F5F0" } }
+              }
+            ]
+          }
+        ]
+      },
+      "cardVisual": {
+        "*": [
+          {
+            "labels": [
+              {
+                "color": { "solid": { "color": "#6B6B63" } },
+                "fontSize": 11
+              }
+            ],
+            "wordWrap": [
+              {
+                "show": true
+              }
+            ]
+          }
+        ]
+      },
+      "kpiVisual": {
+        "*": [
+          {
+            "goal": [
+              {
+                "color": { "solid": { "color": "#E8A020" } }
+              }
+            ],
+            "trendAxis": [
+              {
+                "color": { "solid": { "color": "#9E9E91" } }
+              }
+            ]
+          }
+        ]
+      },
+      "slicer": {
+        "*": [
+          {
+            "header": [
+              {
+                "fontSize": 11,
+                "fontFamily": "Poppins, Segoe UI, Arial, sans-serif"
+              }
+            ],
+            "items": [
+              {
+                "fontSize": 10
+              }
+            ]
+          }
+        ]
+      },
+      "tableEx": {
+        "*": [
+          {
+            "rowHeaders": [
+              {
+                "backColor": { "solid": { "color": "#1C1C1A" } },
+                "color": { "solid": { "color": "#FFFFFF" } },
+                "outlineColor": { "solid": { "color": "#1C1C1A" } },
+                "fontSize": 10
+              }
+            ],
+            "values": [
+              {
+                "alternateBackColor": { "solid": { "color": "#F8F5F0" } },
+                "backColor": { "solid": { "color": "#FFFFFF" } },
+                "outlineColor": { "solid": { "color": "#E8E4D8" } },
+                "fontSize": 10
+              }
+            ]
+          }
+        ]
+      },
+      "button": {
+        "*": [
+          {
+            "icon": [
+              {
+                "fill": [
+                  { "solid": { "color": "#FFFFFF" } }
+                ]
+              }
+            ],
+            "text": [
+              {
+                "fontFamily": "Inter, Segoe UI, Arial, sans-serif",
+                "fontSize": 11,
+                "color": { "solid": { "color": "#FFFFFF" } }
+              }
+            ],
+            "background": [
+              {
+                "color": { "solid": { "color": "#2972C4" } },
+                "transparency": 0
+              }
+            ],
+            "border": [
+              {
+                "color": { "solid": { "color": "#2972C4" } },
+                "show": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+
+  "textClasses": {
+    "title": {
+      "fontSize": 14,
+      "fontFamily": "Poppins, Segoe UI, Arial, sans-serif",
+      "color": { "solid": { "color": "#1C1C1A" } }
+    },
+    "label": {
+      "fontSize": 10,
+      "fontFamily": "Inter, Segoe UI, Arial, sans-serif",
+      "color": { "solid": { "color": "#6B6B63" } }
+    },
+    "header": {
+      "fontSize": 12,
+      "fontFamily": "Poppins, Segoe UI, Arial, sans-serif",
+      "color": { "solid": { "color": "#1C1C1A" } }
+    },
+    "callout": {
+      "fontSize": 28,
+      "fontFamily": "Poppins, Segoe UI, Arial, sans-serif",
+      "color": { "solid": { "color": "#1C1C1A" } }
+    }
+  },
+
+  "badgePalette": [
+    { "key": "ok", "label": "On Track", "backgroundColor": "#3A8B6F", "fontColor": "#FFFFFF" },
+    { "key": "risk", "label": "At Risk", "backgroundColor": "#E8A020", "fontColor": "#1C1C1A" },
+    { "key": "critical", "label": "Critical", "backgroundColor": "#C82B5E", "fontColor": "#FFFFFF" },
+    { "key": "new", "label": "New", "backgroundColor": "#7BD3B8", "fontColor": "#1C1C1A" },
+    { "key": "review", "label": "Under Review", "backgroundColor": "#B8A9E8", "fontColor": "#1C1C1A" },
+    { "key": "info", "label": "Info", "backgroundColor": "#2972C4", "fontColor": "#FFFFFF" },
+    { "key": "draft", "label": "Draft", "backgroundColor": "#E8E4D8", "fontColor": "#6B6B63" }
+  ],
+
+  "colorPalette": {
+    "cream": "#F4EFE4",
+    "amber": "#E8A020",
+    "pink": "#C82B5E",
+    "blue": "#2972C4",
+    "charcoal": "#1C1C1A",
+    "green": "#3A8B6F",
+    "red": "#C0392B",
+    "mint": "#7BD3B8",
+    "mintDark": "#5DB89A",
+    "mintLight": "#B8F0DE",
+    "pastelPurple": "#B8A9E8",
+    "pastelPurpleDark": "#9B8AD4",
+    "pastelPurpleLight": "#D8D0F4",
+    "neutral50": "#F8F5F0",
+    "neutral100": "#F4EFE4",
+    "neutral200": "#E8E4D8",
+    "neutral600": "#6B6B63",
+    "neutral700": "#4A4A42"
+  },
+
+  "chartPalette": {
+    "Referral Volume": ["#2972C4", "#E8A020", "#C82B5E", "#7BD3B8"],
+    "Provider Activity": ["#3A8B6F", "#E8A020", "#2972C4", "#B8A9E8"],
+    "Offer Status": ["#7BD3B8", "#B8A9E8", "#E8A020", "#C82B5E"],
+    "IPA Tracking": ["#B8A9E8", "#7BD3B8", "#2972C4", "#C82B5E"],
+    "Age Analysis": ["#E8A020", "#C82B5E", "#7BD3B8", "#B8A9E8"],
+    "Gender Split": ["#2972C4", "#C82B5E", "#E8A020"]
+  }
+}

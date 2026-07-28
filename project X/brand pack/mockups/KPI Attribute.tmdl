@@ -1,0 +1,71 @@
+calculationGroup 'KPI Attribute'
+	precedence: 10
+
+	calculationItem Value =
+		
+		SELECTEDMEASURE()
+		
+	
+	formatStringExpression: 
+		VAR _Base = SELECTEDMEASUREFORMATSTRING()
+		RETURN _Base
+
+	calculationItem "vs Prior Period" =
+		
+		VAR _Current = SELECTEDMEASURE()
+		VAR _Prior =
+		    CALCULATE(
+		        SELECTEDMEASURE(),
+		        DATEADD(dim_date[Date], -1, MONTH)
+		    )
+		RETURN
+		DIVIDE(_Current - _Prior, _Prior)
+		
+	
+	formatStringExpression: "▲ 0.0%;▼ -0.0%;0.0%"
+
+	calculationItem "vs Same Period Last Year" =
+		
+		VAR _Current = SELECTEDMEASURE()
+		VAR _Prior =
+		    CALCULATE(
+		        SELECTEDMEASURE(),
+		        SAMEPERIODLASTYEAR(dim_date[Date])
+		    )
+		RETURN
+		DIVIDE(_Current - _Prior, _Prior)
+		
+	
+	formatStringExpression: "▲ 0.0%;▼ -0.0%;0.0%"
+
+	calculationItem Indicator =
+		
+		VAR _Current = SELECTEDMEASURE()
+		VAR _Prior =
+		    CALCULATE(
+		        SELECTEDMEASURE(),
+		        SAMEPERIODLASTYEAR(dim_date[Date])
+		    )
+		RETURN
+		IF(
+		    _Current > _Prior, "▲",
+		    _Current < _Prior, "▼",
+		    "─"
+		)
+		
+	
+
+	calculationItem Color =
+		
+		VAR _Current = SELECTEDMEASURE()
+		VAR _Prior =
+		    CALCULATE(
+		        SELECTEDMEASURE(),
+		        SAMEPERIODLASTYEAR(dim_date[Date])
+		    )
+		RETURN
+		IF(
+		    _Current > _Prior, "#3A8B6F",
+		    _Current < _Prior, "#C0392B",
+		    "#6B6B63"
+		)
