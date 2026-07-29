@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40" class="squiggle">
+  <path d="M4 30 C 20 8, 30 8, 40 22 S 60 38, 70 24 S 92 4, 104 14"
+        stroke="#E0603F" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M98 6 L106 14 L96 18" stroke="#E0603F" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

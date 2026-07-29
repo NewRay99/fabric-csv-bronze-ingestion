@@ -1,0 +1,165 @@
+/* ============================================================
+   WMPP "Pastel Coral" Components — Proposed Pack v1.0
+   Composes tokens.css into report-ready components:
+   KPI cards, circular icon buttons, chart bars, status chips,
+   donut segments, page header. Import tokens.css first.
+   ============================================================ */
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg-canvas);
+  font-family: var(--font-body);
+  color: var(--ink);
+}
+
+/* ---------- Page header ---------- */
+.wmpp-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-4) var(--sp-5) var(--sp-2);
+}
+.wmpp-header .brand {
+  display: flex; align-items: center; gap: var(--sp-3);
+}
+.wmpp-header .brand .logo-grid {
+  width: 30px; height: 30px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 3px;
+}
+.wmpp-header .brand .logo-grid span {
+  border-radius: 4px; background: var(--ink);
+}
+.wmpp-header .brand .logo-grid span:nth-child(4) { background: var(--coral); }
+.wmpp-header h1 {
+  font-family: var(--font-display);
+  font-size: 22px; letter-spacing: .14em; margin: 0; font-weight: 700;
+}
+.wmpp-header .meta {
+  font-size: var(--fs-caption); color: var(--ink-faint); line-height: 1.5;
+}
+.wmpp-header .meta strong { color: var(--ink-soft); font-size: var(--fs-label); }
+
+/* ---------- Circular icon buttons (top-right nav) ---------- */
+.btn-circle {
+  width: 46px; height: 46px; border-radius: var(--r-pill);
+  border: none; cursor: pointer; display: inline-flex;
+  align-items: center; justify-content: center;
+  background: var(--bg-card); box-shadow: var(--shadow-btn);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.btn-circle:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(40,20,12,.22); }
+.btn-circle svg { width: 20px; height: 20px; }
+.btn-circle.coral   { background: var(--coral); }
+.btn-circle.coral svg { stroke: #fff; fill: none; }
+.btn-circle.ink     { background: var(--ink); }
+.btn-circle.ink svg { stroke: #fff; fill: none; }
+.btn-circle.plain svg { stroke: var(--ink); fill: none; }
+
+/* Mini circular action buttons on card headers */
+.btn-mini {
+  width: 26px; height: 26px; border-radius: var(--r-pill);
+  border: 1px solid var(--border-soft); background: var(--bg-card);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.btn-mini.solid { background: var(--ink); border-color: var(--ink); }
+.btn-mini.solid svg { stroke: #fff; }
+.btn-mini svg { width: 13px; height: 13px; stroke: var(--ink); fill: none; }
+
+/* ---------- KPI strip & cards ---------- */
+.kpi-strip {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--sp-4); padding: var(--sp-3) var(--sp-5);
+}
+.kpi-card {
+  background: var(--bg-card); border-radius: var(--r-tile);
+  padding: var(--sp-4); box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: var(--sp-2);
+  border: 1px solid var(--border-soft);
+}
+.kpi-card .kpi-icon {
+  width: 34px; height: 34px; border-radius: var(--r-pill);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--coral-tint);
+}
+.kpi-card .kpi-icon svg { width: 17px; height: 17px; stroke: var(--coral); fill: none; }
+.kpi-card.teal  .kpi-icon { background: var(--teal-tint); }
+.kpi-card.teal  .kpi-icon svg { stroke: var(--teal-deep); }
+.kpi-card.ink   .kpi-icon { background: #ECEAE9; }
+.kpi-card.ink   .kpi-icon svg { stroke: var(--ink); }
+.kpi-card.green .kpi-icon { background: var(--good-tint); }
+.kpi-card.green .kpi-icon svg { stroke: var(--good); }
+.kpi-card .kpi-value {
+  font-family: var(--font-display); font-size: var(--fs-kpi);
+  font-weight: 700; letter-spacing: .01em;
+}
+.kpi-card .kpi-label { font-size: var(--fs-label); color: var(--ink-soft); font-weight: 600; }
+.kpi-card .kpi-delta { font-size: var(--fs-caption); font-weight: 600; }
+.kpi-card .kpi-delta.up   { color: var(--good); }
+.kpi-card .kpi-delta.down { color: var(--bad); }
+.kpi-card .kpi-delta.flat { color: var(--ink-faint); }
+.kpi-card .provenance {
+  font-size: 9px; letter-spacing: .1em; color: var(--ink-faint);
+  text-transform: uppercase;
+}
+
+/* ---------- Dashboard cards (visual containers) ---------- */
+.card {
+  background: var(--bg-card); border-radius: var(--r-card);
+  box-shadow: var(--shadow-card); border: 1px solid var(--border-soft);
+  padding: var(--sp-4) var(--sp-4) var(--sp-3);
+  display: flex; flex-direction: column;
+}
+.card .card-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: var(--sp-3);
+}
+.card .card-title {
+  font-family: var(--font-display); font-size: var(--fs-title);
+  font-weight: 700; margin: 0; display: flex; align-items: center; gap: 6px;
+}
+.card .card-title .info-dot {
+  width: 14px; height: 14px; border-radius: 50%; border: 1.4px solid var(--ink-faint);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--ink-faint); font-weight: 700;
+}
+.card .card-sub { font-size: var(--fs-sub); color: var(--ink-faint); margin-top: 2px; }
+.card .card-actions { display: flex; gap: 6px; }
+
+/* ---------- Legend chips ---------- */
+.legend { display: flex; gap: var(--sp-4); font-size: var(--fs-label); color: var(--ink-soft); }
+.legend .key { display: flex; align-items: center; gap: 6px; }
+.legend .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+
+/* ---------- Status chips / pills ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: var(--r-pill);
+  font-size: var(--fs-caption); font-weight: 700;
+}
+.chip.open     { background: var(--status-open-tint);     color: var(--coral-deep); }
+.chip.engaged  { background: var(--status-engaged-tint);  color: var(--teal-deep); }
+.chip.success  { background: var(--status-success-tint);  color: var(--good); }
+.chip.closed   { background: var(--status-closed-tint);   color: var(--ink); }
+
+/* ---------- Rounded bars (SVG-free CSS bars for previews) ---------- */
+.bar { border-radius: var(--r-bar) var(--r-bar) 2px 2px; }
+.bar.coral      { background: var(--coral); }
+.bar.coral-mid  { background: var(--coral-mid); }
+.bar.coral-soft { background: var(--coral-soft); }
+.bar.coral-tint { background: var(--coral-tint); }
+.bar.teal       { background: var(--teal); }
+.bar.ink        { background: var(--ink); }
+
+/* ---------- Squiggly arrow decoration ---------- */
+.squiggle { overflow: visible; }
+.squiggle path {
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+
+/* ---------- Utility ---------- */
+.grid-dashboard {
+  display: grid; gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-5) var(--sp-5);
+}
+.txt-faint { color: var(--ink-faint); }
+.txt-soft  { color: var(--ink-soft); }

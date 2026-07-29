@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMPP Proposed Pack — Brand Preview</title>
+<link rel="stylesheet" href="../design-system/tokens.css">
+<link rel="stylesheet" href="../design-system/components.css">
+<style>
+  .preview { max-width: 1200px; margin: 0 auto; padding: var(--sp-5); }
+  .preview h2 {
+    font-family: var(--font-display); font-size: 13px; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--ink-soft);
+    border-bottom: 1px solid var(--border-soft); padding-bottom: var(--sp-2);
+    margin: var(--sp-6) 0 var(--sp-4);
+  }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px,1fr)); gap: var(--sp-3); }
+  .swatch-card { border-radius: var(--r-tile); overflow: hidden; box-shadow: var(--shadow-card); background: var(--bg-card); }
+  .swatch-card .fill { height: 64px; }
+  .swatch-card .label { padding: 8px 10px; font-size: 10px; }
+  .swatch-card .label b { display: block; font-size: 11px; }
+  .btn-row { display: flex; gap: var(--sp-3); align-items: center; flex-wrap: wrap; }
+  .icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); gap: var(--sp-3); }
+  .icon-cell { background: var(--bg-card); border-radius: var(--r-tile); border:1px solid var(--border-soft);
+    padding: var(--sp-3); text-align: center; font-size: 10px; color: var(--ink-soft); }
+  .icon-cell img, .icon-cell svg { width: 28px; height: 28px; display:block; margin: 0 auto 6px; }
+  .chip-row { display:flex; gap: var(--sp-2); flex-wrap: wrap; }
+  .type-sample .big { font-family: var(--font-display); font-size: 34px; font-weight:700; }
+  .type-sample .small { font-size: var(--fs-label); color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="preview">
+
+  <div class="wmpp-header" style="padding:0">
+    <div class="brand">
+      <div class="logo-grid"><span></span><span></span><span></span><span></span></div>
+      <h1>WMPP — PROPOSED BRAND PACK</h1>
+    </div>
+    <div class="meta"><strong>v1.0</strong> · Pastel Coral design system<br>Preview of every token &amp; component</div>
+  </div>
+
+  <h2>Colour — Primary Coral Ramp</h2>
+  <div class="swatches">
+    <div class="swatch-card"><div class="fill" style="background:var(--coral)"></div><div class="label"><b>Coral</b>#E0603F · primary</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--coral-deep)"></div><div class="label"><b>Coral Deep</b>#C84E2E · hover/max</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--coral-mid)"></div><div class="label"><b>Coral Mid</b>#F0937A · series 2</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--coral-soft)"></div><div class="label"><b>Coral Soft</b>#F8BFB2 · series 3</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--coral-tint)"></div><div class="label"><b>Coral Tint</b>#FDDDD4 · series 4</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--coral-faint)"></div><div class="label"><b>Coral Faint</b>#FEEDE8 · fills</div></div>
+  </div>
+
+  <h2>Colour — Teal, Ink &amp; Semantic</h2>
+  <div class="swatches">
+    <div class="swatch-card"><div class="fill" style="background:var(--teal)"></div><div class="label"><b>Teal</b>#78B8C0 · compare</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--teal-deep)"></div><div class="label"><b>Teal Deep</b>#4E97A1</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--ink)"></div><div class="label"><b>Ink</b>#282828 · neutral</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--good)"></div><div class="label"><b>Good</b>#3A9E75</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--warn)"></div><div class="label"><b>Warn</b>#E3A72F</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--bad)"></div><div class="label"><b>Bad</b>#D64554</div></div>
+    <div class="swatch-card"><div class="fill" style="background:var(--bg-canvas); border:1px solid var(--border-soft)"></div><div class="label"><b>Canvas</b>#FDF0EB</div></div>
+  </div>
+
+  <h2>Typography</h2>
+  <div class="card type-sample">
+    <div class="big">1,248 Open Referrals</div>
+    <div class="small" style="margin-top:6px">DIN (display) — KPI numerals &amp; visual titles · Segoe UI (body) — labels, axes, subtitles</div>
+  </div>
+
+  <h2>KPI Card Styles</h2>
+  <div class="kpi-strip" style="padding:0">
+    <div class="kpi-card">
+      <div class="kpi-icon"><img src="../icons/referral-open.svg" alt=""></div>
+      <div class="kpi-value">312</div>
+      <div class="kpi-label">Open Referrals</div>
+      <div class="kpi-delta up">▲ 8% vs last month</div>
+      <div class="provenance">Derived</div>
+    </div>
+    <div class="kpi-card teal">
+      <div class="kpi-icon"><img src="../icons/referral-engaged.svg" alt="" style="filter:hue-rotate(140deg)"></div>
+      <div class="kpi-value">47%</div>
+      <div class="kpi-label">With Engagement</div>
+      <div class="kpi-delta up">▲ 3 pts</div>
+      <div class="provenance">Derived</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon"><img src="../icons/referral-success.svg" alt="" style="filter:hue-rotate(60deg)"></div>
+      <div class="kpi-value">128</div>
+      <div class="kpi-label">Successful Placements</div>
+      <div class="kpi-delta flat">— on plan</div>
+      <div class="provenance">Locked</div>
+    </div>
+    <div class="kpi-card ink">
+      <div class="kpi-icon"><img src="../icons/referral-closed.svg" alt="" style="filter:grayscale(1) brightness(.3)"></div>
+      <div class="kpi-value">664</div>
+      <div class="kpi-label">Closed Referrals</div>
+      <div class="kpi-delta down">▼ 5%</div>
+      <div class="provenance">Locked</div>
+    </div>
+  </div>
+
+  <h2>Circular Buttons</h2>
+  <div class="btn-row">
+    <button class="btn-circle coral"><svg viewBox="0 0 24 24"><path d="M12 17.2s-6-4-6-8.5A3.5 3.5 0 0 1 12 6a3.5 3.5 0 0 1 6 2.7c0 4.5-6 8.5-6 8.5z" fill="currentColor" stroke="none"/></svg></button>
+    <button class="btn-circle ink"><svg viewBox="0 0 24 24"><path d="M3 17 9 11l4 4 8-8" fill="none"/><polyline points="15 7 21 7 21 13" fill="none"/></svg></button>
+    <button class="btn-circle plain"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg></button>
+    <button class="btn-circle plain"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></button>
+    <span class="txt-faint" style="font-size:11px">Top-right page navigation · coral = primary action, ink = secondary, white = utility</span>
+  </div>
+
+  <h2>Mini Card Action Buttons</h2>
+  <div class="btn-row">
+    <button class="btn-mini solid"><svg viewBox="0 0 24 24"><polyline points="17 4 21 8 17 12"/><line x1="3" y1="8" x2="21" y2="8"/></svg></button>
+    <button class="btn-mini"><svg viewBox="0 0 24 24"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/></svg></button>
+    <button class="btn-mini"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/></svg></button>
+  </div>
+
+  <h2>Status Chips (Referral Lifecycle)</h2>
+  <div class="chip-row">
+    <span class="chip open">● Open</span>
+    <span class="chip engaged">● With Engagement</span>
+    <span class="chip success">● Successful</span>
+    <span class="chip closed">● Closed</span>
+  </div>
+
+  <h2>Icons</h2>
+  <div class="icon-grid">
+    <div class="icon-cell"><img src="../icons/referral-open.svg" alt="">referral-open</div>
+    <div class="icon-cell"><img src="../icons/referral-closed.svg" alt="">referral-closed</div>
+    <div class="icon-cell"><img src="../icons/referral-engaged.svg" alt="">referral-engaged</div>
+    <div class="icon-cell"><img src="../icons/referral-success.svg" alt="">referral-success</div>
+    <div class="icon-cell"><img src="../icons/provider-home.svg" alt="">provider-home</div>
+    <div class="icon-cell"><img src="../icons/authority.svg" alt="">authority</div>
+    <div class="icon-cell"><img src="../icons/child-placement.svg" alt="">child-placement</div>
+    <div class="icon-cell"><img src="../icons/offer.svg" alt="">offer</div>
+    <div class="icon-cell"><img src="../icons/clock-pending.svg" alt="">clock-pending</div>
+    <div class="icon-cell"><img src="../icons/caseload.svg" alt="">caseload</div>
+    <div class="icon-cell"><img src="../icons/map-pin.svg" alt="">map-pin</div>
+    <div class="icon-cell"><img src="../icons/trend-up.svg" alt="">trend-up</div>
+    <div class="icon-cell"><img src="../icons/filter.svg" alt="">filter</div>
+    <div class="icon-cell"><img src="../icons/calendar.svg" alt="">calendar</div>
+    <div class="icon-cell"><img src="../icons/compare.svg" alt="">compare</div>
+    <div class="icon-cell"><img src="../icons/grid.svg" alt="">grid</div>
+  </div>
+
+  <h2>Squiggly Arrows</h2>
+  <div class="btn-row" style="background:var(--bg-card); border-radius:var(--r-tile); padding:var(--sp-4); border:1px solid var(--border-soft)">
+    <img src="../icons/arrow-squiggly-right.svg" alt="" style="width:110px">
+    <img src="../icons/arrow-squiggly-teal.svg" alt="" style="width:110px">
+    <img src="../icons/arrow-squiggly-down.svg" alt="" style="height:70px">
+    <img src="../icons/arrow-squiggly-loop.svg" alt="" style="width:48px">
+  </div>
+
+  <h2>Chart Bar Treatments</h2>
+  <div class="card">
+    <div style="display:flex; align-items:flex-end; gap:14px; height:120px; padding:0 var(--sp-3)">
+      <div class="bar coral"      style="width:38px; height:100%"></div>
+      <div class="bar coral-mid"  style="width:38px; height:82%"></div>
+      <div class="bar coral-soft" style="width:38px; height:64%"></div>
+      <div class="bar coral-tint" style="width:38px; height:48%"></div>
+      <div style="width:24px"></div>
+      <div class="bar teal"       style="width:38px; height:70%"></div>
+      <div class="bar ink"        style="width:38px; height:55%"></div>
+      <div class="bar coral"      style="width:38px; height:38%"></div>
+    </div>
+    <div class="legend" style="margin-top:var(--sp-3)">
+      <span class="key"><span class="swatch" style="background:var(--coral)"></span>Coral ramp — ranked categories</span>
+      <span class="key"><span class="swatch" style="background:var(--teal)"></span>Teal — comparison series</span>
+      <span class="key"><span class="swatch" style="background:var(--ink)"></span>Ink — neutral / closed</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

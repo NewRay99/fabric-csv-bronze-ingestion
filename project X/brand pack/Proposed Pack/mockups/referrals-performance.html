@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMPP — Referrals Performance (Proposed Style)</title>
+<link rel="stylesheet" href="../design-system/tokens.css">
+<link rel="stylesheet" href="../design-system/components.css">
+<style>
+  .canvas { max-width: 1280px; margin: 0 auto; min-height: 100vh;
+    background: linear-gradient(180deg, var(--bg-canvas) 0%, var(--bg-canvas-soft) 100%); }
+
+  .dash-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--sp-4);
+    padding: var(--sp-2) var(--sp-5) var(--sp-6);
+  }
+  .span-4 { grid-column: span 4; } .span-6 { grid-column: span 6; }
+  .span-8 { grid-column: span 8; } .span-12 { grid-column: span 12; }
+  @media (max-width: 900px){ .span-4,.span-6,.span-8 { grid-column: span 12; } }
+
+  .bar-chart { display:flex; align-items:flex-end; gap:10%; height:170px; padding:0 6px; }
+  .bar-chart .col { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end; }
+  .bar-chart .val { font-family:var(--font-display); font-size:11px; font-weight:700; }
+  .bar-chart .bar { width:100%; max-width:52px; }
+  .bar-chart .cat { font-size:10px; color:var(--ink-faint); }
+
+  .grouped { display:flex; align-items:flex-end; gap:8%; height:170px; }
+  .grouped .grp { flex:1; min-width:0; display:flex; align-items:flex-end; justify-content:center; gap:6px; height:100%; position:relative; }
+  .grouped .grp .bar { width:22px; max-width:22px; flex:none; }
+  .grouped .grp .cat { position:absolute; bottom:-20px; font-size:10px; color:var(--ink-faint); }
+  .grouped .gv { font-family:var(--font-display); font-size:10px; font-weight:700; position:absolute; }
+
+  .donut-wrap { display:flex; align-items:center; justify-content:center; gap:var(--sp-5); }
+
+  .axis { border-bottom:1px solid var(--ink-ghost); }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+  <!-- ================= HEADER ================= -->
+  <div class="wmpp-header">
+    <div class="brand">
+      <div class="logo-grid"><span></span><span></span><span></span><span></span></div>
+      <h1>WMPP REFERRALS PERFORMANCE</h1>
+    </div>
+    <div style="display:flex; gap:12px">
+      <button class="btn-circle coral" title="Referrals"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></button>
+      <button class="btn-circle plain" title="Offers"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M3 11h18"/></svg></button>
+      <button class="btn-circle plain" title="Providers"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ================= META + KPI STRIP ================= -->
+  <div style="display:flex; align-items:center; gap:var(--sp-5); padding:0 var(--sp-5) var(--sp-3)">
+    <div class="meta" style="font-size:11px; color:var(--ink-faint)">
+      <strong style="font-size:13px; color:var(--ink-soft)">29 July 2026 · 9:41 AM</strong><br>Last refresh
+    </div>
+    <div class="kpi-strip" style="flex:1; padding:0">
+      <div class="kpi-card">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/referral-open.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">312</div>
+            <div class="kpi-label">Open Referrals</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card teal">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/referral-engaged.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">47%</div>
+            <div class="kpi-label">With Engagement</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card green">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/referral-success.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">128</div>
+            <div class="kpi-label">Successful Placements</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card ink">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/referral-closed.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">664</div>
+            <div class="kpi-label">Closed Referrals</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/provider-home.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">86</div>
+            <div class="kpi-label">Provider Homes</div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card teal">
+        <div style="display:flex; align-items:center; gap:10px">
+          <div class="kpi-icon"><img src="../icons/authority.svg" alt=""></div>
+          <div>
+            <div class="kpi-value" style="font-size:24px">14</div>
+            <div class="kpi-label">Local Authorities</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CHART GRID ================= -->
+  <div class="dash-grid">
+
+    <!-- Referrals by Local Authority -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Referrals by Local Authority <span class="info-dot">i</span></div>
+          <div class="card-sub">Open referrals raised per authority, ranked</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-mini solid"><svg viewBox="0 0 24 24"><polyline points="17 4 21 8 17 12"/><line x1="3" y1="8" x2="21" y2="8"/></svg></button>
+          <button class="btn-mini"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/></svg></button>
+        </div>
+      </div>
+      <div class="bar-chart axis">
+        <div class="col"><div class="val">86</div><div class="bar coral" style="height:92%"></div><div class="cat">Birmingham</div></div>
+        <div class="col"><div class="val">74</div><div class="bar coral-mid" style="height:80%"></div><div class="cat">Coventry</div></div>
+        <div class="col"><div class="val">52</div><div class="bar coral-mid" style="height:58%"></div><div class="cat">Sandwell</div></div>
+        <div class="col"><div class="val">41</div><div class="bar coral-soft" style="height:46%"></div><div class="cat">Walsall</div></div>
+        <div class="col"><div class="val">29</div><div class="bar coral-tint" style="height:34%"></div><div class="cat">Dudley</div></div>
+      </div>
+    </div>
+
+    <!-- Top Providers by Placements -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Top Provider Homes by Placements <span class="info-dot">i</span></div>
+          <div class="card-sub">Five highest-placing provider homes</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-mini solid"><svg viewBox="0 0 24 24"><polyline points="17 4 21 8 17 12"/><line x1="3" y1="8" x2="21" y2="8"/></svg></button>
+          <button class="btn-mini"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/></svg></button>
+        </div>
+      </div>
+      <div class="bar-chart axis">
+        <div class="col"><div class="val">38</div><div class="bar coral" style="height:90%"></div><div class="cat">Maple House</div></div>
+        <div class="col"><div class="val">35</div><div class="bar coral-mid" style="height:83%"></div><div class="cat">Oak Lodge</div></div>
+        <div class="col"><div class="val">27</div><div class="bar coral-mid" style="height:66%"></div><div class="cat">Willow Grange</div></div>
+        <div class="col"><div class="val">22</div><div class="bar coral-soft" style="height:55%"></div><div class="cat">Birchfield</div></div>
+        <div class="col"><div class="val">18</div><div class="bar coral-tint" style="height:46%"></div><div class="cat">Cedar View</div></div>
+      </div>
+    </div>
+
+    <!-- Referral Outcomes by Age Band -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Outcomes by Age Band <span class="info-dot">i</span></div>
+          <div class="card-sub">Placed vs closed-without-placement per age group</div>
+        </div>
+      </div>
+      <div class="legend" style="margin-bottom:var(--sp-3)">
+        <span class="key"><span class="swatch" style="background:var(--coral)"></span>Placed</span>
+        <span class="key"><span class="swatch" style="background:var(--ink)"></span>Closed</span>
+        <span class="key"><span class="swatch" style="background:var(--teal)"></span>In progress</span>
+      </div>
+      <div class="grouped axis" style="margin-bottom:22px">
+        <div class="grp"><div class="bar coral" style="height:42%"></div><div class="bar ink" style="height:78%"></div><div class="bar teal" style="height:56%"></div><div class="cat">0–5</div></div>
+        <div class="grp"><div class="bar coral" style="height:60%"></div><div class="bar ink" style="height:34%"></div><div class="bar teal" style="height:80%"></div><div class="cat">6–11</div></div>
+        <div class="grp"><div class="bar coral" style="height:44%"></div><div class="bar ink" style="height:50%"></div><div class="bar teal" style="height:38%"></div><div class="cat">12–15</div></div>
+        <div class="grp"><div class="bar coral" style="height:30%"></div><div class="bar ink" style="height:26%"></div><div class="bar teal" style="height:42%"></div><div class="cat">16+</div></div>
+      </div>
+    </div>
+
+    <!-- Map placeholder -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Referrals by Location <span class="info-dot">i</span></div>
+          <div class="card-sub">Distribution across West Midlands authorities</div>
+        </div>
+      </div>
+      <div style="flex:1; min-height:190px; border-radius:var(--r-tile); background:var(--coral-faint); position:relative; overflow:hidden">
+        <!-- simplified stylised region shapes -->
+        <svg viewBox="0 0 300 180" style="width:100%; height:100%">
+          <path d="M40 30 Q90 10 130 35 T210 40 Q260 50 255 95 T200 145 Q140 170 90 150 T35 95 Q25 60 40 30 Z"
+                fill="#F8CFC4" stroke="#F0AB9C" stroke-width="1.5"/>
+          <g font-family="DIN,Segoe UI" font-size="10" font-weight="700" fill="#fff">
+            <circle cx="120" cy="70" r="16" fill="var(--coral)"/><text x="120" y="74" text-anchor="middle">86</text>
+            <circle cx="170" cy="55" r="13" fill="var(--coral-mid)"/><text x="170" y="59" text-anchor="middle">74</text>
+            <circle cx="90" cy="105" r="11" fill="var(--coral-mid)"/><text x="90" y="109" text-anchor="middle">52</text>
+            <circle cx="200" cy="110" r="10" fill="var(--coral-soft)" stroke="#fff"/><text x="200" y="114" text-anchor="middle" fill="#C84E2E">41</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Donut: engagement status -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Referral Engagement Mix <span class="info-dot">i</span></div>
+          <div class="card-sub">Share of open referrals by engagement state</div>
+        </div>
+      </div>
+      <div class="donut-wrap" style="flex:1">
+        <svg width="150" height="150" viewBox="0 0 42 42">
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--ink-ghost)" stroke-width="7"/>
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--coral)" stroke-width="7"
+                  stroke-dasharray="47 53" stroke-dashoffset="25" stroke-linecap="butt"/>
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--teal)" stroke-width="7"
+                  stroke-dasharray="28 72" stroke-dashoffset="-22"/>
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--ink)" stroke-width="7"
+                  stroke-dasharray="15 85" stroke-dashoffset="-50"/>
+          <circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--coral-soft)" stroke-width="7"
+                  stroke-dasharray="10 90" stroke-dashoffset="-65"/>
+        </svg>
+        <div style="font-size:11px; line-height:2">
+          <span class="key"><span class="swatch" style="background:var(--coral)"></span> Engaged 47%</span><br>
+          <span class="key"><span class="swatch" style="background:var(--teal)"></span> Awaiting response 28%</span><br>
+          <span class="key"><span class="swatch" style="background:var(--ink)"></span> Uncontactable 15%</span><br>
+          <span class="key"><span class="swatch" style="background:var(--coral-soft)"></span> New 10%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Open vs Successful trend -->
+    <div class="card span-4">
+      <div class="card-head">
+        <div>
+          <div class="card-title">Open vs Successful Referrals <span class="info-dot">i</span></div>
+          <div class="card-sub">Monthly comparison across the pilot period</div>
+        </div>
+      </div>
+      <div class="legend" style="margin-bottom:var(--sp-3)">
+        <span class="key"><span class="swatch" style="background:var(--coral)"></span>Opened</span>
+        <span class="key"><span class="swatch" style="background:var(--ink)"></span>Successful</span>
+      </div>
+      <div class="grouped axis" style="margin-bottom:22px">
+        <div class="grp"><div class="bar coral" style="height:72%"></div><div class="bar ink" style="height:46%"></div><div class="cat">Mar</div></div>
+        <div class="grp"><div class="bar coral" style="height:80%"></div><div class="bar ink" style="height:52%"></div><div class="cat">Apr</div></div>
+        <div class="grp"><div class="bar coral" style="height:68%"></div><div class="bar ink" style="height:58%"></div><div class="cat">May</div></div>
+        <div class="grp"><div class="bar coral" style="height:88%"></div><div class="bar ink" style="height:60%"></div><div class="cat">Jun</div></div>
+        <div class="grp"><div class="bar coral" style="height:64%"></div><div class="bar ink" style="height:44%"></div><div class="cat">Jul</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

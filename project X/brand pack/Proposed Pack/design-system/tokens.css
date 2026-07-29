@@ -1,0 +1,87 @@
+/* ============================================================
+   WMPP "Pastel Coral" Design Tokens — Proposed Pack v1.0
+   Inspired by the SupplySense reference dashboard (pastel pink/
+   coral aesthetic). Replaces the stock CY26SU02 theme colours.
+   All mockups and components must consume these variables only.
+   ============================================================ */
+
+:root {
+  /* ---- Canvas & surfaces ---- */
+  --bg-canvas:        #FDF0EB;   /* pastel peach-pink page wash   */
+  --bg-canvas-soft:   #FBE7DF;   /* deeper wash for footer bands  */
+  --bg-card:          #FFFFFF;   /* card / visual background      */
+  --bg-card-hover:    #FDF8F5;
+  --border-soft:      #F0D9D1;   /* hairline card borders         */
+
+  /* ---- Primary coral ramp (main data series) ---- */
+  --coral:            #E0603F;   /* primary bars, buttons, pins   */
+  --coral-deep:       #C84E2E;   /* hover / max emphasis          */
+  --coral-mid:        #F0937A;   /* 2nd series tint               */
+  --coral-soft:       #F8BFB2;   /* 3rd series tint               */
+  --coral-tint:       #FDDDD4;   /* 4th series tint               */
+  --coral-faint:      #FEEDE8;   /* 5th series tint / fills       */
+
+  /* ---- Secondary teal ramp (comparison series) ---- */
+  --teal:             #78B8C0;
+  --teal-deep:        #4E97A1;
+  --teal-soft:        #BFDDE1;
+  --teal-tint:        #E2F1F3;
+
+  /* ---- Ink (neutral series / text) ---- */
+  --ink:              #282828;   /* near-black bars & headings    */
+  --ink-soft:         #5A5756;   /* secondary text                */
+  --ink-faint:        #9A9694;   /* captions, axis labels         */
+  --ink-ghost:        #E9E4E1;   /* disabled / gridlines          */
+
+  /* ---- Semantic (status) ---- */
+  --good:             #3A9E75;   /* successful / positive delta   */
+  --good-tint:        #DDEEE6;
+  --warn:             #E3A72F;   /* aging / at risk               */
+  --warn-tint:        #FBEED3;
+  --bad:              #D64554;   /* overdue / critical            */
+  --bad-tint:         #F8DEE0;
+  --info:             var(--teal);
+
+  /* ---- WMPP referral-status mapping ---- */
+  --status-open:        var(--coral);       /* Open referrals        */
+  --status-open-tint:   var(--coral-tint);
+  --status-engaged:     var(--teal);        /* With engagement       */
+  --status-engaged-tint:var(--teal-tint);
+  --status-success:     var(--good);        /* Placed / successful   */
+  --status-success-tint:var(--good-tint);
+  --status-closed:      var(--ink);         /* Closed referrals      */
+  --status-closed-tint: #E4E2E1;
+
+  /* ---- Chart categorical sequence (SupplySense order) ---- */
+  --cat-1: var(--coral);
+  --cat-2: var(--ink);
+  --cat-3: var(--teal);
+  --cat-4: var(--coral-mid);
+  --cat-5: var(--coral-soft);
+  --cat-6: var(--coral-tint);
+  --cat-7: var(--teal-deep);
+  --cat-8: var(--teal-soft);
+
+  /* ---- Typography ---- */
+  --font-display: "DIN", "Archivo", "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-body:    "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+
+  --fs-kpi:     30px;   /* big KPI numerals          */
+  --fs-title:   15px;   /* visual titles (bold caps) */
+  --fs-sub:     11.5px; /* visual subtitles          */
+  --fs-label:   11px;   /* axis / data labels        */
+  --fs-caption: 10px;   /* captions, provenance      */
+
+  /* ---- Radii & elevation ---- */
+  --r-card:   18px;     /* dashboard cards             */
+  --r-tile:   14px;     /* KPI tiles / chips           */
+  --r-pill:   999px;    /* circular buttons, pills     */
+  --r-bar:      6px;    /* rounded bar tops            */
+
+  --shadow-card: 0 1px 2px rgba(40,20,12,.04), 0 8px 24px rgba(200,78,46,.06);
+  --shadow-btn:  0 4px 12px rgba(40,20,12,.18);
+
+  /* ---- Spacing scale ---- */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;
+  --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+}

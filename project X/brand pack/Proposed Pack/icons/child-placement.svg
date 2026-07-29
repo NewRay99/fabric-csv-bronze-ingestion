@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Child placement: adult+child figures -->
+  <circle cx="9" cy="7" r="3"/>
+  <path d="M4 21v-4a5 5 0 0 1 10 0v4"/>
+  <circle cx="18" cy="10" r="2.2"/>
+  <path d="M15 21v-2.5a3 3 0 0 1 6 0V21"/>
+</svg>
