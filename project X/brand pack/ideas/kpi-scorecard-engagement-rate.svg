@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="260" viewBox="0 0 560 260" role="img" aria-labelledby="title desc">
+  <title id="title">Referral engagement rate KPI scorecard</title><desc id="desc">Illustrative engagement scorecard using percentage-point terminology.</desc>
+  <rect width="560" height="260" fill="#FFFFFF" stroke="#D6D6D4"/><rect width="10" height="260" fill="#EF7911"/>
+  <g font-family="Lato, Arial, sans-serif"><text x="38" y="48" font-size="19" font-weight="700" fill="#575756">Referral engagement rate</text><text x="38" y="111" font-size="52" font-weight="700" fill="#1D1D1B">68.0%</text><text x="38" y="139" font-size="13" fill="#575756">Current period</text>
+  <line x1="38" y1="164" x2="522" y2="164" stroke="#D6D6D4"/><text x="38" y="194" font-size="13" fill="#575756">Previous month</text><text x="38" y="224" font-size="22" font-weight="700" fill="#1D1D1B">65.4%</text>
+  <text x="298" y="194" font-size="13" fill="#575756">MoM change</text><text x="298" y="224" font-size="22" font-weight="700" fill="#3A8B6F">+2.6 pp</text><text x="422" y="194" font-size="13" fill="#575756">Change rate</text><text x="422" y="224" font-size="22" font-weight="700" fill="#3A8B6F">+4.0%</text></g>
+</svg>

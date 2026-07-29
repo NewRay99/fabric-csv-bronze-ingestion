@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Birmingham Children's Trust Power BI brand swatch</title>
+  <desc id="desc">Approved BCT colours and Lato typography for the WMPP Power BI report.</desc>
+  <rect width="1200" height="760" fill="#EDEDED"/>
+  <rect x="48" y="48" width="1104" height="664" rx="4" fill="#FFFFFF" stroke="#D6D6D4"/>
+  <text x="88" y="112" font-family="Lato, Arial, sans-serif" font-size="34" font-weight="700" fill="#1D1D1B">WMPP Power BI brand swatch</text>
+  <text x="88" y="144" font-family="Lato, Arial, sans-serif" font-size="15" fill="#575756">Birmingham Children's Trust · website-first visual system</text>
+  <g font-family="Lato, Arial, sans-serif">
+    <g transform="translate(88 192)">
+      <rect width="224" height="126" fill="#FCBF00"/><text x="16" y="82" font-size="18" font-weight="700" fill="#1D1D1B">BCT Gold</text><text x="16" y="106" font-size="14" fill="#1D1D1B">#FCBF00</text>
+    </g>
+    <g transform="translate(328 192)">
+      <rect width="224" height="126" fill="#F59E00"/><text x="16" y="82" font-size="18" font-weight="700" fill="#1D1D1B">BCT Orange</text><text x="16" y="106" font-size="14" fill="#1D1D1B">#F59E00</text>
+    </g>
+    <g transform="translate(568 192)">
+      <rect width="224" height="126" fill="#EF7911"/><text x="16" y="82" font-size="18" font-weight="700" fill="#1D1D1B">Deep Orange</text><text x="16" y="106" font-size="14" fill="#1D1D1B">#EF7911</text>
+    </g>
+    <g transform="translate(808 192)">
+      <rect width="224" height="126" fill="#FFE672"/><text x="16" y="82" font-size="18" font-weight="700" fill="#1D1D1B">Pale Yellow</text><text x="16" y="106" font-size="14" fill="#1D1D1B">#FFE672</text>
+    </g>
+    <g transform="translate(88 338)">
+      <rect width="176" height="96" fill="#1D1D1B"/><text x="14" y="60" font-size="15" font-weight="700" fill="#FFFFFF">Charcoal</text><text x="14" y="80" font-size="12" fill="#FFFFFF">#1D1D1B</text>
+    </g>
+    <g transform="translate(280 338)">
+      <rect width="176" height="96" fill="#575756"/><text x="14" y="60" font-size="15" font-weight="700" fill="#FFFFFF">Mid Grey</text><text x="14" y="80" font-size="12" fill="#FFFFFF">#575756</text>
+    </g>
+    <g transform="translate(472 338)">
+      <rect width="176" height="96" fill="#EDEDED" stroke="#D6D6D4"/><text x="14" y="60" font-size="15" font-weight="700" fill="#1D1D1B">Canvas</text><text x="14" y="80" font-size="12" fill="#575756">#EDEDED</text>
+    </g>
+    <g transform="translate(664 338)">
+      <rect width="176" height="96" fill="#3A8B6F"/><text x="14" y="60" font-size="15" font-weight="700" fill="#FFFFFF">Success</text><text x="14" y="80" font-size="12" fill="#FFFFFF">#3A8B6F</text>
+    </g>
+    <g transform="translate(856 338)">
+      <rect width="176" height="96" fill="#C0392B"/><text x="14" y="60" font-size="15" font-weight="700" fill="#FFFFFF">Critical</text><text x="14" y="80" font-size="12" fill="#FFFFFF">#C0392B</text>
+    </g>
+    <text x="88" y="500" font-size="14" font-weight="700" fill="#575756">PRIMARY TYPEFACE</text>
+    <text x="88" y="552" font-size="40" font-weight="700" fill="#1D1D1B">Lato Bold — clear, warm headings</text>
+    <text x="88" y="594" font-size="22" fill="#1D1D1B">Lato Regular — readable labels, tables and supporting copy.</text>
+    <text x="88" y="638" font-size="14" fill="#575756">Power BI fallback: Arial · Base spacing: 8px · Card radius: 4px · Use charcoal text on warm colours.</text>
+  </g>
+</svg>
