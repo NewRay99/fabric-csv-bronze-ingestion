@@ -1,105 +1,145 @@
-# ── Parameters ─────────────────────────────────────────────────
-ROOT_PATH = "Files/archive_unzipped"       # Shortcut path in lakehouse. Path to the "archived" folder inside filestore
-ARCHIVE_SCHEMA    = "archived"             # Schema for archived tables
-TABLE_PREFIX     = "archived_"               # Prefix for brarchivedonze tables
-LOAD_MODE        = "append"             # append | overwrite
-TEXT_QUALIFIER   = '"'                  # CSV text qualifier character
-REBUILD   = 0                           # Rebuild Bronze tables
+import os
+from datetime import datetime
+from pyspark.sql.types import StructType, StructField, StringType, BooleanType, IntegerType, TimestampType
+
+# ── 1. Parameters ─────────────────────────────────────────────────────────────
+ROOT_PATH        = "Files/archive_unzipped"      # Relative path inside Lakehouse
+POSIX_ROOT_PATH  = f"/lakehouse/default/{ROOT_PATH}"
+ARCHIVE_SCHEMA   = "archived"
+TABLE_PREFIX     = "archived_"                  # Prefix for bronze tables
+LOAD_MODE        = "append"                     # append | overwrite
+TEXT_QUALIFIER   = '"'
+REBUILD          = 0                            # Set to 1 to drop & rebuild tables
 
 print(f"ROOT_PATH=[{ROOT_PATH}]")
-print(f"BRONZE_SCHEMA=[{ARCHIVE_SCHEMA}]")
+print(f"ARCHIVE_SCHEMA=[{ARCHIVE_SCHEMA}]")
 print(f"TABLE_PREFIX=[{TABLE_PREFIX}]")
 print(f"LOAD_MODE=[{LOAD_MODE}]")
-print(f"TEXT_QUALIFIER=[{TEXT_QUALIFIER}]")
 print(f"REBUILD=[{REBUILD}]")
 
-script = """create table if not exists archived.cfg_load_control 
+# ── 2. Create Schema & Control Table ──────────────────────────────────────────
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS {ARCHIVE_SCHEMA}")
+
+spark.sql(f"""
+CREATE TABLE IF NOT EXISTS {ARCHIVE_SCHEMA}.cfg_load_control 
 (
-    filename VARCHAR(500)
-    , reload BOOLEAN
-    , table_path  VARCHAR(500)
-    , schema_name  VARCHAR(500)
-    , table_name VARCHAR(500)
-    , load_count int
-    , export_date varchar(14)
-    , first_load_date timestamp
-    , last_load_date timestamp
-)"""
+    filename STRING,
+    reload BOOLEAN,
+    table_path STRING,
+    schema_name STRING,
+    table_name STRING,
+    load_count INT,
+    export_date STRING,
+    first_load_date TIMESTAMP,
+    last_load_date TIMESTAMP
+)
+""")
 
-spark.sql(script)
+# ── 3. Load Previously Logged Paths into Memory ────────────────────────────────
+loaded_df = spark.table(f"{ARCHIVE_SCHEMA}.cfg_load_control").where("reload = false").select("table_path")
+loaded_paths = set(row["table_path"] for row in loaded_df.collect())
 
+print(f"Found {len(loaded_paths)} previously logged file path(s) in control table.\n")
 
+# ── 4. Recursively Process All Files Across All Date Folders ──────────────────
+processed_count = 0
+skipped_count = 0
 
-from pyspark.sql import SparkSession
-from notebookutils import mssparkutils
-import os
+for root, dirs, files in os.walk(POSIX_ROOT_PATH):
+    for file_name in files:
+        # Only target CSV or Parquet files
+        if not (file_name.lower().endswith('.csv') or file_name.lower().endswith('.parquet')):
+            continue
 
-table_count = 0
+        # Paths
+        full_posix_path = os.path.join(root, file_name)
+        relative_path = os.path.relpath(full_posix_path, "/lakehouse/default")
+        
+        # Check control table for skip
+        if relative_path in loaded_paths:
+            print(f"⏩ Skipped (already logged): {relative_path}")
+            skipped_count += 1
+            continue
 
-df_cfg_lc = spark.table("archived.cfg_load_control").where("reload == FALSE")
+        # Extract target table name (e.g. ProviderHome.csv -> archived.archived_ProviderHome)
+        raw_entity_name = os.path.splitext(file_name)[0]
+        clean_table_name = f"{TABLE_PREFIX}{raw_entity_name}"
+        full_table_target = f"{ARCHIVE_SCHEMA}.{clean_table_name}"
 
-try:
-    folders = mssparkutils.fs.ls(ROOT_PATH)
+        print(f"\n🔄 Processing: {relative_path}")
+        print(f"   └── Target Table: {full_table_target}")
 
-    for f in folders:
-        # inside loop after successful write
-        table_count += 1
-        folder_name = os.path.basename(f.path.rstrip("/"))
+        # Drop table if REBUILD flag is active
+        if REBUILD == 1:
+            print(f"\t🔥 REBUILD=1: Dropping table {full_table_target}")
+            spark.sql(f"DROP TABLE IF EXISTS {full_table_target}")
 
-        clean_name = folder_name.split(".")[-2]
-        clean_name = f"{ARCHIVE_SCHEMA}.{clean_name}"
+        # Load file into DataFrame
+        try:
+            if file_name.lower().endswith('.parquet'):
+                df = spark.read.format("parquet").load(relative_path)
+            elif file_name.lower().endswith('.csv'):
+                df = (
+                    spark.read
+                    .format("csv")
+                    .option("header", "true")
+                    .option("inferSchema", "true")
+                    .option("quote", TEXT_QUALIFIER)
+                    .option("escape", TEXT_QUALIFIER)
+                    .option("multiLine", "true")
+                    .load(relative_path)
+                )
 
-        table_path = f"{ROOT_PATH}/{folder_name}"
-        file_exists = df_cfg_lc.where(F.col(""==table_path))
-        if (file_exists): 
-            print(f"😅 Skipping this file:{table_path}")
-        else:
-            print(f"Processing folder: {folder_name} -> table: {clean_name}")
-            if REBUILD==1:
-                print(f"\tDropping table: {clean_name}")
-                sql_drop= f"DROP TABLE IF EXISTS {clean_name}"
-                spark.sql(sql_drop)
+            row_count = df.count()
+            print(f"\tLoaded {row_count:,} rows.")
 
+            # Write DataFrame into Lakehouse Delta table
+            df.write.format("delta") \
+                .mode(LOAD_MODE) \
+                .option("mergeSchema", "true") \
+                .saveAsTable(full_table_target)
             
-            # Try parquet first (most common)
-            if folder_name.lower().endswith(".parquet"):
-                df = spark.read.format("parquet").load(table_path)
-                print(f"\tLoaded parquet for {folder_name}")
-            elif folder_name.lower().endswith(".csv"):
-                # Try CSV if parquet fails
-                try:
-                    df = (
-                            spark.read
-                            .format("csv")
-                            .option("header", "true")
-                            .option("quote", TEXT_QUALIFIER)
-                            .option("escape", TEXT_QUALIFIER)
-                            .option("multiLine", "true")
-                            .load(table_path)
-                        )
-                    print(f"\tLoaded CSV for {folder_name}")
-                except Exception as e:
-                    print(f"FAILED: {folder_name}")
-                    print(type(e).__name__)
-                    print(str(e))
-                    #print(f"Skipping {folder_name}, unsupported format or empty folder")
-                    continue
-                    
-            # Write to Lakehouse as Delta table
-            try:
-                df.write.format("delta").mode(LOAD_MODE).option("overwriteSchema", "true").saveAsTable(clean_name)
-                
-                print(f"\tCreated/updated table: {clean_name}")
-            except Exception as e:
-                print(f"\tWrite failed for {clean_name}")
-                print(str(e))
-                raise
+            print(f"\t✅ Written to {full_table_target}")
 
-            
-except Exception as e:
-    print("ERROR TYPE:", type(e).__name__)
-    print("ERROR:", str(e))
-    raise
+            # Extract parent folder name as export date (e.g. '2026-07-01')
+            parent_folder = os.path.basename(root)
+            export_date = parent_folder if parent_folder != "archive_unzipped" else ""
+            now = datetime.now()
 
-print(f"Successfully processed {table_count} tables")   
-print("All tables processed successfully!")
+            # Append metadata record to control table
+            log_schema = StructType([
+                StructField("filename", StringType(), True),
+                StructField("reload", BooleanType(), True),
+                StructField("table_path", StringType(), True),
+                StructField("schema_name", StringType(), True),
+                StructField("table_name", StringType(), True),
+                StructField("load_count", IntegerType(), True),
+                StructField("export_date", StringType(), True),
+                StructField("first_load_date", TimestampType(), True),
+                StructField("last_load_date", TimestampType(), True)
+            ])
+
+            log_data = [(
+                file_name,
+                False,
+                relative_path,
+                ARCHIVE_SCHEMA,
+                clean_table_name,
+                row_count,
+                export_date,
+                now,
+                now
+            )]
+
+            log_df = spark.createDataFrame(log_data, log_schema)
+            log_df.write.format("delta").mode("append").saveAsTable(f"{ARCHIVE_SCHEMA}.cfg_load_control")
+
+            # Memory update to prevent duplicate work in current run
+            loaded_paths.add(relative_path)
+            processed_count += 1
+
+        except Exception as e:
+            print(f"❌ FAILED to process {file_name}: {str(e)}")
+            raise e
+
+print(f"\n🎉 Completed! Total files processed: {processed_count} | Skipped: {skipped_count}")
