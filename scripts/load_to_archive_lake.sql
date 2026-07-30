@@ -1,3 +1,43 @@
+
+from delta.tables import DeltaTable
+
+# 1. Create the single-row logging DataFrame for the current file
+log_data = [(
+    file_name,
+    False,
+    relative_path,
+    ARCHIVE_SCHEMA,
+    clean_table_name,
+    row_count,
+    export_date,
+    now, # first_load_date
+    now  # last_load_date
+)]
+
+log_df = spark.createDataFrame(log_data, log_schema)
+
+# 2. Load the Delta table reference
+control_delta_table = DeltaTable.forName(spark, f"{ARCHIVE_SCHEMA}.cfg_load_control")
+
+# 3. Perform the Upsert (Merge)
+control_delta_table.alias("target") \
+    .merge(
+        log_df.alias("source"),
+        "target.table_path = source.table_path"
+    ) \
+    .whenMatchedUpdate(set = {
+        # Update existing record: add new row_count to previous total
+        "load_count": "target.load_count + source.load_count",
+        "last_load_date": "source.last_last_load_date" if "source.last_last_load_date" in log_df.columns else "source.last_load_date"
+    }) \
+    .whenNotMatchedInsertAll() \
+    .execute()
+
+print(f"\t📝 Logged metadata to {ARCHIVE_SCHEMA}.cfg_load_control")
+
+
+
+
 import os
 from datetime import datetime
 from pyspark.sql.types import StructType, StructField, StringType, BooleanType, IntegerType, TimestampType
