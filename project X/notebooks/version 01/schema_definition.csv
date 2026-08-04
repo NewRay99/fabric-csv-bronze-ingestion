@@ -1,7 +1,7 @@
-schema_name,table_name,ordinal_position,column_name,data_type,is_nullable,column_default,primary_key_name,is_primary_key,foreign_key_name,referenced_schema,referenced_table,referenced_column,column_description,table_description
+﻿schema_name,table_name,ordinal_position,column_name,data_type,is_nullable,column_default,primary_key_name,is_primary_key,foreign_key_name,referenced_schema,referenced_table,referenced_column,column_description,table_description
 offer,additional_fee,1,additional_fee_id,uuid,NO,NULL,pk_additional_fee,YES,,,,,Auto Generated Unique Primary Key,Holds key information regarding the addtional fee
 offer,additional_fee,2,offer_id,uuid,NO,NULL,,NO,fk_offer_additional_fee,offer,offer,offer_id,FK to Offer entity,Holds key information regarding the addtional fee
-offer,additional_fee,3,fee_code,character varying(9),YES,NULL,,NO,,,,,Fee code,Holds key information regarding the addtional fee
+offer,additional_fee,3,fee_title,character varying(9),YES,NULL,,NO,,,,,Fee code,Holds key information regarding the addtional fee
 offer,additional_fee,4,number_of_hours,"numeric(6,1)",NO,NULL,,NO,,,,,NULL,Holds key information regarding the addtional fee
 offer,additional_fee,5,other_fee_title,character varying(50),YES,NULL,,NO,,,,,NULL,Holds key information regarding the addtional fee
 offer,additional_fee,6,fee_frequency,character varying(50),NO,NULL,,NO,,,,,NULL,Holds key information regarding the addtional fee
@@ -74,18 +74,6 @@ provider,holding_company,14,companies_house_details,character varying(100),NO,NU
 ipa,ipa,1,ipa_id,uuid,NO,NULL,ipa_pkey,YES,,,,,NULL,NULL
 ipa,ipa,2,offer_id,uuid,NO,NULL,,NO,fk_ipa_offer,offer,offer,offer_id,NULL,NULL
 ipa,ipa,3,referral_id,uuid,NO,NULL,,NO,fk_ipa_referral,referral,referral,referral_id,NULL,NULL
-ipa,ipa,4,child_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,5,child_known_as,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,6,child_date_of_birth,date,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,7,child_age_years,integer,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,8,child_gender,character varying(40),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,9,child_ethnicity,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,10,child_preferred_language,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,11,child_religion,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,12,child_legal_status,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,13,child_reference_number,character varying(50),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,14,child_support_needs,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,15,child_support_needs_other_text,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,16,la_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,17,la_addr_line1,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,18,la_addr_line2,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
@@ -118,7 +106,6 @@ ipa,ipa,44,registered_manager_name,character varying(150),YES,NULL,,NO,,,,,NULL,
 ipa,ipa,45,registered_manager_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,46,registered_manager_email,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,47,registered_manager_registration_number,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,48,registered_manager_email_address,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,49,provider_urn,character varying(50),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,50,education_included_with_referral,boolean,YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,51,education_provision_name,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
@@ -128,51 +115,6 @@ ipa,ipa,54,education_addr_postcode,character varying(20),YES,NULL,,NO,,,,,NULL,N
 ipa,ipa,55,education_location,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,56,education_length_weeks,integer,YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,57,education_provision_cost,"numeric(19,2)",YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,58,expected_destination_after_placement,character varying(120),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,59,expected_destination_other_text,character varying(3000),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,60,outcomes_of_placement,character varying(3000),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,61,foster_enabled,boolean,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,62,foster_primary_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,63,foster_primary_age_years,integer,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,64,foster_primary_language_spoken,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,65,foster_primary_gender,character varying(40),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,66,foster_primary_ethnicity,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,67,foster_primary_religion,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,68,foster_primary_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,69,foster_primary_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,70,foster_primary_approval_date,date,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,71,foster_primary_approval_details,character varying(3000),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,72,foster_additional_exists,boolean,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,73,foster_additional_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,74,foster_additional_age_years,integer,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,75,foster_additional_language_spoken,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,76,foster_additional_gender,character varying(40),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,77,foster_additional_ethnicity,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,78,foster_additional_religion,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,79,foster_additional_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,80,foster_additional_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,81,foster_additional_approval_date,date,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,82,foster_additional_approval_details,character varying(3000),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,83,foster_home_addr_line1,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,84,foster_home_addr_town,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,85,foster_home_addr_postcode,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,86,foster_home_has_pets,boolean,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,87,foster_transport_can_provide_for_school,character varying(255),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,88,foster_vehicle_details,character varying(300),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,89,foster_safeguarding_reviewed,boolean,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,90,social_worker_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,91,social_worker_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,92,social_worker_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,93,health_contact_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,94,health_contact_organisation_name,character varying(300),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,95,health_contact_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,96,health_contact_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,97,advocacy_team_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,98,advocacy_team_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,99,advocacy_team_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,100,independent_review_officer_full_name,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,101,independent_review_officer_phone,character varying(20),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,102,independent_review_officer_email,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,103,costs_total_weekly_fee,"numeric(12,2)",YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,104,costs_total_core_costs_weekly_fee,"numeric(12,2)",YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,105,core_cost_weekly_fee,"numeric(12,2)",YES,NULL,,NO,,,,,NULL,NULL
@@ -202,12 +144,6 @@ ipa,ipa,128,home_addr_line2,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,129,home_addr_county,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,130,education_addr_line2,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,131,education_addr_county,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,132,foster_home_addr_line2,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,133,foster_home_addr_county,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,134,foster_home_pets_details,character varying(300),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,135,foster_transport_for_school_details,character varying(300),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,136,foster_transport_can_provide_for_family,character varying(255),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,137,foster_transport_can_provide_for_family_details,character varying(300),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,138,created_by,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,139,updated_by,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,140,status,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
@@ -223,8 +159,6 @@ ipa,ipa,149,closed,boolean,NO,FALSE,,NO,,,,,NULL,NULL
 ipa,ipa,150,closed_datetime,timestamp without time zone,YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa,151,signed_by_provider,boolean,NO,FALSE,,NO,,,,,NULL,NULL
 ipa,ipa,152,provider_id,uuid,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa,153,child_age_months,integer,YES,0,,NO,,,,,NULL,NULL
-ipa,ipa,154,invoice_recipient_phone,character varying(100),YES,0,,NO,,,,,NULL,NULL
 ipa,ipa_additional_fee,1,additional_fee_id,uuid,NO,generate_ulid(),additional_fee_pkey,YES,,,,,NULL,NULL
 ipa,ipa_additional_fee,2,ipa_id,uuid,NO,NULL,,NO,fk_additional_fee_ipa,ipa,ipa,ipa_id,NULL,NULL
 ipa,ipa_additional_fee,3,title,character varying(300),NO,NULL,,NO,,,,,NULL,NULL
@@ -235,8 +169,6 @@ ipa,ipa_additional_fee,7,review_date,date,YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_additional_fee,8,end_date,date,YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_additional_fee,9,created_at,timestamp with time zone,NO,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_additional_fee,10,updated_at,timestamp with time zone,YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa_additional_fee,11,hours_per_week,"numeric(19,2)",YES,0,,NO,,,,,NULL,NULL
-ipa,ipa_additional_fee,12,weekly_total,"numeric(19,2)",YES,0,,NO,,,,,NULL,NULL
 ipa,ipa_child,1,ipa_child_id,uuid,NO,generate_ulid(),ipa_child_pkey,YES,,,,,NULL,NULL
 ipa,ipa_child,2,ipa_id,uuid,NO,NULL,,NO,fk_ipa_child_ipa,ipa,ipa,ipa_id,NULL,NULL
 ipa,ipa_child,3,child_full_name,character varying(150),NO,NULL,,NO,,,,,NULL,NULL
@@ -250,10 +182,8 @@ ipa,ipa_child,10,child_religion,character varying(80),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_child,11,child_legal_status,character varying(100),NO,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_child,12,child_reference_number,character varying(50),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_child,13,child_support_needs_other_text,character varying(150),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa_child,14,child_support_needs,character varying(500),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_child,15,expected_destination_after_placement,character varying(120),YES,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_child,16,expected_destination_other_text,character varying(3000),YES,NULL,,NO,,,,,NULL,NULL
-ipa,ipa_child,17,child_age_months,integer,YES,0,,NO,,,,,NULL,NULL
 ipa,ipa_document,1,ipa_document_id,uuid,NO,generate_ulid(),ipa_document_pkey,YES,,,,,NULL,NULL
 ipa,ipa_document,2,ipa_id,uuid,NO,NULL,,NO,,,,,NULL,NULL
 ipa,ipa_document,3,s3_file_metadata_id,uuid,NO,NULL,,NO,fk_ipa_document_s3_file_metadata,document,s3_file_metadata,s3_file_metadata_id,NULL,NULL
@@ -273,11 +203,10 @@ offer,offer,10,education_weekly_fee,"numeric(6,2)",YES,NULL,,NO,,,,,weekly educa
 offer,offer,11,child_summary_needs,text,YES,NULL,,NO,,,,,child needs summary,Holds key information regarding the offer as created by the provider
 offer,offer,12,offer_date,timestamp without time zone,YES,now(),,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,13,last_modified_date,timestamp without time zone,YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
-offer,offer,14,decline_code,character varying(50),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
+offer,offer,14,decline_reason_other,character varying(50),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,15,decline_reason,character varying(500),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,16,can_edit_offer,boolean,YES,FALSE,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,17,withdraw_reason,character varying(500),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
-offer,offer,18,withdraw_code,character varying(50),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,19,offer_type,character varying(50),YES,NULL,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer,20,category_code,character varying(100),YES,NULL::character varying,,NO,,,,,NULL,Holds key information regarding the offer as created by the provider
 offer,offer_document,1,s3_file_metadata_id,uuid,NO,NULL,pk_offer_document,YES,fk_offer_document_s3_file_metadata,document,s3_file_metadata,s3_file_metadata_id,FK to Metadata entity,Holds key information regarding the offer and metadata association
@@ -372,15 +301,12 @@ provider,provider,19,registrant_name,character varying(100),YES,NULL,,NO,,,,,Ind
 provider,provider,20,registrant_role,character varying(100),YES,NULL,,NO,,,,,Individual person's role registering the provider onto the portal,This provider entity all key information regarding the provider
 provider,provider,21,registrant_email_address,character varying(100),YES,NULL,,NO,,,,,Individual person's email address registering the provider onto the portal,This provider entity all key information regarding the provider
 provider,provider,22,registrant_contact_number,character varying(100),YES,NULL,,NO,,,,,Individual person's contact telephone registering the provider onto the portal,This provider entity all key information regarding the provider
-provider,provider,23,sic_codes,character varying[],NO,NULL,,NO,,,,,List of SIC codes,This provider entity all key information regarding the provider
 provider,provider,24,companies_house_registration_reference,character varying(100),YES,NULL,,NO,,,,,The unique registration code provided by companies house,This provider entity all key information regarding the provider
 provider,provider,25,national_contract_external_link,character varying(1000),YES,NULL,,NO,,,,,A web link to the national contracts held for this provider,This provider entity all key information regarding the provider
 provider,provider,26,created_by,character varying(100),NO,NULL,,NO,,,,,The system user that created this record,This provider entity all key information regarding the provider
 provider,provider,27,modified_by,character varying(100),YES,NULL,,NO,,,,,The system user that last modified this record,This provider entity all key information regarding the provider
 provider,provider,28,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time the Provider was created on the system,This provider entity all key information regarding the provider
 provider,provider,29,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,The date/time this record was last modified,This provider entity all key information regarding the provider
-provider,provider,30,regulatory_body_name,character varying(100),YES,NULL,,NO,,,,,NULL,This provider entity all key information regarding the provider
-provider,provider,31,is_fostering_spot,boolean,YES,FALSE,,NO,,,,,NULL,This provider entity all key information regarding the provider
 provider,provider,32,qa_flag,boolean,YES,FALSE,,NO,,,,,Quality Assurance flag ,This provider entity all key information regarding the provider
 provider,provider,33,qa_flag_fostering_spot,boolean,YES,FALSE,,NO,,,,,Quality Assurance flag ,This provider entity all key information regarding the provider
 provider,provider,34,qa_flag_sup_acc,boolean,YES,FALSE,,NO,,,,,Quality Assurance flag for supported accommodation,This provider entity all key information regarding the provider
@@ -418,11 +344,8 @@ provider,provider_education_provision,15,last_regulating_body_inspection_date,da
 provider,provider_education_provision,16,regulatory_body_registration_reference,character varying(100),YES,NULL,,NO,,,,,Regulatory Body Registration code,NULL
 provider,provider_education_provision,17,inspection_outcome_rating,character varying(100),YES,NULL,,NO,,,,,The rating of the last inspection,NULL
 provider,provider_education_provision,18,created_by,character varying(100),NO,NULL,,NO,,,,,The system user that created this record,NULL
-provider,provider_education_provision,19,modified_by,character varying(100),YES,NULL,,NO,,,,,The system user that last modified this record,NULL
 provider,provider_education_provision,20,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time the reocrd was created on the system,NULL
 provider,provider_education_provision,21,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,The date/time this record was last modified,NULL
-provider,provider_education_provision,22,regulatory_body_name,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
-provider,provider_education_provision,23,dfe_registration_number,character varying(100),YES,NULL,,NO,,,,,NULL,NULL
 provider,provider_framework,1,provider_framework_id,bigint,NO,nextval('provider.provider_framework_provider_framework_id_seq'::regclass),pk_provider_framework,YES,,,,,Auto Generated Unique Primary Key,Entity that links providers to frameworks
 provider,provider_framework,2,provider_id,uuid,NO,NULL,,NO,fk_provider_framework_provider,provider,provider,provider_id,Unique ID of the Provider,Entity that links providers to frameworks
 provider,provider_framework,3,framework_code,character varying(10),NO,NULL,,NO,fk_provider_framework_framework,framework,framework,framework_code,Unique ID of the Framework,Entity that links providers to frameworks
@@ -451,12 +374,6 @@ provider,provider_home,21,modified_by,character varying(100),YES,NULL,,NO,,,,,Th
 provider,provider_home,22,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time the record was created on the system,Home entity that holds all data related to a provider home
 provider,provider_home,23,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,The date/time this record was last modified,Home entity that holds all data related to a provider home
 provider,provider_home,24,is_spot,boolean,NO,FALSE,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,25,responsible_individual_name,character varying(150),YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,26,responsible_individual_role,character varying(150),YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,27,responsible_individual_email_address,character varying(100),YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,28,regulatory_body_name,character varying(150),YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,29,regulatory_body_registration_date,date,YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
-provider,provider_home,30,age_band_id,integer,YES,NULL,,NO,,,,,NULL,Home entity that holds all data related to a provider home
 provider,provider_home,31,qa_flag,boolean,YES,FALSE,,NO,,,,,Quality Assurance flag ,Home entity that holds all data related to a provider home
 provider,provider_home,32,qa_flag_spot,boolean,YES,FALSE,,NO,,,,,Quality Assurance flag ,Home entity that holds all data related to a provider home
 provider,provider_home_age,1,provider_home_age_id,bigint,NO,nextval('provider.provider_home_age_provider_home_age_id_seq'::regclass),pk_provider_home_age,YES,,,,,Table Primary Key,Ages supported by a Home
@@ -487,7 +404,6 @@ refdata,refdata,9,modified_by,character varying(100),YES,NULL,,NO,,,,,The system
 refdata,refdata,10,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time this record was created in the system,Master reference data table
 refdata,refdata,11,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,Date/Time this record was last modified in the system,Master reference data table
 referral,referral,1,referral_id,uuid,NO,NULL,pk_referral,YES,,,,,Auto Generated Unique Primary Key,Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,2,placement_type_code,character varying(9),NO,NULL,,NO,fk_referral_refdata,refdata,refdata,ref_code,"The type of placement. EG: Residential, Fostering, Supported Accomodation",Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,3,required_start_date,date,NO,NULL,,NO,,,,,The date that this referral is required to start,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,4,response_required_by_date,date,NO,NULL,,NO,,,,,A preferred date that the local authority require from providers,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,5,is_sibling_placement,boolean,NO,FALSE,,NO,,,,,A boolean flag to indiciate that this is a sibling placement,Holds key informatoin regarding the referral as created by the placement officer
@@ -498,12 +414,7 @@ referral,referral,9,location_preference_details,character varying(300),YES,NULL,
 referral,referral,10,has_location_restriction,boolean,NO,NULL,,NO,,,,,A boolean flag to indiciate that location restrictions are to be considered,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,11,location_restriction_details,character varying(300),YES,NULL,,NO,,,,,Details for the location restrictions expressed for the referral,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,12,additional_information,character varying(3000),YES,NULL,,NO,,,,,"Additional Information regarding the referral. For example, details about the childs needs or profile",Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,13,created_by,uuid,NO,NULL,,NO,fk_created_by_user,wmpp_users,users,user_id,The system user that created this record,Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,14,modified_by,uuid,YES,NULL,,NO,fk_modified_by_user,wmpp_users,users,user_id,The system user that last modified this record,Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,15,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time this record was created in the system,Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,16,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,Date/Time this record was last modified in the system,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral,17,is_spot,boolean,NO,FALSE,,NO,,,,,NULL,Holds key informatoin regarding the referral as created by the placement officer
-referral,referral,18,status,character varying(50),NO,NULL,,NO,,,,,Stores the current status of the referral,Holds key informatoin regarding the referral as created by the placement officer
 referral,referral_aud,1,id,uuid,NO,NULL,referral_aud_pkey,YES,,,,,NULL,NULL
 referral,referral_aud,2,rev,integer,NO,NULL,referral_aud_pkey,YES,,,,,NULL,NULL
 referral,referral_aud,3,revtype,bigint,YES,NULL,,NO,,,,,NULL,NULL
@@ -570,26 +481,24 @@ referral,referral_provider,4,is_excluded,boolean,NO,FALSE,,NO,,,,,Flag to indica
 referral,referral_provider,5,is_declined,boolean,NO,FALSE,,NO,,,,,Boolean value to indicate if this Referral is currently declined by the Provider,Mapping table for referrals to providers
 referral,referral_provider,6,created_by,character varying(100),NO,NULL,,NO,,,,,The system user that created this record,Mapping table for referrals to providers
 referral,referral_provider,7,modified_by,character varying(100),YES,NULL,,NO,,,,,The system user that last modified this record,Mapping table for referrals to providers
-referral,referral_provider,8,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time this record was created in the system,Mapping table for referrals to providers
-referral,referral_provider,9,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,Date/Time this record was last modified in the system,Mapping table for referrals to providers
 referral,referral_provider,10,is_cancelled,boolean,NO,FALSE,,NO,,,,,NULL,Mapping table for referrals to providers
 referral,referral_provider,11,is_closed,boolean,NO,FALSE,,NO,,,,,NULL,Mapping table for referrals to providers
 referral,referral_provider,12,is_spot,boolean,NO,FALSE,,NO,,,,,NULL,Mapping table for referrals to providers
 referral,referral_provider_cancel_reason,1,cancel_reason_id,bigint,NO,nextval('referral.referral_provider_cancel_reason_cancel_reason_id_seq'::regclass),pk_referral_provider_cancel_reason,YES,,,,,Autogenerated Primary Key,This entity holds all reasons submitted by a provider for cancelling a referral
-referral,referral_provider_cancel_reason,2,cancel_reason_code,character varying(9),NO,NULL,,NO,fk_referral_provider_cancel_reason_code,refdata,refdata,ref_code,Unique Code to Cancel Reason Reference Data,This entity holds all reasons submitted by a provider for cancelling a referral
+referral,referral_provider_cancel_reason,2,cancel_reason,character varying(9),NO,NULL,,NO,fk_referral_provider_cancel_reason_code,refdata,refdata,ref_code,Unique Code to Cancel Reason Reference Data,This entity holds all reasons submitted by a provider for cancelling a referral
 referral,referral_provider_cancel_reason,3,cancel_reason_other_text,character varying(100),YES,NULL,,NO,,,,,"Free text field for cancelled reason
 
 Only populated when Reference Code is ""OTHER?""",This entity holds all reasons submitted by a provider for cancelling a referral
 referral,referral_provider_cancel_reason,4,created_by,character varying(100),NO,NULL,,NO,,,,,This field holds the system user name of the user that provided the cancel reason,This entity holds all reasons submitted by a provider for cancelling a referral
-referral,referral_provider_cancel_reason,5,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,The timestamp when the cancel reason was added,This entity holds all reasons submitted by a provider for cancelling a referral
+referral,referral_provider_cancel_reason,5,created_date,timestamp without time zone,NO,now(),,NO,,,,,The timestamp when the cancel reason was added,This entity holds all reasons submitted by a provider for cancelling a referral
 referral,referral_provider_cancel_reason,6,referral_provider_id,uuid,NO,NULL,,NO,fk_referral_provider_cancel_reason_referral_provider,referral,referral_provider,referral_provider_id,Foreign Key to Referral Provider Table,This entity holds all reasons submitted by a provider for cancelling a referral
 referral,referral_provider_decline_reason,1,decline_reason_id,bigint,NO,nextval('referral.referral_provider_decline_reason_decline_reason_id_seq'::regclass),pk_referral_provider_decline_reason,YES,,,,,Autogenerated Primary Key,This entity holds all reasons submitted by a provider for declining a referral
-referral,referral_provider_decline_reason,2,decline_reason_code,character varying(9),NO,NULL,,NO,fk_referral_provider_decline_reason_code,refdata,refdata,ref_code,Unique Code to Decline Reason Reference Data,This entity holds all reasons submitted by a provider for declining a referral
+referral,referral_provider_decline_reason,2,decline_reason,character varying(9),NO,NULL,,NO,fk_referral_provider_decline_reason_code,refdata,refdata,ref_code,Unique Code to Decline Reason Reference Data,This entity holds all reasons submitted by a provider for declining a referral
 referral,referral_provider_decline_reason,3,decline_reason_other_text,character varying(100),YES,NULL,,NO,,,,,"Free text field for declined reason
 
 Only populated when Reference Code is ""OTHER?""",This entity holds all reasons submitted by a provider for declining a referral
 referral,referral_provider_decline_reason,4,created_by,character varying(100),NO,NULL,,NO,,,,,This field holds the system user name of the user that provided the decline reason,This entity holds all reasons submitted by a provider for declining a referral
-referral,referral_provider_decline_reason,5,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,The timestamp when the decline reason was added,This entity holds all reasons submitted by a provider for declining a referral
+referral,referral_provider_decline_reason,5,created_date,timestamp without time zone,NO,now(),,NO,,,,,The timestamp when the decline reason was added,This entity holds all reasons submitted by a provider for declining a referral
 referral,referral_provider_decline_reason,6,referral_provider_id,uuid,NO,NULL,,NO,fk_referral_provider_decline_reason_referral_provider,referral,referral_provider,referral_provider_id,Foreign Key to Referral Provider Table,This entity holds all reasons submitted by a provider for declining a referral
 referral,referral_provider_message,1,message_id,uuid,NO,NULL,pk_referral_provider_message,YES,,,,,Auto Generated Unique ID,This entity will hold all messages between Providers and Placement Officers
 referral,referral_provider_message,2,message_text,character varying(3000),NO,NULL,,NO,,,,,This is the body of the message,This entity will hold all messages between Providers and Placement Officers
@@ -612,7 +521,6 @@ referral,referral_save,3,saved_by,character varying(100),NO,NULL,,NO,,,,,"The sy
 referral,referral_save,4,saved_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/Time this record was created in the system,This entity holds entries of Saved referals for a provider system user
 referral,referral_spot_category,1,referral_spot_category_id,bigint,NO,nextval('referral.referral_spot_category_referral_spot_category_id_seq'::regclass),pk_referral_spot_category,YES,,,,,NULL,Spot categories supported by the Referral
 referral,referral_spot_category,2,referral_id,uuid,NO,NULL,,NO,fk_referral_spot_category_referral,referral,referral,referral_id,FK to Referral,Spot categories supported by the Referral
-referral,referral_spot_category,3,spot_category_code,character varying(9),NO,NULL,,NO,,,,,FK to Reference Data - SpotCategoryCode,Spot categories supported by the Referral
 referral,referral_updates_history,1,update_id,uuid,NO,NULL,pk_update_history,YES,,,,,NULL,NULL
 referral,referral_updates_history,2,referral_provider_id,uuid,YES,NULL,,NO,fk_ref_prov_id,referral,referral_provider,referral_provider_id,NULL,NULL
 referral,referral_updates_history,3,referral_update_timestamp,timestamp without time zone,YES,now(),,NO,,,,,NULL,NULL
@@ -675,3 +583,20 @@ wmpp_users,users,12,job_tile,character varying(50),YES,NULL,,NO,,,,,NULL,Holds u
 wmpp_users,users,13,office_phone,character varying(50),YES,NULL,,NO,,,,,NULL,Holds users details which are synchronized with cognito users pool
 wmpp_users,users,14,mobile_phone,character varying(50),YES,NULL,,NO,,,,,NULL,Holds users details which are synchronized with cognito users pool
 wmpp_users,users,15,service_type,character varying(50),YES,NULL,,NO,,,,,NULL,Holds users details which are synchronized with cognito users pool
+referral,referral_person,1,person_id,uuid,NO,NULL,pk_person_id,YES,,,,,NULL,NULL
+referral,referral_person,2,initials,STRING,NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,3,age_value,integer,NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,4,age_date_unit,character varying(200),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,5,has_restrictions,boolean,NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,6,restriction_details,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,7,source_reference_id,character varying(50),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,8,gender,character varying(200),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,9,gender_other,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,10,ethnicity,character varying(200),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,11,ethnicity_other,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,12,religion,character varying(200),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,13,religion_other,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,14,preferred_language,character varying(200),NO,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,15,preferred_language_other,character varying(200),YES,NULL,,NO,,,,,NULL,NULL
+referral,referral_person,16,referral_id,uuid,NO,NULL,,NO,fk_referral_person_referral,referral,referral,referral_id,NULL,NULL
+referral,referral_person,17,child_index,integer,NO,NULL,,NO,,,,,NULL,NULL
