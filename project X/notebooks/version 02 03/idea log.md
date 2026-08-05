@@ -203,8 +203,82 @@ for expected_export_date, relative_zip, relative_path, full_path, file_name in f
             break
 
 
-
+## New error
 FAILED Files/archive_unzipped/2026-07-05/audit/jun26/2026-06-11.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
 FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-12.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
 FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-28.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
 FAILED Files/archive_unzipped/2026-07-18/audit/jun26/2026-06-23.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
+
+## next error 
+
+Table schema:
+root
+-- run_id: string (nullable = true)
+-- layer: string (nullable = true)
+-- source_kind: string (nullable = true)
+-- source_object: string (nullable = true)
+-- target_object: string (nullable = true)
+-- rows_read: long (nullable = true)
+-- rows_written: long (nullable = true)
+-- duplicate_key_count: long (nullable = true)
+-- null_primary_key_count: long (nullable = true)
+-- recorded_at: timestamp (nullable = true)
+
+
+Data schema:
+root
+-- run_id: string (nullable = true)
+-- layer: string (nullable = true)
+-- source_kind: string (nullable = true)
+-- source_object: string (nullable = true)
+-- target_object: string (nullable = true)
+-- rows_read: long (nullable = true)
+-- rows_written: long (nullable = true)
+-- duplicate_key_count: long (nullable = true)
+-- rejected_row_count: long (nullable = true)
+-- recorded_at: timestamp (nullable = true)
+
+         
+Deleted prior source-path rows from archived.archived_audit
+FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-12.csv: [_LEGACY_ERROR_TEMP_DELTA_0007] A schema mismatch detected when writing to the Delta table (Table ID: 25740aa1-4437-4811-8c8b-f819b2933166).
+To enable schema migration using DataFrameWriter or DataStreamWriter, please set:
+'.option("mergeSchema", "true")'.
+For other operations, set the session configuration
+spark.databricks.delta.schema.autoMerge.enabled to "true". See the documentation
+specific to the operation for details.
+
+Table schema:
+root
+-- run_id: string (nullable = true)
+-- layer: string (nullable = true)
+-- source_kind: string (nullable = true)
+-- source_object: string (nullable = true)
+-- target_object: string (nullable = true)
+-- rows_read: long (nullable = true)
+-- rows_written: long (nullable = true)
+-- duplicate_key_count: long (nullable = true)
+-- null_primary_key_count: long (nullable = true)
+-- recorded_at: timestamp (nullable = true)
+
+
+Data schema:
+root
+-- run_id: string (nullable = true)
+-- layer: string (nullable = true)
+-- source_kind: string (nullable = true)
+-- source_object: string (nullable = true)
+-- target_object: string (nullable = true)
+-- rows_read: long (nullable = true)
+-- rows_written: long (nullable = true)
+-- duplicate_key_count: long (nullable = true)
+-- rejected_row_count: long (nullable = true)
+-- recorded_at: timestamp (nullable = true)
+
+         
+Deleted prior source-path rows from archived.archived_audit
+FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-28.csv: [_LEGACY_ERROR_TEMP_DELTA_0007] A schema mismatch detected when writing to the Delta table (Table ID: 25740aa1-4437-4811-8c8b-f819b2933166).
+To enable schema migration using DataFrameWriter or DataStreamWriter, please set:
+'.option("mergeSchema", "true")'.
+For other operations, set the session configuration
+spark.databricks.delta.schema.autoMerge.enabled to "true". See the documentation
+specific to the operation for details.
