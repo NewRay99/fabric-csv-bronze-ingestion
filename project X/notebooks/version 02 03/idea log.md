@@ -1,6 +1,27 @@
 in the .00_archive_load 02 03.ipynb i need the following changes
 
 
+extract_root_posix = f"/lakehouse/default/{EXTRACT_ROOT}"
+os.makedirs(extract_root_posix, exist_ok=True)
+
+zip_batches = []
+for root, _, files in os.walk(extract_root_posix):
+    for file_name in files:
+        if not file_name.lower().endswith(".csv"):
+            continue
+        full_path = os.path.join(root, file_name)
+        relative_path = os.path.relpath(full_path, "/lakehouse/default").replace("\\", "/")
+        export_date = parse_export_date(file_name) or parse_export_date(relative_path)
+        
+        if export_date is None:
+            print(f"Skipping ZIP without YYYY-MM-DD export date: {relative_path}")
+            continue
+        if PROCESS_EXPORT_DATE and export_date.strftime("%Y-%m-%d") != PROCESS_EXPORT_DATE:
+            continue
+        zip_batches.append((export_date, relative_path, full_path))
+
+
+
 files_to_load = []
 for zip_export_date, relative_zip, _ in zip_batches:
     # Never load a stale or partially extracted directory after a ZIP failure.
