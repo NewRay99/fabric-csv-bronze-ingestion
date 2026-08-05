@@ -201,3 +201,10 @@ for expected_export_date, relative_zip, relative_path, full_path, file_name in f
         print(f"FAILED {relative_path}: {error}")
         if STOP_ON_FIRST_ERROR:
             break
+
+
+
+FAILED Files/archive_unzipped/2026-07-05/audit/jun26/2026-06-11.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
+FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-12.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
+FAILED Files/archive_unzipped/2026-07-14/audit/jun26/2026-06-28.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
+FAILED Files/archive_unzipped/2026-07-18/audit/jun26/2026-06-23.csv: archived.archived_audit has neither export_date nor source-file lineage, so a safe replacement is impossible.
