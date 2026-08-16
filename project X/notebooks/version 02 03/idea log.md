@@ -31,3 +31,11 @@ Deleted legacy export-date rows from archived.archived_referral_provider_decline
 FAILED Files/archive_unzipped/2026-08-05/referral_provider_decline_reason.csv: [DELTA_FAILED_TO_MERGE_FIELDS] Failed to merge fields 'export_date' and 'export_date'
 Deleted legacy export-date rows from archived.archived_provider_education_provision for 2026-05-30
 FAILED Files/archive_unzipped/2026-05-30/provider_education_provision.csv: [DELTA_FAILED_TO_MERGE_FIELDS] Failed to merge fields 'export_date' and 'export_date'…
+
+these arent coming from the source extracts...
+FAILED bronze.ref_KPI_Definition: bronze.ref_KPI_Definition has no export_date; rerun 01_bronze_get_latest first
+FAILED bronze.ref_KPI_RID_linkage: bronze.ref_KPI_RID_linkage has no export_date; rerun 01_bronze_get_latest first
+FAILED bronze.ref_RID: bronze.ref_RID has no export_date; rerun 01_bronze_get_latest first
+FAILED bronze.ref_Table_Lineage: bronze.ref_Table_Lineage has no export_date; rerun 01_bronze_get_latest first
+OK bronze.referral -> silver.slv_referral @ 2026-08-15 00:00:00: 599 rows
+create a new notebook call it common_util.ipynb and add these tables in a list array so that this 02_silver_formatter 02 03.ipynb any any other ETL notebooks can explucde them from the process
