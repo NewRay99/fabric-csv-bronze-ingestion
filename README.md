@@ -1,6 +1,6 @@
-# Birmingham Children's Trust — Fabric CSV ingestion
+# BCT — Fabric CSV ingestion
 
-This repository contains the Birmingham Children's Trust implementation of the
+This repository contains the BCT implementation of the
 West Midlands Placement Portal (WMPP) data platform in Microsoft Fabric.
 
 The active client implementation is under [`project X`](project%20X/). The
