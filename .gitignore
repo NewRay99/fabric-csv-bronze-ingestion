@@ -2,3 +2,8 @@
 __pycache__/
 *.pyc
 .venv/
+.env
+_sim_*/
+_gold_sim_warehouse/
+project X/tests/_sim_*/
+project X/tests/_gold_sim_warehouse/

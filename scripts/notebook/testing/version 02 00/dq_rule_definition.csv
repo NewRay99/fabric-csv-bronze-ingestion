@@ -1,4 +1,0 @@
-rule_id,active,severity,rule_type,source_schema,table_name,column_name,referenced_schema,referenced_table,referenced_column,operator,rule_value,description
-REFERRAL_RESPONSE_BEFORE_REQUIRED,true,ERROR,DATE_ORDER,referral,referral,response_required_by_date,referral,referral,required_start_date,<=,,Response deadline should not be after required placement date
-OFFER_CORE_FEE_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,offer,offer,core_weekly_fee,,,,>=,0,Core weekly fee must not be negative
-IPA_TOTAL_FEE_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,ipa,ipa,costs_total_weekly_fee,,,,>=,0,Total weekly fee must not be negative

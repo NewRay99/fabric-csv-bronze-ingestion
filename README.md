@@ -1,66 +1,24 @@
-# Fabric CSV → Bronze Ingestion
+# Birmingham Children's Trust — Fabric CSV ingestion
 
-A reusable skill for ingesting **daily CSV extracts** from a Microsoft Fabric lakehouse shortcut folder into **bronze Delta tables** — programmatically, with type inference and append loading.
+This repository contains the Birmingham Children's Trust implementation of the
+West Midlands Placement Portal (WMPP) data platform in Microsoft Fabric.
 
-## What It Does
+The active client implementation is under [`project X`](project%20X/). The
+repository-level `scripts`, `references`, and `SKILL.md` retain reusable
+ingestion material; they are not the production WMPP notebook chain.
 
-- **Auto-discovers** all `.csv` files in a lakehouse shortcut folder (`Files/Latest/`)
-- **Creates bronze tables programmatically** — no manual DDL
-- **Type inference rules** applied during read:
-  - Columns named `notes`, `description`, `comment` → **STRING** (with text qualifier)
-  - Columns ending in `_id` → **INT**
-  - Columns containing `date` → **DATE**
-- **Append mode** — stacks new daily rows without overwriting
-- **Fabric tier guidance** — what works on F2 (lowest) and what you gain by upgrading
+## Repository layout
 
-## Scenario
+| Location | Purpose |
+|---|---|
+| `project X/` | Active BCT Fabric notebooks and project assets |
+| `project X/client documentation/` | Client-facing discovery, design, governance, and operations documentation |
+| `project X/change tracking/` | ETL issue/change history kept separate from client design documents |
+| `project X/configuration/` | Version-controlled schema and DQ configuration deployed to Fabric Files |
+| `project X/tests/` | Portable static regression checks and Spark simulation harness |
+| `archive/` | Superseded layouts and versions retained for recovery/reference |
+| `scripts/` | Reusable or supporting ingestion scripts |
+| `references/` | Generic Fabric reference material |
 
-```
-Lakehouse Shortcut → Files/Latest/
-                        ├── filename1.csv  →  bronze.brz_filename1 (Delta)
-                        ├── filename2.csv  →  bronze.brz_filename2 (Delta)
-                        └── filename3.csv  →  bronze.brz_filename3 (Delta)
-```
+Start with [`project X/README.md`](project%20X/README.md).
 
-New files appearing on subsequent days are picked up automatically on the next run.
-
-## Files
-
-| File | Description |
-|------|-------------|
-| `SKILL.md` | Main skill — concise instructions, type rules, code, pitfalls, checklist |
-| `scripts/bronze_ingestion_notebook.py` | Full PySpark notebook (Fabric-ready, cell-delimited) |
-| `references/fabric-tier-comparison.md` | F2 → F64+ tier comparison with upgrade advice and cost tips |
-
-## Quick Start
-
-1. Open a **PySpark notebook** in your Fabric workspace
-2. Copy the code from `scripts/bronze_ingestion_notebook.py` (or reference `SKILL.md` for the inline version)
-3. Update the configuration cell:
-   ```python
-   SHORTCUT_FOLDER = "Files/Latest"   # your shortcut path
-   BRONZE_SCHEMA   = "bronze"
-   TABLE_PREFIX    = "brz_"
-   LOAD_MODE       = "append"
-   ```
-4. Run the notebook — all CSVs are discovered, typed, and loaded into bronze Delta tables
-
-## Fabric Tier Notes
-
-The lowest tier (**F2**, 2 Capacity Units) works for small files but is impeded:
-
-- ❌ 1 concurrent Spark session
-- ❌ Short execution timeout (~2 min)
-- ❌ No autoscale
-- ❌ No event-based triggers
-- ❌ No Unity Catalog
-
-Upgrading to **F64** unlocks full Spark power, governance, and event triggers — the practical minimum for production. See `references/fabric-tier-comparison.md` for the full breakdown.
-
-## Related Skills
-
-- `data-engineering-expert` — broader Azure Data Factory + Databricks medallion architecture patterns
-
-## License
-
-MIT

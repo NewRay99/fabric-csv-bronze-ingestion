@@ -1,0 +1,79 @@
+MOVE	docs	archive/2026-08-16-reorganisation/repository-docs
+MOVE	README.md	archive/2026-08-16-reorganisation/legacy-root/README-legacy.md
+MOVE	01a_cfg_schema_capture_archive 02 03.ipynb	archive/2026-08-16-reorganisation/root-strays/01a_cfg_schema_capture_archive 02 03.ipynb
+MOVE	01a_cfg_schema_capture_live 02 03.ipynb	archive/2026-08-16-reorganisation/root-strays/01a_cfg_schema_capture_live 02 03.ipynb
+MOVE	schema drift.xlsx	archive/2026-08-16-reorganisation/root-strays/schema drift.xlsx
+MOVE	scripts/notebook/testing	archive/2026-08-16-reorganisation/notebook-versions/scripts-testing
+MOVE	project X/notebooks	archive/2026-08-16-reorganisation/notebook-versions/project-X-notebooks
+MOVE	project X/client documentation/notebooks	archive/2026-08-16-reorganisation/notebook-versions/client-documentation-notebooks
+MOVE	project X/client documentation/00_README.md	archive/2026-08-16-reorganisation/legacy-client-documentation/00_README.md
+MOVE	project X/client documentation/Document checlist.txt	archive/2026-08-16-reorganisation/legacy-client-documentation/Document checlist.txt
+MOVE	project X/report v01 extracted	archive/2026-08-16-reorganisation/reports/report-v01-extracted
+MOVE	project X/report_extracted	archive/2026-08-16-reorganisation/reports/report-extracted
+MOVE	project X/report v00.zip	archive/2026-08-16-reorganisation/reports/report-v00.zip
+MOVE	project X/report v01.zip	archive/2026-08-16-reorganisation/reports/report-v01.zip
+MOVE	project X/reoprt v02.zip	archive/2026-08-16-reorganisation/reports/report-v02-original-name-reoprt-v02.zip
+MOVE	project X/schema_definition.csv	archive/2026-08-16-reorganisation/configuration/legacy-project-root-schema_definition.csv
+MOVE	project X/Change Indicator	archive/2026-08-16-reorganisation/change-tracking/legacy-change-indicator.txt
+MOVE	project X/brand pack	project X/assets/brand-pack
+MOVE	project X/client documentation/Power BI screenshots	project X/assets/power-bi-screenshots
+MOVE	project X/client documentation/WMPP-brand-preview-v2.png	project X/assets/design-previews/WMPP-brand-preview-v2.png
+MOVE	project X/client documentation/WMPP-referrals-overview-v2.png	project X/assets/design-previews/WMPP-referrals-overview-v2.png
+MOVE	project X/report v03.zip	project X/reports/current/WMPP-report-v03.zip
+MOVE	project X/client documentation/report v15.zip	project X/reports/client-deliverables/report-v15.zip
+MOVE	project X/client documentation/SM Test v2.zip	project X/reports/client-deliverables/semantic-model-test-v2.zip
+MOVE	project X/client documentation/01_Client_Discovery_Questionnaire.md	project X/client documentation/01_Discovery_and_Scope/Client_Discovery_Questionnaire.md
+MOVE	project X/client documentation/06_Statement_of_Work.md	project X/client documentation/01_Discovery_and_Scope/Statement_of_Work.md
+MOVE	project X/client documentation/02_As_Is_Assessment_Report.md	project X/client documentation/02_Assessment_and_Requirements/As_Is_Assessment_Report.md
+MOVE	project X/client documentation/03_Gap_Analysis_Report.md	project X/client documentation/02_Assessment_and_Requirements/Gap_Analysis_Report.md
+MOVE	project X/functional spec.md	project X/client documentation/02_Assessment_and_Requirements/Functional_Specification.md
+MOVE	project X/am_functional_specification.csv	project X/client documentation/02_Assessment_and_Requirements/AM_Functional_Specification.csv
+MOVE	project X/client documentation/04_Proposed_Solution_Architecture.md	project X/client documentation/03_Architecture_and_Design/Proposed_Solution_Architecture.md
+MOVE	project X/client documentation/fabrics data solution.docx	project X/client documentation/03_Architecture_and_Design/Fabric_Data_Solution.docx
+MOVE	project X/kpi_reference_guide.md	project X/client documentation/04_Data_and_Reporting/KPI_Reference_Guide.md
+MOVE	project X/measures_comparison_checklist.md	project X/client documentation/04_Data_and_Reporting/Measures_Comparison_Checklist.md
+MOVE	project X/WMPP_Dashboard_Overview_and_KPI_Logic_Final_Pack.md	project X/client documentation/04_Data_and_Reporting/WMPP_Dashboard_Overview_and_KPI_Logic.md
+MOVE	project X/WMPP_Semantic_Model_Measures.md	project X/client documentation/04_Data_and_Reporting/WMPP_Semantic_Model_Measures.md
+MOVE	project X/client documentation/05_HOLD_Register.md	project X/client documentation/06_Governance/HOLD_Register.md
+MOVE	project X/client documentation/07_Semantic_Model_Changelog_v00_to_v01.md	project X/change tracking/SEMANTIC_MODEL_CHANGELOG.md
+COPY	H:\notebooks\version 02 04\00_archive_load 02 03.ipynb	project X/00_archive_load 02 03.ipynb	3fb1a1c17439d8a17925d3835a8ad325c4cb6df83628d815a715e543efad054d
+COPY	H:\notebooks\version 02 04\00_setup_cfg 02 03.ipynb	project X/00_setup_cfg 02 03.ipynb	3e5503d703aa889b2c796daf8e604d9b7d12c23153322cff005dcef5523ff9b7
+COPY	H:\notebooks\version 02 04\00a_rehydrate_archive_cfg 02 03.ipynb	project X/00a_rehydrate_archive_cfg 02 03.ipynb	e647b679e18d1b1deb4b79b3cb4067d19d0d4356b464fb89fcae2aa56a6ff715
+COPY	H:\notebooks\version 02 04\00b_reset_silver_cfg 02 03.ipynb	project X/00b_reset_silver_cfg 02 03.ipynb	6a5b511c3d09ab8800b5e9a8a31d6852d731461e5534fcf9b8ba695f70bc68f8
+COPY	H:\notebooks\version 02 04\01_bronze_get_latest 02 03.ipynb	project X/01_bronze_get_latest 02 03.ipynb	800380e8251543b1aad1a9b112c556ab1a5675f8f7a8928857d828363f89e4f4
+COPY	H:\notebooks\version 02 04\01a_cfg_schema_capture_archive 02 03.ipynb	project X/01a_cfg_schema_capture_archive 02 03.ipynb	63b59d67465ec251f1774cc5ca6a0253aa53155924303796babd1b0b988df814
+COPY	H:\notebooks\version 02 04\01a_cfg_schema_capture_live 02 03.ipynb	project X/01a_cfg_schema_capture_live 02 03.ipynb	4e1a200f69a3b1add2c520810891aa8b5f0591d6ffa5bef7dae53a2ab574d1f4
+COPY	H:\notebooks\version 02 04\02_silver_formatter 02 03.ipynb	project X/02_silver_formatter 02 03.ipynb	d8c6e9d079703d62f6c5ca6a7f78d39826442aa52ed1ee120cd8ea428acbb27a
+COPY	H:\notebooks\version 02 04\02a_archive_silver 02 03.ipynb	project X/02a_archive_silver 02 03.ipynb	d048b108caab71622a00a05ff1e34271477abb811a1178a93584d4cf2d44aa15
+COPY	H:\notebooks\version 02 04\03_silver_business_rules 02 03.ipynb	project X/03_silver_business_rules 02 03.ipynb	2803b8799b12ad2b01ceb18d967e7754647a08fac910d51e73d03348559f03da
+COPY	H:\notebooks\version 02 04\04_gold_model 02 03.ipynb	project X/04_gold_model 02 03.ipynb	c6060804f413c9f818296c3811274afb2ac519f0cd18ee9f13e64fbdb2e770f5
+COPY	H:\notebooks\version 02 04\99_common_library 02 03.ipynb	project X/99_common_library 02 03.ipynb	3612cc2aeb363742bab3ae60e52d8391deb349e6deff0bf14355438757e280d8
+COPY	H:\notebooks\version 02 04\common_util.ipynb	project X/common_util.ipynb	9477bea6a638ebf0049c95799290c0bfbeeae1eaf54067c016250bd655e25790
+COPY	H:\notebooks\version 02 04\schema_definition.csv	project X/configuration/schema_definition.csv	5516fc5b2aa0f683d3ee225e1289cdc7185eb3daf9e8cfd84c5bf3d11609646b
+COPY	H:\notebooks\version 02 04\dq_rule_definition.csv	project X/configuration/dq_rule_definition.csv	e85dd4eb3c4fde17878491381843ee7376f9aac3c040ef8d7b06d37fee9d3a1e
+COPY	H:\notebooks\version 02 04\schema drift.xlsx	project X/configuration/schema drift.xlsx	13ffb3def4ac3cde3f909c15ce0a89c0d3d5825b304c8afe2b487659bcae7cf0
+COPY	H:\notebooks\version 02 04\ARCHIVE_BATCH_PROCESS.md	project X/client documentation/05_Operations_and_Runbooks/ARCHIVE_BATCH_PROCESS.md	bd520f38fc9ec9755eccd8932502a2b4139260454af48412160e62ddf7bbe20a
+COPY	H:\notebooks\version 02 04\ARCHIVE_LOAD_NOTES.md	project X/client documentation/05_Operations_and_Runbooks/ARCHIVE_LOAD_NOTES.md	172f06938d41a5861dd6994b5ab734b322628d84ec7f6d87e03e85a54e6d6359
+COPY	H:\notebooks\version 02 04\VALIDATION.md	project X/client documentation/05_Operations_and_Runbooks/VALIDATION.md	2adefe64b277f671e675251096c8027df46df283d991e789136186b5b39e14b2
+COPY	H:\notebooks\version 02 04\Upgrades.md	project X/client documentation/04_Data_and_Reporting/ENHANCEMENT_BACKLOG.md	a7c178dd37feae5bc5f77eda5e71bd2bc6dbf813bf30484fcc5f164649f4796c
+COPY	H:\notebooks\version 02 04\issue_log.md	project X/change tracking/ETL_ISSUE_AND_CHANGE_LOG.md	297ab6d5fff2ee2ce89d31f52b06a54eb187b1015e99d887a38dbd6bc712ac54
+COPY	H:\notebooks\version 02 04\_gold_sim_test.py	project X/tests/_gold_sim_test.py	6ad43a96335ad575500d74662860009060634abcf9e8551a860f5b35b68bbfda
+COPY	H:\notebooks\version 02 04\_gold_fact_sql.sql	project X/tests/_gold_fact_sql.sql	a325daad474ea3f15698679eb25ba19c4200c364c5d23b82d440dcb734c71423
+COPY	H:\notebooks\version 02 04\_extract_gold_sql.py	project X/tests/_extract_gold_sql.py	12ecc7ab294ca69c54ee240d0ad19cac5d5d4336c92059fcb55a5c3bb16510a5
+COPY	H:\notebooks\version 02 04\validate_archive_load_v02_04.py	project X/tests/validate_archive_load_v02_04.py	880b271b9ee0648a8496a403f6340f23f39da2434c0756c5f083b8d6d5ecb9bf
+COPY	H:\notebooks\version 02 04\validate_cfg_setup_v02_04.py	project X/tests/validate_cfg_setup_v02_04.py	ee48c87a19c0a16ee8a434d3d6fc740ef10804cfc394eddead080b1e6601707d
+COPY	H:\notebooks\version 02 04\validate_ref_exclusions_v02_04.py	project X/tests/validate_ref_exclusions_v02_04.py	7ddc875e6e983f45ed5b3f020dfd0183d0f07b0a2da652c90ad3e9d536cd8fd0
+COPY	H:\notebooks\version 02 04\validate_schema_drift_v02_04.py	project X/tests/validate_schema_drift_v02_04.py	7b544ff012f39bfe211937c6434c23987a5db190c647d2645d0c1ae17d65f545
+COPY	H:\notebooks\version 02 04\validate_version01.py	project X/tests/validate_version01.py	b9add65710a4c6f9531dccbeeb76704f9dbcc22fc65d3f3555adbd3f61f7a9e3
+COPY	H:\notebooks\version 02 04\validate_version02_03.py	project X/tests/validate_version02_03.py	af96f5ea19d2fe7f30e1dfa3ee370405433e5a4e3e63c3046dca97a72440cbb3
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\archive\2026-08-16-reorganisation\README.md	archive/2026-08-16-reorganisation/README.md	15a9195c44cba33f5b909ead53157172af9725118a0c5465a63b4a0a03c5eb1e
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\change tracking\README.md	project X/change tracking/README.md	22bc281391342848ad29b70007e1bb34bf319e09b6ec3d1e70c324f84ad12708
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\client documentation\03_Architecture_and_Design\HLD.md	project X/client documentation/03_Architecture_and_Design/HLD.md	49ae18e549fc6f6114449877ab2c39a1ebf926161894f5da169c7820537058e0
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\client documentation\03_Architecture_and_Design\TFD.md	project X/client documentation/03_Architecture_and_Design/TFD.md	7f5729ffd4394873f65404d873d1ee5aefb81192c7c7fdef17bfaa62feaa4802
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\client documentation\05_Operations_and_Runbooks\NOTEBOOK_RUNBOOK.md	project X/client documentation/05_Operations_and_Runbooks/NOTEBOOK_RUNBOOK.md	20a1ac86ef225fea38321ac31ed85c225395e38b72f7064139eb2afc1550d99a
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\client documentation\README.md	project X/client documentation/README.md	9751e68e9275455e129c5afc847d3304d0969ee372c95d926ea8338609e3b8f4
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\configuration\README.md	project X/configuration/README.md	c3ed17be20cb9e6d7a65db184133ffc8cae2ed9d9ab0fda9dd8d93644991bfdc
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\README.md	project X/README.md	7b63fcf0b127731485135e838a2ad9ff300daab73809328f05602faddf1039a6
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\reports\README.md	project X/reports/README.md	010a9b784980430904db8ae9b4ffdfea0347153eb29bd2cc9e9449b2ebc32e2d
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\project X\tests\README.md	project X/tests/README.md	fe1fda69f527056233a70888c7d710a6b0dc859398b49dff89d1d5e0f9e432d5
+COPY	C:\Users\akhta\Documents\Codex\2026-08-16\can-you-see-this-folder-h\work\reorg_payload\README.md	README.md	547ea01bd3ac8fb79bcb275f3395baa87553f3c913d5d59b5d8e9687df52d3fb
