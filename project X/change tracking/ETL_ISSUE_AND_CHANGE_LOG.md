@@ -366,3 +366,6 @@ table contracts continue to be logged and skipped.
 - **Validation:** run
   `python validate_archive_framework_fallback_v02_04.py`; the full portable
   validator set must also pass.
+## SI-006 error when loading into fact_referral
+RuntimeError
+2026-04-30 DQ/Gold: An error occurred while calling o10770.throwExceptionIfHave. : com.microsoft.spark.notebook.msutils.NotebookExecutionException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `modified_timestamp` cannot be resolved. Did you mean one of the following? [`_silver_load_ts`, `_silver_run_id`, `is_spot`, `required_start_date`, `sibling_count`].; line 6 pos 22; 'CreateViewCommand `spark_catalog`.`chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg`.`fact_referral`, WITH referral_history AS (
