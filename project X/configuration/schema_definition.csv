@@ -440,6 +440,7 @@ refdata,10,created_timestamp,timestamp without time zone,NO,now(),,NO,,,,,Date/T
 refdata,11,modified_timestamp,timestamp without time zone,YES,NULL,,NO,,,,,Date/Time this record was last modified in the system,Master reference data table
 refdata,12,export_date,timestamp without time zone,YES,NULL,,NO,,,,,Source export timestamp carried into Silver for lineage and point-in-time reporting,Master reference data table
 referral,1,referral_id,uuid,NO,NULL,pk_referral,YES,,,,,Auto Generated Unique Primary Key,Holds key informatoin regarding the referral as created by the placement officer
+referral,2,placement_type,character varying(120),YES,NULL,,NO,,,,,Placement type supplied by the flattened referral extract,Holds key informatoin regarding the referral as created by the placement officer
 referral,3,required_start_date,date,NO,NULL,,NO,,,,,The date that this referral is required to start,Holds key informatoin regarding the referral as created by the placement officer
 referral,4,response_required_by_date,date,NO,NULL,,NO,,,,,A preferred date that the local authority require from providers,Holds key informatoin regarding the referral as created by the placement officer
 referral,5,is_sibling_placement,boolean,NO,FALSE,,NO,,,,,A boolean flag to indiciate that this is a sibling placement,Holds key informatoin regarding the referral as created by the placement officer
@@ -450,8 +451,13 @@ referral,9,location_preference_details,character varying(300),YES,NULL,,NO,,,,,D
 referral,10,has_location_restriction,boolean,NO,NULL,,NO,,,,,A boolean flag to indiciate that location restrictions are to be considered,Holds key informatoin regarding the referral as created by the placement officer
 referral,11,location_restriction_details,character varying(300),YES,NULL,,NO,,,,,Details for the location restrictions expressed for the referral,Holds key informatoin regarding the referral as created by the placement officer
 referral,12,additional_information,character varying(3000),YES,NULL,,NO,,,,,"Additional Information regarding the referral. For example, details about the childs needs or profile",Holds key informatoin regarding the referral as created by the placement officer
-referral,17,is_spot,boolean,NO,FALSE,,NO,,,,,NULL,Holds key informatoin regarding the referral as created by the placement officer
-referral,18,export_date,timestamp without time zone,YES,NULL,,NO,,,,,Source export timestamp carried into Silver for lineage and point-in-time reporting,Holds key informatoin regarding the referral as created by the placement officer
+referral,13,referral_created_date,timestamp without time zone,YES,NULL,,NO,,,,,Date/time the referral was created in the source extract,Holds key informatoin regarding the referral as created by the placement officer
+referral,14,referral_modified_date,timestamp without time zone,YES,NULL,,NO,,,,,Date/time the referral was last modified in the source extract,Holds key informatoin regarding the referral as created by the placement officer
+referral,15,is_spot,boolean,NO,FALSE,,NO,,,,,NULL,Holds key informatoin regarding the referral as created by the placement officer
+referral,16,referral_created_by,character varying(100),YES,NULL,,NO,,,,,User identifier that created the referral,Holds key informatoin regarding the referral as created by the placement officer
+referral,17,referral_updated_by,character varying(100),YES,NULL,,NO,,,,,User identifier that last updated the referral,Holds key informatoin regarding the referral as created by the placement officer
+referral,18,referral_status,character varying(50),YES,NULL,,NO,,,,,Current referral status supplied by the flattened referral extract,Holds key informatoin regarding the referral as created by the placement officer
+referral,19,export_date,timestamp without time zone,YES,NULL,,NO,,,,,Source export timestamp carried into Silver for lineage and point-in-time reporting,Holds key informatoin regarding the referral as created by the placement officer
 referral_aud,1,id,uuid,NO,NULL,referral_aud_pkey,YES,,,,,NULL,NULL
 referral_aud,2,rev,integer,NO,NULL,referral_aud_pkey,YES,,,,,NULL,NULL
 referral_aud,3,revtype,bigint,YES,NULL,,NO,,,,,NULL,NULL

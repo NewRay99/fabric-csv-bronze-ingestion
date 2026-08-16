@@ -2,16 +2,17 @@ CREATE OR REPLACE VIEW gold.fact_referral AS
 WITH referral_history AS (
   SELECT *, ROW_NUMBER() OVER (
     PARTITION BY referral_id
-    ORDER BY COALESCE(modified_timestamp, created_timestamp) DESC, rev DESC
+    ORDER BY COALESCE(referral_modified_date, referral_created_date, export_date) DESC,
+             export_date DESC
   ) AS row_number_current
-  FROM silver.slv_referral_aud
+  FROM silver.slv_referral
 ),
 referral_current AS (
   SELECT * FROM referral_history WHERE row_number_current = 1
 ),
 referral_created AS (
-  SELECT referral_id, MIN(created_timestamp) AS ReferralCreatedDate
-  FROM silver.slv_referral_aud GROUP BY referral_id
+  SELECT referral_id, MIN(referral_created_date) AS ReferralCreatedDate
+  FROM silver.slv_referral GROUP BY referral_id
 ),
 offer_rollup AS (
   SELECT rp.referral_id,
@@ -42,13 +43,13 @@ base AS (
   SELECT r.referral_id AS ReferralID, c.ReferralCreatedDate,
     r.required_start_date AS RequiredPlacementDate,
     r.response_required_by_date AS ResponseRequiredDate,
-    r.modified_timestamp AS ReferralModifiedTimestamp,
-    r.status AS CurrentStatus, r.placement_type_code AS PlacementTypeRequired,
+    r.referral_modified_date AS ReferralModifiedTimestamp,
+    r.referral_status AS CurrentStatus, r.placement_type AS PlacementTypeRequired,
     e.FirstActionDate, o.FirstOfferDate, o.OfferAcceptedDate, i.IPAIssuedDate,
-    CASE WHEN LOWER(COALESCE(r.status, '')) IN ('closed','cancelled','withdrawn','completed')
-      THEN r.modified_timestamp END AS ReferralClosedDate,
+    CASE WHEN LOWER(COALESCE(r.referral_status, '')) IN ('closed','cancelled','withdrawn','completed')
+      THEN COALESCE(r.referral_modified_date, r.export_date) END AS ReferralClosedDate,
     CAST(NULL AS STRING) AS ReferralClosureReason,
-    GREATEST(COALESCE(r.modified_timestamp, r.created_timestamp),
+    GREATEST(COALESCE(r.referral_modified_date, r.referral_created_date, r.export_date),
       e.LastEventActivityDate, o.LastOfferActivityDate, i.LastIPAActivityDate) AS LastActivityDate,
     o.OfferCount, o.UniqueHomesOffered,
     i.PlannedPlacementStartDate, i.EstimatedWeeklyCost,

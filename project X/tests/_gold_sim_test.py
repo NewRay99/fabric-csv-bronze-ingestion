@@ -1,7 +1,7 @@
 """
 Local simulation test for 04_gold_model 02 03.ipynb.
 
-Fabricates 3 months of Silver-layer data (referral_aud, referral_provider,
+Fabricates 3 months of flattened Silver-layer data (referral, referral_provider,
 offer, ipa, referral_event_log) that mimics what the bronze->silver formatter
 and the archive replay would produce: new referrals each month plus in-month
 updates, spread across multiple months. Then runs the gold model SQL logic
@@ -39,7 +39,7 @@ MONTHS = [date(2025, 1, 31), date(2025, 2, 28), date(2025, 3, 31)]  # 3 month-en
 def ts(d, h=9, m=0):
     return datetime(d.year, d.month, d.day, h, m)
 
-referrals = []   # referral_aud rows (audit: one row per revision)
+referrals = []   # flattened referral rows, including later versions for test coverage
 providers = []   # referral_provider
 offers = []      # offer
 ipas = []        # ipa
@@ -54,11 +54,11 @@ def add_referral(created, required_start, status="open"):
     rid = str(uuid.uuid4())
     rev_counter[rid] = 0
     rev_counter[rid] += 1
-    referrals.append(dict(id=uuid.uuid4(), rev=rev_counter[rid], revtype=0,
-        referral_id=rid, placement_type_code="FOSTER",
+    referrals.append(dict(
+        referral_id=rid, placement_type="FOSTER",
         required_start_date=required_start, response_required_by_date=required_start - timedelta(days=2),
-        created_timestamp=ts(created), modified_timestamp=ts(created),
-        created_by=str(uuid.uuid4()), modified_by=str(uuid.uuid4()), status="open",
+        referral_created_date=ts(created), referral_modified_date=ts(created),
+        referral_created_by=str(uuid.uuid4()), referral_updated_by=str(uuid.uuid4()), referral_status="open",
         export_date=ts(created)))
     return rid
 
@@ -118,11 +118,11 @@ r9 = add_referral(date(2025,2,20), date(2025,2,22))  # critical, closed without 
 add_event(r9, date(2025,2,20))
 # in-month update: close r3 (created Jan) -> new audit revision in Feb
 rev_counter[r3] += 1
-referrals.append(dict(id=uuid.uuid4(), rev=rev_counter[r3], revtype=1,
-    referral_id=r3, placement_type_code="FOSTER", required_start_date=date(2025,2,10),
-    response_required_by_date=date(2025,2,8), created_timestamp=ts(date(2025,1,15)),
-    modified_timestamp=ts(date(2025,2,15), 14), created_by=uuid.uuid4(), modified_by=uuid.uuid4(),
-    status="completed", export_date=ts(date(2025,2,15), 14)))
+referrals.append(dict(
+    referral_id=r3, placement_type="FOSTER", required_start_date=date(2025,2,10),
+    response_required_by_date=date(2025,2,8), referral_created_date=ts(date(2025,1,15)),
+    referral_modified_date=ts(date(2025,2,15), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
+    referral_status="completed", export_date=ts(date(2025,2,15), 14)))
 add_event(r3, date(2025,2,15), "CLOSE")
 
 # --- Month 3 (Mar): 3 new + updates ---
@@ -137,14 +137,14 @@ add_event(r12, date(2025,3,12))
 o5 = add_offer(r5, date(2025,3,3), "accepted"); add_ipa(r5, o5, date(2025,3,3), date(2025,3,5))
 # r9 closed without placement in Mar
 rev_counter[r9] += 1
-referrals.append(dict(id=uuid.uuid4(), rev=rev_counter[r9], revtype=1,
-    referral_id=r9, placement_type_code="FOSTER", required_start_date=date(2025,2,22),
-    response_required_by_date=date(2025,2,20), created_timestamp=ts(date(2025,2,20)),
-    modified_timestamp=ts(date(2025,3,10), 14), created_by=uuid.uuid4(), modified_by=uuid.uuid4(),
-    status="cancelled", export_date=ts(date(2025,3,10), 14)))
+referrals.append(dict(
+    referral_id=r9, placement_type="FOSTER", required_start_date=date(2025,2,22),
+    response_required_by_date=date(2025,2,20), referral_created_date=ts(date(2025,2,20)),
+    referral_modified_date=ts(date(2025,3,10), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
+    referral_status="cancelled", export_date=ts(date(2025,3,10), 14)))
 add_event(r9, date(2025,3,10), "CLOSE")
 
-print(f"Fabricated: {len(referrals)} referral_aud rows, {len(providers)} providers, "
+print(f"Fabricated: {len(referrals)} flattened referral rows, {len(providers)} providers, "
       f"{len(offers)} offers, {len(ipas)} ipas, {len(events)} events")
 
 spark.sql("CREATE SCHEMA IF NOT EXISTS silver")
@@ -173,7 +173,7 @@ def mkdf(rows):
     _tmp_dirs.append(d)
     return spark.read.json("file:///" + d.replace("\\", "/"))
 
-write(mkdf(referrals), "slv_referral_aud")
+write(mkdf(referrals), "slv_referral")
 write(mkdf(providers), "slv_referral_provider")
 write(mkdf(offers), "slv_offer")
 write(mkdf(ipas), "slv_ipa")

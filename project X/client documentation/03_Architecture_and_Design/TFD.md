@@ -172,3 +172,16 @@ raises a combined failure after later eligible items have been attempted.
 - For BAU, confirm the newest Bronze export becomes the current Silver/Gold
   state and that completed exports are skipped on rerun.
 
+### 3.4 Flattened referral contract
+
+The Bronze referral CSV is a flattened reporting extract. Its operational
+columns are `placement_type`, `referral_created_date`,
+`referral_modified_date`, `referral_created_by`, `referral_updated_by`, and
+`referral_status`; they must not be substituted with similarly named fields
+from `referral_aud`. Silver retains these fields through the central contract,
+and Gold uses the created/modified/export timestamps in that priority order for
+current-row selection and activity dates.
+
+`04_gold_model 02 03` validates its complete Silver input contract before view
+creation. This makes a stale Lakehouse contract or incomplete Silver rerun an
+explicit deployment error rather than an unresolved SQL-column exception.

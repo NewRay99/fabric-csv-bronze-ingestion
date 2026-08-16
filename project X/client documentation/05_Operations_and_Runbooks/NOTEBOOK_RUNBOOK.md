@@ -156,3 +156,12 @@ For operational detail, also read:
 - `ARCHIVE_LOAD_NOTES.md`
 - `VALIDATION.md`
 
+### SI-006 recovery — Gold referral source validation
+
+If Gold reports missing referral fields, do not run `04_gold_model 02 03` by
+itself. First deploy the updated Gold notebook and replace
+`Files/cfg_files/schema_definition.csv` with the project copy. Rerun
+`02a_archive_silver 02 03` for the affected month so `silver.slv_referral` is
+rebuilt with `placement_type`, `referral_created_date`,
+`referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
+successful month-control row, set its reload flag before rerunning.

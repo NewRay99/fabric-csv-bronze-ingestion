@@ -366,6 +366,31 @@ table contracts continue to be logged and skipped.
 - **Validation:** run
   `python validate_archive_framework_fallback_v02_04.py`; the full portable
   validator set must also pass.
-## SI-006 error when loading into fact_referral
-RuntimeError
-2026-04-30 DQ/Gold: An error occurred while calling o10770.throwExceptionIfHave. : com.microsoft.spark.notebook.msutils.NotebookExecutionException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `modified_timestamp` cannot be resolved. Did you mean one of the following? [`_silver_load_ts`, `_silver_run_id`, `is_spot`, `required_start_date`, `sibling_count`].; line 6 pos 22; 'CreateViewCommand `spark_catalog`.`chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg`.`fact_referral`, WITH referral_history AS (
+## SI-006 — Gold referral model used obsolete referral column names
+
+- **Status:** Fixed in the project source; Fabric deployment and April replay are required.
+- **Symptom:** archive replay reached `04_gold_model 02 03` for 2026-04-30,
+  then failed while creating `gold.fact_referral` because
+  `modified_timestamp` could not be resolved in `silver.slv_referral`.
+- **Cause:** the current flattened referral extract uses `placement_type`,
+  `referral_created_date`, `referral_modified_date`, and `referral_status`.
+  These fields were visible as `UNCONTRACTED_COLUMN_ADDED` in both schema-drift
+  sheets, so Silver removed them. Gold still referred to the older audit-style
+  names `placement_type_code`, `created_timestamp`, `modified_timestamp`,
+  `status`, and `rev`.
+- **Fix:** the referral section of `schema_definition.csv` now includes all six
+  captured flattened-extract fields with their observed ordinals. The two date
+  fields are conformed to timestamps. `04_gold_model 02 03` now uses the
+  flattened referral names and orders duplicate candidates by referral modified
+  date, referral created date, then export date.
+- **Preflight:** Gold now checks all required Silver tables and columns before
+  creating views. If a deployment or Silver rerun is missing, it raises one
+  actionable `Gold source validation failed` message instead of a sequence of
+  unresolved-column errors.
+- **Recovery:** deploy the updated notebook and copy the updated contract to
+  `Files/cfg_files/schema_definition.csv`; then set the affected month to reload
+  and rerun `02a_archive_silver 02 03` from 2026-04-30.
+- **Validation:** run `python validate_gold_referral_schema_v02_04.py`; the full
+  portable validator set must also pass. The Spark simulation fixture now mirrors
+  the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors
+  the flattened referral schema; execute it in a PySpark/Delta-capable environment.
