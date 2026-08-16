@@ -90,6 +90,20 @@ contract supplies valid relationships.
 - Monthly replay uses one canonical date per month and each table's latest
   available snapshot on or before that date.
 - Silver is rebuilt for the month before DQ and Gold are invoked.
+- If no archived `framework` snapshot exists on or before a canonical month,
+  `02a_archive_silver 02 03` reads
+  `Files/deprecated_wmpp_files/framework.csv`, stamps the canonical monthly
+  snapshot date as `export_date`, and writes `silver.slv_framework` through the
+  normal deduplication, formatting, audit, and metric path.
+- An eligible archived framework snapshot always takes precedence. The fallback
+  also covers complete physical-table absence and does not create
+  `archived.archived_framework`. Its
+  Silver output retains `_archive_fallback = true` and `_source_file`; missing,
+  empty, or structurally incompatible fallback data fails the affected month.
+- The fallback currently uses an explicit local six-column contract because
+  `framework` is missing from `schema_definition.csv`. Replace that temporary
+  contract with the approved CSV contract when framework metadata is signed
+  off.
 
 ### 4.4 Data quality
 

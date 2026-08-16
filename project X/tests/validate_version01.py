@@ -75,7 +75,8 @@ archive_source = notebook_source(notebooks["02a_archive_silver 02 03.ipynb"])
 assert "month_end_dates = sorted(month_last_dates.values())" in archive_source
 assert "for snapshot_date in month_end_dates:" in archive_source
 assert "for batch_date in batch_dates:" not in archive_source
-assert '.where(F.to_date("export_date") == F.lit(source_date))' in archive_source
+assert "spark.table(source_table).where(" in archive_source
+assert 'F.to_date("export_date") == F.lit(source_date)' in archive_source
 common_notebook = json.loads(
     (ROOT / "99_common_library 02 03.ipynb").read_text(encoding="utf-8")
 )

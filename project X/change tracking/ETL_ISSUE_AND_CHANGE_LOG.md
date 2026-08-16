@@ -335,3 +335,34 @@ table contracts continue to be logged and skipped.
   config registry, the missing live setup call, and central Gold-rule seeding.
 - **Validation:** `validate_cfg_setup_v02_04.py` verifies ownership, required
   table coverage, setup-call order, and absence of child config DDL.
+
+## SI-005 — Archive replay had no framework source when the table was absent
+
+- **Symptom:** historical Silver replay could not materialise
+  `silver.slv_framework` when archive deliveries did not contain a logical
+  `framework` table. Downstream `provider_framework.framework_code`
+  referential checks therefore had no parent object.
+- **Cause:** `02a_archive_silver 02 03.ipynb` discovered only physical archive
+  tables. The controlled legacy framework CSV was not registered as an
+  archive-replay source.
+- **Fix:** archive Silver now uses the archived framework's latest eligible
+  snapshot when available. When no framework snapshot exists on or before a
+  canonical month—including complete physical-table absence—it reads
+  `Files/deprecated_wmpp_files/framework.csv`, validates
+  the required columns and non-empty content, stamps each canonical monthly
+  snapshot date into `export_date`, and routes the frame through normal PK
+  deduplication, conformance, auditing, metrics, and FK dependency ordering.
+- **Provenance:** the Silver result records `_archive_fallback = true` and
+  `_source_file`. No synthetic `archived.archived_framework` table is created.
+- **Contract note:** `framework` is currently absent from
+  `schema_definition.csv`, although `provider_framework` references
+  `framework.framework_code`. The notebook uses a narrow evidence-based local
+  contract for both archived and fallback framework data until the central
+  schema contract is formally approved. The missing contract remains visible
+  as schema drift rather than being silently approved.
+- **Failure behaviour:** a missing file, empty file, or missing required column
+  fails the affected canonical month and is retained in the existing audit and
+  month-end error controls.
+- **Validation:** run
+  `python validate_archive_framework_fallback_v02_04.py`; the full portable
+  validator set must also pass.

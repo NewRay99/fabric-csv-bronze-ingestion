@@ -40,7 +40,11 @@ Run in this order:
 
 Before step 3, verify that `COMPARED_SCHEMA` points to the deployed archive
 schema. Before step 5, confirm archive business tables contain a valid row-level
-`export_date`.
+`export_date`. If any canonical month lacks an eligible archived `framework`
+snapshot—or the table is absent—confirm
+`Files/deprecated_wmpp_files/framework.csv` exists and contains
+`framework_code`, `framework_name`, `start_date`, `end_date`, and
+`placement_type` before starting archive Silver replay.
 
 With `RUN_GOLD_AT_MONTH_END = True`, step 5 processes each canonical month in
 chronological order and invokes:
@@ -74,6 +78,7 @@ Rehydration reconstructs controls; it does not reload business rows.
 | `STOP_ON_FIRST_ERROR` | Normally `False` so independent files continue and failures are summarised |
 | `BATCH_EXPORT_DATE` | Blank for all canonical months; any date selects that calendar month |
 | `RUN_GOLD_AT_MONTH_END` | `True` for complete historical Silver/DQ/Gold replay |
+| `FRAMEWORK_FALLBACK_PATH` | Controlled framework CSV used only when no archived framework snapshot exists on or before the canonical month; default `Files/deprecated_wmpp_files/framework.csv` |
 
 ### 2.4 Archive completion checks
 
@@ -81,6 +86,8 @@ Rehydration reconstructs controls; it does not reload business rows.
   states and no unexplained failures.
 - Archive tables contain the expected dated slices and valid `export_date`.
 - `cfg_silver_export_load` has successful `ARCHIVE_MONTH_END` outcomes.
+- When fallback was required, `silver.slv_framework` has the canonical monthly
+  `export_date`, `_archive_fallback = true`, and the expected `_source_file`.
 - `cfg_data_quality_result` has no unresolved critical failures.
 - `cfg_month_end_gold_run` has one successful row per canonical snapshot date.
 - `gold.fact_referral_snapshot` contains the expected historical dates.
