@@ -88,6 +88,12 @@ for source_table in [
 assert "Gold source validation failed" in source
 print("PASS Gold fails early with one actionable source-schema message")
 
+assert 'EVENT_ROLLUP_SOURCE = "silver.slv_referral_event_log"' in source
+assert "No Silver referral event-log snapshot" in source
+assert "WHERE 1 = 0" in source
+assert "FROM {EVENT_ROLLUP_SOURCE}" in fact_cell
+print("PASS missing historical event-log snapshots use a typed empty enrichment")
+
 
 issue_log = (
     ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md"

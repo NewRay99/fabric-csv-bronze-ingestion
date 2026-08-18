@@ -165,3 +165,24 @@ itself. First deploy the updated Gold notebook and replace
 rebuilt with `placement_type`, `referral_created_date`,
 `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
 successful month-control row, set its reload flag before rerunning.
+
+If the replay reports that `silver.slv_referral_event_log` is missing, this is
+not by itself a failed referral fact. Historical event-log delivery is optional
+enrichment: Gold creates a typed empty event relation for that month. Deploy
+the current Gold notebook and contract first, rerun the affected Silver month,
+and verify that `gold.fact_referral_snapshot` is populated. If an event-log
+table is present, Gold validates its required columns before creating views.
+
+### SI-007 onwards — Contract and Silver materialisation recovery
+
+The project contract is evidence-based. Deploy the rebuilt
+`configuration/schema_definition.csv` together with the notebooks; do not
+copy the retired 57-table contract. `join_class=TRIAL_JOIN` entries are
+diagnostic mappings and must be reconciled in Fabric before being promoted to
+contract foreign keys. `INVALID_JOIN` entries are intentionally excluded from
+DQ referential rules until their parent source is delivered.
+
+The Silver business-rules notebook rebuilds these tables on every successful
+run: `slv_age_band`, `slv_directory_summary_axis`, `slv_fostering_axis`,
+`slv_referral_closure_reason_summary`, and `slv_dim_date`. Verify their schemas
+and row counts before refreshing the semantic model.

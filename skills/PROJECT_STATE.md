@@ -1,7 +1,7 @@
 # Project State
 
 **Project:** BCT WMPP Fabric and Power BI platform  
-**State date:** 16 August 2026  
+**State date:** 18 August 2026  
 **Purpose:** Concise handover and continuity record for the ChatGPT Project.
 
 ## Current implementation baseline
@@ -43,6 +43,22 @@
 - Client documentation, configuration, tests, reports, and change tracking were
   separated into clear folders.
 - Portable notebook validators passed after the reorganisation.
+- SI-007 contract rebuilt from observed drift fields: 397 fields across 31
+  tables, with explicit `CONTRACT_FK`, `TRIAL_JOIN`, and `INVALID_JOIN`
+  classifications.
+- GLD-001 Gold mappings use the flattened Silver referral contract and allow
+  absent historical event-log enrichment without suppressing mandatory-source
+  failures.
+- SI-008–SI-012 are idempotent Silver materialisations for axes, closure
+  summary, and date dimension.
+- Verified with the SI-007 materialisation validator and the full portable
+  validator set.
+
+## Next action
+
+- Deploy the current contract and notebooks to Fabric, mark the 2026-04-30
+  month control for reload, rerun archive Silver/DQ/Gold, inspect the trial-join
+  results, and capture Silver materialisation and Gold snapshot evidence.
 
 ## Update protocol
 

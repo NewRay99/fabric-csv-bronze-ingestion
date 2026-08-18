@@ -395,209 +395,73 @@ table contracts continue to be logged and skipped.
   the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors
   the flattened referral schema; execute it in a PySpark/Delta-capable environment.
 
-## SI-007 schema issue output
+## SI-007 — Reconcile the schema contract with observed source fields
 
-=== PROCESSING CANONICAL MONTH END 2026-04-30 ===
-MONTH END 2026-04-30: archived.archived_framework -> silver.slv_framework
-  Source: archived.archived_framework; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_framework; Gold snapshot=2026-04-30
-  Rows: source=3; written=3; duplicates removed=0
-  Primary keys: ['framework_code']
-  Primary-key sample: [{'framework_code': 'RESI-24'}, {'framework_code': 'FOST-24'}, {'framework_code': 'SUPA-24'}]
-  Silver export_date: non-null=3; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_framework: {'rows': 3, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_framework_category -> silver.slv_framework_category
-  Source: archived.archived_framework_category; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_framework_category; Gold snapshot=2026-04-30
-  Rows: source=20; written=20; duplicates removed=0
-  Primary keys: ['framework_category_id']
-  Primary-key sample: [{'framework_category_id': 7}, {'framework_category_id': 11}, {'framework_category_id': 3}, {'framework_category_id': 30}, {'framework_category_id': 8}]
-  Silver export_date: non-null=20; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_framework_category: {'rows': 20, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_holding_company -> silver.slv_holding_company
-  Source: archived.archived_holding_company; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_holding_company; Gold snapshot=2026-04-30
-  Rows: source=476; written=476; duplicates removed=0
-  Primary keys: ['holding_company_id']
-  Primary-key sample: [{'holding_company_id': '2bbe4c9a-ce8c-4d32-82a0-903eb705b656'}, {'holding_company_id': '338a3c6e-33fa-4bfb-b5a8-0384c41cf04a'}, {'holding_company_id': '3cff7219-6e14-4f20-8b29-aed740bbe793'}, {'holding_company_id': '76bf59dc-a5f4-4436-9bbf-b3a3edf1f0d6'}, {'holding_company_id': '156baf9d-4189-47f5-adb9-567c035f4cb1'}]
-  Silver export_date: non-null=476; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_holding_company: {'rows': 476, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-SKIP archived.archived_referral: no export on or before 2026-04-30
-MONTH END 2026-04-30: archived.archived_provider -> silver.slv_provider
-  Source: archived.archived_provider; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider; Gold snapshot=2026-04-30
-  Rows: source=472; written=472; duplicates removed=0
-  Primary keys: ['provider_id']
-  Primary-key sample: [{'provider_id': '0b80b420-50e3-4cd5-9475-473b9b2cf1ef'}, {'provider_id': '4f9e431d-b7db-4686-84a5-915421926761'}, {'provider_id': 'a3dc647a-b9ba-424a-96f4-4595f8052b65'}, {'provider_id': 'a92f877c-3d50-4a29-bd36-2ef2718ff131'}, {'provider_id': 'b3d12892-34a4-4ae7-a713-951610b8fe38'}]
-  Silver export_date: non-null=472; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider: {'rows': 472, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-SKIP archived.archived_referral_category: no export on or before 2026-04-30
-SKIP archived.archived_referral_person: no export on or before 2026-04-30
-SKIP archived.archived_referral_spot_category: no export on or before 2026-04-30
-MONTH END 2026-04-30: archived.archived_provider_framework -> silver.slv_provider_framework
-  Source: archived.archived_provider_framework; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_framework; Gold snapshot=2026-04-30
-  Rows: source=260; written=260; duplicates removed=0
-  Primary keys: ['provider_framework_id']
-  Primary-key sample: [{'provider_framework_id': 125}, {'provider_framework_id': 124}, {'provider_framework_id': 307}, {'provider_framework_id': 169}, {'provider_framework_id': 205}]
-  Silver export_date: non-null=260; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_framework: {'rows': 260, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_provider_home -> silver.slv_provider_home
-  Source: archived.archived_provider_home; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_home; Gold snapshot=2026-04-30
-  Rows: source=1,667; written=1,667; duplicates removed=0
-  Primary keys: ['provider_home_id']
-  Primary-key sample: [{'provider_home_id': '11f50a14-4917-4a5e-b86d-793677c41937'}, {'provider_home_id': '1df557e1-fdd2-4452-bc81-84ef06075fee'}, {'provider_home_id': '2744141e-47aa-4eea-ac4c-385625ceb2d0'}, {'provider_home_id': '374e2e57-8b3d-4dd4-aaad-521b49b78055'}, {'provider_home_id': '7526bd92-ec05-48a9-b37e-d93f3ad8c310'}]
-  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_home: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-SKIP archived.archived_referral_provider: no export on or before 2026-04-30
-SKIP archived.archived_offer: no export on or before 2026-04-30
-MONTH END 2026-04-30: archived.archived_provider_education_provision -> silver.slv_provider_education_provision
-  Source: archived.archived_provider_education_provision; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_education_provision; Gold snapshot=2026-04-30
-  Rows: source=789; written=789; duplicates removed=0
-  Primary keys: ['provider_education_provision_id']
-  Primary-key sample: [{'provider_education_provision_id': '82d956e1-7736-45bf-82f9-031b19a2d877'}, {'provider_education_provision_id': 'e0c4488a-eb79-4cf4-b4cc-f368de1880d6'}, {'provider_education_provision_id': '74f96880-1f76-408c-ae93-12eb99bea97f'}, {'provider_education_provision_id': '7b2a024e-6b70-4b8d-81be-585b75ee0309'}, {'provider_education_provision_id': '1dccd793-625d-44b2-b03f-d4536f3c27af'}]
-  Silver export_date: non-null=789; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_education_provision: {'rows': 789, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_provider_home_age -> silver.slv_provider_home_age
-  Source: archived.archived_provider_home_age; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_home_age; Gold snapshot=2026-04-30
-  Rows: source=1,667; written=1,667; duplicates removed=0
-  Primary keys: ['provider_home_age_id']
-  Primary-key sample: [{'provider_home_age_id': 1159}, {'provider_home_age_id': 1436}, {'provider_home_age_id': 1512}, {'provider_home_age_id': 2069}, {'provider_home_age_id': 2088}]
-  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_home_age: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_provider_home_category -> silver.slv_provider_home_category
-  Source: archived.archived_provider_home_category; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_home_category; Gold snapshot=2026-04-30
-  Rows: source=1,960; written=1,960; duplicates removed=0
-  Primary keys: ['provider_home_category_id']
-  Primary-key sample: [{'provider_home_category_id': 1090}, {'provider_home_category_id': 1159}, {'provider_home_category_id': 1436}, {'provider_home_category_id': 1512}, {'provider_home_category_id': 1572}]
-  Silver export_date: non-null=1,960; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_home_category: {'rows': 1960, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_provider_home_gender -> silver.slv_provider_home_gender
-  Source: archived.archived_provider_home_gender; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_home_gender; Gold snapshot=2026-04-30
-  Rows: source=1,667; written=1,667; duplicates removed=0
-  Primary keys: ['provider_home_gender_id']
-  Primary-key sample: [{'provider_home_gender_id': 1090}, {'provider_home_gender_id': 1159}, {'provider_home_gender_id': 1436}, {'provider_home_gender_id': 1572}, {'provider_home_gender_id': 2069}]
-  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_home_gender: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-MONTH END 2026-04-30: archived.archived_provider_home_spot_category -> silver.slv_provider_home_spot_category
-  Source: archived.archived_provider_home_spot_category; selected export=2026-04-30; raw type=timestamp
-  Target: silver.slv_provider_home_spot_category; Gold snapshot=2026-04-30
-  Rows: source=1,032; written=1,032; duplicates removed=0
-  Primary keys: ['provider_home_spot_category_id']
-  Primary-key sample: [{'provider_home_spot_category_id': 296}, {'provider_home_spot_category_id': 467}, {'provider_home_spot_category_id': 675}, {'provider_home_spot_category_id': 691}, {'provider_home_spot_category_id': 829}]
-  Silver export_date: non-null=1,032; null=0; values=['2026-04-30']
-  TARGET CHECK silver.slv_provider_home_spot_category: {'rows': 1032, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
-SKIP archived.archived_referral_provider_cancel_reason: no export on or before 2026-04-30
-SKIP archived.archived_referral_provider_decline_reason: no export on or before 2026-04-30
-SKIP archived.archived_referral_provider_message: no export on or before 2026-04-30
-SKIP archived.archived_additional_fee: no export on or before 2026-04-30
-SKIP archived.archived_foster_carer: no export on or before 2026-04-30
-SKIP archived.archived_foster_home: no export on or before 2026-04-30
-SKIP archived.archived_foster_transport: no export on or before 2026-04-30
-SKIP archived.archived_ipa: no export on or before 2026-04-30
-SKIP archived.archived_offer_updates: no export on or before 2026-04-30
-SKIP archived.archived_offer_view_history: no export on or before 2026-04-30
-SKIP archived.archived_supervising_social_worker: no export on or before 2026-04-30
-SKIP archived.archived_ipa_additional_fee: no export on or before 2026-04-30
-SKIP archived.archived_ipa_child: no export on or before 2026-04-30
-SKIP archived.archived_ipa_child_support_needs: no export on or before 2026-04-30
+- **Symptom:** The 2026-04-30 replay exposed a stale `silver.slv_referral`
+  shape and joins to parents that were not present in the active definition.
+- **Evidence:** Both drift sheets recorded 389 matching fields and 247
+  contracted fields missing from the observed source. The replay output also
+  confirmed the available month-end Silver parents: framework,
+  framework_category, holding_company, provider, provider_framework,
+  provider_home, provider education provision, and provider-home dimensions.
+- **Fix:** `configuration/schema_definition.csv` was rebuilt from available
+  observed fields, with the six SI-006 referral fields retained. Definitions
+  that were explicitly missing were removed. The `join_class` and
+  `join_evidence` columns now distinguish `CONTRACT_FK`, `TRIAL_JOIN`,
+  `INVALID_JOIN`, and `NO_JOIN`.
+- **Join decision:** Retained source FKs point only to available parent keys.
+  High-confidence name/key mappings are marked `TRIAL_JOIN` pending Fabric
+  reconciliation; local-authority mappings remain `INVALID_JOIN` because the
+  parent definition was not delivered.
+- **Validation:** Contract uniqueness, table/column coverage, FK target
+  availability, and portable notebook validators must pass before deployment.
 
-## GLD-001 error in 04_gold 02 03.ipynb
-MONTH END FAILED 2026-04-30: An error occurred while calling o12179.throwExceptionIfHave.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Gold source validation failed. silver.slv_referral: missing ['placement_type', 'referral_created_date', 'referral_modified_date', 'referral_status']; silver.slv_referral_event_log: table is missing. Deploy the current Files/cfg_files/schema_definition.csv and rerun Silver for this snapshot before 04_gold_model.
----------------------------------------------------------------------------RuntimeError                              Traceback (most recent call last)Cell In[7], line 35
-     32         gold_input_issues.append(f"{table_name}: missing {missing_columns}")
-     34 if gold_input_issues:
----> 35     raise RuntimeError(
-     36         "Gold source validation failed. "
-     37         + "; ".join(gold_input_issues)
-     38         + ". Deploy the current Files/cfg_files/schema_definition.csv and rerun "
-     39           "Silver for this snapshot before 04_gold_model."
-     40     )
-     42 print("Gold source validation passed")
-RuntimeError: Gold source validation failed. silver.slv_referral: missing ['placement_type', 'referral_created_date', 'referral_modified_date', 'referral_status']; silver.slv_referral_event_log: table is missing. Deploy the current Files/cfg_files/schema_definition.csv and rerun Silver for this snapshot before 04_gold_model.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
-	at com.microsoft.spark.notebook.workflow.JobSessionClient.runCell(JobSessionClient.scala:419)
-	at com.microsoft.spark.notebook.workflow.JobSessionClient.$anonfun$run$4(JobSessionClient.scala:191)
-	at com.microsoft.spark.notebook.workflow.JobSessionClient.$anonfun$run$4$adapted(JobSessionClient.scala:174)
-	at scala.collection.TraversableLike$WithFilter.$anonfun$foreach$1(TraversableLike.scala:985)
-	at scala.collection.immutable.List.foreach(List.scala:431)
-	at scala.collection.TraversableLike$WithFilter.foreach(TraversableLike.scala:984)
-	at com.microsoft.spark.notebook.workflow.JobSessionClient.run(JobSessionClient.scala:174)
-	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl._run(MSNotebookUtilsImpl.scala:162)
-	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.runWithRetry(MSNotebookUtilsImpl.scala:338)
-	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.$anonfun$buildDAG$2(MSNotebookUtilsImpl.scala:516)
-	at com.microsoft.spark.notebook.common.SimpleDAG.$anonfun$executeJob$1(SimpleDAG.scala:311)
-	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:659)
-	at scala.util.Success.$anonfun$map$1(Try.scala:255)
-	at scala.util.Success.map(Try.scala:213)
-	at scala.concurrent.Future.$anonfun$map$1(Future.scala:292)
-	at scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:33)
-	at scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:33)
-	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
-	at java.base/java.lang.Thread.run(Thread.java:829)
+## GLD-001 — Gold referral model consumed a stale/untrusted Silver contract
 
-Archive month-end run 574223db-5a5e-4c8a-8bc4-a2e1f4664151: FAILED; loaded=31, skipped_months=0, skipped_contracts=4, failed=0
+- **Symptom:** Gold failed with unresolved referral fields because the
+  deployed contract had removed `placement_type`, `referral_created_date`,
+  `referral_modified_date`, and `referral_status` from Silver.
+- **Cause:** Gold was run against a Silver snapshot produced from the old
+  contract. The event-log table was also absent for the historical month.
+- **Fix:** Gold now uses the available flattened Silver tables and current
+  referral field names. Mandatory sources are preflighted; event history is
+  optional enrichment and uses a typed empty relation when no historical
+  event-log snapshot exists.
+- **Recovery:** Deploy the rebuilt contract and Gold notebook, mark the
+  affected month for reload, rerun archive Silver, then run DQ and Gold.
 
-## SI-008 Add Age band to Silver layer
-age_band = 
-DATATABLE(
-    "Age Band", STRING,
-    "Sort Order", INTEGER,
-    {
-        {"0-7 days", 1},
-        {"8-14 days", 2},
-        {"15-30 days", 3},
-        {"31+ days", 4}
-    }
-)
+## SI-008 — Materialise the age-band axis in Silver
 
-## SI-009 add Directory Summary Axis table to Silver layer
-Directory Summary Axis = 
-DATATABLE(
-    "Display Type", STRING,
-    {
-        { "Residential Homes" },
-        { "Supported Accommodation Homes" },
-        { "Fostering Providers" }
-    }
-)
+The former report-only calculated table is now rebuilt as
+`silver.slv_age_band` with `age_band` and `sort_order`.
 
-## SI-010 add Fostering Axis table to Silver layer
-Fostering Axis = 
-DATATABLE(
-    "Display Type", STRING,
-    {
-        { "Fostering Providers" }
-    }
-)
+## SI-009 — Materialise the directory summary axis in Silver
 
-## SI-011 add Referral Closure Reason Summary table to Silver layer
-Referral Closure Reason Summary = 
-ADDCOLUMNS(
-    SUMMARIZE(
-        fact_referral_offer,
-        fact_referral_offer[referral_id]
-    ),
-    "Closed Referral Reason Bucket",
-        CALCULATE(
-            MAX(fact_referral_offer[Closed Referral Reason Bucket])
-        )
-)
+The disconnected reporting axis is now rebuilt as
+`silver.slv_directory_summary_axis` with `display_type`.
 
-## SI-012 add dim_date table to Silver layer
-dim_date = 
-ADDCOLUMNS (
-    CALENDARAUTO(), #dateid (eg 01122026)
-    "Year", YEAR([Date]),
-    "Month Number", MONTH([Date]),
-    "Month Name", FORMAT([Date], "MMMM"),
-    "Quarter", "Q" & FORMAT([Date], "Q"),
-    "Day of Week", FORMAT([Date], "dddd")
-)
+## SI-010 — Materialise the fostering axis in Silver
+
+The fostering-only disconnected axis is now rebuilt as
+`silver.slv_fostering_axis` with `display_type`.
+
+## SI-011 — Materialise referral closure-reason summary in Silver
+
+The former DAX summary is now rebuilt as
+`silver.slv_referral_closure_reason_summary`, using the available referral
+provider and offer Silver tables and producing one bucket per referral.
+
+## SI-012 — Materialise the date dimension in Silver
+
+The date table is now rebuilt as `silver.slv_dim_date`, covering the observed
+date range from referral, offer, and IPA Silver data with year, month, quarter,
+and day-name attributes.
+
+## Deployment status for SI-007 onwards
+
+- **Source changes:** complete in the repository.
+- **Portable validation:** required validators pass locally after the final
+  contract and notebook changes.
+- **Fabric validation still required:** deploy the contract and notebooks,
+  reload 2026-04-30, confirm the Silver materialisations and Gold snapshot,
+  then reconcile `TRIAL_JOIN` results before promoting them to contract FKs.

@@ -103,7 +103,8 @@ tables = {}
 for row in rows:
     tables.setdefault(row["table_name"], []).append(row)
 
-assert len(tables) == 57, f"Expected 57 table contracts, found {len(tables)}"
+assert len(tables) == 31, f"Expected 31 observed table contracts, found {len(tables)}"
+assert {row["join_class"] for row in rows} >= {"NO_JOIN", "CONTRACT_FK", "TRIAL_JOIN", "INVALID_JOIN"}
 for table_name, definitions in tables.items():
     ordinals = [int(row["ordinal_position"]) for row in definitions]
     assert len(ordinals) == len(set(ordinals)), f"{table_name}: duplicate ordinal"
@@ -127,5 +128,5 @@ support_key = {
 }
 assert support_key == {"ipa_child_id", "support_need"}
 
-print("PASS schema contracts: 57 tables, unique ordinals, one export_date each")
+print("PASS schema contracts: observed tables, unique ordinals, one export_date each")
 print("PASS archive regression contracts: framework_category, ipa_child_support_needs")
