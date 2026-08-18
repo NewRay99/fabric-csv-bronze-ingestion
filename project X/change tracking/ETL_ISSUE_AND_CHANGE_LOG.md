@@ -557,3 +557,47 @@ DATATABLE(
         {"31+ days", 4}
     }
 )
+
+## SI-009 add Directory Summary Axis table to Silver layer
+Directory Summary Axis = 
+DATATABLE(
+    "Display Type", STRING,
+    {
+        { "Residential Homes" },
+        { "Supported Accommodation Homes" },
+        { "Fostering Providers" }
+    }
+)
+
+## SI-010 add Fostering Axis table to Silver layer
+Fostering Axis = 
+DATATABLE(
+    "Display Type", STRING,
+    {
+        { "Fostering Providers" }
+    }
+)
+
+## SI-011 add Referral Closure Reason Summary table to Silver layer
+Referral Closure Reason Summary = 
+ADDCOLUMNS(
+    SUMMARIZE(
+        fact_referral_offer,
+        fact_referral_offer[referral_id]
+    ),
+    "Closed Referral Reason Bucket",
+        CALCULATE(
+            MAX(fact_referral_offer[Closed Referral Reason Bucket])
+        )
+)
+
+## SI-012 add dim_date table to Silver layer
+dim_date = 
+ADDCOLUMNS (
+    CALENDARAUTO(),
+    "Year", YEAR([Date]),
+    "Month Number", MONTH([Date]),
+    "Month Name", FORMAT([Date], "MMMM"),
+    "Quarter", "Q" & FORMAT([Date], "Q"),
+    "Day of Week", FORMAT([Date], "dddd")
+)
