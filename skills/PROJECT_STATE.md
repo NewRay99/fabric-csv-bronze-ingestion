@@ -51,6 +51,9 @@
   failures.
 - SI-008–SI-012 are idempotent Silver materialisations for axes, closure
   summary, and date dimension.
+- Configuration CSVs are now bootstrapped once by setup into
+  `monitoring.cfg_schema_contract_column` and
+  `monitoring.cfg_data_quality_rule`; child notebooks read the Delta tables.
 - Verified with the SI-007 materialisation validator and the full portable
   validator set.
 

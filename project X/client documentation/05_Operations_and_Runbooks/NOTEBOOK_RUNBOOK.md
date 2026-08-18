@@ -186,3 +186,14 @@ The Silver business-rules notebook rebuilds these tables on every successful
 run: `slv_age_band`, `slv_directory_summary_axis`, `slv_fostering_axis`,
 `slv_referral_closure_reason_summary`, and `slv_dim_date`. Verify their schemas
 and row counts before refreshing the semantic model.
+
+### Configuration bootstrap — schema and DQ rules
+
+`00_setup_cfg 02 03` is the sole runtime reader of
+`Files/cfg_files/schema_definition.csv` and
+`Files/cfg_files/dq_rule_definition.csv`. It loads them into
+`monitoring.cfg_schema_contract_column` and
+`monitoring.cfg_data_quality_rule`; child notebooks read those Delta tables
+only. The default `LOAD_FILE_CONFIG = False` reuses existing tables and
+automatically bootstraps a missing table. Set it to `True` only for an
+intentional contract/rule refresh, then return it to `False`.

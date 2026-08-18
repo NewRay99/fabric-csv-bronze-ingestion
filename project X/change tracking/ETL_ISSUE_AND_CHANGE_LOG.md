@@ -465,3 +465,14 @@ and day-name attributes.
 - **Fabric validation still required:** deploy the contract and notebooks,
   reload 2026-04-30, confirm the Silver materialisations and Gold snapshot,
   then reconcile `TRIAL_JOIN` results before promoting them to contract FKs.
+
+## CFG-001 — Child notebooks reread configuration CSVs
+
+- **Symptom:** schema and DQ consumers each depended on direct CSV paths,
+  allowing configuration to drift between notebook runs.
+- **Fix:** setup now performs the one-off CSV-to-Delta bootstrap into
+  `monitoring.cfg_schema_contract_column` and
+  `monitoring.cfg_data_quality_rule`. Consumers use those tables only.
+- **Operation:** leave `LOAD_FILE_CONFIG = False` for normal runs; set it to
+  `True` for an intentional reload of either CSV-backed configuration table.
+- **Validation:** the consumer scan reports no direct schema/DQ CSV readers.
