@@ -19,7 +19,7 @@ validation, or KPI reconciliation without evidence.
 
 ## Repository boundary
 
-- Repository root: `H:\BCT\fabric-csv-bronze-ingestion`.
+- Repository root: `C:\repos\BCT\fabric-csv-bronze-ingestion`.
 - Active implementation: `project X/`.
 - Active notebooks live directly in `project X/`; do not create another
   `version NN` notebook tree.
