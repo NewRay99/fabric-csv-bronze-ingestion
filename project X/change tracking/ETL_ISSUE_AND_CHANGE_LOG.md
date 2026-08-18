@@ -544,3 +544,16 @@ RuntimeError: Gold source validation failed. silver.slv_referral: missing ['plac
 	at java.base/java.lang.Thread.run(Thread.java:829)
 
 Archive month-end run 574223db-5a5e-4c8a-8bc4-a2e1f4664151: FAILED; loaded=31, skipped_months=0, skipped_contracts=4, failed=0
+
+## SI-008 Add Age band to Silver layer
+age_band = 
+DATATABLE(
+    "Age Band", STRING,
+    "Sort Order", INTEGER,
+    {
+        {"0-7 days", 1},
+        {"8-14 days", 2},
+        {"15-30 days", 3},
+        {"31+ days", 4}
+    }
+)
