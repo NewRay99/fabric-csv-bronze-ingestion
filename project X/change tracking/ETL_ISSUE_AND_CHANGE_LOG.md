@@ -394,3 +394,115 @@ table contracts continue to be logged and skipped.
   portable validator set must also pass. The Spark simulation fixture now mirrors
   the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors
   the flattened referral schema; execute it in a PySpark/Delta-capable environment.
+
+## SI-007 schema issue output
+
+=== PROCESSING CANONICAL MONTH END 2026-04-30 ===
+MONTH END 2026-04-30: archived.archived_framework -> silver.slv_framework
+  Source: archived.archived_framework; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_framework; Gold snapshot=2026-04-30
+  Rows: source=3; written=3; duplicates removed=0
+  Primary keys: ['framework_code']
+  Primary-key sample: [{'framework_code': 'RESI-24'}, {'framework_code': 'FOST-24'}, {'framework_code': 'SUPA-24'}]
+  Silver export_date: non-null=3; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_framework: {'rows': 3, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_framework_category -> silver.slv_framework_category
+  Source: archived.archived_framework_category; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_framework_category; Gold snapshot=2026-04-30
+  Rows: source=20; written=20; duplicates removed=0
+  Primary keys: ['framework_category_id']
+  Primary-key sample: [{'framework_category_id': 7}, {'framework_category_id': 11}, {'framework_category_id': 3}, {'framework_category_id': 30}, {'framework_category_id': 8}]
+  Silver export_date: non-null=20; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_framework_category: {'rows': 20, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_holding_company -> silver.slv_holding_company
+  Source: archived.archived_holding_company; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_holding_company; Gold snapshot=2026-04-30
+  Rows: source=476; written=476; duplicates removed=0
+  Primary keys: ['holding_company_id']
+  Primary-key sample: [{'holding_company_id': '2bbe4c9a-ce8c-4d32-82a0-903eb705b656'}, {'holding_company_id': '338a3c6e-33fa-4bfb-b5a8-0384c41cf04a'}, {'holding_company_id': '3cff7219-6e14-4f20-8b29-aed740bbe793'}, {'holding_company_id': '76bf59dc-a5f4-4436-9bbf-b3a3edf1f0d6'}, {'holding_company_id': '156baf9d-4189-47f5-adb9-567c035f4cb1'}]
+  Silver export_date: non-null=476; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_holding_company: {'rows': 476, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+SKIP archived.archived_referral: no export on or before 2026-04-30
+MONTH END 2026-04-30: archived.archived_provider -> silver.slv_provider
+  Source: archived.archived_provider; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider; Gold snapshot=2026-04-30
+  Rows: source=472; written=472; duplicates removed=0
+  Primary keys: ['provider_id']
+  Primary-key sample: [{'provider_id': '0b80b420-50e3-4cd5-9475-473b9b2cf1ef'}, {'provider_id': '4f9e431d-b7db-4686-84a5-915421926761'}, {'provider_id': 'a3dc647a-b9ba-424a-96f4-4595f8052b65'}, {'provider_id': 'a92f877c-3d50-4a29-bd36-2ef2718ff131'}, {'provider_id': 'b3d12892-34a4-4ae7-a713-951610b8fe38'}]
+  Silver export_date: non-null=472; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider: {'rows': 472, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+SKIP archived.archived_referral_category: no export on or before 2026-04-30
+SKIP archived.archived_referral_person: no export on or before 2026-04-30
+SKIP archived.archived_referral_spot_category: no export on or before 2026-04-30
+MONTH END 2026-04-30: archived.archived_provider_framework -> silver.slv_provider_framework
+  Source: archived.archived_provider_framework; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_framework; Gold snapshot=2026-04-30
+  Rows: source=260; written=260; duplicates removed=0
+  Primary keys: ['provider_framework_id']
+  Primary-key sample: [{'provider_framework_id': 125}, {'provider_framework_id': 124}, {'provider_framework_id': 307}, {'provider_framework_id': 169}, {'provider_framework_id': 205}]
+  Silver export_date: non-null=260; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_framework: {'rows': 260, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_provider_home -> silver.slv_provider_home
+  Source: archived.archived_provider_home; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_home; Gold snapshot=2026-04-30
+  Rows: source=1,667; written=1,667; duplicates removed=0
+  Primary keys: ['provider_home_id']
+  Primary-key sample: [{'provider_home_id': '11f50a14-4917-4a5e-b86d-793677c41937'}, {'provider_home_id': '1df557e1-fdd2-4452-bc81-84ef06075fee'}, {'provider_home_id': '2744141e-47aa-4eea-ac4c-385625ceb2d0'}, {'provider_home_id': '374e2e57-8b3d-4dd4-aaad-521b49b78055'}, {'provider_home_id': '7526bd92-ec05-48a9-b37e-d93f3ad8c310'}]
+  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_home: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+SKIP archived.archived_referral_provider: no export on or before 2026-04-30
+SKIP archived.archived_offer: no export on or before 2026-04-30
+MONTH END 2026-04-30: archived.archived_provider_education_provision -> silver.slv_provider_education_provision
+  Source: archived.archived_provider_education_provision; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_education_provision; Gold snapshot=2026-04-30
+  Rows: source=789; written=789; duplicates removed=0
+  Primary keys: ['provider_education_provision_id']
+  Primary-key sample: [{'provider_education_provision_id': '82d956e1-7736-45bf-82f9-031b19a2d877'}, {'provider_education_provision_id': 'e0c4488a-eb79-4cf4-b4cc-f368de1880d6'}, {'provider_education_provision_id': '74f96880-1f76-408c-ae93-12eb99bea97f'}, {'provider_education_provision_id': '7b2a024e-6b70-4b8d-81be-585b75ee0309'}, {'provider_education_provision_id': '1dccd793-625d-44b2-b03f-d4536f3c27af'}]
+  Silver export_date: non-null=789; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_education_provision: {'rows': 789, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_provider_home_age -> silver.slv_provider_home_age
+  Source: archived.archived_provider_home_age; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_home_age; Gold snapshot=2026-04-30
+  Rows: source=1,667; written=1,667; duplicates removed=0
+  Primary keys: ['provider_home_age_id']
+  Primary-key sample: [{'provider_home_age_id': 1159}, {'provider_home_age_id': 1436}, {'provider_home_age_id': 1512}, {'provider_home_age_id': 2069}, {'provider_home_age_id': 2088}]
+  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_home_age: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_provider_home_category -> silver.slv_provider_home_category
+  Source: archived.archived_provider_home_category; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_home_category; Gold snapshot=2026-04-30
+  Rows: source=1,960; written=1,960; duplicates removed=0
+  Primary keys: ['provider_home_category_id']
+  Primary-key sample: [{'provider_home_category_id': 1090}, {'provider_home_category_id': 1159}, {'provider_home_category_id': 1436}, {'provider_home_category_id': 1512}, {'provider_home_category_id': 1572}]
+  Silver export_date: non-null=1,960; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_home_category: {'rows': 1960, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_provider_home_gender -> silver.slv_provider_home_gender
+  Source: archived.archived_provider_home_gender; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_home_gender; Gold snapshot=2026-04-30
+  Rows: source=1,667; written=1,667; duplicates removed=0
+  Primary keys: ['provider_home_gender_id']
+  Primary-key sample: [{'provider_home_gender_id': 1090}, {'provider_home_gender_id': 1159}, {'provider_home_gender_id': 1436}, {'provider_home_gender_id': 1572}, {'provider_home_gender_id': 2069}]
+  Silver export_date: non-null=1,667; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_home_gender: {'rows': 1667, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+MONTH END 2026-04-30: archived.archived_provider_home_spot_category -> silver.slv_provider_home_spot_category
+  Source: archived.archived_provider_home_spot_category; selected export=2026-04-30; raw type=timestamp
+  Target: silver.slv_provider_home_spot_category; Gold snapshot=2026-04-30
+  Rows: source=1,032; written=1,032; duplicates removed=0
+  Primary keys: ['provider_home_spot_category_id']
+  Primary-key sample: [{'provider_home_spot_category_id': 296}, {'provider_home_spot_category_id': 467}, {'provider_home_spot_category_id': 675}, {'provider_home_spot_category_id': 691}, {'provider_home_spot_category_id': 829}]
+  Silver export_date: non-null=1,032; null=0; values=['2026-04-30']
+  TARGET CHECK silver.slv_provider_home_spot_category: {'rows': 1032, 'null_dates': 0, 'min_export_date': datetime.datetime(2026, 4, 30, 0, 0), 'max_export_date': datetime.datetime(2026, 4, 30, 0, 0)}
+SKIP archived.archived_referral_provider_cancel_reason: no export on or before 2026-04-30
+SKIP archived.archived_referral_provider_decline_reason: no export on or before 2026-04-30
+SKIP archived.archived_referral_provider_message: no export on or before 2026-04-30
+SKIP archived.archived_additional_fee: no export on or before 2026-04-30
+SKIP archived.archived_foster_carer: no export on or before 2026-04-30
+SKIP archived.archived_foster_home: no export on or before 2026-04-30
+SKIP archived.archived_foster_transport: no export on or before 2026-04-30
+SKIP archived.archived_ipa: no export on or before 2026-04-30
+SKIP archived.archived_offer_updates: no export on or before 2026-04-30
+SKIP archived.archived_offer_view_history: no export on or before 2026-04-30
+SKIP archived.archived_supervising_social_worker: no export on or before 2026-04-30
+SKIP archived.archived_ipa_additional_fee: no export on or before 2026-04-30
+SKIP archived.archived_ipa_child: no export on or before 2026-04-30
+SKIP archived.archived_ipa_child_support_needs: no export on or before 2026-04-30
