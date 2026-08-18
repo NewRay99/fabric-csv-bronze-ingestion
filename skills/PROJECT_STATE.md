@@ -54,6 +54,9 @@
 - Configuration CSVs are now bootstrapped once by setup into
   `monitoring.cfg_schema_contract_column` and
   `monitoring.cfg_data_quality_rule`; child notebooks read the Delta tables.
+- Latest and archive Silver no longer trust a prior successful audit when the
+  target is missing contract columns; the new Silver-column regression test
+  covers the Gold-required referral fields, including `placement_type`.
 - Verified with the SI-007 materialisation validator and the full portable
   validator set.
 

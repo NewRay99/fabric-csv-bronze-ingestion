@@ -457,6 +457,22 @@ The date table is now rebuilt as `silver.slv_dim_date`, covering the observed
 date range from referral, offer, and IPA Silver data with year, month, quarter,
 and day-name attributes.
 
+## SIL-001 — Successful Silver audit could preserve an incomplete target schema
+
+- **Symptom:** `bronze.referral` was reported as already successful, so the
+  formatter skipped rebuilding `silver.slv_referral` even though the target
+  lacked contract columns such as `placement_type`.
+- **Cause:** the skip decision trusted the audit status without checking the
+  existing Silver target schema. The configuration Delta table can also retain
+  an older populated contract until setup is deliberately reloaded.
+- **Fix:** latest and archive Silver now verify target columns before skipping;
+  missing contract columns force an idempotent overwrite. Added
+  `validate_silver_required_columns_v02_04.py` to lock down the referral
+  contract and both refresh guards.
+- **Recovery:** run setup once with `LOAD_FILE_CONFIG = True` after deploying a
+  changed contract CSV, then rerun the affected Silver formatter or archive
+  month. Return the flag to `False` afterward.
+
 ## Deployment status for SI-007 onwards
 
 - **Source changes:** complete in the repository.

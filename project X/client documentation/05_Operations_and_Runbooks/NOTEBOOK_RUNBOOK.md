@@ -187,6 +187,36 @@ run: `slv_age_band`, `slv_directory_summary_axis`, `slv_fostering_axis`,
 `slv_referral_closure_reason_summary`, and `slv_dim_date`. Verify their schemas
 and row counts before refreshing the semantic model.
 
+### Schema capture and inspection
+
+The approved contract and the observed source schemas are deliberately stored
+separately. `monitoring.cfg_schema_contract_column` is the approved
+CSV-loaded contract used by Silver and DQ; do not overwrite it with source
+observations, or schema-drift detection becomes ineffective.
+
+`01a_cfg_schema_capture_live 02 03` captures the current Bronze catalogue in
+`monitoring.cfg_bronze_schema_live`. Inspect it in Fabric with:
+
+```sql
+SELECT table_name, ordinal_position, column_name, live_data_type, is_nullable, captured_at
+FROM monitoring.cfg_bronze_schema_live
+ORDER BY table_name, ordinal_position;
+```
+
+`01a_cfg_schema_capture_archive 02 03` captures the Archive catalogue in
+`monitoring.cfg_archived_schema_live`. Inspect it with:
+
+```sql
+SELECT table_name, ordinal_position, column_name, data_type, is_nullable, contract_loaded_at
+FROM monitoring.cfg_archived_schema_live
+ORDER BY table_name, ordinal_position;
+```
+
+Use `monitoring.cfg_schema_drift_event` to review differences between either
+observed schema and the approved contract. A future unified observation table
+may add a `source_kind` field for combined reporting, but it must remain
+separate from the contract table.
+
 ### Configuration bootstrap — schema and DQ rules
 
 `00_setup_cfg 02 03` is the sole runtime reader of
