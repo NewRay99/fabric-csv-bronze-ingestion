@@ -506,3 +506,41 @@ SKIP archived.archived_supervising_social_worker: no export on or before 2026-04
 SKIP archived.archived_ipa_additional_fee: no export on or before 2026-04-30
 SKIP archived.archived_ipa_child: no export on or before 2026-04-30
 SKIP archived.archived_ipa_child_support_needs: no export on or before 2026-04-30
+
+## GLD-001 error in 04_gold 02 03.ipynb
+MONTH END FAILED 2026-04-30: An error occurred while calling o12179.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Gold source validation failed. silver.slv_referral: missing ['placement_type', 'referral_created_date', 'referral_modified_date', 'referral_status']; silver.slv_referral_event_log: table is missing. Deploy the current Files/cfg_files/schema_definition.csv and rerun Silver for this snapshot before 04_gold_model.
+---------------------------------------------------------------------------RuntimeError                              Traceback (most recent call last)Cell In[7], line 35
+     32         gold_input_issues.append(f"{table_name}: missing {missing_columns}")
+     34 if gold_input_issues:
+---> 35     raise RuntimeError(
+     36         "Gold source validation failed. "
+     37         + "; ".join(gold_input_issues)
+     38         + ". Deploy the current Files/cfg_files/schema_definition.csv and rerun "
+     39           "Silver for this snapshot before 04_gold_model."
+     40     )
+     42 print("Gold source validation passed")
+RuntimeError: Gold source validation failed. silver.slv_referral: missing ['placement_type', 'referral_created_date', 'referral_modified_date', 'referral_status']; silver.slv_referral_event_log: table is missing. Deploy the current Files/cfg_files/schema_definition.csv and rerun Silver for this snapshot before 04_gold_model.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
+	at com.microsoft.spark.notebook.workflow.JobSessionClient.runCell(JobSessionClient.scala:419)
+	at com.microsoft.spark.notebook.workflow.JobSessionClient.$anonfun$run$4(JobSessionClient.scala:191)
+	at com.microsoft.spark.notebook.workflow.JobSessionClient.$anonfun$run$4$adapted(JobSessionClient.scala:174)
+	at scala.collection.TraversableLike$WithFilter.$anonfun$foreach$1(TraversableLike.scala:985)
+	at scala.collection.immutable.List.foreach(List.scala:431)
+	at scala.collection.TraversableLike$WithFilter.foreach(TraversableLike.scala:984)
+	at com.microsoft.spark.notebook.workflow.JobSessionClient.run(JobSessionClient.scala:174)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl._run(MSNotebookUtilsImpl.scala:162)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.runWithRetry(MSNotebookUtilsImpl.scala:338)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.$anonfun$buildDAG$2(MSNotebookUtilsImpl.scala:516)
+	at com.microsoft.spark.notebook.common.SimpleDAG.$anonfun$executeJob$1(SimpleDAG.scala:311)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:659)
+	at scala.util.Success.$anonfun$map$1(Try.scala:255)
+	at scala.util.Success.map(Try.scala:213)
+	at scala.concurrent.Future.$anonfun$map$1(Future.scala:292)
+	at scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:33)
+	at scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:33)
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+Archive month-end run 574223db-5a5e-4c8a-8bc4-a2e1f4664151: FAILED; loaded=31, skipped_months=0, skipped_contracts=4, failed=0
