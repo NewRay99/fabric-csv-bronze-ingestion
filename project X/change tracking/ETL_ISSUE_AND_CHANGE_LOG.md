@@ -594,7 +594,7 @@ ADDCOLUMNS(
 ## SI-012 add dim_date table to Silver layer
 dim_date = 
 ADDCOLUMNS (
-    CALENDARAUTO(),
+    CALENDARAUTO(), #dateid (eg 01122026)
     "Year", YEAR([Date]),
     "Month Number", MONTH([Date]),
     "Month Name", FORMAT([Date], "MMMM"),
