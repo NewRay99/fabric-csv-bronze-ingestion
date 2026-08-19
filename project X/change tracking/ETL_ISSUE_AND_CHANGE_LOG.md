@@ -492,3 +492,12 @@ and day-name attributes.
 - **Operation:** leave `LOAD_FILE_CONFIG = False` for normal runs; set it to
   `True` for an intentional reload of either CSV-backed configuration table.
 - **Validation:** the consumer scan reports no direct schema/DQ CSV readers.
+
+## SI-013 silver.slv_referral_event_log not getting created
+could this be created as part of the `00_setup_cfg 02 03` notebook
+
+
+## SI-014 `02a_archive_silver 02 03` difficult to trace
+this `02a_archive_silver 02 03` although executes from end-to-end its difficult to trace. i would like to be able to process month by month myself to see if data is loaded.. sdo for example if a paramater in the notebook is set to process_only = "2026-05" then it will optionally clear down the montioring tables ... optionally clear the silver tables and then only process for the month passed in by user...
+
+
