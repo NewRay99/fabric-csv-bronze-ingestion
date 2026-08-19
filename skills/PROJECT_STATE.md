@@ -57,9 +57,11 @@
 - Latest and archive Silver no longer trust a prior successful audit when the
   target is missing contract columns; the new Silver-column regression test
   covers the Gold-required referral fields, including `placement_type`.
-- SI-013–SI-016 repaired and consolidated `99_common_library 02 03`, added the
-  typed optional referral-event-log Silver shell, and introduced guarded
-  `PROCESS_ONLY = "YYYY-MM"` archive replay controls.
+- SI-013–SI-016 repaired and consolidated `99_common_library 02 03` and
+  introduced guarded `PROCESS_ONLY = "YYYY-MM"` archive replay controls.
+- The nonexistent source event-log shell was removed. Silver now materialises
+  `slv_referral_lifecycle_event` from available Referral, Offer, Provider
+  Message, and IPA timestamps; Gold consumes this derived lifecycle stream.
 - Verified with the SI-007 materialisation validator and the full portable
   validator set.
 

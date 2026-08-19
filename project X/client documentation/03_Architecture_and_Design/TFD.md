@@ -15,7 +15,7 @@ requirements for the BCT WMPP data-engineering solution.
 | Notebook | Inputs | Outputs / responsibility |
 |---|---|---|
 | `99_common_library 02 03` | Table/file names and contract rows | Shared exclusions, schema-conformance, audit, and Silver-formatting helpers |
-| `00_setup_cfg 02 03` | Parameters | Creates/upgrades monitoring/config tables, the optional event-log Silver shell, and stable Gold rules |
+| `00_setup_cfg 02 03` | Parameters | Creates/upgrades monitoring/config tables and stable Gold rules |
 | `00_archive_load 02 03` | Archive ZIPs or dated CSV/Parquet folders | `archived.archived_*`, ZIP/file controls, metrics |
 | `00a_rehydrate_archive_cfg 02 03` | Existing archive tables, legacy controls, extracted ZIP folders | Reconstructed archive monitoring controls |
 | `00b_reset_silver_cfg 02 03` | Explicit reset parameters | Guarded clearing of selected Silver execution state/tables |
@@ -25,7 +25,7 @@ requirements for the BCT WMPP data-engineering solution.
 | `02_silver_formatter 02 03` | Current Bronze and schema contract | Current `silver.slv_*`, audit rows, drift events, metrics |
 | `02a_archive_silver 02 03` | Historical archive tables and contract | Canonical monthly `silver.slv_*`, DQ/Gold orchestration |
 | `03_silver_business_rules 02 03` | Silver, schema contract, DQ rule CSV | DQ results, rejected keys, referential exceptions |
-| `04_gold_model 02 03` | Current/historical Silver | Gold referral views and `fact_referral_snapshot` |
+| `04_gold_model 02 03` | Current/historical Silver | Gold referral views, lifecycle-event view, and `fact_referral_snapshot` |
 
 ## 3. Configuration contract
 

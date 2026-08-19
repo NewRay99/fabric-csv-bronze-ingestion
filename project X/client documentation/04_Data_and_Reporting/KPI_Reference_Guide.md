@@ -22,7 +22,7 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 | fact_referral_category | slv_referral_category | referral.referral_category | Referral categories |
 | fact_provider_message | slv_referral_provider_message | referral.referral_provider_message | Inter-party messages |
 | dim_referral_gender | slv_person | referral.person | Gender aggregation |
-| fact_referral_event_log | slv_referral_event_log | referral.referral_event_log | Audit trail |
+| fact_referral_lifecycle_event | slv_referral_lifecycle_event | Derived from referral, offer, and IPA timestamps | Referral lifecycle timing; not a source audit trail |
 | dim_s3_file_metadata | slv_s3_file_metadata | document.s3_file_metadata | Document metadata |
 | dim_provider_document | slv_provider_document | provider.provider_document | Provider docs |
 | dim_submission_documents | slv_submission_documents | provider.submission_documents | Onboarding docs |
@@ -609,7 +609,7 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-113: Audit Events by Type `[R20]`
 - **Functional ref:** R20 (full audit tracking across placement activities, IPA, signatures, approvals)
-- **Tables:** `gold.fact_referral_event_log` (from `referral.referral_event_log`)
+- **Tables:** `gold.fact_referral_lifecycle_event` (derived from available Silver timestamps; not a complete source audit log)
 - **Calculation:** `COUNT(DISTINCT event_id) GROUP BY event_type`
 
 ### KPI-114: IPA Signature Completion Rate `[R20, R35]`

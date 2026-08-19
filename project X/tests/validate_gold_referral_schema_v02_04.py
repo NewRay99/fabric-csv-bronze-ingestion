@@ -82,17 +82,17 @@ for source_table in [
     "silver.slv_offer",
     "silver.slv_referral_provider",
     "silver.slv_ipa",
-    "silver.slv_referral_event_log",
+    "silver.slv_referral_lifecycle_event",
 ]:
     assert source_table in source, f"preflight does not cover {source_table}"
 assert "Gold source validation failed" in source
 print("PASS Gold fails early with one actionable source-schema message")
 
-assert 'EVENT_ROLLUP_SOURCE = "silver.slv_referral_event_log"' in source
-assert "No Silver referral event-log snapshot" in source
-assert "WHERE 1 = 0" in source
+assert 'EVENT_ROLLUP_SOURCE = "silver.slv_referral_lifecycle_event"' in source
+assert "source-system referral-event audit log" in source
+assert "slv_referral_event_log" not in source
 assert "FROM {EVENT_ROLLUP_SOURCE}" in fact_cell
-print("PASS missing historical event-log snapshots use a typed empty enrichment")
+print("PASS Gold uses the derived Silver referral lifecycle event stream")
 
 
 issue_log = (

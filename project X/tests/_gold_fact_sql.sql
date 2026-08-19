@@ -37,7 +37,7 @@ ipa_rollup AS (
 event_rollup AS (
   SELECT referral_id, MIN(event_timestamp) AS FirstActionDate,
     MAX(COALESCE(event_timestamp, created_timestamp)) AS LastEventActivityDate
-  FROM silver.slv_referral_event_log GROUP BY referral_id
+  FROM silver.slv_referral_lifecycle_event GROUP BY referral_id
 ),
 base AS (
   SELECT r.referral_id AS ReferralID, c.ReferralCreatedDate,

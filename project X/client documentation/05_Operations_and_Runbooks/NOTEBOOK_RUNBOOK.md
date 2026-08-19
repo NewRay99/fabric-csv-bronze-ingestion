@@ -166,12 +166,11 @@ rebuilt with `placement_type`, `referral_created_date`,
 `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
 successful month-control row, set its reload flag before rerunning.
 
-If the replay reports that `silver.slv_referral_event_log` is missing, this is
-not by itself a failed referral fact. Historical event-log delivery is optional
-enrichment: Gold creates a typed empty event relation for that month. Deploy
-the current Gold notebook and contract first, rerun the affected Silver month,
-and verify that `gold.fact_referral_snapshot` is populated. If an event-log
-table is present, Gold validates its required columns before creating views.
+The source does not deliver a referral event-log table. `03_silver_business_rules
+02 03` therefore derives `silver.slv_referral_lifecycle_event` from actual
+Referral, Offer, and IPA timestamps, and Gold uses it for activity timing. It
+is not a source-system audit log. `gold.fact_referral_snapshot` remains a
+snapshot table, not an event history; run Silver business rules before Gold.
 
 ### SI-007 onwards — Contract and Silver materialisation recovery
 

@@ -495,11 +495,14 @@ and day-name attributes.
 
 ## SI-013 — Referral event-log Silver table was absent
 
-- **Fix:** setup creates the typed, empty `silver.slv_referral_event_log`
-  shell. It supports Gold and downstream consumers while event-history source
-  delivery remains optional; setup does not manufacture event rows.
-- **Validation:** the SI-013–SI-016 validator checks the required event-log
-  fields in `00_setup_cfg 02 03`.
+- **Decision:** no `referral_event_log` source table is delivered, so setup
+  must not fabricate an empty source-shaped Silver table.
+- **Fix:** `03_silver_business_rules 02 03` materialises
+  `silver.slv_referral_lifecycle_event` from real Referral, Offer, and IPA
+  timestamps. Gold consumes that explicitly derived lifecycle stream.
+- **Scope:** this is not a full source-system audit trail. The referral
+  snapshot remains one row per referral/snapshot date and is not an event
+  history.
 
 ## SI-014 — Archive replay needed a traceable single-month mode
 

@@ -46,13 +46,10 @@ def main():
     print("PASS project notebooks no longer import common_util")
 
     setup = source(SETUP)
-    assert "silver.slv_referral_event_log" in setup, "Setup does not create the event-log Silver shell"
-    for column in [
-        "event_id", "referral_id", "event_type", "event_timestamp",
-        "sequence_number", "created_by", "created_timestamp",
-    ]:
-        assert column in setup, f"Event-log shell omits {column}"
-    print("PASS setup creates the typed referral-event-log Silver shell")
+    assert "silver.slv_referral_event_log" not in setup, (
+        "Setup must not fabricate a source event-log table"
+    )
+    print("PASS setup does not fabricate a referral event-log source")
 
     archive = source(ARCHIVE_REPLAY)
     for token in [

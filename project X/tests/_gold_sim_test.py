@@ -2,7 +2,7 @@
 Local simulation test for 04_gold_model 02 03.ipynb.
 
 Fabricates 3 months of flattened Silver-layer data (referral, referral_provider,
-offer, ipa, referral_event_log) that mimics what the bronze->silver formatter
+offer, ipa, referral_lifecycle_event) that mimics the derived Silver event stream
 and the archive replay would produce: new referrals each month plus in-month
 updates, spread across multiple months. Then runs the gold model SQL logic
 against it for each month-end as-of date and validates the output.
@@ -43,7 +43,7 @@ referrals = []   # flattened referral rows, including later versions for test co
 providers = []   # referral_provider
 offers = []      # offer
 ipas = []        # ipa
-events = []      # referral_event_log
+events = []      # derived referral_lifecycle_event
 
 rev_counter = {}
 event_id = 0
@@ -177,7 +177,7 @@ write(mkdf(referrals), "slv_referral")
 write(mkdf(providers), "slv_referral_provider")
 write(mkdf(offers), "slv_offer")
 write(mkdf(ipas), "slv_ipa")
-write(mkdf(events), "slv_referral_event_log")
+write(mkdf(events), "slv_referral_lifecycle_event")
 print("Silver tables written")
 
 GOLD_FACT_SQL = open(os.path.join(TEST_ROOT, "_gold_fact_sql.sql"), encoding="utf-8").read()

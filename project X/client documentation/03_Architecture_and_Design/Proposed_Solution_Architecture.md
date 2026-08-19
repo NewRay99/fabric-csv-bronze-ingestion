@@ -60,7 +60,7 @@ The proposed solution adopts the **medallion architecture** (also known as the m
 2. **Idempotent Silver processing:** Silver tables are rebuilt from Bronze on each run, ensuring consistency. Deduplication uses primary key columns defined in `schema_definition.csv`.
 3. **Gold as semantic contract:** The Gold layer is the single source of truth for analytics. All 117 KPIs are materialised as Spark SQL views, ensuring that Power BI, ad-hoc queries, and future consumers all reference identical logic.
 4. **Direct Lake connectivity:** Power BI connects to Gold Delta tables in Direct Lake mode, bypassing import refresh and providing near-real-time data.
-5. **Auditability:** Every Bronze table includes ingestion metadata columns (`_ingestion_timestamp`, `_source_file`, `_ingestion_id`), and the Gold layer includes an event log table (`fact_referral_event_log`) for full audit trail support (R67–R70).
+5. **Auditability:** Every Bronze table includes ingestion metadata columns (`_ingestion_timestamp`, `_source_file`, `_ingestion_id`). The implemented Gold lifecycle-event view is derived from available Silver timestamps; it is not a full source-system audit trail.
 
 ### 2.3 Source Systems
 
@@ -247,7 +247,7 @@ The Gold layer comprises **17 tables** — a mix of fact and dimension tables de
 | 4 | `fact_referral_person` | Person-level referral facts, linking individuals to referrals. Grain: one row per person per referral. |
 | 5 | `fact_referral_category` | Categorisation facts for referrals (e.g., placement type, urgency, category codes). Grain: one row per referral-category assignment. |
 | 6 | `fact_provider_message` | Provider messaging activity facts. Tracks message volume, response times, and engagement. Grain: one row per message. |
-| 7 | `fact_referral_event_log` | Audit trail fact table. Captures all referral lifecycle events (creation, modification, status change, offer, acceptance, rejection). Grain: one row per event. Supports requirements R67–R70. |
+| 7 | `fact_referral_lifecycle_event` | Derived lifecycle timing fact. Captures available referral, offer, and IPA timestamps only; grain: one derived event per source timestamp. It does not claim full audit coverage. |
 
 #### Dimension Tables (10)
 
@@ -292,7 +292,7 @@ The Gold layer follows a star-schema design:
 - **`fact_offer`** connects to `dim_provider` and `dim_offer_status`.
 - **`fact_ipa`** connects to `dim_referral` and `dim_provider`.
 - **`fact_referral_person`** connects to `dim_referral` and `dim_referral_gender`.
-- **`fact_referral_event_log`** connects to `dim_referral`.
+- **`fact_referral_lifecycle_event`** connects to `dim_referral`.
 - **`fact_provider_message`** connects to `dim_provider`.
 - **`fact_referral_category`** connects to `dim_referral`.
 - **`dim_provider_document`** and **`dim_submission_documents`** connect to `dim_provider` and `dim_referral` respectively.
@@ -506,7 +506,7 @@ The migration follows a **phased approach**: first achieve functional parity wit
 | Step | Activity | Deliverable |
 |------|----------|-------------|
 | 2.1 | Extend Gold Translator with 27 additional KPIs (117 total) | All 117 KPI Spark SQL views created |
-| 2.2 | Add new Gold tables to support functional gaps (e.g., `fact_referral_event_log`, `dim_s3_file_metadata`) | 17 Gold tables fully populated |
+| 2.2 | Add new Gold tables to support functional gaps (e.g., `fact_referral_lifecycle_event`, `dim_s3_file_metadata`) | 17 Gold tables fully populated |
 | 2.3 | Implement RLS for commissioner regional access (R55) | RLS roles and security mapping table configured |
 | 2.4 | Build enhanced dashboard pages (Executive Overview, Audit Trail, Commissioner View, etc.) | All 11 dashboard pages delivered |
 | 2.5 | Implement data quality monitoring dashboard | `dq_monitoring` table and dashboard page live |
