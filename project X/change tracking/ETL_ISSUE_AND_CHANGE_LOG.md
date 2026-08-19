@@ -500,4 +500,10 @@ could this be created as part of the `00_setup_cfg 02 03` notebook
 ## SI-014 `02a_archive_silver 02 03` difficult to trace
 this `02a_archive_silver 02 03` although executes from end-to-end its difficult to trace. i would like to be able to process month by month myself to see if data is loaded.. sdo for example if a paramater in the notebook is set to process_only = "2026-05" then it will optionally clear down the montioring tables ... optionally clear the silver tables and then only process for the month passed in by user...
 
+## SI-015 `project X\02_silver_formatter 02 03` this is still creating its own functions
+this notebook should be calling the coming notebook as the common notebook should have all the functions that the rest of the notebooks need. remove common functions from other notebook in `project X\` folder where they can be called from `project X\99_common_library 02 03.ipynb` 
+
+## SI-016 consolidate common functions to a single notebook
+`project X\common_util.ipynb` is the same idea as  `project X\99_common_library 02 03.ipynb` so copy across the functions in common_util.ipynb into 99_common_library 02 03.ipynb and remove reference from other notebooks to common_util.ipynb 
+
 
