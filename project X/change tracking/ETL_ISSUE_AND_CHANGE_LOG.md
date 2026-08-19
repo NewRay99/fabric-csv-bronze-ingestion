@@ -493,17 +493,36 @@ and day-name attributes.
   `True` for an intentional reload of either CSV-backed configuration table.
 - **Validation:** the consumer scan reports no direct schema/DQ CSV readers.
 
-## SI-013 silver.slv_referral_event_log not getting created
-could this be created as part of the `00_setup_cfg 02 03` notebook
+## SI-013 — Referral event-log Silver table was absent
 
+- **Fix:** setup creates the typed, empty `silver.slv_referral_event_log`
+  shell. It supports Gold and downstream consumers while event-history source
+  delivery remains optional; setup does not manufacture event rows.
+- **Validation:** the SI-013–SI-016 validator checks the required event-log
+  fields in `00_setup_cfg 02 03`.
 
-## SI-014 `02a_archive_silver 02 03` difficult to trace
-this `02a_archive_silver 02 03` although executes from end-to-end its difficult to trace. i would like to be able to process month by month myself to see if data is loaded.. sdo for example if a paramater in the notebook is set to process_only = "2026-05" then it will optionally clear down the montioring tables ... optionally clear the silver tables and then only process for the month passed in by user...
+## SI-014 — Archive replay needed a traceable single-month mode
 
-## SI-015 `project X\02_silver_formatter 02 03` this is still creating its own functions
-this notebook should be calling the coming notebook as the common notebook should have all the functions that the rest of the notebooks need. remove common functions from other notebook in `project X\` folder where they can be called from `project X\99_common_library 02 03.ipynb` 
+- **Fix:** `02a_archive_silver 02 03` accepts `PROCESS_ONLY = "YYYY-MM"`,
+  resolves it to the canonical final export in that month, and processes only
+  that snapshot.
+- **Safe reset:** `RESET_MONTH_MONITORING` and
+  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` are optional. Either requires
+  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"`; monitoring deletion is
+  limited to that canonical snapshot.
 
-## SI-016 consolidate common functions to a single notebook
-`project X\common_util.ipynb` is the same idea as  `project X\99_common_library 02 03.ipynb` so copy across the functions in common_util.ipynb into 99_common_library 02 03.ipynb and remove reference from other notebooks to common_util.ipynb 
+## SI-015 — Latest Silver duplicated common conformance helpers
+
+- **Fix:** `02_silver_formatter 02 03` now imports the shared library for
+  conformance, casting, audit, and target-schema refresh helpers. Its local
+  duplicate implementations were removed.
+
+## SI-016 — Consolidate common helpers into one notebook
+
+- **Fix:** `99_common_library 02 03` was repaired as a valid notebook and now
+  owns the former `common_util` exclusion policy together with shared Silver
+  helpers. Project notebooks no longer import `common_util.ipynb`.
+- **Validation:** `validate_si013_si016_v02_04.py` verifies the library JSON,
+  the migration, the archive controls, and the event-log shell.
 
 

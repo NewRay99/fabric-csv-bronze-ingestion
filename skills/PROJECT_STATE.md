@@ -57,14 +57,17 @@
 - Latest and archive Silver no longer trust a prior successful audit when the
   target is missing contract columns; the new Silver-column regression test
   covers the Gold-required referral fields, including `placement_type`.
+- SI-013–SI-016 repaired and consolidated `99_common_library 02 03`, added the
+  typed optional referral-event-log Silver shell, and introduced guarded
+  `PROCESS_ONLY = "YYYY-MM"` archive replay controls.
 - Verified with the SI-007 materialisation validator and the full portable
   validator set.
 
 ## Next action
 
-- Deploy the current contract and notebooks to Fabric, mark the 2026-04-30
-  month control for reload, rerun archive Silver/DQ/Gold, inspect the trial-join
-  results, and capture Silver materialisation and Gold snapshot evidence.
+- Deploy the current contract and notebooks to Fabric. Use `PROCESS_ONLY` for
+  a traceable single-month archive replay, then capture Silver, event-log shell,
+  DQ, Gold, and trial-join evidence.
 
 ## Update protocol
 

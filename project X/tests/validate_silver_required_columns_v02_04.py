@@ -11,6 +11,7 @@ NOTEBOOKS = [
     ROOT / "project X" / "02_silver_formatter 02 03.ipynb",
     ROOT / "project X" / "02a_archive_silver 02 03.ipynb",
 ]
+COMMON_LIBRARY = ROOT / "project X" / "99_common_library 02 03.ipynb"
 REQUIRED_REFERRAL = {
     "referral_id",
     "placement_type",
@@ -36,9 +37,16 @@ def main():
     assert not missing_contract, f"Referral contract lost Gold-required columns: {sorted(missing_contract)}"
     print("PASS schema contract retains all Gold-required referral columns")
 
+    common_text = source(COMMON_LIBRARY)
+    assert "def target_requires_refresh" in common_text, (
+        "Common library lacks the target-schema refresh guard"
+    )
+
     for notebook in NOTEBOOKS:
         text = source(notebook)
-        assert "def target_requires_refresh" in text, f"{notebook.name} lacks target-schema refresh guard"
+        assert "%run ./99_common_library 02 03" in text, (
+            f"{notebook.name} does not import the target-schema refresh guard"
+        )
         if notebook.name.startswith("02_silver_formatter"):
             assert "if should_skip(" in text and "not target_requires_refresh" in text, (
                 f"{notebook.name} can skip a successful load without checking the target schema"

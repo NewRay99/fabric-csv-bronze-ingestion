@@ -14,8 +14,8 @@ requirements for the BCT WMPP data-engineering solution.
 
 | Notebook | Inputs | Outputs / responsibility |
 |---|---|---|
-| `common_util` | Table/file names | Shared case-insensitive exclusion of explicit and `ref_*` internal tables |
-| `00_setup_cfg 02 03` | Parameters | Creates/upgrades all monitoring/config tables and seeds stable Gold rules |
+| `99_common_library 02 03` | Table/file names and contract rows | Shared exclusions, schema-conformance, audit, and Silver-formatting helpers |
+| `00_setup_cfg 02 03` | Parameters | Creates/upgrades monitoring/config tables, the optional event-log Silver shell, and stable Gold rules |
 | `00_archive_load 02 03` | Archive ZIPs or dated CSV/Parquet folders | `archived.archived_*`, ZIP/file controls, metrics |
 | `00a_rehydrate_archive_cfg 02 03` | Existing archive tables, legacy controls, extracted ZIP folders | Reconstructed archive monitoring controls |
 | `00b_reset_silver_cfg 02 03` | Explicit reset parameters | Guarded clearing of selected Silver execution state/tables |
@@ -51,7 +51,7 @@ uniqueness, and FK checks. Supported implemented rule types include `NOT_NULL`,
 
 ### 3.3 Shared exclusion policy
 
-`common_util.ipynb` normalises physical prefixes (`brz_`, `archived_`, `slv_`)
+`99_common_library 02 03.ipynb` normalises physical prefixes (`brz_`, `archived_`, `slv_`)
 and excludes the explicit internal tables plus every logical name beginning
 `ref_`. Exclusion occurs before `export_date` or contract validation. A business
 table such as `referral` is not excluded.

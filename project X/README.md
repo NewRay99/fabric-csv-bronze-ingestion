@@ -17,7 +17,7 @@ in this folder are the current notebook set promoted from version 02 04 on
 
 | Notebook | Purpose |
 |---|---|
-| `common_util.ipynb` | Shared `ref_*` and internal-table exclusion policy |
+| `99_common_library 02 03.ipynb` | Consolidated exclusions, schema-conformance, audit, and Silver helpers |
 | `00_setup_cfg 02 03.ipynb` | Creates/upgrades all monitoring and configuration tables |
 | `00_archive_load 02 03.ipynb` | Loads dated archive ZIP/file extracts into `archived` Delta tables |
 | `00a_rehydrate_archive_cfg 02 03.ipynb` | Reconstructs archive controls for an existing deployment |
@@ -29,7 +29,6 @@ in this folder are the current notebook set promoted from version 02 04 on
 | `02a_archive_silver 02 03.ipynb` | Replays canonical historical month-end states into Silver/Gold |
 | `03_silver_business_rules 02 03.ipynb` | Runs schema-driven DQ and referential-integrity checks |
 | `04_gold_model 02 03.ipynb` | Builds the current/historical referral Gold model and snapshots |
-| `99_common_library 02 03.ipynb` | Legacy/shared parsing helpers retained for compatibility |
 
 ## Supporting folders
 
