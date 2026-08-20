@@ -29,18 +29,18 @@ check(
 )
 
 contract_consumers = [
-    "01a_cfg_schema_capture_live 02 03.ipynb",
-    "01a_cfg_schema_capture_archive 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
-    "03_silver_business_rules 02 03.ipynb",
+    "01a_cfg_schema_capture_live.ipynb",
+    "01a_cfg_schema_capture_archive.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
+    "03_silver_business_rules.ipynb",
 ]
 for name in contract_consumers:
     source = notebook_source(name)
     check('row["schema_name"]' not in source, f"{name} still indexes schema_name")
     check('row.get("schema_name")' not in source, f"{name} still reads schema_name")
 
-live_source = notebook_source("01a_cfg_schema_capture_live 02 03.ipynb")
+live_source = notebook_source("01a_cfg_schema_capture_live.ipynb")
 for required in [
     "monitoring.cfg_schema_drift_definition",
     "monitoring.cfg_schema_drift_event",
@@ -55,13 +55,13 @@ for required in [
 ]:
     check(required in live_source, f"daily live capture is missing {required}")
 
-setup_source = notebook_source("00_setup_cfg 02 03.ipynb")
+setup_source = notebook_source("00_setup_cfg.ipynb")
 check(
     "monitoring.cfg_schema_drift_definition" in setup_source,
     "00_setup_cfg does not deploy cfg_schema_drift_definition",
 )
 
-dq_source = notebook_source("03_silver_business_rules 02 03.ipynb")
+dq_source = notebook_source("03_silver_business_rules.ipynb")
 for guard in [
     "Missing Silver source table",
     "Missing Silver column(s)",
@@ -70,12 +70,12 @@ for guard in [
 ]:
     check(guard in dq_source, f"03_silver_business_rules lost SKIPPED guard: {guard}")
 
-archive_source = notebook_source("01a_cfg_schema_capture_archive 02 03.ipynb")
+archive_source = notebook_source("01a_cfg_schema_capture_archive.ipynb")
 check('COMPARED_SCHEMA = "Bronze"' in archive_source, "archive capture was not restored")
 check("ARCHIVE_TABLE_PREFIX" not in archive_source, "archive capture still has the unwanted rewrite")
 check('StructField("schema_name"' not in archive_source, "archive capture still stores schema_name")
 
-for name in ["02_silver_formatter 02 03.ipynb", "02a_archive_silver 02 03.ipynb"]:
+for name in ["02_silver_formatter.ipynb", "02a_archive_silver.ipynb"]:
     source = notebook_source(name)
     check("actual_type string" in source, f"{name} still writes the legacy drift-event shape")
     check("drift_event_row" in source, f"{name} has no expanded drift-event row builder")

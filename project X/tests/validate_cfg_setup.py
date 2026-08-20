@@ -7,23 +7,26 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
 PROJECT = Path(__file__).resolve().parents[1]
-SETUP = "00_setup_cfg 02 03.ipynb"
+SETUP = "00_setup_cfg.ipynb"
 CONSUMERS = [
-    "00_archive_load 02 03.ipynb",
-    "00a_rehydrate_archive_cfg 02 03.ipynb",
-    "00b_reset_silver_cfg 02 03.ipynb",
-    "01_bronze_get_latest 02 03.ipynb",
-    "01a_cfg_schema_capture_live 02 03.ipynb",
-    "01a_cfg_schema_capture_archive 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
-    "03_silver_business_rules 02 03.ipynb",
-    "04_gold_model 02 03.ipynb",
+    "00_archive_load.ipynb",
+    "00a_rehydrate_archive_cfg.ipynb",
+    "00b_reset_silver_cfg.ipynb",
+    "01_bronze_get_latest.ipynb",
+    "01a_cfg_schema_capture_live.ipynb",
+    "01a_cfg_schema_capture_archive.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
+    "03_silver_business_rules.ipynb",
+    "04_gold_model.ipynb",
+    "05_gold_dimensions.ipynb",
 ]
 REQUIRED_TABLES = {
     "monitoring.cfg_silver_export_load",
     "monitoring.cfg_pipeline_run",
     "monitoring.cfg_table_load_metric",
+    "monitoring.cfg_job_run",
+    "monitoring.cfg_job_step_run",
     "monitoring.cfg_schema_drift_definition",
     "monitoring.cfg_schema_drift_event",
     "monitoring.cfg_month_end_gold_run",

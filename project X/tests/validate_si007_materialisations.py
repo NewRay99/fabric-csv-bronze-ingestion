@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "configuration" / "schema_definition.csv"
-NOTEBOOK = ROOT / "03_silver_business_rules 02 03.ipynb"
+NOTEBOOK = ROOT / "03_silver_business_rules.ipynb"
 
 with SCHEMA.open(encoding="utf-8-sig", newline="") as handle:
     reader = csv.DictReader(handle)

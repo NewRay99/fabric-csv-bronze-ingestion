@@ -14,18 +14,19 @@ requirements for the BCT WMPP data-engineering solution.
 
 | Notebook | Inputs | Outputs / responsibility |
 |---|---|---|
-| `99_common_library 02 03` | Table/file names and contract rows | Shared exclusions, schema-conformance, audit, and Silver-formatting helpers |
-| `00_setup_cfg 02 03` | Parameters | Creates/upgrades monitoring/config tables and stable Gold rules |
-| `00_archive_load 02 03` | Archive ZIPs or dated CSV/Parquet folders | `archived.archived_*`, ZIP/file controls, metrics |
-| `00a_rehydrate_archive_cfg 02 03` | Existing archive tables, legacy controls, extracted ZIP folders | Reconstructed archive monitoring controls |
-| `00b_reset_silver_cfg 02 03` | Explicit reset parameters | Guarded clearing of selected Silver execution state/tables |
-| `01_bronze_get_latest 02 03` | Latest source files | Current `bronze.*` tables with lineage and export timestamp |
-| `01a_cfg_schema_capture_live 02 03` | Bronze catalogue and schema contract | Definition snapshot, live schema, drift events, candidate definition |
-| `01a_cfg_schema_capture_archive 02 03` | Archive catalogue and schema contract | Archive live-schema capture/comparison |
-| `02_silver_formatter 02 03` | Current Bronze and schema contract | Current `silver.slv_*`, audit rows, drift events, metrics |
-| `02a_archive_silver 02 03` | Historical archive tables and contract | Canonical monthly `silver.slv_*`, DQ/Gold orchestration |
-| `03_silver_business_rules 02 03` | Silver, schema contract, DQ rule CSV | DQ results, rejected keys, referential exceptions |
-| `04_gold_model 02 03` | Current/historical Silver | Gold referral views, lifecycle-event view, and `fact_referral_snapshot` |
+| `99_common_library` | Table/file names and contract rows | Shared exclusions, schema-conformance, audit, and Silver-formatting helpers |
+| `00_setup_cfg` | Parameters | Creates/upgrades monitoring/config tables and stable Gold rules |
+| `00_archive_load` | Archive ZIPs or dated CSV/Parquet folders | Source-named `archived.<table>` tables, ZIP/file controls, metrics |
+| `00a_rehydrate_archive_cfg` | Existing archive tables, legacy controls, extracted ZIP folders | Reconstructed archive monitoring controls |
+| `00b_reset_silver_cfg` | Explicit reset parameters | Guarded clearing of selected Silver execution state/tables |
+| `01_bronze_get_latest` | Latest source files | Current `bronze.*` tables with lineage and export timestamp |
+| `01a_cfg_schema_capture_live` | Bronze catalogue and schema contract | Definition snapshot, live schema, drift events, candidate definition |
+| `01a_cfg_schema_capture_archive` | Archive catalogue and schema contract | Archive live-schema capture/comparison |
+| `02_silver_formatter` | Current Bronze and schema contract | Current `silver.slv_*`, audit rows, drift events, metrics |
+| `02a_archive_silver` | Historical archive tables and contract | Canonical monthly `silver.slv_*`, DQ/Gold orchestration |
+| `03_silver_business_rules` | Silver, schema contract, DQ rule CSV | DQ results, rejected keys, referential exceptions |
+| `04_gold_model` | Current/historical Silver | Gold referral views, lifecycle-event view, and `fact_referral_snapshot` |
+| `05_gold_dimensions` | Silver dimensions and provider bridges | Gold dimensions and bridges for reporting |
 
 ## 3. Configuration contract
 
@@ -51,7 +52,7 @@ uniqueness, and FK checks. Supported implemented rule types include `NOT_NULL`,
 
 ### 3.3 Shared exclusion policy
 
-`99_common_library 02 03.ipynb` normalises physical prefixes (`brz_`, `archived_`, `slv_`)
+`99_common_library.ipynb` normalises supported physical prefixes (`brz_`, `slv_`); archive tables retain their source names
 and excludes the explicit internal tables plus every logical name beginning
 `ref_`. Exclusion occurs before `export_date` or contract validation. A business
 table such as `referral` is not excluded.
@@ -91,13 +92,13 @@ contract supplies valid relationships.
   available snapshot on or before that date.
 - Silver is rebuilt for the month before DQ and Gold are invoked.
 - If no archived `framework` snapshot exists on or before a canonical month,
-  `02a_archive_silver 02 03` reads
+  `02a_archive_silver` reads
   `Files/deprecated_wmpp_files/framework.csv`, stamps the canonical monthly
   snapshot date as `export_date`, and writes `silver.slv_framework` through the
   normal deduplication, formatting, audit, and metric path.
 - An eligible archived framework snapshot always takes precedence. The fallback
   also covers complete physical-table absence and does not create
-  `archived.archived_framework`. Its
+  `archived.framework`. Its
   Silver output retains `_archive_fallback = true` and `_source_file`; missing,
   empty, or structurally incompatible fallback data fails the affected month.
 - The fallback currently uses an explicit local six-column contract because
@@ -116,7 +117,7 @@ contract supplies valid relationships.
 
 ## 5. Monitoring model
 
-`00_setup_cfg 02 03.ipynb` centrally owns the configuration catalogue. Core
+`00_setup_cfg.ipynb` centrally owns the configuration catalogue. Core
 tables include:
 
 | Control area | Tables |
@@ -145,7 +146,7 @@ raises a combined failure after later eligible items have been attempted.
 | Object | Convention |
 |---|---|
 | Current raw | `bronze.<source_table>` or physical `brz_` input variant |
-| Historical raw | `archived.archived_<table>` |
+| Historical raw | `archived.<source_table>` |
 | Conformed | `silver.slv_<table>` |
 | Reporting | `gold.fact_*`, Gold views and configuration |
 | Controls | `monitoring.cfg_*` |
@@ -159,7 +160,7 @@ raises a combined failure after later eligible items have been attempted.
 5. Attach the same default Lakehouse to every notebook.
 6. Confirm child-notebook names used by `mssparkutils.notebook.run` match the
    imported Fabric item names.
-7. Run `00_setup_cfg 02 03` and verify all configuration tables.
+7. Run `00_setup_cfg` and verify all configuration tables.
 8. Execute the appropriate stream from the runbook.
 
 ## 9. Verification and acceptance
@@ -182,6 +183,6 @@ from `referral_aud`. Silver retains these fields through the central contract,
 and Gold uses the created/modified/export timestamps in that priority order for
 current-row selection and activity dates.
 
-`04_gold_model 02 03` validates its complete Silver input contract before view
+`04_gold_model` validates its complete Silver input contract before view
 creation. This makes a stale Lakehouse contract or incomplete Silver rerun an
 explicit deployment error rather than an unresolved SQL-column exception.

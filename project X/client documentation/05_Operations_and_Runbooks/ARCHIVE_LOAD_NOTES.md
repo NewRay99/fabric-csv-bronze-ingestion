@@ -3,7 +3,7 @@
 ## Date-named audit CSV files
 
 Files named `YYYY-MM-DD.csv` are audit-event files and are loaded by
-`00_archive_load 02 03.ipynb` into `archived.archived_audit`. A separate
+`00_archive_load.ipynb` into `archived.audit`. A separate
 archive notebook is not required.
 
 The source fields are retained, including `correlation_id`, `commit_date`,
@@ -16,19 +16,19 @@ The source fields are retained, including `correlation_id`, `commit_date`,
 - `_archive_source_path`, `_archive_source_zip`, `_archive_run_id`, and
   `_archive_load_ts`.
 
-If `archived.archived_audit` was created by an older loader and has none of
+If `archived.audit` was created by an older loader and has none of
 these managed fields, the notebook first adds them as nullable Delta columns.
 Historical rows remain unchanged because their original archive snapshot date
 cannot be reconstructed safely. Newly loaded rows receive complete dates and
 source lineage, so they can be replaced by file path on future reruns.
 
-`archived.archived_audit` should remain excluded from the normal
+`archived.audit` should remain excluded from the normal
 contract-driven Silver replay. If audit-event reporting is later required,
 create a dedicated audit Silver/Gold model with event semantics rather than
 treating these rows as monthly entity snapshots.
 
 `LOAD_ARCHIVE_AUDIT = False` is the default and excludes files targeting
-`archived.archived_audit` before CFG joins or file processing. This is useful
+`archived.audit` before CFG joins or file processing. This is useful
 for normal business archive runs when audit ingestion is too expensive. Set it
 to `True` for an audit catch-up run; the skipped files retain their existing CFG
 state and have not been marked as loaded.

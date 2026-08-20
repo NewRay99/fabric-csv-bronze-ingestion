@@ -17,18 +17,20 @@ in this folder are the current notebook set promoted from version 02 04 on
 
 | Notebook | Purpose |
 |---|---|
-| `99_common_library 02 03.ipynb` | Consolidated exclusions, schema-conformance, audit, and Silver helpers |
-| `00_setup_cfg 02 03.ipynb` | Creates/upgrades all monitoring and configuration tables |
-| `00_archive_load 02 03.ipynb` | Loads dated archive ZIP/file extracts into `archived` Delta tables |
-| `00a_rehydrate_archive_cfg 02 03.ipynb` | Reconstructs archive controls for an existing deployment |
-| `00b_reset_silver_cfg 02 03.ipynb` | Guarded administrative reset for Silver replay |
-| `01_bronze_get_latest 02 03.ipynb` | Loads the latest source extracts into Bronze |
-| `01a_cfg_schema_capture_live 02 03.ipynb` | Captures live Bronze schema and records drift |
-| `01a_cfg_schema_capture_archive 02 03.ipynb` | Captures/compares the archive catalogue schema |
-| `02_silver_formatter 02 03.ipynb` | Formats the current Bronze batch into Silver |
-| `02a_archive_silver 02 03.ipynb` | Replays canonical historical month-end states into Silver/Gold |
-| `03_silver_business_rules 02 03.ipynb` | Runs schema-driven DQ and referential-integrity checks |
-| `04_gold_model 02 03.ipynb` | Builds the current/historical referral Gold model and snapshots |
+| `99_common_library.ipynb` | Consolidated exclusions, schema-conformance, audit, and Silver helpers |
+| `00_setup_cfg.ipynb` | Creates/upgrades all monitoring and configuration tables |
+| `00_archive_load.ipynb` | Loads dated archive ZIP/file extracts into source-named `archived` Delta tables |
+| `00a_rehydrate_archive_cfg.ipynb` | Reconstructs archive controls for an existing deployment |
+| `00b_reset_silver_cfg.ipynb` | Guarded administrative reset for Silver replay |
+| `01_bronze_get_latest.ipynb` | Loads the latest source extracts into Bronze |
+| `01a_cfg_schema_capture_live.ipynb` | Captures live Bronze schema and records drift |
+| `01a_cfg_schema_capture_archive.ipynb` | Captures/compares the archive catalogue schema |
+| `02_silver_formatter.ipynb` | Formats the current Bronze batch into Silver |
+| `02a_archive_silver.ipynb` | Replays canonical historical month-end states into Silver/Gold |
+| `03_silver_business_rules.ipynb` | Runs schema-driven DQ and referential-integrity checks |
+| `04_gold_model.ipynb` | Builds the current/historical referral Gold model and snapshots |
+| `05_gold_dimensions.ipynb` | Builds Gold reporting dimensions and provider bridges from Silver |
+| `90_run_live_pipeline.ipynb` | Runs the standard live Bronze-to-Gold notebook sequence |
 
 ## Supporting folders
 

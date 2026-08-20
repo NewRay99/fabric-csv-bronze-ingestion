@@ -38,26 +38,29 @@ check('ETL_EXCLUDED_TABLE_PREFIXES = ["ref_"]' in common_source, "common_util is
 check("def is_etl_excluded_table" in common_source, "common_util is missing exclusion helper")
 
 consumers = [
-    "00_archive_load 02 03.ipynb",
-    "01_bronze_get_latest 02 03.ipynb",
-    "01a_cfg_schema_capture_live 02 03.ipynb",
-    "01a_cfg_schema_capture_archive 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
+    "00_archive_load.ipynb",
+    "01_bronze_get_latest.ipynb",
+    "01a_cfg_schema_capture_live.ipynb",
+    "01a_cfg_schema_capture_archive.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
 ]
 for name in consumers:
     source = notebook_source(name)
-    check("%run common_util" in source, f"{name} does not reference common_util")
+    check(
+        "%run ./99_common_library" in source,
+        f"{name} does not reference the shared common library",
+    )
     check("is_etl_excluded_table" in source, f"{name} does not apply the shared exclusion")
 
-latest_source = notebook_source("02_silver_formatter 02 03.ipynb")
+latest_source = notebook_source("02_silver_formatter.ipynb")
 check(
     latest_source.find("is_etl_excluded_table") < latest_source.find("for physical_table in physical_tables"),
     "latest Silver exclusion is not applied before the processing loop",
 )
 check("Excluded internal/reference Bronze tables" in latest_source, "latest Silver does not report exclusions")
 
-archive_source = notebook_source("02a_archive_silver 02 03.ipynb")
+archive_source = notebook_source("02a_archive_silver.ipynb")
 check("Excluded internal/reference archive tables" in archive_source, "archive Silver does not report exclusions")
 
 issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(encoding="utf-8", errors="replace")

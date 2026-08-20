@@ -7,14 +7,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS = [
-    "00_archive_load 02 03.ipynb",
-    "00_setup_cfg 02 03.ipynb",
-    "00a_rehydrate_archive_cfg 02 03.ipynb",
-    "00b_reset_silver_cfg 02 03.ipynb",
-    "01_bronze_get_latest 02 03.ipynb",
-    "99_common_library 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
+    "00_archive_load.ipynb",
+    "00_setup_cfg.ipynb",
+    "00a_rehydrate_archive_cfg.ipynb",
+    "00b_reset_silver_cfg.ipynb",
+    "01_bronze_get_latest.ipynb",
+    "99_common_library.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
+    "05_gold_dimensions.ipynb",
 ]
 
 
@@ -35,7 +36,7 @@ def source(notebook):
 notebooks = {name: load_notebook(name) for name in NOTEBOOKS}
 print("PASS notebook JSON and Python syntax")
 
-for name in ["00_setup_cfg 02 03.ipynb", "99_common_library 02 03.ipynb"]:
+for name in ["00_setup_cfg.ipynb", "99_common_library.ipynb"]:
     text = source(notebooks[name])
     assignment = text.find("TIME_PARSER_POLICY =")
     use = text.find('spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)')
@@ -45,10 +46,11 @@ for name in ["00_setup_cfg 02 03.ipynb", "99_common_library 02 03.ipynb"]:
 print("PASS shared/setup parser policy is self-contained")
 
 CFG_CALLERS = [
-    "00a_rehydrate_archive_cfg 02 03.ipynb",
-    "00b_reset_silver_cfg 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
+    "00a_rehydrate_archive_cfg.ipynb",
+    "00b_reset_silver_cfg.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
+    "05_gold_dimensions.ipynb",
 ]
 for name in CFG_CALLERS:
     text = source(notebooks[name])
@@ -60,13 +62,13 @@ for name in CFG_CALLERS:
     assert "from notebookutils import mssparkutils" in text
 print("PASS cfg notebook receives the resolved audit-table name")
 
-reset_text = source(notebooks["00b_reset_silver_cfg 02 03.ipynb"])
+reset_text = source(notebooks["00b_reset_silver_cfg.ipynb"])
 assert reset_text.find("def qident") < reset_text.find("cfg_result ="), (
     "00b reset must define qident before the cfg setup cell uses it"
 )
 print("PASS reset helper execution order")
 
-for name in ["02_silver_formatter 02 03.ipynb", "02a_archive_silver 02 03.ipynb"]:
+for name in ["02_silver_formatter.ipynb", "02a_archive_silver.ipynb"]:
     text = source(notebooks[name])
     assert "SKIPPED_NO_CONTRACT" in text, (
         f"{name}: missing contracts must be auditable non-fatal skips"

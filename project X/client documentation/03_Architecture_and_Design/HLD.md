@@ -92,7 +92,7 @@ then runs DQ and Gold.
 
 ## 5. Configuration and governance
 
-- `00_setup_cfg 02 03.ipynb` is the sole owner of configuration-table DDL and
+- `00_setup_cfg.ipynb` is the sole owner of configuration-table DDL and
   non-destructive legacy column upgrades.
 - `schema_definition.csv` is the approved schema, PK, and FK contract.
 - `dq_rule_definition.csv` contains supplementary DQ rules.

@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK = ROOT / "00_archive_load 02 03.ipynb"
+NOTEBOOK = ROOT / "00_archive_load.ipynb"
 notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
 
 for index, cell in enumerate(notebook["cells"]):
@@ -34,7 +34,7 @@ zip_loop = cell_containing("zip_batches_by_month")
 file_loop = cell_containing("raw_archive_files_df = discover_archive_files_dataframe(")
 all_source = "\n".join(cell_sources)
 setup_notebook = json.loads(
-    (ROOT / "00_setup_cfg 02 03.ipynb").read_text(encoding="utf-8")
+    (ROOT / "00_setup_cfg.ipynb").read_text(encoding="utf-8")
 )
 setup_source = "\n".join(
     "".join(cell.get("source", [])) for cell in setup_notebook["cells"]
@@ -54,11 +54,11 @@ function_nodes = [
     if isinstance(node, ast.FunctionDef) and node.name in wanted
 ]
 namespace = {"re": re, "os": os, "datetime": __import__("datetime").datetime,
-             "TABLE_PREFIX": "archived_", "ValueError": ValueError}
+             "ValueError": ValueError}
 exec(compile(ast.Module(body=function_nodes, type_ignores=[]), "helpers", "exec"), namespace)
-assert namespace["clean_table_name"]("2026-06-29.csv") == "archived_audit"
+assert namespace["clean_table_name"]("2026-06-29.csv") == "audit"
 assert namespace["parse_export_date"]("2026-06-29.csv").strftime("%Y-%m-%d") == "2026-06-29"
-print("PASS date-named CSV routes to archived.archived_audit")
+print("PASS date-named CSV routes to archived.audit")
 
 should_load = namespace["should_load_archive_file"]
 assert should_load(None)
@@ -116,7 +116,7 @@ assert 'frame.write.format("delta").mode("append")' in file_loop
 assert "Loaded all {row_count:,} rows" in file_loop
 print("PASS unordered full-file replacement inherits the dated folder export_date")
 
-# A pre-existing archived_audit table may contain only the source event fields.
+# A pre-existing audit table may contain only the source event fields.
 # The loader must add its managed dates/lineage before delete-before-append runs.
 assert "def legacy_audit_columns_to_add(" in helpers
 assert "def ensure_legacy_audit_lineage(" in helpers
@@ -135,7 +135,7 @@ assert namespace["legacy_audit_columns_to_add"](
     ["audit_file_date", "export_date", "_archive_source_path",
      "_archive_source_zip", "_archive_run_id", "_archive_load_ts"]
 ) == []
-print("PASS legacy archived_audit gains loader dates and lineage before replacement")
+print("PASS legacy audit gains loader dates and lineage before replacement")
 
 # The shared metric contract is owned by setup/Silver and uses
 # null_primary_key_count. Telemetry failure must not mark loaded data FAILED.

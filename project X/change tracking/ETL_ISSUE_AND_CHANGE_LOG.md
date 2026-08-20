@@ -1,10 +1,10 @@
 # Archive loader issue and regression log
 
-This file records resolved defects in `00_archive_load 02 03.ipynb`. Before
+This file records resolved defects in `00_archive_load.ipynb`. Before
 publishing future changes, run:
 
 ```text
-python validate_archive_load_v02_04.py
+python validate_archive_load.py
 ```
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
@@ -248,7 +248,7 @@ both metric columns and reintroduce inconsistent writers.
 
 ### Bronze-to-Silver decision
 
-`02_silver_formatter 02 03.ipynb` does not require archive-style target
+`02_silver_formatter.ipynb` does not require archive-style target
 migration. It casts all fields from `schema_definition.csv` and performs an
 atomic full overwrite with `overwriteSchema = true`, rather than deleting a
 slice and appending. It now calls `validate_silver_export_date()` before the
@@ -268,7 +268,7 @@ table contracts continue to be logged and skipped.
 
 ## SI-001 — Internal `ref_*` tables failed latest-to-Silver formatting
 
-- **Symptom:** `02_silver_formatter 02 03.ipynb` failed on
+- **Symptom:** `02_silver_formatter.ipynb` failed on
   `bronze.ref_KPI_Definition`, `bronze.ref_KPI_RID_linkage`,
   `bronze.ref_RID`, and `bronze.ref_Table_Lineage` because they do not contain
   `export_date`.
@@ -280,7 +280,7 @@ table contracts continue to be logged and skipped.
   file discovery boundaries.
 - **Behaviour:** excluded tables are reported once and are not audited as failed,
   loaded to Silver, or reported as source-schema drift.
-- **Regression guard:** run `python validate_ref_exclusions_v02_04.py`.
+- **Regression guard:** run `python validate_ref_exclusions.py`.
 
 
 
@@ -289,13 +289,13 @@ table contracts continue to be logged and skipped.
 - **Symptom:** ETL notebooks could fail when a required `monitoring.cfg_*`
   table had not already been created, and table definitions were duplicated
   between setup, archive ingestion, schema capture, data quality, and Gold.
-- **Cause:** `00_setup_cfg 02 03.ipynb` created only part of the configuration
+- **Cause:** `00_setup_cfg.ipynb` created only part of the configuration
   catalogue; several parent notebooks still owned their own config DDL.
-- **Fix:** `00_setup_cfg 02 03.ipynb` now owns an idempotent registry of all 18
+- **Fix:** `00_setup_cfg.ipynb` now owns an idempotent registry of all 18
   configuration tables, adds missing columns to older deployments, and seeds
   `gold.cfg_placement_urgency_rule`. Every ETL/control notebook invokes setup
   before its first configuration operation; duplicate child DDL was removed.
-- **Validation:** `validate_cfg_setup_v02_04.py` checks ownership, setup-call
+- **Validation:** `validate_cfg_setup.py` checks ownership, setup-call
   order, required table coverage, and notebook Python syntax.
 
 
@@ -306,9 +306,9 @@ table contracts continue to be logged and skipped.
   dated business extracts.
 - **Cause:** the promoted archive notebook imported the shared formatting
   library but not the separate internal-table exclusion utility.
-- **Fix:** `02a_archive_silver 02 03.ipynb` now imports both shared notebooks,
+- **Fix:** `02a_archive_silver.ipynb` now imports both shared notebooks,
   filters `ref_*` tables before export-date processing, and reports exclusions.
-- **Validation:** the relocated `validate_ref_exclusions_v02_04.py` checks all
+- **Validation:** the relocated `validate_ref_exclusions.py` checks all
   latest/archive consumers and passes from `project X/tests`.
 
 
@@ -333,7 +333,7 @@ table contracts continue to be logged and skipped.
   though its change log and validators described the later centralised design.
 - **Fix:** the active repository baseline now restores the 18-table idempotent
   config registry, the missing live setup call, and central Gold-rule seeding.
-- **Validation:** `validate_cfg_setup_v02_04.py` verifies ownership, required
+- **Validation:** `validate_cfg_setup.py` verifies ownership, required
   table coverage, setup-call order, and absence of child config DDL.
 
 ## SI-005 — Archive replay had no framework source when the table was absent
@@ -342,7 +342,7 @@ table contracts continue to be logged and skipped.
   `silver.slv_framework` when archive deliveries did not contain a logical
   `framework` table. Downstream `provider_framework.framework_code`
   referential checks therefore had no parent object.
-- **Cause:** `02a_archive_silver 02 03.ipynb` discovered only physical archive
+- **Cause:** `02a_archive_silver.ipynb` discovered only physical archive
   tables. The controlled legacy framework CSV was not registered as an
   archive-replay source.
 - **Fix:** archive Silver now uses the archived framework's latest eligible
@@ -364,12 +364,12 @@ table contracts continue to be logged and skipped.
   fails the affected canonical month and is retained in the existing audit and
   month-end error controls.
 - **Validation:** run
-  `python validate_archive_framework_fallback_v02_04.py`; the full portable
+  `python validate_archive_framework_fallback.py`; the full portable
   validator set must also pass.
 ## SI-006 — Gold referral model used obsolete referral column names
 
 - **Status:** Fixed in the project source; Fabric deployment and April replay are required.
-- **Symptom:** archive replay reached `04_gold_model 02 03` for 2026-04-30,
+- **Symptom:** archive replay reached `04_gold_model` for 2026-04-30,
   then failed while creating `gold.fact_referral` because
   `modified_timestamp` could not be resolved in `silver.slv_referral`.
 - **Cause:** the current flattened referral extract uses `placement_type`,
@@ -380,7 +380,7 @@ table contracts continue to be logged and skipped.
   `status`, and `rev`.
 - **Fix:** the referral section of `schema_definition.csv` now includes all six
   captured flattened-extract fields with their observed ordinals. The two date
-  fields are conformed to timestamps. `04_gold_model 02 03` now uses the
+  fields are conformed to timestamps. `04_gold_model` now uses the
   flattened referral names and orders duplicate candidates by referral modified
   date, referral created date, then export date.
 - **Preflight:** Gold now checks all required Silver tables and columns before
@@ -389,8 +389,8 @@ table contracts continue to be logged and skipped.
   unresolved-column errors.
 - **Recovery:** deploy the updated notebook and copy the updated contract to
   `Files/cfg_files/schema_definition.csv`; then set the affected month to reload
-  and rerun `02a_archive_silver 02 03` from 2026-04-30.
-- **Validation:** run `python validate_gold_referral_schema_v02_04.py`; the full
+  and rerun `02a_archive_silver` from 2026-04-30.
+- **Validation:** run `python validate_gold_referral_schema.py`; the full
   portable validator set must also pass. The Spark simulation fixture now mirrors
   the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors
   the flattened referral schema; execute it in a PySpark/Delta-capable environment.
@@ -422,11 +422,11 @@ table contracts continue to be logged and skipped.
   deployed contract had removed `placement_type`, `referral_created_date`,
   `referral_modified_date`, and `referral_status` from Silver.
 - **Cause:** Gold was run against a Silver snapshot produced from the old
-  contract. The event-log table was also absent for the historical month.
+  contract. The previously assumed source event-log table is not delivered.
 - **Fix:** Gold now uses the available flattened Silver tables and current
-  referral field names. Mandatory sources are preflighted; event history is
-  optional enrichment and uses a typed empty relation when no historical
-  event-log snapshot exists.
+  referral field names. Mandatory sources are preflighted; lifecycle timing
+  comes from the explicit derived `silver.slv_referral_lifecycle_event`
+  stream rather than a fabricated empty event-log relation.
 - **Recovery:** Deploy the rebuilt contract and Gold notebook, mark the
   affected month for reload, rerun archive Silver, then run DQ and Gold.
 
@@ -467,7 +467,7 @@ and day-name attributes.
   an older populated contract until setup is deliberately reloaded.
 - **Fix:** latest and archive Silver now verify target columns before skipping;
   missing contract columns force an idempotent overwrite. Added
-  `validate_silver_required_columns_v02_04.py` to lock down the referral
+  `validate_silver_required_columns.py` to lock down the referral
   contract and both refresh guards.
 - **Recovery:** run setup once with `LOAD_FILE_CONFIG = True` after deploying a
   changed contract CSV, then rerun the affected Silver formatter or archive
@@ -497,7 +497,7 @@ and day-name attributes.
 
 - **Decision:** no `referral_event_log` source table is delivered, so setup
   must not fabricate an empty source-shaped Silver table.
-- **Fix:** `03_silver_business_rules 02 03` materialises
+- **Fix:** `03_silver_business_rules` materialises
   `silver.slv_referral_lifecycle_event` from real Referral, Offer, and IPA
   timestamps. Gold consumes that explicitly derived lifecycle stream.
 - **Scope:** this is not a full source-system audit trail. The referral
@@ -506,7 +506,7 @@ and day-name attributes.
 
 ## SI-014 — Archive replay needed a traceable single-month mode
 
-- **Fix:** `02a_archive_silver 02 03` accepts `PROCESS_ONLY = "YYYY-MM"`,
+- **Fix:** `02a_archive_silver` accepts `PROCESS_ONLY = "YYYY-MM"`,
   resolves it to the canonical final export in that month, and processes only
   that snapshot.
 - **Safe reset:** `RESET_MONTH_MONITORING` and
@@ -516,16 +516,35 @@ and day-name attributes.
 
 ## SI-015 — Latest Silver duplicated common conformance helpers
 
-- **Fix:** `02_silver_formatter 02 03` now imports the shared library for
+- **Fix:** `02_silver_formatter` now imports the shared library for
   conformance, casting, audit, and target-schema refresh helpers. Its local
   duplicate implementations were removed.
 
 ## SI-016 — Consolidate common helpers into one notebook
 
-- **Fix:** `99_common_library 02 03` was repaired as a valid notebook and now
+- **Fix:** `99_common_library` was repaired as a valid notebook and now
   owns the former `common_util` exclusion policy together with shared Silver
   helpers. Project notebooks no longer import `common_util.ipynb`.
-- **Validation:** `validate_si013_si016_v02_04.py` verifies the library JSON,
+- **Validation:** `validate_si013_si016.py` verifies the library JSON,
   the migration, the archive controls, and the event-log shell.
+
+## SI-017 — Bronze drift tables and Gold dimensions were omitted from the active flow
+
+- **Symptom:** Bronze tables such as `provider_submission_docs` existed in the
+  drift output but had no `schema_definition.csv` rows, so Silver logged and
+  skipped them. The legacy Gold translator also described dimensions based on
+  stale source names.
+- **Fix:** Added evidence-backed contracts for all eight uncontracted Bronze
+  tables, including provider documents, SIC codes, referral-person support
+  needs and reference metadata. Added `05_gold_dimensions.ipynb` to create
+  Gold dimensions and bridges from real Silver sources, with source/column
+  preflight checks.
+- **Archive naming:** `00_archive_load.ipynb` now preserves source table names
+  in `archived` (for example `archived.referral` and
+  `archived.provider_submission_docs`); `archived_` is no longer applied.
+  The prior notebook is retained in the version 02 03 archive.
+- **Operations:** `90_run_live_pipeline.ipynb` links the standard live
+  sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence
+  and safe single-month recovery controls.
 
 

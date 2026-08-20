@@ -6,7 +6,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-NOTEBOOK = ROOT / "project X" / "99_common_library 02 03.ipynb"
+NOTEBOOK = ROOT / "project X" / "99_common_library.ipynb"
 
 
 def main():

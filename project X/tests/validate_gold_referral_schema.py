@@ -13,7 +13,7 @@ ROOT = (
     if len(sys.argv) == 2
     else Path(__file__).resolve().parents[1]
 )
-NOTEBOOK = ROOT / "04_gold_model 02 03.ipynb"
+NOTEBOOK = ROOT / "04_gold_model.ipynb"
 SCHEMA = ROOT / "configuration" / "schema_definition.csv"
 
 
@@ -100,7 +100,7 @@ issue_log = (
 ).read_text(encoding="utf-8", errors="replace")
 assert "## SI-006" in issue_log
 assert "referral_modified_date" in issue_log
-assert "validate_gold_referral_schema_v02_04.py" in issue_log
+assert "validate_gold_referral_schema.py" in issue_log
 print("PASS change log records SI-006 and its validation")
 
 

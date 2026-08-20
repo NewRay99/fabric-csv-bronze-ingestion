@@ -8,10 +8,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT = ROOT / "project X" / "configuration" / "schema_definition.csv"
 NOTEBOOKS = [
-    ROOT / "project X" / "02_silver_formatter 02 03.ipynb",
-    ROOT / "project X" / "02a_archive_silver 02 03.ipynb",
+    ROOT / "project X" / "02_silver_formatter.ipynb",
+    ROOT / "project X" / "02a_archive_silver.ipynb",
 ]
-COMMON_LIBRARY = ROOT / "project X" / "99_common_library 02 03.ipynb"
+COMMON_LIBRARY = ROOT / "project X" / "99_common_library.ipynb"
 REQUIRED_REFERRAL = {
     "referral_id",
     "placement_type",
@@ -44,7 +44,7 @@ def main():
 
     for notebook in NOTEBOOKS:
         text = source(notebook)
-        assert "%run ./99_common_library 02 03" in text, (
+        assert "%run ./99_common_library" in text, (
             f"{notebook.name} does not import the target-schema refresh guard"
         )
         if notebook.name.startswith("02_silver_formatter"):

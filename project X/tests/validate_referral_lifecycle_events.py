@@ -6,9 +6,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = ROOT / "project X"
-SETUP = PROJECT / "00_setup_cfg 02 03.ipynb"
-SILVER_RULES = PROJECT / "03_silver_business_rules 02 03.ipynb"
-GOLD = PROJECT / "04_gold_model 02 03.ipynb"
+SETUP = PROJECT / "00_setup_cfg.ipynb"
+SILVER_RULES = PROJECT / "03_silver_business_rules.ipynb"
+GOLD = PROJECT / "04_gold_model.ipynb"
 
 
 def source(path):

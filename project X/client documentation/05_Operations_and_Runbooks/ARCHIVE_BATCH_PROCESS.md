@@ -2,8 +2,8 @@
 
 ## Archive ZIP and file ingestion
 
-`00_archive_load 02 03.ipynb` extracts dated ZIPs and appends each CSV/Parquet file to
-`archived.archived_<table>`. It stamps every business row with:
+`00_archive_load.ipynb` extracts dated ZIPs and appends each CSV/Parquet file to
+`archived.<source_table>`. It stamps every business row with:
 
 - `export_date` as a TIMESTAMP derived from the dated ZIP/folder;
 - `_archive_source_path`;
@@ -33,13 +33,13 @@ WHERE file_path = 'Files/archive_unzipped/2026-06-15/Offer.csv'
   AND export_date = TIMESTAMP '2026-06-15 00:00:00';
 ```
 
-The date-named change-log files are retained as `archived.archived_audit`.
+The date-named change-log files are retained as `archived.audit`.
 They are deliberately excluded from standard Silver replay because
 `schema_definition.csv` does not define a generic `audit` entity.
 
 ## Rehydrate monitoring controls
 
-`00a_rehydrate_archive_cfg 02 03.ipynb` reconstructs global table/export, ZIP,
+`00a_rehydrate_archive_cfg.ipynb` reconstructs global table/export, ZIP,
 and file controls from three sources: existing archive tables, the legacy
 `archived.cfg_load_control`, and already extracted ZIP folders. Rehydration
 does not reload or modify business rows and preserves an existing manual
@@ -54,7 +54,7 @@ is required only for a table that genuinely has no valid `export_date` values.
 
 ## Latest Bronze to Silver
 
-`02_silver_formatter 02 03.ipynb` records one row per Bronze table and export
+`02_silver_formatter.ipynb` records one row per Bronze table and export
 timestamp in `monitoring.cfg_silver_export_load`.
 
 | Audit state | Next run behaviour |
@@ -82,8 +82,8 @@ Use the exact timestamp shown in the audit table.
 
 ## Archive to Silver
 
-`02a_archive_silver 02 03.ipynb` reads row-level archive batches from
-`archived.archived_<table>` and writes them to the same
+`02a_archive_silver.ipynb` reads row-level archive batches from
+`archived.<source_table>` and writes them to the same
 `silver.slv_<table>` targets. CamelCase/underscore differences are normalised
 against the schema contract; the CSV `schema_name` value is not embedded in
 the physical target name.
@@ -102,7 +102,7 @@ to process all canonical months chronologically.
 
 The historical source must retain `export_date` on every row. The inspected
 archive tables already contain this field, so they can be replayed directly;
-`_archive_source_path` is not required by `02a_archive_silver 02 03.ipynb`.
+`_archive_source_path` is not required by `02a_archive_silver.ipynb`.
 
 Both Silver formatters use Spark's `CORRECTED` time-parser policy and explicitly
 support date-only `yyyy-MM-dd` values plus space-separated timestamps with one,
@@ -139,8 +139,8 @@ The final available export date in each calendar month is treated as the
 month-end batch, even when it is earlier than the calendar month end. After all
 Silver tables for that batch succeed, the archive notebook runs:
 
-1. `03_silver_business_rules 02 03`
-2. `04_gold_model 02 03` with `AS_OF_DATE=<last export date>`
+1. `03_silver_business_rules`
+2. `04_gold_model` with `AS_OF_DATE=<last export date>`
 
 Gold writes or updates `gold.fact_referral_snapshot` for that historical date.
 The orchestration result is recorded in

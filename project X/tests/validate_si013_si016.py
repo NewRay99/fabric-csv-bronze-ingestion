@@ -6,10 +6,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 PROJECT = ROOT / "project X"
-COMMON = PROJECT / "99_common_library 02 03.ipynb"
-SETUP = PROJECT / "00_setup_cfg 02 03.ipynb"
-ARCHIVE_REPLAY = PROJECT / "02a_archive_silver 02 03.ipynb"
-LATEST_SILVER = PROJECT / "02_silver_formatter 02 03.ipynb"
+COMMON = PROJECT / "99_common_library.ipynb"
+SETUP = PROJECT / "00_setup_cfg.ipynb"
+ARCHIVE_REPLAY = PROJECT / "02a_archive_silver.ipynb"
+LATEST_SILVER = PROJECT / "02_silver_formatter.ipynb"
 
 
 def source(path):
@@ -67,7 +67,7 @@ def main():
     latest = source(LATEST_SILVER)
     for duplicate in ["def qident", "def normalise", "def map_data_type", "def cast_column", "def format_frame"]:
         assert duplicate not in latest, f"Latest Silver still defines common helper {duplicate}"
-    assert "%run ./99_common_library 02 03" in latest, "Latest Silver does not import the common library"
+    assert "%run ./99_common_library" in latest, "Latest Silver does not import the common library"
     print("PASS latest Silver uses common conformance helpers")
 
     print("VALIDATION PASSED")

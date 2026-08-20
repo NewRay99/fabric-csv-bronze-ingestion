@@ -16,7 +16,7 @@
    - `dq_rule_definition.csv`
 4. Confirm the latest extract shortcut/path and archive ZIP/folder paths in the
    parameter cells.
-5. Run `00_setup_cfg 02 03` once and confirm that the `monitoring` configuration
+5. Run `00_setup_cfg` once and confirm that the `monitoring` configuration
    tables and `gold.cfg_placement_urgency_rule` are created.
 
 Every ETL/control notebook also calls setup itself, so later schema additions
@@ -32,11 +32,11 @@ monthly Silver/Gold states.
 
 Run in this order:
 
-1. `00_setup_cfg 02 03`
-2. `00_archive_load 02 03`
-3. `01a_cfg_schema_capture_archive 02 03`
+1. `00_setup_cfg`
+2. `00_archive_load`
+3. `01a_cfg_schema_capture_archive`
 4. Review the archive schema comparison and correct critical contract issues.
-5. `02a_archive_silver 02 03`
+5. `02a_archive_silver`
 
 Before step 3, verify that `COMPARED_SCHEMA` points to the deployed archive
 schema. Before step 5, confirm archive business tables contain a valid row-level
@@ -49,8 +49,8 @@ snapshot—or the table is absent—confirm
 With `RUN_GOLD_AT_MONTH_END = True`, step 5 processes each canonical month in
 chronological order and invokes:
 
-1. `03_silver_business_rules 02 03`
-2. `04_gold_model 02 03` with that month's `AS_OF_DATE`
+1. `03_silver_business_rules`
+2. `04_gold_model` with that month's `AS_OF_DATE`
 
 The orchestration result is recorded in
 `monitoring.cfg_month_end_gold_run`.
@@ -60,10 +60,10 @@ The orchestration result is recorded in
 If archive tables already exist but global monitoring controls are missing or
 were created by an older version, run:
 
-1. `00_setup_cfg 02 03`
-2. `00a_rehydrate_archive_cfg 02 03`
+1. `00_setup_cfg`
+2. `00a_rehydrate_archive_cfg`
 3. Review tables reported as missing a valid `export_date`.
-4. Continue with archive schema capture and `02a_archive_silver 02 03`.
+4. Continue with archive schema capture and `02a_archive_silver`.
 
 Rehydration reconstructs controls; it does not reload business rows.
 
@@ -96,14 +96,15 @@ Rehydration reconstructs controls; it does not reload business rows.
 
 Run this stream for each new latest-extract delivery:
 
-1. `00_setup_cfg 02 03`
-2. `01_bronze_get_latest 02 03`
-3. `01a_cfg_schema_capture_live 02 03`
+1. `00_setup_cfg`
+2. `01_bronze_get_latest`
+3. `01a_cfg_schema_capture_live`
 4. Review `monitoring.cfg_schema_drift_event` and the schema-definition
    candidate. Approve contract changes before relying on new/changed columns.
-5. `02_silver_formatter 02 03`
-6. `03_silver_business_rules 02 03`
-7. `04_gold_model 02 03`
+5. `02_silver_formatter`
+6. `03_silver_business_rules`
+7. `04_gold_model`
+8. `05_gold_dimensions`
 
 `common_util` excludes explicit internal reference tables and every logical
 `ref_*` table before extract-date/contract checks. Do not add synthetic
@@ -140,7 +141,7 @@ Set `reload = true` for the actual canonical snapshot date in
 
 ## 5. Administrative reset
 
-`00b_reset_silver_cfg 02 03` is not a routine pipeline step. It previews the
+`00b_reset_silver_cfg` is not a routine pipeline step. It previews the
 scope and performs destructive work only when `CONFIRM_RESET` exactly equals
 `RESET SILVER`. Review all reset flags and the preview before enabling it.
 
@@ -158,10 +159,10 @@ For operational detail, also read:
 
 ### SI-006 recovery — Gold referral source validation
 
-If Gold reports missing referral fields, do not run `04_gold_model 02 03` by
+If Gold reports missing referral fields, do not run `04_gold_model` by
 itself. First deploy the updated Gold notebook and replace
 `Files/cfg_files/schema_definition.csv` with the project copy. Rerun
-`02a_archive_silver 02 03` for the affected month so `silver.slv_referral` is
+`02a_archive_silver` for the affected month so `silver.slv_referral` is
 rebuilt with `placement_type`, `referral_created_date`,
 `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
 successful month-control row, set its reload flag before rerunning.
@@ -193,7 +194,7 @@ separately. `monitoring.cfg_schema_contract_column` is the approved
 CSV-loaded contract used by Silver and DQ; do not overwrite it with source
 observations, or schema-drift detection becomes ineffective.
 
-`01a_cfg_schema_capture_live 02 03` captures the current Bronze catalogue in
+`01a_cfg_schema_capture_live` captures the current Bronze catalogue in
 `monitoring.cfg_bronze_schema_live`. Inspect it in Fabric with:
 
 ```sql
@@ -202,7 +203,7 @@ FROM monitoring.cfg_bronze_schema_live
 ORDER BY table_name, ordinal_position;
 ```
 
-`01a_cfg_schema_capture_archive 02 03` captures the Archive catalogue in
+`01a_cfg_schema_capture_archive` captures the Archive catalogue in
 `monitoring.cfg_archived_schema_live`. Inspect it with:
 
 ```sql
@@ -218,7 +219,7 @@ separate from the contract table.
 
 ### Configuration bootstrap — schema and DQ rules
 
-`00_setup_cfg 02 03` is the sole runtime reader of
+`00_setup_cfg` is the sole runtime reader of
 `Files/cfg_files/schema_definition.csv` and
 `Files/cfg_files/dq_rule_definition.csv`. It loads them into
 `monitoring.cfg_schema_contract_column` and
@@ -226,3 +227,27 @@ separate from the contract table.
 only. The default `LOAD_FILE_CONFIG = False` reuses existing tables and
 automatically bootstraps a missing table. Set it to `True` only for an
 intentional contract/rule refresh, then return it to `False`.
+
+## 8. Linked live execution
+
+Use `90_run_live_pipeline.ipynb` for the standard live sequence: setup, Bronze latest, live schema capture, Silver formatter, Silver business rules, Gold facts and Gold dimensions. The detailed archive procedure is in `ARCHIVE_PIPELINE_RUNBOOK.md`.
+
+The runner prints one `JOB_RUN_ID` and passes it to every child notebook. Use
+that value to follow the whole execution through the monitor tables:
+
+```sql
+SELECT *
+FROM monitoring.cfg_job_run
+WHERE job_run_id = '<JOB_RUN_ID>';
+
+SELECT *
+FROM monitoring.cfg_job_step_run
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY step_sequence;
+```
+
+Child notebooks retain their own `run_id` for an individual retry. The shared
+`job_run_id` is also stored in `cfg_pipeline_run`,
+`cfg_silver_export_load`, `cfg_table_load_metric`, and the DQ result,
+rejection, and referential-exception tables when those records are produced by
+the linked live execution.

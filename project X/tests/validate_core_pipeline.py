@@ -8,17 +8,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_NAMES = [
-    "00_archive_load 02 03.ipynb",
-    "00a_rehydrate_archive_cfg 02 03.ipynb",
-    "01_bronze_get_latest 02 03.ipynb",
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
-    "03_silver_business_rules 02 03.ipynb",
-    "04_gold_model 02 03.ipynb",
+    "00_archive_load.ipynb",
+    "00a_rehydrate_archive_cfg.ipynb",
+    "01_bronze_get_latest.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
+    "03_silver_business_rules.ipynb",
+    "04_gold_model.ipynb",
 ]
 SILVER_NOTEBOOKS = [
-    "02_silver_formatter 02 03.ipynb",
-    "02a_archive_silver 02 03.ipynb",
+    "02_silver_formatter.ipynb",
+    "02a_archive_silver.ipynb",
 ]
 REQUIRED_FRACTIONAL_FORMATS = {
     "yyyy-MM-dd",
@@ -71,14 +71,14 @@ for name in SILVER_NOTEBOOKS:
     assert 'spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)' in notebook_source(notebook)
     print(f"PASS fractional timestamp regression: {name}")
 
-archive_source = notebook_source(notebooks["02a_archive_silver 02 03.ipynb"])
+archive_source = notebook_source(notebooks["02a_archive_silver.ipynb"])
 assert "month_end_dates = sorted(month_last_dates.values())" in archive_source
 assert "for snapshot_date in month_end_dates:" in archive_source
 assert "for batch_date in batch_dates:" not in archive_source
 assert "spark.table(source_table).where(" in archive_source
 assert 'F.to_date("export_date") == F.lit(source_date)' in archive_source
 common_notebook = json.loads(
-    (ROOT / "99_common_library 02 03.ipynb").read_text(encoding="utf-8")
+    (ROOT / "99_common_library.ipynb").read_text(encoding="utf-8")
 )
 common_source = notebook_source(common_notebook)
 assert "deduplicate_frame(raw_frame, schema_cols)" in archive_source
@@ -103,7 +103,7 @@ tables = {}
 for row in rows:
     tables.setdefault(row["table_name"], []).append(row)
 
-assert len(tables) == 31, f"Expected 31 observed table contracts, found {len(tables)}"
+assert len(tables) == 39, f"Expected 39 observed table contracts, found {len(tables)}"
 assert {row["join_class"] for row in rows} >= {"NO_JOIN", "CONTRACT_FK", "TRIAL_JOIN", "INVALID_JOIN"}
 for table_name, definitions in tables.items():
     ordinals = [int(row["ordinal_position"]) for row in definitions]

@@ -11,7 +11,7 @@ ROOT = (
     if len(sys.argv) == 2
     else Path(__file__).resolve().parents[1]
 )
-NOTEBOOK = ROOT / "02a_archive_silver 02 03.ipynb"
+NOTEBOOK = ROOT / "02a_archive_silver.ipynb"
 notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
 cells = ["".join(cell.get("source", [])) for cell in notebook["cells"]]
 source = "\n".join(cells)
