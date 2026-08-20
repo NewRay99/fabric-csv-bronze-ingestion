@@ -81,7 +81,7 @@ All five additions are stored in `_Measures.tmdl` under the `Referral Offers` di
 
 | Added measure | Archived v01 DAX | Provisional requirements alignment | Validation status |
 |---|---|---|---|
-| `Open Referral` | `CALCULATE(DISTINCTCOUNT(dim_referral[referral_id]), dim_referral[referral_status] IN {"OPEN", "UNDER_OFFER"})` | R24 — referral-status overview | Technically verified; business mapping to confirm |
+| `Open Referral` | `CALCULATE(DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[referral_status] IN {"OPEN", "UNDER_OFFER"})` | R24 — referral-status overview | Technically verified; business mapping to confirm |
 | `Open Referral Previous Month` | `CALCULATE([Open Referral], DATEADD(dim_date[Date], -1, MONTH))` | R24 and R52 — status and period comparison | Technically verified; business mapping to confirm |
 | `Open Referrals MoM %` | `DIVIDE([Open Referral] - [Open Referral Previous Month], [Open Referral Previous Month])` | R24 and R52 — month-on-month status trend | Technically verified; business mapping to confirm |
 | `Closed Referral Previous Month` | `CALCULATE([Closed Referrals (by Reason)], DATEADD(dim_date[Date], -1, MONTH))` | Extends the existing R24/R54 closure measure with period comparison | Technically verified; does not by itself close the R54 decline-reason gap |
@@ -135,8 +135,8 @@ These remain active, one-to-one, and bidirectional in both archives. The logical
 
 | v00 direction | v01 direction |
 |---|---|
-| `dim_referral.referral_id` → `dim_referral_gender.referral_id` | `dim_referral_gender.referral_id` → `dim_referral.referral_id` |
-| `dim_referral.referral_id` → `tmp_referral_person_gender.referral_id` | `tmp_referral_person_gender.referral_id` → `dim_referral.referral_id` |
+| `fact_referral.referral_id` → `fact_referral_gender.referral_id` | `fact_referral_gender.referral_id` → `fact_referral.referral_id` |
+| `fact_referral.referral_id` → `tmp_referral_person_gender.referral_id` | `tmp_referral_person_gender.referral_id` → `fact_referral.referral_id` |
 | `dim_provider_home.provider_home_id` → `rpt_provider_registry.provider_home_id` | `rpt_provider_registry.provider_home_id` → `dim_provider_home.provider_home_id` |
 
 ### 4.4 Date-join behaviour changed to `datePartOnly`
@@ -153,9 +153,9 @@ The following 19 retained relationships change from the omitted/default `dateAnd
 | 6 | `dim_provider_framework.export_date` | `LocalDateTable_efcb9c79-f5af-4d12-b2d3-95377a4b1c64.Date` |
 | 7 | `dim_provider_home.export_date` | `LocalDateTable_6d4ae097-14d6-4557-bdd5-62ecae22c3c2.Date` |
 | 8 | `dim_provider_home.last_regulating_body_inspection_date` | `LocalDateTable_8f2a60c8-3c88-4eff-b199-beb431e63809.Date` |
-| 9 | `dim_referral.'Export Date Clean'` | `LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18.Date` |
-| 10 | `dim_referral.'Response Required Date Clean'` | `LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0.Date` |
-| 11 | `dim_referral_provider_message.export_date` | `LocalDateTable_7a31c86c-072f-40cb-ba1c-e823599ebaec.Date` |
+| 9 | `fact_referral.'Export Date Clean'` | `LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18.Date` |
+| 10 | `fact_referral.'Response Required Date Clean'` | `LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0.Date` |
+| 11 | `fact_referral_provider_message.export_date` | `LocalDateTable_7a31c86c-072f-40cb-ba1c-e823599ebaec.Date` |
 | 12 | `fact_ipa.export_date` | `LocalDateTable_5fb970bc-aa2a-4b57-9991-fc2ef569d2b3.Date` |
 | 13 | `fact_offer.estimated_start_date` | `LocalDateTable_a7d1d006-5922-4cf6-9273-75b1c3c15f5b.Date` |
 | 14 | `fact_offer.export_date` | `LocalDateTable_62f66eb0-ba0f-4926-a158-67ca75f4cea5.Date` |
@@ -170,7 +170,7 @@ The following 19 retained relationships change from the omitted/default `dateAnd
 | Relationship | v00 | v01 | Test implication |
 |---|---|---|---|
 | `fact_offer.offer_date_only` → `dim_date.Date` | Active, single-direction | Active, bidirectional | Check date filters, offer status totals, and ambiguity with other referral/date paths |
-| `fact_offer.referral_id` → `dim_referral.referral_id` | Active, single-direction | Active, bidirectional | Check referral/offer propagation and double-filtering across `fact_referral_offer` |
+| `fact_offer.referral_id` → `fact_referral.referral_id` | Active, single-direction | Active, bidirectional | Check referral/offer propagation and double-filtering across `fact_referral_offer` |
 | `fact_referral_offer.export_date` → `dim_date.Date` | Active | Inactive | Measures that require export-date context must activate the relationship explicitly or use another date path |
 
 ### 4.6 Required relationship regression tests
@@ -289,14 +289,14 @@ The total relationship count remains **49**, but the offer-to-referral filter pa
 
 | Change | v02 | v03 | Consequence / test focus |
 |---|---|---|---|
-| Removed | `fact_offer.referral_id` → `dim_referral.referral_id`, bidirectional | Removed | Direct offer-to-referral propagation is no longer available through this relationship. |
+| Removed | `fact_offer.referral_id` → `fact_referral.referral_id`, bidirectional | Removed | Direct offer-to-referral propagation is no longer available through this relationship. |
 | Added | — | `fact_offer.referral_provider_id` → `fact_referral_offer.referral_provider_id`, bidirectional, many-to-many | Validate ambiguity and propagation between offers, provider/referral offers, providers, and referrals. |
-| Modified | `fact_referral_offer.referral_id` → `dim_referral.referral_id`, default single direction | Same endpoints, **bidirectional** | Referral filters can now propagate from `fact_referral_offer` back to `dim_referral`; test totals and cross-filter interactions. |
+| Modified | `fact_referral_offer.referral_id` → `fact_referral.referral_id`, default single direction | Same endpoints, **bidirectional** | Referral filters can now propagate from `fact_referral_offer` back to `fact_referral`; test totals and cross-filter interactions. |
 
 **Required v03 regression tests:**
 
 1. Reconcile all 41 new previous-month, variance, indicator, and color measures in unfiltered and month-filtered contexts.
-2. Test `fact_offer`, `fact_referral_offer`, `dim_referral`, and `dim_provider` slicers independently and in combination for double-counting or ambiguous filter paths.
+2. Test `fact_offer`, `fact_referral_offer`, `fact_referral`, and `dim_provider` slicers independently and in combination for double-counting or ambiguous filter paths.
 3. Validate visuals that use the new indicator/color helper measures for blank, zero, positive, and negative prior-period outcomes.
 4. Confirm the many-to-many offer/provider-referral relationship produces expected totals for providers with multiple offers or referrals.
 

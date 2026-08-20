@@ -196,7 +196,7 @@ These are functional requirements from the spec that have **no corresponding mea
 
 | Req ID | Requirement | Gap Description | Suggested Action |
 |--------|------------|-----------------|-----------------|
-| **R18** | Emergency placements — distinct identification, separate reporting | No KPI distinguishes emergency from planned/spot. `is_spot` ≠ emergency. | Add `Emergency Referrals` and `Emergency Placement Rate` measures. Add `is_emergency` flag to dim_referral. |
+| **R18** | Emergency placements — distinct identification, separate reporting | No KPI distinguishes emergency from planned/spot. `is_spot` ≠ emergency. | Add `Emergency Referrals` and `Emergency Placement Rate` measures. Add `is_emergency` flag to fact_referral. |
 | **R22** | Out-of-region placements tagged and finance-informed | `Overlap Referrals` measure exists but unclear if it tracks external (non-WM) placements specifically. | Add `Out-of-Region Referrals` measure with geographic tagging. |
 | **R41** | QA advisory notices and flags against providers | No KPI shows flagged provider counts or flag types (safeguarding, info notices). | Add `Providers with QA Flags`, `QA Flag Type Breakdown` measures. Use provider.qa_flag_* fields. |
 | **R47** | Document expiry monitoring and reminders | No KPI for documents nearing expiry or expired. | Add `Documents Expiring (30 days)`, `Documents Expired` measures. Use s3_file_metadata.expiry_date. |

@@ -14,19 +14,19 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 | fact_referral_offer | slv_referral_provider | referral.referral_provider | Referral → Provider mapping |
 | fact_offer | slv_offer | offer.offer | Provider offers |
 | fact_ipa | slv_ipa | ipa.ipa | Individual Placement Agreements |
-| dim_referral | slv_referral | referral.referral | Referral header |
+| fact_referral | slv_referral | referral.referral | Referral header |
 | dim_provider | slv_provider | provider.provider | Provider master |
 | dim_provider_home | slv_provider_home | provider.provider_home | Provider homes |
 | dim_provider_framework | slv_provider_framework | provider.provider_framework | Provider-framework link |
 | fact_referral_person | slv_person | referral.person | Child demographics |
 | fact_referral_category | slv_referral_category | referral.referral_category | Referral categories |
 | fact_provider_message | slv_referral_provider_message | referral.referral_provider_message | Inter-party messages |
-| dim_referral_gender | slv_person | referral.person | Gender aggregation |
+| fact_referral_gender | slv_person | referral.person | Gender aggregation |
 | fact_referral_lifecycle_event | slv_referral_lifecycle_event | Derived from referral, offer, and IPA timestamps | Referral lifecycle timing; not a source audit trail |
 | dim_s3_file_metadata | slv_s3_file_metadata | document.s3_file_metadata | Document metadata |
 | dim_provider_document | slv_provider_document | provider.provider_document | Provider docs |
 | dim_submission_documents | slv_submission_documents | provider.submission_documents | Onboarding docs |
-| dim_referral_provider_decline_reason | slv_referral_provider_decline_reason | referral.referral_provider_decline_reason | Decline reasons |
+| fact_referral_provider_decline_reason | slv_referral_provider_decline_reason | referral.referral_provider_decline_reason | Decline reasons |
 | dim_offer_status | slv_offer (derived) | offer.offer | Offer status lookup |
 
 ---
@@ -35,19 +35,19 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-01: Total Referrals `[R24, R51]`
 - **Functional ref:** R24 (dashboard referral status overview), R51 (robust data model)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IS NOT NULL`
 - **PBI measure:** `Total Referrals` → `EXTERNALMEASURE("Total Referrals", INTEGER, ...)`
 
 ### KPI-02: Referrals With Offers `[R24, R36]`
 - **Functional ref:** R24 (referral status), R36 (providers with outstanding offers)
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) JOIN fact_referral_offer rpo WHERE rpo.is_excluded = false AND rpo.is_declined = false`
 - **PBI measure:** `Referrals With Offers`
 
 ### KPI-03: Referrals Awaiting Offer `[R24, R36]`
 - **Functional ref:** R24, R36
-- **Tables:** `gold.dim_referral`, `gold.fact_referral_offer` (NOT IN subquery)
+- **Tables:** `gold.fact_referral`, `gold.fact_referral_offer` (NOT IN subquery)
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN','UNDER_OFFER') AND referral_id NOT IN (SELECT referral_id FROM fact_referral_offer WHERE is_excluded = false AND is_declined = false)`
 - **PBI measure:** `Referrals Awaiting Offer`
 
@@ -77,19 +77,19 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-08: Referrals Not Yet Closed (Created in Period) `[R24]`
 - **Functional ref:** R24
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status NOT IN ('CLOSED', 'CANCELLED')`
 - **PBI measure:** `Referrals Not Yet Closed (Created in Period)`
 
 ### KPI-09: Referrals With Offers (Created in Period) `[R24, R51]`
 - **Functional ref:** R24, R51
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** Same as KPI-02 but filtered by `created_timestamp >= period_start`
 - **PBI measure:** `Referrals With Offers (Created in Period)`
 
 ### KPI-10: Total Referrals That Received Offers `[R51]`
 - **Functional ref:** R51 (value analysis — referral offer rate)
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) WHERE EXISTS (SELECT 1 FROM fact_referral_offer rpo WHERE rpo.referral_id = r.referral_id AND rpo.is_excluded = false AND rpo.is_declined = false)`
 - **PBI measure:** `Total Referrals That Recieved Offers`
 
@@ -147,7 +147,7 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-19: Active Referrals With Provider Engagement `[R24, R26]`
 - **Functional ref:** R24, R26
-- **Tables:** `gold.dim_referral`, `gold.fact_referral_offer` (EXISTS subquery)
+- **Tables:** `gold.fact_referral`, `gold.fact_referral_offer` (EXISTS subquery)
 - **Calculation:** `COUNT(DISTINCT CASE WHEN has_offer THEN 1 END)` where `has_offer = EXISTS (SELECT 1 FROM fact_referral_offer WHERE ...)`
 - **PBI measure:** `Active Referrals With Provider Engagement`
 
@@ -159,13 +159,13 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-21: Active Awaiting Offers (Engaged) `[R24, R26]`
 - **Functional ref:** R24, R26
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status = 'OPEN' AND has_offer = true`
 - **PBI measure:** `Active Awaiting Offers (Engaged)`
 
 ### KPI-22: Active Awaiting Offers (No Engagement) `[R24, R26]`
 - **Functional ref:** R24, R26
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status = 'OPEN' AND has_offer = false`
 - **PBI measure:** `Active Awaiting Offers (No Engagement)`
 
@@ -175,13 +175,13 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-23: Referrals This Month `[R24, R52]`
 - **Functional ref:** R24 (dashboard), R52 (accurate reporting)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE created_timestamp >= trunc(current_date(), 'month')`
 - **PBI measure:** `Referrals This Month`
 
 ### KPI-24: Referrals This FY `[R52]`
 - **Functional ref:** R52 (customisable reporting)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE created_timestamp >= date_trunc('year', current_date())`
 - **PBI measure:** `Referrals This FY`
 
@@ -216,28 +216,28 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 - **Calculation:** `COUNT(DISTINCT offer_id)` — base offer count
 
 ### KPI-29: Referrals Currently Active `[R24]`
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN', 'UNDER_OFFER')`
 
 ### KPI-30: Active Referrals Under Offer `[R24, R36]`
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) WHERE r.status = 'UNDER_OFFER' AND rpo.is_excluded = false AND rpo.is_declined = false`
 
 ### KPI-31: Referrals Cancelled/Closed `[R13]`
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('CLOSED', 'CANCELLED')`
 
 ### KPI-32: Active Referrals Awaiting Offers `[R24, R36]`
-- **Tables:** `gold.dim_referral`, `gold.fact_referral_offer` (NOT IN)
+- **Tables:** `gold.fact_referral`, `gold.fact_referral_offer` (NOT IN)
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status = 'OPEN' AND referral_id NOT IN (SELECT ... FROM fact_referral_offer)`
 
 ### KPI-33: Referrals With One or More Offers `[R24]`
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) JOIN fact_referral_offer WHERE is_excluded = false AND is_declined = false`
 
 ### KPI-34: Closed Referrals (by Reason) `[R54]`
 - **Functional ref:** R54 (capture reasons for declined placements)
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer` ⟕ `gold.fact_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer` ⟕ `gold.fact_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) GROUP BY COALESCE(f.decline_code, f.decline_reason, 'Unknown') WHERE r.status IN ('CLOSED', 'CANCELLED')`
 
 ### KPI-35: Total Offers Made (Active Referrals Under Offer) `[R25-R29]`
@@ -484,7 +484,7 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-90: Overlap Referrals `[R22]`
 - **Functional ref:** R22 (out-of-region placements — partial)
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** Referrals appearing in multiple provider referral-provider mappings
 
 ---
@@ -493,29 +493,29 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-91: Emergency Referrals `[R18, R57]` ⭐ HIGH PRIORITY
 - **Functional ref:** R18 (emergency placements — distinct identification, separate reporting), R57 (emergency vs planned separately reportable)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN', 'UNDER_OFFER') AND created_timestamp::date = required_start_date`
 - **Logic:** A referral is "emergency" when `created_timestamp` date equals `required_start_date` (same-day placement required). This distinguishes from planned placements where there's lead time.
 - **Note:** The schema doesn't have an explicit `is_emergency` flag. This is the best proxy using available fields. Consider adding an `is_emergency` boolean to `referral.referral` table in future schema revision.
 
 ### KPI-92: Emergency Placement Rate `[R18, R57]` ⭐ HIGH PRIORITY
 - **Functional ref:** R18, R57
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `KPI-91 / KPI-01 * 100` (Emergency Referrals / Total Referrals * 100)
 
 ### KPI-93: Planned Referrals `[R57]`
 - **Functional ref:** R57 (planned placements separately reportable)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN', 'UNDER_OFFER') AND created_timestamp::date != required_start_date`
 
 ### KPI-94: Emergency vs Planned Split `[R18, R57]`
 - **Functional ref:** R18, R57
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) GROUP BY CASE WHEN created_timestamp::date = required_start_date THEN 'Emergency' ELSE 'Planned' END`
 
 ### KPI-95: Out-of-Region Referrals `[R22]`
 - **Functional ref:** R22 (out-of-region placements tagged, finance informed)
-- **Tables:** `gold.dim_referral` ⟕ `gold.fact_referral_offer` ⟕ `gold.dim_provider`
+- **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer` ⟕ `gold.dim_provider`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) JOIN fact_referral_offer rpo JOIN dim_provider p WHERE p.country != 'United Kingdom' OR p.county NOT LIKE '%West Midlands%'`
 - **Note:** The referral table has no explicit region field. Provider location is used as proxy. Consider adding `is_out_of_region` flag to referral table.
 
@@ -568,12 +568,12 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-105: Decline Reasons (Referral Level) `[R54]`
 - **Functional ref:** R54 (capture reasons for declined placements)
-- **Tables:** `gold.fact_referral_offer` ⟕ `gold.dim_referral_provider_decline_reason` (from `referral.referral_provider_decline_reason`)
+- **Tables:** `gold.fact_referral_offer` ⟕ `gold.fact_referral_provider_decline_reason` (from `referral.referral_provider_decline_reason`)
 - **Calculation:** `COUNT(DISTINCT rpo.referral_id) JOIN decline_reason dr WHERE dr.decline_reason_code IS NOT NULL GROUP BY dr.decline_reason_code`
 
 ### KPI-106: Framework Changes During Active Referrals `[R58]`
 - **Functional ref:** R58 (commissioners alerted when framework changes during referral activity)
-- **Tables:** `gold.fact_referral_category` ⟕ `gold.fact_referral_offer` ⟕ `gold.dim_referral`
+- **Tables:** `gold.fact_referral_category` ⟕ `gold.fact_referral_offer` ⟕ `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) WHERE r.status IN ('OPEN', 'UNDER_OFFER') AND r.referral_id IN (SELECT referral_id FROM fact_referral_category)` AND the referral_category has been modified (check `modified_timestamp` vs `created_timestamp` on referral)
 
 ### KPI-107: Total Weekly Fee Liability `[R62]` ⭐ HIGH PRIORITY
@@ -619,7 +619,7 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 ### KPI-115: Referral Updates per Day `[R19]`
 - **Functional ref:** R19 (placement officers update referrals, auto-notify providers)
-- **Tables:** `gold.dim_referral`
+- **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) / COUNT(DISTINCT DATE(modified_timestamp)) WHERE modified_timestamp IS NOT NULL`
 
 ### KPI-116: Provider Onboarding Pipeline `[R59]`

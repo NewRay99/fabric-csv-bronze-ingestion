@@ -213,7 +213,7 @@ Deduplication is performed by partitioning the dataset by primary key columns an
 The Gold Translator reads Silver tables and constructs the analytical model. It creates:
 
 - **Fact tables:** Normalised transactional tables (e.g., `fact_referral_offer`, `fact_offer`, `fact_ipa`) containing measures and foreign keys to dimensions.
-- **Dimension tables:** Descriptive tables (e.g., `dim_referral`, `dim_provider`, `dim_provider_home`) containing attributes for filtering and grouping.
+- **Dimension tables:** Descriptive tables (e.g., `fact_referral`, `dim_provider`, `dim_provider_home`) containing attributes for filtering and grouping.
 - **KPI views:** 117 Spark SQL views, one per KPI, encapsulating the business logic for each metric. These views serve as the canonical definition of each KPI and are consumed by the Power BI semantic model.
 
 **KPI view structure:**
@@ -248,20 +248,21 @@ The Gold layer comprises **17 tables** — a mix of fact and dimension tables de
 | 5 | `fact_referral_category` | Categorisation facts for referrals (e.g., placement type, urgency, category codes). Grain: one row per referral-category assignment. |
 | 6 | `fact_provider_message` | Provider messaging activity facts. Tracks message volume, response times, and engagement. Grain: one row per message. |
 | 7 | `fact_referral_lifecycle_event` | Derived lifecycle timing fact. Captures available referral, offer, and IPA timestamps only; grain: one derived event per source timestamp. It does not claim full audit coverage. |
+| 8 | `fact_referral` | Referral with attributes: referral ID, status, local authority, region, creation date, placement type, urgency level. |
 
 #### Dimension Tables (10)
 
 | # | Table Name | Description |
 |---|------------|-------------|
-| 8 | `dim_referral` | Referral dimension with attributes: referral ID, status, local authority, region, creation date, placement type, urgency level. |
+
 | 9 | `dim_provider` | Provider dimension with attributes: provider ID, name, type, registration status, local authority, region. Supports provider registry KPIs (R25–R36). |
 | 10 | `dim_provider_home` | Provider home dimension: home ID, provider ID, address, capacity, registered placements, Ofsted status. |
 | 11 | `dim_provider_framework` | Provider framework dimension: framework ID, provider ID, framework name, start/end dates, status. Supports spot vs framework KPIs. |
-| 12 | `dim_referral_gender` | Gender reference dimension for referral persons. |
+| 12 | `fact_referral_gender` | Gender reference dimension for referral persons. |
 | 13 | `dim_s3_file_metadata` | File metadata dimension: file name, source, upload timestamp, file type, size, checksum. Supports document compliance KPIs. |
 | 14 | `dim_provider_document` | Provider document dimension: document ID, provider ID, document type, upload date, expiry date, compliance status. Supports R38–R49. |
 | 15 | `dim_submission_documents` | Submission documents dimension: submission ID, referral ID, document list, submission timestamp, submitted by. |
-| 16 | `dim_referral_provider_decline_reason` | Decline reason dimension: decline ID, referral ID, provider ID, reason code, reason description, decline timestamp. |
+| 16 | `fact_referral_provider_decline_reason` | Decline reason dimension: decline ID, referral ID, provider ID, reason code, reason description, decline timestamp. |
 | 17 | `dim_offer_status` | Offer status dimension: status ID, status code, status description, active flag, sort order. |
 
 ### 5.2 KPI Summary — 117 KPIs across 14 Categories
@@ -288,14 +289,14 @@ The Gold layer comprises **17 tables** — a mix of fact and dimension tables de
 
 The Gold layer follows a star-schema design:
 
-- **`fact_referral_offer`** is the central fact table, with foreign keys to `dim_referral`, `dim_provider`, `dim_provider_home`, `dim_provider_framework`, `dim_offer_status`, and `dim_referral_provider_decline_reason`.
+- **`fact_referral_offer`** is the central fact table, with foreign keys to `fact_referral`, `dim_provider`, `dim_provider_home`, `dim_provider_framework`, `dim_offer_status`, and `fact_referral_provider_decline_reason`.
 - **`fact_offer`** connects to `dim_provider` and `dim_offer_status`.
-- **`fact_ipa`** connects to `dim_referral` and `dim_provider`.
-- **`fact_referral_person`** connects to `dim_referral` and `dim_referral_gender`.
-- **`fact_referral_lifecycle_event`** connects to `dim_referral`.
+- **`fact_ipa`** connects to `fact_referral` and `dim_provider`.
+- **`fact_referral_person`** connects to `fact_referral` and `fact_referral_gender`.
+- **`fact_referral_lifecycle_event`** connects to `fact_referral`.
 - **`fact_provider_message`** connects to `dim_provider`.
-- **`fact_referral_category`** connects to `dim_referral`.
-- **`dim_provider_document`** and **`dim_submission_documents`** connect to `dim_provider` and `dim_referral` respectively.
+- **`fact_referral_category`** connects to `fact_referral`.
+- **`dim_provider_document`** and **`dim_submission_documents`** connect to `dim_provider` and `fact_referral` respectively.
 - **`dim_s3_file_metadata`** is a standalone dimension linked to document-related facts via file name.
 
 ---
@@ -377,7 +378,7 @@ Requirement R55 specifies that commissioners must only see data for their respec
 
 **Implementation:**
 
-- **`dim_referral`** includes a `local_authority` column and a `region` column.
+- **`fact_referral`** includes a `local_authority` column and a `region` column.
 - **RLS roles** are defined for each of the 14 West Midlands local authorities (e.g., `RLS_Birmingham`, `RLS_Coventry`, `RLS_Wolverhampton`, etc.).
 - Each RLS role applies a DAX filter: `[local_authority] = USERPRINCIPALNAME()` mapped via a security lookup table, or `[region] = "<region_name>"` for region-level roles.
 - A **security mapping table** (`dim_security_mapping`) links Entra ID user principal names (UPNs) to their assigned local authority/region. This table is maintained by the platform admin and stored in the Gold layer.

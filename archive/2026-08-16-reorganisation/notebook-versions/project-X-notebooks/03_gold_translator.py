@@ -66,9 +66,9 @@ SELECT ipa_id, offer_id, referral_id, child_full_name, child_date_of_birth,
 FROM {SILVER_SCHEMA}.slv_ipa
 """)
 
-# ── [R24, R51] dim_referral ← referral.referral ──
+# ── [R24, R51] fact_referral ← referral.referral ──
 spark.sql(f"""
-CREATE OR REPLACE TABLE {GOLD_SCHEMA}.dim_referral AS
+CREATE OR REPLACE TABLE {GOLD_SCHEMA}.fact_referral AS
 SELECT referral_id, placement_type_code, required_start_date,
        response_required_by_date, is_sibling_placement, sibling_count,
        is_parent_child_placement, is_spot, status,
@@ -206,14 +206,14 @@ print("Helper tables created.")
 
 # %%
 # [R24, R51] KPI-01: Total Referrals — COUNT(DISTINCT referral_id)
-# Tables: dim_referral
+# Tables: fact_referral
 spark.sql(f"""
 CREATE OR REPLACE VIEW {GOLD_SCHEMA}.mv_total_referrals AS
 SELECT COUNT(DISTINCT referral_id) AS total_referrals
-FROM {GOLD_SCHEMA}.dim_referral WHERE status IS NOT NULL
+FROM {GOLD_SCHEMA}.fact_referral WHERE status IS NOT NULL
 """)
 
-# [R24, R36] KPI-02: Referrals With Offers — JOIN dim_referral to fact_referral_offer
+# [R24, R36] KPI-02: Referrals With Offers — JOIN fact_referral to fact_referral_offer
 # Tables: dim_referral, fact_referral_offer
 spark.sql(f"""
 CREATE OR REPLACE VIEW {GOLD_SCHEMA}.mv_referrals_with_offers AS

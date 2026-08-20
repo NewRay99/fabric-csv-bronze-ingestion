@@ -16,10 +16,10 @@ This catalogue is generated from the committed v01 TMDL and replaces the older V
 
 ## `Closed_Date` derivation
 
-The v01 model now exposes `Closed_Date` in both `fact_referral_offer` and `dim_referral`:
+The v01 model now exposes `Closed_Date` in both `fact_referral_offer` and `fact_referral`:
 
 1. `fact_referral_offer[Closed_Date]` returns the date portion of `modified_date` only when `has_offer = TRUE()`; otherwise it returns DAX `BLANK()`.
-2. `dim_referral[Closed_Date]` returns the latest related `fact_referral_offer[Closed_Date]` across matching offer rows. If no related row has `has_offer = TRUE()`, it remains `BLANK()`/null.
+2. `fact_referral[Closed_Date]` returns the latest related `fact_referral_offer[Closed_Date]` across matching offer rows. If no related row has `has_offer = TRUE()`, it remains `BLANK()`/null.
 
 The v01 `fact_referral_offer` table does not expose a separate upstream `closed_date` field. Therefore the implementation uses the available `modified_date` as the closure timestamp proxy. If the source system later provides a canonical closure timestamp, replace the row-level expression and retain the same null-handling rule.
 

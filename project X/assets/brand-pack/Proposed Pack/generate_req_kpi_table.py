@@ -46,7 +46,7 @@ rows = [
      "KPI-75", "✅ Implemented", "", ""),
     ("R18", "Emergency placements: same-day, distinct ID, separate reporting & finance", "Placement Officer", "High",
      "KPI-91, KPI-92, KPI-94", "❌ Missing", "No KPI distinguishes emergency from planned/spot. is_spot ≠ emergency. Statutory compliance risk.",
-     "Add Emergency Referrals and Emergency Placement Rate measures. Add is_emergency flag to dim_referral."),
+     "Add Emergency Referrals and Emergency Placement Rate measures. Add is_emergency flag to fact_referral."),
     ("R19", "Update referrals; auto-notify providers", "Placement Officer", "Low",
      "KPI-115", "❌ Missing", "No KPI for referral update frequency or notification delivery",
      "Add Referral Updates per Day measure from referral audit trail"),
