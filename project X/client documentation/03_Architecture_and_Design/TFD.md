@@ -123,10 +123,12 @@ tables include:
 | Control area | Tables |
 |---|---|
 | Pipeline and metrics | `cfg_pipeline_run`, `cfg_table_load_metric` |
+| Linked live jobs | `cfg_job_run`, `cfg_job_step_run` and shared `job_run_id` |
 | Current/archive Silver | `cfg_silver_export_load`, `cfg_month_end_gold_run` |
 | Archive ingestion | `cfg_archive_zip_load`, `cfg_archive_file_load`, `cfg_archive_table_export_load` |
 | Schema governance | `cfg_schema_drift_definition`, `cfg_schema_drift_event`, `cfg_schema_contract_column`, live/candidate schema tables |
 | Data quality | `cfg_data_quality_rule`, `cfg_data_quality_result`, `cfg_rejected_row`, `cfg_referential_exception` |
+| Reporting views | `vw_job_run_summary`, `vw_job_step_summary`, `vw_job_schema_drift`, `vw_job_data_quality`, `vw_job_layer_lineage` |
 
 ## 6. Status and retry semantics
 
