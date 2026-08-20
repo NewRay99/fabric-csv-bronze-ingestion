@@ -2,16 +2,16 @@ calculationGroup 'KPI Attribute'
 	precedence: 10
 
 	calculationItem Value =
-		
+
 		SELECTEDMEASURE()
-		
-	
-	formatStringExpression: 
+
+
+	formatStringExpression:
 		VAR _Base = SELECTEDMEASUREFORMATSTRING()
 		RETURN _Base
 
 	calculationItem "vs Prior Period" =
-		
+
 		VAR _Current = SELECTEDMEASURE()
 		VAR _Prior =
 		    CALCULATE(
@@ -20,12 +20,12 @@ calculationGroup 'KPI Attribute'
 		    )
 		RETURN
 		DIVIDE(_Current - _Prior, _Prior)
-		
-	
+
+
 	formatStringExpression: "▲ 0.0%;▼ -0.0%;0.0%"
 
 	calculationItem "vs Same Period Last Year" =
-		
+
 		VAR _Current = SELECTEDMEASURE()
 		VAR _Prior =
 		    CALCULATE(
@@ -34,12 +34,12 @@ calculationGroup 'KPI Attribute'
 		    )
 		RETURN
 		DIVIDE(_Current - _Prior, _Prior)
-		
-	
+
+
 	formatStringExpression: "▲ 0.0%;▼ -0.0%;0.0%"
 
 	calculationItem Indicator =
-		
+
 		VAR _Current = SELECTEDMEASURE()
 		VAR _Prior =
 		    CALCULATE(
@@ -52,11 +52,11 @@ calculationGroup 'KPI Attribute'
 		    _Current < _Prior, "▼",
 		    "─"
 		)
-		
-	
+
+
 
 	calculationItem Color =
-		
+
 		VAR _Current = SELECTEDMEASURE()
 		VAR _Prior =
 		    CALCULATE(

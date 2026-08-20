@@ -230,11 +230,11 @@ provider,6,town_city,character varying(100),YES,NULL,,NO,,,,,The name of the tow
 provider,7,county,character varying(100),YES,NULL,,NO,,,,,"While not always necessary, especially for larger cities, the county can be included for clarity",This provider entity all key information regarding the provider,NO_JOIN,
 provider,8,postcode,character varying(20),NO,NULL,,NO,,,,,"The UK postcode is a crucial element of the address, used to identify the precise location for mail delivery.",This provider entity all key information regarding the provider,NO_JOIN,
 provider,9,country,character varying(100),YES,NULL,,NO,,,,,"If the address is being used in an international context, specifying 'United Kingdom' is important.",This provider entity all key information regarding the provider,NO_JOIN,
-provider,10,provider_status,character varying(9),NO,NULL,,NO,,,,,"The current status of the provider. 
+provider,10,provider_status,character varying(9),NO,NULL,,NO,,,,,"The current status of the provider.
 
 Details TBA
 
-EG: 
+EG:
 Approved
 Pending
 Declined",This provider entity all key information regarding the provider,NO_JOIN,

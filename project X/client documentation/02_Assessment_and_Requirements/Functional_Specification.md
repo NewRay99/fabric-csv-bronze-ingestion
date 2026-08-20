@@ -9,7 +9,7 @@ This document defines the functional and non-functional requirements for a regio
 # 1. High-Level Purpose
 
 ## R1
-**Requirement:**  
+**Requirement:**
 Provide local authorities and children's trusts with the ability to place children with complex care needs with providers across the region who can meet those needs.
 
 **Notes:**
@@ -17,7 +17,7 @@ Provide local authorities and children's trusts with the ability to place childr
 - Must operate across different IT estates, systems, and applications.
 
 ## R2
-**Requirement:**  
+**Requirement:**
 Consider the current incumbent solution and associated processes when designing the future-state architecture.
 
 **Notes:**

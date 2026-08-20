@@ -1,3 +1,3 @@
-add some info relating to the new design.. 
+add some info relating to the new design..
 
-- 
+-

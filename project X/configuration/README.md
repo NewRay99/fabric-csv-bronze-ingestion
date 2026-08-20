@@ -9,4 +9,3 @@ Deploy these files to the configured Fabric Lakehouse location, normally
 
 The notebooks do not read these files from the Git repository at runtime. The
 repository copy is the controlled source that must be published to Fabric.
-

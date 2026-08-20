@@ -546,5 +546,3 @@ and day-name attributes.
 - **Operations:** `90_run_live_pipeline.ipynb` links the standard live
   sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence
   and safe single-month recovery controls.
-
-

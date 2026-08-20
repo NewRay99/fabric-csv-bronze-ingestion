@@ -9,4 +9,3 @@ This folder is deliberately separate from client design documentation.
 Update the relevant log with every material behaviour, contract, or operational
 change. Do not mix temporary investigation output or generated test data into
 these records.
-

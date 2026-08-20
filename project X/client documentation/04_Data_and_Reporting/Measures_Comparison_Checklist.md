@@ -1,12 +1,12 @@
 # Measures Comparison Checklist — PBI Report vs Functional Specification
 
-**Project:** WMPP (West Midlands Placement Portal)  
+**Project:** WMPP (West Midlands Placement Portal)
 **Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
 **Semantic model:** `SM_WMPP` — 95 measures in the current TMDL
 **Current catalogue:** [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md)
 **v00 → v01 changelog:** [`client documentation/07_Semantic_Model_Changelog_v00_to_v01.md`](client%20documentation/07_Semantic_Model_Changelog_v00_to_v01.md)
-**Date:** 10 July 2026  
-**Prepared by:** Hermes Agent  
+**Date:** 10 July 2026
+**Prepared by:** Hermes Agent
 
 ---
 

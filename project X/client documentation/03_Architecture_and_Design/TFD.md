@@ -1,7 +1,7 @@
 # Technical/Functional Design (TFD)
 
-**Project:** WMPP Fabric data platform  
-**Client:** Birmingham Children's Trust  
+**Project:** WMPP Fabric data platform
+**Client:** Birmingham Children's Trust
 **Baseline:** Active notebook set promoted from version 02 04
 
 ## 1. Scope

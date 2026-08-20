@@ -595,10 +595,10 @@ Visually, the width of the flow tells the board immediately where referrals are 
 
 The most important final split should probably be:
 
-**Placed by Required Placement Date**  
-**Placed after Required Placement Date**  
-**Still Open**  
-**Withdrawn / Cancelled**  
+**Placed by Required Placement Date**
+**Placed after Required Placement Date**
+**Still Open**
+**Withdrawn / Cancelled**
 **Closed — no match**
 
 That connects the Sankey directly to the target logic we designed.
@@ -804,22 +804,22 @@ I'd add a fourth dashboard/page called:
 
 Top KPIs:
 
-**128**  
+**128**
 Referrals Created
 
-**109**  
+**109**
 Received ≥1 Offer
 
-**97**  
+**97**
 Preferred Match Selected
 
-**91**  
+**91**
 IPA Issued
 
-**76%**  
+**76%**
 Placed by Required Date
 
-**18**  
+**18**
 Currently Overdue
 
 Then a large Sankey occupying about 60–70% of the page:

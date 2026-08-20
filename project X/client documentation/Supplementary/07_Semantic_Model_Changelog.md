@@ -244,7 +244,7 @@ Until the client chooses an option, the Statement of Work retains its draft comm
 
 This addendum records a direct, read-only comparison of the **last preceding Power BI solution archive**, `reoprt v02` (the filename is retained as committed), against `report v03`. It is additive to the v00-to-v01 reconciliation above; it does not alter the earlier baseline decision or commercial count controls.
 
-| Version | Source archive | Semantic-model path inside archive 
+| Version | Source archive | Semantic-model path inside archive
 |---|---|---:|
 | v02 | `reoprt v02` | `SM_WMPP.SemanticModel/definition/`  |
 | v03 | `report v03` | `SM_WMPP.SemanticModel/definition/`  |

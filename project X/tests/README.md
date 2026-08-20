@@ -7,4 +7,3 @@ working directory/path assumptions if required.
 `_gold_sim_test.py` requires PySpark/Delta dependencies and may need to run in a
 compatible Spark environment. End-to-end notebook orchestration remains a
 Fabric acceptance test.
-

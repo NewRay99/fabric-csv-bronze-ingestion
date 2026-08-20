@@ -1,7 +1,7 @@
 # KPI Reference Guide — Tables, Calculations, and Functional Requirements
 
-**Project:** WMPP (West Midlands Placement Portal)  
-**Date:** 10 July 2026  
+**Project:** WMPP (West Midlands Placement Portal)
+**Date:** 10 July 2026
 
 This document lists every KPI in the gold layer — both the 90 existing measures translated from the Power BI semantic model and the 17 new measures created to close functional spec gaps. Each KPI documents the source tables, calculation logic, and the functional requirement(s) it satisfies.
 

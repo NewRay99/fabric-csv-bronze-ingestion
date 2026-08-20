@@ -127,4 +127,3 @@ and the Measures Comparison Checklist (`measures_comparison_checklist.md`).
 > **Note:** Requirements R2–R9, R29, R32–R33, R39, R45, R55, R69–R70, R72–R90 are non-functional,
 > feature, or security requirements that do not map to a specific Power BI measure. The remaining
 > requirements map to 90 existing + 27 new = 117 KPIs defined in the KPI Reference Guide.
-

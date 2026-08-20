@@ -23,7 +23,7 @@ for zip_name in zip_files:
     # Remove .zip extension to get the folder name (e.g., '2026-07-01')
     folder_name = os.path.splitext(zip_name)[0]
     target_folder_path = os.path.join(extract_base_path, folder_name)
-    
+
     # Check if the target folder exists and is non-empty
     if os.path.exists(target_folder_path) and os.listdir(target_folder_path):
         print(f"⏩ Skipped (folder already exists): {folder_name}/")
@@ -32,11 +32,11 @@ for zip_name in zip_files:
         # Create the specific folder for this zip file
         os.makedirs(target_folder_path, exist_ok=True)
         zip_file_path = os.path.join(archive_dir, zip_name)
-        
+
         # Extract files straight into the date folder
         with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(target_folder_path)
-            
+
         print(f"✅ Extracted: {zip_name} ➔ {folder_name}/")
         extracted_count += 1
 

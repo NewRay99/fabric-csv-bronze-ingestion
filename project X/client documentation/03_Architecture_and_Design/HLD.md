@@ -1,9 +1,9 @@
 # High-Level Design (HLD)
 
-**Project:** West Midlands Placement Portal data platform  
-**Client:** Birmingham Children's Trust  
-**Platform:** Microsoft Fabric Lakehouse  
-**Status:** Current implementation baseline  
+**Project:** West Midlands Placement Portal data platform
+**Client:** Birmingham Children's Trust
+**Platform:** Microsoft Fabric Lakehouse
+**Status:** Current implementation baseline
 **Baseline date:** 16 August 2026
 
 ## 1. Purpose
@@ -143,4 +143,3 @@ then runs DQ and Gold.
   referential metadata must be approved in `schema_definition.csv`.
 - The archive audit-event table is intentionally excluded from standard entity
   replay and requires a dedicated event model if reporting is needed later.
-

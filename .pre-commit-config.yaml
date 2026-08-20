@@ -1,0 +1,29 @@
+minimum_pre_commit_version: "4.6.2"
+exclude: ^archive/
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ["--maxkb=5120"]
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.3
+    hooks:
+      - id: ruff
+        files: ^project X/tests/(validate_.*|test_.*)\.py$
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest static validation suite
+        entry: python -m pytest
+        language: system
+        pass_filenames: false
+        always_run: true

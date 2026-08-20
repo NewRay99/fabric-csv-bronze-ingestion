@@ -1,9 +1,9 @@
 # Functional and Feature Design (FFD)
 
-**Project:** West Midlands Placement Portal data platform  
-**Client:** Birmingham Children's Trust  
-**Platform:** Microsoft Fabric Lakehouse and Power BI  
-**Status:** Initial controlled baseline  
+**Project:** West Midlands Placement Portal data platform
+**Client:** Birmingham Children's Trust
+**Platform:** Microsoft Fabric Lakehouse and Power BI
+**Status:** Initial controlled baseline
 **Baseline date:** 16 August 2026
 
 ## 1. Purpose

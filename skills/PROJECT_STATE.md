@@ -1,7 +1,7 @@
 # Project State
 
-**Project:** BCT WMPP Fabric and Power BI platform  
-**State date:** 18 August 2026  
+**Project:** BCT WMPP Fabric and Power BI platform
+**State date:** 18 August 2026
 **Purpose:** Concise handover and continuity record for the ChatGPT Project.
 
 ## Current implementation baseline

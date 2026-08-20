@@ -1,7 +1,7 @@
 # Fabric notebook runbook
 
-**Client:** Birmingham Children's Trust  
-**Solution:** WMPP Fabric Lakehouse  
+**Client:** Birmingham Children's Trust
+**Solution:** WMPP Fabric Lakehouse
 **Active baseline:** version 02 04 promoted to `project X` root
 
 ## 1. Before the first run

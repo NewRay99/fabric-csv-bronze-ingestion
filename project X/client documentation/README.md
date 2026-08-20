@@ -27,4 +27,3 @@ Issue and change tracking is deliberately separate at
 Documents retained from earlier discovery phases may describe target-state
 features not yet implemented. The HLD, TFD, active notebooks, and current
 configuration files take precedence for the deployed data-engineering flow.
-

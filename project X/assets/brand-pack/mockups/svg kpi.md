@@ -1,4 +1,4 @@
-Closed Referrals KPI SVG = 
+Closed Referrals KPI SVG =
 VAR _Base =
     [Closed Referrals (by Reason)]
 VAR _PriorMonth =

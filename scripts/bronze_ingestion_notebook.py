@@ -1,6 +1,6 @@
 # %% [markdown]
 # # Fabric CSV -> Bronze Ingestion (Append)
-# 
+#
 # **Purpose:** Read all CSVs from a lakehouse shortcut folder, apply type
 # inference rules, and load each into its own bronze Delta table (append mode).
 #
@@ -158,7 +158,7 @@ print("=" * 70)
 
 # %% [markdown]
 # ## Step 6 — Verification Queries
-# 
+#
 # Run these in a new SQL cell to verify the load:
 
 # %%

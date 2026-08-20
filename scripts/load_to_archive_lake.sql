@@ -61,7 +61,7 @@ print(f"REBUILD=[{REBUILD}]")
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {ARCHIVE_SCHEMA}")
 
 spark.sql(f"""
-CREATE TABLE IF NOT EXISTS {ARCHIVE_SCHEMA}.cfg_load_control 
+CREATE TABLE IF NOT EXISTS {ARCHIVE_SCHEMA}.cfg_load_control
 (
     filename STRING,
     reload BOOLEAN,
@@ -94,7 +94,7 @@ for root, dirs, files in os.walk(POSIX_ROOT_PATH):
         # Paths
         full_posix_path = os.path.join(root, file_name)
         relative_path = os.path.relpath(full_posix_path, "/lakehouse/default")
-        
+
         # Check control table for skip
         if relative_path in loaded_paths:
             print(f"⏩ Skipped (already logged): {relative_path}")
@@ -138,7 +138,7 @@ for root, dirs, files in os.walk(POSIX_ROOT_PATH):
                 .mode(LOAD_MODE) \
                 .option("mergeSchema", "true") \
                 .saveAsTable(full_table_target)
-            
+
             print(f"\t✅ Written to {full_table_target}")
 
             # Extract parent folder name as export date (e.g. '2026-07-01')

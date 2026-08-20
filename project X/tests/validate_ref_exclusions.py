@@ -23,9 +23,9 @@ def notebook_source(name):
     return "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
 
-common_path = ROOT / "common_util.ipynb"
-check(common_path.exists(), "common_util.ipynb does not exist")
-common_source = notebook_source("common_util.ipynb") if common_path.exists() else ""
+common_path = ROOT / "99_common_library.ipynb"
+check(common_path.exists(), "99_common_library.ipynb does not exist")
+common_source = notebook_source("99_common_library.ipynb") if common_path.exists() else ""
 
 for table in [
     "ref_KPI_Definition",
@@ -33,9 +33,9 @@ for table in [
     "ref_RID",
     "ref_Table_Lineage",
 ]:
-    check(table in common_source, f"common_util is missing explicit exclusion {table}")
-check('ETL_EXCLUDED_TABLE_PREFIXES = ["ref_"]' in common_source, "common_util is missing ref_ prefix exclusion")
-check("def is_etl_excluded_table" in common_source, "common_util is missing exclusion helper")
+    check(table in common_source, f"99_common_library is missing explicit exclusion {table}")
+check('ETL_EXCLUDED_TABLE_PREFIXES = ["ref_"]' in common_source, "99_common_library is missing ref_ prefix exclusion")
+check("def is_etl_excluded_table" in common_source, "99_common_library is missing exclusion helper")
 
 consumers = [
     "00_archive_load.ipynb",

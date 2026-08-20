@@ -1,11 +1,11 @@
 # WMPP Gap Analysis Report
 
-**Project:** West Midlands Placement Portal (WMPP)  
-**Document Reference:** WMPP-GAP-001  
-**Version:** 1.0  
-**Date:** 12 July 2026  
-**Prepared by:** WMPP Migration Team  
-**Classification:** Official — Client Confidential  
+**Project:** West Midlands Placement Portal (WMPP)
+**Document Reference:** WMPP-GAP-001
+**Version:** 1.0
+**Date:** 12 July 2026
+**Prepared by:** WMPP Migration Team
+**Classification:** Official — Client Confidential
 
 ---
 
@@ -54,13 +54,13 @@ The most critical risks stem from the absence of emergency placement differentia
 
 The gap analysis was conducted using a structured, evidence-based methodology comparing the as-is Power BI report (V13.1) against the WMPP functional specification. The analysis followed a four-stage process:
 
-**Stage 1 — Requirement Extraction**  
+**Stage 1 — Requirement Extraction**
 All functional requirements were extracted from the WMPP functional specification and catalogued with unique requirement references (R1–R62+). Each requirement was classified by stakeholder group (Operations, Finance, QA, Commissioners, Providers) and mapped to expected KPIs.
 
-**Stage 2 — As-Is Inventory**  
+**Stage 2 — As-Is Inventory**
 The existing Power BI report (V13.1) was analysed to produce a complete inventory of all 90 measures. Each measure was documented with its DAX expression, source table, data lineage (where traceable), and stakeholder visibility. Measures were cross-referenced against the requirement catalogue to determine coverage.
 
-**Stage 3 — Gap Identification**  
+**Stage 3 — Gap Identification**
 Each requirement was assessed against the as-is inventory. A gap was recorded where:
 - No measure existed for a stated requirement
 - A measure existed but did not fully satisfy the semantic intent of the requirement
@@ -68,7 +68,7 @@ Each requirement was assessed against the as-is inventory. A gap was recorded wh
 
 Gaps were classified by priority (High, Medium, Low) based on business impact, regulatory exposure, and stakeholder dependency.
 
-**Stage 4 — Architecture & Data Quality Assessment**  
+**Stage 4 — Architecture & Data Quality Assessment**
 The underlying data architecture was reviewed against best-practice patterns for Fabric lakehouse implementations. Data quality was assessed by examining measure names, DAX expressions, and source data for duplicates, typographical errors, and semantic ambiguity.
 
 ### 2.2 Inputs
@@ -451,8 +451,8 @@ The recommended three-sprint plan sequences remediation from critical compliance
 
 The migration from CSV-on-network-drive to Fabric lakehouse with medallion architecture is not merely a technical improvement — it is a prerequisite for closing the identified functional gaps in a maintainable and scalable manner. Attempting to patch the current architecture would replicate its fragility and defer the inevitable migration.
 
-**Total estimated effort:** 12 weeks (3 sprints × 4 weeks)  
-**Gaps addressed:** 17 functional + 4 architecture + 3 data quality = 24 items  
+**Total estimated effort:** 12 weeks (3 sprints × 4 weeks)
+**Gaps addressed:** 17 functional + 4 architecture + 3 data quality = 24 items
 **Target end state:** Fabric lakehouse with bronze-silver-gold medallion architecture, 117 KPIs, Direct Lake semantic model, automated refresh pipeline, and verified RLS.
 
 ---
@@ -502,5 +502,5 @@ The migration from CSV-on-network-drive to Fabric lakehouse with medallion archi
 
 *End of Report*
 
-*WMPP Gap Analysis Report — Version 1.0 — 12 July 2026*  
+*WMPP Gap Analysis Report — Version 1.0 — 12 July 2026*
 *Classification: Official — Client Confidential*
