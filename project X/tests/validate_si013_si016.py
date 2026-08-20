@@ -46,7 +46,7 @@ def main():
     print("PASS project notebooks no longer import common_util")
 
     setup = source(SETUP)
-    assert "silver.slv_referral_event_log" not in setup, (
+    assert "silver.referral_event_log" not in setup, (
         "Setup must not fabricate a source event-log table"
     )
     print("PASS setup does not fabricate a referral event-log source")

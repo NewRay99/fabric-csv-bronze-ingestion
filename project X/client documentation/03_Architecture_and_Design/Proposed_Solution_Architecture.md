@@ -50,8 +50,8 @@ The proposed solution adopts the **medallion architecture** (also known as the m
 
 | Layer | Purpose | Characteristics | Naming Convention |
 |-------|---------|-----------------|-------------------|
-| **Bronze** | Raw ingestion | All columns as STRING, append mode, ingestion metadata | `brz_<table>` |
-| **Silver** | Typed & cleaned | Correct data types per schema definition, deduplicated, validated | `slv_<table>` |
+| **Bronze** | Raw ingestion | All columns as STRING, append mode, ingestion metadata | `<table>` |
+| **Silver** | Typed & cleaned | Correct data types per schema definition, deduplicated, validated | `<table>` |
 | **Gold** | Analytical model | Fact/dimension tables, KPIs as Spark SQL views, business-ready | `fact_<name>`, `dim_<name>` |
 
 ### 2.2 Design Principles
@@ -96,7 +96,7 @@ CSV exports from PostgreSQL are placed on the network drive and picked up by the
 │  │ PostgreSQL│     │  ╔═══════════════════════════════════════════════╗   │ │
 │  │ (Source)  │     │  ║            NOTEBOOK 1: BRONZE LOADER          ║   │ │
 │  │           │     │  ║  CSV → Delta (append), all STRING columns     ║   │ │
-│  │ Schemas:  │     │  ║  Creates: brz_<table>                         ║   │ │
+│  │ Schemas:  │     │  ║  Creates: <table>                         ║   │ │
 │  │ document  │     │  ╚═══════════════════┬═══════════════════════════╝   │ │
 │  │ ipa       │     │                      │                               │ │
 │  │ offer     │     │                      ▼                               │ │
@@ -104,7 +104,7 @@ CSV exports from PostgreSQL are placed on the network drive and picked up by the
 │  │ refdata   │     │  ║         NOTEBOOK 2: SILVER FORMATTER          ║   │ │
 │  │ referral  │     │  ║  Type casting per schema_definition.csv       ║   │ │
 │  │ framework │     │  ║  Deduplication, cleaning, validation          ║   │ │
-│  └───────────┘     │  ║  Creates: slv_<table>                         ║   │ │
+│  └───────────┘     │  ║  Creates: <table>                         ║   │ │
 │                    │  ╚═══════════════════┬═══════════════════════════╝   │ │
 │                    │                      │                               │ │
 │                    │                      ▼                               │ │
@@ -145,7 +145,7 @@ The data pipeline consists of three Fabric notebooks, executed sequentially via 
 |-----------|--------|
 | **Name** | `nb_bronze_loader` |
 | **Input** | `Files/Latest/*.csv` (lakehouse shortcut to network drive) |
-| **Output** | `brz_<table>` Delta tables |
+| **Output** | `<table>` Delta tables |
 | **Mode** | Append |
 | **Column types** | All STRING |
 | **Execution** | Scheduled (daily) + on-demand |
@@ -158,7 +158,7 @@ The Bronze Loader reads each CSV file from the `Files/Latest/` shortcut and appe
 - `_source_file` — name of the source CSV file
 - `_ingestion_id` — unique batch identifier
 
-The notebook iterates over a configured list of source CSV filenames and creates or appends to `brz_<source_name>` Delta tables. No transformations, filtering, or type casting occurs at this stage.
+The notebook iterates over a configured list of source CSV filenames and creates or appends to `<source_name>` Delta tables. No transformations, filtering, or type casting occurs at this stage.
 
 **Key design decisions:**
 
@@ -171,8 +171,8 @@ The notebook iterates over a configured list of source CSV filenames and creates
 | Attribute | Detail |
 |-----------|--------|
 | **Name** | `nb_silver_formatter` |
-| **Input** | `brz_<table>` (Bronze Delta tables) |
-| **Output** | `slv_<table>` (Silver Delta tables) |
+| **Input** | `<table>` (Bronze Delta tables) |
+| **Output** | `<table>` (Silver Delta tables) |
 | **Mode** | Overwrite (full rebuild) |
 | **Schema source** | `schema_definition.csv` |
 | **Execution** | After Bronze Loader completes |
@@ -192,7 +192,7 @@ For each Bronze table, the notebook:
 2. Casts each column to its defined type.
 3. Deduplicates rows using the primary key columns (keeping the latest record by `_ingestion_timestamp`).
 4. Applies basic cleaning (trimming whitespace, null handling, date normalisation).
-5. Writes the result to `slv_<table>` in overwrite mode.
+5. Writes the result to `<table>` in overwrite mode.
 
 **Deduplication logic:**
 
@@ -203,7 +203,7 @@ Deduplication is performed by partitioning the dataset by primary key columns an
 | Attribute | Detail |
 |-----------|--------|
 | **Name** | `nb_gold_translator` |
-| **Input** | `slv_<table>` (Silver Delta tables) |
+| **Input** | `<table>` (Silver Delta tables) |
 | **Output** | `fact_<name>`, `dim_<name>` (Gold Delta tables) + 117 KPI Spark SQL views |
 | **Mode** | Overwrite (full rebuild) |
 | **Execution** | After Silver Formatter completes |
@@ -492,8 +492,8 @@ The migration follows a **phased approach**: first achieve functional parity wit
 | 1.1 | Create Fabric workspace and Lakehouse | Workspace provisioned, Entra ID groups configured |
 | 1.2 | Configure network drive shortcut (`Files/Latest/*.csv`) | Shortcut validated, CSV files accessible from notebooks |
 | 1.3 | Deploy and configure `schema_definition.csv` | All source table schemas documented |
-| 1.4 | Deploy Notebook 1 (Bronze Loader) | `brz_<table>` Delta tables created from CSV files |
-| 1.5 | Deploy Notebook 2 (Silver Formatter) | `slv_<table>` Delta tables with typed columns and deduplication |
+| 1.4 | Deploy Notebook 1 (Bronze Loader) | `<table>` Delta tables created from CSV files |
+| 1.5 | Deploy Notebook 2 (Silver Formatter) | `<table>` Delta tables with typed columns and deduplication |
 | 1.6 | Deploy Notebook 3 (Gold Translator) — V13.1 parity subset | Gold tables with the existing 90 measures |
 | 1.7 | Build Power BI semantic model (Direct Lake) | Semantic model connected to Gold tables |
 | 1.8 | Recreate V13.1 report pages in new workspace | Report pages matching V13.1 layout |

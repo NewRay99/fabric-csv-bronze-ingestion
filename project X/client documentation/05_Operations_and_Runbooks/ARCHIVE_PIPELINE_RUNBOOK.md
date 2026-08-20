@@ -9,28 +9,28 @@ schema; the active loader does not add an `archived_` table prefix.
 
 ## Initial or incremental archive sequence
 
-1. Deploy `00_archive_load.ipynb`, `02a_archive_silver.ipynb`,
-   `03_silver_business_rules.ipynb`, `04_gold_model.ipynb`, and
-   `05_gold_dimensions.ipynb`.
-2. Run `00_setup_cfg.ipynb` to load the schema and DQ configuration
-   tables.
-3. Run `00_archive_load.ipynb`. It writes source-named Delta tables such as
+1. Deploy `90_run_archive_pipeline.ipynb` and the child notebooks.
+2. Run `90_run_archive_pipeline.ipynb`. It executes, under one `JOB_RUN_ID`:
+   `00_setup_cfg`, `00_archive_load`, `01a_cfg_schema_capture_archive`,
+   `02a_archive_silver`, and `05_gold_dimensions`.
+3. The archive loader writes source-named Delta tables such as
    `archived.referral`, `archived.provider_submission_docs`, and
    `archived.audit` (when audit loading is enabled).
-4. Run `01a_cfg_schema_capture_archive.ipynb`; investigate
-   missing-contract or type drift before replay.
-5. Run `02a_archive_silver.ipynb`. Leave `PROCESS_ONLY` blank for all
-   months, or set it to `YYYY-MM` to diagnose a single canonical month.
-6. With `RUN_GOLD_AT_MONTH_END=True`, the replay runs DQ, Gold facts, and Gold
-   dimensions for every completed canonical month.
+4. The runner lets archive Silver execute its per-month DQ and Gold-fact
+   steps, then executes Gold dimensions once as its final step. It passes
+   `RUN_GOLD_DIMENSIONS_AT_MONTH_END=False` to avoid duplicating that work.
 
-## Legacy-table transition
+Use the individual notebooks only for diagnosis or controlled replay. Set
+`PROCESS_ONLY` to `YYYY-MM` in `02a_archive_silver` for a single canonical
+month.
 
-Existing `archived_<table>` tables remain readable only while a source-named
-replacement does not exist. To create source-named tables across an existing
-estate, rerun `00_archive_load.ipynb` once with `RESET_ARCHIVE_TABLES=True`.
-Validate the new outputs before retiring legacy tables through normal
-change-control. Where both versions exist, the source-named table wins.
+## Naming transition
+
+Active notebooks use source-named physical tables: `bronze.<table>`,
+`archived.<table>`, and `silver.<table>`. Prefixed physical tables are not read
+by the active pipeline. Rebuild an existing estate using the guarded Silver
+reset and the appropriate live or archive runner before retiring old tables
+through normal change control.
 
 ## Safe single-month recovery
 

@@ -5,14 +5,14 @@ WITH referral_history AS (
     ORDER BY COALESCE(referral_modified_date, referral_created_date, export_date) DESC,
              export_date DESC
   ) AS row_number_current
-  FROM silver.slv_referral
+  FROM silver.referral
 ),
 referral_current AS (
   SELECT * FROM referral_history WHERE row_number_current = 1
 ),
 referral_created AS (
   SELECT referral_id, MIN(referral_created_date) AS ReferralCreatedDate
-  FROM silver.slv_referral GROUP BY referral_id
+  FROM silver.referral GROUP BY referral_id
 ),
 offer_rollup AS (
   SELECT rp.referral_id,
@@ -22,8 +22,8 @@ offer_rollup AS (
     COUNT(DISTINCT o.offer_id) AS OfferCount,
     COUNT(DISTINCT o.provider_home_id) AS UniqueHomesOffered,
     MAX(COALESCE(o.last_modified_date, o.offer_date)) AS LastOfferActivityDate
-  FROM silver.slv_offer o
-  INNER JOIN silver.slv_referral_provider rp
+  FROM silver.offer o
+  INNER JOIN silver.referral_provider rp
     ON o.referral_provider_id = rp.referral_provider_id
   GROUP BY rp.referral_id
 ),
@@ -32,12 +32,12 @@ ipa_rollup AS (
     MIN(placement_admission_date) AS PlannedPlacementStartDate,
     SUM(costs_total_weekly_fee) AS EstimatedWeeklyCost,
     MAX(COALESCE(updated_datetime, created_datetime)) AS LastIPAActivityDate
-  FROM silver.slv_ipa GROUP BY referral_id
+  FROM silver.ipa GROUP BY referral_id
 ),
 event_rollup AS (
   SELECT referral_id, MIN(event_timestamp) AS FirstActionDate,
     MAX(COALESCE(event_timestamp, created_timestamp)) AS LastEventActivityDate
-  FROM silver.slv_referral_lifecycle_event GROUP BY referral_id
+  FROM silver.referral_lifecycle_event GROUP BY referral_id
 ),
 base AS (
   SELECT r.referral_id AS ReferralID, c.ReferralCreatedDate,

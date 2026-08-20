@@ -22,8 +22,8 @@ requirements for the BCT WMPP data-engineering solution.
 | `01_bronze_get_latest` | Latest source files | Current `bronze.*` tables with lineage and export timestamp |
 | `01a_cfg_schema_capture_live` | Bronze catalogue and schema contract | Definition snapshot, live schema, drift events, candidate definition |
 | `01a_cfg_schema_capture_archive` | Archive catalogue and schema contract | Archive live-schema capture/comparison |
-| `02_silver_formatter` | Current Bronze and schema contract | Current `silver.slv_*`, audit rows, drift events, metrics |
-| `02a_archive_silver` | Historical archive tables and contract | Canonical monthly `silver.slv_*`, DQ/Gold orchestration |
+| `02_silver_formatter` | Current Bronze and schema contract | Current `silver.*`, audit rows, drift events, metrics |
+| `02a_archive_silver` | Historical archive tables and contract | Canonical monthly `silver.*`, DQ/Gold orchestration |
 | `03_silver_business_rules` | Silver, schema contract, DQ rule CSV | DQ results, rejected keys, referential exceptions |
 | `04_gold_model` | Current/historical Silver | Gold referral views, lifecycle-event view, and `fact_referral_snapshot` |
 | `05_gold_dimensions` | Silver dimensions and provider bridges | Gold dimensions and bridges for reporting |
@@ -52,8 +52,8 @@ uniqueness, and FK checks. Supported implemented rule types include `NOT_NULL`,
 
 ### 3.3 Shared exclusion policy
 
-`99_common_library.ipynb` normalises supported physical prefixes (`brz_`, `slv_`); archive tables retain their source names
-and excludes the explicit internal tables plus every logical name beginning
+`99_common_library.ipynb` uses source-named physical tables and excludes the
+explicit internal tables plus every logical name beginning
 `ref_`. Exclusion occurs before `export_date` or contract validation. A business
 table such as `referral` is not excluded.
 
@@ -74,7 +74,7 @@ table such as `referral` is not excluded.
 3. Apply configured casts, date/timestamp parsing, whitespace cleanup, and
    null handling.
 4. Deduplicate by the ordered contracted primary key.
-5. Write `silver.slv_<logical_table>` and update audits/metrics.
+5. Write `silver.<logical_table>` and update audits/metrics.
 6. Record missing/extra columns and missing contracts as drift events.
 
 FK parent tables are dependency-ordered before their children where the
@@ -94,7 +94,7 @@ contract supplies valid relationships.
 - If no archived `framework` snapshot exists on or before a canonical month,
   `02a_archive_silver` reads
   `Files/deprecated_wmpp_files/framework.csv`, stamps the canonical monthly
-  snapshot date as `export_date`, and writes `silver.slv_framework` through the
+  snapshot date as `export_date`, and writes `silver.framework` through the
   normal deduplication, formatting, audit, and metric path.
 - An eligible archived framework snapshot always takes precedence. The fallback
   also covers complete physical-table absence and does not create
@@ -147,9 +147,9 @@ raises a combined failure after later eligible items have been attempted.
 
 | Object | Convention |
 |---|---|
-| Current raw | `bronze.<source_table>` or physical `brz_` input variant |
+| Current raw | `bronze.<source_table>` or physical `` input variant |
 | Historical raw | `archived.<source_table>` |
-| Conformed | `silver.slv_<table>` |
+| Conformed | `silver.<table>` |
 | Reporting | `gold.fact_*`, Gold views and configuration |
 | Controls | `monitoring.cfg_*` |
 

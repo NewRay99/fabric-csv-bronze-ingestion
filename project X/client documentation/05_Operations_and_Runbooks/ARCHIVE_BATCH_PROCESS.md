@@ -84,7 +84,7 @@ Use the exact timestamp shown in the audit table.
 
 `02a_archive_silver.ipynb` reads row-level archive batches from
 `archived.<source_table>` and writes them to the same
-`silver.slv_<table>` targets. CamelCase/underscore differences are normalised
+`silver.<table>` targets. CamelCase/underscore differences are normalised
 against the schema contract; the CSV `schema_name` value is not embedded in
 the physical target name.
 
@@ -93,7 +93,7 @@ each table once to obtain its available dates, calculates the global minimum
 and maximum, and selects the final available export date in each calendar
 month. For each monthly snapshot, every table uses its own latest export on or
 before that date. It filters that exact export and applies `row_number()` over
-the contracted primary key before overwriting `silver.slv_<table>`. It does
+the contracted primary key before overwriting `silver.<table>`. It does
 not replay every daily export.
 
 `BATCH_EXPORT_DATE` now selects a calendar month. For example, any date in

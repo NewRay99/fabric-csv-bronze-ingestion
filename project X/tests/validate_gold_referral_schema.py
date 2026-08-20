@@ -78,19 +78,19 @@ print("PASS fact_referral uses current referral extract names, not audit-table n
 
 assert "GOLD_SOURCE_REQUIREMENTS" in source, "missing Gold source preflight"
 for source_table in [
-    "silver.slv_referral",
-    "silver.slv_offer",
-    "silver.slv_referral_provider",
-    "silver.slv_ipa",
-    "silver.slv_referral_lifecycle_event",
+    "silver.referral",
+    "silver.offer",
+    "silver.referral_provider",
+    "silver.ipa",
+    "silver.referral_lifecycle_event",
 ]:
     assert source_table in source, f"preflight does not cover {source_table}"
 assert "Gold source validation failed" in source
 print("PASS Gold fails early with one actionable source-schema message")
 
-assert 'EVENT_ROLLUP_SOURCE = "silver.slv_referral_lifecycle_event"' in source
+assert 'EVENT_ROLLUP_SOURCE = "silver.referral_lifecycle_event"' in source
 assert "source-system referral-event audit log" in source
-assert "slv_referral_event_log" not in source
+assert "referral_event_log" not in source
 assert "FROM {EVENT_ROLLUP_SOURCE}" in fact_cell
 print("PASS Gold uses the derived Silver referral lifecycle event stream")
 
@@ -110,8 +110,8 @@ fixture_sql = (ROOT / "tests" / "_gold_fact_sql.sql").read_text(encoding="utf-8"
 assert not any(line.startswith("+") for line in fixture_sql.splitlines()), (
     "simulation SQL contains a patch-marker character"
 )
-assert 'write(mkdf(referrals), "slv_referral")' in simulation
-assert "slv_referral_aud" not in simulation
+assert 'write(mkdf(referrals), "referral")' in simulation
+assert "referral_aud" not in simulation
 for required_name in [
     "referral_created_date",
     "referral_modified_date",
@@ -122,8 +122,8 @@ for required_name in [
     assert required_name in fixture_sql, f"simulation SQL does not use {required_name}"
 for label, pattern in stale_patterns.items():
     assert not re.search(pattern, fixture_sql, re.IGNORECASE), f"simulation SQL: {label}"
-assert "FROM silver.slv_referral" in fixture_sql
-assert "FROM silver.slv_referral_aud" not in fixture_sql
+assert "FROM silver.referral" in fixture_sql
+assert "FROM silver.referral_aud" not in fixture_sql
 print("PASS Spark simulation fixture mirrors the production flattened referral model")
 
 print("VALIDATION PASSED")

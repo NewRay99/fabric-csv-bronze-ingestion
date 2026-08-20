@@ -30,13 +30,19 @@ monthly Silver/Gold states.
 
 ### 2.1 Standard initial archive load
 
-Run in this order:
+Use `90_run_archive_pipeline` for the standard archive route. It creates one
+`JOB_RUN_ID` and runs the following order:
 
 1. `00_setup_cfg`
 2. `00_archive_load`
 3. `01a_cfg_schema_capture_archive`
-4. Review the archive schema comparison and correct critical contract issues.
-5. `02a_archive_silver`
+4. `02a_archive_silver`
+5. `05_gold_dimensions`
+
+The runner lets `02a_archive_silver` invoke DQ and Gold facts for each month,
+then runs dimensions once as the explicit final step. Use the individual
+notebooks only to investigate schema drift before replay or to perform a
+controlled single-month recovery.
 
 Before step 3, verify that `COMPARED_SCHEMA` points to the deployed archive
 schema. Before step 5, confirm archive business tables contain a valid row-level
@@ -86,7 +92,7 @@ Rehydration reconstructs controls; it does not reload business rows.
   states and no unexplained failures.
 - Archive tables contain the expected dated slices and valid `export_date`.
 - `cfg_silver_export_load` has successful `ARCHIVE_MONTH_END` outcomes.
-- When fallback was required, `silver.slv_framework` has the canonical monthly
+- When fallback was required, `silver.framework` has the canonical monthly
   `export_date`, `_archive_fallback = true`, and the expected `_source_file`.
 - `cfg_data_quality_result` has no unresolved critical failures.
 - `cfg_month_end_gold_run` has one successful row per canonical snapshot date.
@@ -162,13 +168,13 @@ For operational detail, also read:
 If Gold reports missing referral fields, do not run `04_gold_model` by
 itself. First deploy the updated Gold notebook and replace
 `Files/cfg_files/schema_definition.csv` with the project copy. Rerun
-`02a_archive_silver` for the affected month so `silver.slv_referral` is
+`02a_archive_silver` for the affected month so `silver.referral` is
 rebuilt with `placement_type`, `referral_created_date`,
 `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
 successful month-control row, set its reload flag before rerunning.
 
 The source does not deliver a referral event-log table. `03_silver_business_rules
-02 03` therefore derives `silver.slv_referral_lifecycle_event` from actual
+02 03` therefore derives `silver.referral_lifecycle_event` from actual
 Referral, Offer, and IPA timestamps, and Gold uses it for activity timing. It
 is not a source-system audit log. `gold.fact_referral_snapshot` remains a
 snapshot table, not an event history; run Silver business rules before Gold.
@@ -183,8 +189,8 @@ contract foreign keys. `INVALID_JOIN` entries are intentionally excluded from
 DQ referential rules until their parent source is delivered.
 
 The Silver business-rules notebook rebuilds these tables on every successful
-run: `slv_age_band`, `slv_directory_summary_axis`, `slv_fostering_axis`,
-`slv_referral_closure_reason_summary`, and `slv_dim_date`. Verify their schemas
+run: `age_band`, `directory_summary_axis`, `fostering_axis`,
+`referral_closure_reason_summary`, and `dim_date`. Verify their schemas
 and row counts before refreshing the semantic model.
 
 ### Schema capture and inspection
@@ -230,7 +236,7 @@ intentional contract/rule refresh, then return it to `False`.
 
 ## 8. Linked live execution
 
-Use `90_run_live_pipeline.ipynb` for the standard live sequence: setup, Bronze latest, live schema capture, Silver formatter, Silver business rules, Gold facts and Gold dimensions. The detailed archive procedure is in `ARCHIVE_PIPELINE_RUNBOOK.md`.
+Use `90_run_live_pipeline.ipynb` for the standard live sequence: setup, Bronze latest, live schema capture, Silver formatter, Silver business rules, Gold facts and Gold dimensions. Use `90_run_archive_pipeline.ipynb` for the standard archive sequence. The detailed archive procedure is in `ARCHIVE_PIPELINE_RUNBOOK.md`.
 
 The runner prints one `JOB_RUN_ID` and passes it to every child notebook. Use
 that value to follow the whole execution through the monitor tables:

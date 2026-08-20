@@ -6,7 +6,7 @@ Validated locally on 4 August 2026:
 - All Python code cells compile successfully after excluding Fabric `%%sql` cells.
 - The schema contract contains 57 tables and exactly one `export_date` column per table.
 - Every `export_date` contract column is nullable `timestamp without time zone`.
-- Gold-layer Silver references resolve to the `silver.slv_<table>` naming convention.
+- Gold-layer Silver references resolve to the `silver.<table>` naming convention.
 - Resumable-load static checks confirm export auditing, reload control, failed-month retry, canonical month-end materialisation, and the `AS_OF_DATE` hand-off are present.
 - Archive-ingestion static checks confirm global table/export, ZIP, and file controls; row-level `export_date`; source-file replacement where file lineage exists; export-date-only rehydration for older tables; and exclusion of the non-contract `audit` table.
 - Date-only `2026-07-26` and fractional timestamp values `2026-05-19 08:51:41.0` and `2026-06-05 09:28:43.959135` are covered by the corrected Spark parser configuration in both Silver notebooks.

@@ -90,8 +90,8 @@ archive_silver_source = notebook_source(PROJECT / "02a_archive_silver.ipynb")
 assert "ARCHIVE_PREFIXES" not in archive_silver_source
 assert 'EXCLUDED_ARCHIVE_TABLES = {"audit"}' in archive_silver_source
 assert 'resolve_contract(archive_logical_name(physical_table), ())' in archive_silver_source
-assert "source_named_logicals" in archive_silver_source
-assert "legacy_shadowed_tables" in archive_silver_source
+assert "physical_tables = candidate_tables" in archive_silver_source
+assert 'startswith("archived_")' not in archive_silver_source
 assert "RUN_GOLD_DIMENSIONS_AT_MONTH_END = True" in archive_silver_source
 assert 'GOLD_DIMENSIONS_NOTEBOOK_NAME = "05_gold_dimensions"' in archive_silver_source
 
@@ -102,8 +102,8 @@ for required in (
     ".dim_provider_submission_document", ".bridge_provider_sic_code",
 ):
     assert required in dimension_source, f"Missing Gold dimension target: {required}"
-assert "silver.slv_provider_submission_docs" in dimension_source
-assert "silver.slv_provider_sic_codes" in dimension_source
+assert "silver.provider_submission_docs" in dimension_source
+assert "silver.provider_sic_codes" in dimension_source
 
 live_source = notebook_source(PROJECT / "90_run_live_pipeline.ipynb")
 expected_live_order = [
@@ -116,7 +116,8 @@ assert positions == sorted(positions), "Live runner order is incorrect"
 
 archive_runbook = PROJECT / "client documentation" / "05_Operations_and_Runbooks" / "ARCHIVE_PIPELINE_RUNBOOK.md"
 assert archive_runbook.exists(), "Archive runbook is missing"
-assert "00_archive_load.ipynb" in archive_runbook.read_text(encoding="utf-8")
+assert "90_run_archive_pipeline" in archive_runbook.read_text(encoding="utf-8")
+assert (PROJECT / "90_run_archive_pipeline.ipynb").exists(), "Archive runner is missing"
 
 field_status = PROJECT / "client documentation" / "Supplementary" / "ETL_FIELD_IMPLEMENTATION_STATUS.md"
 assert field_status.exists(), "Supplementary field implementation status is missing"

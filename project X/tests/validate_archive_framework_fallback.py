@@ -62,8 +62,8 @@ require("if not framework_archive_present:", "missing fallback-only registration
 require('"is_fallback_only": True', "fallback-only source is not marked")
 require('"source_schema": "Files"', "fallback audit source is not truthful")
 require(
-    '"target_table": f"{SILVER_SCHEMA}.slv_{FRAMEWORK_FALLBACK_TABLE}"',
-    "fallback target is not silver.slv_framework",
+    '"target_table": f"{SILVER_SCHEMA}.{FRAMEWORK_FALLBACK_TABLE}"',
+    "fallback target is not silver.framework",
 )
 require(
     "if contract_key is None and is_framework_table:",

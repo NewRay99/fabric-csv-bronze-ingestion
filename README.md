@@ -4,8 +4,8 @@ This repository contains the BCT implementation of the
 West Midlands Placement Portal (WMPP) data platform in Microsoft Fabric.
 
 The active client implementation is under [`project X`](project%20X/). The
-repository-level `scripts`, `references`, and `SKILL.md` retain reusable
-ingestion material; they are not the production WMPP notebook chain.
+production WMPP notebook chain has no dependency on the retired repository
+script folder.
 
 ## Repository layout
 
@@ -17,7 +17,7 @@ ingestion material; they are not the production WMPP notebook chain.
 | `project X/configuration/` | Version-controlled schema and DQ configuration deployed to Fabric Files |
 | `project X/tests/` | Portable static regression checks and Spark simulation harness |
 | `archive/` | Superseded layouts and versions retained for recovery/reference |
-| `scripts/` | Reusable or supporting ingestion scripts |
+| `archive/2026-08-16-reorganisation/scripts/` | Retired repository scripts retained for reference |
 | `references/` | Generic Fabric reference material |
 
 Start with [`project X/README.md`](project%20X/README.md).

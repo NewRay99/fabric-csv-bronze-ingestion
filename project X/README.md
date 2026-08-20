@@ -31,6 +31,7 @@ in this folder are the current notebook set promoted from version 02 04 on
 | `04_gold_model.ipynb` | Builds the current/historical referral Gold model and snapshots |
 | `05_gold_dimensions.ipynb` | Builds Gold reporting dimensions and provider bridges from Silver |
 | `90_run_live_pipeline.ipynb` | Runs the standard live Bronze-to-Gold notebook sequence |
+| `90_run_archive_pipeline.ipynb` | Runs the monitored archive hydration and historical replay sequence |
 
 ## Supporting folders
 

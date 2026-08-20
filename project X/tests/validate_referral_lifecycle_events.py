@@ -18,7 +18,7 @@ def source(path):
 
 def main():
     setup = source(SETUP)
-    assert "silver.slv_referral_event_log" not in setup, (
+    assert "silver.referral_event_log" not in setup, (
         "Setup must not fabricate a Silver event-log source table"
     )
     print("PASS setup does not fabricate a referral event-log source")
@@ -27,15 +27,15 @@ def main():
     for token in [
         "referral_lifecycle_event", "ReferralCreated", "ReferralModified",
         "OfferSubmitted", "OfferUpdated", "IPACreated", "IPAUpdated",
-        "IPAAdmission", "ProviderMessageSent", "silver.slv_referral_provider",
+        "IPAAdmission", "ProviderMessageSent", "silver.referral_provider",
     ]:
         assert token in silver, f"Silver lifecycle materialisation lacks {token}"
     print("PASS Silver materialises lifecycle events from real sources")
 
     gold = source(GOLD)
-    assert "silver.slv_referral_lifecycle_event" in gold
+    assert "silver.referral_lifecycle_event" in gold
     assert "gold.fact_referral_lifecycle_event" in gold
-    assert "silver.slv_referral_event_log" not in gold
+    assert "silver.referral_event_log" not in gold
     assert "gold.fact_referral_event_log" not in gold
     print("PASS Gold uses derived lifecycle events, not a nonexistent audit source")
 

@@ -173,11 +173,11 @@ def mkdf(rows):
     _tmp_dirs.append(d)
     return spark.read.json("file:///" + d.replace("\\", "/"))
 
-write(mkdf(referrals), "slv_referral")
-write(mkdf(providers), "slv_referral_provider")
-write(mkdf(offers), "slv_offer")
-write(mkdf(ipas), "slv_ipa")
-write(mkdf(events), "slv_referral_lifecycle_event")
+write(mkdf(referrals), "referral")
+write(mkdf(providers), "referral_provider")
+write(mkdf(offers), "offer")
+write(mkdf(ipas), "ipa")
+write(mkdf(events), "referral_lifecycle_event")
 print("Silver tables written")
 
 GOLD_FACT_SQL = open(os.path.join(TEST_ROOT, "_gold_fact_sql.sql"), encoding="utf-8").read()

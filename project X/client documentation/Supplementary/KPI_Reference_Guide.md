@@ -11,23 +11,23 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 
 | Gold Table | Silver Source | Schema Definition Table | Functional Area |
 |-----------|--------------|----------------------|-----------------|
-| fact_referral_offer | slv_referral_provider | referral.referral_provider | Referral → Provider mapping |
-| fact_offer | slv_offer | offer.offer | Provider offers |
-| fact_ipa | slv_ipa | ipa.ipa | Individual Placement Agreements |
-| fact_referral | slv_referral | referral.referral | Referral header |
-| dim_provider | slv_provider | provider.provider | Provider master |
-| dim_provider_home | slv_provider_home | provider.provider_home | Provider homes |
-| dim_provider_framework | slv_provider_framework | provider.provider_framework | Provider-framework link |
-| fact_referral_person | slv_person | referral.person | Child demographics |
-| fact_referral_category | slv_referral_category | referral.referral_category | Referral categories |
-| fact_provider_message | slv_referral_provider_message | referral.referral_provider_message | Inter-party messages |
-| fact_referral_gender | slv_person | referral.person | Gender aggregation |
-| fact_referral_lifecycle_event | slv_referral_lifecycle_event | Derived from referral, offer, and IPA timestamps | Referral lifecycle timing; not a source audit trail |
-| dim_s3_file_metadata | slv_s3_file_metadata | document.s3_file_metadata | Document metadata |
-| dim_provider_document | slv_provider_document | provider.provider_document | Provider docs |
-| dim_submission_documents | slv_submission_documents | provider.submission_documents | Onboarding docs |
-| fact_referral_provider_decline_reason | slv_referral_provider_decline_reason | referral.referral_provider_decline_reason | Decline reasons |
-| dim_offer_status | slv_offer (derived) | offer.offer | Offer status lookup |
+| fact_referral_offer | referral_provider | referral.referral_provider | Referral → Provider mapping |
+| fact_offer | offer | offer.offer | Provider offers |
+| fact_ipa | ipa | ipa.ipa | Individual Placement Agreements |
+| fact_referral | referral | referral.referral | Referral header |
+| dim_provider | provider | provider.provider | Provider master |
+| dim_provider_home | provider_home | provider.provider_home | Provider homes |
+| dim_provider_framework | provider_framework | provider.provider_framework | Provider-framework link |
+| fact_referral_person | person | referral.person | Child demographics |
+| fact_referral_category | referral_category | referral.referral_category | Referral categories |
+| fact_provider_message | referral_provider_message | referral.referral_provider_message | Inter-party messages |
+| fact_referral_gender | person | referral.person | Gender aggregation |
+| fact_referral_lifecycle_event | referral_lifecycle_event | Derived from referral, offer, and IPA timestamps | Referral lifecycle timing; not a source audit trail |
+| dim_s3_file_metadata | s3_file_metadata | document.s3_file_metadata | Document metadata |
+| dim_provider_document | provider_document | provider.provider_document | Provider docs |
+| dim_submission_documents | submission_documents | provider.submission_documents | Onboarding docs |
+| fact_referral_provider_decline_reason | referral_provider_decline_reason | referral.referral_provider_decline_reason | Decline reasons |
+| dim_offer_status | offer (derived) | offer.offer | Offer status lookup |
 
 ---
 
