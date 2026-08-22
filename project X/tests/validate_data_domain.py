@@ -46,6 +46,8 @@ assert "MAX_DISTINCT_VALUES = 40" in source
 assert "CLEAR_TARGET_TABLE = False" in source
 assert "%run ./99_common_library" in source
 assert "collect_low_cardinality_domain_values" in source
+assert "data_domain_exclusion_reason(source_column, contract_data_type)" in source
+assert "skipped_unsuitable" in source
 assert "if values is None" in source
 assert "remove_data_domain(DOMAIN_TABLE" in source
 assert "clear_data_domain_table(DOMAIN_TABLE)" in source
@@ -54,6 +56,11 @@ assert "mssparkutils.notebook.run" in source
 assert "CFG_NOTEBOOK_NAME = \"00_setup_cfg\"" in source
 
 assert "def is_contract_string" in common_source
+assert "def data_domain_exclusion_reason" in common_source
+assert "identifier_type" in common_source
+assert "email_address" in common_source
+assert "audit_user" in common_source
+assert "free_text" in common_source
 assert "def collect_low_cardinality_domain_values" in common_source
 assert "max_distinct_values + 1" in common_source
 assert "if len(values) > max_distinct_values" in common_source

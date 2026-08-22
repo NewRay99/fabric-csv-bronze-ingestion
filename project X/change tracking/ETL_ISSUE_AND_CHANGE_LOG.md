@@ -836,3 +836,19 @@ note that these dates must be greater than the ipa_placement_admission_date and 
 - **Validation:** `validate_data_domain.py` verifies the 41st-value guard,
   shared-library use, optional full clear, and atomic eligible-domain replace.
 - **Status:** Resolved in the repository.
+
+## CFG-004 — Unsuitable string columns could be considered for data domains
+
+- **Symptom:** the profiler could consider identifier, audit-user, contact,
+  personal-name, address, and free-text columns before the cardinality limit
+  excluded most of them. These are not lookup-like business domains.
+- **Cause:** candidate selection was based only on the contract's string type;
+  it did not apply a data-suitability policy to column names or GUID/UUID types.
+- **Fix:** `99_common_library.ipynb` now applies a shared exclusion policy for
+  UUID/GUID/UID and identifier fields, `created_by`/`updated_by`-style audit
+  fields, usernames and names, email/contact/address fields, and descriptive
+  or message text. `99_data_domain.ipynb` applies this policy before collecting
+  a column's values and removes any stale domain that is no longer suitable.
+- **Validation:** `validate_data_domain.py` verifies the shared suitability
+  helper and the profiler's unsuitable-column branch.
+- **Status:** Resolved in the repository.
