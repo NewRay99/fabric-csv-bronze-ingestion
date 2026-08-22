@@ -91,8 +91,10 @@ print("PASS Gold fails early with one actionable source-schema message")
 assert 'EVENT_ROLLUP_SOURCE = "silver.referral_lifecycle_event"' in source
 assert "source-system referral-event audit log" in source
 assert "referral_event_log" not in source
-assert "FROM {EVENT_ROLLUP_SOURCE}" in fact_cell
-print("PASS Gold uses the derived Silver referral lifecycle event stream")
+assert "FROM {EVENT_ROLLUP_SOURCE}" in source
+assert "SELECT * FROM silver.referral_enrichment" in fact_cell
+assert "x.first_action_date AS FirstActionDate" in fact_cell
+print("PASS Gold exposes lifecycle events separately and promotes derived referral dates from Silver")
 
 
 issue_log = (

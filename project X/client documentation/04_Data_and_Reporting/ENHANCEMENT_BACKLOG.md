@@ -36,6 +36,26 @@ The placement’s estimated start, estimated end, actual start, actual end, dura
 
 # Recommended referral dates
 
+## Implemented Gold fact mappings
+
+The active Gold model now implements the source-supported backlog facts as
+views. `gold.fact_referral_snapshot` carries the full referral fact shape for
+each reporting snapshot, while `gold.fact_offer`, `gold.fact_placement`, and
+`gold.fact_referral_provider` retain their natural source grains.
+
+| Backlog fact | Implemented Gold object | Notes |
+|---|---|---|
+| `FactReferral` | `gold.fact_referral` | Includes ChildID, lifecycle dates, closure reason, current status, activity, placement type, urgency-as-priority and enrichment fields. `Region` and `ComplexityBand` are null until reliable source attributes are delivered. |
+| `FactReferralSnapshot` | `gold.fact_referral_snapshot` | Carries all listed referral fields plus snapshot-specific KPI fields; the active month is atomically replaced by the latest daily extract. |
+| `FactOffer` | `gold.fact_offer` | One row per offer, linked to referral, provider and home, with submitted/reviewed/decision dates, status, planned start, weekly cost and rejection reason. |
+| `FactPlacement` | `gold.fact_placement` | One row per IPA, linked to referral and IPA offer, with IPA issue/admission, cost, status and closure information. Actual start/end, actual cost and end reason remain null because the delivered source does not provide them. |
+| Provider response | `gold.fact_referral_provider` | One row per referral-provider assignment with supplied status flags and first observed extract date. |
+
+`ChildID` is the stable minimum delivered `referral_person.person_id` for a
+referral. This preserves the one-row-per-referral fact grain; multi-child
+analysis should use the child-grain source relation rather than treating this
+convenience field as a complete child bridge.
+
 ## Essential board-reporting dates
 
 | Date | Meaning | Main board use |

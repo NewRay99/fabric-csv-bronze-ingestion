@@ -61,6 +61,7 @@ The proposed solution adopts the **medallion architecture** (also known as the m
 3. **Gold as semantic contract:** The Gold layer is the single source of truth for analytics. All 117 KPIs are materialised as Spark SQL views, ensuring that Power BI, ad-hoc queries, and future consumers all reference identical logic.
 4. **Direct Lake connectivity:** Power BI connects to Gold Delta tables in Direct Lake mode, bypassing import refresh and providing near-real-time data.
 5. **Auditability:** Every Bronze table includes ingestion metadata columns (`_ingestion_timestamp`, `_source_file`, `_ingestion_id`). The implemented Gold lifecycle-event view is derived from available Silver timestamps; it is not a full source-system audit trail.
+6. **Derived-data boundary:** Cross-table KPIs are materialised in dedicated Silver derived relations, not added to raw-source contracts. This makes their lineage, validation and reuse explicit while keeping source-conformed tables replayable.
 
 ### 2.3 Source Systems
 
@@ -198,6 +199,24 @@ For each Bronze table, the notebook:
 
 Deduplication is performed by partitioning the dataset by primary key columns and selecting the row with the highest `_ingestion_timestamp` within each partition. This ensures that the most recently ingested record for each entity is retained.
 
+### 4.2a Derived Silver enrichment and validation
+
+`03_silver_business_rules` materialises `silver.referral_enrichment` after
+the source-conformed Silver tables are available. It contains one row per
+referral and the reusable calculations needed for operational reporting:
+
+- offer count and first-offer date;
+- first date that a referral-provider row was observed, plus a no-provider-row flag;
+- IPA admission, signature-completion and last-signature dates; and
+- the earliest eligible provider-document review date after IPA admission.
+
+The enrichment is intentionally derived from delivered source fields. In
+particular, the source does not expose a provider *viewed* timestamp, so
+`first_provider_seen_date` means first observation of a `referral_provider`
+row in an extract, not a user-interface view event. Configuration-driven DQ
+checks enforce the one-row-per-referral key, non-negative offers, populated
+flags, and applicable date ordering.
+
 ### 4.3 Notebook 3 — Gold Translator
 
 | Attribute | Detail |
@@ -228,6 +247,25 @@ Each KPI view is named `vw_kpi_<category>_<kpi_name>` and returns a single aggre
 - Group-by dimensions
 
 This approach ensures that KPI logic is version-controlled, testable, and identical across all consumers (Power BI, notebooks, API queries).
+
+### 4.3a Snapshot replacement and archive replay
+
+`gold.fact_referral_snapshot` is a monthly point-in-time store. Each live or
+archive run atomically replaces all snapshot rows in the active calendar month
+with the latest available extract; completed prior months are retained. This
+prevents daily mid-month archive exports from accumulating competing snapshot
+dates while still allowing an archive replay to refresh the current month.
+
+Gold additionally preserves natural fact grains alongside the referral fact:
+`gold.fact_offer` (one offer), `gold.fact_placement` (one IPA) and
+`gold.fact_referral_provider` (one referral-provider assignment). The source
+does not yet deliver reliable region, complexity, actual placement end/cost or
+end-reason fields; their nullable Gold columns make that controlled source gap
+visible to reporting and data-governance work.
+
+Archive orchestration passes the selected canonical export date to Gold and
+allows two hours per child notebook. This accommodates multi-table historical
+replays while retaining the existing monitoring and failure controls.
 
 ---
 
