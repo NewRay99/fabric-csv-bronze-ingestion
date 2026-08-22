@@ -48,9 +48,7 @@ print("PASS shared/setup parser policy is self-contained")
 CFG_CALLERS = [
     "00a_rehydrate_archive_cfg.ipynb",
     "00b_reset_silver_cfg.ipynb",
-    "02_silver_formatter.ipynb",
     "02a_archive_silver.ipynb",
-    "05_gold_dimensions.ipynb",
 ]
 for name in CFG_CALLERS:
     text = source(notebooks[name])

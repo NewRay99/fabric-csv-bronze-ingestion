@@ -7,6 +7,9 @@ IPA_TOTAL_FEE_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,ipa,ipa,costs_total_weekly_fe
 REFERRAL_ENRICHMENT_KEY_UNIQUE,true,CRITICAL,UNIQUE,silver,referral_enrichment,referral_id,,,,,,Referral enrichment must have one row per referral
 REFERRAL_ENRICHMENT_OFFER_COUNT_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,cnt_offer_made,,,,,,Derived offer count must be present and defaults to zero when no offer exists
 REFERRAL_ENRICHMENT_OFFER_COUNT_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,silver,referral_enrichment,cnt_offer_made,,,,>=,0,Derived offer count must not be negative
+REFERRAL_ENRICHMENT_UNIQUE_HOMES_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,unique_homes_offered,,,,,,Derived unique-home count must be present and defaults to zero when no offer exists
+REFERRAL_ENRICHMENT_UNIQUE_HOMES_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,silver,referral_enrichment,unique_homes_offered,,,,>=,0,Derived unique-home count must not be negative
+REFERRAL_ENRICHMENT_ESTIMATED_COST_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,silver,referral_enrichment,estimated_weekly_cost,,,,>=,0,Derived estimated weekly cost must not be negative when supplied
 REFERRAL_ENRICHMENT_PROVIDER_SEEN_FLAG_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,is_not_seen_by_providers,,,,,,Provider-observation flag must be present for every referral
 REFERRAL_ENRICHMENT_FIRST_ACTION_AFTER_CREATED,true,ERROR,DATE_ORDER,silver,referral_enrichment,first_action_date,silver,referral_enrichment,referral_created_date,>=,,First action cannot precede referral creation and excludes the creation event itself
 REFERRAL_ENRICHMENT_FIRST_OFFER_AFTER_CREATED,true,ERROR,DATE_ORDER,silver,referral_enrichment,first_offer_date,silver,referral_enrichment,referral_created_date,>=,,First offer cannot precede the referral creation timestamp

@@ -27,6 +27,12 @@ names, and `gold.fact_referral_snapshot` includes them for point-in-time
 reporting. The raw `silver.referral` contract is not changed because it remains
 the source-conformed replayable relation.
 
+All referral-grain calculations, including offer count, unique homes offered,
+estimated weekly IPA cost and lifecycle dates, are calculated once in this
+Silver relation. Gold projects these fields and does not repeat offer or IPA
+rollups for the referral fact. The separate Offer and Placement facts still
+retain their own source grain by design.
+
 ### Derived-date lineage
 
 The following dates are calculated in `03_silver_business_rules.ipynb` and

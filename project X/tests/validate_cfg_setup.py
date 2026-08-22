@@ -8,15 +8,18 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8")
 PROJECT = Path(__file__).resolve().parents[1]
 SETUP = "00_setup_cfg.ipynb"
-CONSUMERS = [
+SELF_SETUP_CONSUMERS = [
     "00_archive_load.ipynb",
     "00a_rehydrate_archive_cfg.ipynb",
     "00b_reset_silver_cfg.ipynb",
     "01_bronze_get_latest.ipynb",
-    "01a_cfg_schema_capture_live.ipynb",
     "01a_cfg_schema_capture_archive.ipynb",
-    "02_silver_formatter.ipynb",
     "02a_archive_silver.ipynb",
+    "99_data_domain.ipynb",
+]
+RUNNER_MANAGED_CONSUMERS = [
+    "01a_cfg_schema_capture_live.ipynb",
+    "02_silver_formatter.ipynb",
     "03_silver_business_rules.ipynb",
     "04_gold_model.ipynb",
     "05_gold_dimensions.ipynb",
@@ -34,6 +37,7 @@ REQUIRED_TABLES = {
     "monitoring.cfg_archive_file_load",
     "monitoring.cfg_archive_table_export_load",
     "monitoring.cfg_schema_contract_column",
+    "monitoring.cfg_data_domain",
     "monitoring.cfg_bronze_schema_live",
     "monitoring.cfg_archived_schema_live",
     "monitoring.cfg_schema_definition_candidate",
@@ -77,7 +81,7 @@ ddl_pattern = re.compile(
     re.IGNORECASE,
 )
 
-for name in CONSUMERS:
+for name in SELF_SETUP_CONSUMERS:
     notebook, cells, source = load(name)
     parameter_source = next(
         "".join(cell.get("source", []))
@@ -118,7 +122,38 @@ for name in CONSUMERS:
     if ddl_pattern.search(source):
         errors.append(f"{name}: config DDL/seed logic remains outside {SETUP}")
 
-for path in [PROJECT / SETUP] + [PROJECT / name for name in CONSUMERS]:
+live_runner, _, live_runner_source = load("90_run_live_pipeline.ipynb")
+expected_live_steps = [
+    "00_setup_cfg",
+    "01a_cfg_schema_capture_live",
+    "02_silver_formatter",
+    "03_silver_business_rules",
+    "04_gold_model",
+    "05_gold_dimensions",
+]
+for step_name in expected_live_steps:
+    if step_name not in live_runner_source:
+        errors.append(f"90_run_live_pipeline.ipynb: missing {step_name}")
+if live_runner_source.find('("00_setup_cfg", {})') > live_runner_source.find(
+    '("01a_cfg_schema_capture_live", {})'
+):
+    errors.append("90_run_live_pipeline.ipynb: 00_setup_cfg must remain first")
+
+for name in RUNNER_MANAGED_CONSUMERS:
+    _, _, source = load(name)
+    if "mssparkutils.notebook.run" in source and "00_setup_cfg" in source:
+        errors.append(f"{name}: runner-managed child still invokes 00_setup_cfg")
+    if "CFG_NOTEBOOK_NAME" in source:
+        errors.append(f"{name}: runner-managed child retains CFG_NOTEBOOK_NAME")
+    if ddl_pattern.search(source):
+        errors.append(f"{name}: config DDL/seed logic remains outside {SETUP}")
+
+for path in (
+    [PROJECT / SETUP]
+    + [PROJECT / name for name in SELF_SETUP_CONSUMERS]
+    + [PROJECT / name for name in RUNNER_MANAGED_CONSUMERS]
+    + [PROJECT / "90_run_live_pipeline.ipynb"]
+):
     notebook = json.loads(path.read_text(encoding="utf-8"))
     for index, cell in enumerate(notebook["cells"]):
         if cell.get("cell_type") != "code":

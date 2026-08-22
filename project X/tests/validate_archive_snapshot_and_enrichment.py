@@ -61,6 +61,8 @@ print("PASS ARCH-ETL-002 and LIVE-ETL-001 replace, rather than accumulate, the a
 
 required_fields = {
     "cnt_offer_made",
+    "unique_homes_offered",
+    "estimated_weekly_cost",
     "first_action_date",
     "first_offer_date",
     "offer_accepted_date",
@@ -88,6 +90,15 @@ assert "x.offer_accepted_date AS OfferAcceptedDate" in gold
 assert "x.ipa_issued_date AS IPAIssuedDate" in gold
 assert "x.referral_closed_date AS ReferralClosedDate" in gold
 assert "x.last_activity_date AS LastActivityDate" in gold
+fact_cell = next(
+    cell for cell in json.loads(GOLD.read_text(encoding="utf-8-sig"))["cells"]
+    if "CREATE OR REPLACE VIEW gold.fact_referral AS" in "".join(cell.get("source", []))
+)
+fact_source = "".join(fact_cell.get("source", []))
+assert "offer_rollup AS" not in fact_source
+assert "ipa_rollup AS" not in fact_source
+assert "x.unique_homes_offered AS UniqueHomesOffered" in fact_source
+assert "x.estimated_weekly_cost AS EstimatedWeeklyCost" in fact_source
 print("PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present")
 
 for field in {

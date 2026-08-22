@@ -740,3 +740,31 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   directly to `gold.fact_referral` and `gold.fact_referral_snapshot`.
 - **Validation:** date-order DQ rules enforce that each applicable derived
   date is not earlier than referral creation.
+
+### SI-021 — Live child notebooks repeated configuration setup
+
+- **Symptom:** after `90_run_live_pipeline` had successfully executed
+  `00_setup_cfg`, each live child invoked the same setup notebook again.
+  This added avoidable child notebook startup and configuration work.
+- **Fix:** `01a_cfg_schema_capture_live`, `02_silver_formatter`,
+  `03_silver_business_rules`, `04_gold_model`, and `05_gold_dimensions` now
+  rely on the runner-owned setup step. The runner keeps `00_setup_cfg` as its
+  mandatory first activity; each child records that prerequisite in its source.
+- **Operational note:** run the live pipeline, rather than an individual listed
+  child, when bootstrapping a new Lakehouse environment.
+- **Validation:** `validate_cfg_setup.py` verifies both the setup-first runner
+  order and the absence of setup invocations in runner-managed children.
+
+### CFG-002 — Low-cardinality Bronze data domains were not recorded
+
+- **Fix:** `99_data_domain.ipynb` profiles every Bronze column that has an
+  unambiguous string-compatible type in
+  `monitoring.cfg_schema_contract_column`. It writes the source schema, table,
+  column, contract type, and distinct value to `monitoring.cfg_data_domain`.
+- **Limit and refresh behaviour:** only non-null (and, by default, non-empty)
+  domains with at most 40 values are stored. The notebook reads at most 41
+  distinct values before deciding; a larger or empty domain removes any stale
+  stored values. Eligible columns are replaced atomically per source table and
+  column, so domains reflect the latest successful profile.
+- **Validation:** `validate_data_domain.py` checks the contract-driven filter,
+  40-value cap, replace semantics, and centrally owned configuration schema.
