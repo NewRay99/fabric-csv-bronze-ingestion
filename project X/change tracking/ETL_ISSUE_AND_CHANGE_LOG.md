@@ -546,3 +546,137 @@ and day-name attributes.
 - **Operations:** `90_run_live_pipeline.ipynb` links the standard live
   sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence
   and safe single-month recovery controls.
+
+## ARCH-ETL-001 - archive_pipeline
+running the 90_run_archive_pipeline notebook at the 02a_archive_silver step notebook i get an error. the error message is captured in the monitoring tables which means the logging tables works
+
+select 
+* from monitoring.vw_job_step_summary
+
+heres the error An error occurred while calling o6949.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Timeout when exe cell - 13 in notebook 02a_archive_silver, code length = 11912 and it costs 1800.0s. You can set timeout parameter to mitigate the issue. Please check the doc https://go.microsoft.com/fwlink/?linkid=2152237#notebook-utilities for details.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
+
+please extend the time for the runtime allowance.
+
+## ARCH-ETL-002 - archive_pipeline -multiple current month snapshots
+running the 90_run_archive_pipeline notebook at the 02a_archive_silver i noticed it creates a snapshot table for the LATEST current month for example the latest archive extract is 2026-08-20 so a snapshot of the previous current month (if archive load was loaded yesterday) will be 19 august 2026. in this situation the most current snapshot in the target table (2026-08-19) should be overwriting with the latest ready to snapshot 2026-08-20  data... its should do this step each time the archive pipeline is run daily for any reason.  
+in summary the latest batch if its mid month should be overwritten with the current data in the archive current batch. example Month-end batches: 5; 2026-04-30, 2026-05-30, 2026-06-30, 2026-07-31, 2026-08-20
+should allow overwrite into snapshot for these months... the last batch for the latest data: 2026-08-20 should follow the steps...  delete previous snapshot for that month  2026-08 which might be anything between 2026-08-01 -  2026-08-19 and the insert into the snapshot
+
+## LIVE-ETL-001 - live_pipeline -multiple current month snapshots
+i suspect the 90_run_live_pipeline has the same issue as ARCH-ETL-002. could this also be added to the live pipeline.
+
+
+## SI-018 - missing derived columns
+i have asked if you can add the fields to the silver tables to enhance the details, these additional fields arent only restricted to the referrals table but the ipa table, or the referral_provider or offers table.. here are the derived fields in a markdown \project X\client documentation\04_Data_and_Reporting\ENHANCEMENT_BACKLOG.md . 
+
+please asses whether these enhancements should be made in the silver layer or the gold layer.. if decision is made to perform the derivations in the silver then  promote these fields upto the gold layer and and to the snapshot table if these columns are added to the referrals table.. 
+could you please add these to the relevant gold tables and have dataquality rules added for them, 
+
+please update the 03_Architecture_and_Design/Proposed_Solution_Architecture.md appropriately with the changes
+
+## SI-019 - new derived columns
+also in the fact referral table can we have new enhanced fields such as.. please review these KPI and add or update them to the project X/client documentation/02_Assessment_and_Requirements docs.... 
+
+ - referral.cnt_offer_made (aggregate_fact of offers made for referral)
+```select  o.offer_status , count(*)
+      from bronze.referral a
+      left join bronze.referral_provider b on a.referral_id=b.referral_id
+      inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+      group by all
+```
+  - - result
+        OFFER_UNSUCCESSFUL,18
+        DRAFT,414
+        OFFER_SUCCESSFUL,6
+        OFFER_MADE,1095
+        OFFER_WITHDRAWN,78
+  - referral.first_offer_date:this might be useful in the snapshot tabel to see how responsive the providers are to making an offer
+```select  a.referral_id,min(o.offer_date) as first_offer_date 
+      from bronze.referral a
+      left join bronze.referral_provider b on a.referral_id=b.referral_id
+      inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+      group by all
+```
+  - referral.first_provider_seen_date :referrals without offers and no views by providers: the script below will show referrals that havent been looked at yet
+```
+with 
+cte_view_referral (select  distinct a.referral_id, MIN(created_date) min_seen_date
+from bronze.referral a
+inner join bronze.referral_provider b on a.referral_id=b.referral_id
+)
+select  cte_r.referral_id , min_seen_date as first_provider_seen_date
+ from bronze.referral a
+inner join cte_view_referral cte_r on cte_r.referral_id=a.referral_id
+```
+
+  - referral.is_not_seen_by_providers :referrals without offers and no views by providers: the script below will show referrals that havent been looked at yet
+```
+with 
+cte_view_referral (select  distinct a.referral_id
+from bronze.referral a
+anti join bronze.referral_provider b on a.referral_id=b.referral_id
+)
+select count(distinct cte_r.referral_id) no_viewed_by_ref
+ from bronze.referral a
+anti join bronze.ipa c on a.referral_id=c.referral_id
+inner join cte_view_referral cte_r on cte_r.referral_id=a.referral_id
+```
+
+ - referral.ipa_placement_admission_date :if succesfully assigned to a proivder the child will have an admission date
+   
+```
+select a.referral_id,  c.placement_admission_date as ipa_placement_admission_date
+ from bronze.referral a
+left join bronze.referral_provider b on a.referral_id=b.referral_id
+inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+left join bronze.provider_home ph on o.provider_home_id =ph.provider_home_id
+inner join bronze.ipa c on a.referral_id=c.referral_id
+```
+
+ - referral.ipa_2_signatures :if succesfully assigned to a proivder the child will have an admission date
+   
+```
+select a.referral_id,  c.status   
+ from bronze.referral a
+left join bronze.referral_provider b on a.referral_id=b.referral_id
+inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+left join bronze.provider_home ph on o.provider_home_id =ph.provider_home_id
+inner join bronze.ipa c on a.referral_id=c.referral_id
+```
+various status are 
+SIGNED
+READY_FOR_SIGNATURE
+DRAFT
+SIGNED_BY_PROVIDER
+SIGNED_BY_LA
+
+where 'SIGNED' means its signed by at least to bodies
+
+ - referral.ipa_last_signature_date: if successfully assigned to a provider the child will have an admission date
+   
+```
+select a.referral_id,  GREATEST(signed_datetime_for_local_authority, signed_datetime_for_provider,   can_sign_date) as ipa_last_signature_date
+ from bronze.referral a
+left join bronze.referral_provider b on a.referral_id=b.referral_id
+inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+left join bronze.provider_home ph on o.provider_home_id =ph.provider_home_id
+inner join bronze.ipa c on a.referral_id=c.referral_id
+```
+
+-- ipa.duedilgence_min_review_date
+```
+select  distinct  a.referral_id, c.status, psd.document_name
+,  psd.expiry_date , psd.last_updated, psd.next_review_date
+ from bronze.referral a
+left join bronze.referral_provider b on a.referral_id=b.referral_id
+inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
+left join bronze.provider_home ph on o.provider_home_id =ph.provider_home_id
+inner join bronze.ipa c on a.referral_id=c.referral_id and c.offer_id=o.offer_id
+inner join bronze.provider_submission_docs psd on psd.home_id =o.provider_home_id
+where a.referral_id = '5236db3f-cc23-4109-9c0b-eacfb4a277bb'
+```
+note that these dates must be greater than the ipa_placement_admission_date and not null as this implies that the provider hasnt got the right paperwork inplace 
+
+
+      
