@@ -852,3 +852,11 @@ note that these dates must be greater than the ipa_placement_admission_date and 
 - **Validation:** `validate_data_domain.py` verifies the shared suitability
   helper and the profiler's unsuitable-column branch.
 - **Status:** Resolved in the repository.
+
+## SI-022 — missing fields from the bronze layer
+
+- **Symptom:** gold dimension step is failing
+- **Cause:** this is due to silver layer not extracting fields from the bronze layer
+- this needs to map new or missing columns from the bronze layer into the silver layer..
+- the schema discovery process should have [icked them up and added them to the silver layer... these columns need to be highlighted so we can update the configuration\schema_definition.csv accordingly ... i have added `project X/configuration/cfg_tables` folder with all the exports of the metadata. you can use this from now on
+  
