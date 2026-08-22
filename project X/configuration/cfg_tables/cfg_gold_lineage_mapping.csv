@@ -1,0 +1,17 @@
+gold_object,source_object,source_layer,transformation_notebook,relationship_role,is_required,description
+gold.dim_placement_type,silver.referral,SILVER,05_gold_dimensions,DERIVED,True,Distinct referral placement types
+gold.dim_referral_status,silver.referral,SILVER,05_gold_dimensions,DERIVED,True,Distinct referral statuses
+gold.fact_referral,silver.referral,SILVER,04_gold_model,PRIMARY,True,Current referral reporting fact
+gold.fact_referral,silver.offer,SILVER,04_gold_model,SUPPORTING,True,Offer roll-up
+gold.fact_referral,silver.referral_provider,SILVER,04_gold_model,SUPPORTING,True,Referral/provider bridge
+gold.fact_referral,silver.ipa,SILVER,04_gold_model,SUPPORTING,True,Placement agreement roll-up
+gold.dim_holding_company,silver.holding_company,SILVER,05_gold_dimensions,PRIMARY,True,Holding company dimension
+gold.dim_provider,silver.provider,SILVER,05_gold_dimensions,PRIMARY,True,Provider dimension
+gold.dim_provider_home,silver.provider_home,SILVER,05_gold_dimensions,PRIMARY,True,Provider home dimension
+gold.dim_framework,silver.framework,SILVER,05_gold_dimensions,PRIMARY,True,Framework dimension
+gold.dim_framework_category,silver.framework_category,SILVER,05_gold_dimensions,PRIMARY,True,Framework category dimension
+gold.bridge_provider_framework,silver.provider_framework,SILVER,05_gold_dimensions,PRIMARY,True,Provider/framework bridge
+gold.fact_referral,silver.referral_lifecycle_event,SILVER,04_gold_model,SUPPORTING,True,Derived referral lifecycle events
+gold.fact_referral_lifecycle_event,silver.referral_lifecycle_event,SILVER,04_gold_model,PRIMARY,True,Referral lifecycle event fact
+gold.bridge_provider_sic_code,silver.provider_sic_codes,SILVER,05_gold_dimensions,PRIMARY,True,Provider SIC bridge
+gold.dim_provider_submission_document,silver.provider_submission_docs,SILVER,05_gold_dimensions,PRIMARY,True,Provider submission-document dimension

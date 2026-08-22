@@ -1,0 +1,1360 @@
+run_id,source_kind,source_table,target_table,contract_schema,contract_table,status,rows_read,rows_written,missing_column_count,extra_column_count,started_at,ended_at,error_message
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_decline_reason,silver.referral_provider_decline_reason,referral,referral_provider_decline_reason,FAILED,0,0,0,0,2026-08-04 13:11:26.480539,2026-08-04 13:11:31.670436,"An error occurred while calling o11225.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 1607.0 failed 4 times, most recent failure: Lost task 0.3 in stage 1607.0 (TID 10067) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_referral_provider_decline_reason.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-08 12:01:50.13777' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to "
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_education_provision,silver.provider_provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-03 22:31:28.111293,2026-08-03 22:31:38.958804,"An error occurred while calling o14286.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 3 in stage 2233.0 failed 4 times, most recent failure: Lost task 3.3 in stage 2233.0 (TID 16322) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-06 01:07:45.612' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.sp"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_cancel_reason,silver.referral_provider_cancel_reason,referral,referral_provider_cancel_reason,FAILED,0,0,0,0,2026-08-04 13:11:17.941799,2026-08-04 13:11:24.442487,"An error occurred while calling o11124.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 1563.0 failed 4 times, most recent failure: Lost task 0.3 in stage 1563.0 (TID 9757) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_referral_provider_cancel_reason.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-08 12:00:08.52825' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to re"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_education_provision,silver.provider_provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-03 22:25:05.015220,2026-08-03 22:25:13.322402,"An error occurred while calling o9504.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 698.0 failed 4 times, most recent failure: Lost task 0.3 in stage 698.0 (TID 4921) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_provider_education_provision.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-06 01:07:45.612' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to r"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_provider_message,silver.referral_referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-03 22:35:22.813323,2026-08-03 22:35:31.974732,"An error occurred while calling o16241.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 4 in stage 3049.0 failed 4 times, most recent failure: Lost task 4.3 in stage 3049.0 (TID 22081) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:07:59.802952' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_education_provision,silver.provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-03 22:51:59.122310,2026-08-03 22:52:05.430396,"An error occurred while calling o20651.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3808.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3808.0 (TID 26938) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_education_provision.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-06 01:07:45.612' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restor"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_education_provision,silver.provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-04 13:09:11.430248,2026-08-04 13:09:18.418459,"An error occurred while calling o9329.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 797.0 failed 4 times, most recent failure: Lost task 0.3 in stage 797.0 (TID 4913) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_education_provision.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-27 09:17:35.31' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_provider_message,silver.referral_referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-03 22:28:05.749436,2026-08-03 22:28:13.102460,"An error occurred while calling o11395.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 1410.0 failed 4 times, most recent failure: Lost task 0.3 in stage 1410.0 (TID 10090) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_referral_referral_provider_message.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:07:59.802952' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" "
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_message,silver.referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-04 13:11:33.288528,2026-08-04 13:11:40.158398,"An error occurred while calling o11337.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 1659.0 failed 4 times, most recent failure: Lost task 0.3 in stage 1659.0 (TID 10422) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_referral_provider_message.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-10 11:41:43.894478' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restor"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_provider_message,silver.referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-03 22:54:03.707621,2026-08-03 22:54:09.478384,"An error occurred while calling o22542.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 4403.0 failed 4 times, most recent failure: Lost task 0.3 in stage 4403.0 (TID 30645) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_referral_provider_message.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:07:59.802952' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restor"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_provider_decline_reason,silver.referral_referral_provider_decline_reason,referral,referral_provider_decline_reason,FAILED,0,0,0,0,2026-08-03 22:27:56.588764,2026-08-03 22:28:03.883290,"An error occurred while calling o11306.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: decline_reason_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Sp"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.offer_view_history,silver.offer_offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-03 22:31:02.810779,2026-08-03 22:31:12.106383,"An error occurred while calling o13800.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 3 in stage 2136.0 failed 4 times, most recent failure: Lost task 3.3 in stage 2136.0 (TID 15520) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:36.526606' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_provider_cancel_reason,silver.referral_referral_provider_cancel_reason,referral,referral_provider_cancel_reason,FAILED,0,0,0,0,2026-08-03 22:27:47.964392,2026-08-03 22:27:54.801258,"An error occurred while calling o11217.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: cancel_reason_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Spa"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_provider_decline_reason,silver.referral_provider_decline_reason,referral,referral_provider_decline_reason,FAILED,0,0,0,0,2026-08-03 22:53:55.809729,2026-08-03 22:54:01.980796,"An error occurred while calling o22453.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: decline_reason_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Sp"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_additional_fee,silver.ipa_ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-03 22:30:11.097577,2026-08-03 22:30:20.450385,"An error occurred while calling o13206.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 2 in stage 1933.0 failed 4 times, most recent failure: Lost task 2.3 in stage 1933.0 (TID 13911) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-24 10:07:14.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spar"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_home,silver.provider_provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-03 22:31:56.299506,2026-08-03 22:32:08.366720,"An error occurred while calling o14689.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 7 in stage 2335.0 failed 4 times, most recent failure: Lost task 7.3 in stage 2335.0 (TID 17091) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-08 01:53:52.506' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.sp"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_provider_cancel_reason,silver.referral_provider_cancel_reason,referral,referral_provider_cancel_reason,FAILED,0,0,0,0,2026-08-03 22:53:46.759820,2026-08-03 22:53:54.208879,"An error occurred while calling o22364.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: cancel_reason_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Spa"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.offer_view_history,silver.offer_offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-03 22:24:41.082284,2026-08-03 22:24:51.362415,"An error occurred while calling o9016.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 616.0 failed 4 times, most recent failure: Lost task 0.3 in stage 616.0 (TID 4262) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_offer_view_history.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:36.526606' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.offer_updates,silver.offer_offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-03 22:30:50.618617,2026-08-03 22:30:58.982398,"An error occurred while calling o13712.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 7 in stage 2084.0 failed 4 times, most recent failure: Lost task 7.3 in stage 2084.0 (TID 15063) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:17:02.914538' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ipa_additional_fee,silver.ipa_ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-03 22:23:37.744190,2026-08-03 22:23:49.622532,"An error occurred while calling o8401.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 390.0 failed 4 times, most recent failure: Lost task 0.3 in stage 390.0 (TID 2606) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa_ipa_additional_fee.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-24 10:07:14.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavi"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.offer_view_history,silver.offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-03 22:51:44.370910,2026-08-03 22:51:49.838362,"An error occurred while calling o20163.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3746.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3746.0 (TID 26508) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_view_history.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:36.526606' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the b"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer_view_history,silver.offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-04 13:08:54.113401,2026-08-04 13:08:59.490433,"An error occurred while calling o8839.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 690.0 failed 4 times, most recent failure: Lost task 0.3 in stage 690.0 (TID 4135) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_view_history.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-02 08:52:06.862924' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behav"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.foster_carer,silver.offer_foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-03 22:29:02.666279,2026-08-03 22:29:12.754367,"An error occurred while calling o11878.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 3 in stage 1646.0 failed 4 times, most recent failure: Lost task 3.3 in stage 1646.0 (TID 11843) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-30 00:00:00.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spar"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ipa_additional_fee,silver.ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-03 22:51:07.928151,2026-08-03 22:51:14.446470,"An error occurred while calling o19548.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3584.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3584.0 (TID 25542) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa_additional_fee.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-24 10:07:14.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavi"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_additional_fee,silver.ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-04 13:07:31.963196,2026-08-04 13:07:38.424903,"An error occurred while calling o8210.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 465.0 failed 4 times, most recent failure: Lost task 0.3 in stage 465.0 (TID 2700) (vm-98f61352 executor 1): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa_additional_fee.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-24 10:07:14.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior b"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home,silver.provider_provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-03 22:25:27.169403,2026-08-03 22:25:35.526493,"An error occurred while calling o9908.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 800.0 failed 4 times, most recent failure: Lost task 0.3 in stage 800.0 (TID 5673) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_provider_home.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-08 01:53:52.506' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the beha"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider,silver.provider_provider,provider,provider,FAILED,0,0,0,0,2026-08-03 22:31:14.408826,2026-08-03 22:31:25.603135,"An error occurred while calling o14115.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 7 in stage 2190.0 failed 4 times, most recent failure: Lost task 7.3 in stage 2190.0 (TID 15975) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-22 13:30:01.882987' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.foster_carer,silver.foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-03 22:54:43.386696,2026-08-03 22:54:49.194384,"An error occurred while calling o23025.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 3 in stage 4588.0 failed 4 times, most recent failure: Lost task 3.3 in stage 4588.0 (TID 31825) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-30 00:00:00.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spar"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.offer_updates,silver.offer_offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-03 22:24:27.467294,2026-08-03 22:24:38.706444,"An error occurred while calling o8927.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 573.0 failed 4 times, most recent failure: Lost task 0.3 in stage 573.0 (TID 3937) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_offer_updates.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:15:15.080252' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the beha"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.foster_carer,silver.offer_foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-03 22:21:47.714959,2026-08-03 22:21:58.654408,"An error occurred while calling o7071.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 130.0 failed 4 times, most recent failure: Lost task 0.3 in stage 130.0 (TID 755) (vm-55f63173 executor 1): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_foster_carer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-30 00:00:00.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior be"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home,silver.provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-03 22:52:20.437833,2026-08-03 22:52:26.662366,"An error occurred while calling o21055.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3914.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3914.0 (TID 27658) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_home.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-08 01:53:52.506' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior "
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_spot_category,silver.referral_referral_spot_category,referral,referral_spot_category,FAILED,0,0,0,0,2026-08-03 22:28:14.862291,2026-08-03 22:28:23.599291,"An error occurred while calling o11477.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: spot_category_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executo"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home,silver.provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-04 13:09:30.901207,2026-08-04 13:09:36.758474,"An error occurred while calling o9717.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 910.0 failed 4 times, most recent failure: Lost task 0.3 in stage 910.0 (TID 5640) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_home.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-01-14 09:08:04.827' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior befo"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.offer_updates,silver.offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-03 22:51:37.317663,2026-08-03 22:51:42.866369,"An error occurred while calling o20074.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3715.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3715.0 (TID 26297) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_updates.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:15:15.080252' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavi"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer_updates,silver.offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-04 13:08:46.787938,2026-08-04 13:08:52.134405,"An error occurred while calling o8749.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 646.0 failed 4 times, most recent failure: Lost task 0.3 in stage 646.0 (TID 3824) (vm-5b212845 executor 3): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_updates.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-09 10:11:44.242168' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior b"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider,silver.provider_provider,provider,provider,FAILED,0,0,0,0,2026-08-03 22:24:54.449846,2026-08-03 22:25:03.174401,"An error occurred while calling o9332.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 657.0 failed 4 times, most recent failure: Lost task 0.3 in stage 657.0 (TID 4590) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider_provider.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-22 13:30:01.882987' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavi"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_carer,silver.foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-04 13:06:26.914833,2026-08-04 13:06:34.466414,"An error occurred while calling o7062.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 147.0 failed 4 times, most recent failure: Lost task 0.3 in stage 147.0 (TID 815) (vm-98f61352 executor 1): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_foster_carer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2025-03-31 00:00:00.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before S"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home_gender,silver.provider_provider_home_gender,provider,provider_home_gender,FAILED,0,0,0,0,2026-08-03 22:26:17.879895,2026-08-03 22:26:27.443579,"An error occurred while calling o10196.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: supported_gender.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.foster_carer,silver.foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-03 22:50:14.080662,2026-08-03 22:50:20.814408,"An error occurred while calling o18218.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3336.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3336.0 (TID 23951) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_foster_carer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-06-30 00:00:00.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior bef"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_spot_category,silver.referral_spot_category,referral,referral_spot_category,FAILED,0,0,0,0,2026-08-03 22:54:11.214612,2026-08-03 22:54:16.814002,"An error occurred while calling o22624.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: spot_category_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executo"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.offer,silver.offer_offer,offer,offer,FAILED,0,0,0,0,2026-08-03 22:30:38.567636,2026-08-03 22:30:48.718345,"An error occurred while calling o13596.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 5 in stage 2043.0 failed 4 times, most recent failure: Lost task 5.3 in stage 2043.0 (TID 14717) (vm-c8565992 executor 2): org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:11.463873' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0, or set to ""CORRECTED"" and treat it as an invalid datetime string.
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError(ExecutionErrors.scala:54)
+	at org.apache.spark.sql.errors.ExecutionErrors.failToParseDateTimeInNewParserError$(ExecutionErrors.scala:48)
+	at org.apache.spark.sql.errors.ExecutionErrors$.failToParseDateTimeInNewParserError(ExecutionErrors.scala:218)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:142)
+	at org.apache.spark.sql.catalyst.util.DateTimeFormatterHelper$$anonfun$checkParsedDiff$1.applyOrElse(DateTimeFormatterHelper.scala:135)
+	at scala.runtime.AbstractPartialFunction.apply(AbstractPartialFunction.scala:38)
+	at org.apache.spark.sql.catalyst.util.Iso8601TimestampFormatter.parse(TimestampFormatter.scala:195)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:43)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$1(DeltaFileFormatWriter.scala:568)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_provider,silver.referral_referral_provider,referral,referral_provider,FAILED,0,0,0,0,2026-08-03 22:27:39.268393,2026-08-03 22:27:46.388089,"An error occurred while calling o11128.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: created_timestamp.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Spar"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa,silver.ipa_ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-03 22:29:59.537420,2026-08-03 22:30:09.142439,"An error occurred while calling o13066.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 2 in stage 1893.0 failed 4 times, most recent failure: Lost task 2.3 in stage 1893.0 (TID 13568) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver_archive/slv_ipa_ipa.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:24:03.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior "
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home_gender,silver.provider_home_gender,provider,provider_home_gender,FAILED,0,0,0,0,2026-08-03 22:52:47.923863,2026-08-03 22:52:53.217229,"An error occurred while calling o21343.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: supported_gender.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider,silver.provider,provider,provider,FAILED,0,0,0,0,2026-08-03 22:51:51.349262,2026-08-03 22:51:57.518397,"An error occurred while calling o20479.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3777.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3777.0 (TID 26723) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-22 13:30:01.882987' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior be"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider,silver.provider,provider,provider,FAILED,0,0,0,0,2026-08-04 13:09:01.488100,2026-08-04 13:09:06.854404,"An error occurred while calling o9147.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 734.0 failed 4 times, most recent failure: Lost task 0.3 in stage 734.0 (TID 4447) (vm-e4c61243 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_provider.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-03-25 14:43:09.438954' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_provider,silver.referral_provider,referral,referral_provider,FAILED,0,0,0,0,2026-08-03 22:53:39.693619,2026-08-03 22:53:45.267444,"An error occurred while calling o22275.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: created_timestamp.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Spar"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.holding_company,silver.provider_holding_company,provider,holding_company,FAILED,0,0,0,0,2026-08-03 22:23:07.777692,2026-08-03 22:23:19.037319,"An error occurred while calling o7477.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: contact_person_name.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Spa"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.offer,silver.offer_offer,offer,offer,FAILED,0,0,0,0,2026-08-03 22:24:17.225329,2026-08-03 22:24:25.486483,"An error occurred while calling o8810.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 521.0 failed 4 times, most recent failure: Lost task 0.3 in stage 521.0 (TID 3503) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer_offer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:11.463873' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior bef"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.holding_company,silver.holding_company,provider,holding_company,FAILED,0,0,0,0,2026-08-03 22:50:50.519549,2026-08-03 22:50:56.196620,"An error occurred while calling o18624.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: contact_person_name.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Sp"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer,silver.offer,offer,offer,FAILED,0,0,0,0,2026-08-04 13:08:31.766581,2026-08-04 13:08:44.694655,"An error occurred while calling o8631.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 602.0 failed 4 times, most recent failure: Lost task 0.3 in stage 602.0 (TID 3514) (vm-5b212845 executor 3): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-07-07 14:33:35.101468' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Sp"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.offer,silver.offer,offer,offer,FAILED,0,0,0,0,2026-08-03 22:51:29.980323,2026-08-03 22:51:35.614346,"An error occurred while calling o19957.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3684.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3684.0 (TID 26088) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_offer.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:08:11.463873' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior befor"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ipa,silver.ipa_ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-03 22:23:21.336582,2026-08-03 22:23:34.866503,"An error occurred while calling o8261.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 350.0 failed 4 times, most recent failure: Lost task 0.3 in stage 350.0 (TID 2286) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa_ipa.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:24:03.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_person,silver.referral_person,referral,person,FAILED,0,0,0,0,2026-08-03 22:27:26.085064,2026-08-03 22:27:34.018448,"An error occurred while calling o10880.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: gender_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkError"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ipa,silver.ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-03 22:50:57.825001,2026-08-03 22:51:04.574497,"An error occurred while calling o19408.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 3542.0 failed 4 times, most recent failure: Lost task 0.3 in stage 3542.0 (TID 25226) (vm-c8565992 executor 2): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-07 12:24:03.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark"
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa,silver.ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-04 13:07:21.936620,2026-08-04 13:07:29.746410,"An error occurred while calling o8075.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 0 in stage 421.0 failed 4 times, most recent failure: Lost task 0.3 in stage 421.0 (TID 2409) (vm-98f61352 executor 1): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/slv_ipa.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.PARSE_DATETIME_BY_NEW_PARSER] You may get a different result due to the upgrading to Spark >= 3.0:
+Fail to parse '2026-05-19 08:51:41.0' in the new parser. You can set ""spark.sql.legacy.timeParserPolicy"" to ""LEGACY"" to restore the behavior before Spark 3.0"
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral,silver.referral_referral,referral,referral,FAILED,0,0,0,0,2026-08-03 22:26:57.539593,2026-08-03 22:27:08.275353,"An error occurred while calling o10627.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: placement_type_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Sp"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_person,silver.person,referral,person,FAILED,0,0,0,0,2026-08-03 22:53:30.754644,2026-08-03 22:53:36.419104,"An error occurred while calling o22027.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: gender_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_2$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkError"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral,silver.referral,referral,referral,FAILED,0,0,0,0,2026-08-03 22:53:10.840093,2026-08-03 22:53:16.820376,"An error occurred while calling o21774.saveAsTable.
+: org.apache.spark.sql.delta.schema.DeltaInvariantViolationException: [DELTA_NOT_NULL_CONSTRAINT_VIOLATED] NOT NULL constraint violated for column: placement_type_code.
+
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.getNotNullInvariantViolationException(InvariantViolationException.scala:51)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException$.apply(InvariantViolationException.scala:56)
+	at org.apache.spark.sql.delta.schema.DeltaInvariantViolationException.apply(InvariantViolationException.scala)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.writeFields_0_0$(Unknown Source)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$SpecificUnsafeProjection.apply(Unknown Source)
+	at org.apache.spark.sql.delta.constraints.DeltaInvariantCheckerExec.$anonfun$doExecute$3(DeltaInvariantCheckerExec.scala:89)
+	at scala.collection.Iterator$$anon$10.next(Iterator.scala:461)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603)
+	at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbacks(Utils.scala:1398)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:611)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(Sp"
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_provider_decline_reason,silver.referral_provider_decline_reason,referral,referral_provider_decline_reason,FAILED,0,0,0,0,2026-08-03 22:56:49.321958,2026-08-03 22:56:52.330422,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_provider_cancel_reason,silver.referral_provider_cancel_reason,referral,referral_provider_cancel_reason,FAILED,0,0,0,0,2026-08-03 22:56:45.366368,2026-08-03 22:56:47.827266,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_education_provision,silver.provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-03 22:55:50.729131,2026-08-03 22:55:53.440500,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_home_spot_category,silver.provider_home_spot_category,provider,provider_home_spot_category,FAILED,0,0,0,0,2026-08-03 22:56:19.385710,2026-08-03 22:56:21.935865,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_provider_message,silver.referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-03 22:56:55.544258,2026-08-03 22:56:59.589794,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.supervising_social_worker,silver.supervising_social_worker,offer,supervising_social_worker,FAILED,0,0,0,0,2026-08-03 22:57:05.876967,2026-08-03 22:57:08.401453,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_decline_reason,silver.referral_provider_decline_reason,referral,referral_provider_decline_reason,FAILED,0,0,0,0,2026-08-04 13:30:35.872165,2026-08-04 13:30:37.647601,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_cancel_reason,silver.referral_provider_cancel_reason,referral,referral_provider_cancel_reason,FAILED,0,0,0,0,2026-08-04 13:30:30.879700,2026-08-04 13:30:33.367197,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_home_category,silver.provider_home_category,provider,provider_home_category,FAILED,0,0,0,0,2026-08-03 22:56:09.066260,2026-08-03 22:56:11.934267,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_spot_category,silver.referral_spot_category,referral,referral_spot_category,FAILED,0,0,0,0,2026-08-03 22:57:01.537126,2026-08-03 22:57:04.201810,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_home_gender,silver.provider_home_gender,provider,provider_home_gender,FAILED,0,0,0,0,2026-08-03 22:56:13.592948,2026-08-03 22:56:15.882037,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_education_provision,silver.provider_education_provision,provider,provider_education_provision,FAILED,0,0,0,0,2026-08-04 13:29:15.673676,2026-08-04 13:29:23.987341,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_spot_category,silver.provider_home_spot_category,provider,provider_home_spot_category,FAILED,0,0,0,0,2026-08-04 13:29:54.198274,2026-08-04 13:29:56.276966,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_framework,silver.provider_framework,provider,provider_framework,FAILED,0,0,0,0,2026-08-03 22:55:55.030565,2026-08-03 22:55:57.677865,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_category,silver.referral_category,referral,referral_category,FAILED,0,0,0,0,2026-08-03 22:56:31.299726,2026-08-03 22:56:33.902484,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_home_age,silver.provider_home_age,provider,provider_home_age,FAILED,0,0,0,0,2026-08-03 22:56:03.420289,2026-08-03 22:56:07.465845,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_provider,silver.referral_provider,referral,referral_provider,FAILED,0,0,0,0,2026-08-03 22:56:41.260173,2026-08-03 22:56:43.879211,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.offer_view_history,silver.offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-03 22:55:41.802781,2026-08-03 22:55:44.496520,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider_message,silver.referral_provider_message,referral,referral_provider_message,FAILED,0,0,0,0,2026-08-04 13:30:40.034249,2026-08-04 13:30:43.761665,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa_additional_fee,silver.ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-03 22:55:20.280293,2026-08-03 22:55:23.160709,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.supervising_social_worker,silver.supervising_social_worker,offer,supervising_social_worker,FAILED,0,0,0,0,2026-08-04 13:30:50.902518,2026-08-04 13:30:52.723583,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.holding_company,silver.holding_company,provider,holding_company,FAILED,0,0,0,0,2026-08-03 22:55:09.231991,2026-08-03 22:55:12.601589,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.foster_transport,silver.foster_transport,offer,foster_transport,FAILED,0,0,0,0,2026-08-03 22:55:02.648029,2026-08-03 22:55:06.039373,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_spot_category,silver.referral_spot_category,referral,referral_spot_category,FAILED,0,0,0,0,2026-08-04 13:30:45.590807,2026-08-04 13:30:49.036161,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_category,silver.provider_home_category,provider,provider_home_category,FAILED,0,0,0,0,2026-08-04 13:29:46.065182,2026-08-04 13:29:48.015774,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_home,silver.provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-03 22:55:59.231221,2026-08-03 22:56:01.848997,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.offer_updates,silver.offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-03 22:55:36.847946,2026-08-03 22:55:39.439224,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_gender,silver.provider_home_gender,provider,provider_home_gender,FAILED,0,0,0,0,2026-08-04 13:29:50.466271,2026-08-04 13:29:52.304099,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_framework,silver.provider_framework,provider,provider_framework,FAILED,0,0,0,0,2026-08-04 13:29:26.771856,2026-08-04 13:29:29.514018,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_person,silver.person,referral,person,FAILED,0,0,0,0,2026-08-03 22:56:35.442063,2026-08-03 22:56:38.124067,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider,silver.referral_provider,referral,referral_provider,FAILED,0,0,0,0,2026-08-04 13:30:24.303103,2026-08-04 13:30:28.880725,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_age,silver.provider_home_age,provider,provider_home_age,FAILED,0,0,0,0,2026-08-04 13:29:39.810254,2026-08-04 13:29:43.319262,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer_view_history,silver.offer_view_history,offer,offer_view_history,FAILED,0,0,0,0,2026-08-04 13:29:07.571358,2026-08-04 13:29:09.187876,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_category,silver.referral_category,referral,referral_category,FAILED,0,0,0,0,2026-08-04 13:30:12.760559,2026-08-04 13:30:14.707743,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider,silver.provider,provider,provider,FAILED,0,0,0,0,2026-08-03 22:55:46.130799,2026-08-03 22:55:49.249053,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral,silver.referral,referral,referral,FAILED,0,0,0,0,2026-08-03 22:56:26.978881,2026-08-03 22:56:29.682837,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_additional_fee,silver.ipa_additional_fee,ipa,ipa_additional_fee,FAILED,0,0,0,0,2026-08-04 13:28:32.583100,2026-08-04 13:28:35.913147,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa_child,silver.ipa_child,ipa,ipa_child,FAILED,0,0,0,0,2026-08-03 22:55:24.912675,2026-08-03 22:55:27.449759,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.holding_company,silver.holding_company,provider,holding_company,FAILED,0,0,0,0,2026-08-04 13:28:20.950677,2026-08-04 13:28:23.827604,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person,silver.referral_person,referral,referral_person,FAILED,0,0,0,0,2026-08-04 13:30:18.048471,2026-08-04 13:30:20.112927,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_transport,silver.foster_transport,offer,foster_transport,FAILED,0,0,0,0,2026-08-04 13:28:09.610909,2026-08-04 13:28:12.014117,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home,silver.provider_home,provider,provider_home,FAILED,0,0,0,0,2026-08-04 13:29:32.048170,2026-08-04 13:29:35.027460,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.additional_fee,silver.additional_fee,offer,additional_fee,FAILED,0,0,0,0,2026-08-04 13:27:54.932298,2026-08-04 13:27:58.685314,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.offer,silver.offer,offer,offer,FAILED,0,0,0,0,2026-08-03 22:55:32.169176,2026-08-03 22:55:35.099275,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer_updates,silver.offer_updates,offer,offer_updates,FAILED,0,0,0,0,2026-08-04 13:29:03.678286,2026-08-04 13:29:05.480922,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_carer,silver.foster_carer,offer,foster_carer,FAILED,0,0,0,0,2026-08-04 13:28:00.957444,2026-08-04 13:28:03.271087,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa,silver.ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-03 22:55:14.129763,2026-08-03 22:55:18.466929,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver_archive` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_home,silver.foster_home,offer,foster_home,FAILED,0,0,0,0,2026-08-04 13:28:05.346364,2026-08-04 13:28:07.420004,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider,silver.provider,provider,provider,FAILED,0,0,0,0,2026-08-04 13:29:11.229847,2026-08-04 13:29:13.526486,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral,silver.referral,referral,referral,FAILED,0,0,0,0,2026-08-04 13:30:06.437253,2026-08-04 13:30:10.884893,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_child,silver.ipa_child,ipa,ipa_child,FAILED,0,0,0,0,2026-08-04 13:28:41.215267,2026-08-04 13:28:44.485003,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.offer,silver.offer,offer,offer,FAILED,0,0,0,0,2026-08-04 13:28:53.864420,2026-08-04 13:29:01.451182,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa,silver.ipa,ipa,ipa,FAILED,0,0,0,0,2026-08-04 13:28:26.318523,2026-08-04 13:28:29.847516,"[SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.LH_BCT_WMPP.silver` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS."
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_provider_decline_reason,silver.referral_referral_provider_decline_reason,referral,referral_provider_decline_reason,SUCCESS,203312,203312,2,3,2026-08-03 22:35:05.776381,2026-08-03 22:35:19.108164,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_provider_cancel_reason,silver.referral_referral_provider_cancel_reason,referral,referral_provider_cancel_reason,SUCCESS,307140,307140,2,3,2026-08-03 22:34:48.657405,2026-08-03 22:35:01.783718,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_home_spot_category,silver.provider_provider_home_spot_category,provider,provider_home_spot_category,SUCCESS,42169,42169,0,1,2026-08-03 22:33:02.026380,2026-08-03 22:33:13.682902,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.supervising_social_worker,silver.offer_supervising_social_worker,offer,supervising_social_worker,SUCCESS,380,380,0,1,2026-08-03 22:35:52.193387,2026-08-03 22:36:03.586470,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_home_category,silver.provider_provider_home_category,provider,provider_home_category,SUCCESS,71236,71236,0,1,2026-08-03 22:32:31.829074,2026-08-03 22:32:43.950267,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_spot_category,silver.referral_referral_spot_category,referral,referral_spot_category,SUCCESS,4771,4771,1,2,2026-08-03 22:35:34.540785,2026-08-03 22:35:45.834990,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home_spot_category,silver.provider_provider_home_spot_category,provider,provider_home_spot_category,SUCCESS,1531,1531,0,1,2026-08-03 22:26:29.936298,2026-08-03 22:26:43.416698,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_home_gender,silver.provider_provider_home_gender,provider,provider_home_gender,SUCCESS,66137,66137,0,1,2026-08-03 22:32:47.705690,2026-08-03 22:32:57.709373,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home_spot_category,silver.provider_home_spot_category,provider,provider_home_spot_category,SUCCESS,1531,1531,0,1,2026-08-03 22:52:54.765151,2026-08-03 22:53:01.390536,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_spot_category,silver.provider_home_spot_category,provider,provider_home_spot_category,SUCCESS,1531,1531,0,0,2026-08-04 13:10:11.196018,2026-08-04 13:10:17.427374,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_framework,silver.provider_provider_framework,provider,provider_framework,SUCCESS,8701,8701,0,1,2026-08-03 22:31:40.952195,2026-08-03 22:31:52.519674,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_provider,silver.referral_referral_provider,referral,referral_provider,SUCCESS,918534,918534,2,3,2026-08-03 22:34:31.154554,2026-08-03 22:34:44.844774,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_home_age,silver.provider_provider_home_age,provider,provider_home_age,SUCCESS,66137,66137,0,1,2026-08-03 22:32:11.007953,2026-08-03 22:32:27.324585,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_category,silver.referral_referral_category,referral,referral_category,SUCCESS,9719,9719,0,1,2026-08-03 22:33:50.519945,2026-08-03 22:34:04.642892,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.supervising_social_worker,silver.offer_supervising_social_worker,offer,supervising_social_worker,SUCCESS,25,25,0,1,2026-08-03 22:28:25.818476,2026-08-03 22:28:37.383601,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home_category,silver.provider_provider_home_category,provider,provider_home_category,SUCCESS,2384,2384,0,1,2026-08-03 22:26:00.805149,2026-08-03 22:26:12.818746,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.holding_company,silver.provider_holding_company,provider,holding_company,SUCCESS,18982,18982,0,1,2026-08-03 22:29:44.678256,2026-08-03 22:29:55.825807,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.supervising_social_worker,silver.supervising_social_worker,offer,supervising_social_worker,SUCCESS,25,25,0,1,2026-08-03 22:54:18.472115,2026-08-03 22:54:25.271035,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.supervising_social_worker,silver.supervising_social_worker,offer,supervising_social_worker,SUCCESS,25,25,0,0,2026-08-04 13:11:55.070988,2026-08-04 13:12:01.438079,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.foster_transport,silver.offer_foster_transport,offer,foster_transport,SUCCESS,380,380,0,1,2026-08-03 22:29:29.698603,2026-08-03 22:29:39.665692,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_category,silver.provider_home_category,provider,provider_home_category,SUCCESS,2384,2384,0,0,2026-08-04 13:09:49.230714,2026-08-04 13:09:57.467774,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home_category,silver.provider_home_category,provider,provider_home_category,SUCCESS,2384,2384,0,1,2026-08-03 22:52:38.119976,2026-08-03 22:52:44.710834,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_spot_category,silver.referral_spot_category,referral,referral_spot_category,SUCCESS,242,242,0,1,2026-08-04 13:11:41.806262,2026-08-04 13:11:50.083894,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:34:29.457865,2026-08-03 22:34:29.458073,No schema contract for archived.archived_referral_person_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:56:39.637649,2026-08-03 22:56:39.637839,No schema contract for archived.archived_referral_person_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.additional_fee,silver.offer_additional_fee,offer,additional_fee,SUCCESS,5182,5182,1,2,2026-08-03 22:28:45.217059,2026-08-03 22:28:56.883123,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_framework,silver.provider_provider_framework,provider,provider_framework,SUCCESS,291,291,0,1,2026-08-03 22:25:15.415827,2026-08-03 22:25:23.796221,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_gender,silver.provider_home_gender,provider,provider_home_gender,SUCCESS,2315,2315,0,0,2026-08-04 13:10:01.258743,2026-08-04 13:10:07.636483,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.additional_fee,silver.additional_fee,offer,additional_fee,SUCCESS,5182,5182,1,2,2026-08-03 22:54:28.626914,2026-08-03 22:54:35.898819,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home_age,silver.provider_provider_home_age,provider,provider_home_age,SUCCESS,2315,2315,0,1,2026-08-03 22:25:37.694541,2026-08-03 22:25:53.259597,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_category,silver.referral_referral_category,referral,referral_category,SUCCESS,478,478,0,1,2026-08-03 22:27:09.998602,2026-08-03 22:27:21.670113,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:56:25.475216,2026-08-03 22:56:25.475490,No schema contract for archived.archived_provider_submission_docs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:33:28.226290,2026-08-03 22:33:28.226547,No schema contract for archived.archived_provider_submission_docs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_person,silver.referral_person,referral,person,SUCCESS,11459,11459,5,5,2026-08-03 22:34:08.989018,2026-08-03 22:34:25.559154,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.foster_home,silver.offer_foster_home,offer,foster_home,SUCCESS,380,380,0,1,2026-08-03 22:29:16.459786,2026-08-03 22:29:26.282247,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:30:36.796418,2026-08-03 22:30:36.796655,No schema contract for archived.archived_ipa_child_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:55:29.043417,2026-08-03 22:55:29.043690,No schema contract for archived.archived_ipa_child_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_framework,silver.provider_framework,provider,provider_framework,SUCCESS,291,291,0,1,2026-08-03 22:52:07.072444,2026-08-03 22:52:15.813214,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_framework,silver.provider_framework,provider,provider_framework,SUCCESS,291,291,0,0,2026-08-04 13:09:20.436249,2026-08-04 13:09:27.301896,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral,silver.referral_referral,referral,referral,SUCCESS,10766,10766,6,7,2026-08-03 22:33:30.314276,2026-08-03 22:33:45.724968,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_provider,silver.referral_provider,referral,referral_provider,SUCCESS,49010,49010,0,2,2026-08-04 13:11:05.517878,2026-08-04 13:11:14.648938,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home_age,silver.provider_home_age,provider,provider_home_age,SUCCESS,2315,2315,0,1,2026-08-03 22:52:28.516472,2026-08-03 22:52:34.968664,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_age,silver.provider_home_age,provider,provider_home_age,SUCCESS,2315,2315,0,0,2026-08-04 13:09:38.761761,2026-08-04 13:09:45.376972,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_category,silver.referral_category,referral,referral_category,SUCCESS,496,496,0,0,2026-08-04 13:10:44.029786,2026-08-04 13:10:50.561130,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_category,silver.referral_category,referral,referral_category,SUCCESS,478,478,0,1,2026-08-03 22:53:20.197928,2026-08-03 22:53:27.317978,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.foster_transport,silver.offer_foster_transport,offer,foster_transport,SUCCESS,25,25,0,1,2026-08-03 22:22:16.640480,2026-08-03 22:22:27.030212,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.foster_home,silver.foster_home,offer,foster_home,SUCCESS,380,380,0,1,2026-08-03 22:54:50.800046,2026-08-03 22:54:57.812862,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-04 13:30:22.210656,2026-08-04 13:30:22.210700,No schema contract for bronze.referral_person_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:27:37.320178,2026-08-03 22:27:37.320400,No schema contract for bronze.referral_person_support_needs
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-04 13:11:03.835694,2026-08-04 13:11:03.835756,No schema contract for bronze.referral_person_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:53:38.211479,2026-08-03 22:53:38.211781,No schema contract for bronze.referral_person_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:29:42.981978,2026-08-03 22:29:42.982245,No schema contract for archived.archived_framework_category
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:33:24.330105,2026-08-03 22:33:24.330318,No schema contract for archived.archived_provider_sic_codes
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:55:07.607663,2026-08-03 22:55:07.607957,No schema contract for archived.archived_framework_category
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:56:23.835284,2026-08-03 22:56:23.835499,No schema contract for archived.archived_provider_sic_codes
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_child,silver.ipa_ipa_child,ipa,ipa_child,SUCCESS,396,396,2,1,2026-08-03 22:30:22.442603,2026-08-03 22:30:33.226109,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person,silver.referral_person,referral,referral_person,SUCCESS,560,560,0,0,2026-08-04 13:10:53.950789,2026-08-04 13:11:00.262348,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.holding_company,silver.holding_company,provider,holding_company,SUCCESS,654,654,0,0,2026-08-04 13:07:09.162047,2026-08-04 13:07:17.753053,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.additional_fee,silver.offer_additional_fee,offer,additional_fee,SUCCESS,257,257,1,2,2026-08-03 22:21:25.975149,2026-08-03 22:21:43.550261,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.foster_transport,silver.foster_transport,offer,foster_transport,SUCCESS,25,25,0,1,2026-08-03 22:50:34.952066,2026-08-03 22:50:44.138342,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_transport,silver.foster_transport,offer,foster_transport,SUCCESS,25,25,0,0,2026-08-04 13:06:49.285858,2026-08-04 13:06:57.840371,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.additional_fee,silver.additional_fee,offer,additional_fee,SUCCESS,263,263,0,0,2026-08-04 13:06:06.108475,2026-08-04 13:06:20.031103,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.additional_fee,silver.additional_fee,offer,additional_fee,SUCCESS,257,257,1,2,2026-08-03 22:50:01.780667,2026-08-03 22:50:10.429948,
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:26:50.522963,2026-08-03 22:26:50.523205,No schema contract for bronze.provider_submission_docs
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-04 13:10:24.804832,2026-08-04 13:10:24.804879,No schema contract for bronze.provider_submission_docs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:53:06.074499,2026-08-03 22:53:06.074699,No schema contract for bronze.provider_submission_docs
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-04 13:30:00.234848,2026-08-04 13:30:00.234894,No schema contract for bronze.provider_submission_docs
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-04 13:08:26.149983,2026-08-04 13:08:26.150033,No schema contract for bronze.ipa_child_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:51:26.815947,2026-08-03 22:51:26.816264,No schema contract for bronze.ipa_child_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:24:13.044254,2026-08-03 22:24:13.044541,No schema contract for bronze.ipa_child_support_needs
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-04 13:28:47.846272,2026-08-04 13:28:47.846319,No schema contract for bronze.ipa_child_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.foster_home,silver.offer_foster_home,offer,foster_home,SUCCESS,25,25,0,1,2026-08-03 22:22:01.747987,2026-08-03 22:22:12.560467,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.foster_home,silver.foster_home,offer,foster_home,SUCCESS,25,25,0,0,2026-08-04 13:06:36.730816,2026-08-04 13:06:45.314146,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.foster_home,silver.foster_home,offer,foster_home,SUCCESS,25,25,0,1,2026-08-03 22:50:22.488061,2026-08-03 22:50:29.817116,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.cfg_load_control,,,,FAILED,0,0,0,0,2026-08-03 22:57:10.016175,2026-08-03 22:57:10.016421,No schema contract for archived.cfg_load_control
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.cfg_load_control,,,,FAILED,0,0,0,0,2026-08-03 22:36:08.077782,2026-08-03 22:36:08.078013,No schema contract for archived.cfg_load_control
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.mlv_additional_fee,,,,FAILED,0,0,0,0,2026-08-03 22:51:28.432406,2026-08-03 22:51:28.432609,No schema contract for bronze.mlv_additional_fee
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-04 13:10:23.102203,2026-08-04 13:10:23.102245,No schema contract for bronze.provider_sic_codes
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:26:48.051373,2026-08-03 22:26:48.051625,No schema contract for bronze.provider_sic_codes
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.framework_category,,,,FAILED,0,0,0,0,2026-08-04 13:07:04.111122,2026-08-04 13:07:04.111167,No schema contract for bronze.framework_category
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:53:04.531040,2026-08-03 22:53:04.531224,No schema contract for bronze.provider_sic_codes
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.mlv_additional_fee,,,,FAILED,0,0,0,0,2026-08-04 13:28:51.022079,2026-08-04 13:28:51.022128,No schema contract for bronze.mlv_additional_fee
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.mlv_additional_fee,,,,FAILED,0,0,0,0,2026-08-03 22:24:15.490700,2026-08-03 22:24:15.491049,No schema contract for bronze.mlv_additional_fee
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.framework_category,,,,FAILED,0,0,0,0,2026-08-04 13:28:17.394476,2026-08-04 13:28:17.394522,No schema contract for bronze.framework_category
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:50:49.023611,2026-08-03 22:50:49.023844,No schema contract for bronze.framework_category
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-04 13:29:58.295952,2026-08-04 13:29:58.295997,No schema contract for bronze.provider_sic_codes
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.mlv_additional_fee,,,,FAILED,0,0,0,0,2026-08-04 13:08:29.283444,2026-08-04 13:08:29.283493,No schema contract for bronze.mlv_additional_fee
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:22:32.510955,2026-08-03 22:22:32.511215,No schema contract for bronze.framework_category
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-03 22:26:55.482265,2026-08-03 22:26:55.482580,No schema contract for bronze.ref_Table_Lineage
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-04 13:30:04.398550,2026-08-04 13:30:04.398592,No schema contract for bronze.ref_Table_Lineage
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-04 13:10:30.044915,2026-08-04 13:10:30.044962,No schema contract for bronze.ref_Table_Lineage
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-03 22:53:09.243338,2026-08-03 22:53:09.243580,No schema contract for bronze.ref_Table_Lineage
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ipa_child,silver.ipa_ipa_child,ipa,ipa_child,SUCCESS,20,20,2,1,2026-08-03 22:23:51.954535,2026-08-03 22:24:05.865522,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:54:41.475929,2026-08-03 22:54:41.476115,No schema contract for archived.archived_audit
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:29:00.657920,2026-08-03 22:29:00.658092,No schema contract for archived.archived_audit
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral,silver.referral,referral,referral,SUCCESS,520,520,0,6,2026-08-04 13:10:32.110708,2026-08-04 13:10:40.474556,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_child,silver.ipa_child,ipa,ipa_child,SUCCESS,26,26,0,0,2026-08-04 13:07:40.405001,2026-08-04 13:07:48.855202,
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ipa_child,silver.ipa_child,ipa,ipa_child,SUCCESS,20,20,2,1,2026-08-03 22:51:16.291655,2026-08-03 22:51:23.483177,
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.framework,,,,FAILED,0,0,0,0,2026-08-04 13:07:01.981285,2026-08-04 13:07:01.981324,No schema contract for bronze.framework
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.framework,,,,FAILED,0,0,0,0,2026-08-03 22:50:47.394317,2026-08-03 22:50:47.394550,No schema contract for bronze.framework
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.framework,,,,FAILED,0,0,0,0,2026-08-04 13:28:15.106104,2026-08-04 13:28:15.106146,No schema contract for bronze.framework
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.framework,,,,FAILED,0,0,0,0,2026-08-03 22:22:30.561126,2026-08-03 22:22:30.561372,No schema contract for bronze.framework
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ref_RID,,,,FAILED,0,0,0,0,2026-08-04 13:30:02.047936,2026-08-04 13:30:02.047979,No schema contract for bronze.ref_RID
+c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ref_RID,,,,FAILED,0,0,0,0,2026-08-03 22:26:52.821614,2026-08-03 22:26:52.821785,No schema contract for bronze.ref_RID
+6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ref_RID,,,,FAILED,0,0,0,0,2026-08-03 22:53:07.569695,2026-08-03 22:53:07.569916,No schema contract for bronze.ref_RID
+6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ref_RID,,,,FAILED,0,0,0,0,2026-08-04 13:10:26.656754,2026-08-04 13:10:26.656798,No schema contract for bronze.ref_RID
