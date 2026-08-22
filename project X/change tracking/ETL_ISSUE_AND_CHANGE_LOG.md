@@ -1,13 +1,30 @@
-# Archive loader issue and regression log
+# ETL issue and change log
 
-This file records resolved defects in `00_archive_load.ipynb`. Before
-publishing future changes, run:
+This file records resolved archive, pipeline, Silver, Gold, configuration, and
+repository issues. Before publishing future changes, run the relevant portable
+validator suite, for example:
 
 ```text
 python validate_archive_load.py
 ```
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
+
+## Issue identifier legend
+
+| Prefix | Issue type |
+| --- | --- |
+| `AR` | Archive-layer loader and replay issue |
+| `ARCH-ETL` | Archive ETL pipeline issue |
+| `LIVE-ETL` | Live ETL pipeline issue |
+| `SI` / `SIL` | Silver-layer issue |
+| `GLD` | Gold-layer issue |
+| `CFG` | Configuration and monitoring issue |
+| `RG` | Repository reorganisation issue |
+
+Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
+where applicable. `Status` records whether the source change is complete; a
+Fabric replay remains a separate deployment verification unless stated.
 
 ## AR-001 — Only one archive batch processed
 
@@ -547,54 +564,59 @@ and day-name attributes.
   sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence
   and safe single-month recovery controls.
 
-## ARCH-ETL-001 - archive_pipeline
-running the 90_run_archive_pipeline notebook at the 02a_archive_silver step notebook i get an error. the error message is captured in the monitoring tables which means the logging tables works
+## ARCH-ETL-001 — Archive Silver child timed out
 
-select
-* from monitoring.vw_job_step_summary
-
-heres the error An error occurred while calling o6949.throwExceptionIfHave.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Timeout when exe cell - 13 in notebook 02a_archive_silver, code length = 11912 and it costs 1800.0s. You can set timeout parameter to mitigate the issue. Please check the doc https://go.microsoft.com/fwlink/?linkid=2152237#notebook-utilities for details.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
-
-please extend the time for the runtime allowance.
-
-- **Status:** Resolved in the repository.
+- **Symptom:** `90_run_archive_pipeline` timed out while running
+  `02a_archive_silver` after its 1,800-second allowance. Monitoring correctly
+  captured the child notebook failure in `monitoring.vw_job_step_summary`.
+- **Cause:** archive Silver can include replay, DQ, and Gold child processing,
+  which can exceed the original 30-minute child and Fabric session allowance.
 - **Fix:** `90_run_archive_pipeline` and `02a_archive_silver` now allow
   7,200 seconds (two hours) per child notebook; their Fabric session timeout
   is also extended to two hours. This covers the archive Silver replay plus
   its DQ/Gold child calls while retaining monitoring of the actual failure.
-
-## ARCH-ETL-002 - archive_pipeline -multiple current month snapshots
-running the 90_run_archive_pipeline notebook at the 02a_archive_silver i noticed it creates a snapshot table for the LATEST current month for example the latest archive extract is 2026-08-20 so a snapshot of the previous current month (if archive load was loaded yesterday) will be 19 august 2026. in this situation the most current snapshot in the target table (2026-08-19) should be overwriting with the latest ready to snapshot 2026-08-20  data... its should do this step each time the archive pipeline is run daily for any reason.
-in summary the latest batch if its mid month should be overwritten with the current data in the archive current batch. example Month-end batches: 5; 2026-04-30, 2026-05-30, 2026-06-30, 2026-07-31, 2026-08-20
-should allow overwrite into snapshot for these months... the last batch for the latest data: 2026-08-20 should follow the steps...  delete previous snapshot for that month  2026-08 which might be anything between 2026-08-01 -  2026-08-19 and the insert into the snapshot
-
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` checks the
+  two-hour child timeout; confirm runtime duration during the next replay.
 - **Status:** Resolved in the repository.
+
+## ARCH-ETL-002 — Archive runs accumulated active-month snapshots
+
+- **Symptom:** a daily archive run could leave multiple snapshot dates for the
+  active calendar month, rather than replacing the current-month position with
+  the latest archive extract.
+- **Cause:** snapshot writes were additive rather than scoped to the active
+  calendar-month slice.
 - **Fix:** `04_gold_model` now atomically replaces the complete active
   calendar-month slice of `gold.fact_referral_snapshot` using Delta
   `replaceWhere`. An archive export on 2026-08-20 therefore replaces all
   2026-08 snapshot rows, including an earlier 2026-08-19 export, while
   completed prior months remain intact.
-
-## LIVE-ETL-001 - live_pipeline -multiple current month snapshots
-i suspect the 90_run_live_pipeline has the same issue as ARCH-ETL-002. could this also be added to the live pipeline.
-
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the
+  active-month replacement predicate.
 - **Status:** Resolved in the repository.
+
+## LIVE-ETL-001 — Live runs accumulated active-month snapshots
+
+- **Symptom:** the live pipeline could have retained more than one snapshot
+  date for the current calendar month.
+- **Cause:** live and archive processing shared Gold snapshot behaviour but the
+  requirement had only been recorded for archive replay.
 - **Fix:** the live runner uses the same Gold notebook with today's as-of
   date, so the same active-month atomic replacement applies to every live
   execution without a separate branch.
-
-
-## SI-018 - missing derived columns
-i have asked if you can add the fields to the silver tables to enhance the details, these additional fields arent only restricted to the referrals table but the ipa table, or the referral_provider or offers table.. here are the derived fields in a markdown \project X\client documentation\04_Data_and_Reporting\ENHANCEMENT_BACKLOG.md .
-
-please asses whether these enhancements should be made in the silver layer or the gold layer.. if decision is made to perform the derivations in the silver then  promote these fields upto the gold layer and and to the snapshot table if these columns are added to the referrals table..
-could you please add these to the relevant gold tables and have dataquality rules added for them,
-
-please update the 03_Architecture_and_Design/Proposed_Solution_Architecture.md appropriately with the changes
-
+- **Validation:** the shared snapshot validator covers both archive and live
+  use of `04_gold_model`.
 - **Status:** Resolved in the repository.
-- **Design decision:** cross-table calculations are materialised in the new
+
+
+## SI-018 — Referral enrichment fields were absent from the analytical model
+
+- **Symptom:** the enhancement backlog required cross-table referral, offer,
+  provider, and IPA metrics that were not materialised consistently for Gold
+  reporting or the referral snapshot.
+- **Cause:** the raw source-conformed Silver tables had no reusable,
+  referral-grain relation for cross-table derived fields.
+- **Fix:** cross-table calculations are materialised in the new
   one-row-per-referral `silver.referral_enrichment` relation, not appended to
   the raw source-conformed `silver.referral` contract. Gold and the referral
   snapshot expose the derived fields. This preserves replayable source
@@ -609,9 +631,21 @@ please update the 03_Architecture_and_Design/Proposed_Solution_Architecture.md a
   non-negative offer count, populated flag, and applicable date ordering.
 - **Documentation:** the architecture and the Assessment and Requirements
   KPI enhancement document describe the model, snapshot policy and caveat.
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the
+  Silver enrichment, Gold promotion, and configured DQ controls.
+- **Status:** Resolved in the repository.
 
-## SI-019 - new derived columns
-also in the fact referral table can we have new enhanced fields such as.. please review these KPI and add or update them to the project X/client documentation/02_Assessment_and_Requirements docs....
+## SI-019 — Additional referral KPI fields were not available in Gold
+
+- **Symptom:** reporting required additional referral KPIs, including offer
+  responsiveness, provider engagement, IPA admission/signature, and document
+  review measures, that were not exposed by `gold.fact_referral`.
+- **Cause:** the Silver enrichment and Gold referral projection pre-dated the
+  detailed KPI definitions.
+- **Evidence and requested derivations:**
+
+The following source queries were retained as the evidence for the requested
+business definitions and source relationships.
 
  - referral.cnt_offer_made (aggregate_fact of offers made for referral)
 ```select  o.offer_status , count(*)
@@ -713,7 +747,6 @@ where a.referral_id = '5236db3f-cc23-4109-9c0b-eacfb4a277bb'
 ```
 note that these dates must be greater than the ipa_placement_admission_date and not null as this implies that the provider hasnt got the right paperwork inplace
 
-- **Status:** Resolved in the repository.
 - **Fix:** `CntOfferMade`, `FirstOfferDate`, `FirstProviderSeenDate`,
   `IsNotSeenByProviders`, `IPAPlacementAdmissionDate`, `IPA2Signatures`,
   `IPALastSignatureDate`, and `IPADueDiligenceMinReviewDate` are promoted to
@@ -725,12 +758,15 @@ note that these dates must be greater than the ipa_placement_admission_date and 
 - **Validation:** run `python validate_archive_snapshot_and_enrichment.py`
   with the existing portable validator suite. Fabric deployment and a replay
   remain required to verify runtime behaviour against the Lakehouse.
+- **Status:** Resolved in the repository.
 
-### SI-020 — Referral lifecycle dates were not explicitly derived in Silver
+## SI-020 — Referral lifecycle dates were not explicitly derived in Silver
 
 - **Symptom:** it was unclear whether lifecycle dates shown in Gold had a
   durable, reusable Silver derivation, and first action could be interpreted
   as referral creation.
+- **Cause:** lifecycle calculations were either absent or embedded in Gold
+  projection logic, leaving no durable Silver-level business definition.
 - **Fix:** `03_silver_business_rules.ipynb` now materialises
   `first_action_date`, `offer_accepted_date`, `ipa_issued_date`,
   `referral_closed_date`, and `last_activity_date` in
@@ -740,12 +776,15 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   directly to `gold.fact_referral` and `gold.fact_referral_snapshot`.
 - **Validation:** date-order DQ rules enforce that each applicable derived
   date is not earlier than referral creation.
+- **Status:** Resolved in the repository.
 
-### SI-021 — Live child notebooks repeated configuration setup
+## SI-021 — Live child notebooks repeated configuration setup
 
 - **Symptom:** after `90_run_live_pipeline` had successfully executed
   `00_setup_cfg`, each live child invoked the same setup notebook again.
   This added avoidable child notebook startup and configuration work.
+- **Cause:** each child was independently bootstrapped before the pipeline
+  runner took ownership of the mandatory configuration prerequisite.
 - **Fix:** `01a_cfg_schema_capture_live`, `02_silver_formatter`,
   `03_silver_business_rules`, `04_gold_model`, and `05_gold_dimensions` now
   rely on the runner-owned setup step. The runner keeps `00_setup_cfg` as its
@@ -754,9 +793,14 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   child, when bootstrapping a new Lakehouse environment.
 - **Validation:** `validate_cfg_setup.py` verifies both the setup-first runner
   order and the absence of setup invocations in runner-managed children.
+- **Status:** Resolved in the repository.
 
-### CFG-002 — Low-cardinality Bronze data domains were not recorded
+## CFG-002 — Low-cardinality Bronze data domains were not recorded
 
+- **Symptom:** configuration contained no reusable record of approved
+  low-cardinality Bronze values for reporting, validation, or lookup review.
+- **Cause:** no notebook profiled contract-matched string columns into a
+  centrally managed data-domain table.
 - **Fix:** `99_data_domain.ipynb` profiles every Bronze column that has an
   unambiguous string-compatible type in
   `monitoring.cfg_schema_contract_column`. It writes the source schema, table,
@@ -768,3 +812,27 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   column, so domains reflect the latest successful profile.
 - **Validation:** `validate_data_domain.py` checks the contract-driven filter,
   40-value cap, replace semantics, and centrally owned configuration schema.
+- **Status:** Resolved in the repository.
+
+## CFG-003 — High-cardinality values could be retained as data domains
+
+- **Symptom:** the data-domain implementation needed an explicit safeguard to
+  ensure identifier and description-like columns with more than 40 distinct
+  values are never inserted into `monitoring.cfg_data_domain`.
+- **Cause:** the threshold, clear, stale-delete, and write behaviour were not
+  centralised in the shared library, making the intended guard difficult to
+  verify and reuse.
+- **Fix:** the 40-value decision now occurs inside
+  `collect_low_cardinality_domain_values` in `99_common_library.ipynb`. It
+  returns `None` after observing a 41st distinct value, and
+  `99_data_domain.ipynb` removes any stale domain rather than writing that
+  column.
+- **Operational control:** `CLEAR_TARGET_TABLE` defaults to `False`. Set it to
+  `True` only when a full rebuild of `monitoring.cfg_data_domain` is intended;
+  the table is cleared before profiling begins.
+- **Reuse:** `99_data_domain.ipynb` loads `99_common_library` with `%run`; the
+  contract type, threshold, clear, delete, and atomic-replace helpers are now
+  maintained in one place.
+- **Validation:** `validate_data_domain.py` verifies the 41st-value guard,
+  shared-library use, optional full clear, and atomic eligible-domain replace.
+- **Status:** Resolved in the repository.
