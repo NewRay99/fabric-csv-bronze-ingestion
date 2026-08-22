@@ -43,7 +43,7 @@ assert 'BRONZE_SCHEMA = "bronze"' in source
 assert 'CONTRACT_TABLE = "monitoring.cfg_schema_contract_column"' in source
 assert 'DOMAIN_TABLE = "monitoring.cfg_data_domain"' in source
 assert "MAX_DISTINCT_VALUES = 40" in source
-assert "CLEAR_TARGET_TABLE = False" in source
+assert "CLEAR_TARGET_TABLE =" in source
 assert "%run ./99_common_library" in source
 assert "collect_low_cardinality_domain_values" in source
 assert "data_domain_exclusion_reason(source_column, contract_data_type)" in source

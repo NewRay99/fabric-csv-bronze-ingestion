@@ -827,9 +827,9 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   returns `None` after observing a 41st distinct value, and
   `99_data_domain.ipynb` removes any stale domain rather than writing that
   column.
-- **Operational control:** `CLEAR_TARGET_TABLE` defaults to `False`. Set it to
-  `True` only when a full rebuild of `monitoring.cfg_data_domain` is intended;
-  the table is cleared before profiling begins.
+- **Operational control:** set `CLEAR_TARGET_TABLE` to `True` only when a full
+  rebuild of `monitoring.cfg_data_domain` is intended; reset it to `False` for
+  routine profiling. The table is cleared before profiling begins.
 - **Reuse:** `99_data_domain.ipynb` loads `99_common_library` with `%run`; the
   contract type, threshold, clear, delete, and atomic-replace helpers are now
   maintained in one place.
@@ -853,10 +853,29 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   helper and the profiler's unsuitable-column branch.
 - **Status:** Resolved in the repository.
 
-## SI-022 — missing fields from the bronze layer
+## SI-022 — Source fields were dropped before Silver and Gold dimensions failed
 
-- **Symptom:** gold dimension step is failing
-- **Cause:** this is due to silver layer not extracting fields from the bronze layer
-- this needs to map new or missing columns from the bronze layer into the silver layer..
-- the schema discovery process should have [icked them up and added them to the silver layer... these columns need to be highlighted so we can update the configuration\schema_definition.csv accordingly ... i have added `project X/configuration/cfg_tables` folder with all the exports of the metadata. you can use this from now on
-  
+- **Symptom:** the supplied source-schema extracts in
+  `configuration/cfg_tables` showed Bronze fields absent from
+  `schema_definition.csv`. Silver omitted those fields, which left Gold
+  dimension creation without the required `framework` attributes and made the
+  Gold pipeline fail after source conformance.
+- **Cause:** the schema contract had not been reconciled with
+  `cfg_schema_definition_candidate` after the latest source-schema capture.
+- **Fix:** the canonical contract now includes the observed fields:
+  `framework_name`, `start_date`, `end_date`, and `placement_type` on
+  `framework`; `withdraw_reason_other` on `offer`; `updated_by` on
+  `provider_education_provision`; `status` on `provider_home`;
+  `created_date` and `modified_date` on `referral_provider`;
+  `message_read_by` and `message_read_timestamp` on
+  `referral_provider_message`; and `spot_category` on
+  `referral_spot_category`. Contract ordinals were aligned where the supplied
+  extract established source ordering.
+- **Deployment:** copy the revised `schema_definition.csv` to
+  `Files/cfg_files/schema_definition.csv`, run `00_setup_cfg` once with
+  `LOAD_FILE_CONFIG = True`, return the flag to `False`, then rerun Silver
+  before `04_gold_model` and `05_gold_dimensions`.
+- **Validation:** `validate_si022_source_schema_contract.py` requires every
+  field in the supplied candidate extract to be present in the canonical
+  contract and checks the affected tables for duplicate ordinals.
+- **Status:** Resolved in the repository; Fabric replay remains required.

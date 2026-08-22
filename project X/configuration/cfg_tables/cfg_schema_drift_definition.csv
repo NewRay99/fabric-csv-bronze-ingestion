@@ -222,11 +222,11 @@ provider,6,town_city,character varying(100),YES,NULL,,NO,,,,,The name of the tow
 provider,7,county,character varying(100),YES,NULL,,NO,,,,,"While not always necessary, especially for larger cities, the county can be included for clarity",This provider entity all key information regarding the provider,8006089c6b553e72571cc73918cdcff15a206458357a7b49b3c54bf101657e4e,2026-08-18 16:47:51.418590,,
 provider,8,postcode,character varying(20),NO,NULL,,NO,,,,,"The UK postcode is a crucial element of the address, used to identify the precise location for mail delivery.",This provider entity all key information regarding the provider,4beb7feba59f0c94a3a99dc9d88b4ed9a066d6535cce04988c587393a50d0787,2026-08-18 16:47:51.418590,,
 provider,9,country,character varying(100),YES,NULL,,NO,,,,,"If the address is being used in an international context, specifying 'United Kingdom' is important.",This provider entity all key information regarding the provider,8905f5702d297e61f9c5b7316bdd09e28b071979b140c0aede0f985dd25d09fe,2026-08-18 16:47:51.418590,,
-provider,10,provider_status,character varying(9),NO,NULL,,NO,,,,,"The current status of the provider. 
+provider,10,provider_status,character varying(9),NO,NULL,,NO,,,,,"The current status of the provider.
 
 Details TBA
 
-EG: 
+EG:
 Approved
 Pending
 Declined",This provider entity all key information regarding the provider,427a0c6c0d91fc4b834e418cf33ffbc394a84fcc7312723255565125396f916b,2026-08-18 16:47:51.418590,,
