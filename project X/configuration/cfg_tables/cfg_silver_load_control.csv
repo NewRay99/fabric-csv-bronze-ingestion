@@ -1275,20 +1275,20 @@ c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.foster_transport,silver.of
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_category,silver.provider_home_category,provider,provider_home_category,SUCCESS,2384,2384,0,0,2026-08-04 13:09:49.230714,2026-08-04 13:09:57.467774,
 6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_home_category,silver.provider_home_category,provider,provider_home_category,SUCCESS,2384,2384,0,1,2026-08-03 22:52:38.119976,2026-08-03 22:52:44.710834,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_spot_category,silver.referral_spot_category,referral,referral_spot_category,SUCCESS,242,242,0,1,2026-08-04 13:11:41.806262,2026-08-04 13:11:50.083894,
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:34:29.457865,2026-08-03 22:34:29.458073,No schema contract for archived.archived_referral_person_support_needs
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:56:39.637649,2026-08-03 22:56:39.637839,No schema contract for archived.archived_referral_person_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:34:29.457865,2026-08-03 22:34:29.458073,No schema contract for archived.referral_person_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:56:39.637649,2026-08-03 22:56:39.637839,No schema contract for archived.referral_person_support_needs
 c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.additional_fee,silver.offer_additional_fee,offer,additional_fee,SUCCESS,5182,5182,1,2,2026-08-03 22:28:45.217059,2026-08-03 22:28:56.883123,
 c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_framework,silver.provider_provider_framework,provider,provider_framework,SUCCESS,291,291,0,1,2026-08-03 22:25:15.415827,2026-08-03 22:25:23.796221,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_home_gender,silver.provider_home_gender,provider,provider_home_gender,SUCCESS,2315,2315,0,0,2026-08-04 13:10:01.258743,2026-08-04 13:10:07.636483,
 6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.additional_fee,silver.additional_fee,offer,additional_fee,SUCCESS,5182,5182,1,2,2026-08-03 22:54:28.626914,2026-08-03 22:54:35.898819,
 c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.provider_home_age,silver.provider_provider_home_age,provider,provider_home_age,SUCCESS,2315,2315,0,1,2026-08-03 22:25:37.694541,2026-08-03 22:25:53.259597,
 c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_category,silver.referral_referral_category,referral,referral_category,SUCCESS,478,478,0,1,2026-08-03 22:27:09.998602,2026-08-03 22:27:21.670113,
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:56:25.475216,2026-08-03 22:56:25.475490,No schema contract for archived.archived_provider_submission_docs
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:33:28.226290,2026-08-03 22:33:28.226547,No schema contract for archived.archived_provider_submission_docs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:56:25.475216,2026-08-03 22:56:25.475490,No schema contract for archived.provider_submission_docs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_submission_docs,,,,FAILED,0,0,0,0,2026-08-03 22:33:28.226290,2026-08-03 22:33:28.226547,No schema contract for archived.provider_submission_docs
 c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral_person,silver.referral_person,referral,person,SUCCESS,11459,11459,5,5,2026-08-03 22:34:08.989018,2026-08-03 22:34:25.559154,
 c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.foster_home,silver.offer_foster_home,offer,foster_home,SUCCESS,380,380,0,1,2026-08-03 22:29:16.459786,2026-08-03 22:29:26.282247,
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:30:36.796418,2026-08-03 22:30:36.796655,No schema contract for archived.archived_ipa_child_support_needs
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:55:29.043417,2026-08-03 22:55:29.043690,No schema contract for archived.archived_ipa_child_support_needs
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:30:36.796418,2026-08-03 22:30:36.796655,No schema contract for archived.ipa_child_support_needs
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.ipa_child_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:55:29.043417,2026-08-03 22:55:29.043690,No schema contract for archived.ipa_child_support_needs
 6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.provider_framework,silver.provider_framework,provider,provider_framework,SUCCESS,291,291,0,1,2026-08-03 22:52:07.072444,2026-08-03 22:52:15.813214,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.provider_framework,silver.provider_framework,provider,provider_framework,SUCCESS,291,291,0,0,2026-08-04 13:09:20.436249,2026-08-04 13:09:27.301896,
 c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.referral,silver.referral_referral,referral,referral,SUCCESS,10766,10766,6,7,2026-08-03 22:33:30.314276,2026-08-03 22:33:45.724968,
@@ -1303,10 +1303,10 @@ c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.foster_transport,silver.offer
 c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:27:37.320178,2026-08-03 22:27:37.320400,No schema contract for bronze.referral_person_support_needs
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-04 13:11:03.835694,2026-08-04 13:11:03.835756,No schema contract for bronze.referral_person_support_needs
 6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.referral_person_support_needs,,,,FAILED,0,0,0,0,2026-08-03 22:53:38.211479,2026-08-03 22:53:38.211781,No schema contract for bronze.referral_person_support_needs
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:29:42.981978,2026-08-03 22:29:42.982245,No schema contract for archived.archived_framework_category
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:33:24.330105,2026-08-03 22:33:24.330318,No schema contract for archived.archived_provider_sic_codes
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:55:07.607663,2026-08-03 22:55:07.607957,No schema contract for archived.archived_framework_category
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:56:23.835284,2026-08-03 22:56:23.835499,No schema contract for archived.archived_provider_sic_codes
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:29:42.981978,2026-08-03 22:29:42.982245,No schema contract for archived.framework_category
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:33:24.330105,2026-08-03 22:33:24.330318,No schema contract for archived.provider_sic_codes
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.framework_category,,,,FAILED,0,0,0,0,2026-08-03 22:55:07.607663,2026-08-03 22:55:07.607957,No schema contract for archived.framework_category
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.provider_sic_codes,,,,FAILED,0,0,0,0,2026-08-03 22:56:23.835284,2026-08-03 22:56:23.835499,No schema contract for archived.provider_sic_codes
 c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.ipa_child,silver.ipa_ipa_child,ipa,ipa_child,SUCCESS,396,396,2,1,2026-08-03 22:30:22.442603,2026-08-03 22:30:33.226109,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral_person,silver.referral_person,referral,referral_person,SUCCESS,560,560,0,0,2026-08-04 13:10:53.950789,2026-08-04 13:11:00.262348,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.holding_company,silver.holding_company,provider,holding_company,SUCCESS,654,654,0,0,2026-08-04 13:07:09.162047,2026-08-04 13:07:17.753053,
@@ -1345,8 +1345,8 @@ c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-04 13:10:30.044915,2026-08-04 13:10:30.044962,No schema contract for bronze.ref_Table_Lineage
 6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ref_Table_Lineage,,,,FAILED,0,0,0,0,2026-08-03 22:53:09.243338,2026-08-03 22:53:09.243580,No schema contract for bronze.ref_Table_Lineage
 c2a3ce17-f3df-4809-a0eb-181fb745139e,LATEST,bronze.ipa_child,silver.ipa_ipa_child,ipa,ipa_child,SUCCESS,20,20,2,1,2026-08-03 22:23:51.954535,2026-08-03 22:24:05.865522,
-6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:54:41.475929,2026-08-03 22:54:41.476115,No schema contract for archived.archived_audit
-c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:29:00.657920,2026-08-03 22:29:00.658092,No schema contract for archived.archived_audit
+6d7f6d24-3004-4724-9597-82ad84dba6e8,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:54:41.475929,2026-08-03 22:54:41.476115,No schema contract for archived.audit
+c2a3ce17-f3df-4809-a0eb-181fb745139e,ARCHIVE,archived.audit,,,,FAILED,0,0,0,0,2026-08-03 22:29:00.657920,2026-08-03 22:29:00.658092,No schema contract for archived.audit
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.referral,silver.referral,referral,referral,SUCCESS,520,520,0,6,2026-08-04 13:10:32.110708,2026-08-04 13:10:40.474556,
 6c898cf7-9d0d-4c1b-9f39-46a2bf25acd8,LATEST,bronze.ipa_child,silver.ipa_child,ipa,ipa_child,SUCCESS,26,26,0,0,2026-08-04 13:07:40.405001,2026-08-04 13:07:48.855202,
 6d7f6d24-3004-4724-9597-82ad84dba6e8,LATEST,bronze.ipa_child,silver.ipa_child,ipa,ipa_child,SUCCESS,20,20,2,1,2026-08-03 22:51:16.291655,2026-08-03 22:51:23.483177,

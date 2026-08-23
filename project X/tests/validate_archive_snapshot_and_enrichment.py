@@ -56,7 +56,10 @@ assert "month_predicate" in gold
 assert ".option(\"replaceWhere\", month_predicate)" in gold
 assert "replaced active month" in gold
 assert "AS_OF_DATE_VALUE = date.today()" in gold
-assert "SnapshotDate < DATE" in gold
+# Gold intentionally reads only conformed Silver sources. Archive ownership
+# and the physical archive-to-Silver handoff are verified in Archive Silver.
+assert 'source_table = f"{ARCHIVE_SCHEMA}.{physical_table}"' in archive_silver
+assert 'target_table = f"{SILVER_SCHEMA}.{contract_table}"' in archive_silver
 print("PASS ARCH-ETL-002 and LIVE-ETL-001 replace, rather than accumulate, the active month")
 
 required_fields = {

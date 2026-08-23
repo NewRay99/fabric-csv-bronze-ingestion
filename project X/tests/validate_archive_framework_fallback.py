@@ -95,7 +95,7 @@ require(
     "Silver output loses fallback provenance",
 )
 assert "saveAsTable(f\"{ARCHIVE_SCHEMA}.archived_framework\")" not in source
-assert "saveAsTable(\"archived.archived_framework\")" not in source
+assert "saveAsTable(\"archived.framework\")" not in source
 print("PASS fallback enters normal Silver conformance without inventing archive data")
 
 issue_log = (
