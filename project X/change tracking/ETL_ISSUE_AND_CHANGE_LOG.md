@@ -879,3 +879,39 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   field in the supplied candidate extract to be present in the canonical
   contract and checks the affected tables for duplicate ordinals.
 - **Status:** Resolved in the repository; Fabric replay remains required.
+
+## AR-SL-01 error still with missing silver.provider_submis_docs table
+**Symptom:** error when running 90_run_archive_pipeline
+**Cause:** no silver table
+
+**Error:**
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+02a_archive_silver
+Failed
+92%
+9 min 41 sec 546 ms	
+-
+[DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist. ---------------------------------------------------------------------------AnalysisException Traceback (most recent call last)Cell In[15], line 189 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) --> 189 stale_targets = [ 190 info["target_table"] for info in source_tables 191 if target_requires_refresh(info["target_table"], info["schema_cols"]) 192 ] 193 if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets: 194 skipped_months += 1 Cell In[15], line 191, in <listcomp>(.0) 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) 189 stale_targets = [ 190 info["target_table"] for info in source_tables --> 191 if target_requires_refresh(info["target_table"], info["schema_cols"]) 192 ] 193 if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets: 194 skipped_months += 1 Cell In[8], line 11, in target_requires_refresh(target_table, schema_cols) 9 if not spark.catalog.tableExists(target_table): 10 return True ---> 11 actual_columns = {field.name.lower() for field in spark.table(target_table).schema.fields} 12 expected_columns = {definition["column_name"].lower() for definition in schema_cols} 13 missing_columns = expected_columns - actual_columns File /opt/spark/python/lib/pyspark.zip/pyspark/sql/session.py:1667, in SparkSession.table(self, tableName) 1636 def table(self, tableName: str) -> DataFrame: 1637 """Returns the specified table as a :class:`DataFrame`. 1638 1639 .. versionadded:: 2.0.0 (...) 1665 +---+ 1666 """ -> 1667 return DataFrame(self._jsparkSession.table(tableName), self) File ~/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py:1322, in JavaMember.__call__(self, *args) 1316 command = proto.CALL_COMMAND_NAME +\ 1317 self.command_header +\ 1318 args_command +\ 1319 proto.END_COMMAND_PART 1321 answer = self.gateway_client.send_command(command) -> 1322 return_value = get_return_value( 1323 answer, self.gateway_client, self.target_id, self.name) 1325 for temp_arg in temp_args: 1326 if hasattr(temp_arg, "_detach"): File /opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py:185, in capture_sql_exception.<locals>.deco(*a, **kw) 181 converted = convert_exception(e.java_exception) 182 if not isinstance(converted, UnknownException): 183 # Hide where the exception came from that shows a non-Pythonic 184 # JVM exception message. --> 185 raise converted from None 186 else: 187 raise AnalysisException: [DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
+=== FAILED 02a_archive_silver: An error occurred while calling o6949.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: [DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist.
+---------------------------------------------------------------------------AnalysisException                         Traceback (most recent call last)Cell In[15], line 189
+    187 for snapshot_date in month_end_dates:
+    188     existing = month_end_record(snapshot_date)
+--> 189     stale_targets = [
+    190         info["target_table"] for info in source_tables
+    191         if target_requires_refresh(info["target_table"], info["schema_cols"])
+    192     ]
+    193     if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets:
+    194         skipped_months += 1
+Cell In[15], line 191, in <listcomp>(.0)
+    187 for snapshot_date in month_end_dates:
+    188     existing = month_end_record(snapshot_date)
+    189     stale_targets = [
+    190         info["target_table"] for info in source_tables
+--> 191         if target_requires_refresh(info["target_table"], info["schema_cols"])
+    192     ]
+    193     if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets:
+    194         skipped_months += 1
+
+    
