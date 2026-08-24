@@ -1046,3 +1046,34 @@ display(frame.where("lower(table_name) = 'framework'"))
 - **Regression guard:** `validate_si013_si016.py` requires the explicit blank
   `PROCESS_ONLY` rejection.
 - **Status:** resolved in source; deploy both archive notebooks before rerun.
+
+## CFG-007 new Archive reply error
+- **Evidence:** 
+Content
+Type
+Value
+CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY	bool	true
+CONFIRM_PROCESS_ONLY_RESET	string	
+JOB_RUN_ID	string	fcb4dbff-7a45-4da3-ada7-ff4e9d9e6855
+PROCESS_ONLY	string	
+RESET_MONTH_MONITORING	bool	true
+RUN_GOLD_DIMENSIONS_AT_MONTH_END	bool	false
+
+	
+02a_archive_silver
+ERROR:root:KeyboardInterrupt while sending command.
+Traceback (most recent call last):
+  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py", line 1038, in send_command
+    response = connection.send_command(command)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py", line 1217, in send_command
+    answer = smart_decode(self.stream.readline()[:-1])
+                          ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+schaphost(s) dive into notebook:02a_archive_silver
+RuntimeError
+2026-07-31: archived.framework_category: An error occurred while calling o31024.execute. : org.apache.spark.SparkException: Job 14364 cancelled part of cancelled job group 6
