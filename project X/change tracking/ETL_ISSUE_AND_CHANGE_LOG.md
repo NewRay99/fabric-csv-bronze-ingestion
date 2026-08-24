@@ -1019,3 +1019,17 @@ frame = (spark.read.format("csv").option("header", "true")
 display(frame.where("lower(table_name) = 'framework'"))
 # missing framework_name row
 ```
+## CFG-006 - still no archived data coming through even when setting to the paramater
+CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY	bool	true
+CONFIRM_PROCESS_ONLY_RESET	string	
+JOB_RUN_ID	string	fcb4dbff-7a45-4da3-ada7-ff4e9d9e6855
+PROCESS_ONLY	string	
+RESET_MONTH_MONITORING	bool	true
+RUN_GOLD_DIMENSIONS_AT_MONTH_END	bool	false
+
+--file state
+audit zip updated: yes
+notebook results updated: no
+
+
+
