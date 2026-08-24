@@ -964,9 +964,24 @@ silver.framework is missing required columns: ['framework_name'] ---------------
      52 )
 
 ## CFG-005
-- **Symptom:** `00_setup_cfg` misses rows when inserting into target
-  rejected `silver.framework` because `framework_name` was missing.
-- **Evidence:**  
+- **Symptom:** Fabric's displayed `Files/cfg_files/schema_definition.csv`
+  frame appeared to omit the `framework_name` contract row before any Delta
+  write occurred.
+- **Cause:** `schema_definition.csv` contains quoted multiline descriptions
+  and mixed CRLF/LF line endings. Spark's `multiLine=true` default line
+  separator absorbed the LF-delimited `framework_name` record into the prior
+  `framework_code` record's final field.
+- **Fix:** setup now pins Spark CSV `lineSep` to LF while retaining multiline
+  support. Added `validate_cfg005_contract_source_rows.py`; it verifies CSV
+  record shape, the required framework rows (including ordinal 2
+  `framework_name`), unique table/column keys, and that setup writes the
+  complete unfiltered CSV frame with Delta overwrite semantics.
+- **Validation:** upload the current CSV to Lakehouse Files, display the
+  framework rows from that location, then run the one-off overwrite command
+  before archive replay.
+- **Status:** Source regression covered; Fabric file deployment must be
+  verified operationally.
+- **Evidence:**
 ```
 %%pyspark
 
@@ -975,6 +990,6 @@ csv_path = "Files/cfg_files/schema_definition.csv"
 frame = (spark.read.format("csv").option("header", "true")
         .option("quote", '"').option("escape", '"').option("multiLine", "true")
         .load(csv_path))
-display(frame.where("lower(table_name) = 'framework'")) 
+display(frame.where("lower(table_name) = 'framework'"))
 # missing framework_name row
 ```

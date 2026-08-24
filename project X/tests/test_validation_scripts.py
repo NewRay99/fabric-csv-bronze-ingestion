@@ -22,6 +22,11 @@ def test_validator(validator):
         text=True,
         check=False,
     )
+    if result.returncode == 0:
+        print(f"PASS: {validator.name}")
+        return
+
+    print(f"FAIL: {validator.name}")
     assert result.returncode == 0, (
         f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
     )

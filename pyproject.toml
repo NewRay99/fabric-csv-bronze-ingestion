@@ -1,7 +1,9 @@
 [tool.pytest.ini_options]
 testpaths = ["project X/tests"]
 python_files = ["test_*.py"]
-addopts = "-p no:cacheprovider"
+# Display each validator and its explicit PASS/FAIL line for a plain
+# `python -m pytest` invocation.
+addopts = "-p no:cacheprovider -v -s"
 
 [tool.ruff]
 line-length = 100
