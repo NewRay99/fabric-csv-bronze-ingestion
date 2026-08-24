@@ -917,7 +917,7 @@ Cell In[15], line 191, in <listcomp>(.0)
 
 ## AR-GL-01 error with silver.framework is missing required columns
 **Symptom:** error when running 90_run_archive_pipeline
-**Cause:** no silver column in silver.framework but the column  does exist in archived.framework. when and how is the silver table created?
+**Cause:** no silver column in silver.framework but the column  does exist in archived.framework. when and how is the silver table created? i have provided audit logs in `project X/configuration/cfg_tables/cfg_extracts.zip`
 
 **Error:**
 Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
