@@ -61,6 +61,12 @@ assert ".option(\"multiLine\", \"true\")" in bootstrap_source
 assert '.option("lineSep", "\\n")' in bootstrap_source, (
     "00_setup_cfg does not pin LF for mixed-line-ending contract CSV files"
 )
+assert "frame = frame.toDF(*[column.strip() for column in frame.columns])" in bootstrap_source, (
+    "00_setup_cfg does not remove the CR retained on the final CSV header"
+)
+assert "source = source.toDF(*[column.strip() for column in source.columns])" in bootstrap_source, (
+    "00_setup_cfg does not normalise headers before comparing source and target counts"
+)
 assert ".where(" not in bootstrap_source and ".filter(" not in bootstrap_source, (
     "00_setup_cfg filters CSV rows before writing the contract"
 )
