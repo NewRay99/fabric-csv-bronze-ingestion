@@ -80,11 +80,15 @@ def main():
     print("PASS archive replay exposes guarded single-month tracing controls")
 
     archive_runner = source(ARCHIVE_RUNNER)
+    assert "ARCHIVE_PROCESS_ONLY" not in archive_runner, (
+        "The parent runner must use the child notebook's PROCESS_ONLY parameter "
+        "name so Fabric job inputs are not silently discarded"
+    )
     for token in [
-        "ARCHIVE_PROCESS_ONLY",
+        'PROCESS_ONLY = ""',
+        '"PROCESS_ONLY": PROCESS_ONLY',
         "CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY",
         "CONFIRM_PROCESS_ONLY_RESET",
-        '"PROCESS_ONLY": ARCHIVE_PROCESS_ONLY',
     ]:
         assert token in archive_runner, (
             f"Archive runner does not forward single-month reload control: {token}"

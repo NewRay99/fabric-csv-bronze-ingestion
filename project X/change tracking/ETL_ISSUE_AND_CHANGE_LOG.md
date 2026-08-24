@@ -1047,33 +1047,29 @@ display(frame.where("lower(table_name) = 'framework'"))
   `PROCESS_ONLY` rejection.
 - **Status:** resolved in source; deploy both archive notebooks before rerun.
 
-## CFG-007 new Archive reply error
-- **Evidence:** 
-Content
-Type
-Value
-CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY	bool	true
-CONFIRM_PROCESS_ONLY_RESET	string	
-JOB_RUN_ID	string	fcb4dbff-7a45-4da3-ada7-ff4e9d9e6855
-PROCESS_ONLY	string	
-RESET_MONTH_MONITORING	bool	true
-RUN_GOLD_DIMENSIONS_AT_MONTH_END	bool	false
+## CFG-007 — Parent archive runner discarded the requested process month
 
-	
-02a_archive_silver
-ERROR:root:KeyboardInterrupt while sending command.
-Traceback (most recent call last):
-  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py", line 1038, in send_command
-    response = connection.send_command(command)
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py", line 1217, in send_command
-    answer = smart_decode(self.stream.readline()[:-1])
-                          ^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/trusted-service-user/cluster-env/trident_env/lib/python3.11/socket.py", line 706, in readinto
-    return self._sock.recv_into(b)
-           ^^^^^^^^^^^^^^^^^^^^^^^
-KeyboardInterrupt
-
-schaphost(s) dive into notebook:02a_archive_silver
-RuntimeError
-2026-07-31: archived.framework_category: An error occurred while calling o31024.execute. : org.apache.spark.SparkException: Job 14364 cancelled part of cancelled job group 6
+- **Symptom:** a `90_run_archive_pipeline.ipynb` job was submitted with the
+  clear/reset controls enabled, but Archive Silver received a blank
+  `PROCESS_ONLY` value and started the normal archive range. The unintended
+  work was interrupted, producing a Py4J `KeyboardInterrupt` and Spark
+  cancelled-job error while processing `archived.framework_category`.
+- **Evidence:** the child notebook parameter record showed
+  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and
+  `RESET_MONTH_MONITORING = true`, but both `PROCESS_ONLY` and
+  `CONFIRM_PROCESS_ONLY_RESET` were blank.
+- **Cause:** the parent runner exposed the month as `ARCHIVE_PROCESS_ONLY` but
+  forwarded it as the child's `PROCESS_ONLY`. A Fabric job supplied the natural
+  public name `PROCESS_ONLY`, which was not the parent variable used for the
+  forwarding call, so the child received the blank default.
+- **Fix:** the parent runner now uses and forwards `PROCESS_ONLY` under the
+  same name as `02a_archive_silver.ipynb`. The child guard from CFG-006 rejects
+  blank-month clear/reset requests, and the confirmation guard rejects a blank
+  or mismatched confirmation before archive processing begins.
+- **Usage:** submit `PROCESS_ONLY = "YYYY-MM"` and
+  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` with the selected clear or
+  reset control. For example, use `2026-07` and `RESET 2026-07`.
+- **Regression guard:** `validate_si013_si016.py` rejects the obsolete parent
+  parameter name and requires the exact `PROCESS_ONLY` forwarding mapping.
+- **Status:** resolved in source; deploy the parent and Archive Silver
+  notebooks before rerun.
