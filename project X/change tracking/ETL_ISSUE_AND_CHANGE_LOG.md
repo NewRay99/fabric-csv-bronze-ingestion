@@ -962,3 +962,19 @@ silver.framework is missing required columns: ['framework_name'] ---------------
      50     [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"),
      51      ("category_name", "CategoryName"), ("export_date", "SourceExportDate")],
      52 )
+
+## CFG-005
+- **Symptom:** `00_setup_cfg` misses rows when inserting into target
+  rejected `silver.framework` because `framework_name` was missing.
+- **Evidence:**  
+```
+%%pyspark
+
+from pyspark.sql import functions as F
+csv_path = "Files/cfg_files/schema_definition.csv"
+frame = (spark.read.format("csv").option("header", "true")
+        .option("quote", '"').option("escape", '"').option("multiLine", "true")
+        .load(csv_path))
+display(frame.where("lower(table_name) = 'framework'")) 
+# missing framework_name row
+```
