@@ -1097,3 +1097,7 @@ display(frame.where("lower(table_name) = 'framework'"))
   and job-safe completion predicates.
 - **Status:** resolved in source; deploy the affected child notebooks before
   relying on the updated monitoring lineage.
+## CFG-009 - cfg_archive_schema inserting and not upserting
+
+- **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the 
+LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_name is null... should this be coded to archived? also possibly having the same issue with the 01a_cfg_schema_capture_live.ipynb.. on another note i believe the audit table can be consolidated to a single table so roll up LH_BCT_WMPP.monitoring.cfg_archived_schema_live and LH_BCT_WMPP.monitoring.cfg_bronze_schema_live to LH_BCT_WMPP.monitoring.cfg_schema_live and keep the schema_name fields to identify whether the capture was from Archived or Bronze database/schema
