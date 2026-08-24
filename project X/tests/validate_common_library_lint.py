@@ -33,6 +33,39 @@ def main():
         )
     print("PASS common-library caller settings have standalone defaults")
 
+    for function_name in (
+        "qident",
+        "append_rows",
+        "merge_monitor_row",
+        "drift_event_row",
+    ):
+        assert f"def {function_name}" in source, (
+            f"Common library is missing shared utility {function_name}"
+        )
+
+    shared_callers = {
+        "00_archive_load.ipynb": {"qident", "append_rows"},
+        "01a_cfg_schema_capture_archive.ipynb": {"qident", "append_rows"},
+        "02_silver_formatter.ipynb": {"drift_event_row"},
+        "02a_archive_silver.ipynb": {"drift_event_row"},
+        "90_run_live_pipeline.ipynb": {"merge_monitor_row"},
+        "90_run_archive_pipeline.ipynb": {"merge_monitor_row"},
+    }
+    project = ROOT / "project X"
+    for notebook_name, function_names in shared_callers.items():
+        child = json.loads((project / notebook_name).read_text(encoding="utf-8"))
+        child_source = "\n".join(
+            "".join(cell.get("source", [])) for cell in child["cells"]
+        )
+        assert "%run ./99_common_library" in child_source, (
+            f"{notebook_name} does not load the shared utility seam"
+        )
+        for function_name in function_names:
+            assert f"def {function_name}" not in child_source, (
+                f"{notebook_name} still duplicates common utility {function_name}"
+            )
+    print("PASS duplicate cross-notebook utilities are owned by the common library")
+
     print("VALIDATION PASSED")
 
 

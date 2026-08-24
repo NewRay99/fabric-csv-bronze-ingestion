@@ -60,6 +60,23 @@ for name in CFG_CALLERS:
     assert "from notebookutils import mssparkutils" in text
 print("PASS cfg notebook receives the resolved audit-table name")
 
+RUNNER_CHILD_CFG_CALLERS = [
+    "00_archive_load.ipynb",
+    "01_bronze_get_latest.ipynb",
+    "01a_cfg_schema_capture_archive.ipynb",
+    "02a_archive_silver.ipynb",
+]
+for name in RUNNER_CHILD_CFG_CALLERS:
+    text = source(load_notebook(name))
+    assert "IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)" in text, (
+        f"{name}: must detect a parent JOB_RUN_ID before local state is created"
+    )
+    assert "if not IS_ORCHESTRATED_RUN:" in text, (
+        f"{name}: must run configuration setup only for a standalone run"
+    )
+    assert "SKIP configuration setup: parent runner completed 00_setup_cfg" in text
+print("PASS runner children do not repeat parent configuration setup")
+
 reset_text = source(notebooks["00b_reset_silver_cfg.ipynb"])
 assert reset_text.find("def qident") < reset_text.find("cfg_result ="), (
     "00b reset must define qident before the cfg setup cell uses it"

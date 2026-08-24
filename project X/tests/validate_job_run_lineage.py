@@ -62,6 +62,31 @@ for table in (
 ):
     assert table in dq and "JOB_RUN_ID or None" in dq
 
+pipeline_children = {
+    "00_archive_load.ipynb": "00_archive_load",
+    "02_silver_formatter.ipynb": "02_silver_formatter",
+    "02a_archive_silver.ipynb": "02a_archive_silver",
+    "03_silver_business_rules.ipynb": "03_silver_business_rules",
+}
+for name, pipeline_name in pipeline_children.items():
+    child = notebook_source(name)
+    assert "PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID" in child, (
+        f"{name} does not prefer the parent JOB_RUN_ID for its pipeline run"
+    )
+    assert "[(PIPELINE_RUN_ID," in child, (
+        f"{name} writes cfg_pipeline_run with local RUN_ID instead of PIPELINE_RUN_ID"
+    )
+    pipeline_updates = [
+        line for line in child.splitlines()
+        if "WHERE run_id" in line and "cfg_pipeline_run" in child
+    ]
+    assert pipeline_updates and all("PIPELINE_RUN_ID" in line for line in pipeline_updates), (
+        f"{name} does not update its shared pipeline run by PIPELINE_RUN_ID"
+    )
+    assert pipeline_name in child
+
+print("PASS child pipeline records prefer JOB_RUN_ID and preserve local RUN_ID telemetry")
+
 for name in (
     "01_bronze_get_latest.ipynb",
     "01a_cfg_schema_capture_live.ipynb",

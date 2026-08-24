@@ -1073,3 +1073,27 @@ display(frame.where("lower(table_name) = 'framework'"))
   parameter name and requires the exact `PROCESS_ONLY` forwarding mapping.
 - **Status:** resolved in source; deploy the parent and Archive Silver
   notebooks before rerun.
+
+## CFG-008 — Child pipeline records did not consistently use the parent job ID
+
+- **Symptom:** live and archive parent runners created a `JOB_RUN_ID`, but
+  child entries in `monitoring.cfg_pipeline_run` used their local `RUN_ID` as
+  the record key. This made a parent job and its child pipeline status rows
+  harder to query as one execution.
+- **Cause:** child notebooks retained `RUN_ID` for both detailed telemetry and
+  the pipeline-level status record, despite already receiving `JOB_RUN_ID` from
+  the parent runner.
+- **Fix:** `00_archive_load`, `02_silver_formatter`,
+  `02a_archive_silver`, and `03_silver_business_rules` now define
+  `PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID`. Their
+  `monitoring.cfg_pipeline_run` insert and completion updates use that value,
+  with `pipeline_name` included in update predicates. Local `RUN_ID` remains
+  the identifier for file, table, schema-drift, and DQ detail telemetry; those
+  rows continue to carry `job_run_id` for correlation.
+- **Stand-alone behaviour:** when a child notebook is run directly,
+  `PIPELINE_RUN_ID` falls back to its generated `RUN_ID`.
+- **Regression guard:** `validate_job_run_lineage.py` scans every active
+  notebook that writes `cfg_pipeline_run` and requires job-first pipeline IDs
+  and job-safe completion predicates.
+- **Status:** resolved in source; deploy the affected child notebooks before
+  relying on the updated monitoring lineage.
