@@ -1019,17 +1019,30 @@ frame = (spark.read.format("csv").option("header", "true")
 display(frame.where("lower(table_name) = 'framework'"))
 # missing framework_name row
 ```
-## CFG-006 - still no archived data coming through even when setting to the paramater
-CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY	bool	true
-CONFIRM_PROCESS_ONLY_RESET	string	
-JOB_RUN_ID	string	fcb4dbff-7a45-4da3-ada7-ff4e9d9e6855
-PROCESS_ONLY	string	
-RESET_MONTH_MONITORING	bool	true
-RUN_GOLD_DIMENSIONS_AT_MONTH_END	bool	false
+## CFG-006 — Archive replay reset controls silently did nothing without a month
 
---file state
-audit zip updated: yes
-notebook results updated: no
-
-
-
+- **Symptom:** an archive pipeline run was started with
+  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and
+  `RESET_MONTH_MONITORING = true`, but no archived Silver, DQ, or Gold data
+  was rebuilt. The archive ZIP state updated, while notebook results did not.
+- **Evidence:** the submitted parameters had `PROCESS_ONLY` and
+  `CONFIRM_PROCESS_ONLY_RESET` blank. The reset controls apply to one canonical
+  archive month only; without a month there was no monitoring state or target
+  table selection to change.
+- **Cause:** `02a_archive_silver.ipynb` guarded its reset work with
+  `if PROCESS_ONLY and (...)`. A blank `PROCESS_ONLY` therefore made the reset
+  request a silent no-op, after which existing successful month-end monitoring
+  state continued to skip processing.
+- **Fix:** Archive Silver now fails immediately when either reset control is
+  true and `PROCESS_ONLY` is blank. The error states that `PROCESS_ONLY` must
+  be an explicit `YYYY-MM` value. The existing confirmation check then requires
+  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` before any state is changed.
+- **Usage:** for example, set `PROCESS_ONLY = "2026-05"`,
+  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true`, and
+  `CONFIRM_PROCESS_ONLY_RESET = "RESET 2026-05"`. Leave
+  `RESET_MONTH_MONITORING = false` to retain history and flag it for reload;
+  set it to true only when intentionally deleting the selected month's
+  monitoring records.
+- **Regression guard:** `validate_si013_si016.py` requires the explicit blank
+  `PROCESS_ONLY` rejection.
+- **Status:** resolved in source; deploy both archive notebooks before rerun.

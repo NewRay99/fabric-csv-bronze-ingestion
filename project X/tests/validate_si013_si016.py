@@ -61,6 +61,12 @@ def main():
         assert token in archive, f"Archive replay lacks SI-014 control: {token}"
     assert 'datetime.strptime(PROCESS_ONLY, "%Y-%m")' in archive
     assert 'expected_confirmation = f"RESET {PROCESS_ONLY}"' in archive
+    assert (
+        "if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY:" in archive
+    ), (
+        "Archive replay must reject reset or clear controls without PROCESS_ONLY "
+        "instead of silently leaving a successful month marked as complete"
+    )
     assert "elif CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY:" in archive, (
         "Clearing Silver targets must flag the archive-month monitoring state "
         "for reload so the replay is not skipped as already successful"
