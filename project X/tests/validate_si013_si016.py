@@ -9,6 +9,7 @@ PROJECT = ROOT / "project X"
 COMMON = PROJECT / "99_common_library.ipynb"
 SETUP = PROJECT / "00_setup_cfg.ipynb"
 ARCHIVE_REPLAY = PROJECT / "02a_archive_silver.ipynb"
+ARCHIVE_RUNNER = PROJECT / "90_run_archive_pipeline.ipynb"
 LATEST_SILVER = PROJECT / "02_silver_formatter.ipynb"
 
 
@@ -60,9 +61,29 @@ def main():
         assert token in archive, f"Archive replay lacks SI-014 control: {token}"
     assert 'datetime.strptime(PROCESS_ONLY, "%Y-%m")' in archive
     assert 'expected_confirmation = f"RESET {PROCESS_ONLY}"' in archive
+    assert "elif CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY:" in archive, (
+        "Clearing Silver targets must flag the archive-month monitoring state "
+        "for reload so the replay is not skipped as already successful"
+    )
     assert "DELETE FROM monitoring.cfg_month_end_gold_run" in archive
+    assert "UPDATE monitoring.cfg_month_end_gold_run" in archive
+    assert "UPDATE monitoring.cfg_silver_export_load" in archive
+    assert "SET reload = true, last_updated_at = current_timestamp()" in archive
+    assert "FLAGGED monitoring state for reload" in archive
     assert "DROP TABLE IF EXISTS {target_table}" in archive
     print("PASS archive replay exposes guarded single-month tracing controls")
+
+    archive_runner = source(ARCHIVE_RUNNER)
+    for token in [
+        "ARCHIVE_PROCESS_ONLY",
+        "CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY",
+        "CONFIRM_PROCESS_ONLY_RESET",
+        '"PROCESS_ONLY": ARCHIVE_PROCESS_ONLY',
+    ]:
+        assert token in archive_runner, (
+            f"Archive runner does not forward single-month reload control: {token}"
+        )
+    print("PASS archive runner forwards guarded reload controls to Archive Silver")
 
     latest = source(LATEST_SILVER)
     for duplicate in ["def qident", "def normalise", "def map_data_type", "def cast_column", "def format_frame"]:

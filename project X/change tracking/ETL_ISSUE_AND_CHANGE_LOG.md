@@ -263,6 +263,32 @@ both metric columns and reintroduce inconsistent writers.
 - **Regression guard:** validator requires alignment and type verification to
   occur before the first file-level Delta deletion.
 
+## AR-011 — Clearing a single archive-month Silver rebuild left it marked complete
+
+- **Symptom:** after Silver and Gold tables were cleared for a selected archive
+  month, `02a_archive_silver.ipynb` could skip that month because
+  `monitoring.cfg_month_end_gold_run` still recorded `SUCCESS`. Existing
+  `monitoring.cfg_silver_export_load` rows also continued to imply that the
+  prior export had completed without a requested reload.
+- **Cause:** `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` dropped physical Silver
+  targets only. Monitoring state was deleted only when the separate
+  `RESET_MONTH_MONITORING` option was enabled.
+- **Fix:** when `PROCESS_ONLY` and
+  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` are confirmed, the archive replay now
+  marks the selected snapshot and its `ARCHIVE_MONTH_END` Silver audit rows
+  with `reload = true` before dropping Silver targets. The next loop therefore
+  rebuilds Silver, DQ and Gold, and its normal completion path resets the flag.
+  `RESET_MONTH_MONITORING` still performs the explicit destructive deletion of
+  monitoring state when that behaviour is required. The parent
+  `90_run_archive_pipeline.ipynb` now exposes and forwards the guarded
+  single-month options to Archive Silver.
+- **Scope:** Bronze/archive-file audit history is not reset, because clearing
+  Silver and Gold does not require Bronze files to be ingested again.
+- **Regression guard:** `validate_si013_si016.py` requires the clear option to
+  flag both month-end and Silver-export monitoring records for reload.
+- **Status:** resolved in source; deploy the updated archive Silver notebook
+  before running the guarded single-month reload.
+
 ### Bronze-to-Silver decision
 
 `02_silver_formatter.ipynb` does not require archive-style target
