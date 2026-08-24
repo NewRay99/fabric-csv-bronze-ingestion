@@ -1,6 +1,8 @@
 """Regression checks for SI-022 source-schema fields retained into Silver."""
 
 import csv
+import io
+import zipfile
 from collections import defaultdict
 from pathlib import Path
 
@@ -8,12 +10,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "configuration" / "schema_definition.csv"
 CANDIDATE = ROOT / "configuration" / "cfg_tables" / "cfg_schema_definition_candidate.csv"
+EXTRACT_ZIP = CANDIDATE.parent / "cfg_extracts.zip"
 ISSUE_LOG = ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md"
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
-    with path.open(encoding="utf-8-sig", newline="") as handle:
-        return list(csv.DictReader(handle))
+    if path.exists():
+        with path.open(encoding="utf-8-sig", newline="") as handle:
+            return list(csv.DictReader(handle))
+    if EXTRACT_ZIP.exists():
+        with zipfile.ZipFile(EXTRACT_ZIP) as archive:
+            try:
+                with archive.open(path.name) as raw_handle:
+                    with io.TextIOWrapper(raw_handle, encoding="utf-8-sig", newline="") as handle:
+                        return list(csv.DictReader(handle))
+            except KeyError as exc:
+                raise FileNotFoundError(
+                    f"{path.name} is absent from {EXTRACT_ZIP}"
+                ) from exc
+    raise FileNotFoundError(
+        f"Missing {path}; provide the extracted CSV or {EXTRACT_ZIP.name}"
+    )
 
 
 contract_rows = read_csv(CONTRACT)

@@ -55,6 +55,9 @@ def main():
             assert "stale_targets" in text and "not stale_targets" in text, (
                 f"{notebook.name} can skip a successful month without checking target schemas"
             )
+            assert "complete_framework_schema" in text, (
+                f"{notebook.name} can write an incomplete framework target from a stale contract"
+            )
         assert "schema_cols" in text and "format_frame" in text, (
             f"{notebook.name} does not project the contract columns through format_frame"
         )

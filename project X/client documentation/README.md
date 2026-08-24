@@ -22,7 +22,8 @@ Issue and change tracking is deliberately separate at
 1. [High-Level Design](03_Architecture_and_Design/HLD.md)
 2. [Technical/Functional Design](03_Architecture_and_Design/TFD.md)
 3. [Notebook runbook](05_Operations_and_Runbooks/NOTEBOOK_RUNBOOK.md)
-4. [HOLD register](06_Governance/HOLD_Register.md)
+4. [ETL Operations Control Tower](05_Operations_and_Runbooks/ETL_OPERATIONS_CONTROL_TOWER.md)
+5. [HOLD register](06_Governance/HOLD_Register.md)
 
 Documents retained from earlier discovery phases may describe target-state
 features not yet implemented. The HLD, TFD, active notebooks, and current

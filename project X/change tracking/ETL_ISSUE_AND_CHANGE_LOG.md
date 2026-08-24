@@ -880,11 +880,24 @@ note that these dates must be greater than the ipa_placement_admission_date and 
   contract and checks the affected tables for duplicate ordinals.
 - **Status:** Resolved in the repository; Fabric replay remains required.
 
-## AR-SL-01 error still with missing silver.provider_submis_docs table
-**Symptom:** error when running 90_run_archive_pipeline
-**Cause:** no silver table
+## AR-SL-01 — Archive Silver stopped while checking a missing provider-document target
 
-**Error:**
+- **Symptom:** `90_run_archive_pipeline` failed in `02a_archive_silver` before
+  the missing `silver.provider_submission_docs` target could be materialised.
+- **Runtime evidence:** the failure occurred in the archive month-end
+  `stale_targets` preflight and reported that the provider-document Delta
+  target did not exist.
+- **Expected behaviour:** `target_requires_refresh` treats an absent Silver
+  target as stale so the subsequent replay creates it. If the deployed
+  notebook instead raises at the preflight, verify that the current
+  `99_common_library` and `02a_archive_silver` versions are deployed together.
+- **Operational dependency:** the source must have a complete deployed schema
+  contract and the archive replay must finish its table materialisation before
+  Gold dimensions run.
+- **Status:** Runtime deployment/state investigation required; retained as a
+  separate issue from `AR-GL-01`.
+
+**Original runtime evidence:**
 Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
 0
 02a_archive_silver
@@ -892,40 +905,35 @@ Failed
 92%
 9 min 41 sec 546 ms
 -
-[DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist. ---------------------------------------------------------------------------AnalysisException Traceback (most recent call last)Cell In[15], line 189 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) --> 189 stale_targets = [ 190 info["target_table"] for info in source_tables 191 if target_requires_refresh(info["target_table"], info["schema_cols"]) 192 ] 193 if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets: 194 skipped_months += 1 Cell In[15], line 191, in <listcomp>(.0) 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) 189 stale_targets = [ 190 info["target_table"] for info in source_tables --> 191 if target_requires_refresh(info["target_table"], info["schema_cols"]) 192 ] 193 if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets: 194 skipped_months += 1 Cell In[8], line 11, in target_requires_refresh(target_table, schema_cols) 9 if not spark.catalog.tableExists(target_table): 10 return True ---> 11 actual_columns = {field.name.lower() for field in spark.table(target_table).schema.fields} 12 expected_columns = {definition["column_name"].lower() for definition in schema_cols} 13 missing_columns = expected_columns - actual_columns File /opt/spark/python/lib/pyspark.zip/pyspark/sql/session.py:1667, in SparkSession.table(self, tableName) 1636 def table(self, tableName: str) -> DataFrame: 1637 """Returns the specified table as a :class:`DataFrame`. 1638 1639 .. versionadded:: 2.0.0 (...) 1665 +---+ 1666 """ -> 1667 return DataFrame(self._jsparkSession.table(tableName), self) File ~/cluster-env/trident_env/lib/python3.11/site-packages/py4j/java_gateway.py:1322, in JavaMember.__call__(self, *args) 1316 command = proto.CALL_COMMAND_NAME +\ 1317 self.command_header +\ 1318 args_command +\ 1319 proto.END_COMMAND_PART 1321 answer = self.gateway_client.send_command(command) -> 1322 return_value = get_return_value( 1323 answer, self.gateway_client, self.target_id, self.name) 1325 for temp_arg in temp_args: 1326 if hasattr(temp_arg, "_detach"): File /opt/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py:185, in capture_sql_exception.<locals>.deco(*a, **kw) 181 converted = convert_exception(e.java_exception) 182 if not isinstance(converted, UnknownException): 183 # Hide where the exception came from that shows a non-Pythonic 184 # JVM exception message. --> 185 raise converted from None 186 else: 187 raise AnalysisException: [DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist.You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
-=== FAILED 02a_archive_silver: An error occurred while calling o6949.throwExceptionIfHave.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: [DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist.
----------------------------------------------------------------------------AnalysisException                         Traceback (most recent call last)Cell In[15], line 189
-    187 for snapshot_date in month_end_dates:
-    188     existing = month_end_record(snapshot_date)
---> 189     stale_targets = [
-    190         info["target_table"] for info in source_tables
-    191         if target_requires_refresh(info["target_table"], info["schema_cols"])
-    192     ]
-    193     if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets:
-    194         skipped_months += 1
-Cell In[15], line 191, in <listcomp>(.0)
-    187 for snapshot_date in month_end_dates:
-    188     existing = month_end_record(snapshot_date)
-    189     stale_targets = [
-    190         info["target_table"] for info in source_tables
---> 191         if target_requires_refresh(info["target_table"], info["schema_cols"])
-    192     ]
-    193     if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets:
-    194         skipped_months += 1
+[DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist. ---------------------------------------------------------------------------AnalysisException Traceback (most recent call last)Cell In[15], line 189 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) --> 189 stale_targets = [ 190 info["target_table"] for info in
 
 
-## AR-GL-01 error with silver.framework is missing required columns
-**Symptom:** error when running 90_run_archive_pipeline
-**Cause:** no silver column in silver.framework but the column  does exist in archived.framework. when and how is the silver table created? i have provided audit logs in `project X/configuration/cfg_tables/cfg_extracts.zip`
+## AR-GL-01 — Archive framework contract omitted a Gold-required column
 
-**Error:**
+- **Symptom:** `90_run_archive_pipeline` reached `05_gold_dimensions`, which
+  rejected `silver.framework` because `framework_name` was missing.
+- **Evidence:** the supplied runtime extracts show that
+  `archived.framework` contained `framework_name`, but the active
+  `monitoring.cfg_schema_contract_column` framework contract did not. Archive
+  Silver therefore wrote a successfully completed but incomplete target.
+- **Fix:** Archive Silver now supplements a missing mandatory framework
+  contract field from its controlled framework schema, records one
+  `MISSING_REQUIRED_CONTRACT_COLUMN` event per missing field in
+  `monitoring.cfg_schema_drift_event`, and includes the field in the target
+  schema refresh decision. The configuration CSV must still be deployed and
+  reloaded through `00_setup_cfg` to correct the central contract.
+- **Validation:** `validate_archive_framework_fallback.py` and
+  `validate_silver_required_columns.py` cover the protection.
+- **Status:** Resolved in the repository; deploy `02a_archive_silver`, reload
+  the schema contract, then rerun the archive pipeline.
+
+**Original runtime evidence:**
 Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
 0
 05_gold_dimensions
 Failed
 71%
-38 sec 160 ms	
+38 sec 160 ms
 -
 silver.framework is missing required columns: ['framework_name'] ---------------------------------------------------------------------------ValueError Traceback (most recent call last)Cell In[7], line 42 26 latest_dimension( 27 "silver.provider", "gold.dim_provider", ["provider_id"], 28 [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"), (...) 32 ("export_date", "SourceExportDate")], 33 ) 34 latest_dimension( 35 "silver.provider_home", "gold.dim_provider_home", ["provider_home_id"], 36 [("provider_home_id", "ProviderHomeID"), ("provider_id", "ProviderID"), (...) 40 ("qa_flag", "QAFlag"), ("export_date", "SourceExportDate")], 41 ) ---> 42 latest_dimension( 43 "silver.framework", "gold.dim_framework", ["framework_code"], 44 [("framework_code", "FrameworkCode"), ("framework_name", "FrameworkName"), 45 ("placement_type", "PlacementType"), ("start_date", "StartDate"), 46 ("end_date", "EndDate"), ("export_date", "SourceExportDate")], 47 ) 48 latest_dimension( 49 "silver.framework_category", "gold.dim_framework_category", ["framework_category_id"], 50 [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"), 51 ("category_name", "CategoryName"), ("export_date", "SourceExportDate")], 52 ) Cell In[6], line 12, in latest_dimension(source_table, target_table, key_columns, select_columns) 10 def latest_dimension(source_table, target_table, key_columns, select_columns): 11 """Write one current row per natural key from an available Silver source.""" ---> 12 require_columns(source_table, key_columns + [source for source, _ in select_columns]) 13 frame = spark.table(source_table) 14 order_columns = [ 15 F.col("export_date").cast("timestamp").desc_nulls_last(), 16 F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(), 17 ] Cell In[6], line 7, in require_columns(source_table, required_columns) 5 missing = sorted(set(required_columns) - actual) 6 if missing: ----> 7 raise ValueError(f"{source_table} is missing required columns: {missing}") ValueError: silver.framework is missing required columns: ['framework_name']You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
 === FAILED 05_gold_dimensions: An error occurred while calling o7006.throwExceptionIfHave.

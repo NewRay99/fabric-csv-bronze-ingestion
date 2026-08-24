@@ -73,6 +73,22 @@ require(
     '"fallback_path": (',
     "archived framework has no per-month fallback route",
 )
+require(
+    "def complete_framework_schema(schema_cols, source_table, target_table):",
+    "missing framework contract columns are not protected",
+)
+require(
+    '"MISSING_REQUIRED_CONTRACT_COLUMN"',
+    "incomplete framework contracts do not raise a schema-drift event",
+)
+require(
+    "schema_cols = complete_framework_schema(",
+    "archived framework does not supplement an incomplete contract",
+)
+require(
+    "framework_schema_cols = complete_framework_schema(",
+    "fallback framework does not supplement an incomplete contract",
+)
 print("PASS archived framework wins and fallback-only mode covers physical absence")
 
 registration = source.index("if not framework_archive_present:")
