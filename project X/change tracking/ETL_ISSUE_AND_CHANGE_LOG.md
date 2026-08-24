@@ -913,3 +913,44 @@ Cell In[15], line 191, in <listcomp>(.0)
     192     ]
     193     if existing and existing["status"] == "SUCCESS" and not existing["reload"] and not stale_targets:
     194         skipped_months += 1
+
+
+## AR-GL-01 error with silver.framework is missing required columns
+**Symptom:** error when running 90_run_archive_pipeline
+**Cause:** no silver column in silver.framework but the column  does exist in archived.framework. when and how is the silver table created?
+
+**Error:**
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+05_gold_dimensions
+Failed
+71%
+38 sec 160 ms	
+-
+silver.framework is missing required columns: ['framework_name'] ---------------------------------------------------------------------------ValueError Traceback (most recent call last)Cell In[7], line 42 26 latest_dimension( 27 "silver.provider", "gold.dim_provider", ["provider_id"], 28 [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"), (...) 32 ("export_date", "SourceExportDate")], 33 ) 34 latest_dimension( 35 "silver.provider_home", "gold.dim_provider_home", ["provider_home_id"], 36 [("provider_home_id", "ProviderHomeID"), ("provider_id", "ProviderID"), (...) 40 ("qa_flag", "QAFlag"), ("export_date", "SourceExportDate")], 41 ) ---> 42 latest_dimension( 43 "silver.framework", "gold.dim_framework", ["framework_code"], 44 [("framework_code", "FrameworkCode"), ("framework_name", "FrameworkName"), 45 ("placement_type", "PlacementType"), ("start_date", "StartDate"), 46 ("end_date", "EndDate"), ("export_date", "SourceExportDate")], 47 ) 48 latest_dimension( 49 "silver.framework_category", "gold.dim_framework_category", ["framework_category_id"], 50 [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"), 51 ("category_name", "CategoryName"), ("export_date", "SourceExportDate")], 52 ) Cell In[6], line 12, in latest_dimension(source_table, target_table, key_columns, select_columns) 10 def latest_dimension(source_table, target_table, key_columns, select_columns): 11 """Write one current row per natural key from an available Silver source.""" ---> 12 require_columns(source_table, key_columns + [source for source, _ in select_columns]) 13 frame = spark.table(source_table) 14 order_columns = [ 15 F.col("export_date").cast("timestamp").desc_nulls_last(), 16 F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(), 17 ] Cell In[6], line 7, in require_columns(source_table, required_columns) 5 missing = sorted(set(required_columns) - actual) 6 if missing: ----> 7 raise ValueError(f"{source_table} is missing required columns: {missing}") ValueError: silver.framework is missing required columns: ['framework_name']You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
+=== FAILED 05_gold_dimensions: An error occurred while calling o7006.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: silver.framework is missing required columns: ['framework_name']
+---------------------------------------------------------------------------ValueError                                Traceback (most recent call last)Cell In[7], line 42
+     26 latest_dimension(
+     27     "silver.provider", "gold.dim_provider", ["provider_id"],
+     28     [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"),
+   (...)
+     32      ("export_date", "SourceExportDate")],
+     33 )
+     34 latest_dimension(
+     35     "silver.provider_home", "gold.dim_provider_home", ["provider_home_id"],
+     36     [("provider_home_id", "ProviderHomeID"), ("provider_id", "ProviderID"),
+   (...)
+     40      ("qa_flag", "QAFlag"), ("export_date", "SourceExportDate")],
+     41 )
+---> 42 latest_dimension(
+     43     "silver.framework", "gold.dim_framework", ["framework_code"],
+     44     [("framework_code", "FrameworkCode"), ("framework_name", "FrameworkName"),
+     45      ("placement_type", "PlacementType"), ("start_date", "StartDate"),
+     46      ("end_date", "EndDate"), ("export_date", "SourceExportDate")],
+     47 )
+     48 latest_dimension(
+     49     "silver.framework_category", "gold.dim_framework_category", ["framework_category_id"],
+     50     [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"),
+     51      ("category_name", "CategoryName"), ("export_date", "SourceExportDate")],
+     52 )
