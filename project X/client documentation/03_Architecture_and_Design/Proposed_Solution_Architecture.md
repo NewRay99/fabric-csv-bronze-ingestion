@@ -263,6 +263,14 @@ does not yet deliver reliable region, complexity, actual placement end/cost or
 end-reason fields; their nullable Gold columns make that controlled source gap
 visible to reporting and data-governance work.
 
+The implemented Gold referral fact also publishes `PlacedByRequiredDate`,
+`RequiredPlacementDateOutcome`, lifecycle durations and inactivity/target-age
+indicators. `gold.vw_kpi_referral_board_summary`,
+`gold.vw_kpi_referral_monthly` and `gold.vw_provider_offer_performance` are
+the supported pre-aggregated reporting views. Earlier references in this
+proposal to `fact_referral_offer` and `fact_ipa` describe the proposed v01
+shape; they are not objects created by the active notebook.
+
 Archive orchestration passes the selected canonical export date to Gold and
 allows two hours per child notebook. This accommodates multi-table historical
 replays while retaining the existing monitoring and failure controls.

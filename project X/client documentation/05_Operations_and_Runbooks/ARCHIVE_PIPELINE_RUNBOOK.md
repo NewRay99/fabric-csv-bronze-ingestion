@@ -47,5 +47,9 @@ last available export in that calendar month and records the result in
 - `monitoring.cfg_month_end_gold_run` has a successful row for each replayed
   month.
 - `gold.fact_referral_snapshot` contains the replayed snapshot dates.
+- `gold.fact_referral`, `gold.fact_offer`, `gold.fact_placement` and
+  `gold.fact_referral_provider` are recreated successfully for the canonical
+  archive date; their snapshot-safe historical representation is
+  `gold.fact_referral_snapshot`.
 - `gold.dim_provider_submission_document` and `gold.bridge_provider_sic_code`
   refresh after the Gold dimensions step when their Silver sources are present.

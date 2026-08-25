@@ -1,5 +1,12 @@
 # Page Blueprints
 
+Use the active Gold v02 fact names and measures in
+[Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+The referral outcome visual should group
+`Fact Referral[RequiredPlacementDateOutcome]`; target-hit cards should use the
+`Placement Target Hit Rate` measure rather than comparing unrelated placement
+and referral cohorts.
+
 ## 1. Executive Overview
 
 - Header: title, refresh date, reporting period and urgency slicer.

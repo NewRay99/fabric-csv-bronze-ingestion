@@ -14,6 +14,14 @@
 
 This catalogue is generated from the committed v01 TMDL and replaces the older V13.1 documentation that referred to 90 or 117 measures. Measure names are preserved exactly as defined in the semantic model.
 
+## Active Gold v02 boundary
+
+This is an inventory of the extracted **v01** Power BI model, not a declaration
+of the active notebook-created Gold schema. In particular,
+`fact_referral_offer` and `fact_ipa` are v01 names. The active objects are
+`gold.fact_referral_provider` and `gold.fact_placement`. New v02 measures are
+documented in [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+
 ## `Closed_Date` derivation
 
 The v01 model now exposes `Closed_Date` in both `fact_referral_offer` and `fact_referral`:

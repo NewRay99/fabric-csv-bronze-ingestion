@@ -29,7 +29,7 @@ notebook execution within that job.
 | Archive | `00_archive_load` creates/appends `archived.<source_table>` | Archive file columns plus loader-owned lineage fields | `cfg_archive_file_load`, `cfg_archive_zip_load`; `01a_cfg_schema_capture_archive` captures columns in `monitoring.cfg_archived_schema_live` |
 | Silver | `02_silver_formatter` (live) and `02a_archive_silver` (archive) create/replace `silver.<contract_table>` | `configuration/schema_definition.csv`, deployed to `monitoring.cfg_schema_contract_column` | `cfg_silver_export_load`, `cfg_table_load_metric`, `cfg_schema_drift_event` |
 | Derived Silver | `03_silver_business_rules` creates/replaces derived `silver.*` relations | Notebook transformation logic and DQ rules | `cfg_pipeline_run`, `cfg_data_quality_result`, `cfg_schema_drift_event` where applicable |
-| Gold facts/snapshots | `04_gold_model` creates/replaces Gold views and the referral snapshot Delta table | Gold notebook SQL and `monitoring.cfg_gold_lineage_mapping` | job/step monitoring and `vw_job_layer_lineage` |
+| Gold facts/snapshots | `04_gold_model` creates/replaces `gold.fact_referral`, `gold.fact_offer`, `gold.fact_placement`, `gold.fact_referral_provider`, lifecycle/KPI views and the referral snapshot Delta table | Gold notebook SQL, `silver.referral_enrichment` and `monitoring.cfg_gold_lineage_mapping` | job/step monitoring and `vw_job_layer_lineage` |
 | Gold dimensions/bridges | `05_gold_dimensions` creates/replaces `gold.dim_*` and `gold.bridge_*` | Gold notebook projection and required-column checks | job/step monitoring and `vw_job_layer_lineage` |
 
 `monitoring.cfg_schema_contract_column` is the active runtime contract. A
@@ -61,6 +61,10 @@ with `event_type` (`CREATED`, `COLUMN_ADDED`, `COLUMN_REMOVED`,
 `COLUMN_TYPE_CHANGED`), layer, table, column, before/after type, `run_id`,
 `job_run_id` and event timestamp. Add a Delta-change-data-feed or merge
 metric where true insert/update/delete counts are required.
+
+For Gold reporting semantics and the DAX measures enabled by the referral
+enrichment fields, use
+[Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md).
 
 ## Starter report queries
 

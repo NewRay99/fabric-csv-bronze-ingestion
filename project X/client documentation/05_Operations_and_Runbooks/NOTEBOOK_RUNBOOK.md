@@ -173,11 +173,14 @@ rebuilt with `placement_type`, `referral_created_date`,
 `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a
 successful month-control row, set its reload flag before rerunning.
 
-The source does not deliver a referral event-log table. `03_silver_business_rules
-02 03` therefore derives `silver.referral_lifecycle_event` from actual
-Referral, Offer, and IPA timestamps, and Gold uses it for activity timing. It
-is not a source-system audit log. `gold.fact_referral_snapshot` remains a
-snapshot table, not an event history; run Silver business rules before Gold.
+The source does not deliver a referral event-log table. `03_silver_business_rules`
+therefore derives both `silver.referral_lifecycle_event` from delivered
+Referral, Offer and IPA timestamps, and the one-row-per-referral
+`silver.referral_enrichment` relation. Gold projects the enrichment into
+`gold.fact_referral` and its snapshot; it does not recompute the lifecycle
+roll-ups. The lifecycle-event relation is not a source-system audit log and
+`gold.fact_referral_snapshot` remains a snapshot table, not event history. Run
+Silver business rules before Gold.
 
 ### SI-007 onwards — Contract and Silver materialisation recovery
 

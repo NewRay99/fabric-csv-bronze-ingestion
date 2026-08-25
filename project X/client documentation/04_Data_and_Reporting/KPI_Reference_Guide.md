@@ -3,11 +3,22 @@
 **Project:** WMPP (West Midlands Placement Portal)
 **Date:** 10 July 2026
 
-This document lists every KPI in the gold layer — both the 90 existing measures translated from the Power BI semantic model and the 17 new measures created to close functional spec gaps. Each KPI documents the source tables, calculation logic, and the functional requirement(s) it satisfies.
+This document records the legacy v01 KPI catalogue: the existing measures
+translated from the historical Power BI semantic model and proposed measures
+for functional gaps. It is not a physical-schema declaration for the active
+notebook-created Gold v02 model.
+
+> **Scope correction:** this is the legacy v01 semantic-model catalogue. Its
+> `fact_referral_offer` and `fact_ipa` references are not active Gold v02
+> objects. Use the shared
+> [Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md)
+> for current fact names, fields, KPI views and DAX. Retain this catalogue for
+> requirements traceability until each legacy KPI is reimplemented and
+> certified against Gold v02.
 
 ---
 
-## Table Mapping — Silver to Gold
+## Legacy v01 table mapping — not the active Gold v02 physical model
 
 | Gold Table | Silver Source | Schema Definition Table | Functional Area |
 |-----------|--------------|----------------------|-----------------|
@@ -653,3 +664,188 @@ This document lists every KPI in the gold layer — both the 90 existing measure
 | Onboarding | 0 | 2 (pipeline, success) | 2 |
 | Finance | 0 | 3 (fees, payment, status) | 3 |
 | **Total** | **90** (existing) | **27** (new) | **117** |
+
+---
+
+## Active Gold v02 DAX measure library
+
+This is the copy-ready DAX library for the active notebook-created Gold v02
+model. It supersedes the legacy v01 table references in the preceding
+catalogue. The Assessment and Requirements documents were reviewed: they
+contain requirements and DAX inventory references, but no executable DAX
+expressions to migrate. The expressions below are the implemented Gold v02
+set, including snapshot measures.
+
+Assumed semantic-model table names: `Fact Referral`, `Fact Referral Snapshot`,
+`Fact Offer`, `Fact Placement`, and `Fact Referral Provider`.
+
+```DAX
+Total Referrals = DISTINCTCOUNT ( 'Fact Referral'[ReferralID] )
+
+Open Referrals = CALCULATE ( [Total Referrals], 'Fact Referral'[IsOpen] = TRUE () )
+
+Referrals With an Offer = CALCULATE ( [Total Referrals], 'Fact Referral'[HasOffer] = TRUE () )
+
+Referrals Without Provider Assignment =
+CALCULATE ( [Total Referrals], 'Fact Referral'[IsNotSeenByProviders] = TRUE () )
+
+Open Overdue Referrals =
+CALCULATE (
+    [Total Referrals],
+    FILTER (
+        'Fact Referral',
+        'Fact Referral'[IsOpen] = TRUE ()
+            && NOT ISBLANK ( 'Fact Referral'[RequiredPlacementDate] )
+            && 'Fact Referral'[RequiredPlacementDate] < 'Fact Referral'[AsOfDate]
+    )
+)
+
+Referrals Placed by Required Date =
+CALCULATE ( [Total Referrals], 'Fact Referral'[PlacedByRequiredDate] = TRUE () )
+
+Placement Target Hit Rate =
+DIVIDE (
+    [Referrals Placed by Required Date],
+    CALCULATE (
+        [Total Referrals],
+        FILTER (
+            'Fact Referral',
+            NOT ISBLANK ( 'Fact Referral'[IPAIssuedDate] )
+                && NOT ISBLANK ( 'Fact Referral'[RequiredPlacementDate] )
+        )
+    )
+)
+
+Median Days to First Action =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToFirstAction] ) ),
+    'Fact Referral'[DaysToFirstAction]
+)
+
+Median Days to First Offer =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToFirstOffer] ) ),
+    'Fact Referral'[DaysToFirstOffer]
+)
+
+Median Days to IPA =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToIPA] ) ),
+    'Fact Referral'[DaysToIPA]
+)
+
+Open Referrals Stalled 7+ Days =
+CALCULATE (
+    [Total Referrals],
+    FILTER ( 'Fact Referral', 'Fact Referral'[IsOpen] = TRUE () && 'Fact Referral'[DaysWithoutActivity] >= 7 )
+)
+```
+
+```DAX
+Offers Submitted = DISTINCTCOUNT ( 'Fact Offer'[OfferID] )
+
+Accepted Offers =
+CALCULATE (
+    [Offers Submitted],
+    FILTER (
+        'Fact Offer',
+        LOWER ( 'Fact Offer'[OfferStatus] ) IN { "accepted", "approved", "selected", "offer_successful" }
+    )
+)
+
+Offers with a Decision =
+CALCULATE (
+    [Offers Submitted],
+    FILTER ( 'Fact Offer', NOT ISBLANK ( 'Fact Offer'[OfferDecisionDate] ) )
+)
+
+Offer Acceptance Rate = DIVIDE ( [Accepted Offers], [Offers with a Decision] )
+
+IPAs Created = DISTINCTCOUNT ( 'Fact Placement'[PlacementID] )
+
+Active Placements =
+CALCULATE ( [IPAs Created], 'Fact Placement'[IsPlacementClosed] = FALSE () )
+
+Estimated Active Weekly Cost =
+CALCULATE (
+    SUM ( 'Fact Placement'[EstimatedWeeklyCost] ),
+    'Fact Placement'[IsPlacementClosed] = FALSE ()
+)
+
+Provider Assignments = DISTINCTCOUNT ( 'Fact Referral Provider'[ReferralProviderID] )
+
+Provider Declines =
+CALCULATE ( [Provider Assignments], 'Fact Referral Provider'[IsDeclined] = TRUE () )
+
+Provider Decline Rate = DIVIDE ( [Provider Declines], [Provider Assignments] )
+```
+
+### Snapshot timeline measures
+
+Place `Fact Referral Snapshot[SnapshotDate]` on the X axis. Snapshot records
+the state observed at that date; do not replace these expressions with the
+current `Fact Referral` view. The `< SnapshotDate + 1` checks include all
+timestamped events occurring on the snapshot date.
+
+```DAX
+Snapshot Referrals = DISTINCTCOUNT ( 'Fact Referral Snapshot'[ReferralID] )
+
+Open Referrals at Snapshot =
+CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[IsOpen] = TRUE () )
+
+Closed Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    FILTER (
+        'Fact Referral Snapshot',
+        NOT ISBLANK ( 'Fact Referral Snapshot'[ReferralClosedDate] )
+            && 'Fact Referral Snapshot'[ReferralClosedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1
+    )
+)
+
+Referrals with Placement at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    FILTER (
+        'Fact Referral Snapshot',
+        NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )
+            && 'Fact Referral Snapshot'[IPAIssuedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1
+    )
+)
+
+Referrals Placed by Target at Snapshot =
+CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[PlacedByRequiredDate] = TRUE () )
+
+Open Overdue Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = "Open overdue"
+)
+
+Open On-Track Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = "Open on track"
+)
+
+Open Referral Rate at Snapshot = DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
+
+Placement Rate at Snapshot = DIVIDE ( [Referrals with Placement at Snapshot], [Snapshot Referrals] )
+
+Target Hit Rate at Snapshot =
+DIVIDE (
+    [Referrals Placed by Target at Snapshot],
+    CALCULATE (
+        [Snapshot Referrals],
+        FILTER (
+            'Fact Referral Snapshot',
+            NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )
+                && NOT ISBLANK ( 'Fact Referral Snapshot'[RequiredPlacementDate] )
+        )
+    )
+)
+```
+
+Snapshots retain the latest available export per calendar month, so the
+snapshot timeline is monthly historical trend plus the latest current-month
+snapshot, not a daily export history.

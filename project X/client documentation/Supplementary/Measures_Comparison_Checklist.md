@@ -280,3 +280,226 @@ The first three status rows reconcile the 90 legacy catalogue entries (85 + 2 + 
 ---
 
 *Legacy classification generated from: v00 Power BI semantic-model TMDL (90 `EXTERNALMEASURE` declarations), functional spec.md (87 requirements), am_functional_specification.csv (81 requirements), and WMPP KPI Logic Document. The archived v01 model contains 95 measures; see WMPP-DE-CHG-001 for the controlled delta.*
+
+---
+
+## Active Gold v02 implementation and measure additions
+
+This section is the authoritative reference for the Gold objects created by
+`04_gold_model.ipynb`. It supplements the historic v01 comparison above;
+legacy `fact_referral_offer` and `fact_ipa` names are not active
+notebook-created objects.
+
+| Gold object | Grain | Purpose |
+| --- | --- | --- |
+| `gold.fact_referral` | One current row per referral | Referral status, lifecycle, target and estimated-cost indicators. |
+| `gold.fact_referral_snapshot` | One referral per reporting snapshot | Point-in-time referral timeline. The active calendar month is replaced by its latest extract. |
+| `gold.fact_offer` | One offer | Offer submission/review/decision, cost and rejection analysis. |
+| `gold.fact_placement` | One IPA | IPA issue, planned admission, supplied closure/status and weekly cost. |
+| `gold.fact_referral_provider` | One referral-provider assignment | Provider assignment, exclusion, decline, cancellation and closure response. |
+| `gold.fact_referral_lifecycle_event` | One derived source timestamp | Available lifecycle evidence; not a complete source audit trail. |
+| `gold.vw_kpi_referral_board_summary` | As-of date, urgency, target outcome | Referral board totals. |
+| `gold.vw_kpi_referral_monthly` | Referral-created month | Monthly referral/offer/IPA trend totals. |
+| `gold.vw_provider_offer_performance` | Provider | Provider referral, offer, acceptance and target-placement totals. |
+
+### Gold v02 field rules
+
+`gold.fact_referral` projects `silver.referral_enrichment`; Gold does not
+recalculate offer or IPA roll-ups.
+
+| Field | Rule and reporting use |
+| --- | --- |
+| `FirstActionDate`, `FirstOfferDate`, `OfferAcceptedDate`, `IPAIssuedDate` | First delivered meaningful action, offer, accepted offer and IPA issue. Use for responsiveness and conversion. |
+| `ReferralClosedDate` | Terminal referral modification timestamp, falling back to export time; not a dedicated source close timestamp. |
+| `LastActivityDate` | Latest delivered referral, offer or IPA activity. Use for stalled-referral monitoring. |
+| `PlacedByRequiredDate` | `TRUE` when an IPA issue date is on or before the delivered `RequiredPlacementDate`. |
+| `RequiredPlacementDateOutcome` | `Placed by target`, `Placed after target`, `Open overdue`, `Open on track`, or `Closed without placement`, evaluated at `AsOfDate`. |
+| `DaysToFirstAction`, `DaysToFirstOffer`, `DaysToAcceptedOffer`, `DaysToIPA` | Lifecycle durations from referral creation. |
+| `DaysOpen`, `DaysWithoutActivity`, `DaysPastRequiredDate` | Ageing, inactivity and target-overrun indicators at `AsOfDate`. |
+| `FirstProviderSeenDate`, `IsNotSeenByProviders` | First observed provider assignment / no delivered provider assignment. This is not a provider UI-view event. |
+| IPA signature/admission/review fields | `IPAPlacementAdmissionDate`, `IPA2Signatures`, `IPALastSignatureDate`, `IPADueDiligenceMinReviewDate`; use for readiness checks. |
+
+`Region`, `ComplexityBand`, `ChildCriticalityCode`, actual placement dates,
+actual weekly cost, placement duration and end reason remain null until a
+reliable source supplies them. Do not treat null as a business category.
+
+### Relationship rules
+
+Use single-direction relationships from `Fact Referral[ReferralID]` to `Fact
+Offer[ReferralID]`, `Fact Placement[ReferralID]` and `Fact Referral
+Provider[ReferralID]`. If `Fact Offer[OfferID]` to `Fact
+Placement[AcceptedOfferID]` creates an ambiguous route, keep it inactive and
+activate it only in accepted-offer-to-IPA measures. Use role-specific inactive
+Date relationships for referral-created, target, IPA-issued and closed dates.
+
+### New current-state DAX measures
+
+```DAX
+Total Referrals = DISTINCTCOUNT ( 'Fact Referral'[ReferralID] )
+
+Open Referrals =
+CALCULATE ( [Total Referrals], 'Fact Referral'[IsOpen] = TRUE () )
+
+Referrals With an Offer =
+CALCULATE ( [Total Referrals], 'Fact Referral'[HasOffer] = TRUE () )
+
+Referrals Without Provider Assignment =
+CALCULATE ( [Total Referrals], 'Fact Referral'[IsNotSeenByProviders] = TRUE () )
+
+Open Overdue Referrals =
+CALCULATE (
+    [Total Referrals],
+    FILTER (
+        'Fact Referral',
+        'Fact Referral'[IsOpen] = TRUE ()
+            && NOT ISBLANK ( 'Fact Referral'[RequiredPlacementDate] )
+            && 'Fact Referral'[RequiredPlacementDate] < 'Fact Referral'[AsOfDate]
+    )
+)
+
+Referrals Placed by Required Date =
+CALCULATE ( [Total Referrals], 'Fact Referral'[PlacedByRequiredDate] = TRUE () )
+
+Placement Target Hit Rate =
+DIVIDE (
+    [Referrals Placed by Required Date],
+    CALCULATE (
+        [Total Referrals],
+        FILTER (
+            'Fact Referral',
+            NOT ISBLANK ( 'Fact Referral'[IPAIssuedDate] )
+                && NOT ISBLANK ( 'Fact Referral'[RequiredPlacementDate] )
+        )
+    )
+)
+
+Median Days to First Action =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToFirstAction] ) ),
+    'Fact Referral'[DaysToFirstAction]
+)
+
+Median Days to First Offer =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToFirstOffer] ) ),
+    'Fact Referral'[DaysToFirstOffer]
+)
+
+Median Days to IPA =
+MEDIANX (
+    FILTER ( 'Fact Referral', NOT ISBLANK ( 'Fact Referral'[DaysToIPA] ) ),
+    'Fact Referral'[DaysToIPA]
+)
+
+Open Referrals Stalled 7+ Days =
+CALCULATE (
+    [Total Referrals],
+    FILTER ( 'Fact Referral', 'Fact Referral'[IsOpen] = TRUE () && 'Fact Referral'[DaysWithoutActivity] >= 7 )
+)
+```
+
+```DAX
+Offers Submitted = DISTINCTCOUNT ( 'Fact Offer'[OfferID] )
+
+Accepted Offers =
+CALCULATE (
+    [Offers Submitted],
+    FILTER (
+        'Fact Offer',
+        LOWER ( 'Fact Offer'[OfferStatus] ) IN { "accepted", "approved", "selected", "offer_successful" }
+    )
+)
+
+IPAs Created = DISTINCTCOUNT ( 'Fact Placement'[PlacementID] )
+
+Active Placements =
+CALCULATE ( [IPAs Created], 'Fact Placement'[IsPlacementClosed] = FALSE () )
+
+Estimated Active Weekly Cost =
+CALCULATE (
+    SUM ( 'Fact Placement'[EstimatedWeeklyCost] ),
+    'Fact Placement'[IsPlacementClosed] = FALSE ()
+)
+
+Provider Assignments = DISTINCTCOUNT ( 'Fact Referral Provider'[ReferralProviderID] )
+
+Provider Declines =
+CALCULATE ( [Provider Assignments], 'Fact Referral Provider'[IsDeclined] = TRUE () )
+
+Provider Decline Rate = DIVIDE ( [Provider Declines], [Provider Assignments] )
+```
+
+### Snapshot timeline DAX
+
+Place `Fact Referral Snapshot[SnapshotDate]` on a monthly timeline X axis.
+These measures deliberately use the snapshot fact, not current `Fact Referral`.
+The `< SnapshotDate + 1` predicates include timestamped events on the snapshot
+calendar date.
+
+```DAX
+Snapshot Referrals =
+DISTINCTCOUNT ( 'Fact Referral Snapshot'[ReferralID] )
+
+Open Referrals at Snapshot =
+CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[IsOpen] = TRUE () )
+
+Closed Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    FILTER (
+        'Fact Referral Snapshot',
+        NOT ISBLANK ( 'Fact Referral Snapshot'[ReferralClosedDate] )
+            && 'Fact Referral Snapshot'[ReferralClosedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1
+    )
+)
+
+Referrals with Placement at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    FILTER (
+        'Fact Referral Snapshot',
+        NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )
+            && 'Fact Referral Snapshot'[IPAIssuedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1
+    )
+)
+
+Referrals Placed by Target at Snapshot =
+CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[PlacedByRequiredDate] = TRUE () )
+
+Open Overdue Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = "Open overdue"
+)
+
+Open On-Track Referrals at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = "Open on track"
+)
+
+Open Referral Rate at Snapshot =
+DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
+
+Placement Rate at Snapshot =
+DIVIDE ( [Referrals with Placement at Snapshot], [Snapshot Referrals] )
+
+Target Hit Rate at Snapshot =
+DIVIDE (
+    [Referrals Placed by Target at Snapshot],
+    CALCULATE (
+        [Snapshot Referrals],
+        FILTER (
+            'Fact Referral Snapshot',
+            NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )
+                && NOT ISBLANK ( 'Fact Referral Snapshot'[RequiredPlacementDate] )
+        )
+    )
+)
+```
+
+Snapshots retain the latest available export per calendar month, not every
+daily export. This supports a monthly historic trend plus the latest
+current-month snapshot. The copy-ready DAX source is the **Active Gold v02 DAX
+measure library** in
+[KPI Reference Guide](../04_Data_and_Reporting/KPI_Reference_Guide.md).

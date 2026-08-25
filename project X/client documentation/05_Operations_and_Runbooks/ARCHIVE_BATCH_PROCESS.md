@@ -146,6 +146,13 @@ Gold writes or updates `gold.fact_referral_snapshot` for that historical date.
 The orchestration result is recorded in
 `monitoring.cfg_month_end_gold_run`.
 
+The same Gold invocation recreates the current referral, offer, placement,
+provider-response and KPI views for the canonical archive `AS_OF_DATE`. The
+snapshot is the historical reporting store; the other Gold views represent the
+canonical Silver state for the run. See
+[Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md)
+for their grains and supported measures.
+
 To force DQ and Gold to rerun for a completed month:
 
 ```sql

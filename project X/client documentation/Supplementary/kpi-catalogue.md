@@ -1,5 +1,11 @@
 # Board KPI Catalogue
 
+The active Gold v02 definitions and DAX expressions are in
+[Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+Use `RequiredPlacementDateOutcome` and `PlacedByRequiredDate` from
+`gold.fact_referral` for target reporting rather than recreating target logic
+against `Fact Placement`.
+
 ## Headline KPIs
 
 | KPI | Definition |

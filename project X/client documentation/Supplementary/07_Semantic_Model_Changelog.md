@@ -1,5 +1,10 @@
 # Semantic-Model Changelog — report v00 to v01
 
+> **Historical scope:** this changelog records the extracted v00/v01 Power BI
+> models. It must not be used as the active Gold physical-schema reference.
+> The current notebook-created facts and measures are documented in
+> [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+
 ## WMPP Power BI Baseline Reconciliation
 
 | Field | Value |

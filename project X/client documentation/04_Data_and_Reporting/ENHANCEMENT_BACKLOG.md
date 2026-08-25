@@ -1,3 +1,13 @@
+> **Implemented Gold v02 status:** the active `04_gold_model` notebook now
+> publishes `gold.fact_referral`, `gold.fact_referral_snapshot`,
+> `gold.fact_offer`, `gold.fact_placement`, and
+> `gold.fact_referral_provider`, plus referral-board, monthly and provider
+> performance KPI views. Refer to the shared
+> [Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md)
+> for supported fields, source limitations and the new DAX measures. Items in
+> this backlog remain proposed where they depend on source fields not delivered,
+> including reopened dates, actual placement dates, region and complexity.
+
 ## The key distinction: referrals are demand; placements are outcomes
 
 Your referrals table does **not** need to contain one row per day or month to support time-series reporting.

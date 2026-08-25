@@ -1,5 +1,11 @@
 # KPI Reference Guide — Tables, Calculations, and Functional Requirements
 
+> **Historical scope:** this is an assessment of the V13.1 pilot dashboard.
+> References to `fact_referral_offer` and `fact_ipa` describe that historic
+> report model, not the active notebook-created Gold v02 objects. See
+> [Measures Comparison Checklist](Measures_Comparison_Checklist.md)
+> for current facts and measures.
+
 | Field | Value |
 |-------|-------|
 | **Project** | WMPP — West Midlands Placement Portal |

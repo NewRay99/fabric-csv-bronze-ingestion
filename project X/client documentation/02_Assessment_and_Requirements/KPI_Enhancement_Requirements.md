@@ -18,6 +18,11 @@ matching progress and due-diligence readiness at a reporting snapshot.
 | `IPA2Signatures` | At least one linked IPA has source status `SIGNED`. | `SIGNED` is the supplied indication that both bodies have completed signing. |
 | `IPALastSignatureDate` | Latest of local-authority signature, provider signature and can-sign dates across linked IPAs. | Null when no signature timestamps are delivered. |
 | `IPADueDiligenceMinReviewDate` | Earliest `provider_submission_docs.next_review_date` linked through the IPA offer/home and later than admission. | Null when no eligible delivered document exists. |
+| `ResponseRequiredDate` | Delivered referral response target date. | Retained separately from the required placement date. |
+| `PlacedByRequiredDate` | IPA issue date exists on or before the delivered required placement date. | Null target dates are excluded from a target-hit denominator. |
+| `RequiredPlacementDateOutcome` | Target outcome: placed by target, placed after target, open overdue, open on track or closed without placement. | Derived as at the Gold `AsOfDate`; it is not a source status. |
+| `DaysToFirstAction` / `DaysToFirstOffer` / `DaysToIPA` | Derived duration from referral creation to the stated event. | Null when the event has not been delivered. |
+| `DaysPastRequiredDate` / `DaysWithoutActivity` | Target overrun and inactivity age as at the Gold `AsOfDate`. | Use only for open referral escalation. |
 
 ## Layering and snapshot policy
 
@@ -63,6 +68,12 @@ the referral fact and its snapshot:
   issuance, admission, supplied status, closure and estimated weekly cost.
 - `gold.fact_referral_provider`: one row per provider assignment, including
   supplied exclusion/decline/cancellation/closure flags.
+
+The notebook also publishes `gold.vw_kpi_referral_board_summary`,
+`gold.vw_kpi_referral_monthly` and `gold.vw_provider_offer_performance` for
+board, monthly and provider comparison visuals. The detailed field rules and
+DAX measures are in the active Gold v02 measure library in
+[KPI Reference Guide](../04_Data_and_Reporting/KPI_Reference_Guide.md).
 
 Where the source does not provide actual placement dates, actual cost, duration,
 end reason, region or complexity classification, the Gold views expose a

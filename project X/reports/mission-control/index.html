@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WMPP ETL Operations Control Tower</title>
+  <style>
+    :root { --ink:#1f2937; --muted:#6b7280; --canvas:#f3f4f6; --panel:#fff; --line:#d1d5db; --soft:#f9fafb; --active:#374151; --ok:#4b5563; --warn:#6b7280; --bad:#111827; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-width:320px; background:var(--canvas); color:var(--ink); font:14px/1.4 Arial, Helvetica, sans-serif; }
+    .shell { display:grid; grid-template-columns:230px minmax(0, 1fr); min-height:100vh; }
+    aside { padding:24px 14px; background:#fff; border-right:1px solid var(--line); }
+    .brand { padding:0 10px 24px; font-size:17px; font-weight:700; letter-spacing:.02em; }
+    .brand span { display:block; margin-top:5px; color:var(--muted); font-size:11px; font-weight:400; }
+    .nav-label { margin:18px 10px 6px; color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .nav { display:block; width:100%; margin:2px 0; padding:9px 10px; border:1px solid transparent; border-radius:5px; background:transparent; color:var(--ink); cursor:pointer; font:inherit; font-size:13px; text-align:left; }
+    .nav:hover { background:var(--soft); }
+    .nav[aria-pressed="true"] { border-color:var(--active); background:var(--active); color:#fff; }
+    main { min-width:0; padding:28px; }
+    .top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:20px; }
+    h1 { margin:0; font-size:25px; font-weight:600; }
+    .subtitle { margin:5px 0 0; color:var(--muted); font-size:13px; }
+    select { min-width:145px; padding:9px; border:1px solid var(--line); border-radius:4px; background:#fff; color:var(--ink); }
+    .kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+    .kpi, .panel { border:1px solid var(--line); background:var(--panel); border-radius:6px; }
+    .kpi { min-height:93px; padding:14px; }
+    .label { color:var(--muted); font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; }
+    .value { margin:7px 0 2px; font-size:26px; font-weight:600; }
+    .detail { color:var(--muted); font-size:11px; }
+    .chart-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:16px; }
+    .chart-panel { min-width:0; border:1px solid var(--line); background:var(--panel); border-radius:6px; }
+    .chart-panel h2 { margin:0; padding:13px 15px; border-bottom:1px solid var(--line); font-size:13px; font-weight:600; }
+    .chart-panel svg { display:block; width:100%; height:178px; padding:10px 14px 4px; }
+    .axis { stroke:#9ca3af; stroke-width:1; }.gridline { stroke:#e5e7eb; stroke-width:1; }.bar { fill:#4b5563; }.bar-secondary { fill:#9ca3af; }.chart-line { fill:none; stroke:#374151; stroke-width:2.5; }.chart-dot { fill:#374151; }.chart-label { fill:#6b7280; font-size:10px; }.chart-value { fill:#374151; font-size:10px; font-weight:600; }
+    .layout { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr); gap:16px; }
+    .panel-title { display:flex; align-items:center; justify-content:space-between; padding:13px 15px; border-bottom:1px solid var(--line); font-size:13px; font-weight:600; }
+    .source { color:var(--muted); font-size:10px; font-weight:400; }
+    .table-source { padding:10px 15px 0; color:var(--muted); font-size:10px; }
+    .rows { padding:3px 15px; }
+    .row { display:grid; grid-template-columns:1.35fr .7fr .75fr .7fr; gap:10px; align-items:center; min-height:43px; border-bottom:1px solid var(--line); font-size:12px; }
+    .row:last-child { border-bottom:0; }
+    .row strong { font-weight:600; }
+    .status { font-size:10px; font-weight:700; letter-spacing:.04em; }
+    .status.ok { color:var(--ok); }.status.warn { color:var(--warn); }.status.bad { color:var(--bad); text-decoration:underline; text-underline-offset:3px; }
+    .bars { padding:10px 15px; }
+    .bar-row { display:grid; grid-template-columns:94px minmax(40px,1fr) 30px; align-items:center; gap:8px; margin:14px 0; font-size:11px; }
+    .track { height:7px; background:#e5e7eb; border-radius:4px; overflow:hidden; }
+    .fill { height:100%; background:#4b5563; }.fill.warn { background:#9ca3af; }.fill.bad { background:#111827; }
+    .callout { margin:13px 15px 15px; padding:12px; background:#f3f4f6; border-left:3px solid #6b7280; color:var(--ink); font-size:11px; }
+    .callout b { display:block; margin-bottom:3px; }
+    .coverage { margin-top:16px; padding:13px 15px; border:1px dashed #9ca3af; color:var(--muted); background:#fff; font-size:11px; }
+    .coverage b { color:var(--ink); }
+    @media (max-width:760px) { .shell { grid-template-columns:1fr; } aside { padding:14px; border-right:0; border-bottom:1px solid var(--line); } .brand { padding-bottom:8px; } .nav-label { display:none; } .nav { display:inline-block; width:auto; margin:2px; font-size:11px; } main { padding:16px; } .top { flex-direction:column; } .kpis { grid-template-columns:repeat(2,minmax(0,1fr)); } .chart-grid, .layout { grid-template-columns:1fr; } .row { grid-template-columns:1.2fr .75fr .8fr; } .row span:last-child { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside aria-label="Dashboard pages">
+      <div class="brand">WMPP<span>ETL Operations Control Tower</span></div>
+      <div class="nav-label">Command centre</div>
+      <button class="nav" type="button" data-page="overview" aria-pressed="true">Overview</button>
+      <div class="nav-label">ETL</div>
+      <button class="nav" type="button" data-page="live">90_run_live_pipeline</button>
+      <button class="nav" type="button" data-page="history">90_run_archive_pipeline</button>
+      <button class="nav" type="button" data-page="steps">Job steps &amp; errors</button>
+      <div class="nav-label">Assurance</div>
+      <button class="nav" type="button" data-page="dq">Data quality</button>
+      <button class="nav" type="button" data-page="schema">Schema drift &amp; contract</button>
+      <button class="nav" type="button" data-page="ri">Referential integrity</button>
+      <div class="nav-label">Governance</div>
+      <button class="nav" type="button" data-page="domain">Data domains</button>
+    </aside>
+    <main>
+      <div class="top">
+        <div><h1 id="title">Control tower overview</h1><p class="subtitle" id="subtitle">One operational view across jobs, quality and governance exceptions.</p></div>
+        <label><span class="label">Reporting period</span><br><select aria-label="Reporting period"><option>Last 30 days</option><option>Last 7 days</option><option>Selected job run</option></select></label>
+      </div>
+      <section class="kpis" id="kpis" aria-label="Key performance indicators"></section>
+      <section class="chart-grid" aria-label="Page charts">
+        <article class="chart-panel"><h2 id="chart-one-title"></h2><div id="chart-one"></div></article>
+        <article class="chart-panel"><h2 id="chart-two-title"></h2><div id="chart-two"></div></article>
+      </section>
+      <section class="layout">
+        <article class="panel"><div class="panel-title"><span id="left-title"></span><span class="source">Drillthrough enabled</span></div><div class="table-source" id="table-source"></div><div class="rows" id="rows"></div></article>
+        <article class="panel"><div class="panel-title" id="right-title"></div><div id="right-content"></div></article>
+      </section>
+      <div class="coverage"><b>Data-coverage boundary:</b> the current ETL captures run status, throughput, DQ, drift and referential evidence. It does not yet capture durable table/column lifecycle events or authoritative inserted/updated/deleted row counts.</div>
+    </main>
+  </div>
+  <script>
+    const pages = {
+      overview: { title:'Control tower overview', subtitle:'One operational view across jobs, quality and governance exceptions.', stats:[['Latest job','SUCCESS','90_run_live_pipeline','ok'],['Failed jobs','2','last 30 days','bad'],['DQ failures','14','3 critical rules','warn'],['Active drift','7','columns needing action','warn']], left:'Recent job runs', source:'monitoring.vw_job_run_summary', rows:[['90_run_live_pipeline','SUCCESS','18m 42s','2.1m rows'],['90_run_archive_pipeline','FAILED','1h 12m','error logged'],['90_run_live_pipeline','SUCCESS','16m 08s','1.9m rows'],['90_run_archive_pipeline','SUCCESS','48m 31s','6 batches']], right:'Exceptions requiring attention', bars:[['Critical DQ rules',3,75,'bad'],['Active schema drift',7,58,'warn'],['Failed job steps',2,25,'bad']], note:['Drill path','Job run → notebook step → target table → DQ or drift evidence. Use job_run_id as the principal report key.'] },
+      live: { title:'90_run_live_pipeline', subtitle:'Dedicated operational view for the latest-source pipeline only.', stats:[['Latest run','SUCCESS','completed 08:14','ok'],['Duration','18m 42s','vs prior live run','warn'],['Silver targets','42','all completed','ok'],['Rows written','2.1m','latest live load','ok']], left:'Live pipeline step timeline', source:'vw_job_run_summary, vw_job_step_timing, cfg_pipeline_run, cfg_table_load_metric — filter pipeline_name = 90_run_live_pipeline', rows:[['00_setup_cfg','SUCCESS','01m 12s','configuration'],['01_bronze_get_latest','SUCCESS','03m 48s','Bronze'],['02_silver_formatter','SUCCESS','08m 11s','42 targets'],['03/04/05 Gold','SUCCESS','05m 31s','Gold refresh']], right:'Live throughput and outcome', bars:[['Bronze to Silver',92,92,''],['Silver to Gold',100,100,''],['Null primary keys',3,18,'warn']], note:['Required page filter','Apply pipeline_name = "90_run_live_pipeline" to every visual, including drillthrough. Do not combine archive job runs or export-date measures in this page.'] },
+      history: { title:'90_run_archive_pipeline', subtitle:'Dedicated historical replay and archive-batch view for the archive pipeline only.', stats:[['Archive batches','31','ZIP exports','ok'],['File failures','4','awaiting retry','bad'],['Months ready','26','Gold snapshots','ok'],['Reload flagged','2','queued for replay','warn']], left:'Archive pipeline batch monitor', source:'vw_job_run_summary, vw_job_step_timing, cfg_archive_zip_load, cfg_archive_file_load, cfg_silver_export_load, cfg_month_end_gold_run — filter pipeline_name = 90_run_archive_pipeline', rows:[['2026-07-31','SUCCESS','42 files','Gold complete'],['2026-06-30','SUCCESS','39 files','Gold complete'],['2026-05-31','FAILED','1 file','retry required'],['2026-04-30','RELOAD','40 files','replay queued']], right:'Archive batch readiness', bars:[['ZIP extraction',94,94,''],['File ingestion',89,89,'warn'],['Silver exports',91,91,''],['Gold month end',84,84,'warn']], note:['Required page filter','Apply pipeline_name = "90_run_archive_pipeline" to every job-based visual. Use export_date / snapshot_date for batch slicing and keep reload / attempt_count visible for replay control.'] },
+      steps: { title:'Job steps & errors', subtitle:'Notebook duration, run sequencing and actionable failure evidence.', stats:[['Failed steps','2','last 30 days','bad'],['Median step time','4m 12s','all steps','ok'],['Slowest step','36m 44s','02a_archive_silver','warn'],['Step gaps','5','over one minute','warn']], left:'Step execution detail', source:'monitoring.vw_job_step_timing', rows:[['02a_archive_silver','FAILED','36m 44s','column error'],['03_silver_business_rules','SUCCESS','04m 12s','DQ completed'],['04_gold_model','SUCCESS','02m 19s','snapshot built'],['01a_cfg_schema_capture','SUCCESS','01m 06s','drift scan']], right:'Failure categories', bars:[['Source / contract',4,57,'warn'],['Data type / timestamp',2,29,'bad'],['Notebook timeout',1,14,'bad']], note:['Drillthrough page','Show job_run_id, step sequence, full error_message, child_result and the preceding-step gap without truncation.'] },
+      dq: { title:'Data quality', subtitle:'Rule health, severity, failed rows and rejected-key evidence.', stats:[['Rules checked','188','selected period','ok'],['Rules failed','14','7.4% of checks','bad'],['Failed rows','1,284','all rules','bad'],['Critical failures','3','pipeline impact','warn']], left:'Rule failures', source:'monitoring.vw_job_data_quality, cfg_data_quality_rule, cfg_rejected_row', rows:[['RI_OFFER_REFERRAL','CRITICAL','4.8%','offer.referral_id'],['DATE_IPA_ISSUED','HIGH','1.1%','ipa.issued_date'],['PK_REFERRAL','HIGH','0.3%','referral.referral_id'],['NON_NEGATIVE_FEE','MEDIUM','0.2%','offer.core_fee']], right:'Failures by rule type', bars:[['Referential integrity',8,72,'bad'],['Date order',3,42,'warn'],['Not null',2,29,'warn'],['Uniqueness',1,14,'']], note:['Evidence drillthrough','Show failure percentage, sample key JSON, rejection reason and rejected-key count. Keep personal data out of standard report pages.'] },
+      schema: { title:'Schema drift & contract', subtitle:'Source/contract differences, candidate definitions and their lifecycle.', stats:[['Active events','7','requires triage','warn'],['New today','2','since last run','bad'],['Resolved','19','last 30 days','ok'],['Contract coverage','96%','observed columns mapped','ok']], left:'Active drift register', source:'vw_job_schema_drift, cfg_schema_contract_column, cfg_schema_drift_definition, cfg_schema_definition_candidate, cfg_bronze_schema_live, cfg_archived_schema_live', rows:[['framework.framework_name','MISSING CONTRACT','string','active'],['offer.estimated_start','TYPE MISMATCH','timestamp','active'],['ipa.status','EXTRA SOURCE','string','active'],['provider_home.region','MISSING SOURCE','string','active']], right:'Drift lifecycle', bars:[['Missing contract column',3,70,'bad'],['Type mismatch',2,46,'warn'],['Missing source column',1,23,'warn'],['Extra source column',1,23,'']], note:['Governance action','Show expected/actual type, first/last detection, occurrence count and runtime contract loaded date. Include Gold lineage mapping on the detail page.'] },
+      ri: { title:'Referential integrity', subtitle:'Orphaned child records and affected parent-child relationships.', stats:[['RI exceptions','892','selected period','bad'],['Failing rules','8','active RI rules','bad'],['Affected children','4','tables','warn'],['Largest orphan set','641','offer to referral','bad']], left:'Broken relationships', source:'cfg_referential_exception, vw_job_data_quality, cfg_data_quality_rule', rows:[['offer → referral','641','offer.referral_id','CRITICAL'],['ipa → referral','149','ipa.referral_id','HIGH'],['referral_provider → provider','73','provider_id','HIGH'],['provider_home → provider','29','provider_id','MEDIUM']], right:'Exceptions by parent', bars:[['referral',790,88,'bad'],['provider',102,33,'warn']], note:['Relationship drillthrough','Use child table/column, parent table/column, rule ID and detected timestamp. Restrict child-key detail to authorised users.'] },
+      domain: { title:'Data domains', subtitle:'Safe, low-cardinality values observed in source columns.', stats:[['Profiled columns','128','domain candidates','ok'],['Domain values','1,076','stored values','ok'],['Columns skipped','84','high-cardinality / sensitive','ok'],['New values','9','since last profile','warn']], left:'Domain value explorer', source:'monitoring.cfg_data_domain', rows:[['referral.referral_status','8 values','OPEN • CLOSED',''],['offer.offer_status','6 values','DRAFT • OFFER_MADE',''],['provider.region','12 values','Birmingham • Dudley',''],['ipa.placement_type','9 values','Residential • Foster','']], right:'Domain governance', bars:[['Approved / expected',82,82,''],['New values awaiting review',9,37,'warn'],['Unexpected values',3,18,'bad']], note:['Safety boundary','The profiling process excludes UID, GUID, names, email, free text and high-cardinality columns. Only expose cfg_data_domain in this page.'] }
+    };
+    const chartSets = {
+      overview:[{title:'Job outcome trend',type:'line',labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],values:[8,10,9,12,7,6,11],unit:'job runs'},{title:'Open exception mix',type:'bar',labels:['DQ','Drift','RI','Steps'],values:[14,7,8,2],unit:'open items'}],
+      live:[{title:'Live run duration',type:'line',labels:['Run 1','Run 2','Run 3','Run 4','Run 5','Run 6'],values:[14,16,18,15,17,19],unit:'minutes'},{title:'Rows written by layer',type:'bar',labels:['Bronze','Silver','Gold'],values:[2.4,2.1,0.5],unit:'millions'}],
+      history:[{title:'Archive batches completed',type:'bar',labels:['Mar','Apr','May','Jun','Jul','Aug'],values:[5,5,4,5,6,6],unit:'batches'},{title:'Archive processing duration',type:'line',labels:['Mar','Apr','May','Jun','Jul','Aug'],values:[46,53,72,48,51,44],unit:'minutes'}],
+      steps:[{title:'Notebook duration by step',type:'bar',labels:['Setup','Bronze','Schema','Silver','DQ','Gold'],values:[1,4,1,37,4,3],unit:'minutes'},{title:'Failed steps by week',type:'line',labels:['W1','W2','W3','W4','W5','W6'],values:[0,1,0,2,1,2],unit:'failed steps'}],
+      dq:[{title:'DQ failed-row trend',type:'line',labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],values:[82,106,159,124,277,168,368],unit:'failed rows'},{title:'Failed rows by rule type',type:'bar',labels:['RI','Date','Null','Unique'],values:[892,227,116,49],unit:'failed rows'}],
+      schema:[{title:'Active drift trend',type:'line',labels:['Mar','Apr','May','Jun','Jul','Aug'],values:[4,5,3,6,5,7],unit:'active events'},{title:'Drift by type',type:'bar',labels:['Contract','Type','Source','Extra'],values:[3,2,1,1],unit:'events'}],
+      ri:[{title:'RI exceptions by batch',type:'line',labels:['Mar','Apr','May','Jun','Jul','Aug'],values:[74,98,221,153,189,157],unit:'exceptions'},{title:'Exceptions by relationship',type:'bar',labels:['Offer','IPA','Provider','Home'],values:[641,149,73,29],unit:'exceptions'}],
+      domain:[{title:'Profiled columns over time',type:'line',labels:['Mar','Apr','May','Jun','Jul','Aug'],values:[96,104,108,117,122,128],unit:'columns'},{title:'Domain values by table',type:'bar',labels:['Referral','Offer','Provider','IPA'],values:[188,142,411,335],unit:'values'}]
+    };
+    const title = document.getElementById('title'); const subtitle = document.getElementById('subtitle'); const kpis = document.getElementById('kpis'); const leftTitle = document.getElementById('left-title'); const tableSource = document.getElementById('table-source'); const rows = document.getElementById('rows'); const rightTitle = document.getElementById('right-title'); const rightContent = document.getElementById('right-content'); const chartOneTitle = document.getElementById('chart-one-title'); const chartTwoTitle = document.getElementById('chart-two-title'); const chartOne = document.getElementById('chart-one'); const chartTwo = document.getElementById('chart-two');
+    function stateClass(value) { return value === 'SUCCESS' ? 'ok' : (value === 'FAILED' || value === 'CRITICAL' ? 'bad' : 'warn'); }
+    function chartSvg(chart) { const width=470, height=164, left=32, right=12, top=14, bottom=31, plotWidth=width-left-right, plotHeight=height-top-bottom, max=Math.max(...chart.values,1), step=plotWidth/chart.values.length; const grid=[.25,.5,.75,1].map(f=>`<line class="gridline" x1="${left}" y1="${top+plotHeight*(1-f)}" x2="${width-right}" y2="${top+plotHeight*(1-f)}"></line>`).join(''); const labels=chart.labels.map((label,i)=>`<text class="chart-label" text-anchor="middle" x="${left+step*(i+.5)}" y="${height-10}">${label}</text>`).join(''); if(chart.type==='line'){const points=chart.values.map((value,i)=>`${left+step*(i+.5)},${top+plotHeight-(value/max)*plotHeight}`).join(' '); const dots=chart.values.map((value,i)=>{const x=left+step*(i+.5),y=top+plotHeight-(value/max)*plotHeight;return `<circle class="chart-dot" cx="${x}" cy="${y}" r="3"></circle><text class="chart-value" text-anchor="middle" x="${x}" y="${y-7}">${value}</text>`}).join(''); return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Trend chart, values in ${chart.unit}"><line class="axis" x1="${left}" y1="${top+plotHeight}" x2="${width-right}" y2="${top+plotHeight}"></line>${grid}<polyline class="chart-line" points="${points}"></polyline>${dots}${labels}</svg>`;} const bars=chart.values.map((value,i)=>{const barHeight=(value/max)*plotHeight,x=left+step*i+step*.18,y=top+plotHeight-barHeight,w=step*.64;return `<rect class="bar${i%2?' bar-secondary':''}" x="${x}" y="${y}" width="${w}" height="${barHeight}"></rect><text class="chart-value" text-anchor="middle" x="${x+w/2}" y="${Math.max(y-5,11)}">${value}</text>`}).join(''); return `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Comparison chart, values in ${chart.unit}"><line class="axis" x1="${left}" y1="${top+plotHeight}" x2="${width-right}" y2="${top+plotHeight}"></line>${grid}${bars}${labels}</svg>`; }
+    function render(key) { const p = pages[key]; const charts = chartSets[key]; title.textContent = p.title; subtitle.textContent = p.subtitle; kpis.innerHTML = p.stats.map(s => `<div class="kpi"><div class="label">${s[0]}</div><div class="value ${s[3]}">${s[1]}</div><div class="detail">${s[2]}</div></div>`).join(''); chartOneTitle.textContent=`${charts[0].title} (${charts[0].unit})`; chartTwoTitle.textContent=`${charts[1].title} (${charts[1].unit})`; chartOne.innerHTML=chartSvg(charts[0]); chartTwo.innerHTML=chartSvg(charts[1]); leftTitle.textContent = p.left; tableSource.textContent = p.source; rows.innerHTML = p.rows.map(r => `<div class="row"><strong>${r[0]}</strong><span class="status ${stateClass(r[1])}">${r[1]}</span><span>${r[2]}</span><span class="detail">${r[3]}</span></div>`).join(''); rightTitle.textContent = p.right; rightContent.innerHTML = `<div class="bars">${p.bars.map(b => `<div class="bar-row"><span>${b[0]}</span><div class="track"><div class="fill ${b[3]}" style="width:${b[2]}%"></div></div><span>${b[1]}</span></div>`).join('')}</div><div class="callout"><b>${p.note[0]}</b>${p.note[1]}</div>`; document.querySelectorAll('.nav').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.page === key))); }
+    document.querySelectorAll('.nav').forEach(button => button.addEventListener('click', () => render(button.dataset.page))); render('overview');
+  </script>
+</body>
+</html>

@@ -25,7 +25,7 @@ requirements for the BCT WMPP data-engineering solution.
 | `02_silver_formatter` | Current Bronze and schema contract | Current `silver.*`, audit rows, drift events, metrics |
 | `02a_archive_silver` | Historical archive tables and contract | Canonical monthly `silver.*`, DQ/Gold orchestration |
 | `03_silver_business_rules` | Silver, schema contract, DQ rule CSV | DQ results, rejected keys, referential exceptions |
-| `04_gold_model` | Current/historical Silver | Gold referral views, lifecycle-event view, and `fact_referral_snapshot` |
+| `04_gold_model` | Current/historical Silver plus `silver.referral_enrichment` | `fact_referral`, monthly referral snapshot, offer, placement, provider-response and lifecycle-event views; board/monthly/provider KPI views |
 | `05_gold_dimensions` | Silver dimensions and provider bridges | Gold dimensions and bridges for reporting |
 
 ## 3. Configuration contract

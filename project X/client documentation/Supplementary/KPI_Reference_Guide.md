@@ -3,11 +3,21 @@
 **Project:** WMPP (West Midlands Placement Portal)
 **Date:** 10 July 2026
 
-This document lists every KPI in the gold layer — both the 90 existing measures translated from the Power BI semantic model and the 17 new measures created to close functional spec gaps. Each KPI documents the source tables, calculation logic, and the functional requirement(s) it satisfies.
+This document records the legacy v01 KPI catalogue: the existing measures
+translated from the historical Power BI semantic model and proposed measures
+for functional gaps. It is not a physical-schema declaration for the active
+notebook-created Gold v02 model.
+
+> **Scope correction:** this is the legacy v01 semantic-model catalogue. Its
+> `fact_referral_offer` and `fact_ipa` references are not active Gold v02
+> objects. Use [Measures Comparison Checklist](Measures_Comparison_Checklist.md)
+> for the current fact names, fields, KPI views and DAX. Retain this catalogue
+> for requirements traceability until each legacy KPI is reimplemented and
+> certified against Gold v02.
 
 ---
 
-## Table Mapping — Silver to Gold
+## Legacy v01 table mapping — not the active Gold v02 physical model
 
 | Gold Table | Silver Source | Schema Definition Table | Functional Area |
 |-----------|--------------|----------------------|-----------------|
