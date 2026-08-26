@@ -12,15 +12,16 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
 ## Issue identifier legend
 
-| Prefix | Issue type |
-| --- | --- |
-| `AR` | Archive-layer loader and replay issue |
-| `ARCH-ETL` | Archive ETL pipeline issue |
-| `LIVE-ETL` | Live ETL pipeline issue |
-| `SI` / `SIL` | Silver-layer issue |
-| `GLD` | Gold-layer issue |
-| `CFG` | Configuration and monitoring issue |
-| `RG` | Repository reorganisation issue |
+| Prefix | Issue type | Number of issues |
+| --- | --- | ---: |
+| `AR` | Archive-layer loader and replay issue | 13 |
+| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
+| `LIVE-ETL` | Live ETL pipeline issue | 1 |
+| `SI` / `SIL` | Silver-layer issue | 25 |
+| `GLD` | Gold-layer issue | 1 |
+| `CFG` | Configuration and monitoring issue | 9 |
+| `RG` | Repository reorganisation issue | 1 |
+| **Total classified issues** |  | **52** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1125,7 +1126,25 @@ display(frame.where("lower(table_name) = 'framework'"))
 
 - **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the
 LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_name is null... should this be coded to archived? also possibly having the same issue with the 01a_cfg_schema_capture_live.ipynb.. on another note i believe the audit table can be consolidated to a single table so roll up LH_BCT_WMPP.monitoring.cfg_archived_schema_live and LH_BCT_WMPP.monitoring.cfg_bronze_schema_live to LH_BCT_WMPP.monitoring.cfg_schema_live and keep the schema_name fields to identify whether the capture was from Archived or Bronze database/schema
-## SL-N+1 - 02_silver_formatter error
+## SI-024 — Fabric preprocessor rejected the latest Silver formatter
+
+- **Symptom:** `90_run_live_pipeline` failed before `02_silver_formatter`
+  began execution. Fabric returned HTTP 400 with `%run cannot run with other
+  code or magic commands` while preprocessing the child notebook.
+- **Cause:** the formatter combined `%run ./99_common_library` with Python
+  assignments in one notebook cell. Fabric requires a `%run` magic command to
+  be the only command in its cell.
+- **Fix:** the common-library `%run` now occupies its own cell. The inherited
+  `RUN_ID`/`JOB_RUN_ID` and `PIPELINE_RUN_ID` assignments are in the following
+  normal Python cell, preserving the original runner lineage behaviour.
+- **Validation:** `validate_notebook_integration.py` requires the formatter's
+  `%run` cell to contain only the magic command; `python -m pytest` validates
+  the complete portable suite.
+- **Status:** Resolved in the repository; deploy
+  `02_silver_formatter.ipynb` before rerunning the live pipeline.
+
+**Original runtime evidence:**
+
 === FAILED 02_silver_formatter: An error occurred while calling z:notebookutils.notebook.run.
 : com.microsoft.spark.notebook.msutils.NotebookExecutionException: Fetch notebook content for '02_silver_formatter' failed with exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebook: , x-ms-nbs-activity-spanId: 75d999ae532a2640, x-ms-nbs-activity-traceId: 413b0ea4513f3a39bbc807d23cff4937, x-ms-nbs-environment: Trident prod-uksouth, x-ms-gateway-request-id: f7b0c967-90b4-4fd0-b976-726dd3090d76 | client-request-id : e9a80552-b847-436d-93ff-08e60609b946, x-ms-workspace-name: fefdb483-d26c-4bd9-9a4f-0c41cc786770, x-ms-activity-id: f7b0c967-90b4-4fd0-b976-726dd3090d76, x-ms-client-request-id: e9a80552-b847-436d-93ff-08e60609b946).
 	at com.microsoft.spark.notebook.msutils.impl.notebook.IMSNotebookProvider.get(IMSNotebookProvider.scala:56)

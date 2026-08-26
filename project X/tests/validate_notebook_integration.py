@@ -36,6 +36,21 @@ def source(notebook):
 notebooks = {name: load_notebook(name) for name in NOTEBOOKS}
 print("PASS notebook JSON and Python syntax")
 
+formatter_run_cells = [
+    "".join(cell.get("source", []))
+    for cell in notebooks["02_silver_formatter.ipynb"]["cells"]
+    if "".join(cell.get("source", [])).lstrip().startswith("%run ./99_common_library")
+]
+assert formatter_run_cells == ["%run ./99_common_library\n"], (
+    "02_silver_formatter: Fabric %run must be the only command in its cell"
+)
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+    encoding="utf-8"
+)
+assert "## SI-024" in issue_log
+assert "## SL-N+1" not in issue_log
+print("PASS formatter common-library %run is isolated in its own magic cell")
+
 for name in ["00_setup_cfg.ipynb", "99_common_library.ipynb"]:
     text = source(notebooks[name])
     assignment = text.find("TIME_PARSER_POLICY =")
