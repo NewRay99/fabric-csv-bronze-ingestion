@@ -41,6 +41,19 @@ for name in contract_consumers:
     check('row.get("schema_name")' not in source, f"{name} still reads schema_name")
 
 live_source = notebook_source("01a_cfg_schema_capture_live.ipynb")
+common_source = notebook_source("99_common_library.ipynb")
+check(
+    "def etl_logical_table_name" in common_source,
+    "common library does not define etl_logical_table_name",
+)
+check(
+    "logical_table = etl_logical_table_name(table.name)" in live_source,
+    "live schema capture does not call the common etl_logical_table_name helper",
+)
+check(
+    "logical_table = logical_table_name(table.name)" not in live_source,
+    "live schema capture still calls the retired logical_table_name helper",
+)
 for required in [
     "monitoring.cfg_schema_drift_definition",
     "monitoring.cfg_schema_drift_event",
