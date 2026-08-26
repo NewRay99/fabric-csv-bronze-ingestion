@@ -1101,3 +1101,33 @@ display(frame.where("lower(table_name) = 'framework'"))
 
 - **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the 
 LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_name is null... should this be coded to archived? also possibly having the same issue with the 01a_cfg_schema_capture_live.ipynb.. on another note i believe the audit table can be consolidated to a single table so roll up LH_BCT_WMPP.monitoring.cfg_archived_schema_live and LH_BCT_WMPP.monitoring.cfg_bronze_schema_live to LH_BCT_WMPP.monitoring.cfg_schema_live and keep the schema_name fields to identify whether the capture was from Archived or Bronze database/schema
+## SL-N+1 - 02_silver_formatter error
+=== FAILED 02_silver_formatter: An error occurred while calling z:notebookutils.notebook.run.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Fetch notebook content for '02_silver_formatter' failed with exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebook: , x-ms-nbs-activity-spanId: 75d999ae532a2640, x-ms-nbs-activity-traceId: 413b0ea4513f3a39bbc807d23cff4937, x-ms-nbs-environment: Trident prod-uksouth, x-ms-gateway-request-id: f7b0c967-90b4-4fd0-b976-726dd3090d76 | client-request-id : e9a80552-b847-436d-93ff-08e60609b946, x-ms-workspace-name: fefdb483-d26c-4bd9-9a4f-0c41cc786770, x-ms-activity-id: f7b0c967-90b4-4fd0-b976-726dd3090d76, x-ms-client-request-id: e9a80552-b847-436d-93ff-08e60609b946).
+	at com.microsoft.spark.notebook.msutils.impl.notebook.IMSNotebookProvider.get(IMSNotebookProvider.scala:56)
+	at com.microsoft.spark.notebook.msutils.impl.notebook.IMSNotebookProvider.get$(IMSNotebookProvider.scala:23)
+	at com.microsoft.spark.notebook.msutils.impl.notebook.TridentNotebookProvider.get(TridentNotebookProvider.scala:13)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.$anonfun$checkNotebook$1(MSNotebookUtilsImpl.scala:565)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.$anonfun$checkNotebook$1$adapted(MSNotebookUtilsImpl.scala:544)
+	at scala.collection.immutable.List.foreach(List.scala:431)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.checkNotebook(MSNotebookUtilsImpl.scala:544)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.runMultiple(MSNotebookUtilsImpl.scala:438)
+	at com.microsoft.spark.notebook.msutils.impl.MSNotebookUtilsImpl.run(MSNotebookUtilsImpl.scala:302)
+	at mssparkutils.INotebook.$anonfun$run$2(notebook.scala:46)
+	at com.microsoft.spark.notebook.common.trident.CertifiedTelemetryUtils$.withTelemetry(CertifiedTelemetryUtils.scala:98)
+	at mssparkutils.INotebook.run(notebook.scala:44)
+	at mssparkutils.INotebook.run$(notebook.scala:38)
+	at notebookutils.notebook$.run(notebook.scala:8)
+	at notebookutils.notebook.run(notebook.scala)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.GatewayConnection.run(GatewayConnection.java:238)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebo ===
