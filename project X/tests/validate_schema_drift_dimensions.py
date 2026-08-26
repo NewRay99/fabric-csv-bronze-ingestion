@@ -94,6 +94,9 @@ assert "physical_tables = candidate_tables" in archive_silver_source
 assert 'startswith("archived_")' not in archive_silver_source
 assert "RUN_GOLD_DIMENSIONS_AT_MONTH_END = True" in archive_silver_source
 assert 'GOLD_DIMENSIONS_NOTEBOOK_NAME = "05_gold_dimensions"' in archive_silver_source
+assert "is_final_month_end_batch = snapshot_date == month_end_dates[-1]" in archive_silver_source
+assert "if RUN_GOLD_DIMENSIONS_AT_MONTH_END and is_final_month_end_batch:" in archive_silver_source
+assert "Gold dimensions deferred until final batch" in archive_silver_source
 
 dimension_source = notebook_source(PROJECT / "05_gold_dimensions.ipynb")
 for required in (
