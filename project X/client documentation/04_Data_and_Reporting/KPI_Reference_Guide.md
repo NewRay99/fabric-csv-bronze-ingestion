@@ -679,6 +679,31 @@ set, including snapshot measures.
 Assumed semantic-model table names: `Fact Referral`, `Fact Referral Snapshot`,
 `Fact Offer`, `Fact Placement`, and `Fact Referral Provider`.
 
+### Functional-requirement mapping
+
+The table below maps every active Gold v02 measure to the
+[Functional Specification](../02_Assessment_and_Requirements/Functional_Specification.md).
+**Direct** means the measure reports a stated capability;
+**enabling** means it is a useful analytical breakdown of that capability, not
+evidence that the user-facing workflow itself has been delivered.
+
+| Active Gold v02 measure(s) | Requirement ID(s) | Coverage | Rationale |
+| --- | --- | --- | --- |
+| `Total Referrals`, `Open Referrals`, `Referrals With an Offer`, `Referrals Without Provider Assignment` | R24; R51, R52, R69 | Direct / enabling | Referral-status and provider-update dashboard indicators, supported by the analytical and reporting model. |
+| `Open Overdue Referrals`, `Referrals Placed by Required Date`, `Placement Target Hit Rate`, `Median Days to First Action`, `Median Days to First Offer`, `Median Days to IPA`, `Open Referrals Stalled 7+ Days` | R24; R51, R52, R69 | Enabling | Operational responsiveness, target and ageing indicators for the referral dashboard and commissioner analysis. No requirement states a specific target or duration KPI. |
+| `Offers Submitted`, `Accepted Offers`, `Offers with a Decision`, `Offer Acceptance Rate` | R28, R29, R36; R51 | Direct / enabling | Measures offer acceptance and decisions (R28), the streamlined offer process (R29), and outstanding/open-offer reporting (R36). |
+| `IPAs Created`, `Active Placements` | R35, R62, R71; R51 | Direct / enabling | Counts digitised IPAs and current placements, supporting IPA workflow/audit and finance visibility. |
+| `Estimated Active Weekly Cost` | R51, R62 | Direct | Estimated cost/value analysis for active placements and finance reporting. |
+| `Average Estimated Weekly Cost — Confirmed Referrals` | R51, R62 | Direct | Average referral-level estimated weekly cost where an IPA has been issued. |
+| `Provider Assignments`, `Provider Declines`, `Provider Decline Rate` | R25, R28; R51, R54 | Enabling | Supports analysis of provider responses and placement decisions. R54 is only fully met when visuals expose the delivered decline-reason field; an aggregate decline measure alone does not capture a reason. |
+| `Snapshot Referrals`, `Open Referrals at Snapshot`, `Closed Referrals at Snapshot`, `Referrals with Placement at Snapshot`, `Referrals Placed by Target at Snapshot`, `Open Overdue Referrals at Snapshot`, `Open On-Track Referrals at Snapshot`, `Open Referral Rate at Snapshot`, `Placement Rate at Snapshot`, `Target Hit Rate at Snapshot` | R24; R51, R52, R53, R69 | Enabling | Consistent, exportable point-in-time dashboard and trend analysis. The Functional Specification does not explicitly require snapshot retention. |
+
+`EstimatedWeeklyCost` is a delivered estimate, not an actual payment or invoice
+value. The confirmed-referral measure uses `Fact Referral`, so it averages one
+total estimated weekly cost per referral. A referral is included only when an
+IPA has been issued; where more than one IPA exists, that referral's delivered
+total is averaged once.
+
 ```DAX
 Total Referrals = DISTINCTCOUNT ( 'Fact Referral'[ReferralID] )
 
@@ -770,6 +795,16 @@ Estimated Active Weekly Cost =
 CALCULATE (
     SUM ( 'Fact Placement'[EstimatedWeeklyCost] ),
     'Fact Placement'[IsPlacementClosed] = FALSE ()
+)
+
+Average Estimated Weekly Cost — Confirmed Referrals =
+AVERAGEX (
+    FILTER (
+        'Fact Referral',
+        NOT ISBLANK ( 'Fact Referral'[IPAIssuedDate] )
+            && NOT ISBLANK ( 'Fact Referral'[EstimatedWeeklyCost] )
+    ),
+    'Fact Referral'[EstimatedWeeklyCost]
 )
 
 Provider Assignments = DISTINCTCOUNT ( 'Fact Referral Provider'[ReferralProviderID] )

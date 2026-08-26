@@ -54,7 +54,7 @@ assert referral["referral_modified_date"]["data_type"] == "timestamp without tim
 print("PASS referral contract retains the six captured live fields with approved ordinals")
 
 
-fact_cell = next(cell for cell in cells if "CREATE OR REPLACE VIEW gold.fact_referral AS" in cell)
+fact_cell = next(cell for cell in cells if "CREATE OR REPLACE TABLE gold.fact_referral AS" in cell)
 for required_name in [
     "referral_created_date",
     "referral_modified_date",
@@ -74,6 +74,22 @@ stale_patterns = {
 for label, pattern in stale_patterns.items():
     assert not re.search(pattern, fact_cell, re.IGNORECASE), label
 print("PASS fact_referral uses current referral extract names, not audit-table names")
+
+gold_fact_tables = {
+    "gold.fact_referral",
+    "gold.fact_referral_lifecycle_event",
+    "gold.fact_offer",
+    "gold.fact_placement",
+    "gold.fact_referral_provider",
+}
+for gold_fact_table in gold_fact_tables:
+    assert f"CREATE OR REPLACE TABLE {gold_fact_table} AS" in source, (
+        f"{gold_fact_table} must be materialised as a Gold table"
+    )
+    assert f"CREATE OR REPLACE VIEW {gold_fact_table} AS" not in source, (
+        f"{gold_fact_table} must not be published as a view"
+    )
+print("PASS Gold facts are materialised tables for Lakehouse semantic-model discovery")
 
 
 assert "GOLD_SOURCE_REQUIREMENTS" in source, "missing Gold source preflight"
@@ -103,6 +119,8 @@ issue_log = (
 assert "## SI-006" in issue_log
 assert "referral_modified_date" in issue_log
 assert "validate_gold_referral_schema.py" in issue_log
+assert "## SI-023" in issue_log
+assert "Lakehouse semantic model" in issue_log
 print("PASS change log records SI-006 and its validation")
 
 

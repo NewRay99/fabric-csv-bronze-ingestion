@@ -95,7 +95,7 @@ assert "x.referral_closed_date AS ReferralClosedDate" in gold
 assert "x.last_activity_date AS LastActivityDate" in gold
 fact_cell = next(
     cell for cell in json.loads(GOLD.read_text(encoding="utf-8-sig"))["cells"]
-    if "CREATE OR REPLACE VIEW gold.fact_referral AS" in "".join(cell.get("source", []))
+    if "CREATE OR REPLACE TABLE gold.fact_referral AS" in "".join(cell.get("source", []))
 )
 fact_source = "".join(fact_cell.get("source", []))
 assert "offer_rollup AS" not in fact_source
@@ -123,9 +123,9 @@ for field in {
 }:
     assert field in gold, f"Gold referral model does not expose {field}"
 for gold_fact in [
-    "CREATE OR REPLACE VIEW gold.fact_offer AS",
-    "CREATE OR REPLACE VIEW gold.fact_placement AS",
-    "CREATE OR REPLACE VIEW gold.fact_referral_provider AS",
+    "CREATE OR REPLACE TABLE gold.fact_offer AS",
+    "CREATE OR REPLACE TABLE gold.fact_placement AS",
+    "CREATE OR REPLACE TABLE gold.fact_referral_provider AS",
 ]:
     assert gold_fact in gold, f"missing source-grain Gold fact: {gold_fact}"
 assert "ActualPlacementStartDate" in gold

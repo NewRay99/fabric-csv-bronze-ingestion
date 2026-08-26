@@ -421,6 +421,16 @@ CALCULATE (
     'Fact Placement'[IsPlacementClosed] = FALSE ()
 )
 
+Average Estimated Weekly Cost — Confirmed Referrals =
+AVERAGEX (
+    FILTER (
+        'Fact Referral',
+        NOT ISBLANK ( 'Fact Referral'[IPAIssuedDate] )
+            && NOT ISBLANK ( 'Fact Referral'[EstimatedWeeklyCost] )
+    ),
+    'Fact Referral'[EstimatedWeeklyCost]
+)
+
 Provider Assignments = DISTINCTCOUNT ( 'Fact Referral Provider'[ReferralProviderID] )
 
 Provider Declines =
@@ -502,4 +512,15 @@ Snapshots retain the latest available export per calendar month, not every
 daily export. This supports a monthly historic trend plus the latest
 current-month snapshot. The copy-ready DAX source is the **Active Gold v02 DAX
 measure library** in
+[KPI Reference Guide](../04_Data_and_Reporting/KPI_Reference_Guide.md).
+
+### Functional coverage update
+
+`Average Estimated Weekly Cost — Confirmed Referrals` is a new direct measure
+for R51 (placement records, market intelligence and value analysis) and R62
+(finance access to current IPAs and payment-related information). It averages
+the referral-level delivered `EstimatedWeeklyCost` only for referrals with an
+issued IPA. It is an estimated weekly cost, rather than an invoice, payment or
+actual-cost measure. The complete measure-to-requirement mapping for the active
+Gold v02 library is maintained in the
 [KPI Reference Guide](../04_Data_and_Reporting/KPI_Reference_Guide.md).

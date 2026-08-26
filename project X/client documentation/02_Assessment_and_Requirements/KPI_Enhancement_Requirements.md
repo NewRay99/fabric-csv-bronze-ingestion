@@ -101,3 +101,13 @@ provider assignment, IPA completion/signing, and provider document review
 readiness. They support requirements for referral status visibility, IPA
 signing/auditability, provider due-diligence, and accurate commissioner
 reporting (R24, R35, R47–R49, R51–R54 and R69).
+
+### Confirmed-placement cost KPI
+
+The active Gold v02 measure library adds `Average Estimated Weekly Cost —
+Confirmed Referrals` for R51 and R62. It averages the referral-level delivered
+`EstimatedWeeklyCost` for referrals with an issued IPA (`IPAIssuedDate` is not
+blank). This is suitable for placement value analysis and finance reporting;
+it is explicitly an estimate, not an actual cost, payment or invoice value.
+The copy-ready DAX and the full active-measure requirement mapping are held in
+[KPI Reference Guide](../04_Data_and_Reporting/KPI_Reference_Guide.md).

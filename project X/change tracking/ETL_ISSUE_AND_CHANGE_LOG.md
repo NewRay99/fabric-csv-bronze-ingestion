@@ -634,6 +634,30 @@ and day-name attributes.
   use of `04_gold_model`.
 - **Status:** Resolved in the repository.
 
+## SI-023 — Gold fact views were not visible to the Lakehouse semantic model
+
+- **Symptom:** the `gold.fact_*` objects created by `04_gold_model.ipynb` were
+  present in the OneLake Lakehouse as views but were not available to select in
+  the Power BI semantic model.
+- **Cause:** the Gold facts were published with `CREATE OR REPLACE VIEW`.
+  The Lakehouse semantic-model integration requires materialised Lakehouse
+  tables for reliable fact-table discovery. `05_gold_dimensions.ipynb` was
+  already compliant: its date dimension uses `CREATE OR REPLACE TABLE` and its
+  helper writes all other dimensions with `saveAsTable`.
+- **Fix:** `04_gold_model.ipynb` now publishes `fact_referral`,
+  `fact_referral_lifecycle_event`, `fact_offer`, `fact_placement`, and
+  `fact_referral_provider` with `CREATE OR REPLACE TABLE`. During deployment,
+  it drops only an existing legacy view with the same name before recreating
+  the managed Delta table. The `gold.vw_*` reporting views deliberately remain
+  views because this issue is limited to the facts used by the semantic model.
+- **Recovery:** deploy and run `04_gold_model.ipynb`, then refresh the
+  Lakehouse semantic model in Power BI. Confirm the five `fact_*` tables are
+  available before configuring relationships and measures.
+- **Validation:** `validate_gold_referral_schema.py` rejects any Gold fact
+  published as a view and confirms all five use `CREATE OR REPLACE TABLE`.
+- **Status:** Resolved in the repository; Fabric deployment and semantic-model
+  refresh remain required.
+
 
 ## SI-018 — Referral enrichment fields were absent from the analytical model
 
@@ -1099,5 +1123,5 @@ display(frame.where("lower(table_name) = 'framework'"))
   relying on the updated monitoring lineage.
 ## CFG-009 - cfg_archive_schema inserting and not upserting
 
-- **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the 
+- **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the
 LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_name is null... should this be coded to archived? also possibly having the same issue with the 01a_cfg_schema_capture_live.ipynb.. on another note i believe the audit table can be consolidated to a single table so roll up LH_BCT_WMPP.monitoring.cfg_archived_schema_live and LH_BCT_WMPP.monitoring.cfg_bronze_schema_live to LH_BCT_WMPP.monitoring.cfg_schema_live and keep the schema_name fields to identify whether the capture was from Archived or Bronze database/schema

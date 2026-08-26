@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW gold.fact_referral AS
+CREATE OR REPLACE TABLE gold.fact_referral AS
 WITH referral_history AS (
   SELECT *, ROW_NUMBER() OVER (
     PARTITION BY referral_id
