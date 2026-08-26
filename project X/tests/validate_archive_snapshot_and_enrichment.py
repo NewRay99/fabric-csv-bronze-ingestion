@@ -124,12 +124,12 @@ for field in {
     assert field in gold, f"Gold referral model does not expose {field}"
 for gold_fact in [
     "CREATE OR REPLACE TABLE gold.fact_offer AS",
-    "CREATE OR REPLACE TABLE gold.fact_placement AS",
+    "CREATE OR REPLACE TABLE gold.fct_ipa AS",
     "CREATE OR REPLACE TABLE gold.fact_referral_provider AS",
 ]:
     assert gold_fact in gold, f"missing source-grain Gold fact: {gold_fact}"
-assert "ActualPlacementStartDate" in gold
-assert "EstimatedDurationWeeks" in gold
+assert "actual_placement_start_date" in gold
+assert "estimated_duration_weeks" in gold
 print("PASS full FactReferral shape, snapshot promotion and Offer/Placement facts are present")
 
 with DQ_CONFIG.open(encoding="utf-8-sig", newline="") as handle:

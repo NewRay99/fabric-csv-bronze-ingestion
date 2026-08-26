@@ -79,7 +79,7 @@ gold_fact_tables = {
     "gold.fact_referral",
     "gold.fact_referral_lifecycle_event",
     "gold.fact_offer",
-    "gold.fact_placement",
+    "gold.fct_ipa",
     "gold.fact_referral_provider",
 }
 for gold_fact_table in gold_fact_tables:
@@ -90,6 +90,19 @@ for gold_fact_table in gold_fact_tables:
         f"{gold_fact_table} must not be published as a view"
     )
 print("PASS Gold facts are materialised tables for Lakehouse semantic-model discovery")
+
+for required_field in [
+    "referral_id", "referral_created_date", "first_action_date",
+    "ipa_issued_date", "estimated_weekly_cost", "is_open",
+    "placed_by_required_date", "required_placement_date_outcome",
+]:
+    assert f"AS {required_field}" in fact_cell, (
+        f"Gold fact_referral does not publish snake_case field {required_field}"
+    )
+assert "gold.fact_placement" in source, "missing controlled retirement of fact_placement"
+assert "CREATE OR REPLACE TABLE gold.fact_placement AS" not in source
+assert "CREATE OR REPLACE TABLE gold.fct_ipa AS" in source
+print("PASS Gold facts use the snake_case semantic contract and fct_ipa name")
 
 
 assert "GOLD_SOURCE_REQUIREMENTS" in source, "missing Gold source preflight"

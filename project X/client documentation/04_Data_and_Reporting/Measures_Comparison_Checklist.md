@@ -10,6 +10,11 @@
 
 ---
 
+> **Historical comparison only.** The active notebook-created Gold semantic
+> model uses lower-case snake-case fields and `gold.fct_ipa`. Create or amend
+> measures only from the [Gold semantic-model DAX build guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
+> and [KPI reference guide](KPI_Reference_Guide.md).
+
 ## Overview
 
 This checklist is retained as a comparison of the legacy functional-specification mapping. The v01 semantic model is the current source of truth and contains **95 measures**, not the older 90-measure inventory. Sections 1–9 classify the 90 names retained from v00; the five v01 additions are recorded separately in WMPP-DE-CHG-001 and remain unclassified pending stakeholder validation. Use the generated catalogue linked above for the exact current names and display folders.

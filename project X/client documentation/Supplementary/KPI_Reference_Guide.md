@@ -9,11 +9,13 @@ for functional gaps. It is not a physical-schema declaration for the active
 notebook-created Gold v02 model.
 
 > **Scope correction:** this is the legacy v01 semantic-model catalogue. Its
-> `fact_referral_offer` and `fact_ipa` references are not active Gold v02
-> objects. Use [Measures Comparison Checklist](Measures_Comparison_Checklist.md)
-> for the current fact names, fields, KPI views and DAX. Retain this catalogue
-> for requirements traceability until each legacy KPI is reimplemented and
-> certified against Gold v02.
+> `fact_referral_offer` and `fact_ipa` references are not active Gold objects.
+> Do not use the legacy DAX below to build the current model. Use the
+> [Gold semantic-model DAX build guide](../04_Data_and_Reporting/GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
+> and [KPI reference guide](../04_Data_and_Reporting/KPI_Reference_Guide.md)
+> for active Gold table names, fields and DAX. Retain this catalogue only for
+> requirements traceability until each legacy KPI is reimplemented and
+> certified.
 
 ---
 
