@@ -1,0 +1,21 @@
+table dim_referral_status
+	lineageTag: 831fa2d8-2c82-463b-ae6c-f239e6bf2f8e
+
+	column referral_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_status
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition dim_referral_status = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_referral_status = Source{[Schema="gold",Item="dim_referral_status"]}[Data]
+				in
+				    gold_dim_referral_status

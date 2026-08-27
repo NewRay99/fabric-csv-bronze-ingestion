@@ -1,96 +1,41 @@
 table dim_framework
-	lineageTag: ef170781-e5b2-41b2-9c81-8d4c1f5006d3
+	lineageTag: da7744ea-9b91-492e-a10e-99ad52eaa69c
 
 	column framework_code
 		dataType: string
-		lineageTag: 09681a6e-739b-4ecb-84a0-9aa9c5d492ae
 		summarizeBy: none
 		sourceColumn: framework_code
 
-		annotation SummarizationSetBy = Automatic
-
 	column framework_name
 		dataType: string
-		lineageTag: 2af231d3-9802-486c-ad40-c7c761036b7c
 		summarizeBy: none
 		sourceColumn: framework_name
 
-		annotation SummarizationSetBy = Automatic
-
-	column start_date
-		dataType: string
-		lineageTag: af6f30cc-154a-4b83-bf0f-91a0f1fd6854
-		summarizeBy: none
-		sourceColumn: start_date
-
-		annotation SummarizationSetBy = Automatic
-
-	column end_date
-		dataType: string
-		lineageTag: 834ff39c-03f8-494d-b732-2d1ce67b6eae
-		summarizeBy: none
-		sourceColumn: end_date
-
-		annotation SummarizationSetBy = Automatic
-
 	column placement_type
 		dataType: string
-		lineageTag: b86372d3-088b-46cc-be73-498ae684be59
 		summarizeBy: none
 		sourceColumn: placement_type
 
-		annotation SummarizationSetBy = Automatic
-
-	column Index
-		dataType: int64
-		formatString: 0
-		lineageTag: bd9ccaa4-6483-44dd-ba16-71a130fe3a95
-		summarizeBy: sum
-		sourceColumn: Index
-
-		annotation SummarizationSetBy = Automatic
-
-	column _ingestion_timestamp
+	column start_date
 		dataType: dateTime
-		formatString: General Date
-		lineageTag: b54ec779-977c-4626-8bee-f037e958450d
 		summarizeBy: none
-		sourceColumn: _ingestion_timestamp
+		sourceColumn: start_date
 
-		variation Variation
-			isDefault
-			relationship: 4bfa5a81-fdfd-4696-b5d9-c0799a71d7be
-			defaultHierarchy: LocalDateTable_c206d0fd-3c2f-49e0-a827-4ef9e65d70fe.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-	column _source_file
-		dataType: string
-		lineageTag: 96cd28a4-3fca-40ee-a083-040b88474563
+	column end_date
+		dataType: dateTime
 		summarizeBy: none
-		sourceColumn: _source_file
+		sourceColumn: end_date
 
-		annotation SummarizationSetBy = Automatic
-
-	column _ingestion_id
-		dataType: string
-		lineageTag: aa5055b9-21c3-40eb-a45a-94b745a5264d
+	column source_export_date
+		dataType: dateTime
 		summarizeBy: none
-		sourceColumn: _ingestion_id
-
-		annotation SummarizationSetBy = Automatic
+		sourceColumn: source_export_date
 
 	partition dim_framework = m
-		mode: import
+		mode: directQuery
 		source =
 				let
-				    Source = #"bronze framework",
-				    #"Removed Columns" = Table.RemoveColumns(Source,{"export_date"}),
-				    #"Removed Duplicates" = Table.Distinct(#"Removed Columns", {"framework_code"}),
-				    #"Added Index" = Table.AddIndexColumn(#"Removed Duplicates", "Index", 1, 1, Int64.Type)
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_framework = Source{[Schema="gold",Item="dim_framework"]}[Data]
 				in
-				    #"Added Index"
-
-	annotation PBI_NavigationStepName = Navigation
-
-	annotation PBI_ResultType = Table
+				    gold_dim_framework

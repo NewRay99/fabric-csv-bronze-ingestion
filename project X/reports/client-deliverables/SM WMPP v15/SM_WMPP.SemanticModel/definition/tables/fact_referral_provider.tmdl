@@ -1,0 +1,66 @@
+table fact_referral_provider
+	lineageTag: 2ee46a6e-f203-4117-81e0-3e7e2ae6f034
+
+	column as_of_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+	column referral_provider_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+	column referral_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_id
+
+	column provider_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_id
+
+	column first_observed_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_observed_date
+
+	column is_excluded
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_excluded
+
+	column is_declined
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_declined
+
+	column is_cancelled
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_cancelled
+
+	column is_closed
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_closed
+
+	column provider_response_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_response_status
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition fact_referral_provider = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_fact_referral_provider = Source{[Schema="gold",Item="fact_referral_provider"]}[Data]
+				in
+				    gold_fact_referral_provider

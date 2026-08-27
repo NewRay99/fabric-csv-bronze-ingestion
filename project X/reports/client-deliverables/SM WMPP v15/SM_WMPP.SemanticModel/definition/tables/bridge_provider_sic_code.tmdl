@@ -1,0 +1,26 @@
+table bridge_provider_sic_code
+	lineageTag: 0c707586-b825-4360-865d-42904ec8ba16
+
+	column provider_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_id
+
+	column sic_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: sic_code
+
+	column source_export_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	partition bridge_provider_sic_code = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_bridge_provider_sic_code = Source{[Schema="gold",Item="bridge_provider_sic_code"]}[Data]
+				in
+				    gold_bridge_provider_sic_code

@@ -1,0 +1,101 @@
+table fct_ipa
+	lineageTag: 126c5a57-fa6a-426d-97a9-501b007c0511
+
+	column as_of_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+	column ipa_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: ipa_id
+
+	column referral_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_id
+
+	column accepted_offer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: accepted_offer_id
+
+	column ipa_issued_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ipa_issued_date
+
+	column planned_placement_start_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: planned_placement_start_date
+
+	column actual_placement_start_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: actual_placement_start_date
+
+	column planned_placement_end_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: planned_placement_end_date
+
+	column actual_placement_end_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: actual_placement_end_date
+
+	column placement_admission_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: placement_admission_date
+
+	column estimated_weekly_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: estimated_weekly_cost
+
+	column actual_weekly_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: actual_weekly_cost
+
+	column placement_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_status
+
+	column is_placement_closed
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_placement_closed
+
+	column placement_ended_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: placement_ended_date
+
+	column placement_end_reason
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_end_reason
+
+	column source_export_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition fct_ipa = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_fct_ipa = Source{[Schema="gold",Item="fct_ipa"]}[Data]
+				in
+				    gold_fct_ipa

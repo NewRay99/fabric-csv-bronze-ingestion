@@ -4,9 +4,11 @@
 It documents the required pages, visual hierarchy and drill paths; its sample
 values are illustrative, not sourced data.
 
-`mission-control-measures.dax` contains the DAX measure definitions. Import
-the `monitoring` reporting views and configuration tables using the semantic
-model names stated at the top of that file.
+The copy-ready monitoring measures, source mapping, relationship instructions
+and deployment checklist are maintained in
+[`MISSION_CONTROL_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`](../../client%20documentation/04_Data_and_Reporting/MISSION_CONTROL_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md).
+The dashboard page and KPI summary is maintained in
+[`MISSION_CONTROL_DASHBOARD_OVERVIEW_AND_KPI_LOGIC.md`](../../client%20documentation/04_Data_and_Reporting/MISSION_CONTROL_DASHBOARD_OVERVIEW_AND_KPI_LOGIC.md).
 
 The additional referral, offer, placement, provider-response and snapshot DAX
 measures enabled by `04_gold_model` are held in

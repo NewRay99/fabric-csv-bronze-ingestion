@@ -1,0 +1,31 @@
+table dim_framework_category
+	lineageTag: 6982902d-9d4b-4eb5-9933-9cb847187d0f
+
+	column framework_category_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: framework_category_id
+
+	column framework_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: framework_code
+
+	column category_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: category_name
+
+	column source_export_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	partition dim_framework_category = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_framework_category = Source{[Schema="gold",Item="dim_framework_category"]}[Data]
+				in
+				    gold_dim_framework_category

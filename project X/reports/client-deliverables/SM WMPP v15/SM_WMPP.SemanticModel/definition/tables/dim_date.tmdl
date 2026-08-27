@@ -1,75 +1,66 @@
 table dim_date
-	lineageTag: 031ca49f-6766-4403-98aa-ba96d3db3f5d
+	lineageTag: c5dd3b12-27c4-4158-99f0-94070e8c712f
 
-	column Date
-		formatString: General Date
-		lineageTag: b2877141-8213-43f7-baf1-752fb295107f
+	column date
+		dataType: dateTime
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Date]
+		sourceColumn: date
 
-		variation Variation
-			isDefault
-			relationship: eb8174bc-31e9-4720-b126-da2ed1f132a8
-			defaultHierarchy: LocalDateTable_bbbcde47-d5df-4426-b044-338ecb6b7c37.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-	column Year
-		formatString: 0
-		lineageTag: ad61dd13-95d7-4ea5-96ab-9b1eae7ea7de
-		summarizeBy: sum
-		isNameInferred
-		sourceColumn: [Year]
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Month Number'
-		formatString: 0
-		lineageTag: 259cdc23-c464-4305-a884-c246a15c2a94
-		summarizeBy: sum
-		isNameInferred
-		sourceColumn: [Month Number]
-
-		annotation SummarizationSetBy = Automatic
-
-	column 'Month Name'
-		lineageTag: f59bce03-c39d-4bc6-81a9-776a1c22c013
+	column calendar_year
+		dataType: int64
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Month Name]
+		sourceColumn: calendar_year
 
-		annotation SummarizationSetBy = Automatic
-
-	column Quarter
-		lineageTag: d8893ff7-9439-46e5-ab8f-363b688ab4e4
+	column calendar_quarter
+		dataType: int64
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Quarter]
+		sourceColumn: calendar_quarter
 
-		annotation SummarizationSetBy = Automatic
-
-	column 'Day of Week'
-		lineageTag: 633de414-16cd-44a5-bc89-df9676dc226c
+	column calendar_month_number
+		dataType: int64
 		summarizeBy: none
-		isNameInferred
-		sourceColumn: [Day of Week]
+		sourceColumn: calendar_month_number
 
-		annotation SummarizationSetBy = Automatic
+	column calendar_month_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: calendar_month_name
 
-	partition dim_date = calculated
-		mode: import
-		source = ```
+	column year_month
+		dataType: string
+		summarizeBy: none
+		sourceColumn: year_month
 
-				ADDCOLUMNS (
-				    CALENDARAUTO(),
-				    "Year", YEAR([Date]),
-				    "Month Number", MONTH([Date]),
-				    "Month Name", FORMAT([Date], "MMMM"),
-				    "Quarter", "Q" & FORMAT([Date], "Q"),
-				    "Day of Week", FORMAT([Date], "dddd")
-				)
+	column day_of_week_number
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: day_of_week_number
 
-				```
+	column day_of_week_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: day_of_week_name
 
-	annotation PBI_Id = bf7834da0d444069993b21cf23201128
+	column day_of_month
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: day_of_month
+
+	column is_weekday
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_weekday
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition dim_date = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_date = Source{[Schema="gold",Item="dim_date"]}[Data]
+				in
+				    gold_dim_date

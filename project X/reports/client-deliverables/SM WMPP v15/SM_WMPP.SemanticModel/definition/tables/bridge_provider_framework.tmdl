@@ -1,0 +1,36 @@
+table bridge_provider_framework
+	lineageTag: 35b98cf6-8fc8-42b4-8224-70cb34e7c343
+
+	column provider_framework_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_framework_id
+
+	column provider_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_id
+
+	column framework_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: framework_code
+
+	column qa_flag
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+	column source_export_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	partition bridge_provider_framework = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_bridge_provider_framework = Source{[Schema="gold",Item="bridge_provider_framework"]}[Data]
+				in
+				    gold_bridge_provider_framework

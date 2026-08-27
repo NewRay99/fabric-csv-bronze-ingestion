@@ -1,0 +1,71 @@
+table dim_provider_submission_document
+	lineageTag: 6cbdfb1b-ce31-4b3d-9327-daf74be5f18a
+
+	column document_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: document_id
+
+	column submission_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: submission_id
+
+	column s3_file_metadata_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: s3_file_metadata_id
+
+	column document_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: document_name
+
+	column document_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: document_type
+
+	column expiry_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: expiry_date
+
+	column last_updated
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: last_updated
+
+	column next_review_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: next_review_date
+
+	column service_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_type
+
+	column home_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_id
+
+	column start_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: start_date
+
+	column source_export_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	partition dim_provider_submission_document = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_provider_submission_document = Source{[Schema="gold",Item="dim_provider_submission_document"]}[Data]
+				in
+				    gold_dim_provider_submission_document

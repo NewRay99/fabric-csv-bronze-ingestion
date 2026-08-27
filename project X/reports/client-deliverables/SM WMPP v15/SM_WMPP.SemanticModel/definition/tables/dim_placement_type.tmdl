@@ -1,0 +1,21 @@
+table dim_placement_type
+	lineageTag: a452aa2c-b085-4368-949c-430b23a2e371
+
+	column placement_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_type
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition dim_placement_type = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_dim_placement_type = Source{[Schema="gold",Item="dim_placement_type"]}[Data]
+				in
+				    gold_dim_placement_type

@@ -1,265 +1,58 @@
-relationship bede70d8-608b-44f5-9076-8b8dd085cfa3
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_category.framework_start_date
-	toColumn: LocalDateTable_1d1f28af-4ee0-445d-932d-406e35e3ffc7.Date
+relationship 1556772f-23f5-4273-a2c8-22d710702c60
+	fromColumn: fact_offer.referral_id
+	toColumn: fact_referral.referral_id
 
-relationship 2b2fbe28-7595-1355-5d52-06a772399ab6
-	crossFilteringBehavior: bothDirections
-	fromColumn: fact_referral_offer.referral_id
-	toColumn: dim_referral.referral_id
+relationship 637daafb-6af9-4c54-80ba-775e3fe04b91
+	fromColumn: fct_ipa.referral_id
+	toColumn: fact_referral.referral_id
 
-relationship fd3a349c-13a0-c3d9-dafe-a6c40cb14ce6
-	fromColumn: fact_referral_offer.provider_id
+relationship 485ca366-d6b1-41d6-b852-cebd7123eb23
+	fromColumn: fact_referral_provider.referral_id
+	toColumn: fact_referral.referral_id
+
+relationship 32094fb1-b881-47b5-8c18-a471e2d984ce
+	fromColumn: fact_offer.provider_id
 	toColumn: dim_provider.provider_id
 
-relationship 7a1581a5-0d9b-eae3-928c-15d9a5542d3b
-	isActive: false
-	fromColumn: fact_referral_offer.created_date
-	toColumn: dim_date.Date
+relationship 1064f932-c907-41e8-8777-e9f325463c1c
+	fromColumn: fact_referral_provider.provider_id
+	toColumn: dim_provider.provider_id
 
-relationship 748287f5-f14b-2855-b796-01f6d24d2499
-	fromColumn: fact_offer.provider_home_id
+relationship dbbfd708-0a78-4f7f-8e8b-3c275175668e
+	fromColumn: fact_offer.home_id
 	toColumn: dim_provider_home.provider_home_id
 
-relationship 1eda5f2d-228b-d9db-0dd7-79820555d20c
-	fromColumn: fact_offer.offer_status
-	toColumn: dim_offer_status.offer_status
-
-relationship cdea5e1c-cd10-4d6a-342b-2f8415527ffc
-	isActive: false
+relationship 84c1afcd-7b30-4516-895c-a9af8876a779
 	fromColumn: dim_provider_home.provider_id
 	toColumn: dim_provider.provider_id
 
-relationship a6beeb3f-4013-6a62-83c2-b74e6ba540d9
-	crossFilteringBehavior: bothDirections
-	fromColumn: fact_referral_category.referral_id
-	toColumn: dim_referral.referral_id
-
-relationship 4297ac18-157b-93a2-c5ff-82a507e4ec07
-	fromColumn: fact_referral_category.framework_category_id
-	toColumn: dim_category.framework_category_id
-
-relationship 273e77e6-6b3d-06b3-3e3e-2cc14da8145f
-	crossFilteringBehavior: bothDirections
-	fromColumn: fact_referral_person.referral_id
-	toColumn: dim_referral.referral_id
-
-relationship 5d7efecb-3d0a-71e8-e433-dc51c19568c0
-	fromColumn: fact_referral_person.person_id
-	toColumn: dim_person.person_id
-
-relationship 48f75d7e-7a6d-6aea-f9f7-d99b9954d43a
-	toCardinality: many
-	fromColumn: fact_provider_message.referral_provider_id
-	toColumn: fact_referral_offer.referral_provider_id
-
-relationship c9318e8f-447e-4f0f-afe7-d88b35ddc61d
-	fromColumn: dim_category.framework_code
-	toColumn: dim_framework.framework_code
-
-relationship 4c566735-2712-20be-1479-c0c0bcc545ff
-	isActive: false
-	fromColumn: fact_referral_offer.export_date
-	toColumn: dim_date.Date
-
-relationship AutoDetected_d12ecd8b-5101-47b4-bc79-5a770af02e3b
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: dim_referral_gender.referral_id
-	toColumn: dim_referral.referral_id
-
-relationship AutoDetected_9ca04acf-720f-4863-9697-85753e2ed76d
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: tmp_referral_person_gender.referral_id
-	toColumn: dim_referral.referral_id
-
-relationship AutoDetected_7e4c5393-2d47-4f5d-a18f-ff98ecbc6009
-	fromColumn: fact_ipa.provider_id
+relationship f3921fa6-3af0-44b2-99d2-b0eb791d1ceb
+	fromColumn: bridge_provider_framework.provider_id
 	toColumn: dim_provider.provider_id
 
-relationship AutoDetected_d2d61312-b698-43f2-9fc6-e21517f82768
-	fromColumn: fact_ipa.referral_id
-	toColumn: dim_referral.referral_id
-
-relationship cf3de632-30fd-5fd7-2289-aa6e1d478afb
-	crossFilteringBehavior: bothDirections
-	fromColumn: fact_offer.offer_date_only
-	toColumn: dim_date.Date
-
-relationship eb8174bc-31e9-4720-b126-da2ed1f132a8
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_date.Date
-	toColumn: LocalDateTable_bbbcde47-d5df-4426-b044-338ecb6b7c37.Date
-
-relationship 51d6804e-a794-5633-3ce8-104d3bf1590a
-	isActive: false
-	fromColumn: dim_referral.referral_date_only
-	toColumn: dim_date.Date
-
-relationship 47641ce9-0c1f-fa45-b594-46cde52af5fe
-	isActive: false
-	fromColumn: fact_ipa.ipa_date_only
-	toColumn: dim_date.Date
-
-relationship AutoDetected_32680adf-c6a1-40f1-89b6-6283475d1f26
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: rpt_provider_registry.provider_home_id
+relationship 5e448c96-ae7d-4503-bf5a-787b2984547c
+	fromColumn: dim_provider_submission_document.home_id
 	toColumn: dim_provider_home.provider_home_id
 
-relationship e61c21cb-3d65-bb69-787b-81ff23501759
-	fromColumn: rpt_provider_registry.provider_id
-	toColumn: dim_provider.provider_id
+relationship 1595d7e7-5b36-4aea-8c6b-dce7256d4076
+	fromColumn: fact_referral.referral_created_date
+	toColumn: dim_date.date
 
-relationship AutoDetected_52f4e418-0390-4c90-82b7-a76cc99efd2d
-	fromColumn: dim_provider_framework.provider_id
-	toColumn: dim_provider.provider_id
+relationship 5234469d-f394-42a2-afe5-2479e911f031
+	fromColumn: fact_referral_snapshot.snapshot_date
+	toColumn: dim_date.date
 
-relationship AutoDetected_614ee316-2276-487b-8f96-d3467cc98e26
-	fromColumn: dim_provider_framework.framework_code
-	toColumn: dim_framework.framework_code
+relationship 4d6c81f8-b2c3-4936-857d-0588c5ee8905
+	isActive: false
+	fromColumn: fct_ipa.ipa_issued_date
+	toColumn: dim_date.date
 
-relationship AutoDetected_a87978a8-cf2a-4ad2-b32f-5996963c0d15
-	fromColumn: rpt_provider_fostering.provider_id
-	toColumn: dim_provider.provider_id
+relationship 13909e4e-31c9-40f3-85f6-eb3000ef5be1
+	isActive: false
+	fromColumn: fact_referral.required_placement_date
+	toColumn: dim_date.date
 
-relationship AutoDetected_f086d536-2509-44ee-8d32-5c38f364b3de
-	fromColumn: rpt_provider_fostering.'Placement Type'
-	toColumn: dim_framework.placement_type
-
-relationship ae87a085-72f4-c9d3-48a9-1b51a30aaae9
-	fromColumn: dim_referral.referral_id
-	toColumn: 'Referral Closure Reason Summary'.referral_id
-
-relationship ba575f16-d2b3-4818-b0f1-f82a24d9a142
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_referral.'Response Required Date Clean'
-	toColumn: LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0.Date
-
-relationship e138e6ea-f561-4693-ab1d-682dadfca512
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_referral.'Export Date Clean'
-	toColumn: LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18.Date
-
-relationship f671ddf4-6f54-ac2a-5fc2-b60a9a066a59
-	fromColumn: fact_offer.'Draft Age Band'
-	toColumn: 'Draft Age Band Table'.'Draft Age Band'
-
-relationship 97de477a-e8a8-41dc-9610-b6033cf541df
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_referral.referral_created_date
-	toColumn: LocalDateTable_e3164895-a841-4676-948d-55410512d8da.Date
-
-relationship 8a09bb5f-bb62-4d7b-beb1-bb222175b409
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_referral.first_engagement_date
-	toColumn: LocalDateTable_2fe8f1b1-f210-4ea6-946c-55b782e7b667.Date
-
-relationship 5f9eb542-0940-4fbd-82b0-0e293dc35bae
-	crossFilteringBehavior: bothDirections
-	fromCardinality: one
-	fromColumn: prep_stg_referral_first_contact.referral_provider_id
-	toColumn: prep_stg_first_offer.referral_provider_id
-
-	annotation PBI_IsFromSource = FS
-
-relationship 85817993-b790-9f5e-4cc7-7946fa37d7f4
-	crossFilteringBehavior: bothDirections
-	toCardinality: many
-	fromColumn: fact_referral_offer.referral_provider_id
-	toColumn: fact_offer.referral_provider_id
-
-relationship 2f4b8e7c-dd2e-4ac0-8d2b-7a0d0e5be1a6
-	crossFilteringBehavior: bothDirections
-	fromColumn: ref_KPI_RID_Linkage.'Req ID'
-	toColumn: ref_RID.'Req ID'
-
-relationship e9eb0e72-d285-6dd6-2d10-2395e98fb108
-	crossFilteringBehavior: bothDirections
-	fromColumn: ref_KPI_RID_Linkage.'KPI ID'
-	toColumn: ref_KPI.'KPI ID'
-
-relationship bcb872e7-f6b0-4f25-825e-011d595e597e
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_provider._ingestion_timestamp
-	toColumn: LocalDateTable_d230fda8-5078-4faa-88cf-957643b8dfa5.Date
-
-relationship 6e207ae8-9006-4612-a324-b1f6456450fa
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_provider_home._ingestion_timestamp
-	toColumn: LocalDateTable_11d98265-51ec-400e-83ab-7e3bfceca30c.Date
-
-relationship 2f107da9-39d9-4d4c-8187-48fdfd28262f
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_provider_framework._ingestion_timestamp
-	toColumn: LocalDateTable_4983fe04-f371-4af4-a7af-ace6bafb6009.Date
-
-relationship 5d11dfe5-5a00-4447-a75d-8fce8c11b284
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_referral_provider_message._ingestion_timestamp
-	toColumn: LocalDateTable_49abf3cd-9ac2-481f-be35-d7fbd3e85f13.Date
-
-relationship 7de84a23-f06a-4506-856c-77139383adee
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_person._ingestion_timestamp
-	toColumn: LocalDateTable_e87d3d46-bfc3-4334-9ca4-edab85fc6a6c.Date
-
-relationship 4bfa5a81-fdfd-4696-b5d9-c0799a71d7be
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_framework._ingestion_timestamp
-	toColumn: LocalDateTable_c206d0fd-3c2f-49e0-a827-4ef9e65d70fe.Date
-
-relationship c6037d8c-3799-44d1-afe6-b80496ce6371
-	joinOnDateBehavior: datePartOnly
-	fromColumn: dim_category._ingestion_timestamp
-	toColumn: LocalDateTable_7611c118-ac4b-4ade-bfdf-eebc998b40ee.Date
-
-relationship ae6f1033-5351-410a-85dc-984db6296246
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_offer._ingestion_timestamp
-	toColumn: LocalDateTable_897633f4-52ac-4862-97a3-fa65de9f6971.Date
-
-relationship b099ace8-3c11-4b83-9b66-32eee8296f72
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_ipa._ingestion_timestamp
-	toColumn: LocalDateTable_3f7a6a46-5a86-4936-9dda-6336395c6dc7.Date
-
-relationship 0bed4e7f-377c-4b82-b3ee-48f1463e2443
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_provider_message._ingestion_timestamp
-	toColumn: LocalDateTable_0e53e8c8-ca95-4397-b844-bd119198f4a9.Date
-
-relationship 6231b704-fab8-4534-b1d4-604ccc29104e
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_referral_category._ingestion_timestamp
-	toColumn: LocalDateTable_617d99c0-18ec-4835-8ac6-48f2871af54d.Date
-
-relationship 1f007beb-2782-484f-94de-c4ccd18f234b
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_referral_offer._ingestion_timestamp
-	toColumn: LocalDateTable_644aff18-b874-46f9-9512-534e66895457.Date
-
-relationship bccd7eb1-205b-43fe-8e07-e46d79e873a2
-	joinOnDateBehavior: datePartOnly
-	fromColumn: fact_referral_person._ingestion_timestamp
-	toColumn: LocalDateTable_f59bb241-a0d4-4ba7-9cd0-8281fce2a55d.Date
-
-relationship fcff4818-a929-443c-9c84-3bbfc371210f
-	joinOnDateBehavior: datePartOnly
-	fromColumn: rpt_provider_registry._ingestion_timestamp
-	toColumn: LocalDateTable_e911cf20-0e88-4e6f-b6a6-089ad35f9c81.Date
-
-relationship c5a4d030-cf18-4ac2-8984-2f27953c7770
-	joinOnDateBehavior: datePartOnly
-	fromColumn: rpt_provider_fostering._ingestion_timestamp
-	toColumn: LocalDateTable_6eef3c7d-4d0a-44cf-821a-eadd091bcc00.Date
-
-relationship 37ba685c-21a3-4387-a5ed-b0c7d592c6b0
-	joinOnDateBehavior: datePartOnly
-	fromColumn: prep_stg_referral_first_contact._ingestion_timestamp
-	toColumn: LocalDateTable_8f6f969a-1110-489e-8cb1-04d34e1c4c9a.Date
-
-relationship 7cee8483-4464-3b0e-5275-4e4150030872
-	fromColumn: 'Fact Referral Snapshot'.SnapshotDate
-	toColumn: dim_date.Date
+relationship e1de5c97-e057-40f8-85a0-58f87c86f648
+	isActive: false
+	fromColumn: fact_referral.referral_closed_date
+	toColumn: dim_date.date

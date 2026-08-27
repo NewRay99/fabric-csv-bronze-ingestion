@@ -1,0 +1,41 @@
+table fact_referral_lifecycle_event
+	lineageTag: 548d2d2c-70a8-41d7-aa5f-87ae79a7b40a
+
+	column event_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: event_id
+
+	column referral_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_id
+
+	column event_type
+		dataType: string
+		summarizeBy: none
+		sourceColumn: event_type
+
+	column event_timestamp
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: event_timestamp
+
+	column sequence_number
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: sequence_number
+
+	column created_by
+		dataType: string
+		summarizeBy: none
+		sourceColumn: created_by
+
+	partition fact_referral_lifecycle_event = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_fact_referral_lifecycle_event = Source{[Schema="gold",Item="fact_referral_lifecycle_event"]}[Data]
+				in
+				    gold_fact_referral_lifecycle_event

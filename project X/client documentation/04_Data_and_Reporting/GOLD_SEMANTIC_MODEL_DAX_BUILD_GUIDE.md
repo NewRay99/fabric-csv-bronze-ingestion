@@ -7,8 +7,8 @@ active notebook-created Gold database. It was reconciled against:
 
 - `SM WMPP v15.zip` — legacy business-report measures;
 - `SM WMPP Mission Control.zip` — operational monitoring report; and
-- `reports/mission-control/mission-control-measures.dax` — monitoring-only
-  measures.
+- [Mission Control semantic model DAX build guide](MISSION_CONTROL_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
+  — monitoring-only measures.
 
 The Mission Control measures remain a separate monitoring model because they
 use `monitoring.cfg_*` tables, not referral Gold facts. The v15 measures must
@@ -749,7 +749,7 @@ CALCULATE (
 )
 
 IPA Signature Completion Rate =
-DIVIDE ( [Referrals With Fully Signed IPA], [Referrals with IPA] )
+DIVIDE ( [Referrals With Fully Signed IPA], [Referrals With IPA] )
 
 Referral Lifecycle Events =
 DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[event_id] )

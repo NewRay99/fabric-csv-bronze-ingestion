@@ -1,0 +1,226 @@
+table fact_referral
+	lineageTag: dce1358e-4623-44f0-b25a-561b6263f755
+
+	column as_of_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: as_of_date
+
+	column referral_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_id
+
+	column child_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: child_id
+
+	column referral_created_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: referral_created_date
+
+	column required_placement_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: required_placement_date
+
+	column response_required_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: response_required_date
+
+	column first_action_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_action_date
+
+	column first_offer_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_offer_date
+
+	column offer_accepted_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: offer_accepted_date
+
+	column ipa_issued_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ipa_issued_date
+
+	column referral_closed_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: referral_closed_date
+
+	column referral_closure_reason
+		dataType: string
+		summarizeBy: none
+		sourceColumn: referral_closure_reason
+
+	column last_activity_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: last_activity_date
+
+	column current_status
+		dataType: string
+		summarizeBy: none
+		sourceColumn: current_status
+
+	column placement_type_required
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_type_required
+
+	column region
+		dataType: string
+		summarizeBy: none
+		sourceColumn: region
+
+	column priority
+		dataType: string
+		summarizeBy: none
+		sourceColumn: priority
+
+	column complexity_band
+		dataType: string
+		summarizeBy: none
+		sourceColumn: complexity_band
+
+	column placement_urgency_band
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_urgency_band
+
+	column cnt_offer_made
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: cnt_offer_made
+
+	column first_provider_seen_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_provider_seen_date
+
+	column is_not_seen_by_providers
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_not_seen_by_providers
+
+	column ipa_placement_admission_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ipa_placement_admission_date
+
+	column ipa_2_signatures
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: ipa_2_signatures
+
+	column ipa_last_signature_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ipa_last_signature_date
+
+	column ipa_due_diligence_min_review_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ipa_due_diligence_min_review_date
+
+	column child_criticality_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: child_criticality_code
+
+	column offer_count
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: offer_count
+
+	column unique_homes_offered
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: unique_homes_offered
+
+	column has_offer
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: has_offer
+
+	column days_to_first_action
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_to_first_action
+
+	column days_to_first_offer
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_to_first_offer
+
+	column days_to_accepted_offer
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_to_accepted_offer
+
+	column days_to_ipa
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_to_ipa
+
+	column days_open
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_open
+
+	column days_without_activity
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_without_activity
+
+	column days_past_required_date
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: days_past_required_date
+
+	column is_open
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: is_open
+
+	column placed_by_required_date
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: placed_by_required_date
+
+	column required_placement_date_outcome
+		dataType: string
+		summarizeBy: none
+		sourceColumn: required_placement_date_outcome
+
+	column planned_placement_start_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: planned_placement_start_date
+
+	column estimated_weekly_cost
+		dataType: double
+		summarizeBy: none
+		sourceColumn: estimated_weekly_cost
+
+	column gold_modelled_at
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition fact_referral = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    gold_fact_referral = Source{[Schema="gold",Item="fact_referral"]}[Data]
+				in
+				    gold_fact_referral
