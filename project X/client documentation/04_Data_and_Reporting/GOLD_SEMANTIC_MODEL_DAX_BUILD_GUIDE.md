@@ -15,6 +15,17 @@ use `monitoring.cfg_*` tables, not referral Gold facts. The v15 measures must
 be recreated only from the active Gold tables listed below; do not retain a
 legacy table in the new semantic model just to preserve a measure name.
 
+## Gold-only KPI contract
+
+Every published referral KPI must reference a field in an active Gold fact,
+dimension or bridge table imported into the semantic model. `bronze.*`,
+`silver.*`, retired facts and legacy model tables are lineage evidence only and
+must never appear in a published DAX expression. A source marked as available
+in Bronze or Silver is therefore **not** KPI-ready until the required field is
+deliberately promoted into Gold. The source-coverage worksheet in
+`configuration/Dashboard Legend.xlsx` records this distinction in its **KPI
+DAX eligibility** column.
+
 ## Import and relationship instructions
 
 Import `fact_referral`, `fact_referral_snapshot`, `fact_offer`, `fct_ipa`,
@@ -749,6 +760,12 @@ DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[referral_id] )
 Average Lifecycle Events per Referral =
 DIVIDE ( [Referral Lifecycle Events], [Referrals With Lifecycle Activity] )
 
+Provider Messages Sent =
+CALCULATE (
+    [Referral Lifecycle Events],
+    'fact_referral_lifecycle_event'[event_type] = "ProviderMessageSent"
+)
+
 Gold Model Last Refreshed = MAX ( 'fact_referral'[gold_modelled_at] )
 ```
 
@@ -763,7 +780,7 @@ still using the stable `fct_ipa[accepted_offer_id]` key.
 | KPI-01–03, 08–10, 19–24, 29–39, 87–90 | Referral, offer, provider-engagement, time, closure reason, status, assignment overlap and export measures. |
 | KPI-11–18, 25–28, 53–72 | Provider activity, offer portfolio, spot/non-spot, draft and pending age measures. |
 | KPI-40–52, 97, 99–101, 104, 116–117 | Provider/home register, framework coverage, QA flags, document expiry and onboarding measures. |
-| KPI-73–76, 79, 83–84, 107 and 113 | IPA volume/cost, accepted-offer conversion and lifecycle-activity measures. |
+| KPI-73–76, 79, 83–84, 107, 110 and 113 | IPA volume/cost, accepted-offer conversion, provider-message volume proxy and lifecycle-activity measures. |
 | KPI-114 and KPI-115 | Referral-level IPA-signature and lifecycle-event **proxies** are supplied; they are not like-for-like IPA-signature or referral-update measures. |
 | KPI-91–94 | Emergency/planned referral measures using created and required-placement dates. |
 
@@ -775,7 +792,7 @@ still using the stable `fct_ipa[accepted_offer_id]` key.
 | KPI-98 | Only one provider/home QA flag is published, not the historic flag-type breakdown. |
 | KPI-102–103 | The current document fact has no documented expected-document set or blocking outcome, so compliance cannot be calculated. |
 | KPI-105–106 | No referral-level decline-reason or framework-change history fact. Use offer rejection reasons only. |
-| KPI-108–112 | No payment, invoice, provider-message or message-status facts. |
+| KPI-108–109 and KPI-111–112 | No payment, invoice, detailed provider-message or message-status facts. `Provider Messages Sent` is supported as a lifecycle-event proxy only. |
 | KPI-115 | No durable referral update timestamp; lifecycle events provide the supported activity measure. |
 | Child support needs and referral categories | No active Gold dimension/fact at the required analysis grain. |
 

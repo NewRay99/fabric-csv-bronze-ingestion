@@ -88,11 +88,10 @@ assert "provider_submission_docs" in dq
 assert "d.next_review_date > i.placement_admission_date" in dq
 assert "activity_type <> 'ReferralCreated'" in dq
 assert "'offer_successful'" in dq
-assert "x.first_action_date AS FirstActionDate" in gold
-assert "x.offer_accepted_date AS OfferAcceptedDate" in gold
-assert "x.ipa_issued_date AS IPAIssuedDate" in gold
-assert "x.referral_closed_date AS ReferralClosedDate" in gold
-assert "x.last_activity_date AS LastActivityDate" in gold
+assert "x.first_action_date, x.first_offer_date" in gold
+assert "x.offer_accepted_date, x.ipa_issued_date" in gold
+assert "x.referral_closed_date," in gold
+assert "x.last_activity_date," in gold
 fact_cell = next(
     cell for cell in json.loads(GOLD.read_text(encoding="utf-8-sig"))["cells"]
     if "CREATE OR REPLACE TABLE gold.fact_referral AS" in "".join(cell.get("source", []))
@@ -100,26 +99,26 @@ fact_cell = next(
 fact_source = "".join(fact_cell.get("source", []))
 assert "offer_rollup AS" not in fact_source
 assert "ipa_rollup AS" not in fact_source
-assert "x.unique_homes_offered AS UniqueHomesOffered" in fact_source
-assert "x.estimated_weekly_cost AS EstimatedWeeklyCost" in fact_source
+assert "x.unique_homes_offered," in fact_source
+assert "x.estimated_weekly_cost," in fact_source
 print("PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present")
 
 for field in {
-    "ChildID",
-    "ReferralCreatedDate",
-    "RequiredPlacementDate",
-    "FirstActionDate",
-    "FirstOfferDate",
-    "OfferAcceptedDate",
-    "IPAIssuedDate",
-    "ReferralClosedDate",
-    "ReferralClosureReason",
-    "CurrentStatus",
-    "LastActivityDate",
-    "PlacementTypeRequired",
-    "Region",
-    "Priority",
-    "ComplexityBand",
+    "child_id",
+    "referral_created_date",
+    "required_placement_date",
+    "first_action_date",
+    "first_offer_date",
+    "offer_accepted_date",
+    "ipa_issued_date",
+    "referral_closed_date",
+    "referral_closure_reason",
+    "current_status",
+    "last_activity_date",
+    "placement_type_required",
+    "region",
+    "priority",
+    "complexity_band",
 }:
     assert field in gold, f"Gold referral model does not expose {field}"
 for gold_fact in [
@@ -130,7 +129,7 @@ for gold_fact in [
     assert gold_fact in gold, f"missing source-grain Gold fact: {gold_fact}"
 assert "actual_placement_start_date" in gold
 assert "estimated_duration_weeks" in gold
-print("PASS full FactReferral shape, snapshot promotion and Offer/Placement facts are present")
+print("PASS full fact_referral shape, snapshot promotion and Offer/IPA facts are present")
 
 with DQ_CONFIG.open(encoding="utf-8-sig", newline="") as handle:
     dq_rules = list(csv.DictReader(handle))

@@ -96,7 +96,7 @@ for required_field in [
     "ipa_issued_date", "estimated_weekly_cost", "is_open",
     "placed_by_required_date", "required_placement_date_outcome",
 ]:
-    assert f"AS {required_field}" in fact_cell, (
+    assert re.search(rf"\b{required_field}\b", fact_cell), (
         f"Gold fact_referral does not publish snake_case field {required_field}"
     )
 assert "gold.fact_placement" in source, "missing controlled retirement of fact_placement"
@@ -122,8 +122,26 @@ assert "source-system referral-event audit log" in source
 assert "referral_event_log" not in source
 assert "FROM {EVENT_ROLLUP_SOURCE}" in source
 assert "SELECT * FROM silver.referral_enrichment" in fact_cell
-assert "x.first_action_date AS FirstActionDate" in fact_cell
+assert "x.first_action_date AS FirstActionDate" not in fact_cell
+assert "x.first_action_date, x.first_offer_date" in fact_cell
+
+# CTE and DataFrame-temporary SQL aliases are part of the executable model,
+# not merely presentation labels. Keep them in the same lower snake_case
+# convention as the published Gold schema.
+sql_aliases = re.findall(
+    r"\bAS\s+([A-Za-z][A-Za-z0-9_]*)\s*(?=,|\n)", fact_cell
+)
+assert sql_aliases, "fact_referral SQL aliases were not found"
+invalid_aliases = [
+    alias for alias in sql_aliases
+    if not re.fullmatch(r"[a-z][a-z0-9_]*", alias)
+]
+assert not invalid_aliases, (
+    "fact_referral must use lower snake_case for all intermediate SQL aliases: "
+    f"{invalid_aliases}"
+)
 print("PASS Gold exposes lifecycle events separately and promotes derived referral dates from Silver")
+print("PASS fact_referral intermediate SQL aliases use lower snake_case")
 
 
 issue_log = (
