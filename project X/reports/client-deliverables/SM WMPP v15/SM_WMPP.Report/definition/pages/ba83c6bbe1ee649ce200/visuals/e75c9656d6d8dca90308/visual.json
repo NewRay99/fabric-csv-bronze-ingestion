@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "e75c9656d6d8dca90308",
+  "position": {
+    "x": 341.58131390832051,
+    "y": 290.06230397198448,
+    "z": 28000,
+    "height": 177.14285714285717,
+    "width": 1121.4285714285716,
+    "tabOrder": 41000
+  },
+  "visualGroup": {
+    "displayName": "Narration Box",
+    "groupMode": "ScaleMode"
+  }
+}

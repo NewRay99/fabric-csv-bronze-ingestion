@@ -1,0 +1,164 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "63342eaa24e22650bc01",
+  "position": {
+    "x": 0,
+    "y": 342.22222222222223,
+    "z": 12000,
+    "height": 301.11111111111109,
+    "width": 306.66666666666669,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "PropertyVariationSource": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "dim_referral"
+                            }
+                          },
+                          "Name": "Variation",
+                          "Property": "referral_created_date"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Year"
+                }
+              },
+              "queryRef": "dim_referral.referral_created_date.Variation.Date Hierarchy.Year",
+              "nativeQueryRef": "referral_created_date Year",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "PropertyVariationSource": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "dim_referral"
+                            }
+                          },
+                          "Name": "Variation",
+                          "Property": "referral_created_date"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Month"
+                }
+              },
+              "queryRef": "dim_referral.referral_created_date.Variation.Date Hierarchy.Month",
+              "nativeQueryRef": "referral_created_date Month",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_referral"
+                    }
+                  },
+                  "Property": "referral_status"
+                }
+              },
+              "queryRef": "dim_referral.referral_status",
+              "nativeQueryRef": "referral_status",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Offer Count"
+                }
+              },
+              "queryRef": "_Measures.Offer Count",
+              "nativeQueryRef": "Offer Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Open Referral"
+                }
+              },
+              "queryRef": "_Measures.Open Referral",
+              "nativeQueryRef": "Open Referral"
+            }
+          ]
+        }
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "dim_referral.referral_created_date.Variation.Date Hierarchy.Year"
+            ],
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "LocalDateTable_e3164895-a841-4676-948d-55410512d8da"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "dim_referral.referral_created_date.Variation.Date Hierarchy.Month"
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "dim_referral.referral_status"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "drillFilterOtherVisuals": true
+  }
+}

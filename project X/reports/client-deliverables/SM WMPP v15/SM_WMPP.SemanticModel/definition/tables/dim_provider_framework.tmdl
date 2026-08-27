@@ -1,0 +1,84 @@
+table dim_provider_framework
+	lineageTag: a7724283-d1f2-495e-a25f-e4a75c8decd7
+
+	column provider_framework_id
+		dataType: string
+		lineageTag: eaa0d96f-47c0-4b83-95aa-4a6610b2308c
+		summarizeBy: none
+		sourceColumn: provider_framework_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: 58fb8cee-7b47-40c7-8947-e8d4131b92dc
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column framework_code
+		dataType: string
+		lineageTag: 6f2e9884-5fe7-42a4-ace6-de2308f00d2c
+		summarizeBy: none
+		sourceColumn: framework_code
+
+		annotation SummarizationSetBy = Automatic
+
+	column qa_flag
+		dataType: string
+		lineageTag: 4d18c4b4-ca28-47cc-922e-df06f1a8f05f
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		lineageTag: 9e7781c3-db13-4fd5-9301-89af4818d56f
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 28d062d6-3f43-485d-a276-b1f1667d57f9
+		summarizeBy: none
+		sourceColumn: _ingestion_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 2f107da9-39d9-4d4c-8187-48fdfd28262f
+			defaultHierarchy: LocalDateTable_4983fe04-f371-4af4-a7af-ace6bafb6009.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_file
+		dataType: string
+		lineageTag: 061c2fc5-8ba3-43e1-b9ff-21c4e16303ca
+		summarizeBy: none
+		sourceColumn: _source_file
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_id
+		dataType: string
+		lineageTag: d71bda66-65a3-4caa-bb06-648bbbc3d0a4
+		summarizeBy: none
+		sourceColumn: _ingestion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_provider_framework = m
+		mode: import
+		source =
+				let
+				    Source = #"bronze provider_framework"
+				in
+				   Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

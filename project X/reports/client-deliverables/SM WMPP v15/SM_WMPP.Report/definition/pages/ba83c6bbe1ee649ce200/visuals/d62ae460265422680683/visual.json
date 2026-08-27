@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "d62ae460265422680683",
+  "position": {
+    "x": 1151.6666666666667,
+    "y": 183.33333333333334,
+    "z": 39000,
+    "height": 272,
+    "width": 332,
+    "tabOrder": 42000
+  },
+  "visualGroup": {
+    "displayName": "Referrals - Expanded Filter",
+    "groupMode": "ScaleMode",
+    "objects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "isHidden": true
+}

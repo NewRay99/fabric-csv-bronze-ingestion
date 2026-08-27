@@ -1,0 +1,108 @@
+table dim_referral_provider_message
+	lineageTag: 8bcb5e20-34d3-4854-b832-6d961b5e2c6a
+
+	column message_id
+		dataType: string
+		lineageTag: f08cd3bc-20dd-45d4-8c0e-f88952c439eb
+		summarizeBy: none
+		sourceColumn: message_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: 30b6e790-1bd0-48ce-a312-60206a1a69ea
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_by
+		dataType: string
+		lineageTag: 424db41c-a3a4-4a6c-be29-052077d7cb83
+		summarizeBy: none
+		sourceColumn: message_read_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_read_timestamp
+		dataType: string
+		lineageTag: b177166f-9451-4be9-b43d-4fe8d17fa914
+		summarizeBy: none
+		sourceColumn: message_read_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column message_text
+		dataType: string
+		lineageTag: c7702919-4952-4de8-8071-aca3b9ab7afa
+		summarizeBy: none
+		sourceColumn: message_text
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_timestamp
+		dataType: string
+		lineageTag: 212ea539-0f38-480b-b4ca-ef6c01b62bd1
+		summarizeBy: none
+		sourceColumn: created_timestamp
+
+		annotation SummarizationSetBy = Automatic
+
+	column created_by
+		dataType: string
+		lineageTag: 084fcf4d-7b3b-46e3-ba4e-5c548e571ad9
+		summarizeBy: none
+		sourceColumn: created_by
+
+		annotation SummarizationSetBy = Automatic
+
+	column export_date
+		dataType: string
+		lineageTag: b644a049-5ed9-434d-9f48-4f67b002d700
+		summarizeBy: none
+		sourceColumn: export_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 26c17a22-e72e-47a8-98df-4dbff77daf2d
+		summarizeBy: none
+		sourceColumn: _ingestion_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 5d11dfe5-5a00-4447-a75d-8fce8c11b284
+			defaultHierarchy: LocalDateTable_49abf3cd-9ac2-481f-be35-d7fbd3e85f13.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_file
+		dataType: string
+		lineageTag: 46c367e1-55a5-4c88-b0fe-dafc3117997d
+		summarizeBy: none
+		sourceColumn: _source_file
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_id
+		dataType: string
+		lineageTag: e0969e97-915c-4c76-aef1-60632ee2d6f4
+		summarizeBy: none
+		sourceColumn: _ingestion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_referral_provider_message = m
+		mode: import
+		source =
+				let
+				    Source = #"bronze referral_provider_message"
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

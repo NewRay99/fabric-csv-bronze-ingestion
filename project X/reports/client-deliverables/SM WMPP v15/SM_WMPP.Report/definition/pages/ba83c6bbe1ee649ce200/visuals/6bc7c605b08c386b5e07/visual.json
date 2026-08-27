@@ -1,0 +1,85 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "6bc7c605b08c386b5e07",
+  "position": {
+    "x": 18.333333333333336,
+    "y": 461.66666666666669,
+    "z": 48000,
+    "height": 205,
+    "width": 428.33333333333337,
+    "tabOrder": 48000
+  },
+  "visual": {
+    "visualType": "pieChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Referral Closure Reason Summary"
+                    }
+                  },
+                  "Property": "Closed Referral Reason Bucket"
+                }
+              },
+              "queryRef": "Referral Closure Reason Summary.Closed Referral Reason Bucket",
+              "nativeQueryRef": "Closed Referral Reason Bucket",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Referral Closure Reason Summary"
+                        }
+                      },
+                      "Property": "referral_id"
+                    }
+                  },
+                  "Function": 2
+                }
+              },
+              "queryRef": "CountNonNull(Referral Closure Reason Summary.referral_id)",
+              "nativeQueryRef": "Count of referral_id"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "Referral Closure Reason Summary"
+                      }
+                    },
+                    "Property": "referral_id"
+                  }
+                },
+                "Function": 2
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

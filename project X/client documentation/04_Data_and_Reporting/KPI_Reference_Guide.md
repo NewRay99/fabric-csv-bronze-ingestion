@@ -49,6 +49,52 @@ Copy-ready DAX, the v15 reconciliation, required relationships, and the
 measures that cannot yet be recreated are in
 [Gold Semantic Model DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md).
 
+## Maintained catalogue and lineage
+
+`configuration/Dashboard Legend.xlsx` is the maintained Excel catalogue of
+the Gold v02 DAX measure names, legacy mappings, requirement IDs, Gold source
+objects and publication status. It currently contains **109 active measures**:
+**108 Ready** measures and **one Gold lifecycle-event proxy**. It also records
+ten roadmap gaps that must not be published until their fields exist in Gold.
+
+The workbook is deliberately a DAX catalogue, not the system-of-record for
+technical lineage. Use [KPI Lineage](KPI_Lineage.md) to trace each KPI family
+from functional requirement through the source extract, Bronze, Silver,
+Gold object and DAX measure. The original assessment documents remain useful
+as historic evidence, but are not the current implementation record:
+
+- [KPI Enhancement Requirements](../02_Assessment_and_Requirements/KPI_Enhancement_Requirements.md)
+- [Gap Analysis Report](../02_Assessment_and_Requirements/Gap_Analysis_Report.md)
+
+### Latest Gold-only calculations
+
+These measures are included in the active DAX catalogue and are repeated here
+because they close the most recent reporting requests. Both use active Gold
+fields only.
+
+```DAX
+Average Estimated Weekly Cost — Confirmed Referrals =
+AVERAGEX (
+    FILTER (
+        'fact_referral',
+        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
+            && NOT ISBLANK ( 'fact_referral'[estimated_weekly_cost] )
+    ),
+    'fact_referral'[estimated_weekly_cost]
+)
+
+Provider Messages Sent =
+CALCULATE (
+    [Referral Lifecycle Events],
+    'fact_referral_lifecycle_event'[event_type] = "ProviderMessageSent"
+)
+```
+
+`Average Estimated Weekly Cost — Confirmed Referrals` uses a referral with an
+issued IPA as confirmation; it is not an actual-payment measure. `Provider
+Messages Sent` is a Gold lifecycle-event proxy for message volume only. It
+does not provide response-time, unread-message or message-content analysis.
+
 ## Source limitations
 
 `estimated_weekly_cost` is an estimate, not an invoice or actual payment.

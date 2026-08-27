@@ -18,10 +18,10 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 | `ARCH-ETL` | Archive ETL pipeline issue | 2 |
 | `LIVE-ETL` | Live ETL pipeline issue | 1 |
 | `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 1 |
+| `GLD` | Gold-layer issue | 3 |
 | `CFG` | Configuration and monitoring issue | 9 |
 | `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **52** |
+| **Total classified issues** |  | **54** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1174,3 +1174,64 @@ LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_
 	at py4j.GatewayConnection.run(GatewayConnection.java:238)
 	at java.base/java.lang.Thread.run(Thread.java:829)
 Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebo ===
+## GLD-002 — Gold DAX field coverage audit and documentation update
+
+- **Symptom:** The Gold semantic model build guide lists 109 supported DAX measures and 15 unsupported KPI groups, but there was no audited proof that the active Gold layer (`04_gold_model.ipynb` + `05_gold_dimensions.ipynb`) actually supplies every column those measures require. Architecture docs also lacked a formal Gold-to-DAX schema contract and project navigation was fragmented.
+- **Cause:** Documentation drift — the build guide was written ahead of the notebooks, and no reverse-mapping exercise had been performed to confirm every DAX field exists in the current Gold tables. The `03_Architecture_and_Design` folder had no contract doc enforcing the rule that DAX must never reference `bronze.*`, `silver.*`, or retired tables.
+- **Fix:**
+  1. **Audit:** Cross-referenced all 109 supported DAX measures in `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` against the active Gold layer. Every required column was confirmed present in `gold.fct_ipa`, `gold.fact_referral_provider`, `gold.dim_date`, `gold.dim_provider`, `gold.dim_child`, `gold.dim_school`, `gold.dim_la`, `gold.dim_age_band`, `gold.dim_directory_summary_axis`, `gold.dim_fostering_axis`, `gold.dim_referral_closure_reason`, and related dimension tables.
+  2. **Coverage report:** Created `04_Data_and_Reporting/GOLD_DAX_FIELD_COVERAGE_AUDIT.md` containing the full 109-measure mapping table, visual dimension summary, and the 15 unsupported KPI groups with blocking reasons.
+  3. **Schema contract:** Created `03_Architecture_and_Design/Gold_DAX_Schema_Contract.md` with Gold object inventory, column-to-DAX mapping rules, relationship cardinality rules, blocked/retired tables list, and extension rules for new measures.
+  4. **Navigation skill:** Created `skills/PROJECT_NAVIGATION.md` with repo layout, notebook execution chain, document quick-reference, naming conventions, and common pitfalls.
+- **Validation:**
+  - All 109 DAX measures map to active Gold columns; zero references to `bronze.*`, `silver.*`, `fact_placement` (retired), or `fact_referral_offer_v01` (retired).
+  - The 15 unsupported KPI groups are correctly documented as blocked by missing source fields (e.g., FSM ever-6, SEN primary need, ethnicity detailed breakdowns, tier-4 bed-days, joint-plans, placement-distance, team-workload, provider-contact, health-check, care-leaver pathway-plan, missing/absent data, provider-cost, re-referral within 12 months, concordance).
+  - No Gold notebook code changes were required.
+- **Status:** Resolved. Documentation artifacts committed. Fabric replay not required because no notebook code was modified.
+
+## GLD-003 - Legacy v15 measure-library reconciliation and DAX port to Gold
+
+- **Symptom:** the Gold semantic model build guide did not reconcile against the
+  full legacy measure library. All 153 measures in `reports/client-deliverables/
+  SM WMPP v15.zip` (`_Measures.tmdl`) were at risk of being missed in the Gold
+  rebuild: only about a third matched an existing Gold measure by name. The
+  build guide also contained a dangling dependency - `IPA Signature Completion
+  Rate` referenced a `Referrals with IPA` measure that was never defined.
+- **Cause:** the build guide was reconciled against KPI groups rather than the
+  extracted v15 measure list, so the card variance/indicator stacks
+  (Previous Month / Variance / MoM % / Indicator / Indicator Color), the
+  created-in-period measures, the under-offer scoped offer portfolio, the IPA
+  signature funnel proxies, the snapshot target pair, and the row-level visual
+  helpers had no Gold port or documented disposition.
+- **Fix:** documentation-only change; no notebook code modified.
+  1. Extracted all 153 legacy measures from `SM WMPP v15.zip` and diffed them
+     against the build guide.
+  2. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`: added the "Legacy v15
+     full-library port" section with 76 new copy-ready Gold DAX definitions
+     (11 MoM card stacks completed to a consistent five-measure pattern,
+     created-in-period measures, 10 under-offer scoped offer measures,
+     `Referrals With IPA` plus signature-pending proxies, snapshot target
+     measures, 3 row-level visual helpers), a legacy-to-Gold alias map, a
+     retired-helpers table (15 measures), and additional blocked rows
+     (17 measures: gender, provider-contact family, IPA-grain signature
+     helpers, KPI tooltip).
+  3. `GOLD_DAX_FIELD_COVERAGE_AUDIT.md`: rev 2 - 185 measures audited
+     (109 + 76), new Section 2.8 mapping every ported measure to Gold columns,
+     blocked table extended with the provider-contact family and gender/flag
+     legacy measures, dangling-dependency fix recorded.
+  4. `Gold_DAX_Schema_Contract.md`: `fact_referral[contact_made]` added to
+     blocked fields; verification checklist updated to 185 measures, explicit
+     legacy disposition check, and retired legacy table names.
+  5. `skills/SKILLS.md`: new platform navigation index; `PROJECT_NAVIGATION.md`
+     updated to reference it.
+- **Validation:**
+  - Disposition arithmetic reconciles: 153 legacy = 59 covered/alias +
+    62 ported + 15 retired + 17 blocked.
+  - Every ported measure references only active Gold columns already verified
+    in the coverage audit; `fact_referral_snapshot` carries
+    `placed_by_required_date` (confirmed in `04_gold_model.ipynb`).
+  - `contact_made` confirmed absent from both Gold notebooks, so the Provider
+    Contact Referral family is blocked, not proxied.
+- **Status:** Resolved in documentation. Fabric replay not required; rebuild
+  the Power BI semantic model from the updated build guide and reconcile
+  totals per the deployment checklist.

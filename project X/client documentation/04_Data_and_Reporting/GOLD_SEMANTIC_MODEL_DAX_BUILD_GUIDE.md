@@ -809,3 +809,535 @@ point DAX at Bronze, Silver, or a legacy imported table as a workaround.
 4. Create the active relationships, then add the DAX above.
 5. Reconcile totals by `referral_id`, `offer_id`, `ipa_id`, and
    `referral_provider_id` before rebuilding visual pages.
+
+## Legacy v15 full-library port
+
+This section reconciles **all 153 measures** extracted from the legacy
+`SM WMPP v15.zip` semantic model (`_Measures` table, TMDL) against the Gold
+build guide. Disposition:
+
+| Disposition | Count | Meaning |
+| --- | ---: | --- |
+| Already covered (identical or alias) | 59 | Served by a measure in the sections above |
+| Newly ported in this revision | 62 | Copy-ready Gold DAX below (76 definitions; MoM stacks completed to a consistent 5-measure pattern) |
+| Retired report-construct helpers | 15 | Not recreated; reasons listed below |
+| Blocked by missing Gold source fields | 17 | Added to the do-not-recreate list |
+| **Total legacy v15 measures** | **153** | |
+
+Every ported measure references active Gold tables only. No `bronze.*`,
+`silver.*`, `fact_placement`, `fact_referral_offer`, `dim_referral`,
+`dim_offer_status`, or `LocalDateTable` reference survives the port.
+
+### Month-on-month card variance and indicator family
+
+Every v15 KPI card ships with a previous-month companion, an absolute
+variance, a month-on-month percentage, and arrow/colour indicator measures.
+The legacy model defined these inconsistently (some cards lack the MoM %
+member); the port completes every card to the same five-measure stack.
+
+All stacks use the active `dim_date[date]` to
+`fact_referral[referral_created_date]` relationship, so no
+`USERELATIONSHIP` is required. The stack pattern is:
+
+```DAX
+<Base> Previous Month = CALCULATE ( [<Base>], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+<Base> Variance = [<Base>] - [<Base> Previous Month]
+<Base> MoM % = DIVIDE ( [<Base> Variance], [<Base> Previous Month] )
+<Base> Variance Indicator = IF ( [<Base> Variance] > 0, "▲", IF ( [<Base> Variance] < 0, "▼", "–" ) )
+<Base> Variance Indicator Color = IF ( [<Base> Variance] > 0, "green", IF ( [<Base> Variance] < 0, "red", "grey" ) )
+```
+
+Copy-ready stacks for every legacy KPI card:
+
+```DAX
+
+-- Legacy card: Total Referrals
+Total Referrals Previous Month =
+CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Total Referrals Variance =
+[Total Referrals] - [Total Referrals Previous Month]
+
+Total Referrals MoM % =
+DIVIDE ( [Total Referrals Variance], [Total Referrals Previous Month] )
+
+Total Referrals Variance Indicator =
+IF ( [Total Referrals Variance] > 0, "▲", IF ( [Total Referrals Variance] < 0, "▼", "–" ) )
+
+Total Referrals Variance Indicator Color =
+IF ( [Total Referrals Variance] > 0, "green", IF ( [Total Referrals Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Open Referral
+Open Referrals Previous Month =
+CALCULATE ( [Open Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Open Referrals Variance =
+[Open Referrals] - [Open Referrals Previous Month]
+
+Open Referrals MoM % =
+DIVIDE ( [Open Referrals Variance], [Open Referrals Previous Month] )
+
+Open Referrals Variance Indicator =
+IF ( [Open Referrals Variance] > 0, "▲", IF ( [Open Referrals Variance] < 0, "▼", "–" ) )
+
+Open Referrals Variance Indicator Color =
+IF ( [Open Referrals Variance] > 0, "green", IF ( [Open Referrals Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Closed Referrals (by Reason)
+Closed Referrals Previous Month =
+CALCULATE ( [Closed Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Closed Referrals Variance =
+[Closed Referrals] - [Closed Referrals Previous Month]
+
+Closed Referrals MoM % =
+DIVIDE ( [Closed Referrals Variance], [Closed Referrals Previous Month] )
+
+Closed Referrals Variance Indicator =
+IF ( [Closed Referrals Variance] > 0, "▲", IF ( [Closed Referrals Variance] < 0, "▼", "–" ) )
+
+Closed Referrals Variance Indicator Color =
+IF ( [Closed Referrals Variance] > 0, "green", IF ( [Closed Referrals Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Referrals With Offers
+Referrals With an Offer Previous Month =
+CALCULATE ( [Referrals With an Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Referrals With an Offer Variance =
+[Referrals With an Offer] - [Referrals With an Offer Previous Month]
+
+Referrals With an Offer MoM % =
+DIVIDE ( [Referrals With an Offer Variance], [Referrals With an Offer Previous Month] )
+
+Referrals With an Offer Variance Indicator =
+IF ( [Referrals With an Offer Variance] > 0, "▲", IF ( [Referrals With an Offer Variance] < 0, "▼", "–" ) )
+
+Referrals With an Offer Variance Indicator Color =
+IF ( [Referrals With an Offer Variance] > 0, "green", IF ( [Referrals With an Offer Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Active Referrals Awaiting Offers
+Referrals Awaiting Offer Previous Month =
+CALCULATE ( [Referrals Awaiting Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Referrals Awaiting Offer Variance =
+[Referrals Awaiting Offer] - [Referrals Awaiting Offer Previous Month]
+
+Referrals Awaiting Offer MoM % =
+DIVIDE ( [Referrals Awaiting Offer Variance], [Referrals Awaiting Offer Previous Month] )
+
+Referrals Awaiting Offer Variance Indicator =
+IF ( [Referrals Awaiting Offer Variance] > 0, "▲", IF ( [Referrals Awaiting Offer Variance] < 0, "▼", "–" ) )
+
+Referrals Awaiting Offer Variance Indicator Color =
+IF ( [Referrals Awaiting Offer Variance] > 0, "green", IF ( [Referrals Awaiting Offer Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Active Referrals Under Offer
+Referrals Under Offer Previous Month =
+CALCULATE ( [Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Referrals Under Offer Variance =
+[Referrals Under Offer] - [Referrals Under Offer Previous Month]
+
+Referrals Under Offer MoM % =
+DIVIDE ( [Referrals Under Offer Variance], [Referrals Under Offer Previous Month] )
+
+Referrals Under Offer Variance Indicator =
+IF ( [Referrals Under Offer Variance] > 0, "▲", IF ( [Referrals Under Offer Variance] < 0, "▼", "–" ) )
+
+Referrals Under Offer Variance Indicator Color =
+IF ( [Referrals Under Offer Variance] > 0, "green", IF ( [Referrals Under Offer Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Referrals Currently Active
+Referrals Currently Active Previous Month =
+CALCULATE ( [Referrals Currently Active], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Referrals Currently Active Variance =
+[Referrals Currently Active] - [Referrals Currently Active Previous Month]
+
+Referrals Currently Active MoM % =
+DIVIDE ( [Referrals Currently Active Variance], [Referrals Currently Active Previous Month] )
+
+Referrals Currently Active Variance Indicator =
+IF ( [Referrals Currently Active Variance] > 0, "▲", IF ( [Referrals Currently Active Variance] < 0, "▼", "–" ) )
+
+Referrals Currently Active Variance Indicator Color =
+IF ( [Referrals Currently Active Variance] > 0, "green", IF ( [Referrals Currently Active Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Referrals Cancelled/Closed
+Closed or Cancelled Referrals Previous Month =
+CALCULATE ( [Closed or Cancelled Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Closed or Cancelled Referrals Variance =
+[Closed or Cancelled Referrals] - [Closed or Cancelled Referrals Previous Month]
+
+Closed or Cancelled Referrals MoM % =
+DIVIDE ( [Closed or Cancelled Referrals Variance], [Closed or Cancelled Referrals Previous Month] )
+
+Closed or Cancelled Referrals Variance Indicator =
+IF ( [Closed or Cancelled Referrals Variance] > 0, "▲", IF ( [Closed or Cancelled Referrals Variance] < 0, "▼", "–" ) )
+
+Closed or Cancelled Referrals Variance Indicator Color =
+IF ( [Closed or Cancelled Referrals Variance] > 0, "green", IF ( [Closed or Cancelled Referrals Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Active Referral Engagement Rate
+Active Referral Engagement Rate Previous Month =
+CALCULATE ( [Active Referral Engagement Rate], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Active Referral Engagement Rate Variance =
+[Active Referral Engagement Rate] - [Active Referral Engagement Rate Previous Month]
+
+Active Referral Engagement Rate MoM % =
+DIVIDE ( [Active Referral Engagement Rate Variance], [Active Referral Engagement Rate Previous Month] )
+
+Active Referral Engagement Rate Variance Indicator =
+IF ( [Active Referral Engagement Rate Variance] > 0, "▲", IF ( [Active Referral Engagement Rate Variance] < 0, "▼", "–" ) )
+
+Active Referral Engagement Rate Variance Indicator Color =
+IF ( [Active Referral Engagement Rate Variance] > 0, "green", IF ( [Active Referral Engagement Rate Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Total Offers Made (Active Referrals Under Offer)
+Offers on Referrals Under Offer Previous Month =
+CALCULATE ( [Offers on Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Offers on Referrals Under Offer Variance =
+[Offers on Referrals Under Offer] - [Offers on Referrals Under Offer Previous Month]
+
+Offers on Referrals Under Offer MoM % =
+DIVIDE ( [Offers on Referrals Under Offer Variance], [Offers on Referrals Under Offer Previous Month] )
+
+Offers on Referrals Under Offer Variance Indicator =
+IF ( [Offers on Referrals Under Offer Variance] > 0, "▲", IF ( [Offers on Referrals Under Offer Variance] < 0, "▼", "–" ) )
+
+Offers on Referrals Under Offer Variance Indicator Color =
+IF ( [Offers on Referrals Under Offer Variance] > 0, "green", IF ( [Offers on Referrals Under Offer Variance] < 0, "red", "grey" ) )
+
+-- Legacy card: Total Referrals That Received Offers
+Offer Receipt Rate (Created in Period) Previous Month =
+CALCULATE ( [Offer Receipt Rate (Created in Period)], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+
+Offer Receipt Rate (Created in Period) Variance =
+[Offer Receipt Rate (Created in Period)] - [Offer Receipt Rate (Created in Period) Previous Month]
+
+Offer Receipt Rate (Created in Period) MoM % =
+DIVIDE ( [Offer Receipt Rate (Created in Period) Variance], [Offer Receipt Rate (Created in Period) Previous Month] )
+
+Offer Receipt Rate (Created in Period) Variance Indicator =
+IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "▲", IF ( [Offer Receipt Rate (Created in Period) Variance] < 0, "▼", "–" ) )
+
+Offer Receipt Rate (Created in Period) Variance Indicator Color =
+IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "green", IF ( [Offer Receipt Rate (Created in Period) Variance] < 0, "red", "grey" ) )
+
+```
+
+> The legacy `Provider Contact Referral` card family (6 measures) is
+> **not** ported: there is no `contact_made` field anywhere in the
+> active Gold layer. See the blocked list below.
+
+
+### Created-in-period measures
+
+These replace the legacy `USERELATIONSHIP(dim_date[Date],
+dim_referral[referral_date_only])` pattern; the Gold active relationship
+already filters on `referral_created_date`.
+
+```DAX
+Referrals Not Yet Closed (Created in Period) =
+CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
+
+Referrals With Offers (Created in Period) =
+CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
+
+Offer Receipt Rate (Created in Period) =
+DIVIDE ( [Referrals With Offers (Created in Period)], [Total Referrals] )
+```
+
+> `Offer Receipt Rate (Created in Period)` ports the legacy measure named
+> `Total Referrals That Received Offers`, which despite its name returns a
+> ratio, not a count.
+
+### Under-offer referral offer portfolio
+
+The legacy model scoped offer measures to referrals in `UNDER_OFFER` status
+through a chain of `CALCULATETABLE`/`TREATAS` helper measures. In Gold the
+active `fact_referral` to `fact_offer` relationship makes this a single
+cross-table filter, matching the existing `Offers on Referrals Under Offer`
+pattern.
+
+```DAX
+Draft Offers on Referrals Under Offer =
+CALCULATE (
+    [Offers in Draft],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Pending Offers on Referrals Under Offer =
+CALCULATE (
+    [Pending Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Successful Offers on Referrals Under Offer =
+CALCULATE (
+    [Accepted Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Unsuccessful Offers on Referrals Under Offer =
+CALCULATE (
+    [Unsuccessful Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Spot Offers on Referrals Under Offer =
+CALCULATE (
+    [Spot Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Framework Offers on Referrals Under Offer =
+CALCULATE (
+    [Non-Spot Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Providers With Offers on Referrals Under Offer =
+CALCULATE (
+    [Providers Who Made Offers],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Average Offers per Provider - Under Offer =
+DIVIDE (
+    [Offers on Referrals Under Offer],
+    [Providers With Offers on Referrals Under Offer]
+)
+
+Draft Offers With No Activity - Under Offer Referrals =
+CALCULATE (
+    [Draft Offers With No Activity Since Creation],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+
+Draft Offers Stalled 14+ Days - Under Offer Referrals =
+CALCULATE (
+    [Draft Offers Stalled 14+ Days],
+    FILTER (
+        'fact_referral',
+        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+            IN { "under_offer", "under offer", "offer" }
+    )
+)
+```
+
+> Legacy `Draft Offer Count (Under Offer Referrals)` and `Offers per Provider
+> (Under Offer Referrals)` are exact duplicates of `Draft Offers on Referrals
+> Under Offer` and `Offers on Referrals Under Offer`; they are not recreated
+> as separate measures.
+
+### IPA signature funnel (referral-level proxies)
+
+The legacy funnel (`IPA Created`, `IPA Completed`, `IPAs Pending Completion`,
+`IPA Created to Completion %`, `Successful Offers to IPA Completed %`) read
+`fact_ipa[signed_by_provider]` and `fact_ipa[signed_by_local_authority]`.
+Gold has no IPA-grain signature fields, so the funnel is ported at referral
+grain using the existing `ipa_2_signatures` proxy. Like-for-like IPA-grain
+signature measures remain blocked (see the do-not-recreate list).
+
+`Referrals With IPA` also closes a dangling dependency: `IPA Signature
+Completion Rate` already references it, but it was never defined.
+
+```DAX
+Referrals With IPA =
+CALCULATE (
+    [Total Referrals],
+    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[ipa_issued_date] ) )
+)
+
+Referrals With IPA Pending Signature =
+CALCULATE (
+    [Total Referrals],
+    FILTER (
+        'fact_referral',
+        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
+            && COALESCE ( 'fact_referral'[ipa_2_signatures], FALSE () ) = FALSE ()
+    )
+)
+
+IPA Signature Pending Rate =
+DIVIDE ( [Referrals With IPA Pending Signature], [Referrals With IPA] )
+```
+
+### Snapshot target measures
+
+`fact_referral_snapshot` carries every `fact_referral` column including
+`placed_by_required_date`, so the legacy target-at-snapshot pair ports
+directly. Legacy `Referrals with Placement at Snapshot` is a name alias of
+the existing `Referrals with IPA at Snapshot`.
+
+```DAX
+Referrals Placed by Target at Snapshot =
+CALCULATE (
+    [Snapshot Referrals],
+    'fact_referral_snapshot'[placed_by_required_date] = TRUE ()
+)
+
+Target Hit Rate at Snapshot =
+DIVIDE (
+    [Referrals Placed by Target at Snapshot],
+    CALCULATE (
+        [Snapshot Referrals],
+        FILTER (
+            'fact_referral_snapshot',
+            NOT ISBLANK ( 'fact_referral_snapshot'[ipa_issued_date] )
+                && NOT ISBLANK ( 'fact_referral_snapshot'[required_placement_date] )
+        )
+    )
+)
+```
+
+### Row-level visual helpers
+
+Legacy per-row Yes/No flags used on the IPA funnel and provider registry
+pages. These evaluate in a single-row visual context (`SELECTEDVALUE`); they
+are not aggregation measures.
+
+```DAX
+Is Non Framework Provider =
+IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
+
+IPA Exists =
+VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
+RETURN
+    IF (
+        CALCULATE (
+            COUNTROWS ( 'fct_ipa' ),
+            TREATAS ( { current_offer }, 'fct_ipa'[accepted_offer_id] )
+        ) > 0,
+        "Yes",
+        "No"
+    )
+
+Is Awaiting IPA Creation =
+VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
+VAR accepted_offers =
+    CALCULATETABLE (
+        VALUES ( 'fact_offer'[offer_id] ),
+        FILTER (
+            'fact_offer',
+            LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
+                IN { "accepted", "approved", "selected", "offer_successful" }
+        )
+    )
+VAR ipa_offers =
+    CALCULATETABLE (
+        VALUES ( 'fct_ipa'[accepted_offer_id] ),
+        FILTER ( 'fct_ipa', NOT ISBLANK ( 'fct_ipa'[accepted_offer_id] ) )
+    )
+RETURN
+    IF ( current_offer IN EXCEPT ( accepted_offers, ipa_offers ), 1, 0 )
+```
+
+> Legacy `Is IPA Completed`, `Is IPA Pending` and `Is In Accepted KPI` need
+> IPA-grain signature flags and stay blocked; use the referral-grain proxy
+> measures above instead.
+
+
+### Legacy-to-Gold alias map
+
+These legacy measures are already satisfied by an existing Gold measure
+under a different name; rename visuals at reconciliation time, do not
+recreate.
+
+| Legacy v15 measure | Gold measure |
+| --- | --- |
+| Open Referral | Open Referrals |
+| Referrals This Month | Referrals Created This Month |
+| Referrals This FY | Referrals Created This Financial Year |
+| Referrals With Offers / Referrals With One or More Offers | Referrals With an Offer |
+| Active Referrals Awaiting Offers | Referrals Awaiting Offer |
+| Active Referrals Under Offer | Referrals Under Offer |
+| Referrals Cancelled/Closed | Closed or Cancelled Referrals |
+| Closed Referrals (by Reason) | Closed Referrals + `fact_referral[referral_closure_reason]` visual dimension |
+| Active Awaiting Offers (Engaged) | Active Referrals With Provider Engagement |
+| Active Awaiting Offers (No Engagement) | Active Awaiting Offers Without Engagement |
+| Offer Count / Total Offers Made Historically / (NEW)Total Offers Made / Latest Offer Status Count | Offers Submitted (Gold `fact_offer` holds the latest state per offer) |
+| Placement Type Totals (Visual) | Total Referrals + `fact_referral[placement_type_required]` visual dimension |
+| Offers At Risk (8-14 Days) | Pending Offers 8-14 Days |
+| Offers Outside Timeframe (15-30 Days) | Pending Offers 15-29 Days |
+| Critical Offers (30+ Days) | Pending Offers 30+ Days |
+| Provider with Offers over 30+ Days | Providers With Pending Offers 30+ Days |
+| Draft No Activity 7+ Days | Draft Offers Stalled 7+ Days |
+| Drafts With No Activity 14+ Days | Draft Offers Stalled 14+ Days |
+| Draft Offers Updated After Creation | Draft Offers With Activity Since Creation |
+| Draft With No Activity Since Creation (%) | Draft Offers With No Activity % |
+| Latest Export per Offer | Latest Offer Source Export |
+| Dashboard Last Refreshed: | Gold Model Last Refreshed |
+| Average Active Weekly Cost | Average Active IPA Weekly Cost |
+| Overlap Referrals | Referrals With Multiple Provider Assignments |
+| Fostering Providers | Providers - Fostering |
+| NON Framework Providers | Non-Framework Providers |
+| Total Offers Made (Active Referrals Under Offer) | Offers on Referrals Under Offer |
+| Avg Offers per Referral Under Offer | Average Offers per Referral Under Offer |
+| IPA Created (successful offers with IPA) | Accepted Offers With IPA |
+| IPAs Created | IPAs Created (identical name) |
+| Offers Still to Progress to IPA | Offers Awaiting IPA Creation |
+| Referrals with Placement at Snapshot | Referrals with IPA at Snapshot |
+| IPA Completed / IPA Created to Completion % / Successful Offers to IPA Completed % | Referral-grain proxies: Referrals With Fully Signed IPA, IPA Signature Completion Rate |
+
+### Retired report-construct helpers
+
+These legacy measures exist only to drive v15 report navigation or SCD
+latest-export logic. They are deliberately **not** recreated in the Gold
+model.
+
+| Legacy v15 measure | Why retired |
+| --- | --- |
+| Accepted Offers Base / Accepted Offers (Scoped Table) / Offer IDs (Under Offer Referrals) | Internal `CALCULATETABLE` helpers; the Gold relationship graph and `TREATAS` patterns make them unnecessary |
+| KPI Tooltip Style 1 | Reads the `ref_KPI` functional-spec metadata table, which is not a Gold object; re-import `ref_KPI` as a static table if the tooltip page is rebuilt |
+| Directory Summary Count / Fostering Chart Count | Depend on the `Directory Summary Axis` and `rpt_provider_fostering` report-view tables; rebuild with field parameters over `dim_provider_home[service_type]` |
+| Pending Offers by Age Bucket | Depended on the disconnected `Draft Age Band Table`; the four pending-age measures cover the same bands |
+| Latest Export per Offer / Latest Offer Status Count | Gold `fact_offer` is already deduplicated to the latest state per offer |
+| Dashboard Last Refreshed: | Superseded by Gold Model Last Refreshed (`gold_modelled_at`) |
+
+### Additional blocked legacy measures
+
+These rows extend the do-not-recreate list above; they must not be pointed
+at Bronze, Silver or legacy tables.
+
+| Do not recreate yet | Missing active-Gold field or grain |
+| --- | --- |
+| Provider Contact Referral card family (6 measures: base, Previous Month, Variance, MoM %, Indicator, Indicator Color) | No provider-contact flag (legacy `dim_referral[contact_made]`) anywhere in the active Gold referral fact. `is_not_seen_by_providers` is an offer-visibility flag, not a safe substitute. |
+| Female / Male / Other / Total Gendered Referrals | Already covered by the KPI-04-07 entry: no child gender field in the active Gold referral fact. |
+| Is IPA Completed / Is IPA Pending / Is In Accepted KPI | Already covered by the KPI-77-86 entry: no IPA-grain signature status. Use the referral-grain proxies instead. |

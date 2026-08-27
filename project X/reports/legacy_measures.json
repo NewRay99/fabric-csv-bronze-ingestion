@@ -1,0 +1,767 @@
+[
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only])\n\t\t\t)\n\t\t\t\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 6323e309-be45-4771-93c9-b5940e7b3c14"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With Offers",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    dim_referral[referral_id] IN\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(fact_referral_offer[referral_id]),\n\t\t\t            fact_referral_offer[has_offer] = TRUE()\n\t\t\t        )\n\t\t\t)\n\t\t\t\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 7f0f7b0e-df90-400b-a2a9-a4955a71daa7"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Awaiting Offer",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    NOT dim_referral[referral_id] IN\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(fact_referral_offer[referral_id]),\n\t\t\t            fact_referral_offer[has_offer] = TRUE()\n\t\t\t        )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 76689445-0377-4e72-9b3b-7b5fa4d9b1a7"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "No. Providers Who Made Offers",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR ValidOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] <> \"Draft\"\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_referral_offer[provider_id]),\n\t\t\t    TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id]),\n\t\t\t    TREATAS(ValidOfferIDs, fact_referral_offer[offer_id]),\n\t\t\t    NOT ISBLANK(fact_referral_offer[provider_id])\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: fa759a7d-4361-48b4-95f4-9f9397ce05ee"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made Historically",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    KEEPFILTERS(dim_offer_status[offer_status_label] <> \"Draft\")\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: a60e7175-e2be-4aff-b11e-252839c54ae0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Avg Offers per Referral Under Offer",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [Total Offers Made (Active Referrals Under Offer)],\n\t\t\t    [Active Referrals Under Offer],\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: bfe9a2e9-a57e-4984-b3ec-58bf784bf06f"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Avg Offers per Provider (Under Offer)",
+  "expr": "DIVIDE(\n\t\t\t    [Total Offers Made (Active Referrals Under Offer)],\n\t\t\t    [No. Providers Who Made Offers],\n\t\t\t    0\n\t\t\t)\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 486d4d4c-7e13-4746-ba81-0bef2c94f802"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals This Month",
+  "expr": "```\n\t\t\tCALCULATE([Total Referrals], DATESMTD(dim_date[Date]))\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Timebased KPis\n\t\tlineageTag: 0bafd5c1-1f64-4057-a0ec-341c853b1be9"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals This FY",
+  "expr": "```\n\t\t\tCALCULATE([Total Referrals], DATESYTD(dim_date[Date], \"03-31\"))\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Timebased KPis\n\t\tlineageTag: 95988cf7-0c45-47c0-8c6b-31d8d3f50a47"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Successful Offers (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: a6249863-7e2a-4683-b336-3179a1a5e8d4"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Unsuccessful Offers (Under Offer Referrals)",
+  "expr": "VAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[is_terminal] = TRUE(),\n\t\t\t    dim_offer_status[is_accepted] = FALSE(),\n\t\t\t    TREATAS(OfferIDs, fact_offer[offer_id])\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 6bb8307a-18f1-499f-8668-a1c37656ef15"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers in Draft (Under Offer Referrals)",
+  "expr": "VAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t    TREATAS(OfferIDs, fact_offer[offer_id])\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 37f211b7-8a19-4974-9dae-24ba648ba00f"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers (Under Offer Referrals)",
+  "expr": "COALESCE(\n\t\t\t    VAR UnderOfferReferralIDs =\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(dim_referral[referral_id]),\n\t\t\t            dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t        )\n\t\t\t\n\t\t\t    VAR OfferIDs =\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(fact_referral_offer[offer_id]),\n\t\t\t            TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t        )\n\t\t\t\n\t\t\t    RETURN\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t        TREATAS(OfferIDs, fact_offer[offer_id])\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 182eb22f-a4c1-4db5-900e-a4cf02238260"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "(NEW)Total Offers Made",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_referral_offer[offer_id]),\n\t\t\t    NOT ISBLANK(fact_referral_offer[offer_id]),\n\t\t\t    FILTER(\n\t\t\t        fact_referral_offer,\n\t\t\t        fact_referral_offer[export_date] = [Latest Export per Offer]\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Spot vs Framework\n\t\tlineageTag: a5dc703d-6c77-43ee-b34c-b839f0485060"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Male Referrals",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    COUNTROWS(dim_referral),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    TRIM(UPPER(dim_referral[Gender Clean])) = \"MALE\"\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: a4aa2582-6622-4eef-ba93-115ae9202322"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Female Referrals",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    COUNTROWS(dim_referral),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    TRIM(UPPER(dim_referral[Gender Clean])) = \"FEMALE\"\n\t\t\t)\n\t\t\t\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 280c6c44-518b-4185-8957-c1782dea4a4d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Other Referrals",
+  "expr": "```\n\t\t\t\n\t\t\t[Total Gendered Referrals] - [Male Referrals] - [Female Referrals]\n\t\t\t\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 56b82b4c-567a-4e71-b09a-1242262ed977"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Dashboard Last Refreshed:",
+  "expr": "```\n\t\t\t\n\t\t\tVAR _CurrentTime = UTCNOW() + TIME(1, 0, 0)\n\t\t\tRETURN\n\t\t\tFORMAT(_CurrentTime, \"dd mmm yyyy HH:mm\")\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Dashboad Refresh DAX\n\t\tlineageTag: 9fa4e154-2c7f-47fd-ab67-2add00141cf3"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Placement Type Totals (Visual)",
+  "expr": "```\n\t\t\t\n\t\t\tDISTINCTCOUNT(dim_referral[referral_id])\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Spot vs Framework\n\t\tlineageTag: 8d96a1fb-4822-49b0-bb9f-2a61324df1d0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Latest Export per Offer",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    MAX(fact_referral_offer[export_date]),\n\t\t\t    ALLEXCEPT(\n\t\t\t        fact_referral_offer,\n\t\t\t        fact_referral_offer[offer_id]\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: General Date\n\t\tdisplayFolder: Miscellaneous Queries\n\t\tlineageTag: b74f81fa-64f8-47ee-bad4-8791963726dd"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offer Count",
+  "expr": "```\n\t\t\t\n\t\t\tDISTINCTCOUNT(fact_offer[offer_id])\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 51c9956a-a206-404f-8311-145b3029ee56"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Latest Offer Status Count",
+  "expr": "VAR LatestOffers =\n\t\t\t    ADDCOLUMNS(\n\t\t\t        SUMMARIZE(\n\t\t\t            fact_offer,\n\t\t\t            fact_offer[offer_id]\n\t\t\t        ),\n\t\t\t        \"LatestDate\",\n\t\t\t            CALCULATE(MAX(fact_offer[export_date]))\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    TREATAS(\n\t\t\t        LatestOffers,\n\t\t\t        fact_offer[offer_id],\n\t\t\t        fact_offer[export_date]\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Miscellaneous Queries\n\t\tlineageTag: 19ad85dd-1b85-4f1f-a782-96b859621732"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Gendered Referrals",
+  "expr": "VAR FilteredReferrals =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only])\n\t\t\t    )\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(dim_referral_gender[referral_id]),\n\t\t\t        TREATAS(FilteredReferrals, dim_referral_gender[referral_id])\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 79529786-b09c-4496-bc69-ff0f5bf8ed5d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Homes Registered",
+  "expr": "```\n\t\t\t\n\t\t\tCOUNTROWS ( rpt_provider_registry )\n\t\t\t\n\t\t\t```\n\t\tformatString: #,0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 53d92208-5d26-4a21-8b74-0a1ba2bb3637"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Providers Registered",
+  "expr": "DISTINCTCOUNT(dim_provider[provider_id])\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: dca64fd9-3c14-48d2-af14-910c9d5119ad"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Currently Active",
+  "expr": "VAR LatestExportDate =\n\t\t\t    MAXX(\n\t\t\t        ALL(dim_referral),\n\t\t\t        dim_referral[Export Date Clean]\n\t\t\t    )\n\t\t\t\n\t\t\tVAR LiveProviderReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[referral_id]),\n\t\t\t        REMOVEFILTERS(fact_referral_offer),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        fact_referral_offer[is_cancelled] = FALSE(),\n\t\t\t        fact_referral_offer[is_closed] = FALSE(),\n\t\t\t        fact_referral_offer[is_excluded] = FALSE()\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OpenWithinResponseWindowIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        dim_referral[referral_status] = \"OPEN\",\n\t\t\t        dim_referral[Response Required Date Clean] >= LatestExportDate\n\t\t\t    )\n\t\t\t\n\t\t\tVAR ActiveOpenReferralIDs =\n\t\t\t    DISTINCT(\n\t\t\t        UNION(\n\t\t\t            LiveProviderReferralIDs,\n\t\t\t            OpenWithinResponseWindowIDs\n\t\t\t        )\n\t\t\t    )\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR CombinedActiveReferralIDs =\n\t\t\t    DISTINCT(\n\t\t\t        UNION(\n\t\t\t            ActiveOpenReferralIDs,\n\t\t\t            UnderOfferReferralIDs\n\t\t\t        )\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    REMOVEFILTERS(dim_date),\n\t\t\t    dim_referral[referral_status] IN { \"OPEN\", \"UNDER_OFFER\" },\n\t\t\t    TREATAS(\n\t\t\t        CombinedActiveReferralIDs,\n\t\t\t        dim_referral[referral_id]\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: c38981f9-2b39-4084-ac10-c1e7f88f3f07"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Under Offer",
+  "expr": "```\n\t\t\t\n\t\t\tVAR AcceptedOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR ReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[referral_id]),\n\t\t\t        TREATAS(AcceptedOffers, fact_referral_offer[offer_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOUNTROWS(\n\t\t\t    DISTINCT(ReferralIDs)\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 238dd258-9c43-4841-8f2d-1e446ce2e72a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Cancelled/Closed",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    dim_referral[referral_status] IN { \"CANCELLED\", \"CLOSED\" }\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: c9646831-a1e8-4348-8da0-3729bc2aa106"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Awaiting Offers",
+  "expr": "```\n\t\t\t\n\t\t\tVAR LatestExportDate =\n\t\t\t    MAXX(\n\t\t\t        ALL(dim_referral),\n\t\t\t        dim_referral[Export Date Clean]\n\t\t\t    )\n\t\t\t\n\t\t\tVAR LiveProviderReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[referral_id]),\n\t\t\t        REMOVEFILTERS(fact_referral_offer),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        fact_referral_offer[is_cancelled] = FALSE(),\n\t\t\t        fact_referral_offer[is_closed] = FALSE(),\n\t\t\t        fact_referral_offer[is_excluded] = FALSE()\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OpenWithinResponseWindowIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        dim_referral[referral_status] = \"OPEN\",\n\t\t\t        dim_referral[Response Required Date Clean] >= LatestExportDate\n\t\t\t    )\n\t\t\t\n\t\t\tVAR ActiveOpenReferralIDs =\n\t\t\t    DISTINCT(\n\t\t\t        UNION(\n\t\t\t            LiveProviderReferralIDs,\n\t\t\t            OpenWithinResponseWindowIDs\n\t\t\t        )\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    REMOVEFILTERS(dim_date),\n\t\t\t    dim_referral[referral_status] = \"OPEN\",   -- ✅ Only OPEN\n\t\t\t    TREATAS(\n\t\t\t        ActiveOpenReferralIDs,\n\t\t\t        dim_referral[referral_id]\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 4d514fb3-8116-4be6-8a8a-f4f2672976f5"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With One or More Offers",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    dim_referral[referral_status] = \"OPEN\",\n\t\t\t    dim_referral[referral_id] IN\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(fact_referral_offer[referral_id]),\n\t\t\t            fact_referral_offer[has_offer] = TRUE()\n\t\t\t        )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 7e1bb40e-dbc4-426e-957f-74fe1871955d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft No Activity Since Creation (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR DraftOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t        TREATAS(DraftOfferIDs, fact_offer[offer_id]),\n\t\t\t        FILTER(\n\t\t\t            fact_offer,\n\t\t\t            NOT ISBLANK(fact_offer[offer_date]) &&\n\t\t\t            NOT ISBLANK(fact_offer[last_modified_date]) &&\n\t\t\t            LEFT(fact_offer[last_modified_date], 10) =\n\t\t\t            LEFT(fact_offer[offer_date], 10)\n\t\t\t        )\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 0805fd7c-83e1-4caa-9d97-cda725926c7a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft Offers With Activity Since Creation",
+  "expr": "[Offers in Draft (Under Offer Referrals)]\n\t\t\t- [Draft No Activity Since Creation (Under Offer Referrals)]\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 7297ff37-222c-44ef-ac1c-119d63a20a60"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft Offers Missing Dates",
+  "expr": "```\n\t\t\t\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t        FILTER(\n\t\t\t            fact_offer,\n\t\t\t            ISBLANK(fact_offer[offer_date]) ||\n\t\t\t            ISBLANK(fact_offer[last_modified_date])\n\t\t\t        )\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 8c7fc1d9-b83b-4eaa-9fde-0fd8a713a2bb"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft Offers Updated After Creation",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t    FILTER(\n\t\t\t        fact_offer,\n\t\t\t        NOT ISBLANK(fact_offer[offer_date]) &&\n\t\t\t        NOT ISBLANK(fact_offer[last_modified_date]) &&\n\t\t\t        LEFT(fact_offer[last_modified_date], 10) <> LEFT(fact_offer[offer_date], 10)\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 436dda3c-963e-473b-8b41-f957d762de6d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft No Activity 7+ Days",
+  "expr": "```\n\t\t\t\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t        FILTER(\n\t\t\t            fact_offer,\n\t\t\t            ISBLANK(fact_offer[last_modified_date]) ||\n\t\t\t            DATEDIFF(\n\t\t\t                DATEVALUE(LEFT(fact_offer[last_modified_date], 10)),\n\t\t\t                TODAY(),\n\t\t\t                DAY\n\t\t\t            ) >= 7\n\t\t\t        )\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 8c6c5599-05ae-4005-a629-3732423e1120"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Drafts No Activity 14+ Days (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR DraftOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t        TREATAS(DraftOfferIDs, fact_offer[offer_id]),\n\t\t\t        FILTER(\n\t\t\t            fact_offer,\n\t\t\t            ISBLANK(fact_offer[last_modified_date]) ||\n\t\t\t            DATEDIFF(\n\t\t\t                DATEVALUE(LEFT(fact_offer[last_modified_date], 10)),\n\t\t\t                TODAY(),\n\t\t\t                DAY\n\t\t\t            ) >= 14\n\t\t\t        )\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 32521366-3a68-49be-9571-dc02df8807ba"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Average Days in Draft",
+  "expr": "AVERAGEX(\n\t\t\t    FILTER(\n\t\t\t        fact_offer,\n\t\t\t        fact_offer[Is_Latest_Record] = 1 &&\n\t\t\t        RELATED(dim_offer_status[offer_status_label]) = \"Draft\" &&\n\t\t\t        NOT ISBLANK(fact_offer[offer_date])\n\t\t\t    ),\n\t\t\t    DATEDIFF(\n\t\t\t        DATEVALUE(LEFT(fact_offer[offer_date], 10)),\n\t\t\t        TODAY(),\n\t\t\t        DAY\n\t\t\t    )\n\t\t\t)\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 626c0f5e-b234-4358-a49f-338c3050cfec"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Oldest Draft Age (Days)",
+  "expr": "```\n\t\t\t\n\t\t\tMAXX(\n\t\t\t    FILTER(\n\t\t\t        fact_offer,\n\t\t\t        fact_offer[Is_Latest_Record] = 1 &&\n\t\t\t        RELATED(dim_offer_status[offer_status_label]) = \"Draft\" &&\n\t\t\t        NOT ISBLANK(fact_offer[offer_date])\n\t\t\t    ),\n\t\t\t    DATEDIFF(\n\t\t\t        DATEVALUE(LEFT(fact_offer[offer_date], 10)),\n\t\t\t        TODAY(),\n\t\t\t        DAY\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 074b02a5-c5f5-4e9f-a1e7-b062981aa55b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft Offer Count (Under Offer Referrals)",
+  "expr": "VAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR DraftOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Draft\",\n\t\t\t        TREATAS(DraftOfferIDs, fact_offer[offer_id])\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 8562c005-0e24-4fd9-a7a5-e169eaaec9db"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Draft With No Activity Since Creation (%)",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [Draft No Activity Since Creation (Under Offer Referrals)],\n\t\t\t    [Offers in Draft (Under Offer Referrals)],\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: 2a730e36-425a-4be9-bced-20c5638c487e"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Drafts With No Activity 14+ Days",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [Drafts No Activity 14+ Days (Under Offer Referrals)],\n\t\t\t    [Offers in Draft (Under Offer Referrals)],\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Draft/Pending Offers\n\t\tlineageTag: c087a28a-91b0-4a5b-abdb-a6bb7583017b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referrals (by Reason)",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    dim_referral[referral_status] IN {\"CANCELLED\", \"CLOSED\"}\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 2939d3a1-44af-4b29-b68c-0800d2780f52"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Providers - Fostering",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_provider_framework[provider_id]),\n\t\t\t    dim_framework[placement_type] = \"Fostering\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 5a8fb78f-bb8a-4338-ab5a-00e89e70b32e"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Providers - Residential",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_provider_framework[provider_id]),\n\t\t\t    dim_framework[placement_type] = \"Residential\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: f2025bb7-e1a0-4551-ac06-fa769543c735"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Providers - Supported Accommodation",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_provider_framework[provider_id]),\n\t\t\t    dim_framework[placement_type] = \"Supported Accommodation\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: a4dfe6f5-7890-4541-8246-8a92fc9478f0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Framework Providers",
+  "expr": "DISTINCTCOUNT(dim_provider_framework[provider_id])\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 1c7a53aa-ecc1-4a60-9937-d559ee58e1dd"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "NON Framework Providers",
+  "expr": "[Providers Registered] - [Framework Providers]\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 75b5f1e4-a107-42df-8f7e-62906d7cea09"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Is Non Framework Provider",
+  "expr": "```\n\t\t\t\n\t\t\tVAR HasFramework =\n\t\t\t    CALCULATE(\n\t\t\t        COUNTROWS(dim_provider_framework)\n\t\t\t    )\n\t\t\tRETURN\n\t\t\tIF( HasFramework = 0, 1, 0 )\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 4e32101d-4700-4166-8295-37a7dd66f27a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Directory Summary Count",
+  "expr": "VAR SelectedType =\n\t\t\t    SELECTEDVALUE('Directory Summary Axis'[Display Type])\n\t\t\t\n\t\t\tVAR IsFostering =\n\t\t\t    COUNTROWS(rpt_provider_fostering) > 0\n\t\t\t        && COUNTROWS(rpt_provider_registry) = 0\n\t\t\t\n\t\t\tRETURN\n\t\t\tSWITCH(\n\t\t\t    TRUE(),\n\t\t\t\n\t\t\t    -- Fostering view → only show fostering\n\t\t\t    IsFostering && SelectedType = \"Fostering Providers\",\n\t\t\t        [Fostering Providers],\n\t\t\t\n\t\t\t    IsFostering,\n\t\t\t        BLANK(),\n\t\t\t\n\t\t\t    -- SA/Resi view → only show homes\n\t\t\t    SelectedType = \"Residential Homes\",\n\t\t\t        [Residential Homes],\n\t\t\t\n\t\t\t    SelectedType = \"Supported Accommodation Homes\",\n\t\t\t        [Supported Accommodation Homes],\n\t\t\t\n\t\t\t    BLANK()\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: cceb583e-e6d7-4b00-a844-81dab59676d9"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Residential Homes",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    COUNTROWS(rpt_provider_registry),\n\t\t\t    rpt_provider_registry[Service Type] = \"PLCM-REST\"\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: ca54c38c-17fd-4856-b4c8-325d7b46f263"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Supported Accommodation Homes",
+  "expr": "CALCULATE(\n\t\t\t    COUNTROWS(rpt_provider_registry),\n\t\t\t    rpt_provider_registry[Service Type] = \"PLCM-SUPA\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 3c6d0352-6a64-4dba-a8c4-42bd254313c8"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Fostering Providers",
+  "expr": "DISTINCTCOUNT(rpt_provider_fostering[provider_id])\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: 992d4cd7-962f-43f0-a2fc-da4018e4601d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Fostering Chart Count",
+  "expr": "[Fostering Providers]\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Registry\n\t\tlineageTag: dd2a461e-b3bc-4f5f-97c1-d7d470c45e87"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers by Age Bucket",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 39c63440-21e5-4485-8766-7631d52f123a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers 15–30 Days",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 14 &&\n\t\t\t    fact_offer[Pending Offer Age (Days)] <= 30\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 817b25cc-af90-4835-9211-9d2ab26e6e25"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers 30+ Days",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 30\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 6ae703ee-2b7a-459b-b140-db57f0a3b3be"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers 0–7 Days",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] <= 7\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 2f93e1fc-0734-4d78-bf32-ad604513b698"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Pending Offers 8–14 Days",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 7 &&\n\t\t\t    fact_offer[Pending Offer Age (Days)] <= 14\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 202c659c-fee5-4153-8335-345c2e1f427a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider with Offers over 30+ Days",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 30\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 6a876819-2f18-4c1e-87f9-b81032486248"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers At Risk (8–14 Days)",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 7 &&\n\t\t\t    fact_offer[Pending Offer Age (Days)] <= 14\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: 2ba2fa3f-af10-4d17-a2e8-1c4d892b5ecc"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers Outside Timeframe (15–30 Days)",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 14 &&\n\t\t\t    fact_offer[Pending Offer Age (Days)] <= 30\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: e80ec6cb-7cf4-466b-8038-5c6186ffe562"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Critical Offers (30+ Days)",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Pending\",\n\t\t\t    fact_offer[Pending Offer Age (Days)] > 30\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Pending offers\n\t\tlineageTag: cf93c2c5-1385-4a68-bee7-c7d44d108f3d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Not Yet Closed (Created in Period)",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    dim_referral[referral_status] IN { \"OPEN\", \"UNDER_OFFER\" }\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 347b6523-ebbf-400f-9b71-14dee5786bde"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With Offers (Created in Period)",
+  "expr": "CALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_referral_offer[referral_id]),\n\t\t\t    USERELATIONSHIP(dim_date[Date], dim_referral[referral_date_only]),\n\t\t\t    fact_referral_offer[has_offer] = TRUE()\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: ede895b8-586c-4c46-8261-7a0ce079aced"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals That Received Offers",
+  "expr": "DIVIDE(\n\t\t\t    [Referrals With Offers (Created in Period)],\n\t\t\t    [Total Referrals],\n\t\t\t    0\n\t\t\t)\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: c46113a1-36b4-4cad-8c63-853a362003e0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals With Provider Engagement",
+  "expr": "VAR ActiveReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        dim_referral[referral_status] IN {\"OPEN\", \"UNDER_OFFER\"}\n\t\t\t    )\n\t\t\t\n\t\t\tVAR EngagedReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        fact_referral_offer[is_cancelled] = FALSE(),\n\t\t\t        fact_referral_offer[is_closed] = FALSE(),\n\t\t\t        fact_referral_offer[is_excluded] = FALSE()\n\t\t\t    )\n\t\t\t\n\t\t\tVAR IntersectionIDs =\n\t\t\t    INTERSECT(\n\t\t\t        ActiveReferralIDs,\n\t\t\t        EngagedReferralIDs\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    REMOVEFILTERS(dim_date),\n\t\t\t    TREATAS(\n\t\t\t        IntersectionIDs,\n\t\t\t        dim_referral[referral_id]\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 23283daf-e03b-4c88-8fbe-5c9d54c93057"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referral Engagement Rate",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [Active Referrals With Provider Engagement],\n\t\t\t    [Referrals Currently Active],\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: cc628e4a-edf8-407f-b5dd-470706356c93"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Awaiting Offers (Engaged)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR ActiveReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        REMOVEFILTERS(dim_date),\n\t\t\t        dim_referral[referral_status] = \"OPEN\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR EngagedReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[referral_id]),\n\t\t\t        fact_referral_offer[is_cancelled] = FALSE(),\n\t\t\t        fact_referral_offer[is_closed] = FALSE(),\n\t\t\t        fact_referral_offer[is_excluded] = FALSE()\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(dim_referral[referral_id]),\n\t\t\t    TREATAS(\n\t\t\t        INTERSECT(ActiveReferralIDs, EngagedReferralIDs),\n\t\t\t        dim_referral[referral_id]\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 0584de65-d334-43eb-96ee-2bd6ef0da472"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Awaiting Offers (No Engagement)",
+  "expr": "```\n\t\t\t\n\t\t\t[Active Referrals Awaiting Offers] \n\t\t\t- [Active Awaiting Offers (Engaged)]\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 64509714-cb8c-419c-97d7-2d49be8bd9c8"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made (Active Referrals Under Offer)",
+  "expr": "VAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] <> \"Draft\",\n\t\t\t    TREATAS(OfferIDs, fact_offer[offer_id])\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 6fb317fd-0ade-47c0-8dd0-0312d2a6012d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offer IDs (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATETABLE(\n\t\t\t    VALUES(fact_referral_offer[offer_id]),\n\t\t\t    TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 241fb00a-70fe-44fc-a1f9-42d787ab5d6b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers per Provider (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR OfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] <> \"Draft\",\n\t\t\t    TREATAS(OfferIDs, fact_offer[offer_id])\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 5791ed90-5c15-4d99-b037-a85fc959dbbe"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Spot Offers (Under Offer Referrals)",
+  "expr": "```\n\t\t\t\n\t\t\tVAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR SpotOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        fact_referral_offer[is_spot] = TRUE(),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] <> \"Draft\",\n\t\t\t        TREATAS(SpotOfferIDs, fact_offer[offer_id])\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Spot vs Framework\n\t\tlineageTag: 208782f4-b742-4576-afc3-65f5119cd817"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Framework Offers (Under Offer Referrals)",
+  "expr": "VAR UnderOfferReferralIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(dim_referral[referral_id]),\n\t\t\t        dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR FrameworkOfferIDs =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_referral_offer[offer_id]),\n\t\t\t        fact_referral_offer[is_spot] = FALSE(),\n\t\t\t        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOALESCE(\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] <> \"Draft\",\n\t\t\t        TREATAS(FrameworkOfferIDs, fact_offer[offer_id])\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 8758d6ad-10cd-4c0f-a71e-4c0da4a82d29"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPA Exists",
+  "expr": "VAR CurrentOffer =\n\t\t\t    SELECTEDVALUE(fact_offer[offer_id])\n\t\t\t\n\t\t\tRETURN\n\t\t\tIF(\n\t\t\t    CALCULATE(\n\t\t\t        COUNTROWS(fact_ipa),\n\t\t\t        fact_ipa[offer_id] = CurrentOffer\n\t\t\t    ) > 0,\n\t\t\t    \"Yes\",\n\t\t\t    \"No\"\n\t\t\t)\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: c6f0d16d-500d-4960-8ed3-c8588d56355d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Accepted Offers (Scoped Table)",
+  "expr": "CALCULATETABLE(\n\t\t\t    VALUES(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    dim_offer_status[offer_status_label] = \"Accepted\",\n\t\t\t    TREATAS(\n\t\t\t        CALCULATETABLE(\n\t\t\t            VALUES(fact_referral_offer[offer_id]),\n\t\t\t            dim_referral[referral_status] = \"UNDER_OFFER\"\n\t\t\t        ),\n\t\t\t        fact_offer[offer_id]\n\t\t\t    )\n\t\t\t)\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 045fc5f2-7b2b-4f9f-811c-ad4b948939c2"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Is In Accepted KPI",
+  "expr": "```\n\t\t\t\n\t\t\tVAR CurrentOffer =\n\t\t\t    SELECTEDVALUE(fact_offer[offer_id])\n\t\t\t\n\t\t\tRETURN\n\t\t\tIF(\n\t\t\t    CALCULATE(\n\t\t\t        COUNTROWS(fact_offer),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        dim_offer_status[offer_status_label] = \"Accepted\",\n\t\t\t        fact_offer[offer_id] = CurrentOffer\n\t\t\t    ) > 0,\n\t\t\t    \"Yes\",\n\t\t\t    \"No\"\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 6842c1b2-aaae-4202-971f-62a35840465c"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Accepted Offers Base",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATETABLE(\n\t\t\t    VALUES(fact_offer[offer_id]),\n\t\t\t    fact_offer[Is_Latest_Record] = 1,\n\t\t\t    fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 56fce66f-aed5-4f75-8ebe-2099158f5312"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPA Created",
+  "expr": "VAR BaseOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_ipa[offer_id]),\n\t\t\t    TREATAS(BaseOffers, fact_ipa[offer_id])\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: b0bd7e49-2026-4d49-bbe0-45560de0937d"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPA Completed",
+  "expr": "VAR BaseOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_ipa[offer_id]),\n\t\t\t    fact_ipa[signed_by_provider] = TRUE(),\n\t\t\t    fact_ipa[signed_by_local_authority] = TRUE(),\n\t\t\t    TREATAS(BaseOffers, fact_ipa[offer_id])\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 99782e69-a2fc-4d06-b1d2-4cd73bfced49"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPAs Pending Completion",
+  "expr": "```\n\t\t\t\n\t\t\tVAR BaseOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCALCULATE(\n\t\t\t    DISTINCTCOUNT(fact_ipa[offer_id]),\n\t\t\t    TREATAS(BaseOffers, fact_ipa[offer_id]),\n\t\t\t    FILTER(\n\t\t\t        fact_ipa,\n\t\t\t        NOT (\n\t\t\t            COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE()\n\t\t\t            &&\n\t\t\t            COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()\n\t\t\t        )\n\t\t\t    )\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 0c473b07-46d6-47ef-80fc-4ed8d69c38d1"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers Awaiting IPA Creation",
+  "expr": "```\n\t\t\t\n\t\t\tVAR BaseOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR IPAOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_ipa[offer_id]),\n\t\t\t        TREATAS(BaseOffers, fact_ipa[offer_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tCOUNTROWS(\n\t\t\t    EXCEPT(BaseOffers, IPAOffers)\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 635fe8f7-f5ed-4383-a14b-bd2889938b07"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Is IPA Pending",
+  "expr": "VAR CurrentOffer =\n\t\t\t    SELECTEDVALUE(fact_ipa[offer_id])\n\t\t\t\n\t\t\tRETURN\n\t\t\tIF(\n\t\t\t    CALCULATE(\n\t\t\t        COUNTROWS(fact_ipa),\n\t\t\t        FILTER(\n\t\t\t            fact_ipa,\n\t\t\t            fact_ipa[offer_id] = CurrentOffer &&\n\t\t\t            NOT (\n\t\t\t                COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE() &&\n\t\t\t                COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()\n\t\t\t            )\n\t\t\t        )\n\t\t\t    ) > 0,\n\t\t\t    1,\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: c6dc9179-c710-49fd-8909-8cc69d8ceb38"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Is Awaiting IPA Creation",
+  "expr": "VAR CurrentOffer =\n\t\t\t    SELECTEDVALUE(fact_offer[offer_id])\n\t\t\t\n\t\t\tVAR BaseOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    )\n\t\t\t\n\t\t\tVAR IPAOffers =\n\t\t\t    CALCULATETABLE(\n\t\t\t        VALUES(fact_ipa[offer_id]),\n\t\t\t        TREATAS(BaseOffers, fact_ipa[offer_id])\n\t\t\t    )\n\t\t\t\n\t\t\tRETURN\n\t\t\tIF(\n\t\t\t    CurrentOffer IN EXCEPT(BaseOffers, IPAOffers),\n\t\t\t    1,\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 058b9fac-f4cd-492f-ac2d-39d20c70b376"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Is IPA Completed",
+  "expr": "VAR CurrentOffer =\n\t\t\t    SELECTEDVALUE(fact_offer[offer_id])\n\t\t\t\n\t\t\tRETURN\n\t\t\tIF(\n\t\t\t    CALCULATE(\n\t\t\t        COUNTROWS(fact_ipa),\n\t\t\t        FILTER(\n\t\t\t            fact_ipa,\n\t\t\t            fact_ipa[offer_id] = CurrentOffer &&\n\t\t\t            COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE() &&\n\t\t\t            COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()\n\t\t\t        )\n\t\t\t    ) > 0,\n\t\t\t    1,\n\t\t\t    0\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 5158372f-9e2a-4e4b-8dff-bb7776795aac"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Accepted Offer to IPA Conversion %",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [IPA Created],\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 6905e0dd-36c7-495e-9c4f-739bed3a64b6"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Offers Still to Progress to IPA",
+  "expr": "DIVIDE(\n\t\t\t    [Offers Awaiting IPA Creation],\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 202fc7f6-a1af-4a44-b046-a81f7dac2b9a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPA Created to Completion %",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [IPA Completed],\n\t\t\t    [IPA Created],\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: f5fda4ea-024a-4890-9c2c-48812dda6409"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Successful Offers to IPA Completed %",
+  "expr": "```\n\t\t\t\n\t\t\tDIVIDE(\n\t\t\t    [IPA Completed],\n\t\t\t    CALCULATE(\n\t\t\t        DISTINCTCOUNT(fact_offer[offer_id]),\n\t\t\t        fact_offer[Is_Latest_Record] = 1,\n\t\t\t        fact_offer[offer_status] = \"OFFER_SUCCESSFUL\"\n\t\t\t    ),\n\t\t\t    0\n\t\t\t)\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 4d78fd96-29ad-45a3-ab50-e4dddad3b585"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Overlap Referrals",
+  "expr": "[Active Referrals Awaiting Offers]\n\t\t\t+ [Active Referrals Under Offer]\n\t\t\t- [Referrals Currently Active]\n\t\tformatString: 0\n\t\tlineageTag: 54c2b74a-7a4a-4821-8086-5a7d8d0e618c"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referral",
+  "expr": "CALCULATE ( DISTINCTCOUNT(dim_referral[referral_id]), dim_referral[referral_status] IN {\"OPEN\", \"UNDER_OFFER\"})\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 34758a00-8077-40f6-87c6-5a6a839100ef"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referral Previous Month",
+  "expr": "CALCULATE ([Open Referral], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f1ba9238-f3d5-456e-ab4f-72fe9ec46554"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referral Previous Month",
+  "expr": "CALCULATE ([Closed Referrals (by Reason)], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f8135835-6571-49ca-b162-131940337c2e"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referrals MoM %",
+  "expr": "DIVIDE ([Open Referral]-[Open Referral Previous Month],[Open Referral Previous Month])\n\t\tformatString: 0.00%;-0.00%;0.00%\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 34c46f6a-ca43-4836-bddc-f2c5040e9cef"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referrals MoM %",
+  "expr": "DIVIDE ([Closed Referrals (by Reason)]-[Closed Referral Previous Month],[Closed Referral Previous Month])\n\t\tformatString: 0.00%;-0.00%;0.00%\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 28109811-acd8-400c-a70a-7a0a515a3788"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referral",
+  "expr": "CALCULATE ( DISTINCTCOUNT(dim_referral[referral_id]), dim_referral[contact_made]=\"1\")\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: bf61a9e6-d428-40ec-ba23-4ee03575fe04"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referral Previous Month",
+  "expr": "CALCULATE ([Provider Contact Referral], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: ee9fb9cf-aa6f-41d4-9203-b662a56dd155"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referrals MoM %",
+  "expr": "DIVIDE ([Provider Contact Referral]-[Provider Contact Referral Previous Month],[Provider Contact Referral Previous Month])\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 52beabfb-40f8-4d32-83dd-43034a14e801"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referral Change Indicator",
+  "expr": "IF([Closed Referrals Variance] > 0, \"▲\", IF([Closed Referrals Variance] < 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 45133170-e42c-4f2e-bb8a-0e4433ce82c1"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referrals Variance",
+  "expr": "[Closed Referrals (by Reason)]-[Closed Referral Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: e23ccfee-41cf-4d16-8e93-21ae46eb5510"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referrals Variance",
+  "expr": "[Open Referral]-[Open Referral Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 3cde0de2-1a18-42e4-ad66-c830269da211"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referral Variance",
+  "expr": "[Provider Contact Referral]-[Provider Contact Referral Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: e8dc98dc-4d58-49c4-9b49-4850b70b06b0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referral Change Indicator",
+  "expr": "IF([Open Referrals Variance] > 0, \"▲\", IF([Open Referrals Variance] < 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 53b2f1df-510f-4954-a6ea-655d140112e0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referral Indicator",
+  "expr": "IF([Provider Contact Referral Variance] > 0, \"▲\", IF([Provider Contact Referral Variance] < 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 1ce05620-de4e-41f5-b596-286abcf4fd8e"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referral Change Indicator Color",
+  "expr": "IF([Closed Referrals Variance] > 0, \"green\", IF([Closed Referrals Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 64707012-f8ca-4de9-ad2f-c2b168263ea7"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referral Change Indicator Color",
+  "expr": "IF([Open Referrals Variance] > 0, \"green\", IF([Open Referrals Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 3c1ae3de-6afe-4f81-a408-77ef10cbccec"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Provider Contact Referral Indicator Color",
+  "expr": "IF([Provider Contact Referral Variance] > 0, \"green\", IF([Provider Contact Referral Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 6ce24cf7-802e-4a40-b2d5-7ab196d56750"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Cancelled/Closed Previous Month",
+  "expr": "CALCULATE ([Referrals Cancelled/Closed], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f0b8467d-98e2-49cb-bab7-3d3780a9e754"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With Offers Previous Month",
+  "expr": "CALCULATE ([Referrals With Offers (Created in Period)], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f3004652-6778-4a84-97a8-57a39418b7a5"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made Previous Month",
+  "expr": "CALCULATE ([Total Offers Made (Active Referrals Under Offer)], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 93fcc86f-6b69-4f6f-a900-8049c128771b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Currently Active Previous Month",
+  "expr": "CALCULATE ([Referrals Currently Active], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: ff9eeff1-1452-4ad1-ac25-29a57b6a9911"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Cancelled/Closed Indicator",
+  "expr": "IF([Referrals Cancelled/Closed Variance] > 0, \"▲\", IF([Referrals Cancelled/Closed Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: dcbbced5-d980-4699-89e1-ee6039f91f0a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Cancelled/Closed Variance",
+  "expr": "[Referrals Cancelled/Closed]-[Referrals Cancelled/Closed Previous Month]\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: e6a63217-5624-431d-8181-4dab03e0f5ec"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Currently Active Variance",
+  "expr": "[Referrals Currently Active]-[Referrals Currently Active Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 7b28ba2e-d56a-49c7-86f3-2002aa570bae"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With Offers Variance",
+  "expr": "[Referrals With Offers (Created in Period)]-[Referrals With Offers Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 9a5caaff-b428-4ff0-a0c0-f746e53b7af0"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made Variance",
+  "expr": "[Total Offers Made (Active Referrals Under Offer)]-[Total Offers Made Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f27914e6-5c63-41b1-b7cf-b0a7e3b7f04a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Currently Active Indicator",
+  "expr": "IF([Referrals Currently Active Variance] > 0, \"▲\", IF([Referrals Currently Active Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: a4afea95-04f7-43d5-b19a-96f8373a2236"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals With Offers Indicator",
+  "expr": "IF([Referrals With Offers Variance] > 0, \"▲\", IF([Referrals With Offers Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 09de2700-c77f-49a1-b14e-0e118f1c7990"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made Variance Indicator",
+  "expr": "IF([Total Offers Made Variance] > 0, \"▲\", IF([Total Offers Made Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 609b60b6-54f8-4490-8a2a-9564d87a1013"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Offers Made Variance Color",
+  "expr": "IF([Total Offers Made Variance] > 0, \"green\", IF([Total Offers Made Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: f93b997f-bd79-4722-8d45-e2b759cfc86b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals That Received Offers Previous Month",
+  "expr": "CALCULATE ([Total Referrals That Received Offers], DATEADD(dim_date[Date],-1,MONTH))\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 524ce750-5fb4-495d-946c-25d1e2f0c0e6"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals That Received Offers Variance",
+  "expr": "[Total Referrals That Received Offers]-[Total Referrals That Received Offers Previous Month]\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: de5b9c95-d1f3-4108-9073-19aa452c1491"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals That Received Offers Variance Indicator Color",
+  "expr": "IF([Total Referrals That Received Offers Variance] > 0, \"green\", IF([Total Referrals That Received Offers Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: c421d5e2-efdb-4896-9ace-12e8e46e70a7"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals Previous Month",
+  "expr": "CALCULATE ([Total Referrals], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 4dcddd76-36fe-47f2-b0bd-2c2869d8cb14"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals Variance",
+  "expr": "[Total Referrals]-[Total Referrals Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: ff26a704-4a33-4be4-98cb-97819c085bf3"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals Variance Indicator Color",
+  "expr": "IF([Total Referrals Variance] > 0, \"green\", IF([Total Referrals Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: fc62af05-61ec-45be-8f74-82660c5879f3"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Total Referrals Variance Indicator",
+  "expr": "IF([Total Referrals Variance] > 0, \"▲\", IF([Total Referrals Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Volume KPIs\n\t\tlineageTag: 3fb6bac8-f204-4589-9881-df4e0bc38759"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Awaiting Offers Previous Month",
+  "expr": "CALCULATE ([Active Referrals Awaiting Offers], DATEADD(dim_date[Date],-1,MONTH))\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: b453738f-f44a-4805-9b4a-5f397312defb"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Under Offer Previous Month",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE ([Active Referrals Under Offer], DATEADD(dim_date[Date],-1,MONTH))\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: ce4a3b50-5202-4895-921d-c831783b6c16"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Awaiting Offers Variance",
+  "expr": "[Active Referrals Awaiting Offers]-[Active Referrals Awaiting Offers Previous Month]\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 6075eeaf-e95e-476b-8410-b27293429c77"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Awaiting Offers Variance Indicator Color",
+  "expr": "IF([Active Referrals Awaiting Offers Variance] > 0, \"green\", IF([Active Referrals Awaiting Offers Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: fef87e6f-0177-4f6d-b6cb-96aecea23e70"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Awaiting Offers Variance Indicator",
+  "expr": "IF([Active Referrals Awaiting Offers Variance] > 0, \"▲\", IF([Active Referrals Awaiting Offers Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 5a18888f-db05-4aeb-8e8c-cf47ed682bb8"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Under Offer Variance",
+  "expr": "```\n\t\t\t[Active Referrals Under Offer]-[Active Referrals Under Offer Previous Month]\n\t\t\t\n\t\t\t```\n\t\tformatString: 0\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: b09909ee-437a-4f1e-8858-a56abd9f453a"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Under Offer Variance Indicator Color",
+  "expr": "IF([Active Referrals Under Offer Variance] > 0, \"green\", IF([Active Referrals Under Offer Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 48886e68-a8cb-404c-abee-93515e56a500"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referrals Under Offer Indicator",
+  "expr": "IF([Active Referrals Under Offer Variance] > 0, \"▲\", IF([Active Referrals Under Offer Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Referral Offers\n\t\tlineageTag: 45b36bf9-72d4-4d77-ae6e-7830c26cf4f2"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referral Engagement Rate Previous Month",
+  "expr": "```\n\t\t\t\n\t\t\tCALCULATE ([Active Referral Engagement Rate], DATEADD(dim_date[Date],-1,MONTH))\n\t\t\t\n\t\t\t```\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 525eea5c-1e4c-4fdd-8026-2c66b6b2bea3"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referral Engagement Rate Variance",
+  "expr": "[Active Referral Engagement Rate]-[Active Referral Engagement Rate Previous Month]\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 521ba058-5696-4e57-b096-fcb5c7931d1c"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referral Engagement Rate Variance Indicator Color",
+  "expr": "IF([Active Referral Engagement Rate Variance] > 0, \"green\", IF([Active Referral Engagement Rate Variance] < 0, \"red\", \"grey\"))\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 4bee2eae-53ba-45d7-b82c-489eef5bd883"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Active Referral Engagement Rate Indicator",
+  "expr": "IF([Active Referral Engagement Rate Variance] > 0, \"▲\", IF([Active Referral Engagement Rate Variance]< 0, \"▼\", \"–\"))\n\t\tdisplayFolder: Provider Activity KPIs\n\t\tlineageTag: 1bc47abb-bcd2-4b6e-97ad-371d2b9105da"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "KPI Tooltip Style 1",
+  "expr": "```\n\t\t\t\n\t\t\t VAR SelectKPI = SELECTEDVALUE('KPI Selector'[KPI Selector Fields])\n\t\t\t --or 'KPI Selector'[KPI Selector])\n\t\t\t RETURN LOOKUPVALUE('ref_KPI'[ref FR IDs], 'ref_KPI'[KPI Description],SelectKPI)\n\t\t\t```\n\t\tdisplayFolder: Visual Select\n\t\tlineageTag: 9a604a99-85ef-4742-9288-11d969916477"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Snapshot Referrals",
+  "expr": "DISTINCTCOUNT ( 'Fact Referral Snapshot'[ReferralID] )\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: a9215a39-55c3-4eda-8b58-f2fd6016d133"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referrals at Snapshot",
+  "expr": "CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[IsOpen] = TRUE () )\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: d9fa258e-310f-4562-9c43-b9dbaf53f581"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Closed Referrals at Snapshot",
+  "expr": "CALCULATE (\n\t\t\t    [Snapshot Referrals],\n\t\t\t    FILTER (\n\t\t\t        'Fact Referral Snapshot',\n\t\t\t        NOT ISBLANK ( 'Fact Referral Snapshot'[ReferralClosedDate] )\n\t\t\t            && 'Fact Referral Snapshot'[ReferralClosedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 009d0dc7-9003-4eb5-98c9-0ba0de3c1243"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals with Placement at Snapshot",
+  "expr": "CALCULATE (\n\t\t\t    [Snapshot Referrals],\n\t\t\t    FILTER (\n\t\t\t        'Fact Referral Snapshot',\n\t\t\t        NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )\n\t\t\t            && 'Fact Referral Snapshot'[IPAIssuedDate] < 'Fact Referral Snapshot'[SnapshotDate] + 1\n\t\t\t    )\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: de4dfeb5-06e7-427e-9734-7f082582c653"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open On-Track Referrals at Snapshot",
+  "expr": "CALCULATE (\n\t\t\t    [Snapshot Referrals],\n\t\t\t    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = \"Open on track\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 66f2d6bf-541e-4912-a233-d97294e6b27b"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Referrals Placed by Target at Snapshot",
+  "expr": "CALCULATE ( [Snapshot Referrals], 'Fact Referral Snapshot'[PlacedByRequiredDate] = TRUE () )\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 7bf09b67-cd96-4faa-8b8e-47ad953eb11f"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Overdue Referrals at Snapshot",
+  "expr": "CALCULATE (\n\t\t\t    [Snapshot Referrals],\n\t\t\t    'Fact Referral Snapshot'[RequiredPlacementDateOutcome] = \"Open overdue\"\n\t\t\t)\n\t\tformatString: 0\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 19992548-9c7e-42eb-b01f-490492c02894"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Open Referral Rate at Snapshot",
+  "expr": "DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: ed61563b-96b3-4e4e-b054-a7d09a0a577e"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Placement Rate at Snapshot",
+  "expr": "DIVIDE ( [Referrals with Placement at Snapshot], [Snapshot Referrals] )\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 621fdc1a-38db-4a93-9f20-fa648de207ac"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Target Hit Rate at Snapshot",
+  "expr": "DIVIDE (\n\t\t\t    [Referrals Placed by Target at Snapshot],\n\t\t\t    CALCULATE (\n\t\t\t        [Snapshot Referrals],\n\t\t\t        FILTER (\n\t\t\t            'Fact Referral Snapshot',\n\t\t\t            NOT ISBLANK ( 'Fact Referral Snapshot'[IPAIssuedDate] )\n\t\t\t                && NOT ISBLANK ( 'Fact Referral Snapshot'[RequiredPlacementDate] )\n\t\t\t        )\n\t\t\t    )\n\t\t\t)\n\t\tdisplayFolder: Snapshot\n\t\tlineageTag: 007b28db-eb81-4f25-8343-a91f85efc880"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Estimated Active Weekly Cost",
+  "expr": "CALCULATE (\n\t\t\t    SUM ( 'Fact Placement'[EstimatedWeeklyCost] ),\n\t\t\t    'Fact Placement'[IsPlacementClosed] = FALSE ()\n\t\t\t)\n\t\tformatString: \"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 71a8f3b8-ac0f-47b9-affd-ec370d75c77c"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "IPAs Created",
+  "expr": "DISTINCTCOUNT ( 'Fact Placement'[PlacementID] )\n\t\tformatString: 0\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: 5af87e93-d889-4b27-b22e-ba3988a0d728"
+ },
+ {
+  "table": "_Measures.tmdl",
+  "name": "Average Active Weekly Cost",
+  "expr": "CALCULATE (\n\t\t\t    AVERAGE( 'Fact Placement'[EstimatedWeeklyCost] ),\n\t\t\t    'Fact Placement'[IsPlacementClosed] = FALSE ()\n\t\t\t)\n\t\tformatString: \"£\"#,0.00;-\"£\"#,0.00;\"£\"#,0.00\n\t\tdisplayFolder: IPA Measures\n\t\tlineageTag: a65e9984-8827-4300-a074-a4d7dbb0c509"
+ }
+]

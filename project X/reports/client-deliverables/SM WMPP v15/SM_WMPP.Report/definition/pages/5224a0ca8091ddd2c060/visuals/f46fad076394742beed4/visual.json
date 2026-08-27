@@ -1,0 +1,101 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "f46fad076394742beed4",
+  "position": {
+    "x": 338.46498599439775,
+    "y": 96.806722689075627,
+    "z": 7,
+    "height": 149.87114845938376,
+    "width": 350.65546218487395
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Average Active Weekly Cost"
+                }
+              },
+              "queryRef": "_Measures.Average Active Weekly Cost",
+              "nativeQueryRef": "Average Active Weekly Cost"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Estimated Active Weekly Cost"
+                }
+              },
+              "queryRef": "_Measures.Estimated Active Weekly Cost",
+              "nativeQueryRef": "Estimated Active Weekly Cost"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "_Measures"
+                  }
+                },
+                "Property": "Average Active Weekly Cost"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "0dd42f524c999854773d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Average Active Weekly Cost"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "65857881a77e160594aa",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Estimated Active Weekly Cost"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

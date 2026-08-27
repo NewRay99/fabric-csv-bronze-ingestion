@@ -1,0 +1,93 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "c40149fd5a5b24b26224",
+  "position": {
+    "x": 773.63636363636363,
+    "y": 570,
+    "z": 6,
+    "height": 150,
+    "width": 463.63636363636363
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Fact Placement"
+                    }
+                  },
+                  "Property": "IsPlacementClosed"
+                }
+              },
+              "queryRef": "Fact Placement.IsPlacementClosed",
+              "nativeQueryRef": "IsPlacementClosed"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Fact Placement"
+                        }
+                      },
+                      "Property": "EstimatedWeeklyCost"
+                    }
+                  },
+                  "Function": 0
+                }
+              },
+              "queryRef": "Sum(Fact Placement.EstimatedWeeklyCost)",
+              "nativeQueryRef": "Sum of EstimatedWeeklyCost"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "53c5b46b0d682b93bf74",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Fact Placement"
+              }
+            },
+            "Property": "IsPlacementClosed"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "df2076244fbffc833d89",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Fact Placement"
+                  }
+                },
+                "Property": "EstimatedWeeklyCost"
+              }
+            },
+            "Function": 0
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "2eecb848e775e02d067b",
+  "position": {
+    "x": 186.78762403345218,
+    "y": 1618.1518366826024,
+    "z": 15000,
+    "height": 173.33333333333334,
+    "width": 1253.3333333333335,
+    "tabOrder": 0
+  },
+  "visualGroup": {
+    "displayName": "Referrals by Gender",
+    "groupMode": "ScaleMode"
+  }
+}

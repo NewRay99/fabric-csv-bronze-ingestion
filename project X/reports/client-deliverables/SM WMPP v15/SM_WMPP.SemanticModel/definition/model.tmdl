@@ -1,0 +1,106 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["stg_framework","stg_holding_company","stg_offer","stg_provider","stg_referral","stg_referral_category","stg_referral_person","stg_referral_person_support_needs","stg_referral_provider","stg_referral_provider_cancel_reason","stg_referral_provider_decline_reason","dim_provider","dim_provider_home","dim_provider_framework","dim_referral","dim_referral_gender","dim_referral_provider_message","dim_person","dim_framework","dim_category","dim_offer_status","fact_offer","fact_ipa","fact_provider_message","fact_referral_category","fact_referral_offer","fact_referral_person","rpt_provider_registry","rpt_provider_fostering","tmp_referral_person_gender","_Measures","bronze additional_fee","bronze foster_carer","bronze foster_home","bronze foster_transport","bronze framework_category","bronze holding_company","bronze ipa","bronze ipa_child","bronze ipa_child_support_needs","bronze mlv_additional_fee","bronze offer","bronze offer_updates","bronze offer_view_history","bronze provider","bronze provider_education_provision","bronze provider_framework","bronze provider_home","bronze provider_home_age","bronze provider_home_category","bronze provider_home_gender","bronze provider_home_spot_category","bronze provider_sic_codes","bronze provider_submission_docs","bronze referral","bronze referral_category","bronze referral_person","bronze referral_person_support_needs","bronze referral_provider","bronze referral_provider_cancel_reason","bronze referral_provider_decline_reason","bronze referral_provider_message","bronze referral_spot_category","bronze supervising_social_worker","bronze framework","prep_stg_first_offer","prep_stg_referral_first_contact","ref_RID","ref_KPI","ref_KPI_RID_Linkage","Fact Referral Snapshot","Fact Placement"]
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+ref table dim_provider
+ref table DateTableTemplate_09c0d9c7-2fb3-4606-9eeb-15ebd29cb616
+ref table dim_referral
+ref table dim_provider_home
+ref table dim_person
+ref table dim_framework
+ref table dim_category
+ref table LocalDateTable_1d1f28af-4ee0-445d-932d-406e35e3ffc7
+ref table dim_offer_status
+ref table fact_offer
+ref table fact_provider_message
+ref table fact_referral_category
+ref table fact_referral_person
+ref table fact_referral_offer
+ref table dim_date
+ref table _Measures
+ref table dim_referral_gender
+ref table tmp_referral_person_gender
+ref table fact_ipa
+ref table LocalDateTable_bbbcde47-d5df-4426-b044-338ecb6b7c37
+ref table rpt_provider_registry
+ref table dim_provider_framework
+ref table rpt_provider_fostering
+ref table 'Directory Summary Axis'
+ref table 'Fostering Axis'
+ref table dim_referral_provider_message
+ref table 'Referral Closure Reason Summary'
+ref table LocalDateTable_8891e268-a5d2-4afb-b123-d5e7559b73b0
+ref table LocalDateTable_45fe65dd-0b5c-4a92-892b-18a0d47ecc18
+ref table 'Draft Age Band Table'
+ref table 'bronze additional_fee'
+ref table 'bronze foster_carer'
+ref table 'bronze foster_home'
+ref table 'bronze foster_transport'
+ref table 'bronze framework_category'
+ref table 'bronze holding_company'
+ref table 'bronze ipa'
+ref table 'bronze ipa_child'
+ref table 'bronze ipa_child_support_needs'
+ref table 'bronze mlv_additional_fee'
+ref table 'bronze offer'
+ref table 'bronze offer_updates'
+ref table 'bronze offer_view_history'
+ref table 'bronze provider'
+ref table 'bronze provider_education_provision'
+ref table 'bronze provider_framework'
+ref table 'bronze provider_home'
+ref table 'bronze provider_home_age'
+ref table 'bronze provider_home_category'
+ref table 'bronze provider_home_gender'
+ref table 'bronze provider_home_spot_category'
+ref table 'bronze provider_sic_codes'
+ref table 'bronze provider_submission_docs'
+ref table 'bronze referral'
+ref table 'bronze referral_category'
+ref table 'bronze referral_person'
+ref table 'bronze referral_person_support_needs'
+ref table 'bronze referral_provider'
+ref table 'bronze referral_provider_cancel_reason'
+ref table 'bronze referral_provider_decline_reason'
+ref table 'bronze referral_provider_message'
+ref table 'bronze referral_spot_category'
+ref table 'bronze supervising_social_worker'
+ref table 'bronze framework'
+ref table LocalDateTable_e3164895-a841-4676-948d-55410512d8da
+ref table LocalDateTable_2fe8f1b1-f210-4ea6-946c-55b782e7b667
+ref table prep_stg_first_offer
+ref table prep_stg_referral_first_contact
+ref table ref_RID
+ref table ref_KPI
+ref table 'KPI Selector'
+ref table ref_KPI_RID_Linkage
+ref table 'Fact Referral Snapshot'
+ref table LocalDateTable_d230fda8-5078-4faa-88cf-957643b8dfa5
+ref table LocalDateTable_11d98265-51ec-400e-83ab-7e3bfceca30c
+ref table LocalDateTable_4983fe04-f371-4af4-a7af-ace6bafb6009
+ref table LocalDateTable_49abf3cd-9ac2-481f-be35-d7fbd3e85f13
+ref table LocalDateTable_e87d3d46-bfc3-4334-9ca4-edab85fc6a6c
+ref table LocalDateTable_c206d0fd-3c2f-49e0-a827-4ef9e65d70fe
+ref table LocalDateTable_7611c118-ac4b-4ade-bfdf-eebc998b40ee
+ref table LocalDateTable_897633f4-52ac-4862-97a3-fa65de9f6971
+ref table LocalDateTable_3f7a6a46-5a86-4936-9dda-6336395c6dc7
+ref table LocalDateTable_0e53e8c8-ca95-4397-b844-bd119198f4a9
+ref table LocalDateTable_617d99c0-18ec-4835-8ac6-48f2871af54d
+ref table LocalDateTable_644aff18-b874-46f9-9512-534e66895457
+ref table LocalDateTable_f59bb241-a0d4-4ba7-9cd0-8281fce2a55d
+ref table LocalDateTable_e911cf20-0e88-4e6f-b6a6-089ad35f9c81
+ref table LocalDateTable_6eef3c7d-4d0a-44cf-821a-eadd091bcc00
+ref table LocalDateTable_8f6f969a-1110-489e-8cb1-04d34e1c4c9a
+ref table 'Fact Placement'
+
+ref cultureInfo en-GB

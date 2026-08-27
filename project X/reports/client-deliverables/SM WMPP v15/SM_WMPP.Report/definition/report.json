@@ -1,0 +1,114 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.2.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY26SU02",
+      "reportVersionAtImport": {
+        "visual": "2.6.0",
+        "report": "3.1.0",
+        "page": "2.3.0"
+      },
+      "type": "SharedResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "true"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "multiInfoCards9D184BB3D4E44A139DA08142D76EFD36",
+    "textFilter25A4896A83E0487089E2B90C9AE57C8A",
+    "searchBoxB49812217AE0495E948E1B8137A58E1A"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU02",
+          "path": "BaseThemes/CY26SU02.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "90f93c1b-57e9-4895-9a06-7b8c9709307266775384015.png",
+          "path": "90f93c1b-57e9-4895-9a06-7b8c9709307266775384015.png",
+          "type": "Image"
+        },
+        {
+          "name": "Capture468857675568373.PNG",
+          "path": "Capture468857675568373.PNG",
+          "type": "Image"
+        },
+        {
+          "name": "Frame_(1)3167680927762928.svg",
+          "path": "Frame_(1)3167680927762928.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Frame_(2)5409959502238385.svg",
+          "path": "Frame_(2)5409959502238385.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Frame9665396789955937.svg",
+          "path": "Frame9665396789955937.svg",
+          "type": "Image"
+        },
+        {
+          "name": "house-solid-full-white8589308864652382.svg",
+          "path": "house-solid-full-white8589308864652382.svg",
+          "type": "Image"
+        },
+        {
+          "name": "settings-sliders42796988903030264.png",
+          "path": "settings-sliders42796988903030264.png",
+          "type": "Image"
+        },
+        {
+          "name": "settings-sliders7521229378928176.png",
+          "path": "settings-sliders7521229378928176.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

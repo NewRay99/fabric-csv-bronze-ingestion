@@ -1,0 +1,89 @@
+table ref_KPI
+	lineageTag: d158abf6-9ff2-4091-85a5-24369af90e2e
+
+	column 'KPI ID'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 00969452-97ad-43d3-80db-18a11eee2109
+		summarizeBy: none
+		sourceColumn: KPI ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ref FR IDs'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e6460418-9d0d-4da7-8959-9fe90a4d9746
+		summarizeBy: none
+		sourceColumn: ref FR IDs
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'KPI Description'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 59772074-32d1-45ed-80fb-6e7490f6a94f
+		summarizeBy: none
+		sourceColumn: KPI Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ref FR IDs Description'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 8982ba00-2dac-4f59-a4a8-b16493331768
+		summarizeBy: none
+		sourceColumn: ref FR IDs Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tables
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: dd03b2cf-3732-48cc-a561-59ad7504d542
+		summarizeBy: none
+		sourceColumn: Tables
+
+		annotation SummarizationSetBy = Automatic
+
+	column Calculation
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7651142d-1421-4024-bc05-974c04d7bcf8
+		summarizeBy: none
+		sourceColumn: Calculation
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PBI Measure'
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b59ef448-8825-4a25-a31e-6a294b9e7152
+		summarizeBy: none
+		sourceColumn: PBI Measure
+
+		annotation SummarizationSetBy = Automatic
+
+	column Section
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2a6fccb7-4f65-43d4-b9fa-470f00487408
+		summarizeBy: none
+		sourceColumn: Section
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ref_KPI = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    bronze_offer = Source{[Schema="bronze",Item="ref_KPI_Definition"]}[Data],
+				    #"Sorted Rows" = Table.Sort(bronze_offer,{{"KPI ID", Order.Ascending}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Sorted Rows", each ([KPI ID] <> null))
+				in
+				    #"Filtered Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

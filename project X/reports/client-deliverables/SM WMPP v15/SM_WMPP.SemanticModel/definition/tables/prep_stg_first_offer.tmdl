@@ -1,0 +1,49 @@
+table prep_stg_first_offer
+	lineageTag: 2a23246c-7d8c-4e58-87a1-f8fedb2dceae
+
+	column offer_id
+		dataType: string
+		lineageTag: 6e20fbc2-ace1-48cf-a60d-243e76f98392
+		summarizeBy: none
+		sourceColumn: offer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: ffe10584-ad8a-4cc9-981a-f4cd8de395bd
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column offer_date
+		dataType: string
+		lineageTag: 78c9e68a-38c0-438c-bb71-f46e6308fbae
+		summarizeBy: none
+		sourceColumn: offer_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_modified_date
+		dataType: string
+		lineageTag: 0b071a85-e404-49ed-bc51-859c914130ec
+		summarizeBy: none
+		sourceColumn: last_modified_date
+
+		annotation SummarizationSetBy = Automatic
+
+	partition prep_stg_first_offer = m
+		mode: import
+		source =
+				let
+				    Source = #"bronze offer",
+				    #"Sorted Rows" = Table.Sort(Source,{{"offer_date", Order.Ascending}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Sorted Rows",{"offer_id", "referral_provider_id", "offer_date", "last_modified_date"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"referral_provider_id"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

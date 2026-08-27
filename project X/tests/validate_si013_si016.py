@@ -61,12 +61,9 @@ def main():
         assert token in archive, f"Archive replay lacks SI-014 control: {token}"
     assert 'datetime.strptime(PROCESS_ONLY, "%Y-%m")' in archive
     assert 'expected_confirmation = f"RESET {PROCESS_ONLY}"' in archive
-    assert (
-        "if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY:" in archive
-    ), (
-        "Archive replay must reject reset or clear controls without PROCESS_ONLY "
-        "instead of silently leaving a successful month marked as complete"
-    )
+    assert "RESET_ALL_ARCHIVE_PROCESSING" in archive
+    assert 'CONFIRM_PROCESS_ONLY_RESET == "RESET ALL"' in archive
+    assert "RESET ALL requires PROCESS_ONLY to be blank" in archive
     assert "elif CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY:" in archive, (
         "Clearing Silver targets must flag the archive-month monitoring state "
         "for reload so the replay is not skipped as already successful"
@@ -78,6 +75,16 @@ def main():
     assert "FLAGGED monitoring state for reload" in archive
     assert "DROP TABLE IF EXISTS {target_table}" in archive
     print("PASS archive replay exposes guarded single-month tracing controls")
+
+    for token in [
+        "def reset_all_archive_processing", "RESET ALL complete",
+        "monitoring.cfg_month_end_gold_run", "monitoring.cfg_silver_export_load",
+        "monitoring.cfg_table_load_metric", "monitoring.cfg_pipeline_run",
+        "monitoring.cfg_schema_drift_event", "GOLD_SCHEMA",
+        "preserved configuration catalogues",
+    ]:
+        assert token in archive, f"Archive replay lacks RESET ALL safeguard: {token}"
+    print("PASS archive replay exposes a guarded all-month rebuild reset")
 
     archive_runner = source(ARCHIVE_RUNNER)
     assert "ARCHIVE_PROCESS_ONLY" not in archive_runner, (

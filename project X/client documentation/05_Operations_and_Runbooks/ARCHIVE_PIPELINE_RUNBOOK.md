@@ -39,6 +39,26 @@ unless the confirmation text is exactly `RESET YYYY-MM`. The replay uses the
 last available export in that calendar month and records the result in
 `monitoring.cfg_month_end_gold_run`.
 
+## Guarded full archive rebuild
+
+To rebuild every canonical archive month from the retained `archived.*` data,
+set the following parameters in `02a_archive_silver` or pass them through
+`90_run_archive_pipeline`:
+
+```python
+PROCESS_ONLY = ""
+RESET_MONTH_MONITORING = True
+CONFIRM_PROCESS_ONLY_RESET = "RESET ALL"
+```
+
+This drops the rebuildable `silver.*` and reporting `gold.*` objects, clears
+archive replay state from `cfg_month_end_gold_run`, `cfg_silver_export_load`,
+`cfg_table_load_metric`, `cfg_pipeline_run` and `cfg_schema_drift_event`, then
+replays every canonical archive month. It preserves `bronze.*`, `archived.*`,
+the schema contract, DQ rules, file configuration, Gold lineage configuration
+and the Gold placement-urgency rule. It deliberately does **not** clear archive
+file/ZIP controls, avoiding duplicate archive ingestion.
+
 ## Completion checks
 
 - `archived` tables use original source names and have populated row-level
@@ -47,7 +67,7 @@ last available export in that calendar month and records the result in
 - `monitoring.cfg_month_end_gold_run` has a successful row for each replayed
   month.
 - `gold.fact_referral_snapshot` contains the replayed snapshot dates.
-- `gold.fact_referral`, `gold.fact_offer`, `gold.fact_placement` and
+- `gold.fact_referral`, `gold.fact_offer`, `gold.fct_ipa` and
   `gold.fact_referral_provider` are recreated successfully for the canonical
   archive date; their snapshot-safe historical representation is
   `gold.fact_referral_snapshot`.

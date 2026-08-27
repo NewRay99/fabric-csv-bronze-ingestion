@@ -1,0 +1,55 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "fddb3c231a3e7092e53b",
+  "position": {
+    "x": 1076.7412935323382,
+    "y": 0,
+    "z": 6000,
+    "height": 172.38805970149252,
+    "width": 281.84079601990049,
+    "tabOrder": 28000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "referral_id"
+                }
+              },
+              "queryRef": "fact_referral_offer.referral_id",
+              "nativeQueryRef": "referral_id"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "fact_referral_offer"
+                  }
+                },
+                "Property": "referral_id"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

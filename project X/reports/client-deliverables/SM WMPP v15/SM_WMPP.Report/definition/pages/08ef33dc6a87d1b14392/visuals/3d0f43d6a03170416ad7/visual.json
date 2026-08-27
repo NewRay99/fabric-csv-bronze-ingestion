@@ -1,0 +1,252 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
+  "name": "3d0f43d6a03170416ad7",
+  "position": {
+    "x": 0,
+    "y": 815.99496221662469,
+    "z": 0,
+    "height": 242.44332493702771,
+    "width": 1486.5239294710327,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "Year"
+                }
+              },
+              "queryRef": "dim_date.Year",
+              "nativeQueryRef": "Year"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_date"
+                    }
+                  },
+                  "Property": "Month Name"
+                }
+              },
+              "queryRef": "dim_date.Month Name",
+              "nativeQueryRef": "Month Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "created_date"
+                }
+              },
+              "queryRef": "fact_referral_offer.created_date",
+              "nativeQueryRef": "created_date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_referral"
+                    }
+                  },
+                  "Property": "first_offer_date"
+                }
+              },
+              "queryRef": "dim_referral.first_offer_date",
+              "nativeQueryRef": "first_offer_date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "referral_id"
+                }
+              },
+              "queryRef": "fact_referral_offer.referral_id",
+              "nativeQueryRef": "referral_id"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Open Referral"
+                }
+              },
+              "queryRef": "_Measures.Open Referral",
+              "nativeQueryRef": "Open Referral"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Closed Referrals (by Reason)"
+                }
+              },
+              "queryRef": "_Measures.Closed Referrals (by Reason)",
+              "nativeQueryRef": "Closed Referrals (by Reason)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "dim_referral"
+                    }
+                  },
+                  "Property": "referral_status"
+                }
+              },
+              "queryRef": "dim_referral.referral_status",
+              "nativeQueryRef": "referral_status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_offer"
+                    }
+                  },
+                  "Property": "offer_status"
+                }
+              },
+              "queryRef": "fact_offer.offer_status",
+              "nativeQueryRef": "offer_status"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "has_offer"
+                }
+              },
+              "queryRef": "fact_referral_offer.has_offer",
+              "nativeQueryRef": "has_offer"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "is_cancelled"
+                }
+              },
+              "queryRef": "CountNonNull(fact_referral_offer.is_cancelled)",
+              "nativeQueryRef": "is_cancelled"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "is_closed"
+                }
+              },
+              "queryRef": "CountNonNull(fact_referral_offer.is_closed)",
+              "nativeQueryRef": "is_closed"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "is_declined"
+                }
+              },
+              "queryRef": "CountNonNull(fact_referral_offer.is_declined)",
+              "nativeQueryRef": "is_declined"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "is_excluded"
+                }
+              },
+              "queryRef": "fact_referral_offer.is_excluded",
+              "nativeQueryRef": "is_excluded"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fact_referral_offer"
+                    }
+                  },
+                  "Property": "is_spot"
+                }
+              },
+              "queryRef": "fact_referral_offer.is_spot",
+              "nativeQueryRef": "is_spot"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "201.25870853091686D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "fact_referral_offer.created_date"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

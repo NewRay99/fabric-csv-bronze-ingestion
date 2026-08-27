@@ -1,0 +1,196 @@
+table 'Fact Placement'
+	lineageTag: 8dd01dab-8fbd-4f25-808b-a4bfc69e3f28
+
+	column AsOfDate
+		dataType: dateTime
+		formatString: Long Date
+		sourceProviderType: date
+		lineageTag: fe7d331b-95e2-4ff3-b14c-fdb854b1a2f3
+		summarizeBy: none
+		sourceColumn: AsOfDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column PlacementID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 49cd265b-8c5a-4413-b717-cf373363d830
+		summarizeBy: none
+		sourceColumn: PlacementID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReferralID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ecdd5fba-dde5-4a71-ba8a-1c9764e61ec9
+		summarizeBy: none
+		sourceColumn: ReferralID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AcceptedOfferID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1c5cb7aa-9879-4144-b42a-213501912b51
+		summarizeBy: none
+		sourceColumn: AcceptedOfferID
+
+		annotation SummarizationSetBy = Automatic
+
+	column IPAIssuedDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 815bbf9b-02a5-4535-a839-7f5a70743d6f
+		summarizeBy: none
+		sourceColumn: IPAIssuedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedPlacementStartDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: f8219368-118d-4b44-bf7d-11aba064fb83
+		summarizeBy: none
+		sourceColumn: PlannedPlacementStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualPlacementStartDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 018e394e-0151-4aa9-b45a-c71b13a36c11
+		summarizeBy: none
+		sourceColumn: ActualPlacementStartDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlannedPlacementEndDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e088677c-5921-48d6-ad18-596d0efe4e1c
+		summarizeBy: none
+		sourceColumn: PlannedPlacementEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualPlacementEndDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 1fa8ad19-90d0-4a74-ad30-7a105941e8a4
+		summarizeBy: none
+		sourceColumn: ActualPlacementEndDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlacementAdmissionDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 40d8f0f4-822f-4ee5-98b4-4e988320f26c
+		summarizeBy: none
+		sourceColumn: PlacementAdmissionDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column EstimatedWeeklyCost
+		dataType: double
+		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
+		sourceProviderType: decimal(19, 2)
+		lineageTag: 398185b6-0030-4502-911f-13ee85e0ad07
+		summarizeBy: sum
+		sourceColumn: EstimatedWeeklyCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column ActualWeeklyCost
+		dataType: double
+		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
+		sourceProviderType: decimal(19, 2)
+		lineageTag: 6320127e-4f5e-4410-bae4-9cf50e5beddd
+		summarizeBy: sum
+		sourceColumn: ActualWeeklyCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column PlacementStatus
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 60540b50-bd00-4880-aca2-e7b4c2f95abb
+		summarizeBy: none
+		sourceColumn: PlacementStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsPlacementClosed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		sourceProviderType: bit
+		lineageTag: 0dd01bb5-6f5e-4e31-adfa-78446e04e5d1
+		summarizeBy: none
+		sourceColumn: IsPlacementClosed
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlacementEndedDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 2aa5e17f-c88f-4f77-a799-67a55a0808ff
+		summarizeBy: none
+		sourceColumn: PlacementEndedDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlacementEndReason
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e5ba5437-cb64-4cb9-aa82-759081dab877
+		summarizeBy: none
+		sourceColumn: PlacementEndReason
+
+		annotation SummarizationSetBy = Automatic
+
+	column SourceExportDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 60da347c-376d-407b-b94d-f6e2d1909504
+		summarizeBy: none
+		sourceColumn: SourceExportDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column GoldModelledAt
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 04bf55ba-3b33-4ef0-a1f6-504ad746ae42
+		summarizeBy: none
+		sourceColumn: GoldModelledAt
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Fact Placement' = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    Custom1 = Source{[Schema="gold",Item="fact_placement"]}[Data]
+				in
+				    Custom1
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,102 @@
+table prep_stg_referral_first_contact
+	lineageTag: c0fa5b02-d00f-4961-a870-6450f4b19a80
+
+	column referral_id
+		dataType: string
+		lineageTag: f58e5bff-0493-44d6-9863-3cd21c6133a9
+		summarizeBy: none
+		sourceColumn: referral_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_provider_id
+		dataType: string
+		lineageTag: a7c9d368-67d3-4a85-939b-728f3e81f7f7
+		summarizeBy: none
+		sourceColumn: referral_provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_id
+		dataType: string
+		lineageTag: 6e2bacc3-d4a2-4204-b369-0f669ddb47d3
+		summarizeBy: none
+		sourceColumn: provider_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_offer_id
+		dataType: string
+		lineageTag: 6d5cd80e-d843-4f21-a1a3-9a4ce101f3b3
+		summarizeBy: none
+		sourceColumn: first_offer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_offer_date
+		dataType: string
+		lineageTag: e9ae123f-bbf2-40d5-97fd-dd7c364ee90b
+		summarizeBy: none
+		sourceColumn: first_offer_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column first_offer_modified_date
+		dataType: string
+		lineageTag: cf62dc69-b299-4a18-9a1e-c0ab4d6f2eac
+		summarizeBy: none
+		sourceColumn: first_offer_modified_date
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e07a98db-f0e8-4712-a523-5e432ebf4af3
+		summarizeBy: none
+		sourceColumn: _ingestion_timestamp
+
+		variation Variation
+			isDefault
+			relationship: 37ba685c-21a3-4387-a5ed-b0c7d592c6b0
+			defaultHierarchy: LocalDateTable_8f6f969a-1110-489e-8cb1-04d34e1c4c9a.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column _source_file
+		dataType: string
+		lineageTag: e0895ca9-88e7-4eaf-8f81-be9cf02010a6
+		summarizeBy: none
+		sourceColumn: _source_file
+
+		annotation SummarizationSetBy = Automatic
+
+	column _ingestion_id
+		dataType: string
+		lineageTag: 61ea2550-9876-4dfe-8955-30dd42fb56ca
+		summarizeBy: none
+		sourceColumn: _ingestion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	partition prep_stg_referral_first_contact = m
+		mode: import
+		source =
+				let
+				    Source = Table.NestedJoin(stg_referral, {"referral_id"},stg_referral_provider, {"referral_id"}, "referral_provider", JoinKind.Inner),
+				    #"Removed Columns" = Table.RemoveColumns(Source,{"placement_type", "required_start_date", "response_required_by_date", "is_sibling_placement", "sibling_count", "is_parent_child_placement", "has_location_preferrence", "location_preference_details", "has_location_restriction", "location_restriction_details", "additional_information", "referral_created_date", "referral_modified_date", "is_spot", "referral_created_by", "referral_updated_by", "referral_status", "export_date"}),
+				    #"Expanded referral_provider" = Table.ExpandTableColumn(#"Removed Columns", "referral_provider", {"referral_provider_id", "provider_id"}, {"referral_provider.referral_provider_id", "referral_provider.provider_id"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Expanded referral_provider",{{"referral_provider.referral_provider_id", "referral_provider_id"}, {"referral_provider.provider_id", "provider_id"}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Renamed Columns", {"referral_provider_id"}, prep_stg_first_offer, {"referral_provider_id"}, "stg_first_offer", JoinKind.LeftOuter),
+				    #"Expanded stg_first_offer" = Table.ExpandTableColumn(#"Merged Queries", "stg_first_offer", {"offer_id", "referral_provider_id", "offer_date", "last_modified_date"}, {"stg_first_offer.offer_id", "stg_first_offer.referral_provider_id", "stg_first_offer.offer_date", "stg_first_offer.last_modified_date"}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Expanded stg_first_offer", each ([stg_first_offer.offer_date] <> null)),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Filtered Rows1",{"stg_first_offer.referral_provider_id"}),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns1",{{"stg_first_offer.offer_id", "first_offer_id"}, {"stg_first_offer.offer_date", "first_offer_date"}, {"stg_first_offer.last_modified_date", "first_offer_modified_date"}}),
+				    #"Sorted Rows1" = Table.Sort(#"Renamed Columns1",{{"first_offer_date", Order.Ascending}}),
+				    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows1", {"referral_id"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
