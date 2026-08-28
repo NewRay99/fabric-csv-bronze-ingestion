@@ -96,6 +96,73 @@ Because one referral may receive multiple offers, these belong in an Offer table
 
 Each provider home offered should ideally be a separate row.
 
+## Proposed enhancement — auditable offer decision history
+
+**Status:** Proposed
+**Priority:** High — required before reporting an exact offer-decision date or
+historical offer-status position.
+
+### Problem
+
+`gold.fact_offer.offer_decision_date` is currently populated with
+`silver.offer.last_modified_date` when the offer's current status is a
+terminal outcome. A later amendment to another field can update
+`last_modified_date`; it is therefore not reliable evidence of when the
+decision itself was made.
+
+### Proposed model
+
+Create `gold.fact_offer_status_event` at the grain **one row per offer-status
+change**, sourced from the offer audit event where `offerStatus` changes.
+
+| Field | Definition |
+| --- | --- |
+| `offer_id` | Offer whose status changed |
+| `referral_id` | Referral associated with the offer |
+| `provider_id` | Provider associated with the offer |
+| `previous_offer_status` | Status before the audited change |
+| `offer_status` | Status after the audited change |
+| `status_changed_at` | Timestamp of the audit event |
+| `audit_event_id` | Immutable source event identifier for traceability |
+| `source_export_date` | Archive/live extract batch containing the event |
+
+Derive the following clearly named fields in `gold.fact_offer` from this
+event fact:
+
+- `first_terminal_status_at`: first transition into accepted, approved,
+  selected, successful, declined, rejected, unsuccessful or withdrawn.
+- `current_terminal_status_at`: latest transition into a terminal status,
+  populated only when the current offer status is terminal.
+
+Retire the misleading generic `offer_decision_date` field once consuming DAX
+has been moved to the explicit replacement field appropriate to its purpose.
+
+### Snapshot treatment
+
+Do **not** add one unqualified `offer_decision_date` to
+`gold.fact_referral_snapshot`: its grain is one referral per snapshot date,
+whereas a referral can have many offers and decisions.
+
+If historical offer-state reporting is required, create
+`gold.fact_offer_snapshot` at **one row per `snapshot_date` and `offer_id`**.
+The referral snapshot may instead carry explicit aggregates calculated from
+events on or before its `snapshot_date`, such as:
+
+- `offers_decided_count`
+- `first_offer_decision_date`
+- `latest_offer_decision_date`
+- `accepted_offer_decision_date`
+
+### Acceptance criteria
+
+1. Every reported offer decision timestamp can be traced to an immutable
+   offer-status audit event.
+2. A later non-status amendment cannot change an established decision time.
+3. The model preserves status transitions, including any reopen/reversal.
+4. DAX uses the explicitly named terminal-status fields; it does not infer a
+   decision from `last_modified_date`.
+5. Snapshot measures only include offer events on or before `snapshot_date`.
+
 ## Placement/IPA dates
 
 These should be kept separate from referral dates:
