@@ -61,7 +61,8 @@ each reporting snapshot, while `gold.fact_offer`, `gold.fct_ipa`, and
 | `fct_ipa` | `gold.fct_ipa` | One row per IPA, linked to referral and accepted offer, with IPA issue/admission, cost, status and closure information. Actual start/end, actual cost and end reason remain null because the delivered source does not provide them. |
 | Provider response | `gold.fact_referral_provider` | One row per referral-provider assignment with supplied status flags and first observed extract date. |
 
-`ChildID` is the stable minimum delivered `referral_person.person_id` for a
+`person_id` (formerly `ChildID`) is the stable minimum delivered
+`referral_person.person_id` for a
 referral. This preserves the one-row-per-referral fact grain; multi-child
 analysis should use the child-grain source relation rather than treating this
 convenience field as a complete child bridge.

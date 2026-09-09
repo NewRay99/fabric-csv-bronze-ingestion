@@ -81,38 +81,42 @@ assert "validate_csv_target_parity(\n        SCHEMA_CONTRACT_CSV_PATH,\n        
 assert "validate_csv_target_parity(\n        DQ_RULE_CSV_PATH,\n        \"monitoring.cfg_data_quality_rule\"" in bootstrap_source
 print("PASS setup compares each source CSV row count with its target table")
 
-# Reproduce the exact Spark reader used by setup when PySpark is available.
-# This catches the mixed-line-ending regression that a Python CSV parser alone
-# cannot reveal.
+# Reproduce the exact Spark reader used by setup when PySpark and a Java
+# runtime are available. This catches the mixed-line-ending regression that a
+# Python CSV parser alone cannot reveal.
 try:
     from pyspark.sql import SparkSession
 except ImportError:
     print("SKIP Spark parser regression check: PySpark is unavailable")
 else:
-    spark = SparkSession.builder.master("local[1]").appName(
-        "validate-cfg005-contract-rows"
-    ).getOrCreate()
     try:
-        spark_rows = (
-            spark.read.format("csv").option("header", "true")
-            .option("quote", '"').option("escape", '"')
-            .option("multiLine", "true").option("lineSep", "\n")
-            .load(str(CONTRACT_CSV))
-        )
-        assert spark_rows.count() == len(rows), (
-            "Spark CSV reader excluded or created contract rows"
-        )
-        spark_dq_rows = (
-            spark.read.format("csv").option("header", "true")
-            .option("quote", '"').option("escape", '"')
-            .option("multiLine", "true").option("lineSep", "\n")
-            .load(str(DQ_RULE_CSV))
-        )
-        assert spark_dq_rows.count() == len(dq_rows), (
-            "Spark CSV reader excluded or created DQ-rule rows"
-        )
-    finally:
-        spark.stop()
-    print("PASS Spark CSV parser retains every schema-contract and DQ-rule row")
+        spark = SparkSession.builder.master("local[1]").appName(
+            "validate-cfg005-contract-rows"
+        ).getOrCreate()
+    except Exception as error:
+        print(f"SKIP Spark parser regression check: Spark session unavailable ({error})")
+    else:
+        try:
+            spark_rows = (
+                spark.read.format("csv").option("header", "true")
+                .option("quote", '"').option("escape", '"')
+                .option("multiLine", "true").option("lineSep", "\n")
+                .load(str(CONTRACT_CSV))
+            )
+            assert spark_rows.count() == len(rows), (
+                "Spark CSV reader excluded or created contract rows"
+            )
+            spark_dq_rows = (
+                spark.read.format("csv").option("header", "true")
+                .option("quote", '"').option("escape", '"')
+                .option("multiLine", "true").option("lineSep", "\n")
+                .load(str(DQ_RULE_CSV))
+            )
+            assert spark_dq_rows.count() == len(dq_rows), (
+                "Spark CSV reader excluded or created DQ-rule rows"
+            )
+        finally:
+            spark.stop()
+        print("PASS Spark CSV parser retains every schema-contract and DQ-rule row")
 
 print("VALIDATION PASSED")

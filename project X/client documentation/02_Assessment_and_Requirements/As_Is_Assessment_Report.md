@@ -144,7 +144,7 @@ and the Measures Comparison Checklist (`measures_comparison_checklist.md`).
 
 > **Note:** Requirements R2–R9, R29, R32–R33, R39, R45, R55, R69–R70, R72–R90 are non-functional,
 > feature, or security requirements that do not map to a specific Power BI measure. The remaining
-> requirements map to 90 existing + 27 new = 117 KPIs defined in the KPI Reference Guide.
+> requirements map to 90 existing + 27 new = 117 KPIs itemised in [§4.7 KPI Calculation Inventory](#47-kpi-calculation-inventory-as-is).
 
 ---
 
@@ -155,6 +155,7 @@ and the Measures Comparison Checklist (`measures_comparison_checklist.md`).
 2. [Current Architecture Overview](#2-current-architecture-overview)
 3. [Report Inventory](#3-report-inventory)
 4. [Measures Analysis](#4-measures-analysis)
+   - 4.7 [KPI Calculation Inventory (As-Is)](#47-kpi-calculation-inventory-as-is)
 5. [Functional Coverage Assessment](#5-functional-coverage-assessment)
 6. [Key Findings](#6-key-findings)
 7. [Risk Assessment](#7-risk-assessment)
@@ -371,7 +372,224 @@ Seventeen functional requirements have no corresponding Power BI measure. These 
 |---|-------------|-------------|-------------|--------|
 | 15–17 | *[3 low-priority requirements]* | — | — | Limited operational impact |
 
-> **Detailed requirement-by-requirement analysis** is provided in the Gap Analysis document (03_Gap_Analysis_Report.md).
+> **Detailed requirement-by-requirement analysis** is provided in the Gap Analysis document (03_Gap_Analysis_Report.md). The full 117-KPI calculation inventory — requirement IDs, source tables, calculation logic and PBI measure names — follows in [§4.7](#47-kpi-calculation-inventory-as-is).
+
+### 4.7 KPI Calculation Inventory (As-Is)
+
+The table below is the complete as-is KPI inventory for the V13.1 pilot dashboard: every KPI with its functional requirement IDs (from the WMPP Functional Specification), source tables, calculation logic and Power BI measure name. It is ported from `Supplementary/02_01_As_Is_KPI.md` so that the assessment report is self-contained; the supplementary copy remains the historic original.
+
+#### 4.7.1 Table mapping — Silver-era model to Gold-era objects (as assessed)
+
+| Model table | Source | Schema definition table | Functional area |
+|---|---|---|---|
+| fact_referral_offer | referral_provider | referral.referral_provider | Referral → Provider mapping |
+| fact_offer | offer | offer.offer | Provider offers |
+| fact_ipa | ipa | ipa.ipa | Individual Placement Agreements |
+| fact_referral | referral | referral.referral | Referral header |
+| dim_provider | provider | provider.provider | Provider master |
+| dim_provider_home | provider_home | provider.provider_home | Provider homes |
+| dim_provider_framework | provider_framework | provider.provider_framework | Provider-framework link |
+| fact_referral_person | person | referral.person | Child demographics |
+| fact_referral_category | referral_category | referral.referral_category | Referral categories |
+| fact_provider_message | referral_provider_message | referral.referral_provider_message | Inter-party messages |
+| fact_referral_gender | person | referral.person | Gender aggregation |
+| fact_referral_event_log | referral_event_log | referral.referral_event_log | Audit trail |
+| dim_s3_file_metadata | s3_file_metadata | document.s3_file_metadata | Document metadata |
+| dim_provider_document | provider_document | provider.provider_document | Provider docs |
+| dim_submission_documents | submission_documents | provider.submission_documents | Onboarding docs |
+| fact_referral_provider_decline_reason | referral_provider_decline_reason | referral.referral_provider_decline_reason | Decline reasons |
+| dim_offer_status | offer (derived) | offer.offer | Offer status lookup |
+
+> These are the table names used by the assessed V13.1 model. They are **not** the active notebook-created Gold v02 objects — see `04_Data_and_Reporting/KPI_Reference_Guide.md` for the current mapping.
+
+#### 4.7.2 KPI inventory by report section
+
+##### Section 1 — Referral Volume KPIs
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-01 | [R24,R51] | Total Referrals | R24 dashboard referral status overview; R51 robust data model | gold.dim_referral | COUNT(DISTINCT referral_id) WHERE status IS NOT NULL | Total Referrals |
+| KPI-02 | [R24,R36] | Referrals With Offers | R24 referral status; R36 outstanding offers | gold.dim_referral + gold.fact_referral_offer | COUNT DISTINCT referrals with valid offers | Referrals With Offers |
+| KPI-03 | [R24,R36] | Referrals Awaiting Offer | R24 referral status; R36 outstanding offers | gold.dim_referral, gold.fact_referral_offer | Open/Under Offer referrals without valid offer | Referrals Awaiting Offer |
+| KPI-04 | [R51] | Male Referrals | R51 demographic monitoring | gold.fact_referral_person | Gender='M' | Male Referrals |
+| KPI-05 | [R51] | Female Referrals | R51 demographic monitoring | gold.fact_referral_person | Gender='F' | Female Referrals |
+| KPI-06 | [R51] | Other Referrals | R51 demographic monitoring | gold.fact_referral_person | Gender not M/F | Other Referrals |
+| KPI-07 | [R51] | Total Gendered Referrals | R51 demographic monitoring | gold.fact_referral_person | Sum of gender counts | Total Gendered Referrals |
+| KPI-08 | [R24] | Referrals Not Yet Closed (Created in Period) | R24 dashboard | gold.dim_referral | Status not Closed/Cancelled | Referrals Not Yet Closed (Created in Period) |
+| KPI-09 | [R24,R51] | Referrals With Offers (Created in Period) | R24 dashboard; R51 reporting | gold.dim_referral + gold.fact_referral_offer | KPI-02 filtered by created period | Referrals With Offers (Created in Period) |
+| KPI-10 | [R51] | Total Referrals That Received Offers | R51 referral offer rate | gold.dim_referral + gold.fact_referral_offer | Referrals having valid offer | Total Referrals That Received Offers |
+
+##### Section 2 — Provider Activity
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-11 | [R25,R26] | No. Providers Who Made Offers | R25 review requests; R26 prioritise requests | gold.fact_offer + gold.fact_referral_offer | Distinct providers with offers | No. Providers Who Made Offers |
+| KPI-12 | [R25-R29] | Total Offers Made Historically | Provider offer management | gold.fact_offer | Distinct offers excluding Draft | Total Offers Made Historically |
+| KPI-13 | [R51] | Avg Offers per Referral (Under Offer) | R51 market intelligence | gold.fact_offer + gold.fact_referral_offer | Offers / Referrals | Avg Offers per Referral Under Offer |
+| KPI-14 | [R51] | Avg Offers per Provider (Under Offer) | R51 market intelligence | gold.fact_offer + gold.fact_referral_offer | Offers / Providers | Avg Offers per Provider (Under Offer) |
+| KPI-15 | [R28] | Successful Offers (Under Offer Referrals) | R28 accept placements | gold.fact_offer | Accepted offers | Successful Offers (Under Offer Referrals) |
+| KPI-16 | [R28] | Unsuccessful Offers (Under Offer Referrals) | R28 reject placements | gold.fact_offer | Declined/Rejected/Withdrawn offers | Unsuccessful Offers (Under Offer Referrals) |
+| KPI-17 | [R24] | Offers in Draft (Under Offer Referrals) | R24 dashboard tasks | gold.fact_offer | Draft offers | Offers in Draft (Under Offer Referrals) |
+| KPI-18 | [R24] | Pending Offers (Under Offer Referrals) | R24 dashboard tasks | gold.fact_offer | Pending offers | Pending Offers (Under Offer Referrals) |
+| KPI-19 | [R24,R26] | Active Referrals With Provider Engagement | Dashboard and prioritisation | gold.dim_referral + gold.fact_referral_offer | Active referrals with offer activity | Active Referrals With Provider Engagement |
+| KPI-20 | [R24,R26] | Active Referral Engagement Rate | Dashboard and prioritisation | Same as KPI-19 | KPI-19 / Active referrals | Active Referral Engagement Rate |
+| KPI-21 | [R24,R26] | Active Awaiting Offers (Engaged) | Dashboard and prioritisation | dim_referral + referral_offer | Open referrals with engagement | Active Awaiting Offers (Engaged) |
+| KPI-22 | [R24,R26] | Active Awaiting Offers (No Engagement) | Dashboard and prioritisation | dim_referral + referral_offer | Open referrals without engagement | Active Awaiting Offers (No Engagement) |
+
+##### Section 3 — Time-based
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-23 | [R24,R52] | Referrals This Month | Dashboard; reporting | gold.dim_referral | Created current month | Referrals This Month |
+| KPI-24 | [R52] | Referrals This FY | Reporting | gold.dim_referral | Created current FY | Referrals This FY |
+
+##### Section 4 — Spot vs Framework
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-25 | [R67,R68] | Total Offers Made | Framework management | gold.fact_offer + gold.fact_referral_offer | Non-draft offers | (NEW) Total Offers Made |
+| KPI-26 | [R13] | Placement Type Totals (Visual) | Placement type filtering | gold.fact_offer + gold.fact_referral_offer | Spot vs Framework split | Placement Type Totals (Visual) |
+| KPI-27 | [R18] | Spot Offers (Under Offer Referrals) | Emergency placement reporting | gold.fact_offer + gold.fact_referral_offer | Spot offers only | Spot Offers (Under Offer Referrals) |
+
+##### Section 5 — Referral Offers
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-28 | [R25-R29] | Offer Count | Provider offer management | gold.fact_offer | Distinct offers | Offer Count |
+| KPI-29 | [R24] | Referrals Currently Active | Dashboard | gold.dim_referral | Open or Under Offer | Referrals Currently Active |
+| KPI-30 | [R24,R36] | Active Referrals Under Offer | Dashboard; offers | dim_referral + referral_offer | Under-offer referrals with valid offers | Active Referrals Under Offer |
+| KPI-31 | [R13] | Referrals Cancelled/Closed | Placement filtering | gold.dim_referral | Closed or Cancelled | Referrals Cancelled/Closed |
+| KPI-32 | [R24,R36] | Active Referrals Awaiting Offers | Dashboard and offers | dim_referral + referral_offer | Open referrals without offers | Active Referrals Awaiting Offers |
+| KPI-33 | [R24] | Referrals With One or More Offers | Dashboard | dim_referral + referral_offer | Referrals with valid offers | Referrals With One or More Offers |
+| KPI-34 | [R54] | Closed Referrals (by Reason) | Declined placement reasons | referral + referral_offer + offer | Group by decline reason | Closed Referrals (by Reason) |
+| KPI-35 | [R25-R29] | Total Offers Made (Active Referrals Under Offer) | Provider offer management | gold.fact_offer | Non-draft offers | Total Offers Made (Active Referrals Under Offer) |
+| KPI-36 | [R25-R29] | Offer IDs (Under Offer Referrals) | Provider offer management | offer + referral_offer | Distinct offer IDs | Offer IDs (Under Offer Referrals) |
+| KPI-37 | [R26] | Offers per Provider (Under Offer Referrals) | Prioritise requests | offer + referral_offer | Offers grouped by provider | Offers per Provider (Under Offer Referrals) |
+| KPI-38 | [R67,R68] | Framework Offers (Under Offer Referrals) | Framework management | offer + referral_offer | Non-spot offers | Framework Offers (Under Offer Referrals) |
+| KPI-39 | [R28,R35] | Accepted Offers (Scoped Table) | Acceptance and IPA | gold.fact_offer | Accepted offers | Accepted Offers (Scoped Table) |
+
+##### Section 6 — Provider Registry
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-40 | [R91,R93] | Provider Homes Registered | Registration; directory | gold.dim_provider_home | Count homes | Provider Homes Registered |
+| KPI-41 | [R91,R93] | Providers Registered | Registration; directory | gold.dim_provider | Count providers | Providers Registered |
+| KPI-42 | [R95] | Providers - Fostering | Fostering framework | provider_home + provider | Fostering providers | Providers - Fostering |
+| KPI-43 | [R96] | Providers - Residential | Residential Framework 2.0 | provider_home + provider | Residential providers | Providers - Residential |
+| KPI-44 | [R91] | Providers - Supported Accommodation | Registration | provider_home + provider | Supported Accommodation providers | Providers - Supported Accommodation |
+| KPI-45 | [R67] | Framework Providers | Framework maintenance | gold.dim_provider_framework | Providers by framework | Framework Providers |
+| KPI-46 | [R46] | NON Framework Providers | QA non-framework providers | provider_framework | QA flag false | NON Framework Providers |
+| KPI-47 | [R46] | Is Non Framework Provider | QA non-framework providers | provider_framework | Boolean flag | Is Non Framework Provider |
+| KPI-48 | [R93] | Directory Summary Count | Provider directory | provider + provider_home | Aggregated provider count | Directory Summary Count |
+| KPI-49 | [R96] | Residential Homes | Residential framework | provider_home | Residential homes | Residential Homes |
+| KPI-50 | [R91] | Supported Accommodation Homes | Registration | provider_home | Supported homes | Supported Accommodation Homes |
+| KPI-51 | [R95] | Fostering Providers | Fostering framework | provider + provider_home | Fostering providers | Fostering Providers |
+| KPI-52 | [R95] | Fostering Chart Count | Fostering reporting | provider_home | Chart aggregation | Fostering Chart Count |
+
+##### Section 7 — Draft/Pending Offers
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-53 | [R24] | Draft No Activity Since Creation | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND offer_date = last_modified_date` | Draft No Activity Since Creation |
+| KPI-54 | [R24] | Draft Offers With Activity Since Creation | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND offer_date != last_modified_date` | Draft Offers With Activity Since Creation |
+| KPI-55 | [R24] | Draft Offers Missing Dates | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND (offer_date IS NULL OR last_modified_date IS NULL)` | Draft Offers Missing Dates |
+| KPI-56 | [R24] | Draft Offers Updated After Creation | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND last_modified_date > offer_date` | Draft Offers Updated After Creation |
+| KPI-57 | [R24] | Draft No Activity 7+ Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND DATEDIFF(current_date(), offer_date) >= 7` | Draft No Activity 7+ Days |
+| KPI-58 | [R24] | Drafts No Activity 14+ Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT' AND DATEDIFF(current_date(), offer_date) >= 14` | Drafts No Activity 14+ Days |
+| KPI-59 | [R24] | Average Days in Draft | R24 (dashboard task management) | `gold.fact_offer` | `AVG(DATEDIFF(current_date(), offer_date)) WHERE offer_status = 'DRAFT'` | Average Days in Draft |
+| KPI-60 | [R24] | Oldest Draft Age (Days) | R24 (dashboard task management) | `gold.fact_offer` | `MAX(DATEDIFF(current_date(), offer_date)) WHERE offer_status = 'DRAFT'` | Oldest Draft Age (Days) |
+| KPI-61 | [R24] | Draft Offer Count | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'DRAFT'` | Draft Offer Count |
+| KPI-62 | [R24] | Draft With No Activity Since Creation (%) | R24 (dashboard task management) | `gold.fact_offer` | `KPI-53 / KPI-61 * 100` | Draft With No Activity Since Creation (%) |
+| KPI-63 | [R24] | Drafts With No Activity 14+ Days | R24 (dashboard task management) | `gold.fact_offer` | Same as KPI-58 (duplicate measure in PBI) | Drafts With No Activity 14+ Days |
+| KPI-64 | [R24] | Pending Offers by Age Bucket | R24 (dashboard task management) | `gold.fact_offer` ⨝ `gold.pending_age_band` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) BETWEEN min_days AND max_days GROUP BY band_label` | Pending Offers by Age Bucket |
+| KPI-65 | [R24] | Pending Offers 15–30 Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) BETWEEN 15 AND 30` | Pending Offers 15–30 Days |
+| KPI-66 | [R24] | Pending Offers 30+ Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) >= 30` | Pending Offers 30+ Days |
+| KPI-67 | [R24] | Pending Offers 0–7 Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) BETWEEN 0 AND 7` | Pending Offers 0–7 Days |
+| KPI-68 | [R24] | Pending Offers 8–14 Days | R24 (dashboard task management) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) BETWEEN 8 AND 14` | Pending Offers 8–14 Days |
+| KPI-69 | [R24,R26] | Provider with Offers over 30+ Days | R24 (dashboard task management), R26 (prioritise requests) | `gold.fact_offer` ⟕ `gold.fact_referral_offer` | `COUNT(DISTINCT provider_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) >= 30` | Provider with Offers over 30+ Days |
+| KPI-70 | [R24] | Offers At Risk (8–14 Days) | R24 (dashboard task management) | `gold.fact_offer` | Same as KPI-68 (duplicate) | Offers At Risk (8–14 Days) |
+| KPI-71 | [R24] | Offers Outside Timeframe (15–30 Days) | R24 (dashboard task management) | `gold.fact_offer` | Same as KPI-65 (duplicate) | Offers Outside Timeframe (15–30 Days) |
+| KPI-72 | [R24] | Critical Offers (30+ Days) | R24 (dashboard task management) | `gold.fact_offer` | Same as KPI-66 (duplicate) | Critical Offers (30+ Days) |
+
+##### Section 8 — IPA Measures
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-73 | [R35] | IPA Exists | R35 (digitised IPA) | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) > 0` (boolean) | IPA Exists |
+| KPI-74 | [R28] | Is In Accepted KPI | R28 (accept placements) | `gold.fact_offer` ⟕ `gold.fact_ipa` | `offer_status = 'ACCEPTED'` flag, base for IPA funnel | Is In Accepted KPI |
+| KPI-75 | [R28,R35] | Accepted Offers Base | R28 (accept placements), R35 (digitised IPA) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) WHERE offer_status = 'ACCEPTED'` | Accepted Offers Base |
+| KPI-76 | [R35] | IPA Created | R35 (digitised IPA) | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id)` | IPA Created |
+| KPI-77 | [R35] | IPA Completed | R35 (digitised IPA) | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) WHERE signed_by_local_authority = true AND signed_by_provider = true` | IPA Completed |
+| KPI-78 | [R35] | IPAs Pending Completion | R35 (digitised IPA) | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) WHERE (signed_by_local_authority = false OR signed_by_provider = false) AND closed = false` | IPAs Pending Completion |
+| KPI-79 | [R35] | Offers Awaiting IPA Creation | R35 (digitised IPA) | `gold.fact_offer` ⟕ `gold.fact_ipa` | `COUNT(DISTINCT f.offer_id) LEFT JOIN fact_ipa i ON f.offer_id = i.offer_id WHERE f.offer_status = 'ACCEPTED' AND i.ipa_id IS NULL` | Offers Awaiting IPA Creation |
+| KPI-80 | [R35] | Is IPA Pending | R35 (digitised IPA) | `gold.fact_ipa` | Boolean flag, IPA exists but not signed | Is IPA Pending |
+| KPI-81 | [R35] | Is Awaiting IPA Creation | R35 (digitised IPA) | `gold.fact_offer` ⟕ `gold.fact_ipa` | Boolean flag, accepted offer with no IPA | Is Awaiting IPA Creation |
+| KPI-82 | [R35] | Is IPA Completed | R35 (digitised IPA) | `gold.fact_ipa` | Boolean flag, both signatures present | Is IPA Completed |
+| KPI-83 | [R35] | Accepted Offer to IPA Conversion % | R35 (digitised IPA) | `gold.fact_offer` ⟕ `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) / COUNT(DISTINCT accepted_offers) * 100` | Accepted Offer to IPA Conversion % |
+| KPI-84 | [R35] | Offers Still to Progress to IPA | R35 (digitised IPA) | `gold.fact_offer` ⟕ `gold.fact_ipa` | `100 - KPI-83` | Offers Still to Progress to IPA |
+| KPI-85 | [R35] | IPA Created to Completion % | R35 (digitised IPA) | `gold.fact_ipa` | `COUNT(DISTINCT completed_ipa) / COUNT(DISTINCT all_ipa) * 100` | IPA Created to Completion % |
+| KPI-86 | [R35] | Successful Offers to IPA Completed % | R35 (digitised IPA) | `gold.fact_offer` ⟕ `gold.fact_ipa` | `COUNT(DISTINCT completed_ipa) / COUNT(DISTINCT accepted_offers) * 100` | Successful Offers to IPA Completed % |
+
+##### Section 9 — Other Measures
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-87 | [R82] | Dashboard Last Refreshed | R82 (reporting and dashboard refresh visibility) | N/A (system timestamp) | `current_timestamp()` | Dashboard Last Refreshed |
+| KPI-88 | [R53] | Latest Export per Offer | R53 (export/reporting capability) | `gold.fact_offer` | `MAX(offer_date) GROUP BY offer_id` | Latest Export per Offer |
+| KPI-89 | [R24] | Latest Offer Status Count | R24 (dashboard monitoring) | `gold.fact_offer` | `COUNT(DISTINCT offer_id) GROUP BY offer_status ORDER BY count DESC` | Latest Offer Status Count |
+| KPI-90 | [R22] | Overlap Referrals | R22 (out-of-region placements — partial) | `gold.fact_referral` ⟕ `gold.fact_referral_offer` | Referrals appearing in multiple provider referral-provider mappings | Overlap Referrals |
+
+##### Section 10 — New Outstanding Measures (functional-gap closure)
+
+| KPI ID | Req IDs | KPI description | Requirement context | Tables | Calculation | PBI measure |
+|---|---|---|---|---|---|---|
+| KPI-91 | [R18,R57] | Emergency Referrals | R18 emergency placements; R57 emergency vs planned reporting | `gold.fact_referral` | `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN','UNDER_OFFER') AND created_timestamp::date = required_start_date` | Emergency Referrals |
+| KPI-92 | [R18,R57] | Emergency Placement Rate | R18 emergency placements; R57 emergency reporting | `gold.fact_referral` | `KPI-91 / KPI-01 * 100` | Emergency Placement Rate |
+| KPI-93 | [R57] | Planned Referrals | R57 planned placements separately reportable | `gold.fact_referral` | `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN','UNDER_OFFER') AND created_timestamp::date != required_start_date` | Planned Referrals |
+| KPI-94 | [R18,R57] | Emergency vs Planned Split | R18 emergency placements; R57 reporting split | `gold.fact_referral` | `COUNT(DISTINCT referral_id) GROUP BY CASE WHEN created_timestamp::date = required_start_date THEN 'Emergency' ELSE 'Planned' END` | Emergency vs Planned Split |
+| KPI-95 | [R22] | Out-of-Region Referrals | R22 out-of-region placements tagged and reported | `gold.fact_referral` ⟕ `gold.fact_referral_offer` ⟕ `gold.dim_provider` | `COUNT(DISTINCT r.referral_id) JOIN fact_referral_offer rpo JOIN dim_provider p WHERE p.country != 'United Kingdom' OR p.county NOT LIKE '%West Midlands%'` | Out-of-Region Referrals |
+| KPI-96 | [R22] | Out-of-Region Placement Rate | R22 out-of-region placement reporting | Same as KPI-95 | `KPI-95 / KPI-01 * 100` | Out-of-Region Placement Rate |
+| KPI-97 | [R41] | Providers with QA Flags | R41 advisory notices and safeguarding flags | `gold.dim_provider` | `COUNT(DISTINCT provider_id) WHERE qa_flag = true OR qa_flag_fostering_spot = true OR qa_flag_sup_acc = true OR qa_flag_resi = true` | Providers with QA Flags |
+| KPI-98 | [R41] | QA Flag Type Breakdown | R41 information notices and safeguarding concerns | `gold.dim_provider` | `UNPIVOT qa_flag columns → COUNT(DISTINCT provider_id) GROUP BY flag_type` | QA Flag Type Breakdown |
+| KPI-99 | [R41] | QA Flagged Providers by Home | R41 advisory notices and safeguarding flags | `gold.dim_provider` ⟕ `gold.dim_provider_home` | `COUNT(DISTINCT provider_home_id) WHERE provider/home QA flags exist` | QA Flagged Providers by Home |
+| KPI-100 | [R47] | Documents Expiring (30 Days) | R47 documentation expiry monitoring | `gold.dim_s3_file_metadata` | `COUNT(DISTINCT s3_file_metadata_id) WHERE expiry_date BETWEEN current_date() AND date_add(current_date(),30)` | Documents Expiring (30 Days) |
+| KPI-101 | [R47,R48] | Documents Expired | R47 documentation control; R48 provider eligibility | `gold.dim_s3_file_metadata` | `COUNT(DISTINCT s3_file_metadata_id) WHERE expiry_date < current_date()` | Documents Expired |
+| KPI-102 | [R48] | Providers Blocked (Incomplete Docs) | R48 exclude providers with incomplete documentation | `gold.dim_provider` ⟕ `gold.dim_provider_document` ⟕ `gold.dim_s3_file_metadata` | `COUNT(DISTINCT provider_id) WHERE expired documentation exists` | Providers Blocked (Incomplete Docs) |
+| KPI-103 | [R48] | Document Compliance Rate | R48 documentation compliance | `gold.dim_provider` ⟕ `gold.dim_s3_file_metadata` | `(Total Providers - KPI-102) / Total Providers * 100` | Document Compliance Rate |
+| KPI-104 | [R49] | Provider Due Diligence Status | R49 provider due diligence monitoring | `gold.dim_provider` | `COUNT(DISTINCT provider_id) GROUP BY provider_status` | Provider Due Diligence Status |
+| KPI-105 | [R54] | Decline Reasons (Referral Level) | R54 capture reasons for declined placements | `gold.fact_referral_offer` ⟕ `gold.fact_referral_provider_decline_reason` | `COUNT(DISTINCT referral_id) GROUP BY decline_reason_code` | Decline Reasons (Referral Level) |
+| KPI-106 | [R58] | Framework Changes During Active Referrals | R58 commissioners alerted to framework changes | `gold.fact_referral_category` ⟕ `gold.fact_referral_offer` ⟕ `gold.fact_referral` | Active referrals where referral category changed during lifecycle | Framework Changes During Active Referrals |
+| KPI-107 | [R62] | Total Weekly Fee Liability | R62 finance payment reporting | `gold.fact_ipa` | `SUM(costs_total_weekly_fee) WHERE signed_by_local_authority = true AND signed_by_provider = true AND closed = false` | Total Weekly Fee Liability |
+| KPI-108 | [R62] | Payment Method Breakdown | R62 finance payment reporting | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) GROUP BY payment_method WHERE closed = false` | Payment Method Breakdown |
+| KPI-109 | [R62] | IPA Payment Status | R62 finance payment reporting | `gold.fact_ipa` | `COUNT(DISTINCT ipa_id) GROUP BY payment lifecycle status` | IPA Payment Status |
+| KPI-110 | [R14] | Messages Sent | R14 provider messaging | `gold.fact_provider_message` | `COUNT(DISTINCT message_id)` | Messages Sent |
+| KPI-111 | [R14] | Avg Message Response Time (Hours) | R14 auditable messaging and prioritisation | `gold.fact_provider_message` ⟕ `gold.fact_referral_offer` | `AVG(response hours between messages)` | Avg Message Response Time (Hours) |
+| KPI-112 | [R14] | Priority Messages Unread | R14 urgent message tracking | `gold.fact_provider_message` ⟕ `gold.fact_provider_message_status` | `COUNT(DISTINCT message_id) WHERE no message status exists` | Priority Messages Unread |
+| KPI-113 | [R20] | Audit Events by Type | R20 audit tracking across placement lifecycle | `gold.fact_referral_event_log` | `COUNT(DISTINCT event_id) GROUP BY event_type` | Audit Events by Type |
+| KPI-114 | [R20,R35] | IPA Signature Completion Rate | R20 signatures tracked; R35 electronic signatures | `gold.fact_ipa` | Counts and rates for LA signed, provider signed, both signed, total IPA | IPA Signature Completion Rate |
+| KPI-115 | [R19] | Referral Updates per Day | R19 referral maintenance and provider notification | `gold.fact_referral` | `COUNT(DISTINCT referral_id) / COUNT(DISTINCT DATE(modified_timestamp))` | Referral Updates per Day |
+| KPI-116 | [R59] | Provider Onboarding Pipeline | R59 bulk provider onboarding | `gold.dim_provider` ⟕ `gold.dim_submission_documents` | `COUNT(DISTINCT provider_id) WHERE provider_status = 'Pending'` | Provider Onboarding Pipeline |
+| KPI-117 | [R59] | Bulk Onboarding Success Rate | R59 bulk provider onboarding | `gold.dim_provider` | `COUNT(DISTINCT approved providers) / COUNT(DISTINCT providers) * 100` | Bulk Onboarding Success Rate |
+
+#### 4.7.3 Inventory summary
+
+| Category | Existing KPIs | New KPIs | Total |
+|---|---:|---:|---:|
+| Referral Volume | 10 | 4 (emergency/planned) | 14 |
+| Provider Activity | 12 | 0 | 12 |
+| Timebased | 2 | 0 | 2 |
+| Spot vs Framework | 3 | 0 | 3 |
+| Referral Offers | 12 | 1 (decline reasons) | 13 |
+| Provider Registry | 13 | 3 (QA flags, due diligence) | 16 |
+| Draft/Pending | 20 | 0 | 20 |
+| IPA Measures | 14 | 3 (finance, signatures) | 17 |
+| Out-of-Region | 1 | 2 (out-of-region, rate) | 3 |
+| Document Compliance | 0 | 4 (expiry, blocked, rate) | 4 |
+| Messaging | 0 | 3 (response, unread) | 3 |
+| Audit Trail | 0 | 2 (events, signatures) | 2 |
+| Onboarding | 0 | 2 (pipeline, success) | 2 |
+| Finance | 0 | 3 (fees, payment, status) | 3 |
+| **Total** | **90** (existing) | **27** (new) | **117** |
 
 ---
 

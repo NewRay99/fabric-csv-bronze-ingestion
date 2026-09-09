@@ -1,10 +1,10 @@
 # Gold DAX Field Coverage Audit
 
 **Project:** WMPP Fabric data platform
-**Date:** 27 August 2026 (rev 2 — legacy v15 full-library reconciliation)
+**Date:** 27 August 2026 (rev 3 — GLD-005–008 missing-dimension remediation)
 **Auditor:** Kimi Agent
 **Scope:** Verify that every DAX measure in the `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` can be resolved to an active Gold table/column, and that every measure in the legacy `SM WMPP v15.zip` semantic model has a Gold disposition.
-**Baseline:** Gold notebooks `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` (promoted version 02 04); legacy `_Measures.tmdl` extraction (153 measures).
+**Baseline:** Gold notebooks `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` (promoted version 02 04, plus GLD-005–008 additions); legacy `_Measures.tmdl` extraction (153 measures).
 
 ---
 
@@ -13,15 +13,16 @@
 | Metric | Count |
 |---|---:|
 | DAX measures audited (original build guide) | 109 |
-| New measures ported from legacy v15 (this revision) | 76 |
-| **Total DAX measures audited** | **185** |
-| ✅ Fully covered by Gold layer | 185 |
+| New measures ported from legacy v15 (rev 2) | 76 |
+| New gender measures added (rev 3, GLD-006/007) | 4 |
+| **Total DAX measures audited** | **189** |
+| ✅ Fully covered by Gold layer | 189 |
 | ⚠️ Partial coverage (proxy fields) | 0 |
 | ❌ Missing Gold field (blocked) | 0 |
-| Known unsupported legacy KPIs | 15 groups + 17 legacy measures |
-| Legacy v15 measures reconciled | 153 (59 covered · 62 ported · 15 retired · 17 blocked) |
+| Known unsupported legacy KPIs | 14 groups + 13 legacy measures |
+| Legacy v15 measures reconciled | 153 (63 covered · 62 ported · 15 retired · 13 blocked) |
 
-**Conclusion:** All *supported* DAX measures in the build guide have their required fields present in the active Gold layer. No notebook changes are required for DAX parity. This revision also (a) defined `Referrals With IPA`, closing a dangling dependency in `IPA Signature Completion Rate`, and (b) ported the remaining portable legacy v15 measures (MoM card variance/indicator stacks, created-in-period measures, under-offer scoped portfolio, IPA signature referral-grain proxies, snapshot target measures, and row-level visual helpers). The unsupported legacy KPI groups and the 17 blocked legacy measures remain blocked by missing source fields; they are correctly documented in the build guide and must not be pointed at Bronze, Silver, or retired tables.
+**Conclusion:** All *supported* DAX measures in the build guide have their required fields present in the active Gold layer. Rev 3 closes the four GLD-005–008 gaps: `dim_provider_home` gained `home_contact_number` and `registered_manager_contact_number` (GLD-005); `gold.dim_person` with `gender_clean` was created and `fact_referral` gained `person_id` (GLD-006/GLD-007), unblocking the KPI-04–07 gender breakdown; and `gold.dim_offer_status` was reinstated as a real Gold dimension with labels and lifecycle flags (GLD-008). The remaining unsupported legacy KPI groups and 13 blocked legacy measures are still blocked by missing source fields; they are correctly documented in the build guide and must not be pointed at Bronze, Silver, or retired tables.
 
 ---
 
@@ -38,17 +39,19 @@
 
 | Table | Grain | Key columns used by DAX |
 |---|---|---|
-| `gold.fact_referral` | One current row per referral | `referral_id`, `is_open`, `has_offer`, `is_not_seen_by_providers`, `required_placement_date`, `as_of_date`, `placed_by_required_date`, `days_to_first_action`, `days_to_first_offer`, `days_to_ipa`, `days_without_activity`, `current_status`, `referral_closure_reason`, `placement_type_required`, `priority`, `estimated_weekly_cost`, `ipa_2_signatures`, `ipa_issued_date`, `gold_modelled_at` |
-| `gold.fact_referral_snapshot` | One referral per reporting snapshot | All `fact_referral` columns plus `snapshot_date`, `required_placement_date_outcome` |
+| `gold.fact_referral` | One current row per referral | `referral_id`, `person_id`, `is_open`, `has_offer`, `is_not_seen_by_providers`, `required_placement_date`, `as_of_date`, `placed_by_required_date`, `days_to_first_action`, `days_to_first_offer`, `days_to_ipa`, `days_without_activity`, `current_status`, `referral_closure_reason`, `placement_type_required`, `priority`, `estimated_weekly_cost`, `ipa_2_signatures`, `ipa_issued_date`, `gold_modelled_at` |
+| `gold.fact_referral_snapshot` | One referral per reporting snapshot | All `fact_referral` columns (including `person_id`; legacy `ChildID`/`child_id` is migrated to `person_id`) plus `snapshot_date`, `required_placement_date_outcome` |
 | `gold.fact_offer` | One offer | `offer_id`, `referral_id`, `provider_id`, `home_id`, `offer_submitted_date`, `offer_reviewed_date`, `offer_decision_date`, `offer_status`, `offer_type`, `rejection_reason`, `estimated_weekly_cost`, `source_export_date` |
 | `gold.fct_ipa` | One IPA | `ipa_id`, `referral_id`, `accepted_offer_id`, `ipa_issued_date`, `estimated_weekly_cost`, `is_placement_closed` |
 | `gold.fact_referral_provider` | One referral-provider assignment | `referral_provider_id`, `referral_id`, `provider_id`, `is_declined` |
 | `gold.fact_referral_lifecycle_event` | One derived event | `event_id`, `referral_id`, `event_type` |
 | `gold.dim_date` | Date dimension | `date` |
 | `gold.dim_provider` | Provider dimension | `provider_id`, `provider_name`, `qa_flag`, `provider_status` |
-| `gold.dim_provider_home` | Provider home dimension | `provider_home_id`, `provider_id`, `is_spot`, `service_type`, `qa_flag` |
+| `gold.dim_provider_home` | Provider home dimension | `provider_home_id`, `provider_id`, `is_spot`, `service_type`, `qa_flag`, `home_contact_number`, `registered_manager_contact_number` |
 | `gold.bridge_provider_framework` | Provider-framework bridge | `provider_id` |
 | `gold.dim_provider_submission_document` | Submission document dimension | `document_id`, `home_id`, `expiry_date` |
+| `gold.dim_person` | One current row per person (GLD-006/007) | `person_id`, `gender`, `gender_clean`, `ethnicity`, `religion`, `preferred_language`, `age_value`, `age_date_unit`, `has_restrictions` |
+| `gold.dim_offer_status` | One row per observed offer-status code (GLD-008) | `offer_status`, `offer_status_label`, `is_active_offer`, `is_accepted`, `is_terminal`, `offer_status_sk` |
 
 ---
 
@@ -217,11 +220,19 @@ columns already verified in Sections 2.1–2.7. No new Gold field is required.
 | 119 | Target Hit Rate at Snapshot | 1 | `fact_referral_snapshot` | `placed_by_required_date`, `ipa_issued_date`, `required_placement_date` | ✅ | |
 | 120 | Row-level visual helpers (Is Non Framework Provider, IPA Exists, Is Awaiting IPA Creation) | 3 | `bridge_provider_framework` / `fct_ipa` / `fact_offer` | `provider_id`, `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | Single-row visual context only |
 
-**Not ported — blocked by missing Gold source fields (17 measures):**
+### 2.9 Gender referral measures (rev 3, GLD-006/GLD-007)
+
+| # | Measure | Gold table | Gold column(s) | Status | Notes |
+|---|---------|------------|----------------|--------|-------|
+| 186 | Female Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-04 |
+| 187 | Male Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-05 |
+| 188 | Other Gender Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-06 |
+| 189 | Total Gendered Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-07; excludes `Unknown` |
+
+**Not ported — blocked by missing Gold source fields (13 measures):**
 
 | Legacy measure(s) | Missing field | Status |
 |---|---|---|
-| Female / Male / Other / Total Gendered Referrals (4) | `child_gender` | ❌ Blocked — KPI-04–07 |
 | Provider Contact Referral family (6) | `contact_made` provider-contact flag | ❌ Blocked — no Gold or Silver field; `is_not_seen_by_providers` is not a safe substitute |
 | Is IPA Completed / Is IPA Pending / Is In Accepted KPI / IPA Completed / IPA Created to Completion % / Successful Offers to IPA Completed % (6) | IPA-grain signature status (`signed_by_provider`, `signed_by_local_authority`) | ❌ Blocked — KPI-77–86; referral-grain proxies supplied (#116–117) |
 | KPI Tooltip Style 1 (1) | `ref_KPI` functional-spec metadata table (not a Gold object) | ❌ Blocked — re-import as static table if tooltip page is rebuilt |
@@ -249,10 +260,13 @@ The following legacy v15 visual breakdowns are supported by direct column use in
 | Placement type breakdown | `fact_referral` | `placement_type_required` | ✅ |
 | Urgency/priority breakdown | `fact_referral` | `priority` | ✅ |
 | Complexity breakdown | `fact_referral` | `complexity_band` | ✅ (null until source delivers) |
+| Gender breakdown | `dim_person` | `gender_clean` (via `fact_referral[person_id]`) | ✅ (rev 3, GLD-006/007) |
 | Offer status breakdown | `fact_offer` | `offer_status` | ✅ |
+| Offer status label breakdown | `dim_offer_status` | `offer_status_label` | ✅ (rev 3, GLD-008) |
 | Offer type breakdown | `fact_offer` | `offer_type` | ✅ |
 | Rejection reason breakdown | `fact_offer` | `rejection_reason` | ✅ |
 | Provider name | `dim_provider` | `provider_name` | ✅ |
+| Provider home contact numbers | `dim_provider_home` | `home_contact_number`, `registered_manager_contact_number` | ✅ (rev 3, GLD-005) |
 
 ---
 
@@ -262,7 +276,6 @@ These KPI groups are **correctly documented as unsupported** in the build guide.
 
 | KPI group | Reason for blockage | Required source change |
 |---|---|---|
-| **KPI-04–07** (Gender breakdown; legacy Female/Male/Other/Total Gendered Referrals) | `child_gender` missing from `fact_referral` | Source must deliver reliable gender attribute at referral grain |
 | **Legacy Provider Contact Referral family** (6 card measures) | No `contact_made` provider-contact flag in `fact_referral` | Source must deliver provider-contact flag at referral grain |
 | **KPI-77–78, 80–82, 85–86, 114** (IPA-grain signatures; legacy IPA Completed funnel and Is IPA Completed/Pending helpers) | No IPA-grain signature status; only referral-level `ipa_2_signatures` boolean proxy exists | Source must deliver per-IPA signature timestamps/status |
 | **KPI-95–96** (Region breakdown) | `fact_referral[region]` is `CAST(NULL AS STRING)` | Source must deliver reliable referral region |
@@ -277,13 +290,13 @@ These KPI groups are **correctly documented as unsupported** in the build guide.
 
 ## 5. Recommendations
 
-1. **No Gold notebook changes required.** The active `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` already publish every field needed for the 185 supported DAX measures (109 original + 76 ported from legacy v15).
-2. **Semantic model build priority:** Proceed with importing the active Gold tables and creating the DAX measures in Sections 2.1–2.8 above.
-3. **Do not import retired tables.** `fact_placement` is retired; use `fct_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_offer_status`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects.
+1. **Gold notebook changes applied (rev 3).** `05_gold_dimensions.ipynb` now publishes `dim_provider_home` with `home_contact_number` / `registered_manager_contact_number`, plus new `dim_person` and `dim_offer_status`; `04_gold_model.ipynb` adds `person_id` to `fact_referral`. Deploy both notebooks and rerun Gold before rebuilding the semantic model.
+2. **Semantic model build priority:** Proceed with importing the active Gold tables and creating the DAX measures in Sections 2.1–2.9 above, including the two new relationships `dim_person[person_id]` → `fact_referral[person_id]` and `dim_offer_status[offer_status]` → `fact_offer[offer_status]`.
+3. **Do not import retired tables.** `fact_placement` is retired; use `fct_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects. (`dim_offer_status` is no longer retired — it is an active Gold dimension per GLD-008.)
 4. **For blocked KPIs:** Track source-field delivery in the enhancement backlog. When a source field becomes available, add it to `schema_definition.csv`, rerun the Silver formatter, then extend the Gold model before creating the corresponding DAX.
-5. **Reconciliation:** Before rebuilding visual pages, reconcile `DISTINCTCOUNT` totals for `referral_id`, `offer_id`, `ipa_id`, and `referral_provider_id` against the legacy v15 report, and reconcile each MoM card stack against the corresponding v15 card.
+5. **Reconciliation:** Before rebuilding visual pages, reconcile `DISTINCTCOUNT` totals for `referral_id`, `offer_id`, `ipa_id`, and `referral_provider_id` against the legacy v15 report, reconcile each MoM card stack against the corresponding v15 card, and reconcile the four gender measures against the legacy `dim_referral[Gender Clean]` card totals (referral-grain, `Unknown` handling included).
 6. **Dangling-reference fix:** `IPA Signature Completion Rate` previously referenced an undefined `Referrals with IPA` measure; `Referrals With IPA` is now defined in the build guide (Section 2.8, row 115).
 
 ---
 
-*This audit was produced against the active notebook set promoted from version 02 04. Re-run the audit whenever the Gold model or DAX build guide is updated.*
+*This audit was produced against the active notebook set promoted from version 02 04, extended by the GLD-005–008 Gold dimension remediation. Re-run the audit whenever the Gold model or DAX build guide is updated.*

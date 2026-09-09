@@ -24,6 +24,8 @@ assert dax_blocks, "the Gold semantic-model guide has no DAX code blocks"
 allowed_gold_tables = {
     "bridge_provider_framework",
     "dim_date",
+    "dim_offer_status",
+    "dim_person",
     "dim_provider",
     "dim_provider_home",
     "dim_provider_submission_document",

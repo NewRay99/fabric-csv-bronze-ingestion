@@ -104,7 +104,7 @@ assert "x.estimated_weekly_cost," in fact_source
 print("PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present")
 
 for field in {
-    "child_id",
+    "person_id",
     "referral_created_date",
     "required_placement_date",
     "first_action_date",

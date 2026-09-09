@@ -46,6 +46,8 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `gold.dim_placement_type` | Placement type | `05_gold_dimensions.ipynb` | Placement-type filter dimension |
 | `gold.dim_referral_status` | Referral status | `05_gold_dimensions.ipynb` | Status filter dimension |
 | `gold.dim_provider_submission_document` | Submission document | `05_gold_dimensions.ipynb` | Document expiry and compliance measures |
+| `gold.dim_person` | One current row per person | `05_gold_dimensions.ipynb` | Gender referral measures (KPI-04–07) via `gender_clean`; GLD-006/GLD-007 |
+| `gold.dim_offer_status` | One row per observed offer-status code | `05_gold_dimensions.ipynb` | Offer-status labels and active/accepted/terminal flags; GLD-008 |
 | `gold.bridge_provider_framework` | Provider-framework link | `05_gold_dimensions.ipynb` | Framework vs non-framework provider counts |
 | `gold.bridge_provider_sic_code` | Provider-SIC link | `05_gold_dimensions.ipynb` | Industry-classification breakdowns |
 
@@ -66,6 +68,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
 | `referral_id` | STRING (PK) | `silver.referral` | Total Referrals, all referral-count measures |
+| `person_id` | STRING | `silver.referral_person` (first recorded person per referral) | Gender referral measures via `dim_person` (GLD-006/007) |
 | `is_open` | BOOLEAN | Derived from `current_status` | Open Referrals, Closed Referrals, Open Overdue, Stalled |
 | `has_offer` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals With an Offer, Awaiting Offer, Engagement measures |
 | `is_not_seen_by_providers` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals Without Provider Assignment |
@@ -164,6 +167,8 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `dim_provider[provider_id]` | `dim_provider_home[provider_id]` | 1:* | |
 | `dim_provider[provider_id]` | `bridge_provider_framework[provider_id]` | 1:* | |
 | `dim_provider_home[provider_home_id]` | `dim_provider_submission_document[home_id]` | 1:* | |
+| `dim_person[person_id]` | `fact_referral[person_id]` | 1:* | Gender breakdown (GLD-006/007) |
+| `dim_offer_status[offer_status]` | `fact_offer[offer_status]` | 1:* | Offer-status labels/flags (GLD-008) |
 
 ### 4.2 Date relationships
 
@@ -197,9 +202,12 @@ The following fields exist in the Gold schema but are **not populated** by the c
 
 The following KPI groups require fields that do not exist in **any** Gold table:
 
+*KPI-04–07 (gender breakdown) was removed from this list in the GLD-006/007
+remediation: `dim_person[gender_clean]` plus `fact_referral[person_id]` now
+support it.*
+
 | KPI group | Missing field/grain | Required source change |
 |---|---|---|
-| KPI-04–07 | `child_gender` | Add gender to referral extract |
 | Legacy Provider Contact Referral family (6 measures) | `contact_made` | Add provider-contact flag to referral extract |
 | KPI-77–78, 80–82, 85–86, 114 | IPA-grain signature status | Add signature audit trail to IPA extract |
 | KPI-98 | QA flag-type dimension | Add flag-type codes to provider extract |
@@ -232,10 +240,10 @@ Before declaring the semantic model ready:
 - [ ] All relationships in Section 4.1 are created
 - [ ] Date relationships in Section 4.2 are configured (active or inactive as specified)
 - [ ] No ambiguous `fact_offer` → `fct_ipa` relationship exists
-- [ ] All 185 measures in `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (109 original + 76 legacy v15 ports) are created and total correctly
+- [ ] All 189 measures in `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (109 original + 76 legacy v15 ports + 4 gender measures) are created and total correctly
 - [ ] Every measure extracted from the legacy `SM WMPP v15.zip` model has a disposition in the build guide's legacy v15 full-library port section (ported, alias, retired, or blocked)
 - [ ] `DISTINCTCOUNT` totals reconcile for `referral_id`, `offer_id`, `ipa_id`, `referral_provider_id`
-- [ ] No DAX references `bronze.*`, `silver.*`, or retired table names (`fact_placement`, `fact_referral_offer`, `dim_referral`, `dim_offer_status`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI`, `Draft Age Band Table`)
+- [ ] No DAX references `bronze.*`, `silver.*`, or retired table names (`fact_placement`, `fact_referral_offer`, `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI`, `Draft Age Band Table`); `dim_offer_status` is an active Gold table (GLD-008) and is exempt from this list
 - [ ] Blocked fields in Section 5 are not used in published measures
 
 ---

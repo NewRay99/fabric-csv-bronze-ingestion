@@ -18,10 +18,10 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 | `ARCH-ETL` | Archive ETL pipeline issue | 2 |
 | `LIVE-ETL` | Live ETL pipeline issue | 1 |
 | `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 4 |
+| `GLD` | Gold-layer issue | 8 |
 | `CFG` | Configuration and monitoring issue | 9 |
 | `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **55** |
+| **Total classified issues** |  | **59** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1293,58 +1293,90 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
 
 ## GLD-005 - SM WMPP v15 required fields - Gold layer missing table or fields
 
-missing field iin gold.dim_provider_home 
-- home_contact_number
-- registered_manager_contact_number
+- **Symptom:** `gold.dim_provider_home` did not publish
+  `home_contact_number` or `registered_manager_contact_number`, which the
+  legacy v15 provider-home visuals display.
+- **Cause:** the `05_gold_dimensions.ipynb` `dim_provider_home` select list
+  omitted both columns even though `silver.provider_home` carries them
+  (`schema_definition.csv` rows 318 and 321).
+- **Fix:** both columns were added to the `latest_dimension` select list for
+  `silver.provider_home` -> `gold.dim_provider_home`, so the existing
+  latest-row-per-home logic now carries them.
+- **Validation:** `require_columns` fails the notebook before any write if
+  either column disappears from Silver. Notebook Python syntax validated.
+- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
+  and refresh the semantic model.
 
 ## GLD-006 - SM WMPP v15 required fields - Gold layer missing table or fields
-referral_person is missing or a dim_person 
-this was used to identify the persons gender. it is still needed. the person  id should be in the fact_referral table 
+
+- **Symptom:** no person dimension existed in Gold, and `fact_referral` had
+  no `person_id`, so the referral-grain gender breakdown (KPI-04-07) could
+  not be rebuilt against Gold. `referral_person` is still needed to identify
+  the person's gender.
+- **Cause:** `silver.referral_person` was only used to derive the former
+  `fact_referral[child_id]` convenience field; no Gold person dimension was
+  published.
+- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_person` (one
+  current row per `person_id` from `silver.referral_person`, latest
+  `export_date` wins) with `initials`, `age_value`, `age_date_unit`,
+  `has_restrictions`, `gender`, `gender_clean`, `ethnicity`, `religion`,
+  `preferred_language` and `source_export_date`. `04_gold_model.ipynb`
+  publishes `person_id` on `fact_referral` (first recorded person per
+  referral) as the single person link — the interim `child_id` alias was
+  removed, and the snapshot migration renames legacy `ChildID`/`child_id`
+  to `person_id`, so `fact_referral_snapshot` carries the same field. This
+  enables the `dim_person[person_id]` -> `fact_referral[person_id]`
+  relationship.
+- **Validation:** notebook Python syntax validated; `require_columns` guards
+  every consumed Silver column.
+- **Status:** resolved in source; rerun `04_gold_model.ipynb` then
+  `05_gold_dimensions.ipynb` in Fabric, then create the new relationship in
+  the semantic model.
 
 
 ## GLD-007 - SM WMPP v15 required fields - Gold layer missing table or fields
-gender is missing
-let
-    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
-    silver_referral_person = Source{[Schema="silver",Item="referral_person"]}[Data],
-    #"Merged Queries" = Table.NestedJoin(silver_referral_person, {"person_id"}, stg_referral_person_support_needs, {"person_id"}, "stg_referral_person_support_needs", JoinKind.LeftOuter),
-    #"Expanded stg_referral_person_support_needs" = Table.ExpandTableColumn(#"Merged Queries", "stg_referral_person_support_needs", {"support_need"}, {"support_need"}),
-    #"Merged Queries1" = Table.NestedJoin(#"Expanded stg_referral_person_support_needs", {"referral_id"}, fact_referral, {"referral_id"}, "fact_referral", JoinKind.LeftOuter),
-    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries1", "fact_referral", {"referral_sk"}, {"referral_sk"}),
-    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_referral", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
-    #"Expanded dim_person" = Table.ExpandTableColumn(#"Merged Queries2", "dim_person", {"person_sk"}, {"person_sk"}),
-    #"Changed Type" = Table.TransformColumnTypes(#"Expanded dim_person",{{"has_restrictions", type logical}}),
-    #"Merged Queries3" = Table.NestedJoin(#"Changed Type", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
-    #"Expanded dim_person1" = Table.ExpandTableColumn(#"Merged Queries3", "dim_person", {"Gender Clean"}, {"Gender Clean"}),
-    #"Removed Columns" = Table.RemoveColumns(#"Expanded dim_person1",{"initials", "age_value", "age_date_unit", "has_restrictions", "restriction_details", "source_reference_id", "gender", "gender_other", "ethnicity", "ethnicity_other", "religion", "religion_other", "preferred_language", "preferred_language_other", "child_index", "export_date", "support_need", "referral_sk", "person_sk"}),
-    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"referral_id", Order.Ascending}, {"person_id", Order.Ascending}}),
-    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_id"}, {{"All Rows", each _, type table [person_id=nullable text, referral_id=nullable text, Gender Clean=text]}}),
-    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Primary Row", each Table.FirstN([All Rows], 1)),
-    #"Expanded Primary Row2" = Table.ExpandTableColumn(#"Added Custom", "Primary Row", {"Gender Clean"}, {"Gender Clean"}),
-    #"Removed Columns1" = Table.RemoveColumns(#"Expanded Primary Row2",{"All Rows"}),
-    #"Replaced Value" = Table.ReplaceValue(#"Removed Columns1",null,"Unknown",Replacer.ReplaceValue,{"Gender Clean"})
-in
-    #"Replaced Value"
+
+- **Symptom:** gender was missing from Gold. The legacy model produced a
+  per-referral `Gender Clean` column via `dim_person`, grouped to referral
+  grain with nulls replaced by `Unknown` (legacy Power Query recorded in
+  `reports/client-deliverables/SM WMPP v15 (2).zip`).
+- **Cause:** no Gold table exposed a cleaned gender value.
+- **Fix:** `gold.dim_person[gender_clean]` reproduces the legacy mapping
+  exactly (`Male` -> `Male`, `Female` -> `Female`, `Another Gender`/`Other`
+  -> `Other`, anything else or null -> `Unknown`). The legacy per-referral
+  grouping is superseded by the `dim_person` -> `fact_referral[person_id]`
+  relationship; no separate referral-gender table is created, and
+  `dim_referral_gender` remains retired. Copy-ready DAX for Female / Male /
+  Other / Total Gendered Referrals was added to
+  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (Gender referral measures,
+  KPI-04-07) and the coverage audit rev 3.
+- **Validation:** legacy `dim_person` partition M code transcribed verbatim
+  into the Spark mapping; notebook Python syntax validated.
+- **Status:** resolved in source; reconcile the four gender measures against
+  the legacy v15 card totals after the Fabric rerun.
 
 
 
 ## GLD-008 - SM WMPP v15 required fields - Gold layer missing table or fields
-dim_offer_status is missing
 
-let
-    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
-    gold_fact_offer = Source{[Schema="gold",Item="fact_offer"]}[Data],
-    #"Removed Other Columns" = Table.SelectColumns(gold_fact_offer,{"offer_status"}),
-    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
-    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"offer_status", "offer_status_code"}}),
-    #"Added Conditional Column" = Table.AddColumn(#"Renamed Columns", "offer_status_label", each if [offer_status_code] = "OFFER_SUCCESSFUL" then "Accepted" else if [offer_status_code] = "DRAFT" then "Draft" else if [offer_status_code] = "OFFER_MADE" then "Pending" else if [offer_status_code] = "OFFER_UNSUCCESSFUL" then "Unsuccessful" else if [offer_status_code] = "OFFER_WITHDRAWN" then "Withdrawn" else null),
-    #"Added Conditional Column1" = Table.AddColumn(#"Added Conditional Column", "is_active_offer", each if [offer_status_code] = "OFFER_MADE" then true else false),
-    #"Added Conditional Column2" = Table.AddColumn(#"Added Conditional Column1", "is_accepted", each if [offer_status_code] = "OFFER_SUCCESSFUL" then true else false),
-    #"Added Conditional Column3" = Table.AddColumn(#"Added Conditional Column2", "is_terminal", each if [offer_status_code] = "OFFER_UNSUCCESSFUL" then true else if [offer_status_code] = "OFFER_WITHDRAWN" then true else false),
-    #"Changed Type" = Table.TransformColumnTypes(#"Added Conditional Column3",{{"is_active_offer", type logical}, {"is_accepted", type logical}, {"is_terminal", type logical}}),
-    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
-    #"Renamed Columns1" = Table.RenameColumns(#"Added Index",{{"Index", "offer_status_sk"}, {"offer_status_code", "offer_status"}})
-in
-    #"Renamed Columns1"
-
-	
+- **Symptom:** `dim_offer_status` was missing. The legacy model carried an
+  offer-status dimension with labels (`Accepted`, `Draft`, `Pending`,
+  `Unsuccessful`, `Withdrawn`) and `is_active_offer` / `is_accepted` /
+  `is_terminal` flags (legacy Power Query recorded in
+  `reports/client-deliverables/SM WMPP v15 (2).zip`).
+- **Cause:** `dim_offer_status` had been listed as a retired legacy table,
+  but the v15 report still needs it as a slicer/label dimension.
+- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_offer_status`
+  from the distinct non-blank `silver.offer[offer_status]` codes with the
+  legacy label mapping, the three boolean flags, and an `offer_status_sk`
+  row-number surrogate key. Unrecognised future codes are retained with a
+  null label, matching the legacy conditional-column behaviour. It is built
+  from Silver (not `gold.fact_offer`) so the notebook keeps its Silver-only
+  source contract. The schema contract and build guide now list
+  `dim_offer_status` as an active Gold table with a
+  `dim_offer_status[offer_status]` -> `fact_offer[offer_status]`
+  relationship.
+- **Validation:** legacy partition M code transcribed into the Spark build;
+  notebook Python syntax validated.
+- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
+  and add the new relationship when rebuilding the semantic model.

@@ -29,7 +29,8 @@ DAX eligibility** column.
 ## Import and relationship instructions
 
 Import `fact_referral`, `fact_referral_snapshot`, `fact_offer`, `fct_ipa`,
-`fact_referral_provider`, and the active `dim_*` / `bridge_*` tables. Their
+`fact_referral_provider`, and the active `dim_*` / `bridge_*` tables
+(including `dim_person` and `dim_offer_status`). Their
 columns are lower-case `snake_case`.
 
 Create these active relationships:
@@ -45,6 +46,8 @@ Create these active relationships:
 | `dim_provider[provider_id]` | `dim_provider_home[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider[provider_id]` | `bridge_provider_framework[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider_home[provider_home_id]` | `dim_provider_submission_document[home_id]` | One-to-many, single direction | Active |
+| `dim_person[person_id]` | `fact_referral[person_id]` | One-to-many, single direction | Active |
+| `dim_offer_status[offer_status]` | `fact_offer[offer_status]` | One-to-many, single direction | Active |
 
 Use `dim_date[date]` as the Date table. Keep the relationships to
 `fact_referral[referral_created_date]` and
@@ -238,6 +241,28 @@ CALCULATE (
 Open Referral Rate at Snapshot = DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
 
 Placement Rate at Snapshot = DIVIDE ( [Referrals with IPA at Snapshot], [Snapshot Referrals] )
+```
+
+### Gender referral measures (KPI-04–07)
+
+`gold.dim_person` (GLD-006/GLD-007) supplies `gender_clean` at person grain,
+and `fact_referral[person_id]` links each referral to its recorded person.
+The active `dim_person[person_id]` → `fact_referral[person_id]` relationship
+makes these measures possible; they replace the legacy `dim_referral[Gender
+Clean]` breakdown.
+
+```DAX
+Female Referrals =
+CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Female" )
+
+Male Referrals =
+CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Male" )
+
+Other Gender Referrals =
+CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Other" )
+
+Total Gendered Referrals =
+CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] <> "Unknown" )
 ```
 
 ## Additional legacy KPI ports
@@ -777,7 +802,7 @@ still using the stable `fct_ipa[accepted_offer_id]` key.
 
 | Historic KPI groups now portable | Use the measures above / visual dimensions |
 | --- | --- |
-| KPI-01–03, 08–10, 19–24, 29–39, 87–90 | Referral, offer, provider-engagement, time, closure reason, status, assignment overlap and export measures. |
+| KPI-01–10, 19–24, 29–39, 87–90 | Referral, gender (via `dim_person[gender_clean]`), offer, provider-engagement, time, closure reason, status, assignment overlap and export measures. |
 | KPI-11–18, 25–28, 53–72 | Provider activity, offer portfolio, spot/non-spot, draft and pending age measures. |
 | KPI-40–52, 97, 99–101, 104, 116–117 | Provider/home register, framework coverage, QA flags, document expiry and onboarding measures. |
 | KPI-73–76, 79, 83–84, 107, 110 and 113 | IPA volume/cost, accepted-offer conversion, provider-message volume proxy and lifecycle-activity measures. |
@@ -786,7 +811,6 @@ still using the stable `fct_ipa[accepted_offer_id]` key.
 
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
-| KPI-04–07 | No child gender field in the active Gold referral fact. |
 | KPI-77–78, 80–82, 85–86, 114 | No IPA-grain signature status; `ipa_2_signatures` is a referral-level proxy only. |
 | KPI-95–96 | `fact_referral[region]` is not populated; provider geography is not a safe referral-region substitute. |
 | KPI-98 | Only one provider/home QA flag is published, not the historic flag-type breakdown. |
@@ -818,15 +842,17 @@ build guide. Disposition:
 
 | Disposition | Count | Meaning |
 | --- | ---: | --- |
-| Already covered (identical or alias) | 59 | Served by a measure in the sections above |
+| Already covered (identical or alias) | 63 | Served by a measure in the sections above (rev 3: includes the 4 gender measures now supported via `dim_person[gender_clean]`, GLD-006/GLD-007) |
 | Newly ported in this revision | 62 | Copy-ready Gold DAX below (76 definitions; MoM stacks completed to a consistent 5-measure pattern) |
 | Retired report-construct helpers | 15 | Not recreated; reasons listed below |
-| Blocked by missing Gold source fields | 17 | Added to the do-not-recreate list |
+| Blocked by missing Gold source fields | 13 | Added to the do-not-recreate list |
 | **Total legacy v15 measures** | **153** | |
 
 Every ported measure references active Gold tables only. No `bronze.*`,
 `silver.*`, `fact_placement`, `fact_referral_offer`, `dim_referral`,
-`dim_offer_status`, or `LocalDateTable` reference survives the port.
+or `LocalDateTable` reference survives the port. (`dim_offer_status` is now
+an active Gold table per GLD-008, rebuilt from Gold `fact_offer` status
+codes.)
 
 ### Month-on-month card variance and indicator family
 
@@ -1339,5 +1365,9 @@ at Bronze, Silver or legacy tables.
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
 | Provider Contact Referral card family (6 measures: base, Previous Month, Variance, MoM %, Indicator, Indicator Color) | No provider-contact flag (legacy `dim_referral[contact_made]`) anywhere in the active Gold referral fact. `is_not_seen_by_providers` is an offer-visibility flag, not a safe substitute. |
-| Female / Male / Other / Total Gendered Referrals | Already covered by the KPI-04-07 entry: no child gender field in the active Gold referral fact. |
 | Is IPA Completed / Is IPA Pending / Is In Accepted KPI | Already covered by the KPI-77-86 entry: no IPA-grain signature status. Use the referral-grain proxies instead. |
+
+The legacy Female / Male / Other / Total Gendered Referrals measures are no
+longer blocked: `dim_person[gender_clean]` and `fact_referral[person_id]`
+(GLD-006/GLD-007) support them. Use the copy-ready definitions in the
+"Gender referral measures (KPI-04–07)" section.
