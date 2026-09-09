@@ -1289,3 +1289,62 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
   Desktop with Fabric credentials and refresh to materialise; the bundled
   v15 report visuals reference removed tables and must be rebuilt against
   the new measure set.
+
+
+## GLD-005 - SM WMPP v15 required fields - Gold layer missing table or fields
+
+missing field iin gold.dim_provider_home 
+- home_contact_number
+- registered_manager_contact_number
+
+## GLD-006 - SM WMPP v15 required fields - Gold layer missing table or fields
+referral_person is missing or a dim_person 
+this was used to identify the persons gender. it is still needed. the person  id should be in the fact_referral table 
+
+
+## GLD-007 - SM WMPP v15 required fields - Gold layer missing table or fields
+gender is missing
+let
+    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+    silver_referral_person = Source{[Schema="silver",Item="referral_person"]}[Data],
+    #"Merged Queries" = Table.NestedJoin(silver_referral_person, {"person_id"}, stg_referral_person_support_needs, {"person_id"}, "stg_referral_person_support_needs", JoinKind.LeftOuter),
+    #"Expanded stg_referral_person_support_needs" = Table.ExpandTableColumn(#"Merged Queries", "stg_referral_person_support_needs", {"support_need"}, {"support_need"}),
+    #"Merged Queries1" = Table.NestedJoin(#"Expanded stg_referral_person_support_needs", {"referral_id"}, fact_referral, {"referral_id"}, "fact_referral", JoinKind.LeftOuter),
+    #"Expanded dim_referral" = Table.ExpandTableColumn(#"Merged Queries1", "fact_referral", {"referral_sk"}, {"referral_sk"}),
+    #"Merged Queries2" = Table.NestedJoin(#"Expanded dim_referral", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+    #"Expanded dim_person" = Table.ExpandTableColumn(#"Merged Queries2", "dim_person", {"person_sk"}, {"person_sk"}),
+    #"Changed Type" = Table.TransformColumnTypes(#"Expanded dim_person",{{"has_restrictions", type logical}}),
+    #"Merged Queries3" = Table.NestedJoin(#"Changed Type", {"person_id"}, dim_person, {"person_id"}, "dim_person", JoinKind.LeftOuter),
+    #"Expanded dim_person1" = Table.ExpandTableColumn(#"Merged Queries3", "dim_person", {"Gender Clean"}, {"Gender Clean"}),
+    #"Removed Columns" = Table.RemoveColumns(#"Expanded dim_person1",{"initials", "age_value", "age_date_unit", "has_restrictions", "restriction_details", "source_reference_id", "gender", "gender_other", "ethnicity", "ethnicity_other", "religion", "religion_other", "preferred_language", "preferred_language_other", "child_index", "export_date", "support_need", "referral_sk", "person_sk"}),
+    #"Sorted Rows" = Table.Sort(#"Removed Columns",{{"referral_id", Order.Ascending}, {"person_id", Order.Ascending}}),
+    #"Grouped Rows" = Table.Group(#"Sorted Rows", {"referral_id"}, {{"All Rows", each _, type table [person_id=nullable text, referral_id=nullable text, Gender Clean=text]}}),
+    #"Added Custom" = Table.AddColumn(#"Grouped Rows", "Primary Row", each Table.FirstN([All Rows], 1)),
+    #"Expanded Primary Row2" = Table.ExpandTableColumn(#"Added Custom", "Primary Row", {"Gender Clean"}, {"Gender Clean"}),
+    #"Removed Columns1" = Table.RemoveColumns(#"Expanded Primary Row2",{"All Rows"}),
+    #"Replaced Value" = Table.ReplaceValue(#"Removed Columns1",null,"Unknown",Replacer.ReplaceValue,{"Gender Clean"})
+in
+    #"Replaced Value"
+
+
+
+## GLD-008 - SM WMPP v15 required fields - Gold layer missing table or fields
+dim_offer_status is missing
+
+let
+    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+    gold_fact_offer = Source{[Schema="gold",Item="fact_offer"]}[Data],
+    #"Removed Other Columns" = Table.SelectColumns(gold_fact_offer,{"offer_status"}),
+    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns"),
+    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"offer_status", "offer_status_code"}}),
+    #"Added Conditional Column" = Table.AddColumn(#"Renamed Columns", "offer_status_label", each if [offer_status_code] = "OFFER_SUCCESSFUL" then "Accepted" else if [offer_status_code] = "DRAFT" then "Draft" else if [offer_status_code] = "OFFER_MADE" then "Pending" else if [offer_status_code] = "OFFER_UNSUCCESSFUL" then "Unsuccessful" else if [offer_status_code] = "OFFER_WITHDRAWN" then "Withdrawn" else null),
+    #"Added Conditional Column1" = Table.AddColumn(#"Added Conditional Column", "is_active_offer", each if [offer_status_code] = "OFFER_MADE" then true else false),
+    #"Added Conditional Column2" = Table.AddColumn(#"Added Conditional Column1", "is_accepted", each if [offer_status_code] = "OFFER_SUCCESSFUL" then true else false),
+    #"Added Conditional Column3" = Table.AddColumn(#"Added Conditional Column2", "is_terminal", each if [offer_status_code] = "OFFER_UNSUCCESSFUL" then true else if [offer_status_code] = "OFFER_WITHDRAWN" then true else false),
+    #"Changed Type" = Table.TransformColumnTypes(#"Added Conditional Column3",{{"is_active_offer", type logical}, {"is_accepted", type logical}, {"is_terminal", type logical}}),
+    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+    #"Renamed Columns1" = Table.RenameColumns(#"Added Index",{{"Index", "offer_status_sk"}, {"offer_status_code", "offer_status"}})
+in
+    #"Renamed Columns1"
+
+	
