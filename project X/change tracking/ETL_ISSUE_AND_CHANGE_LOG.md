@@ -1380,3 +1380,93 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
   notebook Python syntax validated.
 - **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
   and add the new relationship when rebuilding the semantic model.
+
+##LIVE-ETL-002 - Job hangs on 90_run_live_pipeline
+
+- **Symptoms** job hangs when running the `90_run_live_pipeline` at `03_silver_business_rules` stage
+  error message is
+
+  2026-09-11 17:03:19,513 ERROR UserContextCatalogResolver [OneLakeUtil-pool-14]: OneSecurity exception while resolving schema name
+org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS.
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.requireDbExists(SessionCatalog.scala:297)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.$anonfun$getTableRawMetadata$3(SessionCatalog.scala:648)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMs(OneSecurityTelemetry.scala:542)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.getTableRawMetadata(SessionCatalog.scala:647)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.getTableMetadata(SessionCatalog.scala:631)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.$anonfun$getTableMetadata$2(UserContextCatalogResolver.scala:102)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMs(OneSecurityTelemetry.scala:542)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry.executeAndLogMetricMs(OneSecurityTelemetry.scala:192)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry.executeAndLogMetricMs$(OneSecurityTelemetry.scala:190)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.executeAndLogMetricMs(UserContextCatalogResolver.scala:41)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.getTableMetadata(UserContextCatalogResolver.scala:102)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.resolveSchemaTableName(UserContextCatalogResolver.scala:57)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.getWorkSpaceArtifactIdAndResolveSchemaTableName(OneLakeUtil.scala:862)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.buildTableName(OneLakeUtil.scala:235)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$3(OneLakeUtil.scala:653)
+	at scala.Option.flatMap(Option.scala:271)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$2(OneLakeUtil.scala:652)
+	at scala.Option.flatMap(Option.scala:271)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$1(OneLakeUtil.scala:651)
+	at scala.util.Try$.apply(Try.scala:213)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.resolveTwoPartTableName(OneLakeUtil.scala:651)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.getResolvedWorkSpaceAndArtifactNames(OneLakeUtil.scala:359)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveWorkSpaceAndArtifactName$13(OneLakeUtil.scala:466)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:659)
+	at scala.util.Success.$anonfun$map$1(Try.scala:255)
+	at scala.util.Success.map(Try.scala:213)
+	at scala.concurrent.Future.$anonfun$map$1(Future.scala:292)
+	at scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:33)
+	at scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:33)
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+2026-09-11 17:03:21,107 ERROR UserContextCatalogResolver [OneLakeUtil-pool-11]: OneSecurity exception while resolving schema name
+org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog.
+If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
+To tolerate the error on drop use DROP SCHEMA IF EXISTS.
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.requireDbExists(SessionCatalog.scala:297)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.$anonfun$getTableRawMetadata$3(SessionCatalog.scala:648)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMs(OneSecurityTelemetry.scala:542)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.getTableRawMetadata(SessionCatalog.scala:647)
+	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.getTableMetadata(SessionCatalog.scala:631)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.$anonfun$getTableMetadata$2(UserContextCatalogResolver.scala:102)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMs(OneSecurityTelemetry.scala:542)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry.executeAndLogMetricMs(OneSecurityTelemetry.scala:192)
+	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry.executeAndLogMetricMs$(OneSecurityTelemetry.scala:190)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.executeAndLogMetricMs(UserContextCatalogResolver.scala:41)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.getTableMetadata(UserContextCatalogResolver.scala:102)
+	at org.apache.spark.microsoft.onesecurity.catalog.UserContextCatalogResolver.resolveSchemaTableName(UserContextCatalogResolver.scala:57)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.getWorkSpaceArtifactIdAndResolveSchemaTableName(OneLakeUtil.scala:862)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.buildTableName(OneLakeUtil.scala:235)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$3(OneLakeUtil.scala:653)
+	at scala.Option.flatMap(Option.scala:271)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$2(OneLakeUtil.scala:652)
+	at scala.Option.flatMap(Option.scala:271)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveTwoPartTableName$1(OneLakeUtil.scala:651)
+	at scala.util.Try$.apply(Try.scala:213)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.resolveTwoPartTableName(OneLakeUtil.scala:651)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.getResolvedWorkSpaceAndArtifactNames(OneLakeUtil.scala:359)
+	at org.apache.spark.microsoft.onesecurity.util.OneLakeUtil$.$anonfun$resolveWorkSpaceAndArtifactName$13(OneLakeUtil.scala:466)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:659)
+	at scala.util.Success.$anonfun$map$1(Try.scala:255)
+	at scala.util.Success.map(Try.scala:213)
+	at scala.concurrent.Future.$anonfun$map$1(Future.scala:292)
+	at scala.concurrent.impl.Promise.liftedTree1$1(Promise.scala:33)
+	at scala.concurrent.impl.Promise.$anonfun$transform$1(Promise.scala:33)
+	at scala.concurrent.impl.CallbackRunnable.run(Promise.scala:64)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+
+##LIVE-ETL-003 - Job takes a very long time to process on 90_run_live_pipeline
+
+i have extended the time in the notebook with 
+NOTEBOOK_TIMEOUT_SECONDS = 22200
+and usually happens at `03_silver_business_rules` step. is this because of prior error or are there performance upgrade i can do to the queries inside the step.. can you apply logging steps in-between the cells to monitor each cell too?
