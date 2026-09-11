@@ -1,0 +1,17 @@
+--- original/00b_reset_silver_cfg.py:metadata
++++ client/00b_reset_silver_cfg.Notebook:metadata
+@@ -78,14 +78,6 @@
+     },
+     "kernel_info": {
+       "name": "synapse_pyspark"
+-    },
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

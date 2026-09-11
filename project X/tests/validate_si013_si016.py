@@ -1,20 +1,19 @@
 """Regression checks for SI-013 through SI-016 shared-library and replay controls."""
 
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
-PROJECT = ROOT / "project X"
-COMMON = PROJECT / "99_common_library.ipynb"
-SETUP = PROJECT / "00_setup_cfg.ipynb"
-ARCHIVE_REPLAY = PROJECT / "02a_archive_silver.ipynb"
-ARCHIVE_RUNNER = PROJECT / "90_run_archive_pipeline.ipynb"
-LATEST_SILVER = PROJECT / "02_silver_formatter.ipynb"
+PROJECT = Path(__file__).resolve().parents[1]
+COMMON = PROJECT / "99_common_library.py"
+SETUP = PROJECT / "00_setup_cfg.py"
+ARCHIVE_REPLAY = PROJECT / "02a_archive_silver.py"
+ARCHIVE_RUNNER = PROJECT / "90_run_archive_pipeline.py"
+LATEST_SILVER = PROJECT / "02_silver_formatter.py"
 
 
 def source(path):
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     return "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
 
@@ -39,8 +38,8 @@ def main():
     assert not missing_common, f"Common library is missing: {missing_common}"
     print("PASS common library is valid and owns shared helpers")
 
-    for notebook in PROJECT.glob("*.ipynb"):
-        if notebook.name in {COMMON.name, "common_util.ipynb"}:
+    for notebook in PROJECT.glob("*.py"):
+        if notebook.name in {COMMON.name, "common_util.py"}:
             continue
         text = source(notebook)
         assert "%run common_util" not in text, f"{notebook.name} still imports common_util"

@@ -1,0 +1,7 @@
+--- original/90_run_live_pipeline.py:code
++++ client/90_run_live_pipeline.Notebook:code
+@@ -1,4 +1,4 @@
+-NOTEBOOK_TIMEOUT_SECONDS = 1800
++NOTEBOOK_TIMEOUT_SECONDS = 2200
+ STOP_ON_ERROR = True
+ JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.

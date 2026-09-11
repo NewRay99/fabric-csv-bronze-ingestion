@@ -1,9 +1,29 @@
 # Notebook regression checks
 
-The `validate_*.py` files perform portable static checks on the active notebooks
-and configuration contract. Run them from the `project X` folder or adjust the
-working directory/path assumptions if required.
+The numbered `.py` notebooks in `project X` are the primary source. Every
+notebook validator and the Gold SQL extractor reads that source through
+`notebook_loader.py`, which uses the shared Fabric parser in
+`../tools/fabric_notebooks.py`. No validator falls back to the retained `.ipynb`
+migration references.
 
-`_gold_sim_test.py` requires PySpark/Delta dependencies and may need to run in a
-compatible Spark environment. End-to-end notebook orchestration remains a
-Fabric acceptance test.
+The parser preserves cell boundaries, parameter tags, Markdown, `%run`, SQL
+magic and metadata so the existing business checks still inspect notebook
+semantics. Python syntax checks run on decoded Python cells, not on the whole
+Fabric file containing notebook magic commands.
+
+From the repository root:
+
+```powershell
+python -m pytest
+python "project X/tests/validate_table_naming_and_archive_runner.py"
+```
+
+`test_validation_scripts.py` runs all `validate_*.py` scripts as subprocesses.
+`test_fabric_notebooks.py` covers the format boundary and every primary notebook.
+Tests do not require the supplied client snapshot; the comparison is generated
+separately with `python "project X/tools/fabric_notebooks.py" compare`.
+
+`_extract_gold_sql.py` extracts SQL from primary `04_gold_model.py` for the
+simulation fixture. `_gold_sim_test.py` requires PySpark/Delta dependencies and
+may need a compatible Spark environment. End-to-end notebook orchestration and
+Fabric import/deployment remain Fabric acceptance tests.

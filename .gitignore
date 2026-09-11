@@ -3,6 +3,7 @@ __pycache__/
 *.pyc
 .venv/
 .env
+.pytest_tmp/
 _sim_*/
 _gold_sim_warehouse/
 project X/tests/_sim_*/

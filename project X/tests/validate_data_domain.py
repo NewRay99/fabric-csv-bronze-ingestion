@@ -1,18 +1,18 @@
 """Static regression checks for the Bronze data-domain profiler."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK = ROOT / "99_data_domain.ipynb"
-COMMON_LIBRARY = ROOT / "99_common_library.ipynb"
-SETUP = ROOT / "00_setup_cfg.ipynb"
+NOTEBOOK = ROOT / "99_data_domain.py"
+COMMON_LIBRARY = ROOT / "99_common_library.py"
+SETUP = ROOT / "00_setup_cfg.py"
 
 
 def notebook_source(path: Path) -> str:
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     for index, cell in enumerate(notebook["cells"]):
         source = "".join(cell.get("source", []))
         if (

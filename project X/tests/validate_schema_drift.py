@@ -1,5 +1,5 @@
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,7 +12,7 @@ def check(condition, message):
 
 
 def notebook_source(name):
-    notebook = json.loads((ROOT / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(ROOT / name)
     return "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
 
@@ -29,19 +29,19 @@ check(
 )
 
 contract_consumers = [
-    "01a_cfg_schema_capture_live.ipynb",
-    "01a_cfg_schema_capture_archive.ipynb",
-    "02_silver_formatter.ipynb",
-    "02a_archive_silver.ipynb",
-    "03_silver_business_rules.ipynb",
+    "01a_cfg_schema_capture_live.py",
+    "01a_cfg_schema_capture_archive.py",
+    "02_silver_formatter.py",
+    "02a_archive_silver.py",
+    "03_silver_business_rules.py",
 ]
 for name in contract_consumers:
     source = notebook_source(name)
     check('row["schema_name"]' not in source, f"{name} still indexes schema_name")
     check('row.get("schema_name")' not in source, f"{name} still reads schema_name")
 
-live_source = notebook_source("01a_cfg_schema_capture_live.ipynb")
-common_source = notebook_source("99_common_library.ipynb")
+live_source = notebook_source("01a_cfg_schema_capture_live.py")
+common_source = notebook_source("99_common_library.py")
 check(
     "def etl_logical_table_name" in common_source,
     "common library does not define etl_logical_table_name",
@@ -68,13 +68,13 @@ for required in [
 ]:
     check(required in live_source, f"daily live capture is missing {required}")
 
-setup_source = notebook_source("00_setup_cfg.ipynb")
+setup_source = notebook_source("00_setup_cfg.py")
 check(
     "monitoring.cfg_schema_drift_definition" in setup_source,
     "00_setup_cfg does not deploy cfg_schema_drift_definition",
 )
 
-dq_source = notebook_source("03_silver_business_rules.ipynb")
+dq_source = notebook_source("03_silver_business_rules.py")
 for guard in [
     "Missing Silver source table",
     "Missing Silver column(s)",
@@ -83,12 +83,12 @@ for guard in [
 ]:
     check(guard in dq_source, f"03_silver_business_rules lost SKIPPED guard: {guard}")
 
-archive_source = notebook_source("01a_cfg_schema_capture_archive.ipynb")
+archive_source = notebook_source("01a_cfg_schema_capture_archive.py")
 check('COMPARED_SCHEMA = "Bronze"' in archive_source, "archive capture was not restored")
 check("ARCHIVE_TABLE_PREFIX" not in archive_source, "archive capture still has the unwanted rewrite")
 check('StructField("schema_name"' not in archive_source, "archive capture still stores schema_name")
 
-for name in ["02_silver_formatter.ipynb", "02a_archive_silver.ipynb"]:
+for name in ["02_silver_formatter.py", "02a_archive_silver.py"]:
     source = notebook_source(name)
     check("actual_type string" in source, f"{name} still writes the legacy drift-event shape")
     check("drift_event_row" in source, f"{name} has no expanded drift-event row builder")

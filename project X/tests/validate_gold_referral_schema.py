@@ -2,7 +2,7 @@
 
 import ast
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 import re
 import sys
 from pathlib import Path
@@ -13,18 +13,18 @@ ROOT = (
     if len(sys.argv) == 2
     else Path(__file__).resolve().parents[1]
 )
-NOTEBOOK = ROOT / "04_gold_model.ipynb"
+NOTEBOOK = ROOT / "04_gold_model.py"
 SCHEMA = ROOT / "configuration" / "schema_definition.csv"
 
 
-notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8-sig"))
+notebook = read_notebook(NOTEBOOK)
 cells = ["".join(cell.get("source", [])) for cell in notebook["cells"]]
 source = "\n".join(cells)
 for index, cell in enumerate(notebook["cells"]):
     code = "".join(cell.get("source", []))
     if cell.get("cell_type") == "code" and not code.lstrip().startswith("%"):
         ast.parse(code, filename=f"gold-model:cell-{index}")
-print("PASS notebook JSON and Python syntax")
+print("PASS Fabric notebook cells and Python syntax")
 
 
 with SCHEMA.open("r", encoding="utf-8-sig", newline="") as handle:

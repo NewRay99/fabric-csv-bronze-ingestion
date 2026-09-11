@@ -1,7 +1,7 @@
 """Static checks for job-level monitoring, lineage, drift and DQ views."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
@@ -9,7 +9,7 @@ PROJECT = Path(__file__).resolve().parents[1]
 
 
 def source(name):
-    notebook = json.loads((PROJECT / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(PROJECT / name)
     text = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
     for index, cell in enumerate(notebook["cells"]):
         code = "".join(cell.get("source", []))
@@ -18,7 +18,7 @@ def source(name):
     return text
 
 
-setup = source("00_setup_cfg.ipynb")
+setup = source("00_setup_cfg.py")
 for expected in (
     "monitoring.cfg_gold_lineage_mapping",
     "monitoring.vw_job_step_timing",
@@ -33,9 +33,9 @@ for expected in (
     assert expected in setup, f"setup is missing {expected}"
 
 for notebook in (
-    "01a_cfg_schema_capture_live.ipynb",
-    "02_silver_formatter.ipynb",
-    "02a_archive_silver.ipynb",
+    "01a_cfg_schema_capture_live.py",
+    "02_silver_formatter.py",
+    "02a_archive_silver.py",
 ):
     text = source(notebook)
     assert "job_run_id string" in text, f"{notebook} does not write job-linked drift"

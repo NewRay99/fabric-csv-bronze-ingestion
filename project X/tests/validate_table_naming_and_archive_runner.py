@@ -1,7 +1,7 @@
 """Regression checks for source-named tables and archive orchestration."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 import sys
 from pathlib import Path
 
@@ -14,7 +14,7 @@ ROOT = (
 
 
 def notebook_source(name):
-    notebook = json.loads((ROOT / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(ROOT / name)
     cells = []
     for index, cell in enumerate(notebook["cells"]):
         source = "".join(cell.get("source", []))
@@ -24,14 +24,14 @@ def notebook_source(name):
     return "\n".join(cells)
 
 
-bronze = notebook_source("01_bronze_get_latest.ipynb")
-live_capture = notebook_source("01a_cfg_schema_capture_live.ipynb")
-silver = notebook_source("02_silver_formatter.ipynb")
-archive_silver = notebook_source("02a_archive_silver.ipynb")
-reset = notebook_source("00b_reset_silver_cfg.ipynb")
-common = notebook_source("99_common_library.ipynb")
-archive_capture = notebook_source("01a_cfg_schema_capture_archive.ipynb")
-archive_runner = notebook_source("90_run_archive_pipeline.ipynb")
+bronze = notebook_source("01_bronze_get_latest.py")
+live_capture = notebook_source("01a_cfg_schema_capture_live.py")
+silver = notebook_source("02_silver_formatter.py")
+archive_silver = notebook_source("02a_archive_silver.py")
+reset = notebook_source("00b_reset_silver_cfg.py")
+common = notebook_source("99_common_library.py")
+archive_capture = notebook_source("01a_cfg_schema_capture_archive.py")
+archive_runner = notebook_source("90_run_archive_pipeline.py")
 
 assert 'TABLE_PREFIX     = ""' in bronze
 assert "TABLE_PREFIXES = ()" in live_capture

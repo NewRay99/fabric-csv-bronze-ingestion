@@ -1,0 +1,17 @@
+--- original/90_run_live_pipeline.py:metadata
++++ client/90_run_live_pipeline.Notebook:metadata
+@@ -45,14 +45,6 @@
+     },
+     "kernel_info": {
+       "name": "synapse_pyspark"
+-    },
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

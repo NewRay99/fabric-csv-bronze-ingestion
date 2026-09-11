@@ -1,0 +1,83 @@
+--- original/03_silver_business_rules.py
++++ client/03_silver_business_rules.Notebook/notebook-content.py
+@@ -8,22 +8,14 @@
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -31,11 +23,11 @@
+ # MARKDOWN ********************
+
+ # # 03 — Silver business and data-quality rules
+-#
++#
+ # Run metadata-driven checks against the schema-conformed Silver tables.
+ # Primary-key and foreign-key rules come from `schema_definition.csv`; additional
+ # date and numeric rules come from `dq_rule_definition.csv`.
+-#
++#
+ # Rejected-row logging stores only key references, not complete child records.
+
+ # CELL ********************
+@@ -45,6 +37,7 @@
+ FAIL_ON_CRITICAL = True
+
+ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
++
+
+ # METADATA ********************
+
+@@ -56,6 +49,7 @@
+ # CELL ********************
+
+ # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
++
+
+ # METADATA ********************
+
+@@ -87,6 +81,7 @@
+ # Pipeline status joins to the parent job; individual DQ results retain RUN_ID.
+ PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
+
++
+ # METADATA ********************
+
+ # META {
+@@ -99,6 +94,7 @@
+ append_rows("monitoring.cfg_pipeline_run", [(PIPELINE_RUN_ID, "03_silver_business_rules", "SILVER", "LATEST",
+     STARTED_AT, None, "RUNNING", 0, 0, 0, 0, None, JOB_RUN_ID or None)],
+     "run_id string,pipeline_name string,layer string,source_kind string,started_at timestamp,ended_at timestamp,status string,tables_succeeded int,tables_failed int,rows_read long,rows_written long,error_message string,job_run_id string")
++
+
+ # METADATA ********************
+
+@@ -795,6 +791,7 @@
+ print("Silver materialisations ready: age_band, directory_summary_axis, "
+       "fostering_axis, referral_closure_reason_summary, dim_date")
+
++
+ # METADATA ********************
+
+ # META {

@@ -1,0 +1,113 @@
+--- original/00a_rehydrate_archive_cfg.py
++++ client/00a_rehydrate_archive_cfg.Notebook/notebook-content.py
+@@ -8,22 +8,14 @@
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -31,14 +23,15 @@
+ # MARKDOWN ********************
+
+ # # 00a - Rehydrate archive monitoring controls
+-#
++#
+ # Reconstruct the global archive controls from existing archive tables, the
+ # legacy `archived.cfg_load_control`, and extracted ZIP folders.
+-#
++#
+ # An archive table containing row-level `export_date` is already suitable for
+ # `02a_archive_silver.ipynb`, even when older rows do not contain
+ # `_archive_source_path`. File-path lineage is used only for exact per-file
+ # replacement and is not a prerequisite for Silver or Gold replay.
++
+
+ # PARAMETERS CELL ********************
+
+@@ -53,6 +46,7 @@
+ AUDIT_TABLE = "monitoring.cfg_silver_export_load"
+ TIME_PARSER_POLICY = "CORRECTED"
+ NOTEBOOK_TIMEOUT_SECONDS = 1800
++
+
+ # METADATA ********************
+
+@@ -98,6 +92,8 @@
+ def qident(value):
+     return "`" + str(value).replace("`", "``") + "`"
+
++
++
+ # METADATA ********************
+
+ # META {
+@@ -115,6 +111,7 @@
+     {"AUDIT_TABLE": AUDIT_TABLE, "TIME_PARSER_POLICY": TIME_PARSER_POLICY},
+ )
+ print(f"Configuration setup completed: {cfg_result}")
++
+
+ # METADATA ********************
+
+@@ -161,6 +158,7 @@
+
+ print(f"Legacy control rows rehydrated: {rehydrated_legacy:,}")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -255,6 +253,7 @@
+
+ print(f"Table/export audit rows rehydrated: {rehydrated_table_exports:,}")
+ print(f"File-lineage audit rows rehydrated: {rehydrated_file_lineage:,}")
++
+
+ # METADATA ********************
+
+@@ -301,6 +300,7 @@
+
+ print(f"ZIP rows rehydrated: {rehydrated_zips:,}")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -336,9 +336,10 @@
+         "re-ingestion before historical replay."
+     )
+
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
++
++# METADATA ********************
++
++# META {
++# META   "language": "python",
++# META   "language_group": "synapse_pyspark"
++# META }

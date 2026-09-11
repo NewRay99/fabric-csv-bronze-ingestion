@@ -1,0 +1,97 @@
+--- original/05_gold_dimensions.py:code
++++ client/05_gold_dimensions.Notebook:code
+@@ -93,8 +93,6 @@
+      ("service_type", "service_type"), ("home_name", "home_name"),
+      ("town_city", "town_city"), ("county", "county"), ("postcode", "postcode"),
+      ("number_of_registered_beds", "registered_beds"), ("is_spot", "is_spot"),
+-     ("home_contact_number", "home_contact_number"),
+-     ("registered_manager_contact_number", "registered_manager_contact_number"),
+      ("qa_flag", "qa_flag"), ("export_date", "source_export_date")],
+ )
+ latest_dimension(
+@@ -152,85 +150,4 @@
+ )
+ (referral_statuses.write.format("delta").mode("overwrite")
+     .option("overwriteSchema", "true").saveAsTable("gold.dim_referral_status"))
+-
+-# GLD-006/GLD-007: person dimension with the legacy "Gender Clean" mapping.
+-# One current row per person; fact_referral[person_id] relates to this
+-# dimension for the gender KPIs (KPI-04-07). Null/unrecognised gender
+-# becomes "Unknown", matching the legacy model behaviour.
+-require_columns(
+-    "silver.referral_person",
+-    ["person_id", "initials", "age_value", "age_date_unit", "has_restrictions",
+-     "gender", "ethnicity", "religion", "preferred_language", "export_date"],
+-)
+-person_current = (
+-    spark.table("silver.referral_person")
+-    .withColumn(
+-        "_gold_dimension_rank",
+-        F.row_number().over(
+-            Window.partitionBy("person_id").orderBy(
+-                F.col("export_date").cast("timestamp").desc_nulls_last(),
+-                F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(),
+-            )
+-        ),
+-    )
+-    .where(F.col("_gold_dimension_rank") == 1)
+-)
+-dim_person = person_current.select(
+-    F.col("person_id").alias("person_id"),
+-    F.col("initials").alias("initials"),
+-    F.col("age_value").alias("age_value"),
+-    F.col("age_date_unit").alias("age_date_unit"),
+-    F.col("has_restrictions").alias("has_restrictions"),
+-    F.col("gender").alias("gender"),
+-    F.when(F.col("gender") == "Male", "Male")
+-    .when(F.col("gender") == "Female", "Female")
+-    .when(F.col("gender").isin("Another Gender", "Other"), "Other")
+-    .otherwise("Unknown")
+-    .alias("gender_clean"),
+-    F.col("ethnicity").alias("ethnicity"),
+-    F.col("religion").alias("religion"),
+-    F.col("preferred_language").alias("preferred_language"),
+-    F.col("export_date").alias("source_export_date"),
+-)
+-(dim_person.write.format("delta").mode("overwrite")
+-    .option("overwriteSchema", "true").saveAsTable("gold.dim_person"))
+-print(f"gold.dim_person: {dim_person.count():,} rows from silver.referral_person")
+-
+-# GLD-008: offer-status dimension with labels and lifecycle flags, rebuilt
+-# from the distinct offer_status codes observed in Silver. Unknown future
+-# codes are kept with a null label, matching the legacy model behaviour.
+-require_columns("silver.offer", ["offer_status"])
+-offer_statuses = (
+-    spark.table("silver.offer")
+-    .select(F.col("offer_status").alias("offer_status"))
+-    .where(F.col("offer_status").isNotNull() & (F.trim(F.col("offer_status")) != ""))
+-    .dropDuplicates()
+-    .withColumn(
+-        "offer_status_label",
+-        F.when(F.col("offer_status") == "OFFER_SUCCESSFUL", "Accepted")
+-        .when(F.col("offer_status") == "DRAFT", "Draft")
+-        .when(F.col("offer_status") == "OFFER_MADE", "Pending")
+-        .when(F.col("offer_status") == "OFFER_UNSUCCESSFUL", "Unsuccessful")
+-        .when(F.col("offer_status") == "OFFER_WITHDRAWN", "Withdrawn"),
+-    )
+-    .withColumn("is_active_offer", F.col("offer_status") == "OFFER_MADE")
+-    .withColumn("is_accepted", F.col("offer_status") == "OFFER_SUCCESSFUL")
+-    .withColumn(
+-        "is_terminal",
+-        F.col("offer_status").isin("OFFER_UNSUCCESSFUL", "OFFER_WITHDRAWN"),
+-    )
+-    .withColumn(
+-        "offer_status_sk",
+-        F.row_number().over(Window.orderBy("offer_status")),
+-    )
+-    .select(
+-        "offer_status_sk", "offer_status", "offer_status_label",
+-        "is_active_offer", "is_accepted", "is_terminal",
+-    )
+-    .withColumn("gold_modelled_at", F.current_timestamp())
+-)
+-(offer_statuses.write.format("delta").mode("overwrite")
+-    .option("overwriteSchema", "true").saveAsTable("gold.dim_offer_status"))
+-print(f"gold.dim_offer_status: {offer_statuses.count():,} rows from silver.offer")
+-
+ print(f"Gold dimensions completed; AS_OF_DATE={AS_OF_DATE or 'latest'}; started={RUN_STARTED_AT.isoformat()}")

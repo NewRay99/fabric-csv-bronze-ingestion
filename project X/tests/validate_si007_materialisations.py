@@ -1,13 +1,13 @@
 """Static checks for the SI-007 contract rebuild and SI-008–SI-012 Silver tables."""
 
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / "configuration" / "schema_definition.csv"
-NOTEBOOK = ROOT / "03_silver_business_rules.ipynb"
+NOTEBOOK = ROOT / "03_silver_business_rules.py"
 
 with SCHEMA.open(encoding="utf-8-sig", newline="") as handle:
     reader = csv.DictReader(handle)
@@ -28,7 +28,7 @@ for row in rows:
         assert (row["referenced_table"].lower(), row["referenced_column"].lower()) in keys
 print("PASS SI-007 schema contract has explicit and resolvable join classifications")
 
-notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8-sig"))
+notebook = read_notebook(NOTEBOOK)
 source = "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 for table_name in [
     "age_band", "directory_summary_axis", "fostering_axis",

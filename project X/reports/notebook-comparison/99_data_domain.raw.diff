@@ -1,0 +1,51 @@
+--- original/99_data_domain.py
++++ client/99_data_domain.Notebook/notebook-content.py
+@@ -4,7 +4,6 @@
+
+ # META {
+ # META   "kernel_info": {
+-# META     "jupyter_kernel_name": null,
+ # META     "name": "synapse_pyspark"
+ # META   },
+ # META   "dependencies": {
+@@ -18,23 +17,13 @@
+ # META         }
+ # META       ]
+ # META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
+-# META     }
+-# META   },
+-# META   "sessionKeepAliveTimeout": 0,
+-# META   "a365ComputeOptions": null
++# META   }
+ # META }
+
+ # MARKDOWN ********************
+
+ # # Bronze data-domain profile
+-#
++#
+ # Profiles low-cardinality string columns that are defined in the schema contract. Each run replaces the stored domain for the profiled Bronze table and column; domains with more than 40 values are deliberately not retained.
+
+ # PARAMETERS CELL ********************
+@@ -53,6 +42,7 @@
+ TIME_PARSER_POLICY = "CORRECTED"
+ NOTEBOOK_TIMEOUT_SECONDS = 1800
+ JOB_RUN_ID = ""
++
+
+ # METADATA ********************
+
+@@ -105,6 +95,7 @@
+ if CLEAR_TARGET_TABLE:
+     clear_data_domain_table(DOMAIN_TABLE)
+     print(f"Cleared target data-domain table: {DOMAIN_TABLE}")
++
+
+ # METADATA ********************

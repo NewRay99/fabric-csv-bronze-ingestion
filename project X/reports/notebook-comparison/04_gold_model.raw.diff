@@ -1,0 +1,306 @@
+--- original/04_gold_model.py
++++ client/04_gold_model.Notebook/notebook-content.py
+@@ -8,22 +8,14 @@
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -31,19 +23,21 @@
+ # MARKDOWN ********************
+
+ # # 04 — Canonical Gold referral model and snapshots
+-#
++#
+ # Build Gold referral facts and KPI views from the current Silver state. When
+ # `AS_OF_DATE` is supplied by the archive replay notebook, calculations and the
+ # snapshot use that historical export date. With a blank parameter, the notebook
+ # uses the current date for the live pipeline.
+
++
+ # PARAMETERS CELL ********************
+
+ AS_OF_DATE = ""  # Optional YYYY-MM-DD; archive replay passes the month-end export date.
+ GOLD_SCHEMA = "gold"
+ SNAPSHOT_TABLE = "gold.fact_referral_snapshot"
+
+-JOB_RUN_ID = ""  # Parent orchestration correlation ID.
++JOB_RUN_ID = "37e69a44-bb8f-4b08-9d5c-9d98c5c1e109"  # Parent orchestration correlation ID.
++
+
+ # METADATA ********************
+
+@@ -55,6 +49,7 @@
+ # CELL ********************
+
+ # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
++
+
+ # METADATA ********************
+
+@@ -76,6 +71,7 @@
+ AS_OF_SQL = f"DATE '{AS_OF_DATE_VALUE.isoformat()}'"
+ spark.sql(f"CREATE SCHEMA IF NOT EXISTS {GOLD_SCHEMA}")
+ print(f"Gold as-of date: {AS_OF_DATE_VALUE}")
++
+
+ # METADATA ********************
+
+@@ -152,6 +148,8 @@
+ # Lifecycle events are an explicit Silver derivation from referral, offer, and
+ # IPA timestamps; they are not a source-system referral-event audit log.
+ EVENT_ROLLUP_SOURCE = "silver.referral_lifecycle_event"
++
++
+
+ # METADATA ********************
+
+@@ -204,50 +202,50 @@
+   SELECT * FROM referral_history WHERE row_number_current = 1
+ ),
+ referral_created AS (
+-  SELECT referral_id, MIN(referral_created_date) AS referral_created_date
++  SELECT referral_id, MIN(referral_created_date) AS ReferralCreatedDate
+   FROM silver.referral GROUP BY referral_id
+ ),
+ referral_enrichment AS (
+   SELECT * FROM silver.referral_enrichment
+ ),
+ referral_child AS (
+-  SELECT referral_id, MIN(CAST(person_id AS STRING)) AS person_id
++  SELECT referral_id, MIN(CAST(person_id AS STRING)) AS ChildID
+   FROM silver.referral_person
+   GROUP BY referral_id
+ ),
+ closure_reason AS (
+-  SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
++  SELECT referral_id, closed_referral_reason_bucket AS ReferralClosureReason
+   FROM silver.referral_closure_reason_summary
+ ),
+ base AS (
+-  SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+-    r.required_start_date AS required_placement_date,
+-    r.response_required_by_date AS response_required_date,
+-    r.referral_modified_date AS referral_modified_timestamp,
+-    r.referral_status AS current_status, r.placement_type AS placement_type_required,
+-    x.first_action_date, x.first_offer_date,
+-    x.offer_accepted_date, x.ipa_issued_date,
+-    x.referral_closed_date,
+-    closure.referral_closure_reason,
+-    x.last_activity_date,
+-    COALESCE(x.cnt_offer_made, 0) AS cnt_offer_made,
+-    x.first_provider_seen_date,
+-    x.is_not_seen_by_providers,
+-    x.ipa_placement_admission_date,
+-    x.ipa_2_signatures,
+-    x.ipa_last_signature_date,
+-    x.ipa_due_diligence_min_review_date,
+-    COALESCE(x.cnt_offer_made, 0) AS offer_count,
+-    x.unique_homes_offered,
+-    x.ipa_placement_admission_date AS planned_placement_start_date,
+-    x.estimated_weekly_cost,
++  SELECT r.referral_id AS ReferralID, child.ChildID, c.ReferralCreatedDate,
++    r.required_start_date AS RequiredPlacementDate,
++    r.response_required_by_date AS ResponseRequiredDate,
++    r.referral_modified_date AS ReferralModifiedTimestamp,
++    r.referral_status AS CurrentStatus, r.placement_type AS PlacementTypeRequired,
++    x.first_action_date AS FirstActionDate, x.first_offer_date AS FirstOfferDate,
++    x.offer_accepted_date AS OfferAcceptedDate, x.ipa_issued_date AS IPAIssuedDate,
++    x.referral_closed_date AS ReferralClosedDate,
++    closure.ReferralClosureReason,
++    x.last_activity_date AS LastActivityDate,
++    COALESCE(x.cnt_offer_made, 0) AS CntOfferMade,
++    x.first_provider_seen_date AS FirstProviderSeenDate,
++    x.is_not_seen_by_providers AS IsNotSeenByProviders,
++    x.ipa_placement_admission_date AS IPAPlacementAdmissionDate,
++    x.ipa_2_signatures AS IPA2Signatures,
++    x.ipa_last_signature_date AS IPALastSignatureDate,
++    x.ipa_due_diligence_min_review_date AS IPADueDiligenceMinReviewDate,
++    COALESCE(x.cnt_offer_made, 0) AS OfferCount,
++    x.unique_homes_offered AS UniqueHomesOffered,
++    x.ipa_placement_admission_date AS PlannedPlacementStartDate,
++    x.estimated_weekly_cost AS EstimatedWeeklyCost,
+     CASE
+       WHEN r.required_start_date IS NULL THEN 'Unspecified'
+-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 1 THEN 'Critical'
+-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 3 THEN 'High'
+-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 7 THEN 'Medium'
++      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 1 THEN 'Critical'
++      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 3 THEN 'High'
++      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 7 THEN 'Medium'
+       ELSE 'Planned'
+-    END AS placement_urgency_band
++    END AS PlacementUrgencyBand
+   FROM referral_current r
+   INNER JOIN referral_created c ON r.referral_id = c.referral_id
+   LEFT JOIN referral_child child ON r.referral_id = child.referral_id
+@@ -255,48 +253,61 @@
+   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
+ )
+ SELECT {AS_OF_SQL} AS as_of_date,
+-  referral_id, person_id, referral_created_date, required_placement_date,
+-  response_required_date, first_action_date, first_offer_date,
+-  offer_accepted_date, ipa_issued_date, referral_closed_date,
+-  referral_closure_reason, last_activity_date, current_status,
+-  placement_type_required,
++  ReferralID AS referral_id, ChildID AS child_id,
++  ReferralCreatedDate AS referral_created_date,
++  RequiredPlacementDate AS required_placement_date,
++  ResponseRequiredDate AS response_required_date,
++  FirstActionDate AS first_action_date, FirstOfferDate AS first_offer_date,
++  OfferAcceptedDate AS offer_accepted_date, IPAIssuedDate AS ipa_issued_date,
++  ReferralClosedDate AS referral_closed_date,
++  ReferralClosureReason AS referral_closure_reason,
++  LastActivityDate AS last_activity_date, CurrentStatus AS current_status,
++  PlacementTypeRequired AS placement_type_required,
+   CAST(NULL AS STRING) AS region,
+-  placement_urgency_band AS priority,
++  PlacementUrgencyBand AS priority,
+   CAST(NULL AS STRING) AS complexity_band,
+-  placement_urgency_band, cnt_offer_made, first_provider_seen_date,
+-  is_not_seen_by_providers, ipa_placement_admission_date, ipa_2_signatures,
+-  ipa_last_signature_date, ipa_due_diligence_min_review_date,
++  PlacementUrgencyBand AS placement_urgency_band,
++  CntOfferMade AS cnt_offer_made,
++  FirstProviderSeenDate AS first_provider_seen_date,
++  IsNotSeenByProviders AS is_not_seen_by_providers,
++  IPAPlacementAdmissionDate AS ipa_placement_admission_date,
++  IPA2Signatures AS ipa_2_signatures,
++  IPALastSignatureDate AS ipa_last_signature_date,
++  IPADueDiligenceMinReviewDate AS ipa_due_diligence_min_review_date,
+   CAST(NULL AS STRING) AS child_criticality_code,
+-  offer_count, COALESCE(unique_homes_offered, 0) AS unique_homes_offered,
+-  COALESCE(offer_count, 0) > 0 AS has_offer,
+-  DATEDIFF(TO_DATE(first_action_date), TO_DATE(referral_created_date)) AS days_to_first_action,
+-  DATEDIFF(TO_DATE(first_offer_date), TO_DATE(referral_created_date)) AS days_to_first_offer,
+-  DATEDIFF(TO_DATE(offer_accepted_date), TO_DATE(referral_created_date)) AS days_to_accepted_offer,
+-  DATEDIFF(TO_DATE(ipa_issued_date), TO_DATE(referral_created_date)) AS days_to_ipa,
+-  DATEDIFF(COALESCE(TO_DATE(referral_closed_date), {AS_OF_SQL}),
+-    TO_DATE(referral_created_date)) AS days_open,
+-  DATEDIFF({AS_OF_SQL}, TO_DATE(last_activity_date)) AS days_without_activity,
+-  CASE WHEN required_placement_date IS NOT NULL AND required_placement_date < {AS_OF_SQL}
+-    THEN DATEDIFF({AS_OF_SQL}, required_placement_date) ELSE 0 END AS days_past_required_date,
+-  LOWER(COALESCE(current_status, '')) NOT IN
++  OfferCount AS offer_count,
++  COALESCE(UniqueHomesOffered, 0) AS unique_homes_offered,
++  COALESCE(OfferCount, 0) > 0 AS has_offer,
++  DATEDIFF(TO_DATE(FirstActionDate), TO_DATE(ReferralCreatedDate)) AS days_to_first_action,
++  DATEDIFF(TO_DATE(FirstOfferDate), TO_DATE(ReferralCreatedDate)) AS days_to_first_offer,
++  DATEDIFF(TO_DATE(OfferAcceptedDate), TO_DATE(ReferralCreatedDate)) AS days_to_accepted_offer,
++  DATEDIFF(TO_DATE(IPAIssuedDate), TO_DATE(ReferralCreatedDate)) AS days_to_ipa,
++  DATEDIFF(COALESCE(TO_DATE(ReferralClosedDate), {AS_OF_SQL}),
++    TO_DATE(ReferralCreatedDate)) AS days_open,
++  DATEDIFF({AS_OF_SQL}, TO_DATE(LastActivityDate)) AS days_without_activity,
++  CASE WHEN RequiredPlacementDate IS NOT NULL AND RequiredPlacementDate < {AS_OF_SQL}
++    THEN DATEDIFF({AS_OF_SQL}, RequiredPlacementDate) ELSE 0 END AS days_past_required_date,
++  LOWER(COALESCE(CurrentStatus, '')) NOT IN
+     ('closed','cancelled','withdrawn','completed') AS is_open,
+-  ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
+-    AND TO_DATE(ipa_issued_date) <= required_placement_date AS placed_by_required_date,
++  IPAIssuedDate IS NOT NULL AND RequiredPlacementDate IS NOT NULL
++    AND TO_DATE(IPAIssuedDate) <= RequiredPlacementDate AS placed_by_required_date,
+   CASE
+-    WHEN ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
+-      AND TO_DATE(ipa_issued_date) <= required_placement_date THEN 'Placed by target'
+-    WHEN ipa_issued_date IS NOT NULL THEN 'Placed after target'
+-    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(COALESCE(current_status, '')) NOT IN
++    WHEN IPAIssuedDate IS NOT NULL AND RequiredPlacementDate IS NOT NULL
++      AND TO_DATE(IPAIssuedDate) <= RequiredPlacementDate THEN 'Placed by target'
++    WHEN IPAIssuedDate IS NOT NULL THEN 'Placed after target'
++    WHEN RequiredPlacementDate < {AS_OF_SQL} AND LOWER(COALESCE(CurrentStatus, '')) NOT IN
+       ('closed','cancelled','withdrawn','completed') THEN 'Open overdue'
+-    WHEN LOWER(COALESCE(current_status, '')) NOT IN
++    WHEN LOWER(COALESCE(CurrentStatus, '')) NOT IN
+       ('closed','cancelled','withdrawn','completed') THEN 'Open on track'
+     ELSE 'Closed without placement'
+   END AS required_placement_date_outcome,
+-  planned_placement_start_date, estimated_weekly_cost,
++  PlannedPlacementStartDate AS planned_placement_start_date,
++  EstimatedWeeklyCost AS estimated_weekly_cost,
+   CURRENT_TIMESTAMP() AS gold_modelled_at
+ FROM base
+-WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}
+-""")
++WHERE TO_DATE(ReferralCreatedDate) <= {AS_OF_SQL}
++""")
++
+
+ # METADATA ********************
+
+@@ -310,8 +321,7 @@
+ # Preserve historic snapshot rows while migrating the physical field names
+ # from the former PascalCase contract to the Gold snake_case convention.
+ SNAPSHOT_COLUMN_RENAMES = {
+-    'SnapshotDate': 'snapshot_date', 'ReferralID': 'referral_id', 'ChildID': 'person_id',
+-    'child_id': 'person_id',
++    'SnapshotDate': 'snapshot_date', 'ReferralID': 'referral_id', 'ChildID': 'child_id',
+     'ReferralCreatedDate': 'referral_created_date', 'RequiredPlacementDate': 'required_placement_date',
+     'FirstActionDate': 'first_action_date', 'FirstOfferDate': 'first_offer_date',
+     'OfferAcceptedDate': 'offer_accepted_date', 'IPAIssuedDate': 'ipa_issued_date',
+@@ -343,7 +353,7 @@
+
+ snapshot = spark.table("gold.fact_referral").select(
+     F.lit(AS_OF_DATE_VALUE).cast("date").alias("snapshot_date"),
+-    "referral_id", "person_id", "referral_created_date", "required_placement_date",
++    "referral_id", "child_id", "referral_created_date", "required_placement_date",
+     "first_action_date", "first_offer_date", "offer_accepted_date", "ipa_issued_date",
+     "referral_closed_date", "referral_closure_reason", "current_status",
+     "last_activity_date", "placement_type_required", "region", "priority",
+@@ -378,6 +388,7 @@
+     f"replaced active month {month_start:%Y-%m}"
+ )
+
++
+ # METADATA ********************
+
+ # META {
+@@ -432,6 +443,10 @@
+   CAST(NULL AS TIMESTAMP) AS actual_placement_start_date,
+   CAST(NULL AS TIMESTAMP) AS planned_placement_end_date,
+   CAST(NULL AS TIMESTAMP) AS actual_placement_end_date,
++  signed_by_local_authority,
++  signed_datetime_for_local_authority,
++  signed_by_provider,
++  signed_datetime_for_provider,
+   CAST(i.placement_admission_date AS TIMESTAMP) AS placement_admission_date,
+   CAST(i.costs_total_weekly_fee AS DECIMAL(19, 2)) AS estimated_weekly_cost,
+   CAST(NULL AS DECIMAL(19, 2)) AS actual_weekly_cost,
+@@ -502,9 +517,11 @@
+ GROUP BY rp.provider_id
+ """)
+
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
++
++
++# METADATA ********************
++
++# META {
++# META   "language": "python",
++# META   "language_group": "synapse_pyspark"
++# META }

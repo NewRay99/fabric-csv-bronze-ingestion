@@ -1,21 +1,21 @@
 """Regression checks for archive audit CSV and multi-batch processing."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 import os
 import re
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOK = ROOT / "00_archive_load.ipynb"
-notebook = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
+NOTEBOOK = ROOT / "00_archive_load.py"
+notebook = read_notebook(NOTEBOOK)
 
 for index, cell in enumerate(notebook["cells"]):
     code = "".join(cell.get("source", []))
     if cell["cell_type"] == "code" and not code.lstrip().startswith("%"):
         ast.parse(code, filename=f"archive-load:cell-{index}")
-print("PASS notebook JSON and Python syntax")
+print("PASS Fabric notebook cells and Python syntax")
 
 cell_sources = [
     "".join(cell.get("source", [])) for cell in notebook["cells"]
@@ -33,9 +33,7 @@ helpers = cell_containing("def discover_archive_files_dataframe(")
 zip_loop = cell_containing("zip_batches_by_month")
 file_loop = cell_containing("raw_archive_files_df = discover_archive_files_dataframe(")
 all_source = "\n".join(cell_sources)
-setup_notebook = json.loads(
-    (ROOT / "00_setup_cfg.ipynb").read_text(encoding="utf-8")
-)
+setup_notebook = read_notebook(ROOT / "00_setup_cfg.py")
 setup_source = "\n".join(
     "".join(cell.get("source", [])) for cell in setup_notebook["cells"]
 )

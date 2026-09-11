@@ -1,26 +1,26 @@
 """Fast static regressions for the Version 02 03 Fabric notebook fixes."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS = [
-    "00_archive_load.ipynb",
-    "00_setup_cfg.ipynb",
-    "00a_rehydrate_archive_cfg.ipynb",
-    "00b_reset_silver_cfg.ipynb",
-    "01_bronze_get_latest.ipynb",
-    "99_common_library.ipynb",
-    "02_silver_formatter.ipynb",
-    "02a_archive_silver.ipynb",
-    "05_gold_dimensions.ipynb",
+    "00_archive_load.py",
+    "00_setup_cfg.py",
+    "00a_rehydrate_archive_cfg.py",
+    "00b_reset_silver_cfg.py",
+    "01_bronze_get_latest.py",
+    "99_common_library.py",
+    "02_silver_formatter.py",
+    "02a_archive_silver.py",
+    "05_gold_dimensions.py",
 ]
 
 
 def load_notebook(name):
-    notebook = json.loads((ROOT / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(ROOT / name)
     assert notebook["nbformat"] == 4
     for index, cell in enumerate(notebook["cells"]):
         source = "".join(cell.get("source", []))
@@ -34,11 +34,11 @@ def source(notebook):
 
 
 notebooks = {name: load_notebook(name) for name in NOTEBOOKS}
-print("PASS notebook JSON and Python syntax")
+print("PASS Fabric notebook cells and Python syntax")
 
 formatter_run_cells = [
     "".join(cell.get("source", []))
-    for cell in notebooks["02_silver_formatter.ipynb"]["cells"]
+    for cell in notebooks["02_silver_formatter.py"]["cells"]
     if "".join(cell.get("source", [])).lstrip().startswith("%run ./99_common_library")
 ]
 assert formatter_run_cells == ["%run ./99_common_library\n"], (
@@ -51,7 +51,7 @@ assert "## SI-024" in issue_log
 assert "## SL-N+1" not in issue_log
 print("PASS formatter common-library %run is isolated in its own magic cell")
 
-for name in ["00_setup_cfg.ipynb", "99_common_library.ipynb"]:
+for name in ["00_setup_cfg.py", "99_common_library.py"]:
     text = source(notebooks[name])
     assignment = text.find("TIME_PARSER_POLICY =")
     use = text.find('spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)')
@@ -61,9 +61,9 @@ for name in ["00_setup_cfg.ipynb", "99_common_library.ipynb"]:
 print("PASS shared/setup parser policy is self-contained")
 
 CFG_CALLERS = [
-    "00a_rehydrate_archive_cfg.ipynb",
-    "00b_reset_silver_cfg.ipynb",
-    "02a_archive_silver.ipynb",
+    "00a_rehydrate_archive_cfg.py",
+    "00b_reset_silver_cfg.py",
+    "02a_archive_silver.py",
 ]
 for name in CFG_CALLERS:
     text = source(notebooks[name])
@@ -76,10 +76,10 @@ for name in CFG_CALLERS:
 print("PASS cfg notebook receives the resolved audit-table name")
 
 RUNNER_CHILD_CFG_CALLERS = [
-    "00_archive_load.ipynb",
-    "01_bronze_get_latest.ipynb",
-    "01a_cfg_schema_capture_archive.ipynb",
-    "02a_archive_silver.ipynb",
+    "00_archive_load.py",
+    "01_bronze_get_latest.py",
+    "01a_cfg_schema_capture_archive.py",
+    "02a_archive_silver.py",
 ]
 for name in RUNNER_CHILD_CFG_CALLERS:
     text = source(load_notebook(name))
@@ -92,13 +92,13 @@ for name in RUNNER_CHILD_CFG_CALLERS:
     assert "SKIP configuration setup: parent runner completed 00_setup_cfg" in text
 print("PASS runner children do not repeat parent configuration setup")
 
-reset_text = source(notebooks["00b_reset_silver_cfg.ipynb"])
+reset_text = source(notebooks["00b_reset_silver_cfg.py"])
 assert reset_text.find("def qident") < reset_text.find("cfg_result ="), (
     "00b reset must define qident before the cfg setup cell uses it"
 )
 print("PASS reset helper execution order")
 
-for name in ["02_silver_formatter.ipynb", "02a_archive_silver.ipynb"]:
+for name in ["02_silver_formatter.py", "02a_archive_silver.py"]:
     text = source(notebooks[name])
     assert "SKIPPED_NO_CONTRACT" in text, (
         f"{name}: missing contracts must be auditable non-fatal skips"

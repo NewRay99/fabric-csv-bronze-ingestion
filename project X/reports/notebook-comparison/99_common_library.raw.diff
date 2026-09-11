@@ -1,0 +1,90 @@
+--- original/99_common_library.py
++++ client/99_common_library.Notebook/notebook-content.py
+@@ -6,22 +6,15 @@
+ # META   "kernel_info": {
+ # META     "name": "synapse_pyspark"
+ # META   },
+-# META   "dependencies": {},
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
+-# META     }
+-# META   }
++# META   "dependencies": {}
+ # META }
+
+ # MARKDOWN ********************
+
+ # # Shared ETL library
+-#
++#
+ # One source for ETL exclusions, schema conformance, audit helpers, and Silver formatting utilities.
++
+
+ # CELL ********************
+
+@@ -99,6 +92,7 @@
+ def excluded_etl_tables(table_names):
+     return sorted(name for name in table_names if is_etl_excluded_table(name))
+
++
+ # METADATA ********************
+
+ # META {
+@@ -107,6 +101,7 @@
+ # META }
+
+ # CELL ********************
++
+
+ def qident(value):
+     return "`" + str(value).replace("`", "``") + "`"
+@@ -363,6 +358,7 @@
+     (target.alias("t").merge(source.alias("s"), condition)
+         .whenMatchedUpdateAll().whenNotMatchedInsertAll().execute())
+
++
+ # METADATA ********************
+
+ # META {
+@@ -374,10 +370,12 @@
+
+ # ## Silver-layer helpers
+
++
+ # CELL ********************
+
+ def silver_table(table_name):
+     return f"{SILVER_SCHEMA}.{table_name.lower()}"
++
+
+ # METADATA ********************
+
+@@ -406,6 +404,7 @@
+         return True
+     return False
+
++
+ # METADATA ********************
+
+ # META {
+@@ -416,7 +415,7 @@
+ # MARKDOWN ********************
+
+ # ## Data-domain helpers
+-#
++#
+ # Shared helpers for contract-driven, low-cardinality Bronze value domains.
+
+ # CELL ********************
+@@ -546,6 +545,7 @@
+         .saveAsTable(domain_table)
+     )
+
++
+ # METADATA ********************
+
+ # META {

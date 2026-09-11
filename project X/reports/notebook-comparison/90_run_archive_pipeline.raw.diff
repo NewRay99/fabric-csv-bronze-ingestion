@@ -1,0 +1,77 @@
+--- original/90_run_archive_pipeline.py
++++ client/90_run_archive_pipeline.Notebook/notebook-content.py
+@@ -8,22 +8,14 @@
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "7200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -31,14 +23,15 @@
+ # MARKDOWN ********************
+
+ # # 90 — Archive pipeline runner
+-#
++#
+ # Run the archive-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
++
+
+ # CELL ********************
+
+ # Archive replays can process several complete monthly extracts. Two hours
+ # prevents the runner from terminating 02a_archive_silver at the old 30-minute limit.
+-NOTEBOOK_TIMEOUT_SECONDS = 7200
++NOTEBOOK_TIMEOUT_SECONDS = 9200
+ print(
+     f"Child notebook timeout: {NOTEBOOK_TIMEOUT_SECONDS:,} seconds "
+     f"({NOTEBOOK_TIMEOUT_SECONDS / 60:.0f} minutes)"
+@@ -47,10 +40,10 @@
+ JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
+
+ # Optional guarded single-month rebuild controls forwarded to Archive Silver.
+-PROCESS_ONLY = ""  # YYYY-MM; blank processes the normal archive range.
+-RESET_MONTH_MONITORING = False
++PROCESS_ONLY = "2026-07"  # YYYY-MM; blank processes the normal archive range.
++RESET_MONTH_MONITORING = True
+ CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
+-CONFIRM_PROCESS_ONLY_RESET = ""  # Must be RESET YYYY-MM, or RESET ALL when PROCESS_ONLY is blank.
++CONFIRM_PROCESS_ONLY_RESET = "RESET 2026-07"  # Must be exactly RESET YYYY-MM.
+
+ ARCHIVE_STEPS = [
+     ("00_setup_cfg", {}),
+@@ -67,6 +60,7 @@
+     }),
+     ("05_gold_dimensions", {}),
+ ]
++
+
+ # METADATA ********************
+
+@@ -181,6 +175,7 @@
+ if failed:
+     raise RuntimeError(f"Archive pipeline failed notebook(s): {failed}")
+
++
+ # METADATA ********************
+
+ # META {

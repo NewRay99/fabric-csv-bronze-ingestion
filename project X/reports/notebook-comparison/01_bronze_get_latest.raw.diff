@@ -1,0 +1,68 @@
+--- original/01_bronze_get_latest.py
++++ client/01_bronze_get_latest.Notebook/notebook-content.py
+@@ -9,21 +9,13 @@
+ # META   "dependencies": {
+ # META     "lakehouse": {
+ # META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -35,6 +27,7 @@
+ # 2. Select **Run all** to run the notebook.
+ # 3. This will overwrite the data in the bronze layer
+ # 4. When the notebook run is completed, return to your lakehouse and refresh your lake views graph.
++
+
+ # CELL ********************
+
+@@ -93,6 +86,7 @@
+     print(f"Configuration setup completed: {cfg_result}")
+ else:
+     print("SKIP configuration setup: parent runner completed 00_setup_cfg")
++
+
+ # METADATA ********************
+
+@@ -183,6 +177,7 @@
+ print(f"Successfully processed {table_count} tables")
+ print("All tables processed successfully!")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -233,10 +228,9 @@
+ # CELL ********************
+
+
+-
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
++# METADATA ********************
++
++# META {
++# META   "language": "python",
++# META   "language_group": "synapse_pyspark"
++# META }

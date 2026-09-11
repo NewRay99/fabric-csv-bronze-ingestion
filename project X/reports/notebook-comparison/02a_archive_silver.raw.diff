@@ -1,0 +1,230 @@
+--- original/02a_archive_silver.py
++++ client/02a_archive_silver.Notebook/notebook-content.py
+@@ -7,26 +7,18 @@
+ # META     "name": "synapse_pyspark"
+ # META   },
+ # META   "dependencies": {
+-# META     "warehouse": {
+-# META       "known_warehouses": []
+-# META     },
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "7200000"
+-# META       }
++# META       ]
++# META     },
++# META     "warehouse": {
++# META       "known_warehouses": []
+ # META     }
+ # META   }
+ # META }
+@@ -34,25 +26,25 @@
+ # MARKDOWN ********************
+
+ # # 02a — Canonical month-end archive replay
+-#
++#
+ # Materialise one canonical Silver state per archive month, then run the DQ
+ # and Gold notebooks for that snapshot. Archive ZIP exports are treated as
+ # complete table snapshots, so each table uses its latest available export
+ # on or before the month's final available export date.
+-#
++#
+ # This avoids loading every daily export. Primary-key duplicates inside the
+ # selected export are resolved with `row_number()`. Row-level `export_date`
+ # is retained in `silver.<table>` and checked before Gold is invoked.
+-#
++#
+ # When no archived `framework` snapshot exists on or before a canonical month,
+ # the replay reads the controlled framework fallback CSV, stamps that snapshot
+ # date, and writes `silver.framework` with explicit fallback provenance.
+
++
+ # PARAMETERS CELL ********************
+
+ ARCHIVE_SCHEMA = "archived"
+ SILVER_SCHEMA = "silver"
+-GOLD_SCHEMA = "gold"
+ CFG_NOTEBOOK_NAME = "00_setup_cfg"
+ FRAMEWORK_FALLBACK_PATH = "Files/deprecated_wmpp_files/framework.csv"
+ FRAMEWORK_FALLBACK_TABLE = "framework"
+@@ -70,21 +62,12 @@
+ PROCESS_ONLY = ""  # Optional YYYY-MM, for example "2026-05".
+ RESET_MONTH_MONITORING = False
+ CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
+-CONFIRM_PROCESS_ONLY_RESET = ""  # RESET YYYY-MM for one month, or RESET ALL for every archive month.
+-
+-RESET_ALL_ARCHIVE_PROCESSING = (
+-    RESET_MONTH_MONITORING
+-    and not PROCESS_ONLY
+-    and CONFIRM_PROCESS_ONLY_RESET == "RESET ALL"
+-)
+-if CONFIRM_PROCESS_ONLY_RESET == "RESET ALL" and not RESET_ALL_ARCHIVE_PROCESSING:
++CONFIRM_PROCESS_ONLY_RESET = ""  # Set exactly to RESET YYYY-MM when resetting.
++
++if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY:
+     raise ValueError(
+-        "RESET ALL requires PROCESS_ONLY to be blank and RESET_MONTH_MONITORING = True."
+-    )
+-if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY and not RESET_ALL_ARCHIVE_PROCESSING:
+-    raise ValueError(
+-        "PROCESS_ONLY must be set to YYYY-MM when clearing one month. For a full archive rebuild, "
+-        "leave PROCESS_ONLY blank and set RESET_MONTH_MONITORING = True with CONFIRM_PROCESS_ONLY_RESET = 'RESET ALL'."
++        "PROCESS_ONLY must be set to YYYY-MM when clearing Silver targets or resetting monitoring. "
++        "For example: PROCESS_ONLY = '2026-05'."
+     )
+
+ RUN_GOLD_AT_MONTH_END = True
+@@ -120,6 +103,7 @@
+     "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX",
+ ]
+
++
+ # METADATA ********************
+
+ # META {
+@@ -159,6 +143,8 @@
+ PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
+ spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)
+
++
++
+ # METADATA ********************
+
+ # META {
+@@ -181,6 +167,7 @@
+ else:
+     print("SKIP configuration setup: parent runner completed 00_setup_cfg")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -189,6 +176,7 @@
+ # META }
+
+ # CELL ********************
++
+
+
+ append_rows(
+@@ -196,6 +184,7 @@
+     [(PIPELINE_RUN_ID, "02a_archive_silver", "SILVER", "ARCHIVE", STARTED_AT, None, "RUNNING", 0, 0, 0, 0, None, JOB_RUN_ID or None)],
+     "run_id string,pipeline_name string,layer string,source_kind string,started_at timestamp,ended_at timestamp,status string,tables_succeeded int,tables_failed int,rows_read long,rows_written long,error_message string,job_run_id string",
+ )
++
+
+ # METADATA ********************
+
+@@ -281,6 +270,7 @@
+         .withColumn("_ingestion_timestamp", F.current_timestamp())
+         .withColumn("_ingestion_id", F.lit(RUN_ID))
+     )
++
+
+ # METADATA ********************
+
+@@ -589,6 +579,7 @@
+     f"{', '.join(str(value) for value in month_end_dates)}"
+ )
+
++
+ # METADATA ********************
+
+ # META {
+@@ -759,71 +750,6 @@
+     finally:
+         if formatted is not None:
+             formatted.unpersist()
+-
+-
+-def delete_monitoring_rows(table_name, predicate, label):
+-    """Delete a scoped operational-monitoring slice and report its count."""
+-    if not spark.catalog.tableExists(table_name):
+-        print(f"SKIP {label}: {table_name} does not exist")
+-        return 0
+-    before = spark.table(table_name).where(predicate).count()
+-    spark.sql(f"DELETE FROM {table_name} WHERE {predicate}")
+-    print(f"CLEARED {label}: {before:,} rows from {table_name}")
+-    return before
+-
+-
+-def drop_rebuildable_schema_objects(schema_name, preserved_objects=()):
+-    """Drop managed tables/views rebuilt by the archive replay."""
+-    preserved = {name.lower() for name in preserved_objects}
+-    rows = spark.sql(f"SHOW TABLES IN {qident(schema_name)}").collect()
+-    dropped = []
+-    for row in rows:
+-        object_name = row.tableName
+-        if row.isTemporary or object_name.lower() in preserved:
+-            continue
+-        object_type = spark.catalog.getTable(
+-            f"{schema_name}.{object_name}"
+-        ).tableType.upper()
+-        qualified_name = f"{qident(schema_name)}.{qident(object_name)}"
+-        statement = "DROP VIEW" if object_type == "VIEW" else "DROP TABLE"
+-        spark.sql(f"{statement} IF EXISTS {qualified_name}")
+-        dropped.append(f"{schema_name}.{object_name}")
+-    return dropped
+-
+-
+-def reset_all_archive_processing():
+-    """Clear archive replay state and rebuildable Silver/Gold objects."""
+-    if not RESET_ALL_ARCHIVE_PROCESSING:
+-        return
+-
+-    print("RESET ALL preview: clearing archive replay state and rebuildable Silver/Gold objects")
+-    reset_slices = [
+-        ("monitoring.cfg_month_end_gold_run", "1 = 1", "month-end Gold runs"),
+-        ("monitoring.cfg_silver_export_load", "source_kind = 'ARCHIVE_MONTH_END'", "archive Silver export loads"),
+-        ("monitoring.cfg_table_load_metric", "source_kind = 'ARCHIVE_MONTH_END'", "archive table metrics"),
+-        ("monitoring.cfg_pipeline_run", "source_kind IN ('ARCHIVE', 'ARCHIVE_MONTH_END')", "archive pipeline runs"),
+-        ("monitoring.cfg_schema_drift_event", "source_kind IN ('ARCHIVE', 'ARCHIVE_MONTH_END')", "archive schema-drift events"),
+-    ]
+-    cleared_rows = sum(
+-        delete_monitoring_rows(table_name, predicate, label)
+-        for table_name, predicate, label in reset_slices
+-    )
+-    dropped_silver = drop_rebuildable_schema_objects(SILVER_SCHEMA)
+-    dropped_gold = drop_rebuildable_schema_objects(
+-        GOLD_SCHEMA, preserved_objects=("cfg_placement_urgency_rule",)
+-    )
+-    print(
+-        f"RESET ALL complete: cleared {cleared_rows:,} archive monitoring rows; "
+-        f"dropped {len(dropped_silver):,} Silver and {len(dropped_gold):,} Gold objects"
+-    )
+-    print(
+-        "RESET ALL preserved Bronze/archive data and preserved configuration catalogues: "
+-        "schema contract, DQ rules, file configuration, Gold lineage mapping and urgency rules."
+-    )
+-
+-
+-if RESET_ALL_ARCHIVE_PROCESSING:
+-    reset_all_archive_processing()
+
+
+ if PROCESS_ONLY and (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY):
+@@ -972,6 +898,7 @@
+ if errors and FAIL_ON_TABLE_ERROR:
+     raise RuntimeError(error_text)
+
++
+ # METADATA ********************
+
+ # META {

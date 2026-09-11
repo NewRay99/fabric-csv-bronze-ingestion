@@ -1,0 +1,17 @@
+--- original/00a_rehydrate_archive_cfg.py:metadata
++++ client/00a_rehydrate_archive_cfg.Notebook:metadata
+@@ -77,14 +77,6 @@
+     },
+     "kernel_info": {
+       "name": "synapse_pyspark"
+-    },
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

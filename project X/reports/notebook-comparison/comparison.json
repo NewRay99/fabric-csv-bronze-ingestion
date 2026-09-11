@@ -1,0 +1,200 @@
+{
+  "notebooks": [
+    {
+      "notebook": "00_archive_load",
+      "status": "Missing from client snapshot"
+    },
+    {
+      "notebook": "00_setup_cfg",
+      "status": "Missing from client snapshot"
+    },
+    {
+      "notebook": "00a_rehydrate_archive_cfg",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        8,
+        8
+      ]
+    },
+    {
+      "notebook": "00b_reset_silver_cfg",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        7,
+        7
+      ]
+    },
+    {
+      "notebook": "01_bronze_get_latest",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        7,
+        7
+      ]
+    },
+    {
+      "notebook": "01a_cfg_schema_capture_archive",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": true,
+      "metadata": true,
+      "cells": [
+        9,
+        7
+      ]
+    },
+    {
+      "notebook": "01a_cfg_schema_capture_live",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        9,
+        9
+      ]
+    },
+    {
+      "notebook": "02_silver_formatter",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        8,
+        8
+      ]
+    },
+    {
+      "notebook": "02a_archive_silver",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        9,
+        9
+      ]
+    },
+    {
+      "notebook": "03_silver_business_rules",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        9,
+        9
+      ]
+    },
+    {
+      "notebook": "04_gold_model",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        8,
+        8
+      ]
+    },
+    {
+      "notebook": "05_gold_dimensions",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        6,
+        6
+      ]
+    },
+    {
+      "notebook": "90_run_archive_pipeline",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        4,
+        4
+      ]
+    },
+    {
+      "notebook": "90_run_live_pipeline",
+      "status": "Compared",
+      "code": true,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        4,
+        4
+      ]
+    },
+    {
+      "notebook": "99_common_library",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        8,
+        8
+      ]
+    },
+    {
+      "notebook": "99_data_domain",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        7,
+        7
+      ]
+    },
+    {
+      "notebook": "99_data_extracts",
+      "status": "Compared",
+      "code": false,
+      "markdown": false,
+      "cell_contract": false,
+      "metadata": true,
+      "cells": [
+        6,
+        6
+      ]
+    }
+  ],
+  "client_only_items": [
+    "Notebook 2.Notebook",
+    "version 02 03/common_util.Notebook"
+  ],
+  "client_ipynb_files": [
+    "04_gold_model.ipynb",
+    "05_gold_dimensions.ipynb"
+  ]
+}

@@ -1,0 +1,47 @@
+--- original/01a_cfg_schema_capture_archive.py:metadata
++++ client/01a_cfg_schema_capture_archive.Notebook:metadata
+@@ -52,26 +52,9 @@
+       },
+       "parameters": false,
+       "type": "code"
+-    },
+-    {
+-      "language": {
+-        "language": "python",
+-        "language_group": "synapse_pyspark"
+-      },
+-      "parameters": false,
+-      "type": "code"
+-    },
+-    {
+-      "language": {
+-        "language": "python",
+-        "language_group": "synapse_pyspark"
+-      },
+-      "parameters": false,
+-      "type": "code"
+     }
+   ],
+   "notebook": {
+-    "a365ComputeOptions": null,
+     "dependencies": {
+       "lakehouse": {
+         "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+@@ -85,17 +68,7 @@
+       }
+     },
+     "kernel_info": {
+-      "jupyter_kernel_name": null,
+       "name": "synapse_pyspark"
+-    },
+-    "sessionKeepAliveTimeout": 0,
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

@@ -2,15 +2,15 @@
 
 import ast
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ARCHIVE_RUNNER = ROOT / "90_run_archive_pipeline.ipynb"
-ARCHIVE_SILVER = ROOT / "02a_archive_silver.ipynb"
-GOLD = ROOT / "04_gold_model.ipynb"
-DQ = ROOT / "03_silver_business_rules.ipynb"
+ARCHIVE_RUNNER = ROOT / "90_run_archive_pipeline.py"
+ARCHIVE_SILVER = ROOT / "02a_archive_silver.py"
+GOLD = ROOT / "04_gold_model.py"
+DQ = ROOT / "03_silver_business_rules.py"
 DQ_CONFIG = ROOT / "configuration" / "dq_rule_definition.csv"
 ARCHITECTURE = (
     ROOT
@@ -27,7 +27,7 @@ REQUIREMENTS = (
 
 
 def notebook_source(path: Path) -> str:
-    notebook = json.loads(path.read_text(encoding="utf-8-sig"))
+    notebook = read_notebook(path)
     for index, cell in enumerate(notebook["cells"]):
         code = "".join(cell.get("source", []))
         if cell.get("cell_type") == "code" and not code.lstrip().startswith("%"):
@@ -39,7 +39,7 @@ archive_runner = notebook_source(ARCHIVE_RUNNER)
 archive_silver = notebook_source(ARCHIVE_SILVER)
 gold = notebook_source(GOLD)
 dq = notebook_source(DQ)
-print("PASS notebook JSON and Python syntax")
+print("PASS Fabric notebook cells and Python syntax")
 
 assert "NOTEBOOK_TIMEOUT_SECONDS = 7200" in archive_runner
 assert '"spark.synapse.nbs.session.timeout": "7200000"' in ARCHIVE_RUNNER.read_text(
@@ -93,7 +93,7 @@ assert "x.offer_accepted_date, x.ipa_issued_date" in gold
 assert "x.referral_closed_date," in gold
 assert "x.last_activity_date," in gold
 fact_cell = next(
-    cell for cell in json.loads(GOLD.read_text(encoding="utf-8-sig"))["cells"]
+    cell for cell in read_notebook(GOLD)["cells"]
     if "CREATE OR REPLACE TABLE gold.fact_referral AS" in "".join(cell.get("source", []))
 )
 fact_source = "".join(fact_cell.get("source", []))

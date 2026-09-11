@@ -1,0 +1,72 @@
+--- original/99_data_extracts.py
++++ client/99_data_extracts.Notebook/notebook-content.py
+@@ -8,22 +8,14 @@
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+ # META       "known_lakehouses": [
+ # META         {
+ # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+ # META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -31,7 +23,7 @@
+ # MARKDOWN ********************
+
+ # # Bronze data-extractor
+-#
++#
+ # Extracts the data config files
+
+ # PARAMETERS CELL ********************
+@@ -50,6 +42,8 @@
+ , "cfg_table_load_metric"
+ ]
+ OVERWRITE_FILES = True
++
++
+
+ # METADATA ********************
+
+@@ -77,6 +71,7 @@
+ RUN_ID = str(uuid4())
+ PROFILED_AT = datetime.now(timezone.utc)
+
++
+ # METADATA ********************
+
+ # META {
+@@ -97,6 +92,8 @@
+     pdf.to_csv(_CSV_PATH, index=False)
+     print(f"table exported: {full_name} written to {_CSV_PATH}")
+
++
++
+ # METADATA ********************
+
+ # META {
+@@ -105,6 +102,7 @@
+ # META }
+
+ # CELL ********************
++
+
+ import shutil
+ from notebookutils import mssparkutils

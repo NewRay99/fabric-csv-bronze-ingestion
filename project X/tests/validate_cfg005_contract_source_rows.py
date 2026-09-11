@@ -2,14 +2,14 @@
 
 import ast
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT_CSV = ROOT / "configuration" / "schema_definition.csv"
 DQ_RULE_CSV = ROOT / "configuration" / "dq_rule_definition.csv"
-SETUP_NOTEBOOK = ROOT / "00_setup_cfg.ipynb"
+SETUP_NOTEBOOK = ROOT / "00_setup_cfg.py"
 
 with CONTRACT_CSV.open(encoding="utf-8-sig", newline="") as handle:
     raw_rows = list(csv.reader(handle))
@@ -40,7 +40,7 @@ with DQ_RULE_CSV.open(encoding="utf-8-sig", newline="") as handle:
 assert len(dq_rows) == len(dq_raw_rows) - 1, "DQ CSV records were lost while parsing"
 print(f"PASS DQ-rule source contains {len(dq_rows):,} rows")
 
-notebook = json.loads(SETUP_NOTEBOOK.read_text(encoding="utf-8-sig"))
+notebook = read_notebook(SETUP_NOTEBOOK)
 sources = [
     "".join(cell.get("source", []))
     for cell in notebook["cells"]
@@ -48,7 +48,7 @@ sources = [
 ]
 for index, source in enumerate(sources):
     if source.strip() and not source.lstrip().startswith("%"):
-        ast.parse(source, filename=f"00_setup_cfg.ipynb:cell-{index}")
+        ast.parse(source, filename=f"00_setup_cfg.py:cell-{index}")
 
 bootstrap_source = next(
     source for source in sources if "def bootstrap_csv_table(" in source

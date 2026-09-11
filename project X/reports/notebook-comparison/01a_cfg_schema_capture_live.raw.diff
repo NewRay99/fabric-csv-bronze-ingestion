@@ -1,0 +1,104 @@
+--- original/01a_cfg_schema_capture_live.py
++++ client/01a_cfg_schema_capture_live.Notebook/notebook-content.py
+@@ -4,7 +4,6 @@
+
+ # META {
+ # META   "kernel_info": {
+-# META     "jupyter_kernel_name": null,
+ # META     "name": "synapse_pyspark"
+ # META   },
+ # META   "dependencies": {
+@@ -18,25 +17,15 @@
+ # META         }
+ # META       ]
+ # META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
+-# META     }
+-# META   },
+-# META   "sessionKeepAliveTimeout": 0,
+-# META   "a365ComputeOptions": null
++# META   }
+ # META }
+
+ # MARKDOWN ********************
+
+ # # 01a — Capture Schema in Catalogue
+-#
++#
+ # Run this to capture the live schema so we can compare it against what was provided by NEC, we will compare the live schema against the loaded schema contract table;
+-#
++#
+ # This will help the downstream silver layer as the silver layer reuires that the data has references keys.
+
+ # CELL ********************
+@@ -47,6 +36,7 @@
+
+ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
+
++
+ # METADATA ********************
+
+ # META {
+@@ -69,6 +59,7 @@
+
+ # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
+ # Run the pipeline runner rather than this notebook for a fresh environment.
++
+
+ # METADATA ********************
+
+@@ -113,6 +104,7 @@
+ ])
+
+ DRIFT_SCHEMA = "run_id string,source_kind string,source_table string,target_table string,drift_type string,column_name string,expected_type string,actual_type string,referenced_table string,referenced_column string,drift_key string,status string,occurrence_count long,first_detected_at timestamp,last_detected_at timestamp,resolved_at timestamp,detected_at timestamp,job_run_id string"
++
+
+ # METADATA ********************
+
+@@ -179,6 +171,7 @@
+ current_live.createOrReplaceTempView("_schema_live_current")
+ previous_live.createOrReplaceTempView("_schema_live_previous")
+ print(f"Loaded {definition_df.count():,} definition rows; captured {current_live.count():,} live columns")
++
+
+ # METADATA ********************
+
+@@ -295,6 +288,7 @@
+     .option("overwriteSchema", "true")
+     .saveAsTable("monitoring.cfg_schema_definition_candidate"))
+
++
+ # METADATA ********************
+
+ # META {
+@@ -344,6 +338,7 @@
+     .option("overwriteSchema", "true")
+     .saveAsTable("monitoring.cfg_bronze_schema_live"))
+
++
+ # METADATA ********************
+
+ # META {
+@@ -362,9 +357,10 @@
+ print("Candidate definition (same columns as the loaded schema contract):")
+ display(spark.table("monitoring.cfg_schema_definition_candidate").orderBy("table_name", "ordinal_position"))
+
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
++
++# METADATA ********************
++
++# META {
++# META   "language": "python",
++# META   "language_group": "synapse_pyspark"
++# META }

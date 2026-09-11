@@ -1,7 +1,7 @@
 """Static regression checks for linked live-pipeline monitoring."""
 
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def notebook_source(name):
-    notebook = json.loads((ROOT / name).read_text(encoding="utf-8"))
+    notebook = read_notebook(ROOT / name)
     cells = []
     for index, cell in enumerate(notebook["cells"]):
         text = "".join(cell.get("source", []))
@@ -19,7 +19,7 @@ def notebook_source(name):
     return "\n".join(cells)
 
 
-setup = notebook_source("00_setup_cfg.ipynb")
+setup = notebook_source("00_setup_cfg.py")
 for table in ("monitoring.cfg_job_run", "monitoring.cfg_job_step_run"):
     assert table in setup, f"setup must create/upgrade {table}"
 for table in (
@@ -34,7 +34,7 @@ for table in (
     end = setup.find("    ],", start)
     assert "job_run_id STRING" in setup[start:end], f"{table} lacks job_run_id"
 
-runner = notebook_source("90_run_live_pipeline.ipynb")
+runner = notebook_source("90_run_live_pipeline.py")
 for expected in (
     "JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())",
     "monitoring.cfg_job_run",
@@ -45,16 +45,16 @@ for expected in (
 ):
     assert expected in runner, f"live runner missing {expected}"
 
-common = notebook_source("99_common_library.ipynb")
+common = notebook_source("99_common_library.py")
 assert 'JOB_RUN_ID = globals().get("JOB_RUN_ID", "")' in common
 assert 'StructField("job_run_id", StringType(), True)' in common
 assert '"job_run_id": "s.job_run_id"' in common
 
-silver = notebook_source("02_silver_formatter.ipynb")
+silver = notebook_source("02_silver_formatter.py")
 assert "job_run_id string" in silver
 assert "JOB_RUN_ID or None" in silver
 
-dq = notebook_source("03_silver_business_rules.ipynb")
+dq = notebook_source("03_silver_business_rules.py")
 for table in (
     "monitoring.cfg_data_quality_result",
     "monitoring.cfg_rejected_row",
@@ -63,10 +63,10 @@ for table in (
     assert table in dq and "JOB_RUN_ID or None" in dq
 
 pipeline_children = {
-    "00_archive_load.ipynb": "00_archive_load",
-    "02_silver_formatter.ipynb": "02_silver_formatter",
-    "02a_archive_silver.ipynb": "02a_archive_silver",
-    "03_silver_business_rules.ipynb": "03_silver_business_rules",
+    "00_archive_load.py": "00_archive_load",
+    "02_silver_formatter.py": "02_silver_formatter",
+    "02a_archive_silver.py": "02a_archive_silver",
+    "03_silver_business_rules.py": "03_silver_business_rules",
 }
 for name, pipeline_name in pipeline_children.items():
     child = notebook_source(name)
@@ -88,12 +88,12 @@ for name, pipeline_name in pipeline_children.items():
 print("PASS child pipeline records prefer JOB_RUN_ID and preserve local RUN_ID telemetry")
 
 for name in (
-    "01_bronze_get_latest.ipynb",
-    "01a_cfg_schema_capture_live.ipynb",
-    "02_silver_formatter.ipynb",
-    "03_silver_business_rules.ipynb",
-    "04_gold_model.ipynb",
-    "05_gold_dimensions.ipynb",
+    "01_bronze_get_latest.py",
+    "01a_cfg_schema_capture_live.py",
+    "02_silver_formatter.py",
+    "03_silver_business_rules.py",
+    "04_gold_model.py",
+    "05_gold_dimensions.py",
 ):
     assert 'JOB_RUN_ID = ""' in notebook_source(name), f"{name} cannot receive JOB_RUN_ID"
 

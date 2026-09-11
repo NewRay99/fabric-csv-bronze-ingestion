@@ -1,17 +1,17 @@
 """Regression checks for contract columns reaching Silver after a prior success."""
 
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
-CONTRACT = ROOT / "project X" / "configuration" / "schema_definition.csv"
+ROOT = Path(__file__).resolve().parents[1]
+CONTRACT = ROOT / "configuration" / "schema_definition.csv"
 NOTEBOOKS = [
-    ROOT / "project X" / "02_silver_formatter.ipynb",
-    ROOT / "project X" / "02a_archive_silver.ipynb",
+    ROOT / "02_silver_formatter.py",
+    ROOT / "02a_archive_silver.py",
 ]
-COMMON_LIBRARY = ROOT / "project X" / "99_common_library.ipynb"
+COMMON_LIBRARY = ROOT / "99_common_library.py"
 REQUIRED_REFERRAL = {
     "referral_id",
     "placement_type",
@@ -25,7 +25,7 @@ REQUIRED_REFERRAL = {
 
 
 def source(notebook_path):
-    notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+    notebook = read_notebook(notebook_path)
     return "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
 

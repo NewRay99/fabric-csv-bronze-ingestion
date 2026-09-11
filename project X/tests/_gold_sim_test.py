@@ -1,5 +1,5 @@
 """
-Local simulation test for 04_gold_model.ipynb.
+Local simulation test for 04_gold_model.py.
 
 Fabricates 3 months of flattened Silver-layer data (referral, referral_provider,
 offer, ipa, referral_lifecycle_event) that mimics the derived Silver event stream

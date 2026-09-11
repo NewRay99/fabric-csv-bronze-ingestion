@@ -1,0 +1,17 @@
+--- original/05_gold_dimensions.py:metadata
++++ client/05_gold_dimensions.Notebook:metadata
+@@ -61,14 +61,6 @@
+     },
+     "kernel_info": {
+       "name": "synapse_pyspark"
+-    },
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

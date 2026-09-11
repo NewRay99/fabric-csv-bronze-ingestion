@@ -1,0 +1,24 @@
+--- original/90_run_archive_pipeline.py:code
++++ client/90_run_archive_pipeline.Notebook:code
+@@ -1,6 +1,6 @@
+ # Archive replays can process several complete monthly extracts. Two hours
+ # prevents the runner from terminating 02a_archive_silver at the old 30-minute limit.
+-NOTEBOOK_TIMEOUT_SECONDS = 7200
++NOTEBOOK_TIMEOUT_SECONDS = 9200
+ print(
+     f"Child notebook timeout: {NOTEBOOK_TIMEOUT_SECONDS:,} seconds "
+     f"({NOTEBOOK_TIMEOUT_SECONDS / 60:.0f} minutes)"
+@@ -9,10 +9,10 @@
+ JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
+
+ # Optional guarded single-month rebuild controls forwarded to Archive Silver.
+-PROCESS_ONLY = ""  # YYYY-MM; blank processes the normal archive range.
+-RESET_MONTH_MONITORING = False
++PROCESS_ONLY = "2026-07"  # YYYY-MM; blank processes the normal archive range.
++RESET_MONTH_MONITORING = True
+ CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
+-CONFIRM_PROCESS_ONLY_RESET = ""  # Must be RESET YYYY-MM, or RESET ALL when PROCESS_ONLY is blank.
++CONFIRM_PROCESS_ONLY_RESET = "RESET 2026-07"  # Must be exactly RESET YYYY-MM.
+
+ ARCHIVE_STEPS = [
+     ("00_setup_cfg", {}),

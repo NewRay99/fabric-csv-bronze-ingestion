@@ -1,5 +1,5 @@
 import ast
-import json
+from notebook_loader import load_notebook as read_notebook
 import re
 import sys
 from pathlib import Path
@@ -7,22 +7,22 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
 PROJECT = Path(__file__).resolve().parents[1]
-SETUP = "00_setup_cfg.ipynb"
+SETUP = "00_setup_cfg.py"
 SELF_SETUP_CONSUMERS = [
-    "00_archive_load.ipynb",
-    "00a_rehydrate_archive_cfg.ipynb",
-    "00b_reset_silver_cfg.ipynb",
-    "01_bronze_get_latest.ipynb",
-    "01a_cfg_schema_capture_archive.ipynb",
-    "02a_archive_silver.ipynb",
-    "99_data_domain.ipynb",
+    "00_archive_load.py",
+    "00a_rehydrate_archive_cfg.py",
+    "00b_reset_silver_cfg.py",
+    "01_bronze_get_latest.py",
+    "01a_cfg_schema_capture_archive.py",
+    "02a_archive_silver.py",
+    "99_data_domain.py",
 ]
 RUNNER_MANAGED_CONSUMERS = [
-    "01a_cfg_schema_capture_live.ipynb",
-    "02_silver_formatter.ipynb",
-    "03_silver_business_rules.ipynb",
-    "04_gold_model.ipynb",
-    "05_gold_dimensions.ipynb",
+    "01a_cfg_schema_capture_live.py",
+    "02_silver_formatter.py",
+    "03_silver_business_rules.py",
+    "04_gold_model.py",
+    "05_gold_dimensions.py",
 ]
 REQUIRED_TABLES = {
     "monitoring.cfg_silver_export_load",
@@ -51,7 +51,7 @@ REQUIRED_TABLES = {
 
 def load(name):
     path = PROJECT / name
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     sources = ["".join(cell.get("source", [])) for cell in notebook["cells"]]
     return notebook, sources, "\n".join(sources)
 
@@ -122,7 +122,7 @@ for name in SELF_SETUP_CONSUMERS:
     if ddl_pattern.search(source):
         errors.append(f"{name}: config DDL/seed logic remains outside {SETUP}")
 
-live_runner, _, live_runner_source = load("90_run_live_pipeline.ipynb")
+live_runner, _, live_runner_source = load("90_run_live_pipeline.py")
 expected_live_steps = [
     "00_setup_cfg",
     "01a_cfg_schema_capture_live",
@@ -133,11 +133,11 @@ expected_live_steps = [
 ]
 for step_name in expected_live_steps:
     if step_name not in live_runner_source:
-        errors.append(f"90_run_live_pipeline.ipynb: missing {step_name}")
+        errors.append(f"90_run_live_pipeline.py: missing {step_name}")
 if live_runner_source.find('("00_setup_cfg", {})') > live_runner_source.find(
     '("01a_cfg_schema_capture_live", {})'
 ):
-    errors.append("90_run_live_pipeline.ipynb: 00_setup_cfg must remain first")
+    errors.append("90_run_live_pipeline.py: 00_setup_cfg must remain first")
 
 for name in RUNNER_MANAGED_CONSUMERS:
     _, _, source = load(name)
@@ -152,9 +152,9 @@ for path in (
     [PROJECT / SETUP]
     + [PROJECT / name for name in SELF_SETUP_CONSUMERS]
     + [PROJECT / name for name in RUNNER_MANAGED_CONSUMERS]
-    + [PROJECT / "90_run_live_pipeline.ipynb"]
+    + [PROJECT / "90_run_live_pipeline.py"]
 ):
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     for index, cell in enumerate(notebook["cells"]):
         if cell.get("cell_type") != "code":
             continue

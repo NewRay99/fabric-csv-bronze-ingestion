@@ -1,0 +1,14 @@
+--- original/01a_cfg_schema_capture_archive.py:code
++++ client/01a_cfg_schema_capture_archive.Notebook:code
+@@ -78,11 +78,3 @@
+ WHERE c.column_name IS NULL
+    OR l.column_name IS NULL
+    OR c.data_type <> l.data_type;
+-
+-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv")
+-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv".
+-display(df)
+-
+-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv")
+-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv".
+-display(df)

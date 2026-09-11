@@ -1,0 +1,28 @@
+--- original/99_data_domain.py:metadata
++++ client/99_data_domain.Notebook:metadata
+@@ -55,7 +55,6 @@
+     }
+   ],
+   "notebook": {
+-    "a365ComputeOptions": null,
+     "dependencies": {
+       "lakehouse": {
+         "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+@@ -69,17 +68,7 @@
+       }
+     },
+     "kernel_info": {
+-      "jupyter_kernel_name": null,
+       "name": "synapse_pyspark"
+-    },
+-    "sessionKeepAliveTimeout": 0,
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

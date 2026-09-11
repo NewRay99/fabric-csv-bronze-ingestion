@@ -1,0 +1,17 @@
+--- original/99_data_extracts.py:metadata
++++ client/99_data_extracts.Notebook:metadata
+@@ -61,14 +61,6 @@
+     },
+     "kernel_info": {
+       "name": "synapse_pyspark"
+-    },
+-    "spark_compute": {
+-      "compute_id": "/trident/default",
+-      "session_options": {
+-        "conf": {
+-          "spark.synapse.nbs.session.timeout": "1200000"
+-        }
+-      }
+     }
+   }
+ }

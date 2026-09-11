@@ -1,0 +1,125 @@
+--- original/01a_cfg_schema_capture_archive.py
++++ client/01a_cfg_schema_capture_archive.Notebook/notebook-content.py
+@@ -4,8 +4,7 @@
+
+ # META {
+ # META   "kernel_info": {
+-# META     "name": "synapse_pyspark",
+-# META     "jupyter_kernel_name": null
++# META     "name": "synapse_pyspark"
+ # META   },
+ # META   "dependencies": {
+ # META     "lakehouse": {
+@@ -18,25 +17,15 @@
+ # META         }
+ # META       ]
+ # META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
+-# META     }
+-# META   },
+-# META   "sessionKeepAliveTimeout": 0,
+-# META   "a365ComputeOptions": null
++# META   }
+ # META }
+
+ # MARKDOWN ********************
+
+ # # 01a — Capture Schema in Archive Catalogue
+-#
++#
+ # Run this to capture the Archive schema so we can compare it against what was provided by NEC, we will compare the live schema against the loaded schema contract table;
+-#
++#
+ # This will help the downstream silver layer as the silver layer requires that the data has references keys.
+
+ # CELL ********************
+@@ -51,6 +40,7 @@
+ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
+ IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
+ NOTEBOOK_TIMEOUT_SECONDS = 1800
++
+
+ # METADATA ********************
+
+@@ -84,6 +74,7 @@
+ else:
+     print("SKIP configuration setup: parent runner completed 00_setup_cfg")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -100,6 +91,8 @@
+
+ RUN_ID = str(uuid.uuid4())
+ STARTED_AT = datetime.utcnow()
++
++
+
+ # METADATA ********************
+
+@@ -138,6 +131,10 @@
+         .write.format("delta").mode("append")\
+             .saveAsTable("monitoring.cfg_archived_schema_live")
+
++
++
++
++
+ # METADATA ********************
+
+ # META {
+@@ -148,7 +145,7 @@
+ # CELL ********************
+
+ # MAGIC %%sql
+-# MAGIC
++# MAGIC
+ # MAGIC SELECT
+ # MAGIC     COALESCE(c.table_name, l.table_name) AS table_name,
+ # MAGIC     COALESCE(c.column_name, l.column_name) AS column_name,
+@@ -166,6 +163,8 @@
+ # MAGIC WHERE c.column_name IS NULL
+ # MAGIC    OR l.column_name IS NULL
+ # MAGIC    OR c.data_type <> l.data_type;
++# MAGIC
++
+
+ # METADATA ********************
+
+@@ -173,29 +172,3 @@
+ # META   "language": "sparksql",
+ # META   "language_group": "synapse_pyspark"
+ # META }
+-
+-# CELL ********************
+-
+-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv")
+-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv".
+-display(df)
+-
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
+-
+-# CELL ********************
+-
+-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv")
+-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv".
+-display(df)
+-
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }

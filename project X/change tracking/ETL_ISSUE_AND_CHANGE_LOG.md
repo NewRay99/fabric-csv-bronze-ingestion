@@ -10,6 +10,21 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## 2026-09-11 — Primary notebook source converted to Fabric Python
+
+- Converted all 17 root `.ipynb` notebooks to primary `.py` Fabric notebook
+  source, preserving business logic, run defaults, cells, parameter tags,
+  dependency bindings and original Spark/session metadata. Retained `.ipynb`
+  files are migration references; future edits use `.py`.
+- Updated portable validators and the Gold SQL extractor to parse `.py` source;
+  added format-boundary and per-notebook syntax/round-trip coverage.
+- Compared the primary sources against the supplied client WMPP snapshot:
+  nine matching code definitions, six with code differences, and two originals
+  missing from that snapshot. No client definitions were overwritten.
+- Evidence and reproducible diffs: [notebook comparison](../reports/notebook-comparison/README.md).
+- Validation: all 22 existing validators pass against the converted source.
+  Fabric execution and import remain separate acceptance checks.
+
 ## Issue identifier legend
 
 | Prefix | Issue type | Number of issues |

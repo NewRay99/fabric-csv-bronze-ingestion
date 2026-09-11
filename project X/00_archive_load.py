@@ -1,0 +1,1093 @@
+# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+# META       "default_lakehouse_name": "LH_BCT_WMPP",
+# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+# META         }
+# META       ]
+# META     }
+# META   },
+# META   "spark_compute": {
+# META     "compute_id": "/trident/default",
+# META     "session_options": {
+# META       "conf": {
+# META         "spark.synapse.nbs.session.timeout": "1200000"
+# META       }
+# META     }
+# META   }
+# META }
+
+# MARKDOWN ********************
+
+# # 00 - Archive ingestion
+#
+# ZIP extraction and archive-file loading are independent stages. ZIPs can
+# populate the archive folder, but every run rebuilds a dataframe inventory from
+# `ARCHIVE_FILE_ROOT`, including files copied there manually.
+#
+# Each file must sit below a `YYYY-MM-DD` folder, for example
+# `Files/archive_unzipped/2026-04-30/ipa.csv`. All rows from that file are loaded
+# to `archived.ipa` and stamped with `export_date = 2026-04-30`.
+#
+# The inventory dataframe is filtered in one operation against
+# `monitoring.cfg_archive_file_load`. Successful files with `reload = false` are
+# removed; unseen, failed, interrupted, or reload-requested files remain pending.
+# There is no required processing order.
+#
+# Before a pending file is appended, the notebook deletes that file's existing
+# target slice. Source-path lineage is used when available; legacy targets fall
+# back to deleting the matching `export_date`. This makes file reruns idempotent.
+#
+# Date-named CSV files such as `2026-06-29.csv` load into
+# `archived.audit`, retain their filename date as `audit_file_date`, and
+# receive the dated archive-folder snapshot as `export_date`.
+#
+# `LOAD_ARCHIVE_AUDIT` controls whether files targeting
+# `archived.audit` enter the load queue. It defaults to `False` so slow
+# audit ingestion can be deferred without affecting the business archive files.
+
+# PARAMETERS CELL ********************
+
+ARCHIVE_ZIP_ROOT = "Files/wmpp-production-data-export-birmingham/archive"
+EXTRACT_ROOT = "Files/archive_unzipped"
+# Independent input boundary for CSV/Parquet archive files. Files copied
+# manually below YYYY-MM-DD folders here are discovered without a ZIP audit.
+ARCHIVE_FILE_ROOT = EXTRACT_ROOT
+ERROR_LOG_ROOT = "Files/archive_error_logs"
+ARCHIVE_SCHEMA = "archived"
+MONITORING_SCHEMA = "monitoring"
+
+PROCESS_EXPORT_DATE = ""  # Optional YYYY-MM-DD; blank processes all archive dates.
+RUN_ZIP_EXTRACTION = True  # False bypasses ZIP discovery/extraction only.
+LOAD_ARCHIVE_AUDIT = False  # True includes archived.audit files.
+RESET_ARCHIVE_TABLES = False  # Optional full reset of archive target tables.
+# False processes every selected ZIP/file and reports combined failures at the end.
+# Set True only when an operational run must stop at its first error.
+STOP_ON_FIRST_ERROR = False
+TEXT_QUALIFIER = '"'
+
+# Shared configuration setup
+CFG_NOTEBOOK_NAME = "00_setup_cfg"
+AUDIT_TABLE = "monitoring.cfg_silver_export_load"
+TIME_PARSER_POLICY = "CORRECTED"
+JOB_RUN_ID = ""  # Parent orchestration correlation ID.
+# Capture this before local RUN_ID is created: parent runners always pass it.
+IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
+NOTEBOOK_TIMEOUT_SECONDS = 1800
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+%run ./99_common_library
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from notebookutils import mssparkutils
+
+if not IS_ORCHESTRATED_RUN:
+    cfg_result = mssparkutils.notebook.run(
+        CFG_NOTEBOOK_NAME,
+        NOTEBOOK_TIMEOUT_SECONDS,
+        {"AUDIT_TABLE": AUDIT_TABLE, "TIME_PARSER_POLICY": TIME_PARSER_POLICY},
+    )
+    print(f"Configuration setup completed: {cfg_result}")
+else:
+    print("SKIP configuration setup: parent runner completed 00_setup_cfg")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+import os
+import re
+import shutil
+import uuid
+import zipfile
+from datetime import datetime
+
+from delta.tables import DeltaTable
+from pyspark.sql import functions as F
+from pyspark.sql.window import Window
+from pyspark.sql.types import (
+    BooleanType, IntegerType, LongType, StringType, StructField, StructType,
+    TimestampType,
+)
+
+RUN_ID = str(uuid.uuid4())
+JOB_RUN_ID = JOB_RUN_ID or RUN_ID
+# Use the parent job for pipeline-level status, while retaining RUN_ID for
+# archive file and ZIP audit rows generated by this child notebook.
+PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
+STARTED_AT = datetime.utcnow()
+PIPELINE_NAME = "00_archive_load"
+
+
+def sql_string(value):
+    if value is None:
+        return "NULL"
+    return "'" + str(value).replace("'", "''") + "'"
+
+
+def parse_export_date(value):
+    match = re.search(r"(\d{4}-\d{2}-\d{2})", value or "")
+    if not match:
+        return None
+    return datetime.strptime(match.group(1), "%Y-%m-%d")
+
+
+def safe_extract(zip_path, destination):
+    destination_abs = os.path.abspath(destination)
+    with zipfile.ZipFile(zip_path, "r") as archive:
+        members = [m for m in archive.infolist() if not m.is_dir()]
+        for member in members:
+            target = os.path.abspath(os.path.join(destination_abs, member.filename))
+            if os.path.commonpath([destination_abs, target]) != destination_abs:
+                raise ValueError(f"Unsafe ZIP member path: {member.filename}")
+        archive.extractall(destination_abs)
+    return len(members)
+
+
+def clean_table_name(file_name):
+    raw_name = os.path.splitext(os.path.basename(file_name))[0]
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", raw_name):
+        raw_name = "audit"
+    safe_name = re.sub(r"[^A-Za-z0-9_]", "_", raw_name).strip("_")
+    if not safe_name:
+        raise ValueError(f"Could not derive a table name from {file_name}")
+    return safe_name
+
+
+
+def is_archive_audit_file(file_name):
+    """Return whether a source filename maps to archived.audit."""
+    return (
+        clean_table_name(file_name).lower()
+        == "audit"
+    )
+
+
+ZIP_AUDIT_SCHEMA = StructType([
+    StructField("zip_path", StringType(), False),
+    StructField("export_date", TimestampType(), False),
+    StructField("extract_path", StringType(), True),
+    StructField("status", StringType(), False),
+    StructField("reload", BooleanType(), False),
+    StructField("attempt_count", IntegerType(), False),
+    StructField("file_count", IntegerType(), True),
+    StructField("run_id", StringType(), True),
+    StructField("started_at", TimestampType(), True),
+    StructField("ended_at", TimestampType(), True),
+    StructField("error_message", StringType(), True),
+    StructField("first_loaded_at", TimestampType(), True),
+    StructField("last_updated_at", TimestampType(), True),
+])
+
+FILE_AUDIT_SCHEMA = StructType([
+    StructField("file_path", StringType(), False),
+    StructField("filename", StringType(), False),
+    StructField("export_date", TimestampType(), False),
+    StructField("source_zip", StringType(), True),
+    StructField("target_object", StringType(), True),
+    StructField("status", StringType(), False),
+    StructField("reload", BooleanType(), False),
+    StructField("attempt_count", IntegerType(), False),
+    StructField("rows_read", LongType(), True),
+    StructField("rows_written", LongType(), True),
+    StructField("run_id", StringType(), True),
+    StructField("started_at", TimestampType(), True),
+    StructField("ended_at", TimestampType(), True),
+    StructField("error_message", StringType(), True),
+    StructField("first_loaded_at", TimestampType(), True),
+    StructField("last_updated_at", TimestampType(), True),
+])
+
+
+def audit_record(table_name, key_columns):
+    frame = spark.table(table_name)
+    predicate = None
+    for name, value in key_columns.items():
+        condition = F.col(name) == F.lit(value).cast(frame.schema[name].dataType)
+        predicate = condition if predicate is None else predicate & condition
+    rows = frame.where(predicate).limit(1).collect()
+    return rows[0].asDict() if rows else None
+
+
+def merge_audit(table_name, schema, row, key_names):
+    source = spark.createDataFrame([row], schema)
+    condition = " AND ".join(f"t.{name} = s.{name}" for name in key_names)
+    (DeltaTable.forName(spark, table_name).alias("t")
+        .merge(source.alias("s"), condition)
+        .whenMatchedUpdateAll()
+        .whenNotMatchedInsertAll()
+        .execute())
+
+
+def should_load_archive_file(existing, reset_archive_tables=False):
+    """Return whether an archive file belongs in the pending queue."""
+    if reset_archive_tables:
+        return True
+    return not (
+        existing
+        and existing.get("status") == "SUCCESS"
+        and not bool(existing.get("reload"))
+    )
+
+
+
+ARCHIVE_INVENTORY_SCHEMA = StructType([
+    StructField("file_path", StringType(), False),
+    StructField("filename", StringType(), False),
+    StructField("export_date", TimestampType(), False),
+    StructField("source_zip", StringType(), True),
+    StructField("full_path", StringType(), False),
+    StructField("is_audit_file", BooleanType(), False),
+])
+
+
+
+def legacy_audit_columns_to_add(existing_columns):
+    """Return loader-managed columns missing from a legacy audit table."""
+    definitions = [
+        "audit_file_date DATE",
+        "export_date TIMESTAMP",
+        "_archive_source_path STRING",
+        "_archive_source_zip STRING",
+        "_archive_run_id STRING",
+        "_archive_load_ts TIMESTAMP",
+    ]
+    existing_lower = {str(name).lower() for name in existing_columns}
+    return [
+        definition
+        for definition in definitions
+        if definition.split()[0].lower() not in existing_lower
+    ]
+
+
+def ensure_legacy_audit_lineage(target_object):
+    """Upgrade an existing archived_audit table before replacement logic.
+
+    Historical audit rows cannot be assigned a reliable archive export date,
+    so their newly added loader columns remain null. New rows receive complete
+    dates and lineage, allowing future reruns to replace them by source path.
+    """
+    if not spark.catalog.tableExists(target_object):
+        return []
+
+    existing_columns = spark.table(target_object).columns
+    missing_definitions = legacy_audit_columns_to_add(existing_columns)
+    if not missing_definitions:
+        return []
+
+    schema_name, table_name = target_object.split(".", 1)
+    spark.sql(
+        f"ALTER TABLE {qident(schema_name)}.{qident(table_name)} "
+        f"ADD COLUMNS ({', '.join(missing_definitions)})"
+    )
+    print(
+        f"Upgraded legacy audit lineage on {target_object}: "
+        f"{missing_definitions}"
+    )
+    return missing_definitions
+
+
+
+def ensure_archive_export_date_timestamp(target_object):
+    """Safely migrate a legacy archive target's export_date to TIMESTAMP.
+
+    The complete converted table is staged and validated before the original
+    Delta table is overwritten. A failed conversion therefore occurs before
+    any source-path or dated slice is deleted by the file loader.
+    """
+    if not spark.catalog.tableExists(target_object):
+        return False
+
+    target_schema = spark.table(target_object).schema
+    export_field = next(
+        (
+            field
+            for field in target_schema.fields
+            if field.name.lower() == "export_date"
+        ),
+        None,
+    )
+    if export_field is None or isinstance(export_field.dataType, TimestampType):
+        return False
+
+    source_df = spark.table(target_object)
+    converted_export_date = F.to_timestamp(F.col("export_date"))
+    invalid_samples = (
+        source_df
+        .select(
+            F.col("export_date").alias("original_export_date"),
+            converted_export_date.alias("converted_export_date"),
+        )
+        .where(
+            F.col("original_export_date").isNotNull()
+            & (F.trim(F.col("original_export_date").cast("string")) != "")
+            & F.col("converted_export_date").isNull()
+        )
+        .limit(10)
+        .collect()
+    )
+    if invalid_samples:
+        values = [row["original_export_date"] for row in invalid_samples]
+        raise ValueError(
+            f"Invalid legacy export_date values in {target_object}: {values}"
+        )
+
+    converted_df = source_df.withColumn(
+        "export_date", converted_export_date.cast("timestamp")
+    )
+    source_count = source_df.count()
+    schema_name, table_name = target_object.split(".", 1)
+    safe_table_name = re.sub(r"[^A-Za-z0-9_]", "_", table_name)
+    temp_table_name = (
+        f"__tmp_{safe_table_name}_export_ts_"
+        f"{RUN_ID.replace('-', '')[:12]}"
+    )
+    temp_object = f"{schema_name}.{temp_table_name}"
+    migration_complete = False
+
+    try:
+        (
+            converted_df.write.format("delta").mode("overwrite")
+            .option("overwriteSchema", "true").saveAsTable(temp_object)
+        )
+        staged_df = spark.table(temp_object)
+        staged_count = staged_df.count()
+        staged_export_field = next(
+            field
+            for field in staged_df.schema.fields
+            if field.name.lower() == "export_date"
+        )
+        if not isinstance(staged_export_field.dataType, TimestampType):
+            raise TypeError(
+                f"Staged {target_object}.export_date is "
+                f"{staged_export_field.dataType}, not TIMESTAMP"
+            )
+        if staged_count != source_count:
+            raise ValueError(
+                f"Archive export_date migration row-count mismatch for "
+                f"{target_object}: source={source_count}, staged={staged_count}"
+            )
+
+        (
+            staged_df.write.format("delta").mode("overwrite")
+            .option("overwriteSchema", "true").saveAsTable(target_object)
+        )
+        migration_complete = True
+    finally:
+        if migration_complete:
+            spark.sql(
+                f"DROP TABLE IF EXISTS {qident(schema_name)}."
+                f"{qident(temp_table_name)}"
+            )
+        elif spark.catalog.tableExists(temp_object):
+            print(
+                f"Retained failed migration staging table {temp_object} "
+                "for investigation."
+            )
+
+    print(
+        f"Migrated {target_object}.export_date from "
+        f"{export_field.dataType.simpleString()} to timestamp; "
+        f"rows={source_count:,}"
+    )
+    return True
+
+
+
+def align_frame_export_date_to_target(frame, target_object):
+    """Return a frame whose export_date exactly matches the Delta target type.
+
+    This is a pre-delete safety gate. It also catches duplicate case-insensitive
+    export_date columns, which Delta would otherwise report only during append.
+    """
+    if not spark.catalog.tableExists(target_object):
+        incoming_fields = [
+            field
+            for field in frame.schema.fields
+            if field.name.lower() == "export_date"
+        ]
+        if len(incoming_fields) != 1:
+            raise ValueError(
+                f"Incoming frame for {target_object} has "
+                f"{len(incoming_fields)} case-insensitive export_date columns"
+            )
+        if not isinstance(incoming_fields[0].dataType, TimestampType):
+            raise TypeError(
+                f"Incoming export_date type mismatch for new {target_object}: "
+                f"{incoming_fields[0].dataType.simpleString()} is not timestamp"
+            )
+        return frame
+
+    target_fields = [
+        field
+        for field in spark.table(target_object).schema.fields
+        if field.name.lower() == "export_date"
+    ]
+    incoming_fields = [
+        field
+        for field in frame.schema.fields
+        if field.name.lower() == "export_date"
+    ]
+    if len(target_fields) != 1 or len(incoming_fields) != 1:
+        raise ValueError(
+            f"export_date must be unique before replacing {target_object}: "
+            f"target_fields={len(target_fields)}, "
+            f"incoming_fields={len(incoming_fields)}"
+        )
+
+    target_field = target_fields[0]
+    incoming_field = incoming_fields[0]
+    if incoming_field.name != "export_date":
+        frame = frame.withColumnRenamed(incoming_field.name, "export_date")
+
+    aligned_frame = frame.withColumn(
+        "export_date", F.col("export_date").cast(target_field.dataType)
+    )
+    aligned_field = next(
+        field
+        for field in aligned_frame.schema.fields
+        if field.name.lower() == "export_date"
+    )
+    if aligned_field.dataType != target_field.dataType:
+        raise TypeError(
+            f"Incoming export_date type mismatch for {target_object}: "
+            f"incoming={aligned_field.dataType.simpleString()}, "
+            f"target={target_field.dataType.simpleString()}"
+        )
+
+    print(
+        f"Incoming export_date aligned for {target_object}: "
+        f"{incoming_field.dataType.simpleString()} -> "
+        f"{target_field.dataType.simpleString()}"
+    )
+    return aligned_frame
+
+
+def discover_archive_files_dataframe(archive_root_posix, process_export_date=""):
+    """Return every dated CSV/Parquet below the archive root as one dataframe.
+
+    The export date comes from the containing folder, never from ZIP audit state.
+    Therefore files copied directly to YYYY-MM-DD folders are first-class inputs.
+    """
+    rows = []
+    archive_root_abs = os.path.abspath(archive_root_posix)
+    if not os.path.isdir(archive_root_abs):
+        print(f"Archive file root does not exist: {archive_root_posix}")
+        return spark.createDataFrame([], ARCHIVE_INVENTORY_SCHEMA)
+
+    for root, _, files in os.walk(archive_root_abs):
+        folder_relative = os.path.relpath(
+            root, archive_root_abs
+        ).replace("\\", "/")
+        folder_export_date = parse_export_date(folder_relative)
+
+        for file_name in files:
+            if not file_name.lower().endswith((".csv", ".parquet")):
+                continue
+            if is_etl_excluded_table(file_name):
+                print(f"Skipping internal/reference archive file: {file_name}")
+                continue
+
+            full_path = os.path.join(root, file_name)
+            relative_path = os.path.relpath(
+                full_path, "/lakehouse/default"
+            ).replace("\\", "/")
+
+            if folder_export_date is None:
+                print(
+                    "Skipping archive file outside a YYYY-MM-DD folder: "
+                    f"{relative_path}"
+                )
+                continue
+            if (
+                process_export_date
+                and folder_export_date.strftime("%Y-%m-%d")
+                != process_export_date
+            ):
+                continue
+
+            rows.append((
+                relative_path,
+                file_name,
+                folder_export_date,
+                "DIRECT_ARCHIVE_FOLDER",
+                full_path,
+                is_archive_audit_file(file_name),
+            ))
+
+    return (
+        spark.createDataFrame(rows, ARCHIVE_INVENTORY_SCHEMA)
+        .dropDuplicates(["file_path", "export_date"])
+    )
+
+
+
+def filter_archive_file_types(archive_files_df, load_archive_audit=False):
+    """Apply optional file-type controls at the inventory seam."""
+    if load_archive_audit:
+        return archive_files_df
+    return archive_files_df.where(~F.col("is_audit_file"))
+
+
+def filter_pending_archive_files(
+    archive_files_df, audit_df, reset_archive_tables=False
+):
+    """Strip audit-complete files from an archive inventory dataframe.
+
+    This performs one dataframe anti-join instead of one Spark query per file.
+    Audit columns retained on pending rows support attempt/reload bookkeeping.
+    """
+    keys = ["file_path", "export_date"]
+    audit_window = Window.partitionBy(*keys).orderBy(
+        F.col("last_updated_at").desc_nulls_last(),
+        F.col("ended_at").desc_nulls_last(),
+    )
+    audit_state = (
+        audit_df
+        .withColumn("_audit_rank", F.row_number().over(audit_window))
+        .where(F.col("_audit_rank") == 1)
+        .drop("_audit_rank")
+    )
+
+    if reset_archive_tables:
+        pending = archive_files_df
+    else:
+        completed_keys = (
+            audit_state
+            .where(
+                (F.upper(F.col("status")) == F.lit("SUCCESS"))
+                & (~F.coalesce(F.col("reload"), F.lit(False)))
+            )
+            .select(*keys)
+            .dropDuplicates(keys)
+        )
+        pending = archive_files_df.join(completed_keys, keys, "left_anti")
+
+    return (
+        pending.alias("f")
+        .join(audit_state.alias("a"), keys, "left")
+        .select(
+            F.col("f.file_path").alias("file_path"),
+            F.col("f.filename").alias("filename"),
+            F.col("f.export_date").alias("export_date"),
+            F.col("f.source_zip").alias("source_zip"),
+            F.col("f.full_path").alias("full_path"),
+            F.col("a.status").alias("audit_status"),
+            F.col("a.reload").alias("audit_reload"),
+            F.col("a.attempt_count").alias("audit_attempt_count"),
+            F.col("a.first_loaded_at").alias("audit_first_loaded_at"),
+        )
+    )
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+spark.sql(f"CREATE SCHEMA IF NOT EXISTS {qident(ARCHIVE_SCHEMA)}")
+
+append_rows(
+    "monitoring.cfg_pipeline_run",
+    [(PIPELINE_RUN_ID, PIPELINE_NAME, "ARCHIVE", "ARCHIVE_ZIP", STARTED_AT, None,
+      "RUNNING", 0, 0, 0, 0, None, JOB_RUN_ID or None)],
+    "run_id string,pipeline_name string,layer string,source_kind string,started_at timestamp,ended_at timestamp,status string,tables_succeeded int,tables_failed int,rows_read long,rows_written long,error_message string,job_run_id string",
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+zip_root_posix = f"/lakehouse/default/{ARCHIVE_ZIP_ROOT}"
+extract_root_posix = f"/lakehouse/default/{EXTRACT_ROOT}"
+os.makedirs(extract_root_posix, exist_ok=True)
+
+# ZIP discovery/extraction is one optional producer of files. The archive
+# loading stage below no longer depends on this list.
+zip_batches = []
+if RUN_ZIP_EXTRACTION:
+    for root, _, files in os.walk(zip_root_posix):
+        for file_name in files:
+            if not file_name.lower().endswith(".zip"):
+                continue
+            full_path = os.path.join(root, file_name)
+            relative_path = os.path.relpath(
+                full_path, "/lakehouse/default"
+            ).replace("\\", "/")
+            export_date = (
+                parse_export_date(file_name)
+                or parse_export_date(relative_path)
+            )
+            if export_date is None:
+                print(
+                    f"Skipping ZIP without YYYY-MM-DD export date: "
+                    f"{relative_path}"
+                )
+                continue
+            if (PROCESS_EXPORT_DATE
+                    and export_date.strftime("%Y-%m-%d")
+                    != PROCESS_EXPORT_DATE):
+                continue
+            zip_batches.append((export_date, relative_path, full_path))
+
+zip_batches.sort(key=lambda item: (item[0], item[1]))
+if RESET_ARCHIVE_TABLES and PROCESS_EXPORT_DATE:
+    spark.sql(f'''UPDATE monitoring.cfg_pipeline_run
+        SET ended_at=current_timestamp(), status='FAILED', tables_failed=1,
+            error_message='RESET_ARCHIVE_TABLES requires all export dates'
+        WHERE run_id={sql_string(PIPELINE_RUN_ID)} AND pipeline_name={sql_string(PIPELINE_NAME)}''')
+    raise ValueError(
+        "RESET_ARCHIVE_TABLES=True must be run with PROCESS_EXPORT_DATE "
+        "blank so every historical export is rebuilt."
+    )
+
+zip_batches_by_month = {}
+for batch_date, _, _ in zip_batches:
+    month_key = batch_date.strftime("%Y-%m")
+    zip_batches_by_month[month_key] = (
+        zip_batches_by_month.get(month_key, 0) + 1
+    )
+if zip_batches:
+    print(
+        f"Discovered dated ZIPs: {len(zip_batches):,}; "
+        f"min={zip_batches[0][0]:%Y-%m-%d}; "
+        f"max={zip_batches[-1][0]:%Y-%m-%d}; "
+        f"months={zip_batches_by_month}; "
+        f"filter={PROCESS_EXPORT_DATE or '<all>'}"
+    )
+else:
+    reason = "disabled" if not RUN_ZIP_EXTRACTION else "none discovered"
+    print(
+        f"ZIP extraction {reason}; archive inventory will scan "
+        f"{EXTRACT_ROOT} independently"
+    )
+
+extracted_zips = skipped_zips = failed_zips = 0
+zip_errors = []
+for export_date, relative_zip, full_zip in zip_batches:
+    extract_relative = f"{EXTRACT_ROOT}/{export_date:%Y-%m-%d}"
+    extract_posix = f"/lakehouse/default/{extract_relative}"
+    existing = audit_record(
+        "monitoring.cfg_archive_zip_load",
+        {"zip_path": relative_zip, "export_date": export_date},
+    )
+    if (existing and existing["status"] == "SUCCESS"
+            and not existing["reload"]
+            and os.path.isdir(extract_posix)):
+        skipped_zips += 1
+        print(f"Skipped extracted ZIP: {relative_zip}")
+        continue
+    if (existing and existing["status"] == "SUCCESS"
+            and not os.path.isdir(extract_posix)):
+        print(
+            f"ZIP audit is SUCCESS but extraction folder is missing; "
+            f"re-extracting {relative_zip}"
+        )
+
+    now = datetime.utcnow()
+    attempt = int(existing["attempt_count"] or 0) + 1 if existing else 1
+    first_loaded = existing.get("first_loaded_at") if existing else None
+    running = (
+        relative_zip, export_date, extract_relative, "RUNNING",
+        bool(existing["reload"]) if existing else False, attempt, None,
+        RUN_ID, now, None, None, first_loaded, now,
+    )
+    merge_audit(
+        "monitoring.cfg_archive_zip_load", ZIP_AUDIT_SCHEMA, running,
+        ["zip_path", "export_date"],
+    )
+    try:
+        os.makedirs(extract_posix, exist_ok=True)
+        file_count = safe_extract(full_zip, extract_posix)
+        ended = datetime.utcnow()
+        success = (
+            relative_zip, export_date, extract_relative, "SUCCESS", False,
+            attempt, file_count, RUN_ID, now, ended, None,
+            first_loaded or ended, ended,
+        )
+        merge_audit(
+            "monitoring.cfg_archive_zip_load", ZIP_AUDIT_SCHEMA, success,
+            ["zip_path", "export_date"],
+        )
+        extracted_zips += 1
+        print(f"Extracted {relative_zip}: {file_count:,} files")
+    except Exception as exc:
+        ended = datetime.utcnow()
+        error = str(exc)[:4000]
+        failed = (
+            relative_zip, export_date, extract_relative, "FAILED",
+            bool(existing["reload"]) if existing else False, attempt, None,
+            RUN_ID, now, ended, error, first_loaded, ended,
+        )
+        merge_audit(
+            "monitoring.cfg_archive_zip_load", ZIP_AUDIT_SCHEMA, failed,
+            ["zip_path", "export_date"],
+        )
+        zip_errors.append(f"{relative_zip}: {error}")
+        failed_zips += 1
+        if STOP_ON_FIRST_ERROR:
+            break
+
+print(
+    f"ZIP stage complete: extracted={extracted_zips}, "
+    f"skipped={skipped_zips}, failed={failed_zips}, "
+    f"discovered={len(zip_batches)}"
+)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Build one inventory dataframe directly from ARCHIVE_FILE_ROOT. This is
+# independent of zip_batches and includes files copied manually to dated folders.
+archive_file_root_posix = f"/lakehouse/default/{ARCHIVE_FILE_ROOT}"
+os.makedirs(archive_file_root_posix, exist_ok=True)
+
+raw_archive_files_df = discover_archive_files_dataframe(
+    archive_file_root_posix, PROCESS_EXPORT_DATE
+).cache()
+raw_discovered_count = raw_archive_files_df.count()
+
+# Apply optional source-type controls before consulting CFG audit state. When
+# disabled, audit files incur no per-file reads, counts, deletes, or writes.
+archive_files_df = filter_archive_file_types(
+    raw_archive_files_df, LOAD_ARCHIVE_AUDIT
+).cache()
+discovered_count = archive_files_df.count()
+audit_toggle_skipped = raw_discovered_count - discovered_count
+
+archive_audit_df = spark.table("monitoring.cfg_archive_file_load")
+pending_files_df = filter_pending_archive_files(
+    archive_files_df, archive_audit_df, RESET_ARCHIVE_TABLES
+).cache()
+
+pending_count = pending_files_df.count()
+audit_skipped = discovered_count - pending_count
+
+files_by_export_date = {
+    row["export_day"]: row["count"]
+    for row in (
+        archive_files_df
+        .withColumn("export_day", F.date_format("export_date", "yyyy-MM-dd"))
+        .groupBy("export_day")
+        .count()
+        .collect()
+    )
+}
+pending_by_export_date = {
+    row["export_day"]: row["count"]
+    for row in (
+        pending_files_df
+        .withColumn("export_day", F.date_format("export_date", "yyyy-MM-dd"))
+        .groupBy("export_day")
+        .count()
+        .collect()
+    )
+}
+print(
+    f"Archive inventory root: {ARCHIVE_FILE_ROOT}; "
+    f"raw_discovered={raw_discovered_count:,}; "
+    f"selected={discovered_count:,}; pending={pending_count:,}; "
+    f"audit_toggle_skipped={audit_toggle_skipped:,}; "
+    f"cfg_skipped={audit_skipped:,}; batches={files_by_export_date}; "
+    f"pending_batches={pending_by_export_date}"
+)
+if audit_toggle_skipped:
+    print(
+        f"Skipped {audit_toggle_skipped:,} archived_audit files because "
+        "LOAD_ARCHIVE_AUDIT=False. Set it to True to load them later."
+    )
+print("Pending archive files (no processing order is required):")
+pending_files_df.select(
+    "file_path", "export_date", "audit_status", "audit_reload"
+).show(100, truncate=False)
+
+reset_targets = set()
+file_errors = []
+metric_errors = []
+processed = 0
+skipped = audit_skipped
+total_read = total_written = 0
+
+# toLocalIterator streams the already-filtered dataframe to the driver. It does
+# not issue an audit query for each file and does not impose an ordering.
+for pending_row in pending_files_df.toLocalIterator():
+    export_date = pending_row["export_date"]
+    source_zip = pending_row["source_zip"]
+    relative_path = pending_row["file_path"]
+    file_name = pending_row["filename"]
+    existing = None
+    if pending_row["audit_status"] is not None:
+        existing = {
+            "status": pending_row["audit_status"],
+            "reload": bool(pending_row["audit_reload"]),
+            "attempt_count": pending_row["audit_attempt_count"],
+            "first_loaded_at": pending_row["audit_first_loaded_at"],
+        }
+
+    physical_table = clean_table_name(file_name)
+    audit_file_date = (
+        parse_export_date(file_name)
+        if physical_table.lower() == "audit"
+        else None
+    )
+    target_object = f"{ARCHIVE_SCHEMA}.{physical_table}"
+
+    now = datetime.utcnow()
+    attempt = int(existing["attempt_count"] or 0) + 1 if existing else 1
+    first_loaded = existing.get("first_loaded_at") if existing else None
+    running = (
+        relative_path, file_name, export_date, source_zip, target_object,
+        "RUNNING", bool(existing["reload"]) if existing else False,
+        attempt, None, None, RUN_ID, now, None, None, first_loaded, now,
+    )
+    merge_audit(
+        "monitoring.cfg_archive_file_load", FILE_AUDIT_SCHEMA, running,
+        ["file_path", "export_date"],
+    )
+
+    try:
+        if file_name.lower().endswith(".parquet"):
+            frame = spark.read.format("parquet").load(relative_path)
+        else:
+            frame = (
+                spark.read.format("csv")
+                .option("header", "true")
+                .option("inferSchema", "false")
+                .option("mode", "PERMISSIVE")
+                .option("badRecordsPath", f"{ERROR_LOG_ROOT}/corrupt_rows")
+                .option("quote", TEXT_QUALIFIER)
+                .option("escape", TEXT_QUALIFIER)
+                .option("multiLine", "true")
+                .load(relative_path)
+            )
+
+        if audit_file_date is not None:
+            frame = frame.withColumn(
+                "audit_file_date",
+                F.to_date(
+                    F.lit(audit_file_date.strftime("%Y-%m-%d")),
+                    "yyyy-MM-dd",
+                ),
+            )
+
+        # Load every source row and overwrite any source export_date value with
+        # the authoritative date inherited from the containing archive folder.
+        frame = (
+            frame
+            .withColumn(
+                "export_date",
+                F.to_timestamp(
+                    F.lit(export_date.strftime("%Y-%m-%d")),
+                    "yyyy-MM-dd",
+                ),
+            )
+            .withColumn("_archive_source_path", F.lit(relative_path))
+            .withColumn("_archive_source_zip", F.lit(source_zip))
+            .withColumn("_archive_run_id", F.lit(RUN_ID))
+            .withColumn("_archive_load_ts", F.current_timestamp())
+        )
+        row_count = frame.count()
+
+        if RESET_ARCHIVE_TABLES and target_object not in reset_targets:
+            spark.sql(
+                f"DROP TABLE IF EXISTS {qident(ARCHIVE_SCHEMA)}."
+                f"{qident(physical_table)}"
+            )
+            reset_targets.add(target_object)
+
+        # Legacy audit tables may pre-date export_date and archive
+        # lineage. Add nullable loader-managed columns before replacement. Old
+        # rows remain untouched; rows loaded from now on are replay-safe.
+        if (
+            physical_table.lower() == "audit"
+            and spark.catalog.tableExists(target_object)
+        ):
+            ensure_legacy_audit_lineage(target_object)
+
+        # Folder-derived export_date is the sole contract field. Migrate any
+        # legacy STRING/DATE/TIMESTAMP_NTZ target before destructive replacement.
+        # The incoming CSV export_date is intentionally not retained separately.
+        if spark.catalog.tableExists(target_object):
+            ensure_archive_export_date_timestamp(target_object)
+
+        # Re-read the migrated target and cast the incoming field to its exact
+        # Spark datatype. Any mismatch fails here, before Delta deletion.
+        frame = align_frame_export_date_to_target(frame, target_object)
+
+        # A pending file always replaces its previous target slice before all
+        # rows are appended. This protects both normal reruns and manual reloads.
+        if spark.catalog.tableExists(target_object):
+            target_columns = spark.table(target_object).columns
+            target_delta = DeltaTable.forName(spark, target_object)
+            if "_archive_source_path" in target_columns:
+                target_delta.delete(
+                    F.col("_archive_source_path") == F.lit(relative_path)
+                )
+                print(f"Deleted prior source-path rows from {target_object}")
+            elif "export_date" in target_columns:
+                target_delta.delete(
+                    F.to_date("export_date") == F.lit(export_date.date())
+                )
+                print(
+                    f"Deleted legacy export-date rows from {target_object} "
+                    f"for {export_date:%Y-%m-%d}"
+                )
+            else:
+                raise ValueError(
+                    f"{target_object} has neither export_date nor "
+                    "source-file lineage, so a safe replacement is impossible."
+                )
+
+        (
+            frame.write.format("delta").mode("append")
+            .option("mergeSchema", "true").saveAsTable(target_object)
+        )
+        ended = datetime.utcnow()
+        success = (
+            relative_path, file_name, export_date, source_zip,
+            target_object, "SUCCESS", False, attempt, row_count,
+            row_count, RUN_ID, now, ended, None, first_loaded or ended,
+            ended,
+        )
+        merge_audit(
+            "monitoring.cfg_archive_file_load", FILE_AUDIT_SCHEMA, success,
+            ["file_path", "export_date"],
+        )
+        # Metrics use the shared setup/Silver contract. A telemetry
+        # failure is recorded as a warning and must not change a completed
+        # archive file from SUCCESS to FAILED.
+        try:
+            append_rows(
+                "monitoring.cfg_table_load_metric",
+                [(
+                    RUN_ID, "ARCHIVE", "ARCHIVE_FILE", relative_path,
+                    target_object, row_count, row_count, 0, None, ended,
+                    JOB_RUN_ID or None,
+                )],
+                "run_id string,layer string,source_kind string,"
+                "source_object string,target_object string,rows_read long,"
+                "rows_written long,duplicate_key_count long,"
+                "null_primary_key_count long,recorded_at timestamp,job_run_id string",
+            )
+        except Exception as metric_exc:
+            metric_error = (
+                f"{relative_path}: {str(metric_exc)[:2000]}"
+            )
+            metric_errors.append(metric_error)
+            print(f"WARNING metric write failed: {metric_error}")
+        processed += 1
+        total_read += row_count
+        total_written += row_count
+        print(
+            f"Loaded all {row_count:,} rows: {relative_path} -> "
+            f"{target_object}; export_date={export_date:%Y-%m-%d}"
+        )
+    except Exception as exc:
+        ended = datetime.utcnow()
+        error = str(exc)[:4000]
+        failed = (
+            relative_path, file_name, export_date, source_zip,
+            target_object, "FAILED",
+            bool(existing["reload"]) if existing else False,
+            attempt, None, None, RUN_ID, now, ended, error,
+            first_loaded, ended,
+        )
+        merge_audit(
+            "monitoring.cfg_archive_file_load", FILE_AUDIT_SCHEMA, failed,
+            ["file_path", "export_date"],
+        )
+        file_errors.append(f"{relative_path}: {error}")
+        print(f"FAILED {relative_path}: {error}")
+        if STOP_ON_FIRST_ERROR:
+            break
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data_errors = zip_errors + file_errors
+status = "FAILED" if data_errors else "SUCCESS"
+messages = list(data_errors)
+messages.extend(f"METRIC WARNING: {item}" for item in metric_errors)
+error_text = " | ".join(messages)[:4000] if messages else None
+spark.sql(f'''
+UPDATE monitoring.cfg_pipeline_run
+SET ended_at = current_timestamp(),
+    status = {sql_string(status)},
+    tables_succeeded = {processed},
+    tables_failed = {len(data_errors)},
+    rows_read = {total_read},
+    rows_written = {total_written},
+    error_message = {sql_string(error_text)}
+WHERE run_id = {sql_string(PIPELINE_RUN_ID)} AND pipeline_name = {sql_string(PIPELINE_NAME)}
+''')
+
+print(
+    f"Archive ingestion {status}: processed={processed}, skipped={skipped}, "
+    f"failed={len(data_errors)}, metric_warnings={len(metric_errors)}, "
+    f"rows={total_written:,}"
+)
+if metric_errors:
+    print("Metric warnings did not invalidate successful archive file loads:")
+    for metric_error in metric_errors:
+        print(f"  - {metric_error}")
+if data_errors:
+    raise RuntimeError(" | ".join(data_errors)[:4000])
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

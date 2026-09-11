@@ -2,23 +2,23 @@
 
 import ast
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK_NAMES = [
-    "00_archive_load.ipynb",
-    "00a_rehydrate_archive_cfg.ipynb",
-    "01_bronze_get_latest.ipynb",
-    "02_silver_formatter.ipynb",
-    "02a_archive_silver.ipynb",
-    "03_silver_business_rules.ipynb",
-    "04_gold_model.ipynb",
+    "00_archive_load.py",
+    "00a_rehydrate_archive_cfg.py",
+    "01_bronze_get_latest.py",
+    "02_silver_formatter.py",
+    "02a_archive_silver.py",
+    "03_silver_business_rules.py",
+    "04_gold_model.py",
 ]
 SILVER_NOTEBOOKS = [
-    "02_silver_formatter.ipynb",
-    "02a_archive_silver.ipynb",
+    "02_silver_formatter.py",
+    "02a_archive_silver.py",
 ]
 REQUIRED_FRACTIONAL_FORMATS = {
     "yyyy-MM-dd",
@@ -48,7 +48,7 @@ def parameter_assignments(notebook):
 notebooks = {}
 for name in NOTEBOOK_NAMES:
     path = ROOT / name
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     assert notebook["nbformat"] == 4, f"{name}: expected Notebook format 4"
     for index, cell in enumerate(notebook["cells"]):
         source = "".join(cell.get("source", []))
@@ -71,15 +71,13 @@ for name in SILVER_NOTEBOOKS:
     assert 'spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)' in notebook_source(notebook)
     print(f"PASS fractional timestamp regression: {name}")
 
-archive_source = notebook_source(notebooks["02a_archive_silver.ipynb"])
+archive_source = notebook_source(notebooks["02a_archive_silver.py"])
 assert "month_end_dates = sorted(month_last_dates.values())" in archive_source
 assert "for snapshot_date in month_end_dates:" in archive_source
 assert "for batch_date in batch_dates:" not in archive_source
 assert "spark.table(source_table).where(" in archive_source
 assert 'F.to_date("export_date") == F.lit(source_date)' in archive_source
-common_notebook = json.loads(
-    (ROOT / "99_common_library.ipynb").read_text(encoding="utf-8")
-)
+common_notebook = read_notebook(ROOT / "99_common_library.py")
 common_source = notebook_source(common_notebook)
 assert "deduplicate_frame(raw_frame, schema_cols)" in archive_source
 assert "F.row_number().over(window)" in common_source

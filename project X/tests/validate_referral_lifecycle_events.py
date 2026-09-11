@@ -1,18 +1,17 @@
 """Regression checks for derived referral lifecycle events replacing a missing source audit log."""
 
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
-PROJECT = ROOT / "project X"
-SETUP = PROJECT / "00_setup_cfg.ipynb"
-SILVER_RULES = PROJECT / "03_silver_business_rules.ipynb"
-GOLD = PROJECT / "04_gold_model.ipynb"
+PROJECT = Path(__file__).resolve().parents[1]
+SETUP = PROJECT / "00_setup_cfg.py"
+SILVER_RULES = PROJECT / "03_silver_business_rules.py"
+GOLD = PROJECT / "04_gold_model.py"
 
 
 def source(path):
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     return "\n".join("".join(cell.get("source", [])) for cell in notebook["cells"])
 
 

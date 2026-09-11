@@ -4,12 +4,11 @@ from __future__ import annotations
 
 import ast
 import csv
-import json
+from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parents[2]
-PROJECT = ROOT / "project X"
+PROJECT = Path(__file__).resolve().parents[1]
 
 EXPECTED_CONTRACTS = {
     "mlv_additional_fee": {
@@ -40,7 +39,7 @@ EXPECTED_CONTRACTS = {
 
 
 def notebook_source(path: Path) -> str:
-    notebook = json.loads(path.read_text(encoding="utf-8"))
+    notebook = read_notebook(path)
     assert notebook["nbformat"] == 4, f"{path.name} is not Notebook 4"
     for cell in notebook["cells"]:
         if cell["cell_type"] != "code":
@@ -78,15 +77,18 @@ assert next(
     row for row in by_table["provider_sic_codes"] if row["column_name"] == "provider_id"
 )["referenced_table"] == "provider"
 
-archive_loader = PROJECT / "00_archive_load.ipynb"
+archive_loader = PROJECT / "00_archive_load.py"
+if not archive_loader.exists():
+    # Deployed client repo layout: notebooks/<name>.Notebook/
+    archive_loader = PROJECT / "notebooks" / "00_archive_load.Notebook"
 assert archive_loader.exists(), "Renamed archive loader is missing"
-assert not (PROJECT / "00_archive_load 02 03.ipynb").exists(), "Retired archive loader remains active"
+assert not (PROJECT / "00_archive_load 02 03.py").exists(), "Retired archive loader remains active"
 archive_source = notebook_source(archive_loader)
 assert "TABLE_PREFIX" not in archive_source
 assert 'return safe_name' in archive_source
 assert 'target_object = f"{ARCHIVE_SCHEMA}.{physical_table}"' in archive_source
 
-archive_silver_source = notebook_source(PROJECT / "02a_archive_silver.ipynb")
+archive_silver_source = notebook_source(PROJECT / "02a_archive_silver.py")
 assert "ARCHIVE_PREFIXES" not in archive_silver_source
 assert 'EXCLUDED_ARCHIVE_TABLES = {"audit"}' in archive_silver_source
 assert 'resolve_contract(archive_logical_name(physical_table), ())' in archive_silver_source
@@ -98,7 +100,7 @@ assert "is_final_month_end_batch = snapshot_date == month_end_dates[-1]" in arch
 assert "if RUN_GOLD_DIMENSIONS_AT_MONTH_END and is_final_month_end_batch:" in archive_silver_source
 assert "Gold dimensions deferred until final batch" in archive_silver_source
 
-dimension_source = notebook_source(PROJECT / "05_gold_dimensions.ipynb")
+dimension_source = notebook_source(PROJECT / "05_gold_dimensions.py")
 for required in (
     ".dim_date", ".dim_provider", ".dim_provider_home",
     ".dim_framework", ".dim_framework_category",
@@ -108,7 +110,7 @@ for required in (
 assert "silver.provider_submission_docs" in dimension_source
 assert "silver.provider_sic_codes" in dimension_source
 
-live_source = notebook_source(PROJECT / "90_run_live_pipeline.ipynb")
+live_source = notebook_source(PROJECT / "90_run_live_pipeline.py")
 expected_live_order = [
     "00_setup_cfg", "01_bronze_get_latest",
     "01a_cfg_schema_capture_live", "02_silver_formatter",
@@ -120,7 +122,11 @@ assert positions == sorted(positions), "Live runner order is incorrect"
 archive_runbook = PROJECT / "client documentation" / "05_Operations_and_Runbooks" / "ARCHIVE_PIPELINE_RUNBOOK.md"
 assert archive_runbook.exists(), "Archive runbook is missing"
 assert "90_run_archive_pipeline" in archive_runbook.read_text(encoding="utf-8")
-assert (PROJECT / "90_run_archive_pipeline.ipynb").exists(), "Archive runner is missing"
+archive_runner = PROJECT / "90_run_archive_pipeline.py"
+if not archive_runner.exists():
+    # Deployed client repo layout: notebooks/<name>.Notebook/
+    archive_runner = PROJECT / "notebooks" / "90_run_archive_pipeline.Notebook"
+assert archive_runner.exists(), "Archive runner is missing"
 
 field_status = PROJECT / "client documentation" / "Supplementary" / "ETL_FIELD_IMPLEMENTATION_STATUS.md"
 assert field_status.exists(), "Supplementary field implementation status is missing"

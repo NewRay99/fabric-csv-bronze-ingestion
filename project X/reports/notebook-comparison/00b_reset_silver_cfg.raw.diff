@@ -1,0 +1,108 @@
+--- original/00b_reset_silver_cfg.py
++++ client/00b_reset_silver_cfg.Notebook/notebook-content.py
+@@ -7,32 +7,24 @@
+ # META     "name": "synapse_pyspark"
+ # META   },
+ # META   "dependencies": {
++# META     "lakehouse": {
++# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
++# META       "default_lakehouse_name": "LH_BCT_WMPP",
++# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
++# META       "known_lakehouses": [
++# META         {
++# META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
++# META         }
++# META       ]
++# META     },
+ # META     "warehouse": {
++# META       "default_warehouse": "9a24911d-3f57-4c68-889f-88b1dbbc2cc0",
+ # META       "known_warehouses": [
+ # META         {
+ # META           "id": "9a24911d-3f57-4c68-889f-88b1dbbc2cc0",
+ # META           "type": "Lakewarehouse"
+ # META         }
+-# META       ],
+-# META       "default_warehouse": "9a24911d-3f57-4c68-889f-88b1dbbc2cc0"
+-# META     },
+-# META     "lakehouse": {
+-# META       "known_lakehouses": [
+-# META         {
+-# META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+-# META         }
+-# META       ],
+-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+-# META       "default_lakehouse_name": "LH_BCT_WMPP",
+-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
+-# META     }
+-# META   },
+-# META   "spark_compute": {
+-# META     "compute_id": "/trident/default",
+-# META     "session_options": {
+-# META       "conf": {
+-# META         "spark.synapse.nbs.session.timeout": "1200000"
+-# META       }
++# META       ]
+ # META     }
+ # META   }
+ # META }
+@@ -40,9 +32,9 @@
+ # MARKDOWN ********************
+
+ # # 00b — Reset Silver controls and optionally rebuild the Silver schema
+-#
++#
+ # Use this administrative notebook when Silver ingestion must be replayed from scratch. It removes only Silver execution state from the global `monitoring.cfg_*` tables and can drop physical `silver.*` tables.
+-#
++#
+ # It deliberately preserves Bronze data, archive data, archive ZIP/file/table controls, Gold tables, and the configured DQ rule catalogue. The reset does nothing unless `CONFIRM_RESET` exactly matches `RESET SILVER`.
+
+ # CELL ********************
+@@ -66,6 +58,7 @@
+ DROP_SILVER_TABLES = True
+ CLEAR_DQ_EXECUTION_HISTORY = True
+ CLEAR_SCHEMA_CONTRACT_CACHE = True
++
+
+ # METADATA ********************
+
+@@ -145,6 +138,7 @@
+         if not row.isTemporary and row.tableName.lower().startswith(SILVER_TABLE_PREFIX)
+     )
+
++
+ # METADATA ********************
+
+ # META {
+@@ -163,6 +157,7 @@
+     {"AUDIT_TABLE": AUDIT_TABLE, "TIME_PARSER_POLICY": TIME_PARSER_POLICY},
+ )
+ print(f"Configuration setup completed: {cfg_result}")
++
+
+ # METADATA ********************
+
+@@ -207,6 +202,7 @@
+ if CONFIRM_RESET != "RESET SILVER":
+     print("PREVIEW ONLY: set CONFIRM_RESET = 'RESET SILVER' and rerun to execute")
+
++
+ # METADATA ********************
+
+ # META {
+@@ -275,9 +271,10 @@
+ )
+ print("Next: run either 02_silver_formatter or 02a_archive_silver.")
+
+-# METADATA ********************
+-
+-# META {
+-# META   "language": "python",
+-# META   "language_group": "synapse_pyspark"
+-# META }
++
++# METADATA ********************
++
++# META {
++# META   "language": "python",
++# META   "language_group": "synapse_pyspark"
++# META }
