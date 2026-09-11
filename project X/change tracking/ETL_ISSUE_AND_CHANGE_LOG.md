@@ -31,12 +31,12 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 | --- | --- | ---: |
 | `AR` | Archive-layer loader and replay issue | 13 |
 | `ARCH-ETL` | Archive ETL pipeline issue | 2 |
-| `LIVE-ETL` | Live ETL pipeline issue | 1 |
+| `LIVE-ETL` | Live ETL pipeline issue | 3 |
 | `SI` / `SIL` | Silver-layer issue | 25 |
 | `GLD` | Gold-layer issue | 8 |
 | `CFG` | Configuration and monitoring issue | 9 |
 | `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **59** |
+| **Total classified issues** |  | **61** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1480,8 +1480,51 @@ To tolerate the error on drop use DROP SCHEMA IF EXISTS.
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
 	at java.base/java.lang.Thread.run(Thread.java:829)
 
+- **Cause (confirmed 2026-09-11):** the unresolved name
+  `default.WS_BCT_WMPP.silver.dbo` shows Spark's OneSecurity resolver treating
+  `silver` as a lakehouse/warehouse **artifact** (with default schema `dbo`)
+  instead of a schema inside `LH_BCT_WMPP`. That fallback happens when the
+  `silver` schema cannot be resolved in the default lakehouse — either the
+  notebook's default-lakehouse attachment is broken in the live workspace, or
+  the schema does not exist yet when `03_silver_business_rules` starts. Every
+  `silver.*` / `monitoring.*` lookup then slow-fails through this path, and
+  hundreds of rule evaluations × slow failed lookups presents as a "hang".
+- **Fix (2026-09-11):** new guard cell at the top of
+  `03_silver_business_rules` (immediately after `%run ./99_common_library`):
+  - probes `SHOW SCHEMAS` and raises a clear `RuntimeError` naming
+    LIVE-ETL-002 and the attachment check, instead of hanging;
+  - runs `CREATE SCHEMA IF NOT EXISTS` for `silver` and `monitoring`, so
+    two-part names always resolve inside the default lakehouse.
+- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the
+  guard is present.
+- **Status:** source change complete. If the guard raises on the next live
+  run, re-attach `LH_BCT_WMPP` as the notebook's default lakehouse in the
+  live workspace — that confirms the attachment (not the schema) was the
+  root cause.
+
 ##LIVE-ETL-003 - Job takes a very long time to process on 90_run_live_pipeline
 
-i have extended the time in the notebook with 
+i have extended the time in the notebook with
 NOTEBOOK_TIMEOUT_SECONDS = 22200
 and usually happens at `03_silver_business_rules` step. is this because of prior error or are there performance upgrade i can do to the queries inside the step.. can you apply logging steps in-between the cells to monitor each cell too?
+
+- **Cause (confirmed 2026-09-11):** partly the LIVE-ETL-002 resolver loop above —
+  every failed schema lookup burns seconds before the rule is even evaluated.
+  In addition, the DQ loop scanned each Silver table once **per rule**: a full
+  `count()` for `checked_row_count` plus a second scan for the failure count,
+  for every rule, with no caching.
+- **Fix (2026-09-11):**
+  - Rules are now grouped by source table; `checked_row_count` is computed
+    once per table and reused (`checked_counts`).
+  - Tables checked by more than one rule are cached for the duration of
+    their checks and unpersisted afterwards (`cached_frames`).
+  - Added `log_step()` to `99_common_library` — prints timestamp, per-step
+    and cumulative elapsed time. `03_silver_business_rules` now calls it
+    between every cell (schema guard, run registration, rule preparation,
+    main DQ pass, each materialisation, derived DQ, lifecycle events,
+    dim_date), and the DQ loop prints one timing line per rule via
+    `log_rule()`. Slow cells/rules are now visible directly in the job log.
+- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the
+  guard, the logging calls, and the single-scan loop.
+- **Status:** source change complete; confirm duration improvement on the
+  next live run in Fabric.

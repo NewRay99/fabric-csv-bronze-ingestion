@@ -77,6 +77,32 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
 # CELL ********************
 
+# LIVE-ETL-002 guard: fail fast with a clear message when the default
+# lakehouse attachment is broken, and create the expected schemas so
+# two-part names (silver.*, monitoring.*) never fall back to slow
+# cross-artifact resolution — the resolver loop behind the "hang".
+try:
+    visible_schemas = {row[0] for row in spark.sql("SHOW SCHEMAS").collect()}
+except Exception as exc:
+    raise RuntimeError(
+        "LIVE-ETL-002: cannot list schemas in the default lakehouse. "
+        "Confirm LH_BCT_WMPP is attached to this notebook as the default "
+        "lakehouse, then rerun. Original error: " + str(exc)[:500]
+    )
+for required_schema in (SILVER_SCHEMA, "monitoring"):
+    spark.sql(f"CREATE SCHEMA IF NOT EXISTS {required_schema}")
+print(f"Schemas visible to this session: {sorted(visible_schemas)}")
+log_step("Schema guard complete")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 import re, uuid
 from datetime import datetime
 from pyspark.sql import functions as F
@@ -99,6 +125,7 @@ PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
 append_rows("monitoring.cfg_pipeline_run", [(PIPELINE_RUN_ID, "03_silver_business_rules", "SILVER", "LATEST",
     STARTED_AT, None, "RUNNING", 0, 0, 0, 0, None, JOB_RUN_ID or None)],
     "run_id string,pipeline_name string,layer string,source_kind string,started_at timestamp,ended_at timestamp,status string,tables_succeeded int,tables_failed int,rows_read long,rows_written long,error_message string,job_run_id string")
+log_step("Pipeline run row registered")
 
 # METADATA ********************
 
@@ -160,6 +187,7 @@ spark.createDataFrame(normalised_rule_rows,
     .write.format("delta").mode("overwrite").option("overwriteSchema", "true") \
     .saveAsTable("monitoring.cfg_data_quality_rule")
 print(f"Prepared {len(rules):,} data-quality rules")
+log_step(f"Prepared {len(rules):,} data-quality rules")
 
 # METADATA ********************
 
@@ -176,6 +204,21 @@ reference_schema = "run_id string,rule_id string,child_table string,child_column
 result_rows = []
 critical_failures = []
 
+# LIVE-ETL-003: scan each Silver table once per run. Rules are grouped by
+# source table; the row count is computed once per table and multi-rule
+# tables are cached for the duration of their checks.
+table_rule_counts = {}
+for rule in validation_rules:
+    table_rule_counts[rule["table_name"]] = table_rule_counts.get(rule["table_name"], 0) + 1
+checked_counts = {}
+cached_frames = {}
+
+
+def log_rule(rule_id, status, detail, rule_started):
+    elapsed = (datetime.utcnow() - rule_started).total_seconds()
+    print(f"  [{rule_id}] {status}: {detail} (+{elapsed:,.1f}s)")
+
+
 for rule in validation_rules:
     rule_id = rule["rule_id"]
     rule_type = rule["rule_type"].upper()
@@ -183,16 +226,25 @@ for rule in validation_rules:
     source = silver_table(rule["table_name"])
     column_name = rule["column_name"]
     checked_at = datetime.utcnow()
+    rule_started = datetime.utcnow()
     try:
         if not spark.catalog.tableExists(source):
             result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "SKIPPED", 0, 0, 0.0, None, checked_at, "Missing Silver source table"))
+            log_rule(rule_id, "SKIPPED", "missing Silver source table", rule_started)
             continue
         frame = spark.table(source)
+        if table_rule_counts.get(rule["table_name"], 0) > 1 and source not in cached_frames:
+            frame = frame.cache()
+            cached_frames[source] = frame
         missing_columns = [c.strip() for c in column_name.split(",") if c.strip() and c.strip() not in frame.columns]
         if missing_columns:
             result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "SKIPPED", 0, 0, 0.0, None, checked_at, f"Missing Silver column(s): {missing_columns}"))
+            log_rule(rule_id, "SKIPPED", f"missing Silver column(s): {missing_columns}", rule_started)
             continue
-        checked = frame.count()
+        checked = checked_counts.get(source)
+        if checked is None:
+            checked = frame.count()
+            checked_counts[source] = checked
         failed_frame = None
         failed = 0
 
@@ -211,11 +263,13 @@ for rule in validation_rules:
             parent = silver_table(rule["referenced_table"])
             if not spark.catalog.tableExists(parent):
                 result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "SKIPPED", 0, checked, 0.0, None, checked_at, "Missing Silver parent table"))
+                log_rule(rule_id, "SKIPPED", "missing Silver parent table", rule_started)
                 continue
             parent_frame = spark.table(parent)
             parent_column = rule["referenced_column"]
             if parent_column not in parent_frame.columns:
                 result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "SKIPPED", 0, checked, 0.0, None, checked_at, f"Missing Silver parent column: {parent_column}"))
+                log_rule(rule_id, "SKIPPED", f"missing Silver parent column: {parent_column}", rule_started)
                 continue
             parent_frame = parent_frame.select(F.trim(F.col(qident(parent_column)).cast("string")).alias("_parent_key")).distinct()
             failed_frame = (frame.where(F.col(qident(column_name)).isNotNull())
@@ -268,13 +322,18 @@ for rule in validation_rules:
             append_rows("monitoring.cfg_rejected_row", [tuple(row) + (JOB_RUN_ID or None,) for row in rejects], reject_schema)
         result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, status,
             int(failed), int(checked), float(pct), sample_key, checked_at, rule.get("description")))
+        log_rule(rule_id, status, f"{int(failed):,}/{int(checked):,} failed", rule_started)
         if status == "FAIL" and severity == "CRITICAL":
             critical_failures.append(rule_id)
     except Exception as exc:
         result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "ERROR",
             0, 0, 0.0, None, checked_at, str(exc)[:2000]))
+        log_rule(rule_id, "ERROR", str(exc)[:200], rule_started)
         if severity == "CRITICAL":
             critical_failures.append(rule_id)
+
+for cached_frame in cached_frames.values():
+    cached_frame.unpersist()
 
 append_rows("monitoring.cfg_data_quality_result", [tuple(row) + (JOB_RUN_ID or None,) for row in result_rows], result_schema)
 failed_checks = sum(1 for row in result_rows if row[6] in ("FAIL", "ERROR"))
@@ -286,6 +345,7 @@ rows_read=0, rows_written={len(result_rows)}, error_message=NULL WHERE run_id='{
 if critical_failures and FAIL_ON_CRITICAL:
     raise RuntimeError(f"Critical DQ failures: {critical_failures[:20]}")
 print(f"DQ run {RUN_ID}: {len(result_rows)} checks; {len(critical_failures)} critical failures; {skipped_checks} skipped")
+log_step(f"Main DQ pass complete: {len(result_rows)} checks, {len(critical_failures)} critical failures")
 
 # METADATA ********************
 
@@ -359,6 +419,7 @@ else:
         [], "referral_id string, closed_referral_reason_bucket string"
     )
 replace_silver_materialisation(closure_summary, "referral_closure_reason_summary")
+log_step("Materialised referral_closure_reason_summary")
 
 # SI-018/SI-019: referral-level enrichment is intentionally a separate
 # derived Silver relation. The source-conformed silver.referral contract
@@ -507,6 +568,7 @@ else:
     referral_enrichment = spark.createDataFrame([], enrichment_schema)
 replace_silver_materialisation(referral_enrichment, "referral_enrichment")
 print("Silver referral enrichment ready: offer, provider-observation, IPA-signature and due-diligence fields")
+log_step("Materialised referral_enrichment")
 
 # Run derived checks only after the current enrichment has been written.
 # Results use the same monitoring tables as the main DQ pass above.
@@ -598,6 +660,7 @@ if derived_failed:
 if derived_critical_failures and FAIL_ON_CRITICAL:
     raise RuntimeError(f"Critical derived DQ failures: {derived_critical_failures[:20]}")
 print(f"Derived referral DQ: {len(derived_result_rows)} checks; {derived_failed} failures")
+log_step(f"Derived referral DQ complete: {len(derived_result_rows)} checks, {derived_failed} failures")
 
 # SI-013: derived referral lifecycle events. These are not a source-system
 # audit log; each event is derived only from timestamps delivered in Silver.
@@ -741,6 +804,7 @@ else:
         "event_source string, source_table string, event_materialised_at timestamp",
     )
 replace_silver_materialisation(lifecycle_events, "referral_lifecycle_event")
+log_step("Materialised referral_lifecycle_event")
 
 # SI-012: one marked calendar covering the dates present in the current Silver
 # state. The range is rebuilt idempotently with each Silver run.
@@ -794,6 +858,7 @@ else:
 replace_silver_materialisation(date_dimension, "dim_date")
 print("Silver materialisations ready: age_band, directory_summary_axis, "
       "fostering_axis, referral_closure_reason_summary, dim_date")
+log_step("All Silver materialisations complete")
 
 # METADATA ********************
 

@@ -99,6 +99,24 @@ def is_etl_excluded_table(table_name):
 def excluded_etl_tables(table_names):
     return sorted(name for name in table_names if is_etl_excluded_table(name))
 
+
+_LOG_STEP_STATE = {}
+
+
+def log_step(label):
+    """Print step, elapsed and cumulative time for pipeline monitoring.
+
+    State lives in the shared %run namespace, so timings accumulate across
+    the calling notebook's cells. Added for LIVE-ETL-003 observability.
+    """
+    now = datetime.utcnow()
+    start = _LOG_STEP_STATE.setdefault("start", now)
+    previous = _LOG_STEP_STATE.setdefault("previous", now)
+    elapsed = (now - previous).total_seconds()
+    total = (now - start).total_seconds()
+    _LOG_STEP_STATE["previous"] = now
+    print(f"[{now:%Y-%m-%d %H:%M:%S}] {label} | +{elapsed:,.1f}s step | {total:,.1f}s total")
+
 # METADATA ********************
 
 # META {
