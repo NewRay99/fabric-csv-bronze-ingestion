@@ -10,6 +10,29 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## 2026-09-12 — Gold referral flags aligned to the original business rules
+
+- GLD-009: `is_open` now implements the original business rule in
+  `silver.referral_enrichment` (`03_silver_business_rules`) and propagates to
+  `gold.fact_referral` and the snapshot, replacing the inline status check.
+- GLD-010: `is_spot` restored to `gold.fact_referral` from
+  `silver.referral.is_spot` and carried into the snapshot.
+- GLD-011: new `is_awaiting_offer` flag in `silver.referral_enrichment`,
+  propagated to `gold.fact_referral`; the `Referrals Awaiting Offer` DAX
+  measure is now a single flag filter.
+- GLD-012: new `is_engaged` flag on `gold.fact_referral_provider`
+  (not cancelled, not closed, not excluded).
+- Regenerated the `tests/_gold_fact_sql.sql` simulation fixture from the
+  updated `04_gold_model` (extractor now locates the fact cell by content)
+  and rewrote `tests/_gold_sim_test.py` for the snake_case model: it
+  fabricates `silver.referral_enrichment`, `silver.referral_person` and
+  `silver.referral_closure_reason_summary`, derives the GLD-009/GLD-011
+  flags from fabricated provider/offer/IPA records, and checks the
+  propagated `is_open` / `is_awaiting_offer` / `is_spot` values.
+- Validation: all 23 portable validators pass against the updated source,
+  including new regression guards for the four fixes. Fabric execution and
+  import remain separate acceptance checks.
+
 ## 2026-09-11 — Primary notebook source converted to Fabric Python
 
 - Converted all 17 root `.ipynb` notebooks to primary `.py` Fabric notebook
@@ -33,10 +56,10 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 | `ARCH-ETL` | Archive ETL pipeline issue | 2 |
 | `LIVE-ETL` | Live ETL pipeline issue | 3 |
 | `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 8 |
+| `GLD` | Gold-layer issue | 12 |
 | `CFG` | Configuration and monitoring issue | 9 |
 | `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **61** |
+| **Total classified issues** |  | **65** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1529,115 +1552,135 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
 - **Status:** source change complete; confirm duration improvement on the
   next live run in Fabric.
 
-## GLD-009
+## GLD-009 — is_open flag did not match the original business rule
 
-the is_open flag in the gold.fact_referral table is not the same logic as the original business rule. i can see that the logic has been applied here... project X\04_gold_model.ipynb... this field should be added to the silver.referral_enrichment table and then propagate to the gold.fact_referral table. the correct logic should be like the below
-```
-with cte as
-( select distinct a.referral_id from gold.fact_referral_provider a
- --inner join gold.fact_referral b on a.referral_id=b.referral_id
- where
- is_closed = FALSE
- and is_declined = FALSE
- and is_excluded  = FALSE
- and is_cancelled  = FALSE
- --and current_status IN ( "OPEN", "UNDER_OFFER" )
-group by all
-)
-, cte2 as
-(
-    select  distinct referral_id from gold.fact_referral 
-where  current_status in  ( "UNDER_OFFER", "" )
-group by all
-)
-, cte3 as
-(
-    select distinct referral_id from gold.fact_referral 
-where response_required_date>='2026-09-11' 
-and  current_status in  ( "OPEN", "" )
-group by all
---OPEN, 27
+- **Symptom (reported 2026-09-11, verbatim):** "the is_open flag in the
+  gold.fact_referral table is not the same logic as the original business
+  rule... this field should be added to the silver.referral_enrichment table
+  and then propagate to the gold.fact_referral table. the correct logic
+  should be like the below"
 
-)
-, cteagg as (
-select * from cte
-UNION ALL
-select * from cte2
-UNION ALL
-select * from cte3
-)
-select count(distinct a.referral_id) from cteagg a
- inner join gold.fact_referral b on a.referral_id=b.referral_id
- and current_status IN ( "OPEN", "UNDER_OFFER" )
-```
-
-please correct it.
-
-
-## GLD-010
-
-is_spot is missing from the  gold.fact_referral table, this needs adding back in
-
-## GLD-011
-instead of calculating the "Active Referrals Awaiting Offers" in the DAX add this field into the silver.referral_enrichment table and then propagate to the gold.fact_referral table.
-
-```
-Active Referrals Awaiting Offers = 
-VAR LatestExportDate =
-    MAXX(
-        ALL(dim_referral),
-        dim_referral[Export Date Clean]
-    )
-
-VAR LiveProviderReferralIDs =
-    CALCULATETABLE(
-        VALUES(fact_referral_offer[referral_id]),
-        REMOVEFILTERS(fact_referral_offer),
-        REMOVEFILTERS(dim_date),
-        fact_referral_offer[is_cancelled] = FALSE(),
-        fact_referral_offer[is_closed] = FALSE(),
-        fact_referral_offer[is_excluded] = FALSE()
-    )
-
-VAR OpenWithinResponseWindowIDs =
-    CALCULATETABLE(
-        VALUES(dim_referral[referral_id]),
-        REMOVEFILTERS(dim_date),
-        dim_referral[referral_status] = "OPEN",
-        dim_referral[Response Required Date Clean] >= LatestExportDate
-    )
-
-VAR ActiveOpenReferralIDs =
-    DISTINCT(
-        UNION(
-            LiveProviderReferralIDs,
-            OpenWithinResponseWindowIDs
-        )
-    )
-
-RETURN
-CALCULATE(
-    DISTINCTCOUNT(dim_referral[referral_id]),
-    REMOVEFILTERS(dim_date),
-    dim_referral[referral_status] = "OPEN",   -- ✅ Only OPEN
-    TREATAS(
-        ActiveOpenReferralIDs,
-        dim_referral[referral_id]
-    )
-)
-``
+  ```sql
+  with cte as
+  ( select distinct a.referral_id from gold.fact_referral_provider a
+   where
+   is_closed = FALSE
+   and is_declined = FALSE
+   and is_excluded  = FALSE
+   and is_cancelled  = FALSE
+   --and current_status IN ( "OPEN", "UNDER_OFFER" )
+  group by all
+  )
+  , cte2 as
+  (
+      select  distinct referral_id from gold.fact_referral
+  where  current_status in  ( "UNDER_OFFER", "" )
+  group by all
+  )
+  , cte3 as
+  (
+      select distinct referral_id from gold.fact_referral
+  where response_required_date>='2026-09-11'
+  and  current_status in  ( "OPEN", "" )
+  group by all
+  )
+  , cteagg as (
+  select * from cte
+  UNION ALL
+  select * from cte2
+  UNION ALL
+  select * from cte3
+  )
+  select count(distinct a.referral_id) from cteagg a
+   inner join gold.fact_referral b on a.referral_id=b.referral_id
+   and current_status IN ( "OPEN", "UNDER_OFFER" )
+  ```
+- **Cause:** `is_open` was derived inline in `04_gold_model` as a simple
+  status check (`current_status` not in closed/cancelled/withdrawn/
+  completed). It ignored provider-referral state and the response-required
+  window, so referrals that the business rule treats as open were flagged
+  differently.
+- **Fix (2026-09-12):** `is_open` is now computed in
+  `silver.referral_enrichment` (`03_silver_business_rules`) and propagated to
+  `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral is open
+  when its status is `OPEN` or `UNDER_OFFER` **and** at least one of:
+  - it has a live provider referral (not closed, not declined, not excluded,
+    not cancelled) — the `cte` branch;
+  - its status is `UNDER_OFFER` — the `cte2` branch;
+  - its status is `OPEN` and `response_required_by_date` is on or after the
+    latest `export_date` in `silver.referral` — the `cte3` branch, with the
+    hard-coded date replaced by the latest export date (matching the
+    `LatestExportDate` pattern used by the semantic model).
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
+  the `latest_export` / `live_provider` CTEs and the Gold propagation;
+  `validate_gold_referral_schema.py` requires the published fields; new DQ
+  rule `REFERRAL_ENRICHMENT_IS_OPEN_PRESENT`.
+- **Status:** source change complete. `required_placement_date_outcome`
+  intentionally retains its existing status-based definition; only the
+  `is_open` flag was in scope. Confirm open-referral counts against the
+  client extract on the next Fabric run.
 
 
-## GLD-012
-create and is_engaged field in the gold.fact_referral_provider table.
-calculation should be 
-```
-    CALCULATETABLE(
-        VALUES(fact_referral_offer[referral_id]),where
-        fact_referral_offer[is_cancelled] = FALSE(),
-        fact_referral_offer[is_closed] = FALSE(),
-        fact_referral_offer[is_excluded] = FALSE()
-```
+## GLD-010 — is_spot missing from gold.fact_referral
+
+- **Symptom (reported 2026-09-11, verbatim):** "is_spot is missing from the
+  gold.fact_referral table, this needs adding back in"
+- **Cause:** the Gold referral fact never promoted `silver.referral.is_spot`
+  (schema contract ordinal 15), so the spot/framework split was unavailable
+  at referral grain.
+- **Fix (2026-09-12):** `gold.fact_referral` now selects
+  `CAST(r.is_spot AS BOOLEAN) AS is_spot` from the current Silver referral
+  row. The column is part of the Gold source preflight
+  (`GOLD_SOURCE_REQUIREMENTS`) and is carried into
+  `gold.fact_referral_snapshot`.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
+  the cast and snapshot promotion; `validate_gold_referral_schema.py`
+  requires the published field.
+- **Status:** source change complete.
+
+## GLD-011 — Active Referrals Awaiting Offers moved from DAX into the pipeline
+
+- **Symptom (reported 2026-09-11, verbatim):** "instead of calculating the
+  'Active Referrals Awaiting Offers' in the DAX add this field into the
+  silver.referral_enrichment table and then propagate to the
+  gold.fact_referral table." The supplied DAX counted OPEN referrals that
+  either have a live provider referral (not cancelled, not closed, not
+  excluded) or whose response-required date is on or after the latest
+  export date.
+- **Cause:** the KPI existed only as a DAX calculation, so the logic was not
+  reusable by other measures, snapshots or SQL consumers.
+- **Fix (2026-09-12):** new `is_awaiting_offer` boolean in
+  `silver.referral_enrichment` (`03_silver_business_rules`), propagated to
+  `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral counts
+  when its status is `OPEN` **and** at least one of:
+  - it has an engaged provider referral (not cancelled, not closed, not
+    excluded) — the `LiveProviderReferralIDs` branch;
+  - its `response_required_by_date` is on or after the latest `export_date`
+    in `silver.referral` — the `OpenWithinResponseWindowIDs` branch.
+  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` now defines
+  `Referrals Awaiting Offer` (the Gold successor of the legacy
+  `Active Referrals Awaiting Offers` card) as a single filter on
+  `fact_referral[is_awaiting_offer]`.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
+  the `engaged_provider` CTE and the Gold propagation; new DQ rule
+  `REFERRAL_ENRICHMENT_AWAITING_OFFER_PRESENT`.
+- **Status:** source change complete.
 
 
+## GLD-012 — is_engaged added to gold.fact_referral_provider
 
+- **Symptom (reported 2026-09-11, verbatim):** "create and is_engaged field
+  in the gold.fact_referral_provider table. calculation should be" — engaged
+  means `is_cancelled = FALSE`, `is_closed = FALSE` and
+  `is_excluded = FALSE` on the provider referral.
+- **Cause:** engagement was only derivable through multi-table DAX; the
+  provider-grain fact had no row-level engagement flag.
+- **Fix (2026-09-12):** `gold.fact_referral_provider` now publishes
+  `is_engaged`, computed null-safely per row:
+  `NOT COALESCE(is_cancelled, false) AND NOT COALESCE(is_closed, false)
+  AND NOT COALESCE(is_excluded, false)`. Unlike the GLD-009 live-provider
+  rule, engagement does not exclude declined referrals, matching the
+  supplied calculation.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
+  the `is_engaged` expression in the `gold.fact_referral_provider` cell.
+- **Status:** source change complete.

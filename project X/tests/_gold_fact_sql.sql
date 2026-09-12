@@ -11,94 +11,100 @@ referral_current AS (
   SELECT * FROM referral_history WHERE row_number_current = 1
 ),
 referral_created AS (
-  SELECT referral_id, MIN(referral_created_date) AS ReferralCreatedDate
+  SELECT referral_id, MIN(referral_created_date) AS referral_created_date
   FROM silver.referral GROUP BY referral_id
 ),
-offer_rollup AS (
-  SELECT rp.referral_id,
-    MIN(o.offer_date) AS FirstOfferDate,
-    MIN(CASE WHEN LOWER(o.offer_status) IN ('accepted','approved','selected')
-        THEN o.last_modified_date END) AS OfferAcceptedDate,
-    COUNT(DISTINCT o.offer_id) AS OfferCount,
-    COUNT(DISTINCT o.provider_home_id) AS UniqueHomesOffered,
-    MAX(COALESCE(o.last_modified_date, o.offer_date)) AS LastOfferActivityDate
-  FROM silver.offer o
-  INNER JOIN silver.referral_provider rp
-    ON o.referral_provider_id = rp.referral_provider_id
-  GROUP BY rp.referral_id
+referral_enrichment AS (
+  SELECT * FROM silver.referral_enrichment
 ),
-ipa_rollup AS (
-  SELECT referral_id, MIN(created_datetime) AS IPAIssuedDate,
-    MIN(placement_admission_date) AS PlannedPlacementStartDate,
-    SUM(costs_total_weekly_fee) AS EstimatedWeeklyCost,
-    MAX(COALESCE(updated_datetime, created_datetime)) AS LastIPAActivityDate
-  FROM silver.ipa GROUP BY referral_id
+referral_child AS (
+  SELECT referral_id, MIN(CAST(person_id AS STRING)) AS person_id
+  FROM silver.referral_person
+  GROUP BY referral_id
 ),
-event_rollup AS (
-  SELECT referral_id, MIN(event_timestamp) AS FirstActionDate,
-    MAX(COALESCE(event_timestamp, created_timestamp)) AS LastEventActivityDate
-  FROM silver.referral_lifecycle_event GROUP BY referral_id
+closure_reason AS (
+  SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
+  FROM silver.referral_closure_reason_summary
 ),
 base AS (
-  SELECT r.referral_id AS ReferralID, c.ReferralCreatedDate,
-    r.required_start_date AS RequiredPlacementDate,
-    r.response_required_by_date AS ResponseRequiredDate,
-    r.referral_modified_date AS ReferralModifiedTimestamp,
-    r.referral_status AS CurrentStatus, r.placement_type AS PlacementTypeRequired,
-    e.FirstActionDate, o.FirstOfferDate, o.OfferAcceptedDate, i.IPAIssuedDate,
-    CASE WHEN LOWER(COALESCE(r.referral_status, '')) IN ('closed','cancelled','withdrawn','completed')
-      THEN COALESCE(r.referral_modified_date, r.export_date) END AS ReferralClosedDate,
-    CAST(NULL AS STRING) AS ReferralClosureReason,
-    GREATEST(COALESCE(r.referral_modified_date, r.referral_created_date, r.export_date),
-      e.LastEventActivityDate, o.LastOfferActivityDate, i.LastIPAActivityDate) AS LastActivityDate,
-    o.OfferCount, o.UniqueHomesOffered,
-    i.PlannedPlacementStartDate, i.EstimatedWeeklyCost,
+  SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+    r.required_start_date AS required_placement_date,
+    r.response_required_by_date AS response_required_date,
+    r.referral_modified_date AS referral_modified_timestamp,
+    r.referral_status AS current_status, r.placement_type AS placement_type_required,
+    CAST(r.is_spot AS BOOLEAN) AS is_spot,
+    x.is_open, x.is_awaiting_offer,
+    x.first_action_date, x.first_offer_date,
+    x.offer_accepted_date, x.ipa_issued_date,
+    x.referral_closed_date,
+    closure.referral_closure_reason,
+    x.last_activity_date,
+    COALESCE(x.cnt_offer_made, 0) AS cnt_offer_made,
+    x.first_provider_seen_date,
+    x.is_not_seen_by_providers,
+    x.ipa_placement_admission_date,
+    x.ipa_2_signatures,
+    x.ipa_last_signature_date,
+    x.ipa_due_diligence_min_review_date,
+    COALESCE(x.cnt_offer_made, 0) AS offer_count,
+    x.unique_homes_offered,
+    x.ipa_placement_admission_date AS planned_placement_start_date,
+    x.estimated_weekly_cost,
     CASE
       WHEN r.required_start_date IS NULL THEN 'Unspecified'
-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 1 THEN 'Critical'
-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 3 THEN 'High'
-      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.ReferralCreatedDate)) <= 7 THEN 'Medium'
+      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 1 THEN 'Critical'
+      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 3 THEN 'High'
+      WHEN DATEDIFF(r.required_start_date, TO_DATE(c.referral_created_date)) <= 7 THEN 'Medium'
       ELSE 'Planned'
-    END AS PlacementUrgencyBand
+    END AS placement_urgency_band
   FROM referral_current r
   INNER JOIN referral_created c ON r.referral_id = c.referral_id
-  LEFT JOIN offer_rollup o ON r.referral_id = o.referral_id
-  LEFT JOIN ipa_rollup i ON r.referral_id = i.referral_id
-  LEFT JOIN event_rollup e ON r.referral_id = e.referral_id
+  LEFT JOIN referral_child child ON r.referral_id = child.referral_id
+  LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
+  LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
 )
-SELECT {AS_OF_SQL} AS AsOfDate,
-  ReferralID, ReferralCreatedDate, RequiredPlacementDate, ResponseRequiredDate,
-  FirstActionDate, FirstOfferDate, OfferAcceptedDate, IPAIssuedDate,
-  ReferralClosedDate, ReferralClosureReason, LastActivityDate, CurrentStatus,
-  PlacementTypeRequired, PlacementUrgencyBand,
-  CAST(NULL AS STRING) AS ChildCriticalityCode,
-  COALESCE(OfferCount, 0) AS OfferCount,
-  COALESCE(UniqueHomesOffered, 0) AS UniqueHomesOffered,
-  COALESCE(OfferCount, 0) > 0 AS HasOffer,
-  DATEDIFF(TO_DATE(FirstActionDate), TO_DATE(ReferralCreatedDate)) AS DaysToFirstAction,
-  DATEDIFF(TO_DATE(FirstOfferDate), TO_DATE(ReferralCreatedDate)) AS DaysToFirstOffer,
-  DATEDIFF(TO_DATE(OfferAcceptedDate), TO_DATE(ReferralCreatedDate)) AS DaysToAcceptedOffer,
-  DATEDIFF(TO_DATE(IPAIssuedDate), TO_DATE(ReferralCreatedDate)) AS DaysToIPA,
-  DATEDIFF(COALESCE(TO_DATE(ReferralClosedDate), {AS_OF_SQL}),
-    TO_DATE(ReferralCreatedDate)) AS DaysOpen,
-  DATEDIFF({AS_OF_SQL}, TO_DATE(LastActivityDate)) AS DaysWithoutActivity,
-  CASE WHEN RequiredPlacementDate IS NOT NULL AND RequiredPlacementDate < {AS_OF_SQL}
-    THEN DATEDIFF({AS_OF_SQL}, RequiredPlacementDate) ELSE 0 END AS DaysPastRequiredDate,
-  LOWER(COALESCE(CurrentStatus, '')) NOT IN
-    ('closed','cancelled','withdrawn','completed') AS IsOpen,
-  IPAIssuedDate IS NOT NULL AND RequiredPlacementDate IS NOT NULL
-    AND TO_DATE(IPAIssuedDate) <= RequiredPlacementDate AS PlacedByRequiredDate,
+SELECT {AS_OF_SQL} AS as_of_date,
+  referral_id, person_id, referral_created_date, required_placement_date,
+  response_required_date, first_action_date, first_offer_date,
+  offer_accepted_date, ipa_issued_date, referral_closed_date,
+  referral_closure_reason, last_activity_date, current_status,
+  placement_type_required,
+  CAST(NULL AS STRING) AS region,
+  placement_urgency_band AS priority,
+  CAST(NULL AS STRING) AS complexity_band,
+  placement_urgency_band, cnt_offer_made, first_provider_seen_date,
+  is_not_seen_by_providers, ipa_placement_admission_date, ipa_2_signatures,
+  ipa_last_signature_date, ipa_due_diligence_min_review_date,
+  CAST(NULL AS STRING) AS child_criticality_code,
+  offer_count, COALESCE(unique_homes_offered, 0) AS unique_homes_offered,
+  COALESCE(offer_count, 0) > 0 AS has_offer,
+  DATEDIFF(TO_DATE(first_action_date), TO_DATE(referral_created_date)) AS days_to_first_action,
+  DATEDIFF(TO_DATE(first_offer_date), TO_DATE(referral_created_date)) AS days_to_first_offer,
+  DATEDIFF(TO_DATE(offer_accepted_date), TO_DATE(referral_created_date)) AS days_to_accepted_offer,
+  DATEDIFF(TO_DATE(ipa_issued_date), TO_DATE(referral_created_date)) AS days_to_ipa,
+  DATEDIFF(COALESCE(TO_DATE(referral_closed_date), {AS_OF_SQL}),
+    TO_DATE(referral_created_date)) AS days_open,
+  DATEDIFF({AS_OF_SQL}, TO_DATE(last_activity_date)) AS days_without_activity,
+  CASE WHEN required_placement_date IS NOT NULL AND required_placement_date < {AS_OF_SQL}
+    THEN DATEDIFF({AS_OF_SQL}, required_placement_date) ELSE 0 END AS days_past_required_date,
+  -- GLD-009/GLD-011: is_open and is_awaiting_offer implement the original
+  -- business rules in silver.referral_enrichment; Gold propagates them.
+  COALESCE(is_open, false) AS is_open,
+  COALESCE(is_awaiting_offer, false) AS is_awaiting_offer,
+  is_spot,
+  ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
+    AND TO_DATE(ipa_issued_date) <= required_placement_date AS placed_by_required_date,
   CASE
-    WHEN IPAIssuedDate IS NOT NULL AND RequiredPlacementDate IS NOT NULL
-      AND TO_DATE(IPAIssuedDate) <= RequiredPlacementDate THEN 'Placed by target'
-    WHEN IPAIssuedDate IS NOT NULL THEN 'Placed after target'
-    WHEN RequiredPlacementDate < {AS_OF_SQL} AND LOWER(COALESCE(CurrentStatus, '')) NOT IN
+    WHEN ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
+      AND TO_DATE(ipa_issued_date) <= required_placement_date THEN 'Placed by target'
+    WHEN ipa_issued_date IS NOT NULL THEN 'Placed after target'
+    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(COALESCE(current_status, '')) NOT IN
       ('closed','cancelled','withdrawn','completed') THEN 'Open overdue'
-    WHEN LOWER(COALESCE(CurrentStatus, '')) NOT IN
+    WHEN LOWER(COALESCE(current_status, '')) NOT IN
       ('closed','cancelled','withdrawn','completed') THEN 'Open on track'
     ELSE 'Closed without placement'
-  END AS RequiredPlacementDateOutcome,
-  PlannedPlacementStartDate, EstimatedWeeklyCost,
-  CURRENT_TIMESTAMP() AS GoldModelledAt
+  END AS required_placement_date_outcome,
+  planned_placement_start_date, estimated_weekly_cost,
+  CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM base
-WHERE TO_DATE(ReferralCreatedDate) <= {AS_OF_SQL}
+WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}

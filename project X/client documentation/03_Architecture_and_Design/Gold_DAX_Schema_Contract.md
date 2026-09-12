@@ -69,7 +69,9 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 |---|---|---|---|
 | `referral_id` | STRING (PK) | `silver.referral` | Total Referrals, all referral-count measures |
 | `person_id` | STRING | `silver.referral_person` (first recorded person per referral) | Gender referral measures via `dim_person` (GLD-006/007) |
-| `is_open` | BOOLEAN | Derived from `current_status` | Open Referrals, Closed Referrals, Open Overdue, Stalled |
+| `is_open` | BOOLEAN | `silver.referral_enrichment` (GLD-009 business rule: status OPEN/UNDER_OFFER with a live provider referral, under-offer status, or inside the response-required window) | Open Referrals, Closed Referrals, Open Overdue, Stalled |
+| `is_awaiting_offer` | BOOLEAN | `silver.referral_enrichment` (GLD-011: OPEN referral with an engaged provider referral or inside the response-required window) | Active Referrals Awaiting Offers |
+| `is_spot` | BOOLEAN | `silver.referral` (GLD-010) | Spot vs Framework split |
 | `has_offer` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals With an Offer, Awaiting Offer, Engagement measures |
 | `is_not_seen_by_providers` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals Without Provider Assignment |
 | `required_placement_date` | DATE | `silver.referral` | Open Overdue, Emergency/Planned split, Target Hit Rate |
@@ -139,6 +141,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `referral_id` | STRING (FK) | `silver.referral_provider` | Relationship to `fact_referral` |
 | `provider_id` | STRING (FK) | `silver.referral_provider` | Relationship to `dim_provider` |
 | `is_declined` | BOOLEAN | Derived | Provider Declines, Decline Rate |
+| `is_engaged` | BOOLEAN | Derived (GLD-012: not cancelled, not closed, not excluded) | Engagement measures, Active Referrals Awaiting Offers |
 
 ### 3.6 `fact_referral_lifecycle_event` — derived event grain
 

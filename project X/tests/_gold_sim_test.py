@@ -1,10 +1,13 @@
 """
 Local simulation test for 04_gold_model.py.
 
-Fabricates 3 months of flattened Silver-layer data (referral, referral_provider,
-offer, ipa, referral_lifecycle_event) that mimics the derived Silver event stream
-and the archive replay would produce: new referrals each month plus in-month
-updates, spread across multiple months. Then runs the gold model SQL logic
+Fabricates 3 months of flattened Silver-layer data (referral, referral_enrichment,
+referral_person, referral_closure_reason_summary) that mimics what the Silver
+materialisations and the archive replay would produce: new referrals each month
+plus in-month updates, spread across multiple months. The enrichment rows are
+derived from fabricated referral_provider/offer/ipa records using the GLD-009 /
+GLD-011 business rules, so the simulation also exercises the propagated
+is_open / is_awaiting_offer / is_spot flags. Then runs the gold model SQL logic
 against it for each month-end as-of date and validates the output.
 """
 import os, sys, uuid, random
@@ -40,35 +43,25 @@ def ts(d, h=9, m=0):
     return datetime(d.year, d.month, d.day, h, m)
 
 referrals = []   # flattened referral rows, including later versions for test coverage
-providers = []   # referral_provider
-offers = []      # offer
-ipas = []        # ipa
-events = []      # derived referral_lifecycle_event
+providers = []   # referral_provider (feeds the fabricated enrichment)
+offers = []      # offer (feeds the fabricated enrichment)
+ipas = []        # ipa (feeds the fabricated enrichment)
+persons = []     # referral_person
+closures = []    # referral_closure_reason_summary
 
-rev_counter = {}
-event_id = 0
 provider_ids = [uuid.uuid4() for _ in range(3)]
 home_ids = [uuid.uuid4() for _ in range(5)]
 
-def add_referral(created, required_start, status="open"):
+def add_referral(created, required_start, status="open", is_spot=False):
     rid = str(uuid.uuid4())
-    rev_counter[rid] = 0
-    rev_counter[rid] += 1
     referrals.append(dict(
-        referral_id=rid, placement_type="FOSTER",
+        referral_id=rid, placement_type="FOSTER", is_spot=is_spot,
         required_start_date=required_start, response_required_by_date=required_start - timedelta(days=2),
         referral_created_date=ts(created), referral_modified_date=ts(created),
-        referral_created_by=str(uuid.uuid4()), referral_updated_by=str(uuid.uuid4()), referral_status="open",
+        referral_created_by=str(uuid.uuid4()), referral_updated_by=str(uuid.uuid4()), referral_status=status,
         export_date=ts(created)))
+    persons.append(dict(person_id=str(uuid.uuid4()), referral_id=rid, child_index=0))
     return rid
-
-def add_event(rid, when, etype="STATUS"):
-    global event_id
-    event_id += 1
-    events.append(dict(event_id=event_id, referral_id=rid, event_type=etype,
-        event_message="sim", event_username="sim", event_timestamp=ts(when, 10),
-        sequence_number=event_id, created_by="sim", created_timestamp=ts(when, 10),
-        export_date=ts(when, 10)))
 
 def add_offer(rid, when, status="pending"):
     rp = str(uuid.uuid4())
@@ -77,7 +70,8 @@ def add_offer(rid, when, status="pending"):
         created_by="sim", modified_by="sim", is_cancelled=False, is_closed=False,
         is_spot=False, export_date=ts(when)))
     oid = str(uuid.uuid4())
-    offers.append(dict(offer_id=oid, referral_provider_id=rp, offer_status=status,
+    offers.append(dict(offer_id=oid, referral_provider_id=rp, referral_id=rid,
+        offer_status=status,
         provider_home_id=random.choice(home_ids), id_number="ID"+str(random.randint(1,999)),
         category=1, estimated_start_date=when + timedelta(days=7),
         core_weekly_fee=800.0, includes_education=False, education_weekly_fee=None,
@@ -96,56 +90,105 @@ def add_ipa(rid, oid, when, admission):
 # --- Month 1 (Jan): 5 new referrals ---
 jan = date(2025, 1, 10)
 r1 = add_referral(jan, date(2025, 1, 12))            # critical, placed by target
-add_event(r1, jan); o1 = add_offer(r1, date(2025,1,11), "accepted"); add_ipa(r1, o1, date(2025,1,11), date(2025,1,12))
+o1 = add_offer(r1, date(2025,1,11), "accepted"); add_ipa(r1, o1, date(2025,1,11), date(2025,1,12))
 r2 = add_referral(date(2025,1,12), date(2025,1,20))  # offer but no ipa -> open
-add_event(r2, date(2025,1,12)); add_offer(r2, date(2025,1,13), "pending")
+add_offer(r2, date(2025,1,13), "pending")
 r3 = add_referral(date(2025,1,15), date(2025,2,10))  # planned, closes in Feb
-add_event(r3, date(2025,1,15))
 r4 = add_referral(date(2025,1,20), date(2025,1,21))  # critical, no offer -> overdue
-add_event(r4, date(2025,1,20))
 r5 = add_referral(date(2025,1,25), date(2025,3,1))   # planned, placed after target in Mar
-add_event(r5, date(2025,1,25))
 
 # --- Month 2 (Feb): 4 new + updates to month-1 referrals ---
 feb = date(2025, 2, 5)
 r6 = add_referral(feb, date(2025,2,6))               # critical placed by target
-add_event(r6, feb); o6 = add_offer(r6, date(2025,2,6), "accepted"); add_ipa(r6, o6, date(2025,2,6), date(2025,2,6))
-r7 = add_referral(date(2025,2,10), date(2025,2,25))  # high, open
-add_event(r7, date(2025,2,10))
+o6 = add_offer(r6, date(2025,2,6), "accepted"); add_ipa(r6, o6, date(2025,2,6), date(2025,2,6))
+r7 = add_referral(date(2025,2,10), date(2025,2,25), is_spot=True)  # high, spot, no engagement
 r8 = add_referral(date(2025,2,12), date(2025,3,15))  # planned
-add_event(r8, date(2025,2,12))
 r9 = add_referral(date(2025,2,20), date(2025,2,22))  # critical, closed without placement in Mar
-add_event(r9, date(2025,2,20))
-# in-month update: close r3 (created Jan) -> new audit revision in Feb
-rev_counter[r3] += 1
+# in-month update: close r3 (created Jan) -> new flattened version in Feb
 referrals.append(dict(
-    referral_id=r3, placement_type="FOSTER", required_start_date=date(2025,2,10),
+    referral_id=r3, placement_type="FOSTER", is_spot=False,
+    required_start_date=date(2025,2,10),
     response_required_by_date=date(2025,2,8), referral_created_date=ts(date(2025,1,15)),
     referral_modified_date=ts(date(2025,2,15), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
     referral_status="completed", export_date=ts(date(2025,2,15), 14)))
-add_event(r3, date(2025,2,15), "CLOSE")
+closures.append(dict(referral_id=r3, closed_referral_reason_bucket="Closed/Withdrawn"))
 
 # --- Month 3 (Mar): 3 new + updates ---
 mar = date(2025, 3, 5)
 r10 = add_referral(mar, date(2025,3,6))
-add_event(r10, mar); o10 = add_offer(r10, date(2025,3,6), "accepted"); add_ipa(r10, o10, date(2025,3,6), date(2025,3,6))
+o10 = add_offer(r10, date(2025,3,6), "accepted"); add_ipa(r10, o10, date(2025,3,6), date(2025,3,6))
 r11 = add_referral(date(2025,3,10), date(2025,3,30))
-add_event(r11, date(2025,3,10))
 r12 = add_referral(date(2025,3,12), date(2025,4,1))
-add_event(r12, date(2025,3,12))
 # r5 placed after target (IPA issued after required_start_date 2025-03-01)
 o5 = add_offer(r5, date(2025,3,3), "accepted"); add_ipa(r5, o5, date(2025,3,3), date(2025,3,5))
 # r9 closed without placement in Mar
-rev_counter[r9] += 1
 referrals.append(dict(
-    referral_id=r9, placement_type="FOSTER", required_start_date=date(2025,2,22),
+    referral_id=r9, placement_type="FOSTER", is_spot=False,
+    required_start_date=date(2025,2,22),
     response_required_by_date=date(2025,2,20), referral_created_date=ts(date(2025,2,20)),
     referral_modified_date=ts(date(2025,3,10), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
     referral_status="cancelled", export_date=ts(date(2025,3,10), 14)))
-add_event(r9, date(2025,3,10), "CLOSE")
+closures.append(dict(referral_id=r9, closed_referral_reason_bucket="Cancelled"))
 
 print(f"Fabricated: {len(referrals)} flattened referral rows, {len(providers)} providers, "
-      f"{len(offers)} offers, {len(ipas)} ipas, {len(events)} events")
+      f"{len(offers)} offers, {len(ipas)} ipas")
+
+# --- Derive silver.referral_enrichment rows (mirrors 03_silver_business_rules) ---
+CLOSED_STATUSES = {"CLOSED", "CANCELLED", "WITHDRAWN", "COMPLETED"}
+latest_export = max(r["export_date"] for r in referrals).date()
+current = {}
+for row in referrals:
+    key = row["referral_id"]
+    if key not in current or (row["referral_modified_date"], row["export_date"]) > (
+            current[key]["referral_modified_date"], current[key]["export_date"]):
+        current[key] = row
+
+enrichment = []
+for rid, r in current.items():
+    rps = [p for p in providers if p["referral_id"] == rid]
+    rp_ids = {p["referral_provider_id"] for p in rps}
+    r_offers = [o for o in offers if o["referral_provider_id"] in rp_ids]
+    r_ipas = [i for i in ipas if i["referral_id"] == rid]
+    live = any(not p["is_closed"] and not p["is_declined"]
+               and not p["is_excluded"] and not p["is_cancelled"] for p in rps)
+    engaged = any(not p["is_cancelled"] and not p["is_closed"]
+                  and not p["is_excluded"] for p in rps)
+    status = (r["referral_status"] or "").upper()
+    response_date = r["response_required_by_date"]
+    in_window = response_date is not None and response_date >= latest_export
+    # GLD-009 business rule
+    is_open = (status in ("OPEN", "UNDER_OFFER")
+               and (live or status == "UNDER_OFFER" or (status == "OPEN" and in_window)))
+    # GLD-011 business rule
+    is_awaiting_offer = status == "OPEN" and (engaged or in_window)
+    activity = ([r["referral_modified_date"]] if r["referral_modified_date"] > r["referral_created_date"] else [])
+    activity += [o["offer_date"] for o in r_offers] + [o["last_modified_date"] for o in r_offers]
+    activity += [i["created_datetime"] for i in r_ipas] + [i["updated_datetime"] for i in r_ipas]
+    accepted = [o for o in r_offers if o["offer_status"] in ("accepted", "approved", "selected", "offer_successful")]
+    enrichment.append(dict(
+        referral_id=rid,
+        referral_created_date=r["referral_created_date"],
+        cnt_offer_made=len(r_offers),
+        unique_homes_offered=len({o["provider_home_id"] for o in r_offers}),
+        estimated_weekly_cost=sum(i["costs_total_weekly_fee"] for i in r_ipas) if r_ipas else None,
+        first_action_date=min(activity) if activity else None,
+        first_offer_date=min((o["offer_date"] for o in r_offers), default=None),
+        offer_accepted_date=min((o["last_modified_date"] for o in accepted), default=None),
+        ipa_issued_date=min((i["created_datetime"] for i in r_ipas), default=None),
+        referral_closed_date=(r["referral_modified_date"] if status in CLOSED_STATUSES else None),
+        last_activity_date=max(activity) if activity else r["referral_modified_date"],
+        first_provider_seen_date=min((p["export_date"] for p in rps), default=None),
+        is_not_seen_by_providers=not rps,
+        ipa_placement_admission_date=min(
+            (ts(i["placement_admission_date"]) if isinstance(i["placement_admission_date"], date)
+             and not isinstance(i["placement_admission_date"], datetime)
+             else i["placement_admission_date"] for i in r_ipas), default=None),
+        ipa_2_signatures=False,
+        ipa_last_signature_date=None,
+        ipa_due_diligence_min_review_date=None,
+        is_open=is_open,
+        is_awaiting_offer=is_awaiting_offer,
+    ))
 
 spark.sql("CREATE SCHEMA IF NOT EXISTS silver")
 spark.sql("CREATE SCHEMA IF NOT EXISTS gold")
@@ -174,10 +217,9 @@ def mkdf(rows):
     return spark.read.json("file:///" + d.replace("\\", "/"))
 
 write(mkdf(referrals), "referral")
-write(mkdf(providers), "referral_provider")
-write(mkdf(offers), "offer")
-write(mkdf(ipas), "ipa")
-write(mkdf(events), "referral_lifecycle_event")
+write(mkdf(enrichment), "referral_enrichment")
+write(mkdf(persons), "referral_person")
+write(mkdf(closures), "referral_closure_reason_summary")
 print("Silver tables written")
 
 GOLD_FACT_SQL = open(os.path.join(TEST_ROOT, "_gold_fact_sql.sql"), encoding="utf-8").read()
@@ -186,10 +228,11 @@ def run_gold(as_of):
     as_of_sql = f"DATE '{as_of.isoformat()}'"
     spark.sql(GOLD_FACT_SQL.format(AS_OF_SQL=as_of_sql))
     snapshot = spark.table("gold.fact_referral").select(
-        F.lit(as_of).cast("date").alias("SnapshotDate"),
-        "ReferralID", "CurrentStatus", "PlacementUrgencyBand", "RequiredPlacementDate",
-        "IsOpen", "HasOffer", "OfferCount", "DaysOpen", "DaysWithoutActivity",
-        "DaysPastRequiredDate", "PlacedByRequiredDate", "RequiredPlacementDateOutcome")
+        F.lit(as_of).cast("date").alias("snapshot_date"),
+        "referral_id", "current_status", "placement_urgency_band", "required_placement_date",
+        "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
+        "days_without_activity", "days_past_required_date", "placed_by_required_date",
+        "required_placement_date_outcome")
     snap_table = "gold.fact_referral_snapshot"
     if not spark.catalog.tableExists(snap_table):
         snapshot.write.format("delta").mode("overwrite").saveAsTable(snap_table)
@@ -197,7 +240,7 @@ def run_gold(as_of):
         from delta.tables import DeltaTable
         t = DeltaTable.forName(spark, snap_table)
         (t.alias("t").merge(snapshot.alias("s"),
-            "t.SnapshotDate = s.SnapshotDate AND t.ReferralID = s.ReferralID")
+            "t.snapshot_date = s.snapshot_date AND t.referral_id = s.referral_id")
             .whenMatchedUpdateAll().whenNotMatchedInsertAll().execute())
     return spark.table("gold.fact_referral")
 
@@ -207,8 +250,8 @@ for me in MONTHS:
     results[me] = df
     n = df.count()
     print(f"\n=== Gold as-of {me}: {n} referrals ===")
-    df.groupBy("RequiredPlacementDateOutcome").count().orderBy("RequiredPlacementDateOutcome").show(truncate=False)
-    df.groupBy("PlacementUrgencyBand").count().orderBy("PlacementUrgencyBand").show(truncate=False)
+    df.groupBy("required_placement_date_outcome").count().orderBy("required_placement_date_outcome").show(truncate=False)
+    df.groupBy("placement_urgency_band").count().orderBy("placement_urgency_band").show(truncate=False)
 
 print("\n=== VALIDATION ===")
 failures = []
@@ -218,50 +261,65 @@ def check(cond, msg):
 
 jan_df = results[date(2025,1,31)]
 r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12 = map(str,[r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12])
-out = {row.ReferralID: row for row in jan_df.collect()}
-check(out[r1].RequiredPlacementDateOutcome == "Placed by target", "r1 placed by target (Jan)")
-check(out[r1].PlacedByRequiredDate == True, "r1 PlacedByRequiredDate true")
-check(out[r4].RequiredPlacementDateOutcome == "Open overdue", "r4 open overdue (Jan, required 1/21 < 1/31)")
-check(out[r4].DaysPastRequiredDate == 10, f"r4 10 days past required (got {out[r4].DaysPastRequiredDate})")
-check(out[r2].HasOffer == True and out[r2].IsOpen == True, "r2 has offer and open")
+out = {row.referral_id: row for row in jan_df.collect()}
+check(out[r1].required_placement_date_outcome == "Placed by target", "r1 placed by target (Jan)")
+check(out[r1].placed_by_required_date == True, "r1 placed_by_required_date true")
+check(out[r4].required_placement_date_outcome == "Open overdue", "r4 open overdue (Jan, required 1/21 < 1/31)")
+check(out[r4].days_past_required_date == 10, f"r4 10 days past required (got {out[r4].days_past_required_date})")
+check(out[r2].has_offer == True and out[r2].is_open == True, "r2 has offer and open (live provider branch)")
+check(out[r2].is_awaiting_offer == True, "r2 awaiting offer (open with engaged provider)")
+# GLD-009: r4 has no provider engagement and its response window (1/19) closed
+# before the latest export (3/10), so the original business rule says NOT open.
+check(out[r4].is_open == False, "r4 not open under GLD-009 rule (no engagement, expired response window)")
+check(out[r4].is_awaiting_offer == False, "r4 not awaiting offer")
 # r1: created 1/10, required 1/12 -> 2 days -> High (Critical needs <=1)
-check(out[r1].PlacementUrgencyBand == "High", f"r1 urgency High (2 days, got {out[r1].PlacementUrgencyBand})")
+check(out[r1].placement_urgency_band == "High", f"r1 urgency High (2 days, got {out[r1].placement_urgency_band})")
 # r2: created 1/12, required 1/20 -> 8 days -> Planned (Medium needs <=7)
-check(out[r2].PlacementUrgencyBand == "Planned", f"r2 urgency Planned (8 days, got {out[r2].PlacementUrgencyBand})")
-check(out[r5].PlacementUrgencyBand == "Planned", "r5 urgency Planned")
+check(out[r2].placement_urgency_band == "Planned", f"r2 urgency Planned (8 days, got {out[r2].placement_urgency_band})")
+check(out[r5].placement_urgency_band == "Planned", "r5 urgency Planned")
 
 feb_df = results[date(2025,2,28)]
-out_f = {row.ReferralID: row for row in feb_df.collect()}
-check(out_f[r3].IsOpen == False, "r3 closed in Feb")
-check(out_f[r3].RequiredPlacementDateOutcome == "Closed without placement", "r3 closed without placement")
-check(out_f[r6].RequiredPlacementDateOutcome == "Placed by target", "r6 placed by target (Feb)")
-check(out_f[r4].RequiredPlacementDateOutcome == "Open overdue", "r4 still open overdue (Feb)")
+out_f = {row.referral_id: row for row in feb_df.collect()}
+check(out_f[r3].is_open == False, "r3 closed in Feb")
+check(out_f[r3].is_awaiting_offer == False, "r3 not awaiting offer (completed)")
+check(out_f[r3].required_placement_date_outcome == "Closed without placement", "r3 closed without placement")
+check(out_f[r6].required_placement_date_outcome == "Placed by target", "r6 placed by target (Feb)")
+check(out_f[r4].required_placement_date_outcome == "Open overdue", "r4 still open overdue (Feb)")
 check(feb_df.count() == 9, f"Feb has 9 referrals (got {feb_df.count()})")
+# GLD-010: is_spot propagates from silver.referral
+check(out_f[r7].is_spot == True, "r7 is_spot true (GLD-010)")
+check(out_f[r6].is_spot == False, "r6 is_spot false")
+# GLD-009: r7 has no provider engagement and its response window (2/23) expired
+check(out_f[r7].is_open == False, "r7 not open under GLD-009 rule (spot, no engagement, expired window)")
 
 mar_df = results[date(2025,3,31)]
-out_m = {row.ReferralID: row for row in mar_df.collect()}
+out_m = {row.referral_id: row for row in mar_df.collect()}
 check(mar_df.count() == 12, f"Mar has 12 referrals (got {mar_df.count()})")
-check(out_m[r5].RequiredPlacementDateOutcome == "Placed after target", "r5 placed after target (IPA 3/3 > required 3/1)")
-check(out_m[r5].PlacedByRequiredDate == False, "r5 PlacedByRequiredDate false")
-check(out_m[r9].RequiredPlacementDateOutcome == "Closed without placement", "r9 closed without placement (Mar)")
-check(out_m[r10].RequiredPlacementDateOutcome == "Placed by target", "r10 placed by target (Mar)")
+check(out_m[r5].required_placement_date_outcome == "Placed after target", "r5 placed after target (IPA 3/3 > required 3/1)")
+check(out_m[r5].placed_by_required_date == False, "r5 placed_by_required_date false")
+check(out_m[r9].required_placement_date_outcome == "Closed without placement", "r9 closed without placement (Mar)")
+check(out_m[r9].is_open == False, "r9 not open (cancelled)")
+check(out_m[r10].required_placement_date_outcome == "Placed by target", "r10 placed by target (Mar)")
+# GLD-009: r12 is OPEN with response window (3/30) on/after latest export (3/10)
+check(out_m[r12].is_open == True, "r12 open under GLD-009 rule (inside response window)")
+check(out_m[r12].is_awaiting_offer == True, "r12 awaiting offer (open, inside response window)")
 
 snap = spark.table("gold.fact_referral_snapshot")
-snap_dates = sorted(row.SnapshotDate for row in snap.select("SnapshotDate").distinct().collect())
+snap_dates = sorted(row.snapshot_date for row in snap.select("snapshot_date").distinct().collect())
 check(snap_dates == MONTHS, f"snapshot has 3 month-end dates {snap_dates}")
 check(snap.count() == 5 + 9 + 12, f"snapshot total rows {snap.count()} == 26")
 
 spark.sql("""CREATE OR REPLACE VIEW gold.vw_kpi_referral_board_summary AS
-SELECT AsOfDate, PlacementUrgencyBand, RequiredPlacementDateOutcome,
-  COUNT(DISTINCT ReferralID) AS ReferralCount,
-  SUM(CASE WHEN IsOpen THEN 1 ELSE 0 END) AS OpenReferralCount,
-  SUM(CASE WHEN IsOpen AND RequiredPlacementDate < AsOfDate THEN 1 ELSE 0 END) AS OpenOverdueCount,
-  SUM(CASE WHEN PlacedByRequiredDate THEN 1 ELSE 0 END) AS PlacedByRequiredDateCount,
-  SUM(CASE WHEN HasOffer THEN 1 ELSE 0 END) AS ReferralsWithOfferCount,
-  PERCENTILE_APPROX(DaysToIPA, 0.5) AS MedianDaysToIPA,
-  SUM(COALESCE(EstimatedWeeklyCost, 0)) AS EstimatedWeeklyCost
+SELECT as_of_date, placement_urgency_band, required_placement_date_outcome,
+  COUNT(DISTINCT referral_id) AS referral_count,
+  SUM(CASE WHEN is_open THEN 1 ELSE 0 END) AS open_referral_count,
+  SUM(CASE WHEN is_open AND required_placement_date < as_of_date THEN 1 ELSE 0 END) AS open_overdue_count,
+  SUM(CASE WHEN placed_by_required_date THEN 1 ELSE 0 END) AS placed_by_required_date_count,
+  SUM(CASE WHEN has_offer THEN 1 ELSE 0 END) AS referrals_with_offer_count,
+  PERCENTILE_APPROX(days_to_ipa, 0.5) AS median_days_to_ipa,
+  SUM(COALESCE(estimated_weekly_cost, 0)) AS estimated_weekly_cost
 FROM gold.fact_referral
-GROUP BY AsOfDate, PlacementUrgencyBand, RequiredPlacementDateOutcome""")
+GROUP BY as_of_date, placement_urgency_band, required_placement_date_outcome""")
 kpi = spark.table("gold.vw_kpi_referral_board_summary")
 check(kpi.count() > 0, "KPI board summary view returns rows")
 

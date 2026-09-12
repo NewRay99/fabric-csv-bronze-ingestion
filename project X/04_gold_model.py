@@ -90,7 +90,7 @@ GOLD_SOURCE_REQUIREMENTS = {
     "silver.referral": {
         "referral_id", "required_start_date", "response_required_by_date",
         "placement_type", "referral_created_date", "referral_modified_date",
-        "referral_status", "export_date",
+        "referral_status", "is_spot", "export_date",
     },
     "silver.offer": {
         "offer_id", "referral_provider_id", "offer_status", "provider_home_id",
@@ -127,6 +127,7 @@ GOLD_SOURCE_REQUIREMENTS = {
         "first_provider_seen_date", "is_not_seen_by_providers",
         "ipa_placement_admission_date", "ipa_2_signatures",
         "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
+        "is_open", "is_awaiting_offer",
     },
 }
 
@@ -225,6 +226,8 @@ base AS (
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
+    CAST(r.is_spot AS BOOLEAN) AS is_spot,
+    x.is_open, x.is_awaiting_offer,
     x.first_action_date, x.first_offer_date,
     x.offer_accepted_date, x.ipa_issued_date,
     x.referral_closed_date,
@@ -278,8 +281,11 @@ SELECT {AS_OF_SQL} AS as_of_date,
   DATEDIFF({AS_OF_SQL}, TO_DATE(last_activity_date)) AS days_without_activity,
   CASE WHEN required_placement_date IS NOT NULL AND required_placement_date < {AS_OF_SQL}
     THEN DATEDIFF({AS_OF_SQL}, required_placement_date) ELSE 0 END AS days_past_required_date,
-  LOWER(COALESCE(current_status, '')) NOT IN
-    ('closed','cancelled','withdrawn','completed') AS is_open,
+  -- GLD-009/GLD-011: is_open and is_awaiting_offer implement the original
+  -- business rules in silver.referral_enrichment; Gold propagates them.
+  COALESCE(is_open, false) AS is_open,
+  COALESCE(is_awaiting_offer, false) AS is_awaiting_offer,
+  is_spot,
   ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
     AND TO_DATE(ipa_issued_date) <= required_placement_date AS placed_by_required_date,
   CASE
@@ -351,7 +357,7 @@ snapshot = spark.table("gold.fact_referral").select(
     "first_provider_seen_date", "is_not_seen_by_providers",
     "ipa_placement_admission_date", "ipa_2_signatures",
     "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
-    "is_open", "has_offer", "offer_count", "days_open",
+    "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
     "days_without_activity", "days_past_required_date",
     "placed_by_required_date", "required_placement_date_outcome",
 )
@@ -453,6 +459,11 @@ SELECT {AS_OF_SQL} AS as_of_date,
   CAST(rp.is_declined AS BOOLEAN) AS is_declined,
   CAST(rp.is_cancelled AS BOOLEAN) AS is_cancelled,
   CAST(rp.is_closed AS BOOLEAN) AS is_closed,
+  -- GLD-012: a provider referral is engaged while it is not cancelled,
+  -- not closed and not excluded.
+  (NOT COALESCE(CAST(rp.is_cancelled AS BOOLEAN), false)
+    AND NOT COALESCE(CAST(rp.is_closed AS BOOLEAN), false)
+    AND NOT COALESCE(CAST(rp.is_excluded AS BOOLEAN), false)) AS is_engaged,
   CASE
     WHEN rp.is_cancelled THEN 'Cancelled'
     WHEN rp.is_declined THEN 'Declined'

@@ -78,6 +78,8 @@ required_fields = {
     "ipa_2_signatures",
     "ipa_last_signature_date",
     "ipa_due_diligence_min_review_date",
+    "is_open",
+    "is_awaiting_offer",
 }
 for field in required_fields:
     assert field in dq, f"Silver enrichment does not materialise {field}"
@@ -102,6 +104,35 @@ assert "ipa_rollup AS" not in fact_source
 assert "x.unique_homes_offered," in fact_source
 assert "x.estimated_weekly_cost," in fact_source
 print("PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present")
+
+# GLD-009/GLD-011: the open and awaiting-offer flags implement the original
+# business rules in Silver and are propagated, not recalculated, in Gold.
+assert "latest_export AS" in dq
+assert "MAX(TO_DATE(export_date)) AS latest_export_date" in dq
+assert "live_provider AS" in dq
+assert "engaged_provider AS" in dq
+assert "'UNDER_OFFER'" in dq
+assert "TO_DATE(r.response_required_by_date) >= le.latest_export_date" in dq
+assert "is_open boolean, is_awaiting_offer boolean" in dq
+assert "CROSS JOIN latest_export le" in dq
+assert "COALESCE(is_open, false) AS is_open" in fact_source
+assert "COALESCE(is_awaiting_offer, false) AS is_awaiting_offer" in fact_source
+assert "x.is_open, x.is_awaiting_offer," in fact_source
+# GLD-010: is_spot is restored to gold.fact_referral from silver.referral.
+assert "CAST(r.is_spot AS BOOLEAN) AS is_spot" in fact_source
+assert '"is_spot", "has_offer"' in gold
+# GLD-012: is_engaged flags provider referrals that are not cancelled,
+# closed or excluded.
+provider_cell = next(
+    cell for cell in read_notebook(GOLD)["cells"]
+    if "CREATE OR REPLACE TABLE gold.fact_referral_provider AS" in "".join(cell.get("source", []))
+)
+provider_source = "".join(provider_cell.get("source", []))
+assert "AS is_engaged" in provider_source
+assert "NOT COALESCE(CAST(rp.is_cancelled AS BOOLEAN), false)" in provider_source
+assert "NOT COALESCE(CAST(rp.is_closed AS BOOLEAN), false)" in provider_source
+assert "NOT COALESCE(CAST(rp.is_excluded AS BOOLEAN), false)" in provider_source
+print("PASS GLD-009/010/011/012 open, awaiting-offer, is_spot and is_engaged logic is present")
 
 for field in {
     "person_id",

@@ -4,7 +4,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = Path(__file__).resolve().with_name("_gold_fact_sql.sql")
 notebook = read_notebook(ROOT / "04_gold_model.py")
-source = "".join(notebook["cells"][4]["source"])
+fact_cell = next(
+    cell for cell in notebook["cells"]
+    if "CREATE OR REPLACE TABLE gold.fact_referral AS" in "".join(cell.get("source", []))
+)
+source = "".join(fact_cell["source"])
 start = source.find('spark.sql(f"""') + len('spark.sql(f"""')
 end = source.rfind('""")')
 body = source[start:end].strip() + "\n"

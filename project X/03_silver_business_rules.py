@@ -433,7 +433,8 @@ enrichment_schema = (
     "first_provider_seen_date timestamp, "
     "is_not_seen_by_providers boolean, ipa_placement_admission_date timestamp, "
     "ipa_2_signatures boolean, ipa_last_signature_date timestamp, "
-    "ipa_due_diligence_min_review_date timestamp"
+    "ipa_due_diligence_min_review_date timestamp, "
+    "is_open boolean, is_awaiting_offer boolean"
 )
 if (spark.catalog.tableExists("silver.referral")
         and spark.catalog.tableExists("silver.referral_provider")
@@ -539,6 +540,29 @@ if (spark.catalog.tableExists("silver.referral")
           FROM silver.ipa
           GROUP BY referral_id
         ),
+        latest_export AS (
+          SELECT MAX(TO_DATE(export_date)) AS latest_export_date
+          FROM silver.referral
+        ),
+        live_provider AS (
+          -- GLD-009: referral has at least one provider referral that is not
+          -- closed, declined, excluded or cancelled.
+          SELECT DISTINCT CAST(referral_id AS STRING) AS referral_id
+          FROM silver.referral_provider
+          WHERE NOT COALESCE(is_closed, false)
+            AND NOT COALESCE(is_declined, false)
+            AND NOT COALESCE(is_excluded, false)
+            AND NOT COALESCE(is_cancelled, false)
+        ),
+        engaged_provider AS (
+          -- GLD-011/GLD-012: provider engagement excludes declined referrals;
+          -- it only requires not cancelled, not closed and not excluded.
+          SELECT DISTINCT CAST(referral_id AS STRING) AS referral_id
+          FROM silver.referral_provider
+          WHERE NOT COALESCE(is_cancelled, false)
+            AND NOT COALESCE(is_closed, false)
+            AND NOT COALESCE(is_excluded, false)
+        ),
         {documents_cte}
         SELECT CAST(r.referral_id AS STRING) AS referral_id,
           CAST(r.referral_created_date AS TIMESTAMP) AS referral_created_date,
@@ -556,18 +580,49 @@ if (spark.catalog.tableExists("silver.referral")
           i.ipa_placement_admission_date,
           COALESCE(i.ipa_2_signatures, false) AS ipa_2_signatures,
           i.ipa_last_signature_date,
-          d.ipa_due_diligence_min_review_date
+          d.ipa_due_diligence_min_review_date,
+          -- GLD-009: original business rule for the open flag. A referral is
+          -- open when its status is OPEN or UNDER_OFFER and it either has a
+          -- live provider referral, is under offer, or is still inside its
+          -- response-required window (response date on/after the latest
+          -- export date).
+          CASE WHEN UPPER(COALESCE(r.referral_status, '')) IN ('OPEN', 'UNDER_OFFER')
+            AND (
+              lp.referral_id IS NOT NULL
+              OR UPPER(COALESCE(r.referral_status, '')) = 'UNDER_OFFER'
+              OR (
+                UPPER(COALESCE(r.referral_status, '')) = 'OPEN'
+                AND r.response_required_by_date IS NOT NULL
+                AND TO_DATE(r.response_required_by_date) >= le.latest_export_date
+              )
+            ) THEN TRUE ELSE FALSE END AS is_open,
+          -- GLD-011: Active Referrals Awaiting Offers. An OPEN referral that
+          -- either has an engaged provider referral (not cancelled, not
+          -- closed, not excluded) or is still inside its response-required
+          -- window.
+          CASE WHEN UPPER(COALESCE(r.referral_status, '')) = 'OPEN'
+            AND (
+              ep.referral_id IS NOT NULL
+              OR (
+                r.response_required_by_date IS NOT NULL
+                AND TO_DATE(r.response_required_by_date) >= le.latest_export_date
+              )
+            ) THEN TRUE ELSE FALSE END AS is_awaiting_offer
         FROM silver.referral r
+        CROSS JOIN latest_export le
         LEFT JOIN offer_rollup o ON r.referral_id = o.referral_id
         LEFT JOIN activity_rollup a ON r.referral_id = a.referral_id
         LEFT JOIN provider_seen p ON r.referral_id = p.referral_id
         LEFT JOIN ipa_rollup i ON r.referral_id = i.referral_id
         LEFT JOIN ipa_documents d ON r.referral_id = d.referral_id
+        LEFT JOIN live_provider lp ON r.referral_id = lp.referral_id
+        LEFT JOIN engaged_provider ep ON r.referral_id = ep.referral_id
     """)
 else:
     referral_enrichment = spark.createDataFrame([], enrichment_schema)
 replace_silver_materialisation(referral_enrichment, "referral_enrichment")
-print("Silver referral enrichment ready: offer, provider-observation, IPA-signature and due-diligence fields")
+print("Silver referral enrichment ready: offer, provider-observation, IPA-signature, "
+      "due-diligence, is_open and is_awaiting_offer fields")
 log_step("Materialised referral_enrichment")
 
 # Run derived checks only after the current enrichment has been written.

@@ -64,7 +64,7 @@ the new Gold model.
 ✅❌
 
 ```DAX
-✅ 
+✅
 Total Referrals = DISTINCTCOUNT ( 'fact_referral'[referral_id] )
 
 ✅
@@ -742,11 +742,11 @@ COUNTROWS (
         VALUES ( 'bridge_provider_framework'[provider_id] )
     )
 )
-✅ - states 'dim_provider' but fixed with 'bridge_provider_framework' 
+✅ - states 'dim_provider' but fixed with 'bridge_provider_framework'
 Providers With QA Flags =
 CALCULATE ( [Providers Registered], 'dim_provider'[qa_flag] = TRUE () )
 
-✅ - states 'dim_provider_home' but fixed with 'bridge_provider_framework' 
+✅ - states 'dim_provider_home' but fixed with 'bridge_provider_framework'
 QA Flagged Homes =
 CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[qa_flag] = TRUE () )
 
@@ -813,7 +813,7 @@ relationship and use `USERELATIONSHIP` (or make it active only on an IPA
 report page) for the issued-date time-intelligence measures below.
 
 ```DAX
-✅ - userelationship error 
+✅ - userelationship error
 IPAs Issued This Month =
 CALCULATE (
     [IPAs Created],

@@ -74,12 +74,11 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = FALSE () )
 Referrals With an Offer =
 CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 
+-- GLD-011: the legacy "Active Referrals Awaiting Offers" logic now lives in
+-- the Silver referral-enrichment flag is_awaiting_offer (propagated to
+-- fact_referral), so the measure is a single flag filter, not a DAX calculation.
 Referrals Awaiting Offer =
-CALCULATE (
-    [Total Referrals],
-    'fact_referral'[is_open] = TRUE (),
-    'fact_referral'[has_offer] = FALSE ()
-)
+CALCULATE ( [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE () )
 
 Referrals Without Provider Assignment =
 CALCULATE ( [Total Referrals], 'fact_referral'[is_not_seen_by_providers] = TRUE () )
