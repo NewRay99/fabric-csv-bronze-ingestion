@@ -1531,8 +1531,7 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
 
 ## GLD-009
 
-the is_open flag in the gold.fact_referral table is not the same logic as the original business rule
-. i can see that the logic has been applied here... project X\04_gold_model.ipynb... the correct logic should be like the below
+the is_open flag in the gold.fact_referral table is not the same logic as the original business rule. i can see that the logic has been applied here... project X\04_gold_model.ipynb... this field should be added to the silver.referral_enrichment table and then propagate to the gold.fact_referral table. the correct logic should be like the below
 ```
 with cte as
 ( select distinct a.referral_id from gold.fact_referral_provider a
@@ -1578,4 +1577,67 @@ please correct it.
 ## GLD-010
 
 is_spot is missing from the  gold.fact_referral table, this needs adding back in
+
+## GLD-011
+instead of calculating the "Active Referrals Awaiting Offers" in the DAX add this field into the silver.referral_enrichment table and then propagate to the gold.fact_referral table.
+
+```
+Active Referrals Awaiting Offers = 
+VAR LatestExportDate =
+    MAXX(
+        ALL(dim_referral),
+        dim_referral[Export Date Clean]
+    )
+
+VAR LiveProviderReferralIDs =
+    CALCULATETABLE(
+        VALUES(fact_referral_offer[referral_id]),
+        REMOVEFILTERS(fact_referral_offer),
+        REMOVEFILTERS(dim_date),
+        fact_referral_offer[is_cancelled] = FALSE(),
+        fact_referral_offer[is_closed] = FALSE(),
+        fact_referral_offer[is_excluded] = FALSE()
+    )
+
+VAR OpenWithinResponseWindowIDs =
+    CALCULATETABLE(
+        VALUES(dim_referral[referral_id]),
+        REMOVEFILTERS(dim_date),
+        dim_referral[referral_status] = "OPEN",
+        dim_referral[Response Required Date Clean] >= LatestExportDate
+    )
+
+VAR ActiveOpenReferralIDs =
+    DISTINCT(
+        UNION(
+            LiveProviderReferralIDs,
+            OpenWithinResponseWindowIDs
+        )
+    )
+
+RETURN
+CALCULATE(
+    DISTINCTCOUNT(dim_referral[referral_id]),
+    REMOVEFILTERS(dim_date),
+    dim_referral[referral_status] = "OPEN",   -- ✅ Only OPEN
+    TREATAS(
+        ActiveOpenReferralIDs,
+        dim_referral[referral_id]
+    )
+)
+``
+
+
+## GLD-012
+create and is_engaged field in the gold.fact_referral_provider table.
+calculation should be 
+```
+    CALCULATETABLE(
+        VALUES(fact_referral_offer[referral_id]),where
+        fact_referral_offer[is_cancelled] = FALSE(),
+        fact_referral_offer[is_closed] = FALSE(),
+        fact_referral_offer[is_excluded] = FALSE()
+```
+
+
 
