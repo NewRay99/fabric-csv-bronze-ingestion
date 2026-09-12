@@ -1396,7 +1396,7 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
 - **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
   and add the new relationship when rebuilding the semantic model.
 
-##LIVE-ETL-002 - Job hangs on 90_run_live_pipeline
+## LIVE-ETL-002 - Job hangs on 90_run_live_pipeline
 
 - **Symptoms** job hangs when running the `90_run_live_pipeline` at `03_silver_business_rules` stage
   error message is
@@ -1502,7 +1502,7 @@ To tolerate the error on drop use DROP SCHEMA IF EXISTS.
   live workspace — that confirms the attachment (not the schema) was the
   root cause.
 
-##LIVE-ETL-003 - Job takes a very long time to process on 90_run_live_pipeline
+## LIVE-ETL-003 - Job takes a very long time to process on 90_run_live_pipeline
 
 i have extended the time in the notebook with
 NOTEBOOK_TIMEOUT_SECONDS = 22200
@@ -1528,3 +1528,54 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
   guard, the logging calls, and the single-scan loop.
 - **Status:** source change complete; confirm duration improvement on the
   next live run in Fabric.
+
+## GLD-009
+
+the is_open flag in the gold.fact_referral table is not the same logic as the original business rule
+. i can see that the logic has been applied here... project X\04_gold_model.ipynb... the correct logic should be like the below
+```
+with cte as
+( select distinct a.referral_id from gold.fact_referral_provider a
+ --inner join gold.fact_referral b on a.referral_id=b.referral_id
+ where
+ is_closed = FALSE
+ and is_declined = FALSE
+ and is_excluded  = FALSE
+ and is_cancelled  = FALSE
+ --and current_status IN ( "OPEN", "UNDER_OFFER" )
+group by all
+)
+, cte2 as
+(
+    select  distinct referral_id from gold.fact_referral 
+where  current_status in  ( "UNDER_OFFER", "" )
+group by all
+)
+, cte3 as
+(
+    select distinct referral_id from gold.fact_referral 
+where response_required_date>='2026-09-11' 
+and  current_status in  ( "OPEN", "" )
+group by all
+--OPEN, 27
+
+)
+, cteagg as (
+select * from cte
+UNION ALL
+select * from cte2
+UNION ALL
+select * from cte3
+)
+select count(distinct a.referral_id) from cteagg a
+ inner join gold.fact_referral b on a.referral_id=b.referral_id
+ and current_status IN ( "OPEN", "UNDER_OFFER" )
+```
+
+please correct it.
+
+
+## GLD-010
+
+is_spot is missing from the  gold.fact_referral table, this needs adding back in
+
