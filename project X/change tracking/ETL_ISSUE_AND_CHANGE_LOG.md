@@ -112,7 +112,7 @@ Fabric replay remains a separate deployment verification unless stated.
   the archive writer supplied `rejected_row_count`. The file was then recorded
   as `FAILED` even though its archive rows had already been committed.
 - **Cause:** the archive notebook used a private metric schema that differed
-  from the shared setup/Silver monitoring contract, and metric logging was
+  from the shared setup/ver monitoring contract, and metric logging was
   inside the file-load failure boundary.
 - **Fix:** archive metrics now use canonical `null_primary_key_count` and supply
   `None` because archive ingestion does not calculate that measure. Metric
@@ -279,29 +279,29 @@ both metric columns and reintroduce inconsistent writers.
 - **Regression guard:** validator requires alignment and type verification to
   occur before the first file-level Delta deletion.
 
-## AR-011 — Clearing a single archive-month Silver rebuild left it marked complete
+## AR-011 — Clearing a single archive-month ver rebuild left it marked complete
 
-- **Symptom:** after Silver and Gold tables were cleared for a selected archive
-  month, `02a_archive_silver.ipynb` could skip that month because
+- **Symptom:** after ver and Gold tables were cleared for a selected archive
+  month, `02a_archive_ver.ipynb` could skip that month because
   `monitoring.cfg_month_end_gold_run` still recorded `SUCCESS`. Existing
-  `monitoring.cfg_silver_export_load` rows also continued to imply that the
+  `monitoring.cfg_ver_export_load` rows also continued to imply that the
   prior export had completed without a requested reload.
-- **Cause:** `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` dropped physical Silver
+- **Cause:** `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` dropped physical ver
   targets only. Monitoring state was deleted only when the separate
   `RESET_MONTH_MONITORING` option was enabled.
 - **Fix:** when `PROCESS_ONLY` and
-  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` are confirmed, the archive replay now
-  marks the selected snapshot and its `ARCHIVE_MONTH_END` Silver audit rows
-  with `reload = true` before dropping Silver targets. The next loop therefore
-  rebuilds Silver, DQ and Gold, and its normal completion path resets the flag.
+  `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` are confirmed, the archive replay now
+  marks the selected snapshot and its `ARCHIVE_MONTH_END` ver audit rows
+  with `reload = true` before dropping ver targets. The next loop therefore
+  rebuilds ver, DQ and Gold, and its normal completion path resets the flag.
   `RESET_MONTH_MONITORING` still performs the explicit destructive deletion of
   monitoring state when that behaviour is required. The parent
   `90_run_archive_pipeline.ipynb` now exposes and forwards the guarded
-  single-month options to Archive Silver.
+  single-month options to Archive ver.
 - **Scope:** Bronze/archive-file audit history is not reset, because clearing
-  Silver and Gold does not require Bronze files to be ingested again.
+  ver and Gold does not require Bronze files to be ingested again.
 - **Regression guard:** `validate_si013_si016.py` requires the clear option to
-  flag both month-end and Silver-export monitoring records for reload.
+  flag both month-end and ver-export monitoring records for reload.
 - **Status:** resolved in source; deploy the updated archive Silver notebook
   before running the guarded single-month reload.
 
@@ -1640,4 +1640,12 @@ calculation should be
 ```
 
 
+## SI-025 — looks like the export_date in all the silver tables are missing
+the bronze table and even the archived tables such as bronze.referral table have export_date populated but the silver table doesnt.. could the silver tables export table get loaded via the notebook 
+
+
+## GLD-013
+check the semantic model in project X\reports\current\WMPP\SM WMPP v15 (3).zip. see if there are any other DAX measures we can bring into the Gold layer the same way we did GLD-011 and GLD-012
+
+please update the project X\client documentation\04_Data_and_Reporting\GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md and all other md files
 
