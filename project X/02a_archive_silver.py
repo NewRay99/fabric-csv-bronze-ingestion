@@ -433,7 +433,9 @@ for physical_table in physical_tables:
         continue
     else:
         contract_table = contract_key
-        schema_cols = contracts[contract_key]
+        # SI-025: guarantee export_date reaches Silver even when the deployed
+        # contract table is stale; also flags the target schema as stale.
+        schema_cols = ensure_export_date_contract(contracts[contract_key])
 
     target_table = f"{SILVER_SCHEMA}.{contract_table}"
     if is_framework_table:

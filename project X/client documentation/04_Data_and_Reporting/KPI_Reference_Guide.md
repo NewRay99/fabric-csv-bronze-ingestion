@@ -130,16 +130,16 @@ Status legend: **✅ Covered** — active Gold measure; **🔁 Alias** — serve
 | KPI-74 | [R28] | Is In Accepted KPI | — | Blocked — no IPA-grain signature status; use the referral-grain IPA funnel instead | ❌ Blocked |
 | KPI-75 | [R28,R35] | Accepted Offers Base | — | Retired — internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it | 🗄 Retired |
 | KPI-76 | [R35] | IPA Created | `fct_ipa` | IPAs Created | ✅ Covered |
-| KPI-77 | [R35] | IPA Completed | — | Blocked — IPA-grain signed flags (`signed_by_local_authority` / `signed_by_provider`) not in Gold; use [Referrals With Fully Signed IPA] | ❌ Blocked |
-| KPI-78 | [R35] | IPAs Pending Completion | `fact_referral` (`ipa_issued_date`, `ipa_2_signatures`) | Referrals With IPA Pending Signature — referral-grain proxy for IPAs Pending Completion | ⚠️ Proxy |
-| KPI-79 | [R35] | Offers Awaiting IPA Creation | `fact_offer` ⟕ `fct_ipa` | Offers Awaiting IPA Creation | ✅ Covered |
-| KPI-80 | [R35] | Is IPA Pending | — | Blocked — no IPA-grain signature status (see KPI-77) | ❌ Blocked |
-| KPI-81 | [R35] | Is Awaiting IPA Creation | `fact_offer` ⟕ `fct_ipa` | Is Awaiting IPA Creation (row helper) | ✅ Covered |
-| KPI-82 | [R35] | Is IPA Completed | — | Blocked — no IPA-grain signature status (see KPI-77) | ❌ Blocked |
-| KPI-83 | [R35] | Accepted Offer to IPA Conversion % | `fact_offer` ⟕ `fct_ipa` | Accepted Offer to IPA Conversion % | ✅ Covered |
-| KPI-84 | [R35] | Offers Still to Progress to IPA | `fact_offer` ⟕ `fct_ipa` | Offers Still to Progress to IPA % | ✅ Covered |
-| KPI-85 | [R35] | IPA Created to Completion % | — | Blocked — IPA-grain completion rate needs signed flags; referral-grain [IPA Signature Completion Rate] is the supported proxy | ❌ Blocked |
-| KPI-86 | [R35] | Successful Offers to IPA Completed % | — | Blocked — as KPI-85 | ❌ Blocked |
+| KPI-77 | [R35] | IPA Completed | `fact_offer` (`is_ipa_completed`) | IPA Completed — offer-grain, GLD-013 | ✅ Covered |
+| KPI-78 | [R35] | IPAs Pending Completion | `fact_offer` (`is_ipa_pending`) | IPAs Pending Completion — offer-grain, GLD-013 (referral-grain proxy [Referrals With IPA Pending Signature] also available) | ✅ Covered |
+| KPI-79 | [R35] | Offers Awaiting IPA Creation | `fact_offer` (`is_awaiting_ipa_creation`) | Offers Awaiting IPA Creation | ✅ Covered |
+| KPI-80 | [R35] | Is IPA Pending | `fact_offer` (`is_ipa_pending`) | Is IPA Pending (row helper) — GLD-013 | ✅ Covered |
+| KPI-81 | [R35] | Is Awaiting IPA Creation | `fact_offer` (`is_awaiting_ipa_creation`) | Is Awaiting IPA Creation (row helper) | ✅ Covered |
+| KPI-82 | [R35] | Is IPA Completed | `fact_offer` (`is_ipa_completed`) | Is IPA Completed (row helper) — GLD-013 | ✅ Covered |
+| KPI-83 | [R35] | Accepted Offer to IPA Conversion % | `fact_offer` (`is_awaiting_ipa_creation`) | Accepted Offer to IPA Conversion % | ✅ Covered |
+| KPI-84 | [R35] | Offers Still to Progress to IPA | `fact_offer` (`is_awaiting_ipa_creation`) | Offers Still to Progress to IPA % | ✅ Covered |
+| KPI-85 | [R35] | IPA Created to Completion % | `fact_offer` (`is_ipa_completed`, `is_awaiting_ipa_creation`) | IPA Created to Completion % — GLD-013 | ✅ Covered |
+| KPI-86 | [R35] | Successful Offers to IPA Completed % | `fact_offer` (`is_ipa_completed`, `offer_status`) | Successful Offers to IPA Completed % — GLD-013 | ✅ Covered |
 | KPI-87 | [R82] | Dashboard Last Refreshed | `fact_referral[gold_modelled_at]` | Gold Model Last Refreshed | 🔁 Alias |
 | KPI-88 | [R53] | Latest Export per Offer | `fact_offer[source_export_date]` | Latest Offer Source Export | 🔁 Alias |
 | KPI-89 | [R24] | Latest Offer Status Count | — | Retired — Gold `fact_offer` is already deduplicated to the latest state per offer | 🗄 Retired |
@@ -176,14 +176,14 @@ Status legend: **✅ Covered** — active Gold measure; **🔁 Alias** — serve
 
 | Status | Count | Meaning |
 |---|---:|---|
-| ✅ Covered | 68 | Active Gold measure computes the KPI |
+| ✅ Covered | 74 | Active Gold measure computes the KPI |
 | 🔁 Alias | 19 | Existing Gold measure under a different name; rename the visual |
-| ⚠️ Proxy | 5 | Supported at a different grain or with estimated logic |
+| ⚠️ Proxy | 4 | Supported at a different grain or with estimated logic |
 | 🗄 Retired | 7 | v15 report-construct helper, not recreated |
-| ❌ Blocked | 18 | Missing Gold field/grain; add the data first |
+| ❌ Blocked | 13 | Missing Gold field/grain; add the data first |
 | **Total** | **117** | KPI-01–117 |
 
-> **Gender measures (KPI-04–07)** were blocked in earlier revisions and are now covered: `gold.dim_person[gender_clean]` joins to `fact_referral[person_id]` (GLD-006/GLD-007). **Offer-status measures** filter through `gold.dim_offer_status` (GLD-008) rather than hard-coded status strings.
+> **Gender measures (KPI-04–07)** were blocked in earlier revisions and are now covered: `gold.dim_person[gender_clean]` joins to `fact_referral[person_id]` (GLD-006/GLD-007). **Offer-status measures** filter through `gold.dim_offer_status` (GLD-008) rather than hard-coded status strings. **IPA-signature measures (KPI-77–78, 80–82, 85–86)** moved from blocked/proxy to covered in GLD-013: `gold.fact_offer` now carries `is_ipa_completed`, `is_ipa_pending` and `is_awaiting_ipa_creation` at offer grain. KPI-74 (Is In Accepted KPI) remains blocked.
 
 ## DAX implementation
 
@@ -199,9 +199,10 @@ objects and publication status. It currently contains **109 active measures**:
 **108 Ready** measures and **one Gold lifecycle-event proxy**. It also records
 ten roadmap gaps that must not be published until their fields exist in Gold.
 The [DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md) and the
-[Field Coverage Audit](GOLD_DAX_FIELD_COVERAGE_AUDIT.md) (rev 3) carry the wider
-supported set of **189 measures**: the 109 catalogue measures plus the 76
-legacy v15 ports and the 4 gender referral measures enabled by GLD-006/GLD-007.
+[Field Coverage Audit](GOLD_DAX_FIELD_COVERAGE_AUDIT.md) (rev 4) carry the wider
+supported set of **195 measures**: the 109 catalogue measures plus the 82
+legacy v15 ports (76 from rev 2 plus 6 offer-grain IPA-signature measures from
+GLD-013) and the 4 gender referral measures enabled by GLD-006/GLD-007.
 
 The workbook is deliberately a DAX catalogue, not the system-of-record for
 technical lineage. Use [KPI Lineage](KPI_Lineage.md) to trace each KPI family

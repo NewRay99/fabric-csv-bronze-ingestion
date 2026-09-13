@@ -127,6 +127,30 @@ look like business extracts.
   visible as `SKIPPED`, not silent omissions.
 - Gold views and the current referral snapshot refresh successfully.
 
+### 3.2 How a latest Bronze field reaches Silver
+
+`02_silver_formatter` uses the approved
+`monitoring.cfg_schema_contract_column` rows loaded from
+`configuration/schema_definition.csv`; it is not a separate, hand-maintained
+mapping per table. For example, `bronze.referral` resolves to the `referral`
+contract and is written as `silver.referral`.
+
+The 19 contracted referral fields keep their source names. UUID and text fields
+become trimmed strings; the two required/response dates become `DATE`; the
+created, modified, and export fields become `TIMESTAMP`; the five flags become
+normalised booleans; and `sibling_count` becomes `INT`. The formatter uses the
+latest valid `export_date`, keeps one row per contracted primary key
+(`referral_id`) using the newest `_ingestion_timestamp`, and adds
+`_record_source`, `_source_table`, `_silver_run_id`, and `_silver_load_ts` to
+the Silver output.
+
+Only contracted business fields are materialised. A missing contracted field is
+written as a typed null and logged as `MISSING` schema drift; an unexpected
+non-technical Bronze field is omitted and logged as `EXTRA` drift. Bronze
+ingestion fields (`_ingestion_timestamp`, `_source_file`, `_ingestion_id`) are
+not copied to Silver. See the [technical worked example](../03_Architecture_and_Design/TFD.md#worked-example-bronzereferral-to-silverreferral)
+for the complete field groups and type rules.
+
 ## 4. Controlled reruns
 
 ### Latest Silver table/export

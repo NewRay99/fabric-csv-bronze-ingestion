@@ -1,7 +1,7 @@
 # Gold DAX Field Coverage Audit
 
 **Project:** WMPP Fabric data platform
-**Date:** 27 August 2026 (rev 3 — GLD-005–008 missing-dimension remediation)
+**Date:** 13 September 2026 (rev 4 — GLD-013 offer-grain IPA-signature and aging push-downs)
 **Auditor:** Kimi Agent
 **Scope:** Verify that every DAX measure in the `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` can be resolved to an active Gold table/column, and that every measure in the legacy `SM WMPP v15.zip` semantic model has a Gold disposition.
 **Baseline:** Gold notebooks `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` (promoted version 02 04, plus GLD-005–008 additions); legacy `_Measures.tmdl` extraction (153 measures).
@@ -15,14 +15,15 @@
 | DAX measures audited (original build guide) | 109 |
 | New measures ported from legacy v15 (rev 2) | 76 |
 | New gender measures added (rev 3, GLD-006/007) | 4 |
-| **Total DAX measures audited** | **189** |
-| ✅ Fully covered by Gold layer | 189 |
+| New offer-grain IPA-signature measures (rev 4, GLD-013) | 6 |
+| **Total DAX measures audited** | **195** |
+| ✅ Fully covered by Gold layer | 195 |
 | ⚠️ Partial coverage (proxy fields) | 0 |
 | ❌ Missing Gold field (blocked) | 0 |
-| Known unsupported legacy KPIs | 14 groups + 13 legacy measures |
-| Legacy v15 measures reconciled | 153 (63 covered · 62 ported · 15 retired · 13 blocked) |
+| Known unsupported legacy KPIs | 14 groups + 8 legacy measures |
+| Legacy v15 measures reconciled | 153 (62 covered · 68 ported · 15 retired · 8 blocked) |
 
-**Conclusion:** All *supported* DAX measures in the build guide have their required fields present in the active Gold layer. Rev 3 closes the four GLD-005–008 gaps: `dim_provider_home` gained `home_contact_number` and `registered_manager_contact_number` (GLD-005); `gold.dim_person` with `gender_clean` was created and `fact_referral` gained `person_id` (GLD-006/GLD-007), unblocking the KPI-04–07 gender breakdown; and `gold.dim_offer_status` was reinstated as a real Gold dimension with labels and lifecycle flags (GLD-008). The remaining unsupported legacy KPI groups and 13 blocked legacy measures are still blocked by missing source fields; they are correctly documented in the build guide and must not be pointed at Bronze, Silver, or retired tables.
+**Conclusion:** All *supported* DAX measures in the build guide have their required fields present in the active Gold layer. Rev 3 closes the four GLD-005–008 gaps: `dim_provider_home` gained `home_contact_number` and `registered_manager_contact_number` (GLD-005); `gold.dim_person` with `gender_clean` was created and `fact_referral` gained `person_id` (GLD-006/GLD-007), unblocking the KPI-04–07 gender breakdown; and `gold.dim_offer_status` was reinstated as a real Gold dimension with labels and lifecycle flags (GLD-008). Rev 4 (GLD-013) pushes the IPA-signature funnel down to Gold: `fact_offer` gained `is_ipa_completed`, `is_ipa_pending` and `is_awaiting_ipa_creation` (rolled up from `silver.ipa` signature flags), plus `offer_age_days`, `days_since_offer_activity`, `is_draft_no_activity` and `is_draft_missing_dates`; `fact_referral` gained `provider_assignment_count`, `is_emergency_placement` and `is_open_overdue` (all three propagated to `fact_referral_snapshot`). The remaining unsupported legacy KPI groups and 7 blocked legacy measures are still blocked by missing source fields; they are correctly documented in the build guide and must not be pointed at Bronze, Silver, or retired tables.
 
 ---
 
@@ -39,9 +40,9 @@
 
 | Table | Grain | Key columns used by DAX |
 |---|---|---|
-| `gold.fact_referral` | One current row per referral | `referral_id`, `person_id`, `is_open`, `has_offer`, `is_not_seen_by_providers`, `required_placement_date`, `as_of_date`, `placed_by_required_date`, `days_to_first_action`, `days_to_first_offer`, `days_to_ipa`, `days_without_activity`, `current_status`, `referral_closure_reason`, `placement_type_required`, `priority`, `estimated_weekly_cost`, `ipa_2_signatures`, `ipa_issued_date`, `gold_modelled_at` |
+| `gold.fact_referral` | One current row per referral | `referral_id`, `person_id`, `is_open`, `has_offer`, `is_not_seen_by_providers`, `required_placement_date`, `as_of_date`, `placed_by_required_date`, `days_to_first_action`, `days_to_first_offer`, `days_to_ipa`, `days_without_activity`, `current_status`, `referral_closure_reason`, `placement_type_required`, `priority`, `estimated_weekly_cost`, `ipa_2_signatures`, `ipa_issued_date`, `gold_modelled_at`, `provider_assignment_count`, `is_emergency_placement`, `is_open_overdue` (rev 4, GLD-013) |
 | `gold.fact_referral_snapshot` | One referral per reporting snapshot | All `fact_referral` columns (including `person_id`; legacy `ChildID`/`child_id` is migrated to `person_id`) plus `snapshot_date`, `required_placement_date_outcome` |
-| `gold.fact_offer` | One offer | `offer_id`, `referral_id`, `provider_id`, `home_id`, `offer_submitted_date`, `offer_reviewed_date`, `offer_decision_date`, `offer_status`, `offer_type`, `rejection_reason`, `estimated_weekly_cost`, `source_export_date` |
+| `gold.fact_offer` | One offer | `offer_id`, `referral_id`, `provider_id`, `home_id`, `offer_submitted_date`, `offer_reviewed_date`, `offer_decision_date`, `offer_status`, `offer_type`, `rejection_reason`, `estimated_weekly_cost`, `source_export_date`, `offer_age_days`, `days_since_offer_activity`, `is_draft_no_activity`, `is_draft_missing_dates`, `is_awaiting_ipa_creation`, `is_ipa_pending`, `is_ipa_completed` (rev 4, GLD-013) |
 | `gold.fct_ipa` | One IPA | `ipa_id`, `referral_id`, `accepted_offer_id`, `ipa_issued_date`, `estimated_weekly_cost`, `is_placement_closed` |
 | `gold.fact_referral_provider` | One referral-provider assignment | `referral_provider_id`, `referral_id`, `provider_id`, `is_declined` |
 | `gold.fact_referral_lifecycle_event` | One derived event | `event_id`, `referral_id`, `event_type` |
@@ -67,7 +68,7 @@
 | 4 | Referrals With an Offer | `fact_referral` | `has_offer` | ✅ | |
 | 5 | Referrals Awaiting Offer | `fact_referral` | `is_open`, `has_offer` | ✅ | |
 | 6 | Referrals Without Provider Assignment | `fact_referral` | `is_not_seen_by_providers` | ✅ | |
-| 7 | Open Overdue Referrals | `fact_referral` | `is_open`, `required_placement_date`, `as_of_date` | ✅ | |
+| 7 | Open Overdue Referrals | `fact_referral` | `is_open_overdue` | ✅ | rev 4, GLD-013 |
 | 8 | Referrals Placed by Required Date | `fact_referral` | `placed_by_required_date` | ✅ | |
 | 9 | Placement Target Hit Rate | `fact_referral` | `placed_by_required_date`, `ipa_issued_date`, `required_placement_date` | ✅ | |
 | 10 | Median Days to First Action | `fact_referral` | `days_to_first_action` | ✅ | |
@@ -85,7 +86,7 @@
 | 17 | Offer Acceptance Rate | `fact_offer` | (derived from #15, #16) | ✅ | |
 | 18 | Average Offers per Referral | `fact_offer` | `offer_id` / `fact_referral` `has_offer` | ✅ | |
 | 19 | Offers in Draft | `fact_offer` | `offer_id`, `offer_status` | ✅ | |
-| 20 | Draft Offers Stalled 7+ Days | `fact_offer` | `offer_id`, `offer_status`, `offer_reviewed_date` | ✅ | |
+| 20 | Draft Offers Stalled 7+ Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
 | 21 | IPAs Created | `fct_ipa` | `ipa_id` | ✅ | |
 | 22 | Active IPAs | `fct_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
 | 23 | Estimated Active Weekly Cost | `fct_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
@@ -102,7 +103,7 @@
 | 29 | Open Referrals at Snapshot | `fact_referral_snapshot` | `referral_id`, `is_open` | ✅ | |
 | 30 | Closed Referrals at Snapshot | `fact_referral_snapshot` | `referral_id`, `referral_closed_date`, `snapshot_date` | ✅ | |
 | 31 | Referrals with IPA at Snapshot | `fact_referral_snapshot` | `referral_id`, `ipa_issued_date`, `snapshot_date` | ✅ | |
-| 32 | Open Overdue Referrals at Snapshot | `fact_referral_snapshot` | `referral_id`, `required_placement_date_outcome` | ✅ | |
+| 32 | Open Overdue Referrals at Snapshot | `fact_referral_snapshot` | `referral_id`, `is_open_overdue` | ✅ | rev 4, GLD-013 |
 | 33 | Open On-Track Referrals at Snapshot | `fact_referral_snapshot` | `referral_id`, `required_placement_date_outcome` | ✅ | |
 | 34 | Open Referral Rate at Snapshot | `fact_referral_snapshot` | `is_open` | ✅ | |
 | 35 | Placement Rate at Snapshot | `fact_referral_snapshot` | `ipa_issued_date`, `snapshot_date` | ✅ | |
@@ -123,10 +124,10 @@
 | 45 | Active Referral Engagement Rate | `fact_referral` | `is_open`, `has_offer` | ✅ | |
 | 46 | Active Awaiting Offers With Engagement | `fact_referral` | `referral_id`, `is_open`, `has_offer` | ✅ | |
 | 47 | Active Awaiting Offers Without Engagement | `fact_referral` | `referral_id`, `is_open`, `has_offer` | ✅ | |
-| 48 | Emergency Referrals | `fact_referral` | `referral_id`, `referral_created_date`, `required_placement_date` | ✅ | Zero-day required date |
-| 49 | Planned Referrals | `fact_referral` | `referral_id`, `referral_created_date`, `required_placement_date` | ✅ | Non-zero required date |
-| 50 | Emergency Placement Rate | `fact_referral` | `referral_created_date`, `required_placement_date` | ✅ | |
-| 51 | Referrals With Multiple Provider Assignments | `fact_referral_provider` | `referral_id`, `provider_id` | ✅ | |
+| 48 | Emergency Referrals | `fact_referral` | `referral_id`, `is_emergency_placement` | ✅ | Zero-day required date; rev 4, GLD-013 |
+| 49 | Planned Referrals | `fact_referral` | `referral_id`, `referral_created_date`, `required_placement_date`, `is_emergency_placement` | ✅ | Non-zero required date; rev 4, GLD-013 |
+| 50 | Emergency Placement Rate | `fact_referral` | `is_emergency_placement` | ✅ | rev 4, GLD-013 |
+| 51 | Referrals With Multiple Provider Assignments | `fact_referral` | `referral_id`, `provider_assignment_count` | ✅ | rev 4, GLD-013 |
 
 ### 2.5 Offer, spot/framework and draft/pending-offer portfolio
 
@@ -143,18 +144,18 @@
 | 60 | Spot Offers | `fact_offer` / `dim_provider_home` | `offer_id` / `is_spot` | ✅ | Cross-table filter |
 | 61 | Non-Spot Offers | `fact_offer` / `dim_provider_home` | `offer_id` / `is_spot` | ✅ | |
 | 62 | Spot Offer Rate | `fact_offer` / `dim_provider_home` | `offer_id` / `is_spot` | ✅ | |
-| 63 | Draft Offers With No Activity Since Creation | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 64 | Draft Offers With Activity Since Creation | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 65 | Draft Offers Missing Dates | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 66 | Draft Offers Stalled 14+ Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 67 | Average Days in Draft | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date` | ✅ | |
-| 68 | Oldest Draft Age Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date` | ✅ | |
-| 69 | Draft Offers With No Activity % | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 70 | Pending Offers 0-7 Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 71 | Pending Offers 8-14 Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 72 | Pending Offers 15-29 Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 73 | Pending Offers 30+ Days | `fact_offer` | `offer_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
-| 74 | Providers With Pending Offers 30+ Days | `fact_offer` | `provider_id`, `offer_status`, `offer_submitted_date`, `offer_reviewed_date` | ✅ | |
+| 63 | Draft Offers With No Activity Since Creation | `fact_offer` | `offer_id`, `is_draft_no_activity` | ✅ | rev 4, GLD-013 |
+| 64 | Draft Offers With Activity Since Creation | `fact_offer` | `offer_id`, `offer_status`, `is_draft_no_activity`, `is_draft_missing_dates` | ✅ | rev 4, GLD-013 |
+| 65 | Draft Offers Missing Dates | `fact_offer` | `offer_id`, `is_draft_missing_dates` | ✅ | rev 4, GLD-013 |
+| 66 | Draft Offers Stalled 14+ Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
+| 67 | Average Days in Draft | `fact_offer` | `offer_id`, `offer_status`, `offer_age_days` | ✅ | rev 4, GLD-013 |
+| 68 | Oldest Draft Age Days | `fact_offer` | `offer_id`, `offer_status`, `offer_age_days` | ✅ | rev 4, GLD-013 |
+| 69 | Draft Offers With No Activity % | `fact_offer` | `offer_id`, `offer_status`, `is_draft_no_activity` | ✅ | rev 4, GLD-013 |
+| 70 | Pending Offers 0-7 Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
+| 71 | Pending Offers 8-14 Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
+| 72 | Pending Offers 15-29 Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
+| 73 | Pending Offers 30+ Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
+| 74 | Providers With Pending Offers 30+ Days | `fact_offer` | `provider_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
 | 75 | Latest Offer Source Export | `fact_offer` | `source_export_date` | ✅ | |
 
 ### 2.6 Provider register, framework, QA and documentation
@@ -189,8 +190,8 @@
 | 96 | Closed IPAs | `fct_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
 | 97 | Average Active IPA Weekly Cost | `fct_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
 | 98 | Total IPA Weekly Cost | `fct_ipa` | `estimated_weekly_cost` | ✅ | |
-| 99 | Accepted Offers With IPA | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id` | ✅ | TREATAS pattern |
-| 100 | Offers Awaiting IPA Creation | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | EXCEPT pattern |
+| 99 | Accepted Offers With IPA | `fact_offer` | `is_awaiting_ipa_creation`, `offer_status` | ✅ | rev 4, GLD-013 push-down |
+| 100 | Offers Awaiting IPA Creation | `fact_offer` | `is_awaiting_ipa_creation` | ✅ | rev 4, GLD-013 push-down |
 | 101 | Accepted Offer to IPA Conversion % | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
 | 102 | Offers Still to Progress to IPA % | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
 | 103 | Referrals With Fully Signed IPA | `fact_referral` | `referral_id`, `ipa_issued_date`, `ipa_2_signatures` | ✅ | Referral-level proxy |
@@ -218,7 +219,7 @@ columns already verified in Sections 2.1–2.7. No new Gold field is required.
 | 117 | IPA Signature Pending Rate | 1 | `fact_referral` | `ipa_issued_date`, `ipa_2_signatures` | ✅ | Proxy |
 | 118 | Referrals Placed by Target at Snapshot | 1 | `fact_referral_snapshot` | `placed_by_required_date` | ✅ | Snapshot carries all `fact_referral` columns |
 | 119 | Target Hit Rate at Snapshot | 1 | `fact_referral_snapshot` | `placed_by_required_date`, `ipa_issued_date`, `required_placement_date` | ✅ | |
-| 120 | Row-level visual helpers (Is Non Framework Provider, IPA Exists, Is Awaiting IPA Creation) | 3 | `bridge_provider_framework` / `fct_ipa` / `fact_offer` | `provider_id`, `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | Single-row visual context only |
+| 120 | Row-level visual helpers (Is Non Framework Provider, IPA Exists, Is Awaiting IPA Creation, Is IPA Completed, Is IPA Pending) | 5 | `bridge_provider_framework` / `fct_ipa` / `fact_offer` | `provider_id`, `accepted_offer_id`, `offer_id`, `offer_status`, `is_awaiting_ipa_creation`, `is_ipa_completed`, `is_ipa_pending` | ✅ | Single-row visual context only; IPA helpers rev 4, GLD-013 |
 
 ### 2.9 Gender referral measures (rev 3, GLD-006/GLD-007)
 
@@ -228,13 +229,19 @@ columns already verified in Sections 2.1–2.7. No new Gold field is required.
 | 187 | Male Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-05 |
 | 188 | Other Gender Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-06 |
 | 189 | Total Gendered Referrals | `dim_person` / `fact_referral` | `gender_clean`, `person_id` | ✅ | Unblocks KPI-07; excludes `Unknown` |
+| 190 | IPA Completed | `fact_offer` | `is_ipa_completed` | ✅ | Rev 4, GLD-013 offer-grain push-down |
+| 191 | IPAs Pending Completion | `fact_offer` | `is_ipa_pending` | ✅ | Rev 4, GLD-013 offer-grain push-down |
+| 192 | IPA Created to Completion % | `fact_offer` | `is_ipa_completed`, `is_awaiting_ipa_creation` | ✅ | Rev 4, GLD-013 |
+| 193 | Successful Offers to IPA Completed % | `fact_offer` | `is_ipa_completed`, `offer_status` | ✅ | Rev 4, GLD-013 |
+| 194 | Is IPA Completed | `fact_offer` | `is_ipa_completed` | ✅ | Rev 4, GLD-013 row-level helper |
+| 195 | Is IPA Pending | `fact_offer` | `is_ipa_pending` | ✅ | Rev 4, GLD-013 row-level helper |
 
-**Not ported — blocked by missing Gold source fields (13 measures):**
+**Not ported — blocked by missing Gold source fields (7 measures):**
 
 | Legacy measure(s) | Missing field | Status |
 |---|---|---|
 | Provider Contact Referral family (6) | `contact_made` provider-contact flag | ❌ Blocked — no Gold or Silver field; `is_not_seen_by_providers` is not a safe substitute |
-| Is IPA Completed / Is IPA Pending / Is In Accepted KPI / IPA Completed / IPA Created to Completion % / Successful Offers to IPA Completed % (6) | IPA-grain signature status (`signed_by_provider`, `signed_by_local_authority`) | ❌ Blocked — KPI-77–86; referral-grain proxies supplied (#116–117) |
+| Is In Accepted KPI (1) | Legacy accepted-KPI visual state | ❌ Blocked — use the offer-grain helpers (#194–195) and `Accepted Offers` instead |
 | KPI Tooltip Style 1 (1) | `ref_KPI` functional-spec metadata table (not a Gold object) | ❌ Blocked — re-import as static table if tooltip page is rebuilt |
 
 **Retired report-construct helpers (15 measures):** `Accepted Offers Base`,
@@ -277,7 +284,7 @@ These KPI groups are **correctly documented as unsupported** in the build guide.
 | KPI group | Reason for blockage | Required source change |
 |---|---|---|
 | **Legacy Provider Contact Referral family** (6 card measures) | No `contact_made` provider-contact flag in `fact_referral` | Source must deliver provider-contact flag at referral grain |
-| **KPI-77–78, 80–82, 85–86, 114** (IPA-grain signatures; legacy IPA Completed funnel and Is IPA Completed/Pending helpers) | No IPA-grain signature status; only referral-level `ipa_2_signatures` boolean proxy exists | Source must deliver per-IPA signature timestamps/status |
+| **KPI-77–78, 80–82, 85–86, 114** (IPA-grain signatures; legacy IPA Completed funnel and Is IPA Completed/Pending helpers) | Per-IPA-grain signature status still missing; offer-grain flags now exist (GLD-013: `fact_offer[is_ipa_completed]` / `[is_ipa_pending]`), and referral-level `ipa_2_signatures` remains the referral proxy | Source must deliver per-IPA signature timestamps/status for true IPA-grain measures |
 | **KPI-95–96** (Region breakdown) | `fact_referral[region]` is `CAST(NULL AS STRING)` | Source must deliver reliable referral region |
 | **KPI-98** (QA flag-type breakdown) | Only boolean `qa_flag` on provider/home; no flag-type dimension | Source must deliver flag-type codes (safeguarding, info notice, etc.) |
 | **KPI-102–103** (Document compliance %) | No expected-document set or blocking outcome in `dim_provider_submission_document` | Source must deliver expected doc checklist and blocking rules |

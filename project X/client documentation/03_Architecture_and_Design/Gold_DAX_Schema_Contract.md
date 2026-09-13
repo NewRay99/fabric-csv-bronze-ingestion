@@ -74,6 +74,9 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `is_spot` | BOOLEAN | `silver.referral` (GLD-010) | Spot vs Framework split |
 | `has_offer` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals With an Offer, Awaiting Offer, Engagement measures |
 | `is_not_seen_by_providers` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals Without Provider Assignment |
+| `provider_assignment_count` | LONG | `silver.referral_enrichment` (GLD-013: distinct provider assignments per referral) | Referrals With Multiple Provider Assignments |
+| `is_emergency_placement` | BOOLEAN | Derived in `04_gold_model` (GLD-013: required placement date equals referral created date) | Emergency Referrals, Planned Referrals |
+| `is_open_overdue` | BOOLEAN | Derived in `04_gold_model` (GLD-013: open and required placement date before as-of date) | Open Overdue Referrals |
 | `required_placement_date` | DATE | `silver.referral` | Open Overdue, Emergency/Planned split, Target Hit Rate |
 | `as_of_date` | DATE | Derived (run date) | Open Overdue, Age calculations |
 | `placed_by_required_date` | BOOLEAN | Derived from IPA vs required date | Referrals Placed by Required Date, Target Hit Rate |
@@ -100,6 +103,9 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `snapshot_date` | DATE | Derived (canonical month date) | All snapshot measures |
 | `referral_id` | STRING | `silver.referral` | Snapshot Referrals |
 | `is_open` | BOOLEAN | Derived | Open/Closed at Snapshot |
+| `is_open_overdue` | BOOLEAN | Derived (GLD-013) | Open Overdue at Snapshot |
+| `is_emergency_placement` | BOOLEAN | Derived (GLD-013) | Emergency split at Snapshot |
+| `provider_assignment_count` | LONG | `silver.referral_enrichment` (GLD-013) | Assignment-overlap at Snapshot |
 | `referral_closed_date` | DATE | Derived | Closed Referrals at Snapshot |
 | `ipa_issued_date` | DATE | Derived | Referrals with IPA at Snapshot |
 | `required_placement_date_outcome` | STRING | Derived | Open Overdue / On-Track at Snapshot |
@@ -113,14 +119,21 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `referral_id` | STRING (FK) | `silver.offer` | Relationship to `fact_referral` |
 | `provider_id` | STRING (FK) | `silver.offer` | Providers Who Made Offers, Average per Provider |
 | `home_id` | STRING (FK) | `silver.offer` | Relationship to `dim_provider_home` |
-| `offer_submitted_date` | DATE | `silver.offer` | Draft age, pending age measures |
-| `offer_reviewed_date` | DATE | `silver.offer` | Draft age, pending age measures |
+| `offer_submitted_date` | DATE | `silver.offer` (`offer_date`) | Draft age, pending age measures |
+| `offer_reviewed_date` | DATE | `silver.offer` (`last_modified_date`) | Draft age, pending age measures |
 | `offer_decision_date` | DATE | `silver.offer` | Offers with a Decision |
 | `offer_status` | STRING | `silver.offer` | Accepted, Draft, Pending, Unsuccessful measures |
 | `offer_type` | STRING | `silver.offer` | Visual dimension |
 | `rejection_reason` | STRING | `silver.offer` | Offers With Recorded Rejection Reason |
 | `estimated_weekly_cost` | DECIMAL | `silver.offer` | Cost analysis |
 | `source_export_date` | DATE | `silver.offer` | Latest Offer Source Export |
+| `offer_age_days` | INT | Derived in `04_gold_model` (GLD-013: as-of date minus submitted date) | Average Days in Draft, Oldest Draft Age Days |
+| `days_since_offer_activity` | INT | Derived in `04_gold_model` (GLD-013: as-of date minus last activity date) | Draft/Pending stalled-age band measures |
+| `is_draft_no_activity` | BOOLEAN | Derived in `04_gold_model` (GLD-013) | Draft Offers With No Activity Since Creation |
+| `is_draft_missing_dates` | BOOLEAN | Derived in `04_gold_model` (GLD-013) | Draft Offers Missing Dates |
+| `is_awaiting_ipa_creation` | BOOLEAN | Derived in `04_gold_model` (GLD-013: accepted offer with no IPA) | Accepted Offers With IPA, Offers Awaiting IPA Creation |
+| `is_ipa_pending` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPAs Pending Completion |
+| `is_ipa_completed` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPA Completed, IPA Created to Completion % |
 
 ### 3.4 `fct_ipa` — IPA grain
 
@@ -212,7 +225,7 @@ support it.*
 | KPI group | Missing field/grain | Required source change |
 |---|---|---|
 | Legacy Provider Contact Referral family (6 measures) | `contact_made` | Add provider-contact flag to referral extract |
-| KPI-77–78, 80–82, 85–86, 114 | IPA-grain signature status | Add signature audit trail to IPA extract |
+| KPI-77–78, 80–82, 85–86, 114 | Per-IPA-grain signature status (offer-grain flags exist per GLD-013) | Add signature audit trail to IPA extract |
 | KPI-98 | QA flag-type dimension | Add flag-type codes to provider extract |
 | KPI-102–103 | Expected-document checklist | Add document compliance rules to source |
 | KPI-105–106 | Referral-level decline-reason history | Add decline-reason audit to referral extract |
@@ -243,7 +256,7 @@ Before declaring the semantic model ready:
 - [ ] All relationships in Section 4.1 are created
 - [ ] Date relationships in Section 4.2 are configured (active or inactive as specified)
 - [ ] No ambiguous `fact_offer` → `fct_ipa` relationship exists
-- [ ] All 189 measures in `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (109 original + 76 legacy v15 ports + 4 gender measures) are created and total correctly
+- [ ] All 195 measures in `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (109 original + 82 legacy v15 ports + 4 gender measures) are created and total correctly
 - [ ] Every measure extracted from the legacy `SM WMPP v15.zip` model has a disposition in the build guide's legacy v15 full-library port section (ported, alias, retired, or blocked)
 - [ ] `DISTINCTCOUNT` totals reconcile for `referral_id`, `offer_id`, `ipa_id`, `referral_provider_id`
 - [ ] No DAX references `bronze.*`, `silver.*`, or retired table names (`fact_placement`, `fact_referral_offer`, `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI`, `Draft Age Band Table`); `dim_offer_status` is an active Gold table (GLD-008) and is exempt from this list

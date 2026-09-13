@@ -93,15 +93,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_not_seen_by_providers] = TRUE 
 
 ✅
 Open Overdue Referrals =
-CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        'fact_referral'[is_open] = TRUE ()
-            && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-            && 'fact_referral'[required_placement_date] < 'fact_referral'[as_of_date]
-    )
-)
+CALCULATE ( [Total Referrals], 'fact_referral'[is_open_overdue] = TRUE () )
 
 ✅
 Referrals Placed by Required Date =
@@ -188,7 +180,7 @@ CALCULATE (
     FILTER (
         'fact_offer',
         LOWER ( 'fact_offer'[offer_status] ) = "draft"
-            && DATEDIFF ( 'fact_offer'[offer_reviewed_date], TODAY (), DAY ) >= 7
+            && 'fact_offer'[days_since_offer_activity] >= 7
     )
 )
 
@@ -262,7 +254,7 @@ CALCULATE (
 Open Overdue Referrals at Snapshot =
 CALCULATE (
     [Snapshot Referrals],
-    'fact_referral_snapshot'[required_placement_date_outcome] = "Open overdue"
+    'fact_referral_snapshot'[is_open_overdue] = TRUE ()
 )
 
 ✅
@@ -397,19 +389,7 @@ CALCULATE (
 
 ✅
 Emergency Referrals =
-CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        NOT ISBLANK ( 'fact_referral'[referral_created_date] )
-            && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-            && DATEDIFF (
-                'fact_referral'[referral_created_date],
-                'fact_referral'[required_placement_date],
-                DAY
-            ) = 0
-    )
-)
+CALCULATE ( [Total Referrals], 'fact_referral'[is_emergency_placement] = TRUE () )
 
 ✅
 Planned Referrals =
@@ -419,24 +399,15 @@ CALCULATE (
         'fact_referral',
         NOT ISBLANK ( 'fact_referral'[referral_created_date] )
             && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-            && DATEDIFF (
-                'fact_referral'[referral_created_date],
-                'fact_referral'[required_placement_date],
-                DAY
-            ) > 0
+            && 'fact_referral'[is_emergency_placement] = FALSE ()
     )
 )
 ✅
 Emergency Placement Rate = DIVIDE ( [Emergency Referrals], [Total Referrals] )
 
-❌ - replaces overlap referrals
+✅ - pushed down to gold.fact_referral[provider_assignment_count] (GLD-013)
 Referrals With Multiple Provider Assignments =
-COUNTROWS (
-    FILTER (
-        VALUES ( 'fact_referral_provider'[referral_id] ),
-        CALCULATE ( DISTINCTCOUNT ( 'fact_referral_provider'[provider_id] ) ) > 1
-    )
-)
+CALCULATE ( [Total Referrals], 'fact_referral'[provider_assignment_count] > 1 )
 ```
 
 Use `fact_referral[referral_closure_reason]`,
@@ -535,14 +506,7 @@ Spot Offer Rate = DIVIDE ( [Spot Offers], [Non-Draft Offers] )
 
 ✅
 Draft Offers With No Activity Since Creation =
-CALCULATE (
-    [Offers Submitted],
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && 'fact_offer'[offer_submitted_date] = 'fact_offer'[offer_reviewed_date]
-    )
-)
+CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_no_activity] = TRUE () )
 
 ✅
 Draft Offers With Activity Since Creation =
@@ -551,23 +515,14 @@ CALCULATE (
     FILTER (
         'fact_offer',
         LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && 'fact_offer'[offer_reviewed_date] > 'fact_offer'[offer_submitted_date]
+            && 'fact_offer'[is_draft_no_activity] = FALSE ()
+            && 'fact_offer'[is_draft_missing_dates] = FALSE ()
     )
 )
 
 ✅
 Draft Offers Missing Dates =
-CALCULATE (
-    [Offers Submitted],
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && (
-                ISBLANK ( 'fact_offer'[offer_submitted_date] )
-                    || ISBLANK ( 'fact_offer'[offer_reviewed_date] )
-            )
-    )
-)
+CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_missing_dates] = TRUE () )
 
 ✅
 Draft Offers Stalled 14+ Days =
@@ -576,10 +531,7 @@ CALCULATE (
     FILTER (
         'fact_offer',
         LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && DATEDIFF (
-                COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-                TODAY (), DAY
-            ) >= 14
+            && 'fact_offer'[days_since_offer_activity] >= 14
     )
 )
 
@@ -589,9 +541,9 @@ AVERAGEX (
     FILTER (
         'fact_offer',
         LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && NOT ISBLANK ( 'fact_offer'[offer_submitted_date] )
+            && NOT ISBLANK ( 'fact_offer'[offer_age_days] )
     ),
-    DATEDIFF ( 'fact_offer'[offer_submitted_date], TODAY (), DAY )
+    'fact_offer'[offer_age_days]
 )
 
 ✅
@@ -600,9 +552,9 @@ MAXX (
     FILTER (
         'fact_offer',
         LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && NOT ISBLANK ( 'fact_offer'[offer_submitted_date] )
+            && NOT ISBLANK ( 'fact_offer'[offer_age_days] )
     ),
-    DATEDIFF ( 'fact_offer'[offer_submitted_date], TODAY (), DAY )
+    'fact_offer'[offer_age_days]
 )
 
 ✅
@@ -613,13 +565,7 @@ DIVIDE ( [Draft Offers With No Activity Since Creation], [Offers in Draft] )
 Pending Offers 0-7 Days =
 CALCULATE (
     [Pending Offers],
-    FILTER (
-        'fact_offer',
-        DATEDIFF (
-            COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-            TODAY (), DAY
-        ) <= 7
-    )
+    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] <= 7 )
 )
 
 ✅
@@ -628,11 +574,8 @@ CALCULATE (
     [Pending Offers],
     FILTER (
         'fact_offer',
-        VAR age_days = DATEDIFF (
-            COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-            TODAY (), DAY
-        )
-        RETURN age_days >= 8 && age_days <= 14
+        'fact_offer'[days_since_offer_activity] >= 8
+            && 'fact_offer'[days_since_offer_activity] <= 14
     )
 )
 
@@ -642,11 +585,8 @@ CALCULATE (
     [Pending Offers],
     FILTER (
         'fact_offer',
-        VAR age_days = DATEDIFF (
-            COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-            TODAY (), DAY
-        )
-        RETURN age_days >= 15 && age_days <= 29
+        'fact_offer'[days_since_offer_activity] >= 15
+            && 'fact_offer'[days_since_offer_activity] <= 29
     )
 )
 
@@ -654,13 +594,7 @@ CALCULATE (
 Pending Offers 30+ Days =
 CALCULATE (
     [Pending Offers],
-    FILTER (
-        'fact_offer',
-        DATEDIFF (
-            COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-            TODAY (), DAY
-        ) >= 30
-    )
+    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 30 )
 )
 
 ✅
@@ -670,10 +604,7 @@ CALCULATE (
     FILTER (
         'fact_offer',
         LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "pending"
-            && DATEDIFF (
-                COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-                TODAY (), DAY
-            ) >= 30
+            && 'fact_offer'[days_since_offer_activity] >= 30
     )
 )
 
@@ -832,31 +763,10 @@ DIVIDE ( [Estimated Active Weekly Cost], [Active IPAs] )
 Total IPA Weekly Cost = SUM ( 'fct_ipa'[estimated_weekly_cost] )
 ✅
 Accepted Offers With IPA =
-VAR ipa_offer_ids =
-    FILTER (
-        VALUES ( 'fct_ipa'[accepted_offer_id] ),
-        NOT ISBLANK ( 'fct_ipa'[accepted_offer_id] )
-    )
-RETURN
-    CALCULATE ( [Accepted Offers], TREATAS ( ipa_offer_ids, 'fact_offer'[offer_id] ) )
+CALCULATE ( [Accepted Offers], 'fact_offer'[is_awaiting_ipa_creation] = FALSE () )
 ✅
 Offers Awaiting IPA Creation =
-VAR accepted_offer_ids =
-    CALCULATETABLE (
-        VALUES ( 'fact_offer'[offer_id] ),
-        FILTER (
-            'fact_offer',
-            LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
-                IN { "accepted", "approved", "selected", "offer_successful" }
-        )
-    )
-VAR ipa_offer_ids =
-    FILTER (
-        VALUES ( 'fct_ipa'[accepted_offer_id] ),
-        NOT ISBLANK ( 'fct_ipa'[accepted_offer_id] )
-    )
-RETURN
-    COUNTROWS ( EXCEPT ( accepted_offer_ids, ipa_offer_ids ) )
+CALCULATE ( [Offers Submitted], 'fact_offer'[is_awaiting_ipa_creation] = TRUE () )
 ✅
 Accepted Offer to IPA Conversion % =
 DIVIDE ( [Accepted Offers With IPA], [Accepted Offers] )
@@ -899,9 +809,9 @@ CALCULATE (
 Gold Model Last Refreshed = MAX ( 'fact_referral'[gold_modelled_at] )
 ```
 
-`Accepted Offers With IPA` deliberately uses `TREATAS` rather than an active
-fact-to-fact relationship. This avoids an ambiguous relationship path while
-still using the stable `fct_ipa[accepted_offer_id]` key.
+`Accepted Offers With IPA` is pushed down to Gold: `fact_offer[is_awaiting_ipa_creation]`
+is computed in `04_gold_model` from the accepted-status list and the
+offer-grain IPA rollup, so no `TREATAS` hop to `fct_ipa` is needed.
 
 ## Legacy v15 reconciliation
 
@@ -916,7 +826,7 @@ still using the stable `fct_ipa[accepted_offer_id]` key.
 
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
-| KPI-77–78, 80–82, 85–86, 114 | No IPA-grain signature status; `ipa_2_signatures` is a referral-level proxy only. |
+| KPI-77–78, 80–82, 85–86, 114 | Offer-grain signature flags now exist (GLD-013: `fact_offer[is_ipa_pending]` / `[is_ipa_completed]`); per-IPA-grain signature rows still do not — `ipa_2_signatures` remains the referral-level proxy for referral-grain views. |
 | KPI-95–96 | `fact_referral[region]` is not populated; provider geography is not a safe referral-region substitute. |
 | KPI-98 | Only one provider/home QA flag is published, not the historic flag-type breakdown. |
 | KPI-102–103 | The current document fact has no documented expected-document set or blocking outcome, so compliance cannot be calculated. |
@@ -947,10 +857,10 @@ build guide. Disposition:
 
 | Disposition | Count | Meaning |
 | --- | ---: | --- |
-| Already covered (identical or alias) | 63 | Served by a measure in the sections above (rev 3: includes the 4 gender measures now supported via `dim_person[gender_clean]`, GLD-006/GLD-007) |
-| Newly ported in this revision | 62 | Copy-ready Gold DAX below (76 definitions; MoM stacks completed to a consistent 5-measure pattern) |
+| Already covered (identical or alias) | 62 | Served by a measure in the sections above (rev 3: includes the 4 gender measures now supported via `dim_person[gender_clean]`, GLD-006/GLD-007) |
+| Newly ported in this revision | 68 | Copy-ready Gold DAX below (rev 4: +6 IPA-signature measures now on offer-grain Gold flags `fact_offer[is_ipa_completed]` / `[is_ipa_pending]` / `[is_awaiting_ipa_creation]`, GLD-013) |
 | Retired report-construct helpers | 15 | Not recreated; reasons listed below |
-| Blocked by missing Gold source fields | 13 | Added to the do-not-recreate list |
+| Blocked by missing Gold source fields | 8 | Added to the do-not-recreate list |
 | **Total legacy v15 measures** | **153** | |
 
 Every ported measure references active Gold tables only. No `bronze.*`,
@@ -1312,19 +1222,32 @@ CALCULATE (
 > Under Offer` and `Offers on Referrals Under Offer`; they are not recreated
 > as separate measures.
 
-### IPA signature funnel (referral-level proxies)
+### IPA signature funnel
 
 The legacy funnel (`IPA Created`, `IPA Completed`, `IPAs Pending Completion`,
 `IPA Created to Completion %`, `Successful Offers to IPA Completed %`) read
 `fact_ipa[signed_by_provider]` and `fact_ipa[signed_by_local_authority]`.
-Gold has no IPA-grain signature fields, so the funnel is ported at referral
-grain using the existing `ipa_2_signatures` proxy. Like-for-like IPA-grain
-signature measures remain blocked (see the do-not-recreate list).
+Gold now carries offer-grain signature status: `fact_offer[is_ipa_pending]`
+and `fact_offer[is_ipa_completed]` are pushed down from the Silver IPA
+signature flags (GLD-013), so the funnel is rebuilt at offer grain. The
+referral-grain proxies below remain for referral-level views.
 
 `Referrals With IPA` also closes a dangling dependency: `IPA Signature
 Completion Rate` already references it, but it was never defined.
 
 ```DAX
+IPA Completed =
+CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_completed] = TRUE () )
+
+IPAs Pending Completion =
+CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_pending] = TRUE () )
+
+IPA Created to Completion % =
+DIVIDE ( [IPA Completed], [Accepted Offers With IPA] )
+
+Successful Offers to IPA Completed % =
+DIVIDE ( [IPA Completed], [Accepted Offers] )
+
 Referrals With IPA =
 CALCULATE (
     [Total Referrals],
@@ -1398,28 +1321,16 @@ RETURN
     )
 
 Is Awaiting IPA Creation =
-VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
-VAR accepted_offers =
-    CALCULATETABLE (
-        VALUES ( 'fact_offer'[offer_id] ),
-        FILTER (
-            'fact_offer',
-            LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
-                IN { "accepted", "approved", "selected", "offer_successful" }
-        )
-    )
-VAR ipa_offers =
-    CALCULATETABLE (
-        VALUES ( 'fct_ipa'[accepted_offer_id] ),
-        FILTER ( 'fct_ipa', NOT ISBLANK ( 'fct_ipa'[accepted_offer_id] ) )
-    )
-RETURN
-    IF ( current_offer IN EXCEPT ( accepted_offers, ipa_offers ), 1, 0 )
-```
+IF ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), 1, 0 )
 
-> Legacy `Is IPA Completed`, `Is IPA Pending` and `Is In Accepted KPI` need
-> IPA-grain signature flags and stay blocked; use the referral-grain proxy
-> measures above instead.
+✅
+Is IPA Completed =
+IF ( SELECTEDVALUE ( 'fact_offer'[is_ipa_completed] ), 1, 0 )
+
+✅
+Is IPA Pending =
+IF ( SELECTEDVALUE ( 'fact_offer'[is_ipa_pending] ), 1, 0 )
+```
 
 
 ### Legacy-to-Gold alias map
@@ -1462,7 +1373,7 @@ recreate.
 | IPAs Created | IPAs Created (identical name) |
 | Offers Still to Progress to IPA | Offers Awaiting IPA Creation |
 | Referrals with Placement at Snapshot | Referrals with IPA at Snapshot |
-| IPA Completed / IPA Created to Completion % / Successful Offers to IPA Completed % | Referral-grain proxies: Referrals With Fully Signed IPA, IPA Signature Completion Rate |
+| IPA Completed / IPA Created to Completion % / Successful Offers to IPA Completed % | Offer-grain measures: IPA Completed, IPA Created to Completion %, Successful Offers to IPA Completed % (GLD-013) |
 
 ### Retired report-construct helpers
 
@@ -1487,7 +1398,7 @@ at Bronze, Silver or legacy tables.
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
 | Provider Contact Referral card family (6 measures: base, Previous Month, Variance, MoM %, Indicator, Indicator Color) | No provider-contact flag (legacy `dim_referral[contact_made]`) anywhere in the active Gold referral fact. `is_not_seen_by_providers` is an offer-visibility flag, not a safe substitute. |
-| Is IPA Completed / Is IPA Pending / Is In Accepted KPI | Already covered by the KPI-77-86 entry: no IPA-grain signature status. Use the referral-grain proxies instead. |
+| Is In Accepted KPI | Row-level accepted-KPI visual state from the legacy report layout; use the offer-grain `Is IPA Completed` / `Is IPA Pending` / `Is Awaiting IPA Creation` helpers and the `Accepted Offers` measure instead. |
 
 The legacy Female / Male / Other / Total Gendered Referrals measures are no
 longer blocked: `dim_person[gender_clean]` and `fact_referral[person_id]`

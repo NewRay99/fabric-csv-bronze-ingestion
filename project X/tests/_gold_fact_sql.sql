@@ -34,6 +34,7 @@ base AS (
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
     CAST(r.is_spot AS BOOLEAN) AS is_spot,
     x.is_open, x.is_awaiting_offer,
+    x.provider_assignment_count,
     x.first_action_date, x.first_offer_date,
     x.offer_accepted_date, x.ipa_issued_date,
     x.referral_closed_date,
@@ -92,6 +93,16 @@ SELECT {AS_OF_SQL} AS as_of_date,
   COALESCE(is_open, false) AS is_open,
   COALESCE(is_awaiting_offer, false) AS is_awaiting_offer,
   is_spot,
+  -- GLD-013: semantic-model push-downs. provider_assignment_count replaces
+  -- the distinct-provider-count DAX; is_emergency_placement mirrors the
+  -- Emergency/Planned Referrals same-day rule; is_open_overdue mirrors the
+  -- Open Overdue Referrals filter (open and past the required date).
+  COALESCE(provider_assignment_count, 0) AS provider_assignment_count,
+  required_placement_date IS NOT NULL AND referral_created_date IS NOT NULL
+    AND DATEDIFF(TO_DATE(required_placement_date), TO_DATE(referral_created_date)) = 0
+    AS is_emergency_placement,
+  COALESCE(is_open, false) AND required_placement_date IS NOT NULL
+    AND required_placement_date < {AS_OF_SQL} AS is_open_overdue,
   ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
     AND TO_DATE(ipa_issued_date) <= required_placement_date AS placed_by_required_date,
   CASE

@@ -107,6 +107,7 @@ GOLD_SOURCE_REQUIREMENTS = {
         "referral_id", "created_datetime", "updated_datetime",
         "ipa_id", "offer_id", "placement_admission_date",
         "costs_total_weekly_fee", "status", "closed", "closed_datetime",
+        "signed_by_provider", "signed_by_local_authority",
         "export_date",
     },
     "silver.referral_person": {
@@ -127,7 +128,7 @@ GOLD_SOURCE_REQUIREMENTS = {
         "first_provider_seen_date", "is_not_seen_by_providers",
         "ipa_placement_admission_date", "ipa_2_signatures",
         "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
-        "is_open", "is_awaiting_offer",
+        "is_open", "is_awaiting_offer", "provider_assignment_count",
     },
 }
 
@@ -228,6 +229,7 @@ base AS (
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
     CAST(r.is_spot AS BOOLEAN) AS is_spot,
     x.is_open, x.is_awaiting_offer,
+    x.provider_assignment_count,
     x.first_action_date, x.first_offer_date,
     x.offer_accepted_date, x.ipa_issued_date,
     x.referral_closed_date,
@@ -286,6 +288,16 @@ SELECT {AS_OF_SQL} AS as_of_date,
   COALESCE(is_open, false) AS is_open,
   COALESCE(is_awaiting_offer, false) AS is_awaiting_offer,
   is_spot,
+  -- GLD-013: semantic-model push-downs. provider_assignment_count replaces
+  -- the distinct-provider-count DAX; is_emergency_placement mirrors the
+  -- Emergency/Planned Referrals same-day rule; is_open_overdue mirrors the
+  -- Open Overdue Referrals filter (open and past the required date).
+  COALESCE(provider_assignment_count, 0) AS provider_assignment_count,
+  required_placement_date IS NOT NULL AND referral_created_date IS NOT NULL
+    AND DATEDIFF(TO_DATE(required_placement_date), TO_DATE(referral_created_date)) = 0
+    AS is_emergency_placement,
+  COALESCE(is_open, false) AND required_placement_date IS NOT NULL
+    AND required_placement_date < {AS_OF_SQL} AS is_open_overdue,
   ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
     AND TO_DATE(ipa_issued_date) <= required_placement_date AS placed_by_required_date,
   CASE
@@ -358,6 +370,7 @@ snapshot = spark.table("gold.fact_referral").select(
     "ipa_placement_admission_date", "ipa_2_signatures",
     "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
     "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
+    "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
     "days_without_activity", "days_past_required_date",
     "placed_by_required_date", "required_placement_date_outcome",
 )
@@ -420,11 +433,43 @@ SELECT {AS_OF_SQL} AS as_of_date,
   COALESCE(o.decline_reason_other, o.decline_reason, o.withdraw_reason)
     AS rejection_reason,
   o.child_summary_needs AS child_summary_needs,
+  -- GLD-013: semantic-model push-downs. offer_age_days replaces the
+  -- "Pending Offer Age (Days)" calculated column (as_of date instead of
+  -- TODAY(), so snapshots stay reproducible); days_since_offer_activity
+  -- backs the draft stalled 7+/14+ day measures; the is_draft_* flags back
+  -- the draft data-quality cards; the is_*ipa* flags replace the
+  -- per-offer Is Awaiting IPA Creation / Is IPA Pending / Is IPA Completed
+  -- row measures.
+  DATEDIFF({AS_OF_SQL}, TO_DATE(o.offer_date)) AS offer_age_days,
+  DATEDIFF({AS_OF_SQL}, TO_DATE(COALESCE(o.last_modified_date, o.offer_date)))
+    AS days_since_offer_activity,
+  LOWER(COALESCE(o.offer_status, '')) = 'draft'
+    AND (o.offer_date IS NULL OR o.last_modified_date IS NULL)
+    AS is_draft_missing_dates,
+  LOWER(COALESCE(o.offer_status, '')) = 'draft'
+    AND o.offer_date IS NOT NULL AND o.last_modified_date IS NOT NULL
+    AND TO_DATE(o.offer_date) = TO_DATE(o.last_modified_date)
+    AS is_draft_no_activity,
+  LOWER(COALESCE(o.offer_status, '')) IN
+    ('accepted', 'approved', 'selected', 'offer_successful')
+    AND COALESCE(ip.ipa_count, 0) = 0 AS is_awaiting_ipa_creation,
+  COALESCE(ip.ipa_count, 0) > 0 AND COALESCE(ip.has_completed_ipa, 0) = 0
+    AS is_ipa_pending,
+  COALESCE(ip.has_completed_ipa, 0) = 1 AS is_ipa_completed,
   CAST(o.export_date AS TIMESTAMP) AS source_export_date,
   CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM silver.offer o
 INNER JOIN silver.referral_provider rp
   ON o.referral_provider_id = rp.referral_provider_id
+LEFT JOIN (
+  SELECT offer_id, COUNT(*) AS ipa_count,
+    MAX(CASE WHEN COALESCE(CAST(signed_by_provider AS BOOLEAN), false)
+      AND COALESCE(CAST(signed_by_local_authority AS BOOLEAN), false)
+      THEN 1 ELSE 0 END) AS has_completed_ipa
+  FROM silver.ipa
+  WHERE offer_id IS NOT NULL
+  GROUP BY offer_id
+) ip ON o.offer_id = ip.offer_id
 WHERE o.offer_date IS NULL OR TO_DATE(o.offer_date) <= {AS_OF_SQL}
 """)
 

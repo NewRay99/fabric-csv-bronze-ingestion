@@ -41,11 +41,19 @@ def main():
     assert "def target_requires_refresh" in common_text, (
         "Common library lacks the target-schema refresh guard"
     )
+    # SI-025: the shared contract patch must guarantee export_date reaches
+    # Silver even when the deployed contract table pre-dates those rows.
+    assert "def ensure_export_date_contract" in common_text, (
+        "Common library lacks the SI-025 export_date contract guard"
+    )
 
     for notebook in NOTEBOOKS:
         text = source(notebook)
         assert "%run ./99_common_library" in text, (
             f"{notebook.name} does not import the target-schema refresh guard"
+        )
+        assert "ensure_export_date_contract(" in text, (
+            f"{notebook.name} can write Silver without the SI-025 export_date guarantee"
         )
         if notebook.name.startswith("02_silver_formatter"):
             assert "if should_skip(" in text and "not target_requires_refresh" in text, (

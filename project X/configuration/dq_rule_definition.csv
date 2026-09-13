@@ -26,3 +26,9 @@ REFERRAL_ENRICHMENT_DUE_DILIGENCE_REQUIRED_FOR_ADMISSION,true,WARNING,CONDITIONA
 REFERRAL_ENRICHMENT_DUE_DILIGENCE_AFTER_ADMISSION,true,ERROR,DATE_ORDER,silver,referral_enrichment,ipa_due_diligence_min_review_date,silver,referral_enrichment,ipa_placement_admission_date,>=,,Due-diligence review date must be after IPA admission
 REFERRAL_ENRICHMENT_IS_OPEN_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,is_open,,,,,,GLD-009 open flag must be present for every referral
 REFERRAL_ENRICHMENT_AWAITING_OFFER_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,is_awaiting_offer,,,,,,GLD-011 awaiting-offer flag must be present for every referral
+SILVER_REFERRAL_EXPORT_DATE_PRESENT,true,ERROR,NOT_NULL,silver,referral,export_date,,,,,,SI-025 source export timestamp must reach Silver for Gold snapshot lineage
+SILVER_OFFER_EXPORT_DATE_PRESENT,true,ERROR,NOT_NULL,silver,offer,export_date,,,,,,SI-025 source export timestamp must reach Silver for Gold snapshot lineage
+SILVER_REFERRAL_PROVIDER_EXPORT_DATE_PRESENT,true,ERROR,NOT_NULL,silver,referral_provider,export_date,,,,,,SI-025 source export timestamp must reach Silver for Gold snapshot lineage
+SILVER_IPA_EXPORT_DATE_PRESENT,true,ERROR,NOT_NULL,silver,ipa,export_date,,,,,,SI-025 source export timestamp must reach Silver for Gold snapshot lineage
+REFERRAL_ENRICHMENT_PROVIDER_COUNT_PRESENT,true,ERROR,NOT_NULL,silver,referral_enrichment,provider_assignment_count,,,,,,GLD-013 provider assignment count must be present and defaults to zero when no provider is assigned
+REFERRAL_ENRICHMENT_PROVIDER_COUNT_NON_NEGATIVE,true,ERROR,NON_NEGATIVE,silver,referral_enrichment,provider_assignment_count,,,,>=,0,GLD-013 provider assignment count must not be negative

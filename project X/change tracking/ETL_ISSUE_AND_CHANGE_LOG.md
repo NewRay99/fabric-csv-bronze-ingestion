@@ -10,6 +10,33 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## 2026-09-13 — Silver export_date propagation and Gold semantic-model push-downs
+
+- SI-025: `export_date` now propagates from Bronze into every Silver table via a
+  self-healing contract guard (`ensure_export_date_contract`) in
+  `99_common_library`, applied by `02_silver_formatter` and
+  `02a_archive_silver`; four new DQ rules guard the column.
+- GLD-013: mined the 268 measures in `SM WMPP v15 (3).zip` and pushed the
+  remaining computable business rules into the pipeline:
+  `silver.referral_enrichment` gained `provider_assignment_count`;
+  `gold.fact_referral` gained `provider_assignment_count`,
+  `is_emergency_placement` and `is_open_overdue` (all three carried into
+  `gold.fact_referral_snapshot`); `gold.fact_offer` gained `offer_age_days`,
+  `days_since_offer_activity`, `is_draft_no_activity`,
+  `is_draft_missing_dates`, `is_awaiting_ipa_creation`, `is_ipa_pending` and
+  `is_ipa_completed` (rolled up from `silver.ipa` signature flags).
+- Updated `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`,
+  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md`,
+  `Gold_DAX_Schema_Contract.md`, `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (rev 4) and
+  `KPI_Reference_Guide.md`: 18 DAX measures rewritten as single flag/column
+  filters, the IPA-signature funnel rebuilt at offer grain, KPI-77–78, 80–82,
+  85–86 moved from blocked/proxy to covered (195 supported measures; legacy
+  v15 reconciliation now 62 covered · 68 ported · 15 retired · 8 blocked).
+- Validation: all portable validators pass, including new GLD-013 guards in
+  `validate_archive_snapshot_and_enrichment.py` and
+  `validate_gold_referral_schema.py`, plus a 15-case DuckDB smoke test of the
+  new Gold SQL. Fabric execution and import remain separate acceptance checks.
+
 ## 2026-09-12 — Gold referral flags aligned to the original business rules
 
 - GLD-009: `is_open` now implements the original business rule in
@@ -56,10 +83,10 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 | `ARCH-ETL` | Archive ETL pipeline issue | 2 |
 | `LIVE-ETL` | Live ETL pipeline issue | 3 |
 | `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 12 |
+| `GLD` | Gold-layer issue | 13 |
 | `CFG` | Configuration and monitoring issue | 9 |
 | `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **65** |
+| **Total classified issues** |  | **66** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1684,10 +1711,85 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
   the `is_engaged` expression in the `gold.fact_referral_provider` cell.
 - **Status:** source change complete.
 
-## SI-025 — looks like the export_date in all the silver tables are missing
-the bronze table and even the archived tables such as bronze.referral table have export_date populated but the silver table doesnt.. could the silver tables export table get loaded via the notebook
+## SI-025 — export_date missing from all Silver tables
 
-## GLD-013
-check the semantic model in project X\reports\current\WMPP\SM WMPP v15 (3).zip. see if there are any other DAX measures we can bring into the Gold layer the same way we did GLD-011 and GLD-012
+- **Symptom (reported 2026-09-13, verbatim):** "looks like the export_date in
+  all the silver tables are missing the bronze table and even the archived
+  tables such as bronze.referral table have export_date populated but the
+  silver table doesnt.. could the silver tables export table get loaded via
+  the notebook"
+- **Cause:** `format_frame` in `99_common_library` selects only the columns
+  listed in the deployed `monitoring.cfg_schema_contract` rows for the
+  contract. A stale deployed contract (bootstrap skips already-populated
+  config tables unless `LOAD_FILE_CONFIG` is set) lacked the `export_date`
+  contract rows, so the column was silently dropped at Silver even though
+  Bronze and the archive tables carry it — and the contract would never
+  self-heal on later runs.
+- **Fix (2026-09-13):** `99_common_library` now defines
+  `EXPORT_DATE_CONTRACT_COLUMN` and `ensure_export_date_contract(schema_cols)`,
+  which appends the `export_date` contract column when a deployed contract is
+  missing it. `02_silver_formatter` and `02a_archive_silver` both call the
+  guard before formatting, so every Silver table gains `export_date` from the
+  Bronze frame. The fix is self-healing: `target_requires_refresh` rebuilds
+  any existing Silver table that is missing the column. Rerunning
+  `00_setup_cfg` with `LOAD_FILE_CONFIG=true` is still recommended to refresh
+  the deployed contract rows.
+- **Regression guard:** `validate_silver_required_columns.py` asserts the
+  guard exists and is called by both notebooks; new DQ rules
+  `SILVER_REFERRAL_EXPORT_DATE_PRESENT`, `SILVER_OFFER_EXPORT_DATE_PRESENT`,
+  `SILVER_REFERRAL_PROVIDER_EXPORT_DATE_PRESENT` and
+  `SILVER_IPA_EXPORT_DATE_PRESENT` (NOT_NULL / ERROR).
+- **Status:** source change complete.
 
-please update the project X\client documentation\04_Data_and_Reporting\GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md and all other md files
+## GLD-013 — semantic-model measures pushed down into the Gold layer
+
+- **Symptom (reported 2026-09-13, verbatim):** "check the semantic model in
+  project X\reports\current\WMPP\SM WMPP v15 (3).zip. see if there are any
+  other DAX measures we can bring into the Gold layer the same way we did
+  GLD-011 and GLD-012 … please update the project X\client
+  documentation\04_Data_and_Reporting\GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE
+  WIP.md and all other md files"
+- **Cause:** several legacy v15 measures still recomputed business rules in
+  DAX (TODAY()-relative ageing, draft-activity comparisons, IPA-signature
+  funnel via TREATAS/EXCEPT, provider-overlap via DISTINCTCOUNT), so the logic
+  was not reusable by snapshots or SQL consumers, and six IPA-signature
+  measures were blocked for want of a Gold field.
+- **Fix (2026-09-13):** extracted and inventoried all 268 measures from
+  `SM WMPP v15 (3).zip` (`reports/current/SM WMPP v15 (3).zip`,
+  `definition/tables/_Measures.tmdl`) and pushed every rule that Silver/Gold
+  data can support into the pipeline:
+  - `03_silver_business_rules`: `silver.referral_enrichment` gained
+    `provider_assignment_count` (`COUNT(DISTINCT provider_id)` per referral).
+  - `04_gold_model` `fact_referral`: propagated `provider_assignment_count`
+    and added `is_emergency_placement` (required placement date equals
+    referral created date) and `is_open_overdue` (open and required placement
+    date before the as-of date); all three are carried into
+    `gold.fact_referral_snapshot`.
+  - `04_gold_model` `fact_offer`: added an offer-grain rollup over
+    `silver.ipa` (`ipa_count`, `has_completed_ipa` from
+    `signed_by_provider`/`signed_by_local_authority`) and seven published
+    columns: `offer_age_days`, `days_since_offer_activity`,
+    `is_draft_missing_dates`, `is_draft_no_activity`,
+    `is_awaiting_ipa_creation`, `is_ipa_pending`, `is_ipa_completed`.
+  - Documentation: `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`, the WIP guide,
+    `Gold_DAX_Schema_Contract.md`, `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (rev 4)
+    and `KPI_Reference_Guide.md` updated — 18 measures rewritten as flag
+    filters (Open Overdue, Emergency/Planned, Multiple Provider Assignments,
+    draft activity/ageing, pending-age bands, IPA funnel, snapshot overdue),
+    the IPA-signature funnel rebuilt at offer grain (`IPA Completed`,
+    `IPAs Pending Completion`, `IPA Created to Completion %`,
+    `Successful Offers to IPA Completed %`, `Is IPA Completed`,
+    `Is IPA Pending`), and KPI-77–78, 80–82, 85–86 moved from blocked/proxy
+    to covered. The Provider Contact card family and true per-IPA-grain
+    signature rows remain blocked (no source fields); TODAY()-relative
+    document-expiry measures stay in DAX because they report off the live
+    calendar, not the extract as-of date.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` asserts
+  the enrichment `COUNT(DISTINCT provider_id)`, the Gold propagation and all
+  seven offer flags; `validate_gold_referral_schema.py` requires the three
+  new referral fields; new DQ rules
+  `REFERRAL_ENRICHMENT_PROVIDER_COUNT_PRESENT` and
+  `REFERRAL_ENRICHMENT_PROVIDER_COUNT_NON_NEGATIVE`; `tests/_gold_sim_test.py`
+  covers the new flags (runs in Fabric); a 15-case DuckDB smoke test verified
+  the new Gold SQL semantics locally.
+- **Status:** source change complete.

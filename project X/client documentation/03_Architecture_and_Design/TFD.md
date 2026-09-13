@@ -80,6 +80,40 @@ table such as `referral` is not excluded.
 FK parent tables are dependency-ordered before their children where the
 contract supplies valid relationships.
 
+#### Worked example: `bronze.referral` to `silver.referral`
+
+This is a **same-name, contract-driven mapping**. `02_silver_formatter` resolves
+the physical Bronze table name `referral` to the `referral` rows in
+`configuration/schema_definition.csv`, then writes `silver.referral`. It does
+not join to `referral_aud`, rename fields, or derive business values at this
+stage. The contract therefore remains the authoritative field-mapping record.
+
+| Bronze field | Silver field | Contract treatment |
+| --- | --- | --- |
+| `referral_id` | `referral_id` | Primary key; UUID represented as a trimmed Spark `STRING`. |
+| `placement_type`, `location_preference_details`, `location_restriction_details`, `additional_information`, `referral_created_by`, `referral_updated_by`, `referral_status` | Same field name | Trimmed `STRING`. |
+| `required_start_date`, `response_required_by_date` | Same field name | Parsed to Spark `DATE` using the approved date formats. |
+| `referral_created_date`, `referral_modified_date`, `export_date` | Same field name | Parsed to Spark `TIMESTAMP` using the approved timestamp formats. `export_date` identifies the selected Bronze export and is retained for lineage and point-in-time reporting. |
+| `is_sibling_placement`, `is_parent_child_placement`, `has_location_preferrence`, `has_location_restriction`, `is_spot` | Same field name | Normalised to `BOOLEAN`: `true/t/1/yes/y` and `false/f/0/no/n` are recognised; other values become null. |
+| `sibling_count` | `sibling_count` | Cast to Spark `INT` after stripping non-numeric characters permitted by the formatter. |
+
+For the selected `export_date`, duplicate Bronze rows are ranked by the
+contracted primary key (`referral_id`) and the newest `_ingestion_timestamp`;
+only one row per key is written. The formatter selects only contracted business
+fields, so an unapproved non-technical Bronze field is not written to Silver.
+It is recorded as `EXTRA` schema drift; a contracted field absent from Bronze is
+written as a typed null and recorded as `MISSING` drift. Technical Bronze fields
+such as `_ingestion_timestamp`, `_source_file`, and `_ingestion_id` are not
+copied as business columns.
+
+Every output row additionally receives `_record_source = 'LATEST'`,
+`_source_table = 'referral'`, `_silver_run_id`, and `_silver_load_ts`. The
+formatter replaces the current `silver.referral` table for the selected latest
+export and records source/written/duplicate counts in the Silver audit and
+table-load metrics. Business derivations occur later: for example,
+`03_silver_business_rules` produces `silver.referral_enrichment`, while Gold
+uses that relation alongside `silver.referral`.
+
 ### 4.3 Archive ingestion and replay
 
 - The containing `YYYY-MM-DD` folder is the authoritative archive export date.

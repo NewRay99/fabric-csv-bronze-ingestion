@@ -80,6 +80,7 @@ required_fields = {
     "ipa_due_diligence_min_review_date",
     "is_open",
     "is_awaiting_offer",
+    "provider_assignment_count",
 }
 for field in required_fields:
     assert field in dq, f"Silver enrichment does not materialise {field}"
@@ -133,6 +134,42 @@ assert "NOT COALESCE(CAST(rp.is_cancelled AS BOOLEAN), false)" in provider_sourc
 assert "NOT COALESCE(CAST(rp.is_closed AS BOOLEAN), false)" in provider_source
 assert "NOT COALESCE(CAST(rp.is_excluded AS BOOLEAN), false)" in provider_source
 print("PASS GLD-009/010/011/012 open, awaiting-offer, is_spot and is_engaged logic is present")
+
+# GLD-013: semantic-model push-downs mined from SM WMPP v15. Referral-grain
+# columns ride the Silver enrichment relation; offer-grain flags are computed
+# in Gold with an IPA rollup join.
+assert "COUNT(DISTINCT rp.provider_id) AS provider_assignment_count" in dq
+assert "COALESCE(o.provider_assignment_count, 0) AS provider_assignment_count" in dq
+assert "provider_assignment_count long" in dq
+assert "x.provider_assignment_count," in fact_source
+assert "COALESCE(provider_assignment_count, 0) AS provider_assignment_count" in fact_source
+assert "AS is_emergency_placement" in fact_source
+assert (
+    "DATEDIFF(TO_DATE(required_placement_date), TO_DATE(referral_created_date)) = 0"
+    in fact_source
+)
+assert "AS is_open_overdue" in fact_source
+assert '"provider_assignment_count", "is_emergency_placement", "is_open_overdue",' in gold
+assert '"signed_by_provider", "signed_by_local_authority",' in gold
+offer_cell = next(
+    cell for cell in read_notebook(GOLD)["cells"]
+    if "CREATE OR REPLACE TABLE gold.fact_offer AS" in "".join(cell.get("source", []))
+)
+offer_source = "".join(offer_cell.get("source", []))
+for offer_field in [
+    "AS offer_age_days",
+    "AS days_since_offer_activity",
+    "AS is_draft_missing_dates",
+    "AS is_draft_no_activity",
+    "AS is_awaiting_ipa_creation",
+    "AS is_ipa_pending",
+    "AS is_ipa_completed",
+    "has_completed_ipa",
+    "signed_by_provider",
+    "signed_by_local_authority",
+]:
+    assert offer_field in offer_source, f"gold.fact_offer does not publish {offer_field}"
+print("PASS GLD-013 provider-count, emergency, overdue, draft-age and IPA flags are present")
 
 for field in {
     "person_id",

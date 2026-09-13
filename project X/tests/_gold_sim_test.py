@@ -93,6 +93,12 @@ r1 = add_referral(jan, date(2025, 1, 12))            # critical, placed by targe
 o1 = add_offer(r1, date(2025,1,11), "accepted"); add_ipa(r1, o1, date(2025,1,11), date(2025,1,12))
 r2 = add_referral(date(2025,1,12), date(2025,1,20))  # offer but no ipa -> open
 add_offer(r2, date(2025,1,13), "pending")
+# GLD-013: two extra distinct provider assignments (no offers) -> multiple providers
+for extra_pid in provider_ids[1:]:
+    providers.append(dict(referral_provider_id=str(uuid.uuid4()), referral_id=r2,
+        provider_id=extra_pid, is_excluded=False, is_declined=False,
+        created_by="sim", modified_by="sim", is_cancelled=False, is_closed=False,
+        is_spot=False, export_date=ts(date(2025,1,14))))
 r3 = add_referral(date(2025,1,15), date(2025,2,10))  # planned, closes in Feb
 r4 = add_referral(date(2025,1,20), date(2025,1,21))  # critical, no offer -> overdue
 r5 = add_referral(date(2025,1,25), date(2025,3,1))   # planned, placed after target in Mar
@@ -188,6 +194,8 @@ for rid, r in current.items():
         ipa_due_diligence_min_review_date=None,
         is_open=is_open,
         is_awaiting_offer=is_awaiting_offer,
+        # GLD-013: distinct providers assigned to the referral
+        provider_assignment_count=len({p["provider_id"] for p in rps}),
     ))
 
 spark.sql("CREATE SCHEMA IF NOT EXISTS silver")
@@ -231,6 +239,7 @@ def run_gold(as_of):
         F.lit(as_of).cast("date").alias("snapshot_date"),
         "referral_id", "current_status", "placement_urgency_band", "required_placement_date",
         "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
+        "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
         "days_without_activity", "days_past_required_date", "placed_by_required_date",
         "required_placement_date_outcome")
     snap_table = "gold.fact_referral_snapshot"
@@ -268,6 +277,13 @@ check(out[r4].required_placement_date_outcome == "Open overdue", "r4 open overdu
 check(out[r4].days_past_required_date == 10, f"r4 10 days past required (got {out[r4].days_past_required_date})")
 check(out[r2].has_offer == True and out[r2].is_open == True, "r2 has offer and open (live provider branch)")
 check(out[r2].is_awaiting_offer == True, "r2 awaiting offer (open with engaged provider)")
+# GLD-013: pushed-down referral-grain columns
+check(out[r2].provider_assignment_count >= 2,
+      f"r2 has multiple provider assignments (got {out[r2].provider_assignment_count})")
+check(out[r2].is_open_overdue == True, "r2 open overdue (open, required 1/20 < as-of 1/31)")
+check(out[r2].is_emergency_placement == False, "r2 not emergency (8-day lead)")
+check(out[r1].provider_assignment_count == 1, "r1 single provider assignment")
+check(out[r3].is_open_overdue == False, "r3 not open overdue (required 2/10 >= as-of 1/31)")
 # GLD-009: r4 has no provider engagement and its response window (1/19) closed
 # before the latest export (3/10), so the original business rule says NOT open.
 check(out[r4].is_open == False, "r4 not open under GLD-009 rule (no engagement, expired response window)")

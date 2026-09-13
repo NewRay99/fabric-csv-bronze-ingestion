@@ -95,6 +95,7 @@ for required_field in [
     "referral_id", "referral_created_date", "first_action_date",
     "ipa_issued_date", "estimated_weekly_cost", "is_open",
     "is_awaiting_offer", "is_spot",
+    "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
     "placed_by_required_date", "required_placement_date_outcome",
 ]:
     assert re.search(rf"\b{required_field}\b", fact_cell), (

@@ -427,7 +427,8 @@ log_step("Materialised referral_closure_reason_summary")
 # Gold, snapshots, and ad-hoc reporting.
 enrichment_schema = (
     "referral_id string, referral_created_date timestamp, cnt_offer_made long, "
-    "unique_homes_offered long, estimated_weekly_cost decimal(19,2), "
+    "unique_homes_offered long, provider_assignment_count long, "
+    "estimated_weekly_cost decimal(19,2), "
     "first_action_date timestamp, first_offer_date timestamp, offer_accepted_date timestamp, "
     "ipa_issued_date timestamp, referral_closed_date timestamp, last_activity_date timestamp, "
     "first_provider_seen_date timestamp, "
@@ -463,6 +464,10 @@ if (spark.catalog.tableExists("silver.referral")
         WITH offer_rollup AS (
           SELECT rp.referral_id, COUNT(DISTINCT o.offer_id) AS cnt_offer_made,
             COUNT(DISTINCT o.provider_home_id) AS unique_homes_offered,
+            -- GLD-013: distinct providers assigned to the referral; the
+            -- semantic model's Referrals With Multiple Provider Assignments
+            -- measure becomes a single threshold filter on this column.
+            COUNT(DISTINCT rp.provider_id) AS provider_assignment_count,
             MIN(CAST(o.offer_date AS TIMESTAMP)) AS first_offer_date,
             MIN(CASE WHEN LOWER(COALESCE(o.offer_status, '')) IN
               ('accepted', 'approved', 'selected', 'offer_successful')
@@ -568,6 +573,7 @@ if (spark.catalog.tableExists("silver.referral")
           CAST(r.referral_created_date AS TIMESTAMP) AS referral_created_date,
           COALESCE(o.cnt_offer_made, 0) AS cnt_offer_made,
           COALESCE(o.unique_homes_offered, 0) AS unique_homes_offered,
+          COALESCE(o.provider_assignment_count, 0) AS provider_assignment_count,
           i.estimated_weekly_cost,
           a.first_action_date, o.first_offer_date, o.offer_accepted_date,
           i.ipa_issued_date,
@@ -622,7 +628,7 @@ else:
     referral_enrichment = spark.createDataFrame([], enrichment_schema)
 replace_silver_materialisation(referral_enrichment, "referral_enrichment")
 print("Silver referral enrichment ready: offer, provider-observation, IPA-signature, "
-      "due-diligence, is_open and is_awaiting_offer fields")
+      "due-diligence, is_open, is_awaiting_offer and provider-assignment fields")
 log_step("Materialised referral_enrichment")
 
 # Run derived checks only after the current enrichment has been written.

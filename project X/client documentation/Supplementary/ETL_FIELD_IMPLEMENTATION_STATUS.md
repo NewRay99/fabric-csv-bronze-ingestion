@@ -1,5 +1,16 @@
 # ETL field implementation status
 
+## Bronze-to-Silver field mapping
+
+The latest Silver formatter uses the approved schema contract as its mapping
+specification. `bronze.referral` is a representative example: its contracted
+fields retain their names in `silver.referral`, are cast to their declared
+types, and are deduplicated by `referral_id` within the newest `export_date`.
+Only approved contract fields are materialised; missing and extra fields are
+recorded as schema drift. The formatter then appends Silver lineage columns,
+not the Bronze ingestion columns. The detailed rule and field groups are in the
+[technical design](../03_Architecture_and_Design/TFD.md#worked-example-bronzereferral-to-silverreferral).
+
 ## Implemented from available data
 
 - The Gold referral fact provides referral-created, required-placement, first-action, first-offer, accepted-offer, IPA, last-activity, offer-count and urgency fields.

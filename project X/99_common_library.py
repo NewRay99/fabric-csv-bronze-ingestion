@@ -295,6 +295,31 @@ def print_load_diagnostics(source_table, target_table, snapshot_date, source_dat
     )
 
 
+# SI-025: every Bronze/Archive frame carries a row-level export_date (the
+# formatters reject sources without one), so every Silver table must publish
+# it. A deployed cfg_schema_contract_column that pre-dates the export_date
+# contract rows would otherwise silently drop the column; the bootstrap only
+# loads the CSV into an empty table, so the stale contract never self-heals.
+# Patch the in-memory contract instead: the Silver write gains export_date,
+# the drift check stops reporting it as EXTRA, and target_requires_refresh
+# flags existing Silver tables that lack the column for rebuild.
+EXPORT_DATE_CONTRACT_COLUMN = {
+    "ordinal_position": 999999,
+    "column_name": "export_date",
+    "data_type": "timestamp without time zone",
+    "is_primary_key": "NO",
+    "referenced_table": "",
+    "referenced_column": "",
+}
+
+
+def ensure_export_date_contract(schema_cols):
+    """Append the export_date contract column when the deployed contract lacks it."""
+    if any(definition["column_name"].lower() == "export_date" for definition in schema_cols):
+        return schema_cols
+    return [*schema_cols, dict(EXPORT_DATE_CONTRACT_COLUMN)]
+
+
 def format_frame(frame, schema_cols, source_kind, source_table):
     expressions = [cast_column(frame, definition) for definition in schema_cols]
     return (frame.select(*expressions)
