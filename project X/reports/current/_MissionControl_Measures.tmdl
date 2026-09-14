@@ -1,0 +1,537 @@
+table _MissionControl_Measures
+
+	measure 'Pipeline Runs' = ```
+
+			DISTINCTCOUNT ( 'cfg_pipeline_run'[run_id] )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Successful Pipeline Runs' = ```
+
+			CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Failed Pipeline Runs' = ```
+
+			CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Running Pipeline Runs' = ```
+
+			CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "RUNNING", "IN_PROGRESS", "STARTED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Completed Pipeline Runs' = ```
+
+			[Successful Pipeline Runs] + [Failed Pipeline Runs]
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Success Rate' = ```
+
+			DIVIDE ( [Successful Pipeline Runs], [Completed Pipeline Runs] )
+
+			```
+		formatString: 0.0%
+		displayFolder: Pipeline execution
+
+	measure 'Live Pipeline Runs' = ```
+
+			CALCULATE ( [Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_live_pipeline" )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Archive Pipeline Runs' = ```
+
+			CALCULATE ( [Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_archive_pipeline" )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Live Pipeline Failures' = ```
+
+			CALCULATE ( [Failed Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_live_pipeline" )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Archive Pipeline Failures' = ```
+
+			CALCULATE ( [Failed Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_archive_pipeline" )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Tables Succeeded' = ```
+
+			SUM ( 'cfg_pipeline_run'[tables_succeeded] )
+
+			```
+		formatString: #,0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Tables Failed' = ```
+
+			SUM ( 'cfg_pipeline_run'[tables_failed] )
+
+			```
+		formatString: #,0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Rows Read' = ```
+
+			SUM ( 'cfg_pipeline_run'[rows_read] )
+
+			```
+		formatString: #,0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Rows Written' = ```
+
+			SUM ( 'cfg_pipeline_run'[rows_written] )
+
+			```
+		formatString: #,0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Runs With Error' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[error_message] ) ) )
+
+			```
+		formatString: 0
+		displayFolder: Pipeline execution
+
+	measure 'Average Pipeline Duration (min)' = ```
+
+			AVERAGEX ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ) )
+
+			```
+		formatString: 0.0
+		displayFolder: Pipeline execution
+
+	measure 'P95 Pipeline Duration (min)' = ```
+
+			PERCENTILEX.INC ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ), 0.95 )
+
+			```
+		formatString: 0.0
+		displayFolder: Pipeline execution
+
+	measure 'Total Pipeline Duration (min)' = ```
+
+			SUMX ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ) )
+
+			```
+		formatString: 0.0
+		displayFolder: Pipeline execution
+
+	measure 'Pipeline Rows per Minute' = ```
+
+			DIVIDE ( [Pipeline Rows Written], [Total Pipeline Duration (min)] )
+
+			```
+		formatString: #,0.0
+		displayFolder: Pipeline execution
+
+	measure 'Latest Pipeline End' = ```
+
+			MAX ( 'cfg_pipeline_run'[ended_at] )
+
+			```
+		formatString: General Date
+		displayFolder: Pipeline execution
+
+	measure 'Latest Pipeline Status' = ```
+
+			VAR latest_end = [Latest Pipeline End]
+			RETURN
+			    CALCULATE ( CONCATENATEX ( VALUES ( 'cfg_pipeline_run'[status] ), 'cfg_pipeline_run'[status], ", " ), 'cfg_pipeline_run'[ended_at] = latest_end )
+
+			```
+		displayFolder: Pipeline execution
+
+	measure 'Archive ZIP Batches' = ```
+
+			COUNTROWS ( 'cfg_archive_zip_load' )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Successful Archive ZIP Batches' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archive_zip_load', UPPER ( COALESCE ( 'cfg_archive_zip_load'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Failed Archive ZIP Batches' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archive_zip_load', UPPER ( COALESCE ( 'cfg_archive_zip_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive ZIP Batches Awaiting Reload' = ```
+
+			CALCULATE ( [Archive ZIP Batches], 'cfg_archive_zip_load'[reload] = TRUE () )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive ZIP Files Declared' = ```
+
+			SUM ( 'cfg_archive_zip_load'[file_count] )
+
+			```
+		formatString: #,0
+		displayFolder: Archive control
+
+	measure 'Average Archive ZIP Duration (min)' = ```
+
+			AVERAGEX ( FILTER ( 'cfg_archive_zip_load', NOT ISBLANK ( 'cfg_archive_zip_load'[started_at] ) && NOT ISBLANK ( 'cfg_archive_zip_load'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_archive_zip_load'[started_at], 'cfg_archive_zip_load'[ended_at], SECOND ), 60.0 ) )
+
+			```
+		formatString: 0.0
+		displayFolder: Archive control
+
+	measure 'Archive Files Processed' = ```
+
+			COUNTROWS ( 'cfg_archive_file_load' )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Successful Archive Files' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archive_file_load', UPPER ( COALESCE ( 'cfg_archive_file_load'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive File Failures' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archive_file_load', UPPER ( COALESCE ( 'cfg_archive_file_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive Files Awaiting Reload' = ```
+
+			CALCULATE ( [Archive Files Processed], 'cfg_archive_file_load'[reload] = TRUE () )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive File Rows Read' = ```
+
+			SUM ( 'cfg_archive_file_load'[rows_read] )
+
+			```
+		formatString: #,0
+		displayFolder: Archive control
+
+	measure 'Archive File Rows Written' = ```
+
+			SUM ( 'cfg_archive_file_load'[rows_written] )
+
+			```
+		formatString: #,0
+		displayFolder: Archive control
+
+	measure 'Archive Table Exports' = ```
+
+			COUNTROWS ( 'cfg_archive_table_export_load' )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Failed Archive Table Exports' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archive_table_export_load', UPPER ( COALESCE ( 'cfg_archive_table_export_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive Table Exports Awaiting Reload' = ```
+
+			CALCULATE ( [Archive Table Exports], 'cfg_archive_table_export_load'[reload] = TRUE () )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Archive Export Rows' = ```
+
+			SUM ( 'cfg_archive_table_export_load'[row_count] )
+
+			```
+		formatString: #,0
+		displayFolder: Archive control
+
+	measure 'Gold Snapshot Runs' = ```
+
+			COUNTROWS ( 'cfg_month_end_gold_run' )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Successful Gold Snapshots' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Failed Gold Snapshots' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Gold Snapshots Awaiting Replay' = ```
+
+			CALCULATE ( [Gold Snapshot Runs], 'cfg_month_end_gold_run'[reload] = TRUE () )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'Gold Snapshot DQ Failures' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[dq_result], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Archive control
+
+	measure 'DQ Checks' = ```
+
+			COUNTROWS ( 'cfg_data_quality_result' )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'DQ Evaluated Checks' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "PASS", "SUCCESS", "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'DQ Failed Checks' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'DQ Failure Rate' = ```
+
+			DIVIDE ( [DQ Failed Checks], [DQ Evaluated Checks] )
+
+			```
+		formatString: 0.0%
+		displayFolder: Data quality
+
+	measure 'DQ Checked Rows' = ```
+
+			SUM ( 'cfg_data_quality_result'[checked_row_count] )
+
+			```
+		formatString: #,0
+		displayFolder: Data quality
+
+	measure 'DQ Failed Rows' = ```
+
+			SUM ( 'cfg_data_quality_result'[failed_row_count] )
+
+			```
+		formatString: #,0
+		displayFolder: Data quality
+
+	measure 'Weighted DQ Failure Percentage' = ```
+
+			DIVIDE ( [DQ Failed Rows], [DQ Checked Rows] )
+
+			```
+		formatString: 0.00%
+		displayFolder: Data quality
+
+	measure 'Critical Rules Failing' = ```
+
+			CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[severity], "" ) ) = "CRITICAL" && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'High or Critical Rules Failing' = ```
+
+			CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[severity], "" ) ) IN { "CRITICAL", "HIGH" } && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'DQ Failures With Sample Keys' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } && NOT ISBLANK ( 'cfg_data_quality_result'[sample_key_json] ) ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'Active DQ Rules' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_data_quality_rule', UPPER ( COALESCE ( 'cfg_data_quality_rule'[active], "" ) ) IN { "TRUE", "Y", "1" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'Critical Active DQ Rules' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_data_quality_rule', UPPER ( COALESCE ( 'cfg_data_quality_rule'[active], "" ) ) IN { "TRUE", "Y", "1" } && UPPER ( COALESCE ( 'cfg_data_quality_rule'[severity], "" ) ) = "CRITICAL" ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'RI Rules Failing' = ```
+
+			CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Data quality
+
+	measure 'RI Checked Rows' = ```
+
+			CALCULATE ( [DQ Checked Rows], FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" ) )
+
+			```
+		formatString: #,0
+		displayFolder: Data quality
+
+	measure 'RI Failed Rows' = ```
+
+			CALCULATE ( [DQ Failed Rows], FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" ) )
+
+			```
+		formatString: #,0
+		displayFolder: Data quality
+
+	measure 'RI Failure Rate' = ```
+
+			DIVIDE ( [RI Failed Rows], [RI Checked Rows] )
+
+			```
+		formatString: 0.00%
+		displayFolder: Data quality
+
+	measure 'Archived Schema Columns' = ```
+
+			COUNTROWS ( 'cfg_archived_schema_live' )
+
+			```
+		formatString: 0
+		displayFolder: Schema inventory
+
+	measure 'Archived Schema Tables' = ```
+
+			COUNTROWS ( SUMMARIZE ( 'cfg_archived_schema_live', 'cfg_archived_schema_live'[schema_name], 'cfg_archived_schema_live'[table_name] ) )
+
+			```
+		formatString: 0
+		displayFolder: Schema inventory
+
+	measure 'Latest Archived Schema Capture' = ```
+
+			MAX ( 'cfg_archived_schema_live'[contract_loaded_at] )
+
+			```
+		formatString: General Date
+		displayFolder: Schema inventory
+
+	measure 'Archived Nullable Columns' = ```
+
+			COUNTROWS ( FILTER ( 'cfg_archived_schema_live', UPPER ( COALESCE ( 'cfg_archived_schema_live'[is_nullable], "" ) ) IN { "TRUE", "YES", "Y", "1" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Schema inventory
+
+	measure 'Archived Schema Data Types' = ```
+
+			DISTINCTCOUNT ( 'cfg_archived_schema_live'[data_type] )
+
+			```
+		formatString: 0
+		displayFolder: Schema inventory
+
+	measure 'Reload Requests' = ```
+
+			[Archive ZIP Batches Awaiting Reload] + [Archive Files Awaiting Reload] + [Archive Table Exports Awaiting Reload] + [Gold Snapshots Awaiting Replay]
+
+			```
+		formatString: 0
+		displayFolder: Control health
+
+	measure 'Control Failures' = ```
+
+			[Failed Pipeline Runs] + [Failed Archive ZIP Batches] + [Archive File Failures] + [Failed Archive Table Exports] + [Failed Gold Snapshots]
+
+			```
+		formatString: 0
+		displayFolder: Control health
+
+	measure 'Operational Exception Count' = ```
+
+			[Control Failures] + [DQ Failed Checks]
+
+			```
+		formatString: 0
+		displayFolder: Control health
+
+	measure 'Dashboard Last Refreshed' = ```
+
+			FORMAT ( UTCNOW (), "dd mmm yyyy HH:mm" )
+
+			```
+		displayFolder: Control health
