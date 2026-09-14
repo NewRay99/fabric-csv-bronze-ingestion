@@ -1,13 +1,16 @@
 table _Measures
 	lineageTag: 712bae27-868f-4173-abe7-64ce2ab38422
 
+	// 👏 marks a measure needing Gold-model migration or a replacement with a
+	// notebook-created Gold flag. See GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md.
+
 	measure 'Total Referrals' = DISTINCTCOUNT ( 'fact_referral'[referral_id] )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 6323e309-be45-4771-93c9-b5940e7b3c14
 
 	measure 'Referrals With Offers' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral[referral_id]),
 			    fact_referral[has_offer] = TRUE()
@@ -16,8 +19,9 @@ table _Measures
 		displayFolder: Referral Volume KPIs
 		lineageTag: 7f0f7b0e-df90-400b-a2a9-a4955a71daa7
 
+	// 👏 GOLD-FLAG REVIEW: replace reconstructed logic with fact_referral[is_awaiting_offer].
 	measure 'Referrals Awaiting Offer' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    'fact_referral'[is_open] = TRUE (),
@@ -27,21 +31,22 @@ table _Measures
 		displayFolder: Referral Volume KPIs
 		lineageTag: 76689445-0377-4e72-9b3b-7b5fa4d9b1a7
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_referral and fact_referral_offer with active Gold facts.
 	measure 'No. Providers Who Made Offers' = ```
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(dim_referral[referral_id]),
 			        dim_referral[referral_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR ValidOfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_offer[offer_id]),
 			        fact_offer[Is_Latest_Record] = 1,
 			        dim_offer_status[offer_status_label] <> "Draft"
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral_offer[provider_id]),
@@ -49,33 +54,34 @@ table _Measures
 			    TREATAS(ValidOfferIDs, fact_referral_offer[offer_id]),
 			    NOT ISBLANK(fact_referral_offer[provider_id])
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: fa759a7d-4361-48b4-95f4-9f9397ce05ee
 
+	// 👏 GOLD-MODEL REVIEW: remove the retired fact_offer[Is_Latest_Record] filter.
 	measure 'Total Offers Made Historically' = ```
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
 			    KEEPFILTERS(dim_offer_status[offer_status_label] <> "Draft")
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: a60e7175-e2be-4aff-b11e-252839c54ae0
 
 	measure 'Avg Offers per Referral Under Offer' = ```
-			
+
 			DIVIDE(
 			    [Total Offers Made (Active Referrals Under Offer)],
 			    [Active Referrals Under Offer],
 			    0
 			)
-			
+
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: bfe9a2e9-a57e-4984-b3ec-58bf784bf06f
@@ -83,7 +89,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Avg Offers per Provider (Under Offer)' =
-			
+
 			DIVIDE(
 			    [Total Offers Made (Active Referrals Under Offer)],
 			    [No. Providers Who Made Offers],
@@ -94,24 +100,26 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_date_ with dim_date.
 	measure 'Referrals This Month' = ```
 			CALCULATE([Total Referrals], DATESMTD(dim_date_[Date]))
-			
+
 			```
 		formatString: 0
 		displayFolder: Timebased KPis
 		lineageTag: 0bafd5c1-1f64-4057-a0ec-341c853b1be9
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_date_ with dim_date.
 	measure 'Referrals This FY' = ```
 			CALCULATE([Total Referrals], DATESYTD(dim_date_[Date], "03-31"))
-			
+
 			```
 		formatString: 0
 		displayFolder: Timebased KPis
 		lineageTag: 95988cf7-0c45-47c0-8c6b-31d8d3f50a47
 
 	measure 'Successful Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Accepted Offers],
 			    FILTER (
@@ -124,20 +132,21 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: a6249863-7e2a-4683-b336-3179a1a5e8d4
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
 	measure 'Unsuccessful Offers (Under Offer Referrals)' =
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(dim_referral[referral_id]),
 			        dim_referral[referral_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR OfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_offer[offer_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
@@ -151,27 +160,28 @@ table _Measures
 		lineageTag: 6bb8307a-18f1-499f-8668-a1c37656ef15
 
 	measure 'Offers in Draft' =
-			
+
 			CALCULATE ( [Offers Submitted], LOWER ( 'fact_offer'[offer_status] ) = "draft" )
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: 37f211b7-8a19-4974-9dae-24ba648ba00f
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
 	measure 'Pending Offers (Under Offer Referrals)' =
-			
+
 			COALESCE(
 			    VAR UnderOfferReferralIDs =
 			        CALCULATETABLE(
 			            VALUES(dim_referral[referral_id]),
 			            dim_referral[referral_status] = "UNDER_OFFER"
 			        )
-			
+
 			    VAR OfferIDs =
 			        CALCULATETABLE(
 			            VALUES(fact_referral_offer[offer_id]),
 			            TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
 			        )
-			
+
 			    RETURN
 			    CALCULATE(
 			        DISTINCTCOUNT(fact_offer[offer_id]),
@@ -185,8 +195,9 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: 182eb22f-a4c1-4db5-900e-a4cf02238260
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_referral_offer with fact_offer.
 	measure '(NEW)Total Offers Made' = ```
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral_offer[offer_id]),
 			    NOT ISBLANK(fact_referral_offer[offer_id]),
@@ -195,57 +206,59 @@ table _Measures
 			        fact_referral_offer[export_date] = [Latest Export per Offer]
 			    )
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Spot vs Framework
 		lineageTag: a5dc703d-6c77-43ee-b34c-b839f0485060
 
 	measure 'Male Referrals' =
-			
+
 			CALCULATE ( [Total Referrals], 'dim_person'[Gender Clean] = "Male" )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: a4aa2582-6622-4eef-ba93-115ae9202322
 
 	measure 'Female Referrals' = ```
-			
+
 			CALCULATE ( [Total Referrals], 'dim_person'[Gender Clean] = "Female" )
-			
-			
+
+
 			```
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 280c6c44-518b-4185-8957-c1782dea4a4d
 
 	measure 'Other Gender Referrals' =
-			
+
 			CALCULATE ( [Total Referrals], 'dim_person'[Gender Clean] = "Other" )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 56b82b4c-567a-4e71-b09a-1242262ed977
 
 	measure 'Dashboard Last Refreshed:' = ```
-			
+
 			VAR _CurrentTime = UTCNOW() + TIME(1, 0, 0)
 			RETURN
 			FORMAT(_CurrentTime, "dd mmm yyyy HH:mm")
-			
+
 			```
 		displayFolder: Dashboad Refresh DAX
 		lineageTag: 9fa4e154-2c7f-47fd-ab67-2add00141cf3
 
+	// 👏 GOLD-MODEL REVIEW: replace retired dim_referral with fact_referral or dim_placement_type.
 	measure 'Placement Type Totals (Visual)' = ```
-			
+
 			DISTINCTCOUNT(dim_referral[referral_id])
-			
+
 			```
 		formatString: 0
 		displayFolder: Spot vs Framework
 		lineageTag: 8d96a1fb-4822-49b0-bb9f-2a61324df1d0
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_referral_offer with fact_offer[source_export_date].
 	measure 'Latest Export per Offer' = ```
-			
+
 			CALCULATE(
 			    MAX(fact_referral_offer[export_date]),
 			    ALLEXCEPT(
@@ -253,23 +266,23 @@ table _Measures
 			        fact_referral_offer[offer_id]
 			    )
 			)
-			
+
 			```
 		formatString: General Date
 		displayFolder: Miscellaneous Queries
 		lineageTag: b74f81fa-64f8-47ee-bad4-8791963726dd
 
 	measure 'Offer Count' = ```
-			
+
 			DISTINCTCOUNT(fact_offer[offer_id])
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 51c9956a-a206-404f-8311-145b3029ee56
 
 	measure 'Latest Offer Status Count' =
-			
+
 			VAR LatestOffers =
 			    ADDCOLUMNS(
 			        SUMMARIZE(
@@ -279,7 +292,7 @@ table _Measures
 			        "LatestDate",
 			            CALCULATE(MAX(fact_offer[export_date]))
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
@@ -294,7 +307,7 @@ table _Measures
 		lineageTag: 19ad85dd-1b85-4f1f-a782-96b859621732
 
 	measure 'Total Gendered Referrals' =
-			
+
 			CALCULATE ( [Total Referrals], 'dim_person'[Gender Clean] <> "Unknown" )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
@@ -302,52 +315,52 @@ table _Measures
 
 	measure 'Provider Homes Registered' = ```
 			DISTINCTCOUNT ( 'dim_provider_home'[provider_home_id] )
-			
+
 			```
 		formatString: #,0
 		displayFolder: Provider Registry
 		lineageTag: 53d92208-5d26-4a21-8b74-0a1ba2bb3637
 
 	measure 'Providers Registered' =
-			
+
 			DISTINCTCOUNT(dim_provider[provider_id])
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: dca64fd9-3c14-48d2-af14-910c9d5119ad
 
 	measure 'Referrals Currently Active' =
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: c38981f9-2b39-4084-ac10-c1e7f88f3f07
 
 	measure 'Active Referrals Under Offer' = ```
-			
+
 			VAR AcceptedOffers =
 			    CALCULATETABLE(
 			        VALUES(fact_offer[offer_id]),
 			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
 			    )
-			
+
 			VAR ReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_provider[referral_id]),
 			        TREATAS(AcceptedOffers, fact_referral_provider[referral_provider_id])
 			    )
-			
+
 			RETURN
 			COUNTROWS(
 			    DISTINCT(ReferralIDs)
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 238dd258-9c43-4841-8f2d-1e446ce2e72a
 
 	measure 'Closed or Cancelled Referrals' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -360,14 +373,15 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: c9646831-a1e8-4348-8da0-3729bc2aa106
 
+	// 👏 GOLD-FLAG REVIEW: use fact_referral[is_awaiting_offer] instead of rebuilding the referral set.
 	measure 'Active Referrals Awaiting Offers' = ```
-			
+
 			VAR LatestExportDate =
 			    MAXX(
 			        ALL(fact_referral),
 			        fact_referral[as_of_date]
 			    )-1
-			
+
 			VAR LiveProviderReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_provider[referral_id]),
@@ -377,7 +391,7 @@ table _Measures
 			        fact_referral_provider[is_closed] = FALSE(),
 			        fact_referral_provider[is_excluded] = FALSE()
 			    )
-			
+
 			VAR OpenWithinResponseWindowIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral[referral_id]),
@@ -385,7 +399,7 @@ table _Measures
 			        fact_referral[current_status] = "OPEN",
 			        fact_referral[response_required_date] >= LatestExportDate
 			    )
-			
+
 			VAR ActiveOpenReferralIDs =
 			    DISTINCT(
 			        UNION(
@@ -393,7 +407,7 @@ table _Measures
 			            OpenWithinResponseWindowIDs
 			        )
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral[referral_id]),
@@ -404,14 +418,14 @@ table _Measures
 			        fact_referral[referral_id]
 			    )
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 4d514fb3-8116-4be6-8a8a-f4f2672976f5
 
 	measure 'Referrals With One or More Offers' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral[referral_id]),
 			    fact_referral[current_status] = "OPEN",
@@ -421,20 +435,21 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: 7e1bb40e-dbc4-426e-957f-74fe1871955d
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[is_draft_no_activity]; remove legacy table hops.
 	measure 'Draft No Activity Since Creation (Under Offer Referrals)' = ```
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(dim_referral[referral_id]),
 			        dim_referral[referral_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR DraftOfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_offer[offer_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
 			    )
-			
+
 			RETURN
 			COALESCE(
 			    CALCULATE(
@@ -452,14 +467,15 @@ table _Measures
 			    ),
 			    0
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 0805fd7c-83e1-4caa-9d97-cda725926c7a
 
+	// 👏 GOLD-FLAG REVIEW: use is_draft_no_activity = FALSE and is_draft_missing_dates = FALSE.
 	measure 'Draft Offers With Activity Since Creation' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -472,8 +488,9 @@ table _Measures
 		displayFolder: Draft/Pending Offers
 		lineageTag: 7297ff37-222c-44ef-ac1c-119d63a20a60
 
+	// 👏 GOLD-FLAG REVIEW: replace date-null logic with fact_offer[is_draft_missing_dates].
 	measure 'Draft Offers Missing Dates' = ```
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -485,14 +502,15 @@ table _Measures
 			            )
 			    )
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 8c7fc1d9-b83b-4eaa-9fde-0fd8a713a2bb
 
+	// 👏 GOLD-FLAG REVIEW: use is_draft_no_activity = FALSE and is_draft_missing_dates = FALSE.
 	measure 'Draft Offers Updated After Creation' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -508,8 +526,9 @@ table _Measures
 		displayFolder: Draft/Pending Offers
 		lineageTag: 436dda3c-963e-473b-8b41-f957d762de6d
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
 	measure 'Draft No Activity 7+ Days' = ```
-			
+
 			COALESCE(
 			    CALCULATE(
 			        DISTINCTCOUNT(fact_offer[offer_id]),
@@ -527,26 +546,27 @@ table _Measures
 			    ),
 			    0
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 8c6c5599-05ae-4005-a629-3732423e1120
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
 	measure 'Drafts No Activity 14+ Days (Under Offer Referrals)' = ```
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(dim_referral[referral_id]),
 			        dim_referral[referral_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR DraftOfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_offer[offer_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
 			    )
-			
+
 			RETURN
 			COALESCE(
 			    CALCULATE(
@@ -566,14 +586,15 @@ table _Measures
 			    ),
 			    0
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 32521366-3a68-49be-9571-dc02df8807ba
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[offer_age_days].
 	measure 'Average Days in Draft' =
-			
+
 			AVERAGEX (
 			    FILTER (
 			        'fact_offer',
@@ -587,8 +608,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[offer_age_days].
 	measure 'Oldest Draft Age Days' =
-			
+
 			MAXX (
 			    FILTER (
 			        'fact_offer',
@@ -601,20 +623,21 @@ table _Measures
 		displayFolder: Draft/Pending Offers
 		lineageTag: 074b02a5-c5f5-4e9f-a1e7-b062981aa55b
 
+	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
 	measure 'Draft Offer Count (Under Offer Referrals)' =
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(dim_referral[referral_id]),
 			        dim_referral[referral_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR DraftOfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_offer[offer_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
 			    )
-			
+
 			RETURN
 			COALESCE(
 			    CALCULATE(
@@ -630,13 +653,13 @@ table _Measures
 		lineageTag: 8562c005-0e24-4fd9-a7a5-e169eaaec9db
 
 	measure 'Draft With No Activity Since Creation (%)' = ```
-			
+
 			DIVIDE(
 			    [Draft No Activity Since Creation (Under Offer Referrals)],
 			    [Offers in Draft],
 			    0
 			)
-			
+
 			```
 		displayFolder: Draft/Pending Offers
 		lineageTag: 2a730e36-425a-4be9-bced-20c5638c487e
@@ -644,13 +667,13 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Drafts With No Activity 14+ Days' = ```
-			
+
 			DIVIDE(
 			    [Drafts No Activity 14+ Days (Under Offer Referrals)],
 			    [Offers in Draft],
 			    0
 			)
-			
+
 			```
 		displayFolder: Draft/Pending Offers
 		lineageTag: c087a28a-91b0-4a5b-abdb-a6bb7583017b
@@ -658,7 +681,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Closed Referrals (by Reason)' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_referral[referral_id]),
 			    fact_referral[current_status] IN {"CANCELLED", "CLOSED"}
@@ -668,7 +691,7 @@ table _Measures
 		lineageTag: 2939d3a1-44af-4b29-b68c-0800d2780f52
 
 	measure 'Providers - Fostering' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'dim_provider_home'[provider_id] ),
 			    'dim_provider_home'[service_type] = "Fostering"
@@ -678,7 +701,7 @@ table _Measures
 		lineageTag: 5a8fb78f-bb8a-4338-ab5a-00e89e70b32e
 
 	measure 'Providers - Residential' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'dim_provider_home'[provider_id] ),
 			    'dim_provider_home'[service_type] = "Residential"
@@ -688,7 +711,7 @@ table _Measures
 		lineageTag: f2025bb7-e1a0-4551-ac06-fa769543c735
 
 	measure 'Providers - Supported Accommodation' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'dim_provider_home'[provider_id] ),
 			    'dim_provider_home'[service_type] = "Supported Accommodation"
@@ -698,14 +721,14 @@ table _Measures
 		lineageTag: a4dfe6f5-7890-4541-8246-8a92fc9478f0
 
 	measure 'Framework Providers' =
-			
+
 			DISTINCTCOUNT(bridge_provider_framework[provider_id])
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: 1c7a53aa-ecc1-4a60-9937-d559ee58e1dd
 
 	measure 'Non-Framework Providers' =
-			
+
 			COUNTROWS (
 			    EXCEPT (
 			        VALUES ( 'dim_provider'[provider_id] ),
@@ -717,41 +740,41 @@ table _Measures
 		lineageTag: 75b5f1e4-a107-42df-8f7e-62906d7cea09
 
 	measure 'Is Non Framework Provider' = ```
-			
+
 			IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
-			
+
 			```
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: 4e32101d-4700-4166-8295-37a7dd66f27a
 
 	measure 'Directory Summary Count' =
-			
+
 			VAR SelectedType =
 			    SELECTEDVALUE('Directory Summary Axis'[Display Type])
-			
+
 			VAR IsFostering =
 			    COUNTROWS(rpt_provider_fostering) > 0
 			        && COUNTROWS(rpt_provider_registry) = 0
-			
+
 			RETURN
 			SWITCH(
 			    TRUE(),
-			
+
 			    -- Fostering view → only show fostering
 			    IsFostering && SelectedType = "Fostering Providers",
 			        [Fostering Providers],
-			
+
 			    IsFostering,
 			        BLANK(),
-			
+
 			    -- SA/Resi view → only show homes
 			    SelectedType = "Residential Homes",
 			        [Residential Homes],
-			
+
 			    SelectedType = "Supported Accommodation Homes",
 			        [Supported Accommodation Homes],
-			
+
 			    BLANK()
 			)
 		formatString: 0
@@ -759,16 +782,16 @@ table _Measures
 		lineageTag: cceb583e-e6d7-4b00-a844-81dab59676d9
 
 	measure 'Residential Homes' = ```
-			
+
 			CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[service_type] = "Residential" )
-			
+
 			```
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: ca54c38c-17fd-4856-b4c8-325d7b46f263
 
 	measure 'Supported Accommodation Homes' =
-			
+
 			CALCULATE (
 			    [Provider Homes Registered],
 			    'dim_provider_home'[service_type] = "Supported Accommodation"
@@ -778,21 +801,22 @@ table _Measures
 		lineageTag: 3c6d0352-6a64-4dba-a8c4-42bd254313c8
 
 	measure 'Fostering Providers' =
-			
+
 			DISTINCTCOUNT(rpt_provider_fostering[provider_id])
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: 992d4cd7-962f-43f0-a2fc-da4018e4601d
 
 	measure 'Fostering Chart Count' =
-			
+
 			[Fostering Providers]
 		formatString: 0
 		displayFolder: Provider Registry
 		lineageTag: dd2a461e-b3bc-4f5f-97c1-d7d470c45e87
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Pending Offers by Age Bucket' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -803,7 +827,7 @@ table _Measures
 		lineageTag: 39c63440-21e5-4485-8766-7631d52f123a
 
 	measure 'Pending Offers 15-29 Days' =
-			
+
 			CALCULATE (
 			    [Pending Offers],
 			    FILTER (
@@ -820,7 +844,7 @@ table _Measures
 		lineageTag: 817b25cc-af90-4835-9211-9d2ab26e6e25
 
 	measure 'Pending Offers 30+ Days' =
-			
+
 			CALCULATE (
 			    [Pending Offers],
 			    FILTER (
@@ -835,22 +859,24 @@ table _Measures
 		displayFolder: Pending offers
 		lineageTag: 6ae703ee-2b7a-459b-b140-db57f0a3b3be
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Pending Offers 0–7 Days' = ```
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
 			    dim_offer_status[offer_status_label] = "Pending",
 			    fact_offer[Pending Offer Age (Days)] <= 7
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 2f93e1fc-0734-4d78-bf32-ad604513b698
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Pending Offers 8–14 Days' = ```
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -858,14 +884,15 @@ table _Measures
 			    fact_offer[Pending Offer Age (Days)] > 7 &&
 			    fact_offer[Pending Offer Age (Days)] <= 14
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 202c659c-fee5-4153-8335-345c2e1f427a
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Provider with Offers over 30+ Days' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -876,8 +903,9 @@ table _Measures
 		displayFolder: Pending offers
 		lineageTag: 6a876819-2f18-4c1e-87f9-b81032486248
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Offers At Risk (8–14 Days)' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -889,8 +917,9 @@ table _Measures
 		displayFolder: Pending offers
 		lineageTag: 2ba2fa3f-af10-4d17-a2e8-1c4d892b5ecc
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Offers Outside Timeframe (15–30 Days)' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -902,8 +931,9 @@ table _Measures
 		displayFolder: Pending offers
 		lineageTag: e80ec6cb-7cf4-466b-8038-5c6186ffe562
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
 	measure 'Critical Offers (30+ Days)' =
-			
+
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -915,25 +945,25 @@ table _Measures
 		lineageTag: cf93c2c5-1385-4a68-bee7-c7d44d108f3d
 
 	measure 'Referrals Not Yet Closed (Created in Period)' = ```
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 347b6523-ebbf-400f-9b71-14dee5786bde
 
 	measure 'Referrals With Offers (Created in Period)' = ```
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: ede895b8-586c-4c46-8261-7a0ce079aced
 
 	measure 'Total Referrals That Received Offers (Ratio)' =
-			
+
 			DIVIDE(
 			    [Referrals With Offers (Created in Period)],
 			    [Total Referrals],
@@ -944,8 +974,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: rebuild from fact_referral[is_open] and fact_referral_provider[is_engaged].
 	measure 'Active Referrals With Provider Engagement' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    'fact_referral'[is_open] = TRUE (),
@@ -956,15 +987,16 @@ table _Measures
 		lineageTag: 23283daf-e03b-4c88-8fbe-5c9d54c93057
 
 	measure 'Active Referral Engagement Rate' =
-			
+
 			DIVIDE ( [Active Referrals With Provider Engagement], [Referrals Currently Active] )
 		displayFolder: Provider Activity KPIs
 		lineageTag: cc628e4a-edf8-407f-b5dd-470706356c93
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: rebuild at referral grain from is_awaiting_offer and fact_referral_provider[is_engaged].
 	measure 'Active Awaiting Offers With Engagement' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    'fact_referral'[is_open] = TRUE (),
@@ -974,8 +1006,9 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: 0584de65-d334-43eb-96ee-2bd6ef0da472
 
+	// 👏 GOLD-FLAG REVIEW: rebuild at referral grain from is_awaiting_offer and fact_referral_provider[is_engaged].
 	measure 'Active Awaiting Offers Without Engagement' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    'fact_referral'[is_open] = TRUE (),
@@ -985,20 +1018,21 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: 64509714-cb8c-419c-97d7-2d49be8bd9c8
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild on active Gold facts.
 	measure 'Total Offers Made (Active Referrals Under Offer)' =
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral[referral_id]),
 			        fact_referral[current_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR OfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_provider[referral_provider_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_provider_id])
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
@@ -1011,37 +1045,38 @@ table _Measures
 		lineageTag: 6fb317fd-0ade-47c0-8dd0-0312d2a6012d
 
 	measure 'Offer IDs (Under Offer Referrals)' = ```
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral[referral_id]),
 			        fact_referral[current_status] = "UNDER_OFFER"
 			    )
-			
+
 			RETURN
 			CALCULATETABLE(
 			    VALUES(fact_referral_provider[referral_provider_id]),
 			    TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_id])
 			)
-			
+
 			```
 		displayFolder: Referral Offers
 		lineageTag: 241fb00a-70fe-44fc-a1f9-42d787ab5d6b
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild on active Gold facts.
 	measure 'Offers per Provider (Under Offer Referrals)' = ```
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral[referral_id]),
 			        fact_referral[current_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR OfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_provider[referral_provider_id]),
 			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_id])
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_offer[offer_id]),
@@ -1049,36 +1084,37 @@ table _Measures
 			    dim_offer_status[offer_status_label] <> "Draft",
 			    TREATAS(OfferIDs, fact_offer[offer_id])
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 5791ed90-5c15-4d99-b037-a85fc959dbbe
 
 	measure 'Spot Offers' = ```
-			
+
 			CALCULATE ( [Non-Draft Offers], 'dim_provider_home'[is_spot] = TRUE () )
-			
+
 			```
 		formatString: 0
 		displayFolder: Spot vs Framework
 		lineageTag: 208782f4-b742-4576-afc3-65f5119cd817
 
+	// 👏 GOLD-MODEL REVIEW: rebuild from the active Gold spot/framework fields; is_closed is not an is_spot test.
 	measure 'Framework Offers (Under Offer Referrals)' =
-			
+
 			VAR UnderOfferReferralIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral[referral_id]),
 			        fact_referral[current_status] = "UNDER_OFFER"
 			    )
-			
+
 			VAR FrameworkOfferIDs =
 			    CALCULATETABLE(
 			        VALUES(fact_referral_provider[referral_provider_id]),
 			        fact_referral_provider[is_closed] = FALSE(), //is_spot
 			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_id])
 			    )
-			
+
 			RETURN
 			COALESCE(
 			    CALCULATE(
@@ -1093,8 +1129,9 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: 8758d6ad-10cd-4c0f-a71e-4c0da4a82d29
 
+	// 👏 GOLD-FLAG REVIEW: replace the fact_ipa TREATAS check with the offer-grain IPA flags.
 	measure 'IPA Exists' =
-			
+
 			VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
 			RETURN
 			    IF (
@@ -1108,8 +1145,9 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: c6f0d16d-500d-4960-8ed3-c8588d56355d
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild its invalid referral filter.
 	measure 'Accepted Offers (Scoped Table)' =
-			
+
 			CALCULATETABLE(
 			    VALUES(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
@@ -1125,11 +1163,12 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: 045fc5f2-7b2b-4f9f-811c-ad4b948939c2
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use the Gold accepted-status contract.
 	measure 'Is In Accepted KPI' = ```
-			
+
 			VAR CurrentOffer =
 			    SELECTEDVALUE(fact_offer[offer_id])
-			
+
 			RETURN
 			IF(
 			    CALCULATE(
@@ -1141,32 +1180,34 @@ table _Measures
 			    "Yes",
 			    "No"
 			)
-			
+
 			```
 		displayFolder: IPA Measures
 		lineageTag: 6842c1b2-aaae-4202-971f-62a35840465c
 
+	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use the Gold accepted-status contract.
 	measure 'Accepted Offers Base' = ```
-			
+
 			CALCULATETABLE(
 			    VALUES(fact_offer[offer_id]),
 			    fact_offer[Is_Latest_Record] = 1,
 			    fact_offer[offer_status] = "OFFER_SUCCESSFUL"
 			)
-			
+
 			```
 		displayFolder: IPA Measures
 		lineageTag: 56fce66f-aed5-4f75-8ebe-2099158f5312
 
+	// 👏 GOLD-FLAG REVIEW: rebuild from fact_offer[is_awaiting_ipa_creation].
 	measure 'IPA Created' =
-			
+
 			VAR BaseOffers =
 			    CALCULATETABLE(
 			        VALUES(fact_offer[offer_id]),
 			        fact_offer[Is_Latest_Record] = 1,
 			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
@@ -1176,15 +1217,16 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: b0bd7e49-2026-4d49-bbe0-45560de0937d
 
+	// 👏 GOLD-FLAG REVIEW: replace signature joins with fact_offer[is_ipa_completed].
 	measure 'IPA Completed' =
-			
+
 			VAR BaseOffers =
 			    CALCULATETABLE(
 			        VALUES(fact_offer[offer_id]),
 			        fact_offer[Is_Latest_Record] = 1,
 			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
@@ -1196,15 +1238,16 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: 99782e69-a2fc-4d06-b1d2-4cd73bfced49
 
+	// 👏 GOLD-FLAG REVIEW: replace signature joins with fact_offer[is_ipa_pending].
 	measure 'IPAs Pending Completion' = ```
-			
+
 			VAR BaseOffers =
 			    CALCULATETABLE(
 			        VALUES(fact_offer[offer_id]),
 			        fact_offer[Is_Latest_Record] = 1,
 			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
 			    )
-			
+
 			RETURN
 			CALCULATE(
 			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
@@ -1218,14 +1261,15 @@ table _Measures
 			        )
 			    )
 			)
-			
+
 			```
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 0c473b07-46d6-47ef-80fc-4ed8d69c38d1
 
+	// 👏 GOLD-FLAG REVIEW: replace EXCEPT logic with fact_offer[is_awaiting_ipa_creation].
 	measure 'Offers Awaiting IPA Creation' =
-			
+
 			VAR accepted_offer_ids =
 			    CALCULATETABLE (
 			        VALUES ( 'fact_offer'[offer_id] ),
@@ -1246,11 +1290,12 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: 635fe8f7-f5ed-4383-a14b-bd2889938b07
 
+	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_ipa_pending].
 	measure 'Is IPA Pending' =
-			
+
 			VAR CurrentOffer =
 			    SELECTEDVALUE(fact_ipa[accepted_offer_id])
-			
+
 			RETURN
 			IF(
 			    CALCULATE(
@@ -1271,8 +1316,9 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: c6dc9179-c710-49fd-8909-8cc69d8ceb38
 
+	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_awaiting_ipa_creation].
 	measure 'Is Awaiting IPA Creation' =
-			
+
 			VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
 			VAR accepted_offers =
 			    CALCULATETABLE (
@@ -1294,11 +1340,12 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: 058b9fac-f4cd-492f-ac2d-39d20c70b376
 
+	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_ipa_completed].
 	measure 'Is IPA Completed' =
-			
+
 			VAR CurrentOffer =
 			    SELECTEDVALUE(fact_offer[offer_id])
-			
+
 			RETURN
 			IF(
 			    CALCULATE(
@@ -1317,18 +1364,20 @@ table _Measures
 		displayFolder: IPA Measures
 		lineageTag: 5158372f-9e2a-4e4b-8dff-bb7776795aac
 
+	// 👏 GOLD-FLAG REVIEW: calculate from the new offer-grain IPA flag measures.
 	measure 'Accepted Offer to IPA Conversion %' = ```
-			
+
 			DIVIDE ( [Accepted Offers With IPA], [Accepted Offers] )
-			
+
 			```
 		displayFolder: IPA Measures
 		lineageTag: 6905e0dd-36c7-495e-9c4f-739bed3a64b6
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_awaiting_ipa_creation].
 	measure 'Offers Still to Progress to IPA' =
-			
+
 			DIVIDE(
 			    [Offers Awaiting IPA Creation],
 			    CALCULATE(
@@ -1343,22 +1392,24 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_ipa_completed].
 	measure 'IPA Created to Completion %' = ```
-			
+
 			DIVIDE(
 			    [IPA Completed],
 			    [IPA Created],
 			    0
 			)
-			
+
 			```
 		displayFolder: IPA Measures
 		lineageTag: f5fda4ea-024a-4890-9c2c-48812dda6409
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_ipa_completed].
 	measure 'Successful Offers to IPA Completed %' = ```
-			
+
 			DIVIDE(
 			    [IPA Completed],
 			    CALCULATE(
@@ -1368,7 +1419,7 @@ table _Measures
 			    ),
 			    0
 			)
-			
+
 			```
 		displayFolder: IPA Measures
 		lineageTag: 4d78fd96-29ad-45a3-ab50-e4dddad3b585
@@ -1376,59 +1427,60 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Overlap Referrals' =
-			
+
 			[Active Referrals Awaiting Offers]
 			+ [Active Referrals Under Offer]
 			- [Referrals Currently Active]
 		formatString: 0
 		lineageTag: 54c2b74a-7a4a-4821-8086-5a7d8d0e618c
 
+	// 👏 GOLD-FLAG REVIEW: replace status text matching with fact_referral[is_open].
 	measure 'Open Referral' =
-			
+
 			CALCULATE ( DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[current_status] IN {"OPEN", "UNDER_OFFER"})
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 34758a00-8077-40f6-87c6-5a6a839100ef
 
 	measure 'Open Referrals Previous Month' =
-			
+
 			CALCULATE ( [Open Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f1ba9238-f3d5-456e-ab4f-72fe9ec46554
 
 	measure 'Closed Referrals Previous Month' =
-			
+
 			CALCULATE ( [Closed Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f8135835-6571-49ca-b162-131940337c2e
 
 	measure 'Open Referrals MoM %' =
-			
+
 			DIVIDE ( [Open Referrals Variance], [Open Referrals Previous Month] )
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Referral Offers
 		lineageTag: 34c46f6a-ca43-4836-bddc-f2c5040e9cef
 
 	measure 'Closed Referrals MoM %' = ```
-			
+
 			DIVIDE ( [Closed Referrals Variance], [Closed Referrals Previous Month] )
-			
+
 			```
 		formatString: 0.00%;-0.00%;0.00%
 		displayFolder: Referral Offers
 		lineageTag: 28109811-acd8-400c-a70a-7a0a515a3788
 
 	measure 'Provider Contact Referral' =
-			
+
 			CALCULATE ( DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[has_offer]="1")
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: bf61a9e6-d428-40ec-ba23-4ee03575fe04
 
 	measure 'Provider Contact Referral Previous Month' =
-			
+
 			CALCULATE ([Provider Contact Referral], DATEADD(dim_date[Date],-1,MONTH))
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1441,24 +1493,24 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Closed Referrals Variance Indicator' = ```
-			
+
 			IF ( [Closed Referrals Variance] > 0, "▲", IF ( [Closed Referrals Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		displayFolder: Referral Offers
 		lineageTag: 45133170-e42c-4f2e-bb8a-0e4433ce82c1
 
 	measure 'Closed Referrals Variance' = ```
-			
+
 			[Closed Referrals] - [Closed Referrals Previous Month]
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: e23ccfee-41cf-4d16-8e93-21ae46eb5510
 
 	measure 'Open Referrals Variance' =
-			
+
 			[Open Referrals] - [Open Referrals Previous Month]
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1470,7 +1522,7 @@ table _Measures
 		lineageTag: e8dc98dc-4d58-49c4-9b49-4850b70b06b0
 
 	measure 'Open Referrals Variance Indicator' =
-			
+
 			IF ( [Open Referrals Variance] > 0, "▲", IF ( [Open Referrals Variance] < 0, "▼", "–" ) )
 		displayFolder: Referral Offers
 		lineageTag: 53b2f1df-510f-4954-a6ea-655d140112e0
@@ -1480,15 +1532,15 @@ table _Measures
 		lineageTag: 1ce05620-de4e-41f5-b596-286abcf4fd8e
 
 	measure 'Closed Referrals Variance Indicator Color' = ```
-			
+
 			IF ( [Closed Referrals Variance] > 0, "green", IF ( [Closed Referrals Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		displayFolder: Referral Offers
 		lineageTag: 64707012-f8ca-4de9-ad2f-c2b168263ea7
 
 	measure 'Open Referrals Variance Indicator Color' =
-			
+
 			IF ( [Open Referrals Variance] > 0, "green", IF ( [Open Referrals Variance] < 0, "red", "grey" ) )
 		displayFolder: Referral Offers
 		lineageTag: 3c1ae3de-6afe-4f81-a408-77ef10cbccec
@@ -1498,32 +1550,32 @@ table _Measures
 		lineageTag: 6ce24cf7-802e-4a40-b2d5-7ab196d56750
 
 	measure 'Referrals Cancelled/Closed Previous Month' =
-			
+
 			CALCULATE ([Closed or Cancelled Referrals], DATEADD(dim_date[Date],-1,MONTH))
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f0b8467d-98e2-49cb-bab7-3d3780a9e754
 
 	measure 'Referrals With an Offer Previous Month' = ```
-			
+
 			CALCULATE ( [Referrals With an Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f3004652-6778-4a84-97a8-57a39418b7a5
 
 	measure 'Total Offers Made Previous Month' =
-			
+
 			CALCULATE ([Total Offers Made (Active Referrals Under Offer)], DATEADD(dim_date[Date],-1,MONTH))
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 93fcc86f-6b69-4f6f-a900-8049c128771b
 
 	measure 'Referrals Currently Active Previous Month' = ```
-			
+
 			CALCULATE ( [Referrals Currently Active], DATEADD ( 'dim_date'[date], -1, MONTH ) )
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1540,18 +1592,18 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Currently Active Variance' = ```
-			
+
 			[Referrals Currently Active] - [Referrals Currently Active Previous Month]
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 7b28ba2e-d56a-49c7-86f3-2002aa570bae
 
 	measure 'Referrals With an Offer Variance' = ```
-			
+
 			[Referrals With an Offer] - [Referrals With an Offer Previous Month]
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1563,17 +1615,17 @@ table _Measures
 		lineageTag: f27914e6-5c63-41b1-b7cf-b0a7e3b7f04a
 
 	measure 'Referrals Currently Active Variance Indicator' = ```
-			
+
 			IF ( [Referrals Currently Active Variance] > 0, "▲", IF ( [Referrals Currently Active Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		displayFolder: Referral Offers
 		lineageTag: a4afea95-04f7-43d5-b19a-96f8373a2236
 
 	measure 'Referrals With an Offer Variance Indicator' = ```
-			
+
 			IF ( [Referrals With an Offer Variance] > 0, "▲", IF ( [Referrals With an Offer Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		isHidden
 		displayFolder: Referral Offers
@@ -1590,7 +1642,7 @@ table _Measures
 		lineageTag: f93b997f-bd79-4722-8d45-e2b759cfc86b
 
 	measure 'Total Referrals That Received Offers Previous Month' =
-			
+
 			CALCULATE ([Total Referrals That Received Offers (Ratio)], DATEADD(dim_date[Date],-1,MONTH))
 		displayFolder: Referral Volume KPIs
 		lineageTag: 524ce750-5fb4-495d-946c-25d1e2f0c0e6
@@ -1608,46 +1660,46 @@ table _Measures
 		lineageTag: c421d5e2-efdb-4896-9ace-12e8e46e70a7
 
 	measure 'Total Referrals Previous Month' =
-			
+
 			CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 4dcddd76-36fe-47f2-b0bd-2c2869d8cb14
 
 	measure 'Total Referrals Variance' =
-			
+
 			[Total Referrals] - [Total Referrals Previous Month]
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: ff26a704-4a33-4be4-98cb-97819c085bf3
 
 	measure 'Total Referrals Variance Indicator Color' = ```
-			
+
 			IF ( [Total Referrals Variance] > 0, "green", IF ( [Total Referrals Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		displayFolder: Referral Volume KPIs
 		lineageTag: fc62af05-61ec-45be-8f74-82660c5879f3
 
 	measure 'Total Referrals Variance Indicator' = ```
-			
+
 			IF ( [Total Referrals Variance] > 0, "▲", IF ( [Total Referrals Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		displayFolder: Referral Volume KPIs
 		lineageTag: 3fb6bac8-f204-4589-9881-df4e0bc38759
 
 	measure 'Active Referrals Awaiting Offers Previous Month' =
-			
+
 			CALCULATE ([Active Referrals Awaiting Offers], DATEADD(dim_date[Date],-1,MONTH))
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: b453738f-f44a-4805-9b4a-5f397312defb
 
 	measure 'Active Referrals Under Offer Previous Month' = ```
-			
+
 			CALCULATE ([Active Referrals Under Offer], DATEADD(dim_date[Date],-1,MONTH))
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1668,7 +1720,7 @@ table _Measures
 
 	measure 'Active Referrals Under Offer Variance' = ```
 			[Active Referrals Under Offer]-[Active Referrals Under Offer Previous Month]
-			
+
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1683,7 +1735,7 @@ table _Measures
 		lineageTag: 45b36bf9-72d4-4d77-ae6e-7830c26cf4f2
 
 	measure 'Active Referral Engagement Rate Previous Month' =
-			
+
 			CALCULATE ( [Active Referral Engagement Rate], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		displayFolder: Provider Activity KPIs
 		lineageTag: 525eea5c-1e4c-4fdd-8026-2c66b6b2bea3
@@ -1691,9 +1743,9 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Active Referral Engagement Rate Variance' = ```
-			
+
 			[Active Referral Engagement Rate] - [Active Referral Engagement Rate Previous Month]
-			
+
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: 521ba058-5696-4e57-b096-fcb5c7931d1c
@@ -1701,23 +1753,23 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Active Referral Engagement Rate Variance Indicator Color' = ```
-			
+
 			IF ( [Active Referral Engagement Rate Variance] > 0, "green", IF ( [Active Referral Engagement Rate Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: 4bee2eae-53ba-45d7-b82c-489eef5bd883
 
 	measure 'Active Referral Engagement Rate Variance Indicator' = ```
-			
+
 			IF ( [Active Referral Engagement Rate Variance] > 0, "▲", IF ( [Active Referral Engagement Rate Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: 1bc47abb-bcd2-4b6e-97ad-371d2b9105da
 
 	measure 'KPI Tooltip Style 1' = ```
-			
+
 			 VAR SelectKPI = SELECTEDVALUE('KPI Selector'[KPI Selector Fields])
 			 --or 'KPI Selector'[KPI Selector])
 			 RETURN LOOKUPVALUE('ref_KPI'[ref FR IDs], 'ref_KPI'[KPI Description],SelectKPI)
@@ -1731,16 +1783,16 @@ table _Measures
 		lineageTag: a9215a39-55c3-4eda-8b58-f2fd6016d133
 
 	measure 'Open Referrals at Snapshot' = ```
-			
+
 			CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open] = TRUE () )
-			
+
 			```
 		formatString: 0
 		displayFolder: Snapshot
 		lineageTag: d9fa258e-310f-4562-9c43-b9dbaf53f581
 
 	measure 'Closed Referrals at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    FILTER (
@@ -1754,7 +1806,7 @@ table _Measures
 		lineageTag: 009d0dc7-9003-4eb5-98c9-0ba0de3c1243
 
 	measure 'Referrals with Placement at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    FILTER (
@@ -1768,7 +1820,7 @@ table _Measures
 		lineageTag: de4dfeb5-06e7-427e-9734-7f082582c653
 
 	measure 'Open On-Track Referrals at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    'fact_referral_snapshot'[required_placement_date_outcome] = "Open on track"
@@ -1778,7 +1830,7 @@ table _Measures
 		lineageTag: 66f2d6bf-541e-4912-a233-d97294e6b27b
 
 	measure 'Referrals Placed by Target at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    'fact_referral_snapshot'[placed_by_required_date] = TRUE ()
@@ -1787,8 +1839,9 @@ table _Measures
 		displayFolder: Snapshot
 		lineageTag: 7bf09b67-cd96-4faa-8b8e-47ad953eb11f
 
+	// 👏 GOLD-FLAG REVIEW: replace date comparison with fact_referral[is_open_overdue].
 	measure 'Open Overdue Referrals' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -1804,7 +1857,7 @@ table _Measures
 
 	measure 'Open Referral Rate at Snapshot' = ```
 			DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
-			
+
 			```
 		displayFolder: Snapshot
 		lineageTag: ed61563b-96b3-4e4e-b054-a7d09a0a577e
@@ -1818,7 +1871,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Target Hit Rate at Snapshot' =
-			
+
 			DIVIDE (
 			    [Referrals Placed by Target at Snapshot],
 			    CALCULATE (
@@ -1835,8 +1888,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'Estimated Active Weekly Cost' =
-			
+
 			CALCULATE (
 			    SUM ( 'fact_ipa'[estimated_weekly_cost] ),
 			    'fact_ipa'[is_placement_closed] = FALSE ()
@@ -1847,13 +1901,15 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'IPAs Created' = DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 5af87e93-d889-4b27-b22e-ba3988a0d728
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'Average Active Weekly Cost' =
-			
+
 			CALCULATE (
 			    AVERAGE( 'fact_ipa'[estimated_weekly_cost] ),
 			    'fact_ipa'[is_placement_closed] = FALSE ()
@@ -1865,14 +1921,14 @@ table _Measures
 		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
 
 	measure 'Open Referrals' =
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 3f44e061-54b1-4ac3-826b-e900f596fafe
 
 	measure 'Referrals with IPA at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    FILTER (
@@ -1886,33 +1942,33 @@ table _Measures
 		lineageTag: e4f53bc0-09f5-4f74-8604-f4cf7ddd85c6
 
 	measure 'Closed Referrals' =
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = FALSE () )
 		formatString: 0
 		lineageTag: f919526e-7a88-4d97-a49f-81dd7ab3de7f
 
 	measure 'Referrals With an Offer' =
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 		formatString: 0
 		lineageTag: d16929a5-f248-4c06-9058-4c0bf3d173ae
 
 	measure 'Referrals Without Provider Assignment' = ```
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[is_not_seen_by_providers] = TRUE () )
-			
+
 			```
 		formatString: 0
 		lineageTag: 8709b8a6-18a9-4092-aa14-d352ba7aeef2
 
 	measure 'Referrals Placed by Required Date' =
-			
+
 			CALCULATE ( [Total Referrals], 'fact_referral'[placed_by_required_date] = TRUE () )
 		formatString: 0
 		lineageTag: 8e484e3c-2907-44f8-8b2a-02696fde1e12
 
 	measure 'Placement Target Hit Rate' =
-			
+
 			DIVIDE (
 			    [Referrals Placed by Required Date],
 			    CALCULATE (
@@ -1929,7 +1985,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Median Days to First Action' =
-			
+
 			MEDIANX (
 			    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[days_to_first_action] ) ),
 			    'fact_referral'[days_to_first_action]
@@ -1939,7 +1995,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Median Days to First Offer' =
-			
+
 			MEDIANX (
 			    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[days_to_first_offer] ) ),
 			    'fact_referral'[days_to_first_offer]
@@ -1949,19 +2005,19 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Median Days to IPA' = ```
-			
+
 			MEDIANX (
 			    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[days_to_ipa] ) ),
 			    'fact_referral'[days_to_ipa]
 			)
-			
+
 			```
 		lineageTag: 1a9d8e3e-c360-4e6c-843d-b055f571d9a4
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Open Referrals Stalled 7+ Days' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER ( 'fact_referral', 'fact_referral'[is_open] = TRUE () && 'fact_referral'[days_without_activity] >= 7 )
@@ -1974,7 +2030,7 @@ table _Measures
 		lineageTag: 0d9cc46d-b602-4998-b4d5-bd5681bacfd4
 
 	measure 'Accepted Offers' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -1990,16 +2046,17 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'Active IPAs' = ```
-			
+
 			CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = FALSE () )
-			
+
 			```
 		formatString: 0
 		lineageTag: 5706f71b-3f8a-47a0-ac4f-4628a9e7fb06
 
 	measure 'Average Estimated Weekly Cost — Confirmed Referrals' =
-			
+
 			AVERAGEX (
 			    FILTER (
 			        'fact_referral',
@@ -2012,8 +2069,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: replace outcome text matching with fact_referral_snapshot[is_open_overdue].
 	measure 'Open Overdue Referrals at Snapshot' =
-			
+
 			CALCULATE (
 			    [Snapshot Referrals],
 			    'fact_referral_snapshot'[required_placement_date_outcome] = "Open overdue"
@@ -2022,38 +2080,38 @@ table _Measures
 		lineageTag: b231c381-d7dc-4c33-8449-513e536ce697
 
 	measure 'Referrals Created This Month' =
-			
+
 			CALCULATE ( [Total Referrals], DATESMTD ( 'dim_date'[date] ) )
 		formatString: 0
 		lineageTag: f0d07d29-bda7-4655-8bfb-ac9f2d167d88
 
 	measure 'Referrals Created Previous Month' = ```
-			
+
 			CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
-			
+
 			```
 		formatString: 0
 		lineageTag: 87156cf5-8966-477f-a5cf-83f67f235c1b
 
 	measure 'Referral Volume Month on Month' = ```
-			
+
 			[Total Referrals] - [Referrals Created Previous Month]
-			
+
 			```
 		formatString: 0
 		lineageTag: 1284f92f-6dd5-49c3-b32b-daf29dd9b5f8
 
 	measure 'Referral Volume Month on Month %' = ```
-			
+
 			DIVIDE ( [Referral Volume Month on Month], [Referrals Created Previous Month] )
-			
+
 			```
 		lineageTag: 4402a1b8-f4c4-4411-8ea2-ade75bc989c1
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Created This Financial Year' =
-			
+
 			VAR financial_year_start =
 			    DATE ( YEAR ( TODAY () ) - IF ( MONTH ( TODAY () ) < 4, 1, 0 ), 4, 1 )
 			RETURN
@@ -2065,7 +2123,7 @@ table _Measures
 		lineageTag: 5dfee4b9-c8b6-4db2-ba63-c989f0a848c8
 
 	measure 'Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -2077,8 +2135,9 @@ table _Measures
 		formatString: 0
 		lineageTag: 85728ce2-f2a3-44ed-9c26-de5fe413e697
 
+	// 👏 GOLD-FLAG REVIEW: replace DATEDIFF logic with fact_referral[is_emergency_placement].
 	measure 'Emergency Referrals' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -2096,7 +2155,7 @@ table _Measures
 		lineageTag: 40e3aa99-be1e-4d29-a43e-5047658820f2
 
 	measure 'Planned Referrals' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -2119,7 +2178,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Non-Draft Offers' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) <> "draft" )
@@ -2128,7 +2187,7 @@ table _Measures
 		lineageTag: 9396de6e-532c-4452-b9b2-671102309359
 
 	measure 'Pending Offers' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "pending" )
@@ -2137,7 +2196,7 @@ table _Measures
 		lineageTag: 61e960ba-0201-4ee6-be6c-b51e5fc21d2b
 
 	measure 'Unsuccessful Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Unsuccessful Offers],
 			    FILTER (
@@ -2150,7 +2209,7 @@ table _Measures
 		lineageTag: ca7f47c1-841f-4db5-b9dd-ba37149abaee
 
 	measure 'Providers Who Made Offers' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'fact_offer'[provider_id] ),
 			    FILTER (
@@ -2164,7 +2223,7 @@ table _Measures
 		lineageTag: ea3ccab1-1c99-40f4-8f74-f2e3ac76cb9c
 
 	measure 'Average Offers per Referral Under Offer' =
-			
+
 			DIVIDE (
 			    CALCULATE (
 			        [Non-Draft Offers],
@@ -2181,14 +2240,14 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Average Offers per Provider' =
-			
+
 			DIVIDE ( [Non-Draft Offers], [Providers Who Made Offers] )
 		lineageTag: 306453b9-4dee-4444-9964-7a7598f86601
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offers on Referrals Under Offer' = ```
-			
+
 			CALCULATE (
 			    [Non-Draft Offers],
 			    FILTER (
@@ -2197,43 +2256,43 @@ table _Measures
 			            IN { "under_offer", "under offer", "offer" }
 			    )
 			)
-			
+
 			```
 		formatString: 0
 		lineageTag: fd60868d-012f-4e88-88e5-987d68344721
 
 	measure 'Non-Spot Offers' =
-			
+
 			CALCULATE ( [Non-Draft Offers], 'dim_provider_home'[is_spot] = FALSE () )
 		formatString: 0
 		lineageTag: b36b43dc-802b-44e1-81c0-7900670ebfe2
 
 	measure 'Fostering Homes' = ```
-			
+
 			CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[service_type] = "Fostering" )
-			
+
 			```
 		formatString: 0
 		lineageTag: 6b34cc7e-db3d-4805-8770-83e9c601b5cf
 
 	measure 'Providers With QA Flags' = ```
-			
+
 			CALCULATE ( [Providers Registered], 'bridge_provider_framework'[qa_flag] = TRUE () )
-			
+
 			```
 		formatString: 0
 		lineageTag: 9372bb32-d89b-482f-8498-18e43c80e3b4
 
 	measure 'QA Flagged Homes' = ```
-			
+
 			CALCULATE ( [Provider Homes Registered], 'bridge_provider_framework'[qa_flag] = TRUE () )
-			
+
 			```
 		formatString: 0
 		lineageTag: b8cc68e3-4693-4af5-95eb-2e4b08f3ded3
 
 	measure 'Providers Pending Onboarding' =
-			
+
 			CALCULATE (
 			    [Providers Registered],
 			    FILTER ( 'dim_provider', LOWER ( COALESCE ( 'dim_provider'[provider_status], "" ) ) = "pending" )
@@ -2242,26 +2301,27 @@ table _Measures
 		lineageTag: e03735e5-ae7a-48bb-96f4-403f103c314d
 
 	measure 'Providers Approved' = ```
-			
+
 			CALCULATE (
 			    [Providers Registered],
 			    FILTER ( 'dim_provider', LOWER ( COALESCE ( 'dim_provider'[provider_status], "" ) ) = "approved" )
 			)
-			
+
 			```
 		formatString: 0
 		lineageTag: 8e35016a-1552-45f2-902d-9230bb861f4b
 
 	measure 'Provider Onboarding Success Rate' = ```
 			DIVIDE ( [Providers Approved], [Providers Registered] )
-			
+
 			```
 		lineageTag: ad0a0139-d843-441b-9b58-0e29b6d0cf4d
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa and restore the guide's date relationship.
 	measure 'IPAs Issued This Month' =
-			
+
 			CALCULATE (
 			    [IPAs Created],
 			    //USERELATIONSHIP ( 'dim_date'[date], 'fact_ipa'[ipa_issued_date]),
@@ -2270,31 +2330,34 @@ table _Measures
 		formatString: 0
 		lineageTag: 25b3a90a-4572-4218-a7f3-9d4fe06bb325
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'Closed IPAs' = ```
-			
+
 			CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = TRUE () )
-			
+
 			```
 		formatString: 0
 		lineageTag: db78cd5e-ad29-47ec-ad1d-4ca985ef3a99
 
 	measure 'Average Active IPA Weekly Cost' =
-			
+
 			DIVIDE ( [Estimated Active Weekly Cost], [Active IPAs] )
 		lineageTag: 717704e0-3113-4417-9593-7f713d808958
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
 	measure 'Total IPA Weekly Cost' = ```
 			SUM ( 'fact_ipa'[estimated_weekly_cost])
-			
+
 			```
 		lineageTag: 2ee323be-df3e-44a4-b638-ac97323b6e21
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: replace fact_ipa TREATAS logic with fact_offer[is_awaiting_ipa_creation] = FALSE.
 	measure 'Accepted Offers With IPA' =
-			
+
 			VAR ipa_offer_ids =
 			    FILTER (
 			        VALUES ( 'fact_ipa'[accepted_offer_id] ),
@@ -2307,14 +2370,14 @@ table _Measures
 
 	measure 'Offers Still to Progress to IPA %' = ```
 			1 - [Accepted Offer to IPA Conversion %]
-			
+
 			```
 		lineageTag: ef0f6abd-d287-4fda-86cd-2867b22691a1
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals With Fully Signed IPA' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -2327,14 +2390,14 @@ table _Measures
 		lineageTag: e3a0f28c-6f75-46cb-bca3-2a61839071f2
 
 	measure 'IPA Signature Completion Rate' = ```
-			
+
 			DIVIDE ( [Referrals With Fully Signed IPA], [Referrals with IPA] )
-			
+
 			```
 		lineageTag: f1fc6b11-7ba3-415f-9792-bcfe67ec122d
 
 	measure 'Referrals With IPA' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[ipa_issued_date] ) )
@@ -2347,16 +2410,16 @@ table _Measures
 		lineageTag: 98173eed-4c50-444b-9489-084846b17322
 
 	measure 'Total Referrals MoM %' =
-			
+
 			DIVIDE ( [Total Referrals Variance], [Total Referrals Previous Month] )
 		lineageTag: a5ccf527-0259-4cfd-8cb6-3a7c88f4170a
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals With an Offer MoM %' = ```
-			
+
 			DIVIDE ( [Referrals With an Offer Variance], [Referrals With an Offer Previous Month] )
-			
+
 			```
 		lineageTag: d9d9fd99-c01c-4bad-83bc-08a30dbd9362
 
@@ -2368,196 +2431,196 @@ table _Measures
 		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
 
 	measure 'Referrals With an Offer Variance Indicator Color' =
-			
+
 			IF ( [Referrals With an Offer Variance] > 0, "green", IF ( [Referrals With an Offer Variance] < 0, "red", "grey" ) )
 		lineageTag: 90825612-76cf-4a00-a7a0-af463a37a8a0
 
 	measure 'Referrals Awaiting Offer Previous Month' = ```
-			
+
 			CALCULATE ( [Referrals Awaiting Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
-			
+
 			```
 		formatString: 0
 		lineageTag: 80628aa2-c041-4d47-92f9-dd1c335f98d5
 
 	measure 'Referrals Awaiting Offer Variance' = ```
-			
+
 			[Referrals Awaiting Offer] - [Referrals Awaiting Offer Previous Month]
-			
+
 			```
 		formatString: 0
 		lineageTag: 01f139c8-2f7f-4200-8601-a32be8121e87
 
 	measure 'Referrals Awaiting Offer MoM %' = ```
-			
+
 			DIVIDE ( [Referrals Awaiting Offer Variance], [Referrals Awaiting Offer Previous Month] )
-			
+
 			```
 		lineageTag: 44756741-6b34-4bb5-8f84-9fc75bb0803a
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Awaiting Offer Variance Indicator' = ```
-			
+
 			IF ( [Referrals Awaiting Offer Variance] > 0, "▲", IF ( [Referrals Awaiting Offer Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		lineageTag: f51bddc0-dbbc-4bb3-8bf1-24e5df6be6ab
 
 	measure 'Referrals Awaiting Offer Variance Indicator Color' = ```
-			
+
 			IF ( [Referrals Awaiting Offer Variance] > 0, "green", IF ( [Referrals Awaiting Offer Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: ac361134-a60a-4f70-93f5-95199ade8b00
 
 	measure 'Referrals Under Offer Previous Month' =
-			
+
 			CALCULATE ( [Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		formatString: 0
 		lineageTag: fe4731c7-c775-4c0a-ac7f-ec7079c4e995
 
 	measure 'Referrals Under Offer Variance' = ```
-			
+
 			[Referrals Under Offer] - [Referrals Under Offer Previous Month]
-			
+
 			```
 		formatString: 0
 		lineageTag: abdecdfd-55e9-42b4-b42c-4a961ae916ed
 
 	measure 'Referrals Under Offer MoM %' = ```
-			
+
 			DIVIDE ( [Referrals Under Offer Variance], [Referrals Under Offer Previous Month] )
-			
+
 			```
 		lineageTag: 35bb8c7e-5906-4713-8034-23be3dd27099
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Under Offer Variance Indicator' = ```
-			
+
 			IF ( [Referrals Under Offer Variance] > 0, "▲", IF ( [Referrals Under Offer Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		lineageTag: 6e72a081-d99a-49b8-b54f-7bbad137929d
 
 	measure 'Referrals Under Offer Variance Indicator Color' = ```
-			
+
 			IF ( [Referrals Under Offer Variance] > 0, "green", IF ( [Referrals Under Offer Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: c9dab7a8-dde2-4e55-b204-8c57afc24bc9
 
 	measure 'Referrals Currently Active MoM %' = ```
-			
+
 			DIVIDE ( [Referrals Currently Active Variance], [Referrals Currently Active Previous Month] )
-			
+
 			```
 		lineageTag: 994e24df-2cd2-4ef5-a201-f31f52b4d371
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Currently Active Variance Indicator Color' = ```
-			
+
 			IF ( [Referrals Currently Active Variance] > 0, "green", IF ( [Referrals Currently Active Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: c31db999-ba35-463f-a914-07a6e5e311b7
 
 	measure 'Closed or Cancelled Referrals Previous Month' = ```
-			
+
 			CALCULATE ( [Closed or Cancelled Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
-			
+
 			```
 		formatString: 0
 		lineageTag: 9101948b-15ae-4bc2-a155-bb462e647d3f
 
 	measure 'Closed or Cancelled Referrals Variance' = ```
-			
+
 			[Closed or Cancelled Referrals] - [Closed or Cancelled Referrals Previous Month]
-			
+
 			```
 		formatString: 0
 		lineageTag: 488c485e-e6b6-4225-8dbb-3ba40b447637
 
 	measure 'Closed or Cancelled Referrals MoM %' = ```
-			
+
 			DIVIDE ( [Closed or Cancelled Referrals Variance], [Closed or Cancelled Referrals Previous Month] )
-			
+
 			```
 		lineageTag: be270e0e-6323-4a43-9951-873b97d0f9c5
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Closed or Cancelled Referrals Variance Indicator' = ```
-			
+
 			IF ( [Closed or Cancelled Referrals Variance] > 0, "▲", IF ( [Closed or Cancelled Referrals Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		lineageTag: 1c49e596-644b-43a4-9ea8-0eff050f9e12
 
 	measure 'Closed or Cancelled Referrals Variance Indicator Color' = ```
-			
+
 			IF ( [Closed or Cancelled Referrals Variance] > 0, "green", IF ( [Closed or Cancelled Referrals Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: 58faadaf-dcee-4fe3-bca1-6a231b846119
 
 	measure 'Active Referral Engagement Rate MoM %' = ```
-			
+
 			DIVIDE ( [Active Referral Engagement Rate Variance], [Active Referral Engagement Rate Previous Month] )
-			
+
 			```
 		lineageTag: c2836f90-fea0-4cc4-af81-2a8cc510c1d5
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offers on Referrals Under Offer Previous Month' =
-			
+
 			CALCULATE ( [Offers on Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		formatString: 0
 		lineageTag: 3959381e-3eb1-4b02-97bd-ecfa8bf2e2df
 
 	measure 'Offers on Referrals Under Offer Variance' = ```
-			
+
 			[Offers on Referrals Under Offer] - [Offers on Referrals Under Offer Previous Month]
-			
+
 			```
 		formatString: 0
 		lineageTag: 46942324-70cb-4e7c-8222-0c3ce8ebdb0f
 
 	measure 'Offers on Referrals Under Offer MoM %' = ```
-			
+
 			DIVIDE ( [Offers on Referrals Under Offer Variance], [Offers on Referrals Under Offer Previous Month] )
-			
+
 			```
 		lineageTag: 05073169-fe25-4645-a809-e45023445a20
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offers on Referrals Under Offer Variance Indicator' = ```
-			
+
 			IF ( [Offers on Referrals Under Offer Variance] > 0, "▲", IF ( [Offers on Referrals Under Offer Variance] < 0, "▼", "–" ) )
-			
+
 			```
 		lineageTag: 43050046-4952-4bc2-a259-8363be673ef3
 
 	measure 'Offers on Referrals Under Offer Variance Indicator Color' = ```
-			
+
 			IF ( [Offers on Referrals Under Offer Variance] > 0, "green", IF ( [Offers on Referrals Under Offer Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: 8e873989-bb19-42b2-a3d3-99fa82aa6ea2
 
 	measure 'Offer Receipt Rate (Created in Period)' =
-			
+
 			DIVIDE ( [Referrals With Offers (Created in Period)], [Total Referrals] )
 		lineageTag: 90136665-5816-486d-a051-43710b80f964
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Draft Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Offers in Draft],
 			    FILTER (
@@ -2570,7 +2633,7 @@ table _Measures
 		lineageTag: 675b2cd8-e0b7-482d-be00-0d759f2f49d9
 
 	measure 'Pending Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Pending Offers],
 			    FILTER (
@@ -2583,7 +2646,7 @@ table _Measures
 		lineageTag: 63a56e3a-d8bb-4bd4-a267-e0c621f778b1
 
 	measure 'Spot Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Spot Offers],
 			    FILTER (
@@ -2596,7 +2659,7 @@ table _Measures
 		lineageTag: 114c6008-50a0-45b0-9389-e5bf0be9c6aa
 
 	measure 'Framework Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Non-Spot Offers],
 			    FILTER (
@@ -2609,7 +2672,7 @@ table _Measures
 		lineageTag: 499d7583-62fe-4d3d-bb91-20e06a196d32
 
 	measure 'Providers With Offers on Referrals Under Offer' =
-			
+
 			CALCULATE (
 			    [Providers Who Made Offers],
 			    FILTER (
@@ -2622,7 +2685,7 @@ table _Measures
 		lineageTag: 08728362-60bc-4781-b702-311bcdf44110
 
 	measure 'Average Offers per Provider - Under Offer' =
-			
+
 			DIVIDE (
 			    [Offers on Referrals Under Offer],
 			    [Providers With Offers on Referrals Under Offer]
@@ -2631,8 +2694,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: rebuild as a distinct referral count from fact_offer[is_ipa_pending].
 	measure 'Referrals With IPA Pending Signature' =
-			
+
 			CALCULATE (
 			    [Total Referrals],
 			    FILTER (
@@ -2645,14 +2709,14 @@ table _Measures
 		lineageTag: 962b62e7-c03d-4459-ac3c-4d43dc97a7fc
 
 	measure 'IPA Signature Pending Rate' =
-			
+
 			DIVIDE ( [Referrals With IPA Pending Signature], [Referrals With IPA] )
 		lineageTag: 9a891d81-2e0f-4687-a1d7-6d29c95e921c
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offers with a Decision' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_decision_date] ) )
@@ -2664,8 +2728,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
 	measure 'Draft Offers Stalled 7+ Days' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -2682,8 +2747,9 @@ table _Measures
 
 		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
 
+	// 👏 GOLD-FLAG REVIEW: replace provider-table iteration with fact_referral[provider_assignment_count] > 1.
 	measure 'Referrals With Multiple Provider Assignments' =
-			
+
 			COUNTROWS (
 			    FILTER (
 			        VALUES ( 'fact_referral_provider'[referral_id] ),
@@ -2693,12 +2759,12 @@ table _Measures
 		lineageTag: f71d1359-0ed8-4b03-802e-6453e1a767dc
 
 	measure 'Offers With Recorded Rejection Reason' = ```
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[rejection_reason] ) )
 			)
-			
+
 			```
 		formatString: 0
 		lineageTag: cb291828-2f76-49de-be22-4f7aa1603563
@@ -2708,8 +2774,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	// 👏 GOLD-FLAG REVIEW: replace date equality with fact_offer[is_draft_no_activity].
 	measure 'Draft Offers With No Activity Since Creation' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -2721,8 +2788,9 @@ table _Measures
 		formatString: 0
 		lineageTag: 38ea9d96-1737-4c4b-8a8a-61f7f214063c
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
 	measure 'Draft Offers Stalled 14+ Days' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -2738,16 +2806,16 @@ table _Measures
 		lineageTag: afc7faf2-e71c-4e76-8454-8b9eba280660
 
 	measure 'Draft Offers With No Activity %' = ```
-			
+
 			DIVIDE ( [Draft Offers With No Activity Since Creation], [Offers in Draft] )
-			
+
 			```
 		lineageTag: 0be5f584-0a35-4b59-9cfc-94d72c47821f
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Providers With Pending Offers 30+ Days' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'fact_offer'[provider_id] ),
 			    FILTER (
@@ -2763,15 +2831,15 @@ table _Measures
 		lineageTag: 91a685d5-471f-42c6-84da-5f6107acec3b
 
 	measure 'Provider Submission Documents' = ```
-			
+
 			DISTINCTCOUNT ( 'dim_provider_submission_document'[document_id] )
-			
+
 			```
 		formatString: 0
 		lineageTag: a96cf1f3-32be-4f08-8810-41acc551742c
 
 	measure 'Documents Expiring Next 30 Days' =
-			
+
 			CALCULATE (
 			    [Provider Submission Documents],
 			    FILTER (
@@ -2785,7 +2853,7 @@ table _Measures
 		lineageTag: ace54de5-bf81-4046-8c6a-3ad29592e30f
 
 	measure 'Documents Expired' =
-			
+
 			CALCULATE (
 			    [Provider Submission Documents],
 			    FILTER (
@@ -2798,7 +2866,7 @@ table _Measures
 		lineageTag: 5b141c68-bde2-46ea-96c3-a99e79b9584d
 
 	measure 'Provider Homes With Expired Documents' =
-			
+
 			CALCULATE (
 			    DISTINCTCOUNT ( 'dim_provider_submission_document'[home_id] ),
 			    FILTER (
@@ -2811,32 +2879,32 @@ table _Measures
 		lineageTag: 96b03674-f045-4a56-8ad7-dc0403ef81d9
 
 	measure 'Referral Lifecycle Events' = ```
-			
+
 			DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[event_id] )
-			
+
 			```
 		formatString: 0
 		lineageTag: 70ae4570-8c4b-49a4-ac97-c323ea6d5f67
 
 	measure 'Referrals With Lifecycle Activity' = ```
-			
+
 			DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[referral_id] )
-			
+
 			```
 		formatString: 0
 		lineageTag: b44edf90-d35d-4351-bb5a-322668259a6c
 
 	measure 'Average Lifecycle Events per Referral' = ```
-			
+
 			DIVIDE ( [Referral Lifecycle Events], [Referrals With Lifecycle Activity] )
-			
+
 			```
 		lineageTag: 7290a9b9-976e-47f0-a84a-e50ec1614e2a
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Provider Messages Sent' =
-			
+
 			CALCULATE (
 			    [Referral Lifecycle Events],
 			    'fact_referral_lifecycle_event'[event_type] = "ProviderMessageSent"
@@ -2845,40 +2913,41 @@ table _Measures
 		lineageTag: 5932f9d9-4af4-4911-8bda-8a21be93da2e
 
 	measure 'Offer Receipt Rate (Created in Period) Previous Month' =
-			
+
 			CALCULATE ( [Offer Receipt Rate (Created in Period)], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 		lineageTag: 014affb4-c816-4d38-a732-41d5bd3f563d
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offer Receipt Rate (Created in Period) Variance' =
-			
+
 			[Offer Receipt Rate (Created in Period)] - [Offer Receipt Rate (Created in Period) Previous Month]
 		lineageTag: 10070756-c470-4d7e-8bc5-8e6fa153295c
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offer Receipt Rate (Created in Period) MoM %' =
-			
+
 			DIVIDE ( [Offer Receipt Rate (Created in Period) Variance], [Offer Receipt Rate (Created in Period) Previous Month] )
 		lineageTag: 54a1f5e2-3349-4435-ac61-571509b4b8f4
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Offer Receipt Rate (Created in Period) Variance Indicator' =
-			
+
 			IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "▲", IF ( [Offer Receipt Rate (Created in Period) Variance] < 0, "▼", "–" ) )
 		lineageTag: edcc9099-82bc-47d5-b152-02980c6fff17
 
 	measure 'Offer Receipt Rate (Created in Period) Variance Indicator Color' = ```
-			
+
 			IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "green", IF ( [Offer Receipt Rate (Created in Period) Variance] < 0, "red", "grey" ) )
-			
+
 			```
 		lineageTag: 7b267687-6fb2-47ab-9724-cf145b39ccc1
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[is_draft_no_activity] before applying the referral filter.
 	measure 'Draft Offers With No Activity - Under Offer Referrals' =
-			
+
 			CALCULATE (
 			    [Draft Offers With No Activity Since Creation],
 			    FILTER (
@@ -2890,8 +2959,9 @@ table _Measures
 		formatString: 0
 		lineageTag: 27aaecf4-f038-4db6-ad0c-a7bd2c5526e3
 
+	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity] before applying the referral filter.
 	measure 'Draft Offers Stalled 14+ Days - Under Offer Referrals' =
-			
+
 			CALCULATE (
 			    [Draft Offers Stalled 14+ Days],
 			    FILTER (
@@ -2904,7 +2974,7 @@ table _Measures
 		lineageTag: f4334e4f-04d1-42c7-8ce0-b45484ae30d9
 
 	measure 'Unsuccessful Offers' =
-			
+
 			CALCULATE (
 			    [Offers Submitted],
 			    FILTER (
@@ -2925,7 +2995,7 @@ table _Measures
 		lineageTag: 70a630aa-a34a-495a-bbbe-2dd5beb4514e
 
 	measure 'Provider Declines' =
-			
+
 			CALCULATE ( [Provider Assignments], 'fact_referral_provider'[is_declined] = TRUE () )
 		formatString: 0
 		lineageTag: ff34cf13-737b-46a2-a35f-30e0de041329
@@ -2948,4 +3018,3 @@ table _Measures
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Table
-

@@ -80,11 +80,10 @@ Referrals With an Offer =
 CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 
 ✅ ❌ ⚠️
+// 👏 Replace the reconstructed test with the Gold business-rule flag.
 Referrals Awaiting Offer =
 CALCULATE (
-    [Total Referrals],
-    'fact_referral'[is_open] = TRUE (),
-    'fact_referral'[has_offer] = FALSE ()
+    [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE ()
 )
 
 ✅
@@ -185,17 +184,20 @@ CALCULATE (
 )
 
 ✅
-IPAs Created = DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
+// 👏 Use the active Gold table name: fct_ipa, not the retired fact_ipa.
+IPAs Created = DISTINCTCOUNT ( 'fct_ipa'[ipa_id] )
 
 ✅
+// 👏 Use the active Gold table name: fct_ipa, not the retired fact_ipa.
 Active IPAs =
-CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = FALSE () )
+CALCULATE ( [IPAs Created], 'fct_ipa'[is_placement_closed] = FALSE () )
 
 ✅
+// 👏 Correct the retired/invalid table reference before creating this measure.
 Estimated Active Weekly Cost =
 CALCULATE (
-    SUM ( 'fact_ipa'[estimated_weekly_cost] ),
-    'fctfact_ipa_ipa'[is_placement_closed] = FALSE ()
+    SUM ( 'fct_ipa'[estimated_weekly_cost] ),
+    'fct_ipa'[is_placement_closed] = FALSE ()
 )
 
 ✅
@@ -360,6 +362,8 @@ CALCULATE (
 )
 
 ✅
+// 👏 Rebuild this at referral grain using fact_referral[is_open] and
+// fact_referral_provider[is_engaged], rather than has_offer.
 Active Referrals With Provider Engagement =
 CALCULATE (
     [Total Referrals],
@@ -372,6 +376,8 @@ Active Referral Engagement Rate =
 DIVIDE ( [Active Referrals With Provider Engagement], [Referrals Currently Active] )
 
 ✅
+// 👏 Rebuild this at referral grain from is_awaiting_offer and
+// fact_referral_provider[is_engaged].
 Active Awaiting Offers With Engagement =
 CALCULATE (
     [Total Referrals],
@@ -380,6 +386,8 @@ CALCULATE (
 )
 
 ✅
+// 👏 Rebuild this at referral grain from is_awaiting_offer and
+// fact_referral_provider[is_engaged].
 Active Awaiting Offers Without Engagement =
 CALCULATE (
     [Total Referrals],
@@ -1308,6 +1316,7 @@ Is Non Framework Provider =
 IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
 
 ✅
+// 👏 Remove the fact_ipa TREATAS lookup; use the offer-grain IPA flags.
 IPA Exists =
 VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
 RETURN
