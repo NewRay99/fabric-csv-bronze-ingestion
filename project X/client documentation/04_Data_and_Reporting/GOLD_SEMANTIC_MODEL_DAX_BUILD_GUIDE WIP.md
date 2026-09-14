@@ -80,7 +80,7 @@ Referrals With an Offer =
 CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 
 ✅ ❌ ⚠️
-// 👏 Replace the reconstructed test with the Gold business-rule flag.
+// 👏 Gold-contract replacement applied: use the notebook-created flag.
 Referrals Awaiting Offer =
 CALCULATE (
     [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE ()
@@ -184,16 +184,16 @@ CALCULATE (
 )
 
 ✅
-// 👏 Use the active Gold table name: fct_ipa, not the retired fact_ipa.
+// 👏 Gold-contract replacement applied: fct_ipa is the active IPA fact.
 IPAs Created = DISTINCTCOUNT ( 'fct_ipa'[ipa_id] )
 
 ✅
-// 👏 Use the active Gold table name: fct_ipa, not the retired fact_ipa.
+// 👏 Gold-contract replacement applied: fct_ipa is the active IPA fact.
 Active IPAs =
 CALCULATE ( [IPAs Created], 'fct_ipa'[is_placement_closed] = FALSE () )
 
 ✅
-// 👏 Correct the retired/invalid table reference before creating this measure.
+// 👏 Gold-contract replacement applied: estimated costs now read from fct_ipa.
 Estimated Active Weekly Cost =
 CALCULATE (
     SUM ( 'fct_ipa'[estimated_weekly_cost] ),
@@ -362,38 +362,63 @@ CALCULATE (
 )
 
 ✅
-// 👏 Rebuild this at referral grain using fact_referral[is_open] and
-// fact_referral_provider[is_engaged], rather than has_offer.
+// 👏 Gold-contract replacement applied: referral-provider engagement is
+// converted to referral IDs and applied at referral grain.
 Active Referrals With Provider Engagement =
-CALCULATE (
-    [Total Referrals],
-    'fact_referral'[is_open] = TRUE (),
-    'fact_referral'[has_offer] = TRUE ()
-)
+VAR engaged_referral_ids =
+    CALCULATETABLE (
+        VALUES ( 'fact_referral_provider'[referral_id] ),
+        'fact_referral_provider'[is_engaged] = TRUE ()
+    )
+RETURN
+    CALCULATE (
+        [Total Referrals],
+        'fact_referral'[is_open] = TRUE (),
+        TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
+    )
 
 ✅
 Active Referral Engagement Rate =
 DIVIDE ( [Active Referrals With Provider Engagement], [Referrals Currently Active] )
 
 ✅
-// 👏 Rebuild this at referral grain from is_awaiting_offer and
-// fact_referral_provider[is_engaged].
+// 👏 Gold-contract replacement applied: awaiting-offer and engagement flags.
 Active Awaiting Offers With Engagement =
-CALCULATE (
-    [Total Referrals],
-    'fact_referral'[is_open] = TRUE (),
-    'fact_referral'[has_offer] = TRUE ()
-)
+VAR engaged_referral_ids =
+    CALCULATETABLE (
+        VALUES ( 'fact_referral_provider'[referral_id] ),
+        'fact_referral_provider'[is_engaged] = TRUE ()
+    )
+RETURN
+    CALCULATE (
+        [Total Referrals],
+        'fact_referral'[is_open] = TRUE (),
+        'fact_referral'[is_awaiting_offer] = TRUE (),
+        TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
+    )
 
 ✅
-// 👏 Rebuild this at referral grain from is_awaiting_offer and
-// fact_referral_provider[is_engaged].
+// 👏 Gold-contract replacement applied: subtract engaged referral IDs.
 Active Awaiting Offers Without Engagement =
-CALCULATE (
-    [Total Referrals],
-    'fact_referral'[is_open] = TRUE (),
-    'fact_referral'[has_offer] = FALSE ()
-)
+VAR awaiting_referral_ids =
+    CALCULATETABLE (
+        VALUES ( 'fact_referral'[referral_id] ),
+        'fact_referral'[is_open] = TRUE (),
+        'fact_referral'[is_awaiting_offer] = TRUE ()
+    )
+VAR engaged_referral_ids =
+    CALCULATETABLE (
+        VALUES ( 'fact_referral_provider'[referral_id] ),
+        'fact_referral_provider'[is_engaged] = TRUE ()
+    )
+RETURN
+    CALCULATE (
+        [Total Referrals],
+        TREATAS (
+            EXCEPT ( awaiting_referral_ids, engaged_referral_ids ),
+            'fact_referral'[referral_id]
+        )
+    )
 
 ✅
 Emergency Referrals =
@@ -1316,18 +1341,13 @@ Is Non Framework Provider =
 IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
 
 ✅
-// 👏 Remove the fact_ipa TREATAS lookup; use the offer-grain IPA flags.
+// 👏 Gold-contract replacement applied: use the offer-grain IPA flag.
 IPA Exists =
-VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
-RETURN
-    IF (
-        CALCULATE (
-            COUNTROWS ( 'fct_ipa' ),
-            TREATAS ( { current_offer }, 'fct_ipa'[accepted_offer_id] )
-        ) > 0,
-        "Yes",
-        "No"
-    )
+IF (
+    COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), TRUE () ) = FALSE (),
+    "Yes",
+    "No"
+)
 
 Is Awaiting IPA Creation =
 IF ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), 1, 0 )

@@ -1,8 +1,8 @@
 table _Measures
 	lineageTag: 712bae27-868f-4173-abe7-64ce2ab38422
 
-	// 👏 marks a measure needing Gold-model migration or a replacement with a
-	// notebook-created Gold flag. See GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md.
+	// 👏 identifies a measure rewritten to the current Gold contract; see
+	// GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md for the matching model setup.
 
 	measure 'Total Referrals' = DISTINCTCOUNT ( 'fact_referral'[referral_id] )
 		formatString: 0
@@ -19,57 +19,26 @@ table _Measures
 		displayFolder: Referral Volume KPIs
 		lineageTag: 7f0f7b0e-df90-400b-a2a9-a4955a71daa7
 
-	// 👏 GOLD-FLAG REVIEW: replace reconstructed logic with fact_referral[is_awaiting_offer].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Referrals Awaiting Offer' =
-
-			CALCULATE (
-			    [Total Referrals],
-			    'fact_referral'[is_open] = TRUE (),
-			    'fact_referral'[has_offer] = FALSE ()
-			)
+		CALCULATE ( [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE () )
 		formatString: 0
 		displayFolder: Referral Volume KPIs
 		lineageTag: 76689445-0377-4e72-9b3b-7b5fa4d9b1a7
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_referral and fact_referral_offer with active Gold facts.
-	measure 'No. Providers Who Made Offers' = ```
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(dim_referral[referral_id]),
-			        dim_referral[referral_status] = "UNDER_OFFER"
-			    )
-
-			VAR ValidOfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] <> "Draft"
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_referral_offer[provider_id]),
-			    TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id]),
-			    TREATAS(ValidOfferIDs, fact_referral_offer[offer_id]),
-			    NOT ISBLANK(fact_referral_offer[provider_id])
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'No. Providers Who Made Offers' =
+			CALCULATE (
+			    [Providers Who Made Offers],
+			    FILTER ( 'fact_referral', LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) ) IN { "under_offer", "under offer", "offer" } )
 			)
-
-			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: fa759a7d-4361-48b4-95f4-9f9397ce05ee
 
-	// 👏 GOLD-MODEL REVIEW: remove the retired fact_offer[Is_Latest_Record] filter.
-	measure 'Total Offers Made Historically' = ```
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    KEEPFILTERS(dim_offer_status[offer_status_label] <> "Draft")
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Total Offers Made Historically' =
+			[Non-Draft Offers]
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: a60e7175-e2be-4aff-b11e-252839c54ae0
@@ -100,20 +69,16 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_date_ with dim_date.
-	measure 'Referrals This Month' = ```
-			CALCULATE([Total Referrals], DATESMTD(dim_date_[Date]))
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Referrals This Month' =
+			CALCULATE ( [Total Referrals], DATESMTD ( 'dim_date'[date] ) )
 		formatString: 0
 		displayFolder: Timebased KPis
 		lineageTag: 0bafd5c1-1f64-4057-a0ec-341c853b1be9
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_date_ with dim_date.
-	measure 'Referrals This FY' = ```
-			CALCULATE([Total Referrals], DATESYTD(dim_date_[Date], "03-31"))
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Referrals This FY' =
+			CALCULATE ( [Total Referrals], DATESYTD ( 'dim_date'[date], "03-31" ) )
 		formatString: 0
 		displayFolder: Timebased KPis
 		lineageTag: 95988cf7-0c45-47c0-8c6b-31d8d3f50a47
@@ -132,28 +97,11 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: a6249863-7e2a-4683-b336-3179a1a5e8d4
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Unsuccessful Offers (Under Offer Referrals)' =
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(dim_referral[referral_id]),
-			        dim_referral[referral_status] = "UNDER_OFFER"
-			    )
-
-			VAR OfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_offer[offer_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[is_terminal] = TRUE(),
-			    dim_offer_status[is_accepted] = FALSE(),
-			    TREATAS(OfferIDs, fact_offer[offer_id])
+			CALCULATE (
+			    [Unsuccessful Offers],
+			    FILTER ( 'fact_referral', LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) ) IN { "under_offer", "under offer", "offer" } )
 			)
 		formatString: 0
 		displayFolder: Provider Activity KPIs
@@ -166,48 +114,19 @@ table _Measures
 		displayFolder: Provider Activity KPIs
 		lineageTag: 37f211b7-8a19-4974-9dae-24ba648ba00f
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Pending Offers (Under Offer Referrals)' =
-
-			COALESCE(
-			    VAR UnderOfferReferralIDs =
-			        CALCULATETABLE(
-			            VALUES(dim_referral[referral_id]),
-			            dim_referral[referral_status] = "UNDER_OFFER"
-			        )
-
-			    VAR OfferIDs =
-			        CALCULATETABLE(
-			            VALUES(fact_referral_offer[offer_id]),
-			            TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
-			        )
-
-			    RETURN
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Pending",
-			        TREATAS(OfferIDs, fact_offer[offer_id])
-			    ),
-			    0
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_referral', LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) ) IN { "under_offer", "under offer", "offer" } )
 			)
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: 182eb22f-a4c1-4db5-900e-a4cf02238260
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_referral_offer with fact_offer.
-	measure '(NEW)Total Offers Made' = ```
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_referral_offer[offer_id]),
-			    NOT ISBLANK(fact_referral_offer[offer_id]),
-			    FILTER(
-			        fact_referral_offer,
-			        fact_referral_offer[export_date] = [Latest Export per Offer]
-			    )
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure '(NEW)Total Offers Made' =
+			[Offers Submitted]
 		formatString: 0
 		displayFolder: Spot vs Framework
 		lineageTag: a5dc703d-6c77-43ee-b34c-b839f0485060
@@ -246,28 +165,19 @@ table _Measures
 		displayFolder: Dashboad Refresh DAX
 		lineageTag: 9fa4e154-2c7f-47fd-ab67-2add00141cf3
 
-	// 👏 GOLD-MODEL REVIEW: replace retired dim_referral with fact_referral or dim_placement_type.
-	measure 'Placement Type Totals (Visual)' = ```
-
-			DISTINCTCOUNT(dim_referral[referral_id])
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Placement Type Totals (Visual)' =
+			[Total Referrals]
 		formatString: 0
 		displayFolder: Spot vs Framework
 		lineageTag: 8d96a1fb-4822-49b0-bb9f-2a61324df1d0
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_referral_offer with fact_offer[source_export_date].
-	measure 'Latest Export per Offer' = ```
-
-			CALCULATE(
-			    MAX(fact_referral_offer[export_date]),
-			    ALLEXCEPT(
-			        fact_referral_offer,
-			        fact_referral_offer[offer_id]
-			    )
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Latest Export per Offer' =
+			CALCULATE (
+			    MAX ( 'fact_offer'[source_export_date] ),
+			    ALLEXCEPT ( 'fact_offer', 'fact_offer'[offer_id] )
 			)
-
-			```
 		formatString: General Date
 		displayFolder: Miscellaneous Queries
 		lineageTag: b74f81fa-64f8-47ee-bad4-8791963726dd
@@ -373,53 +283,9 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: c9646831-a1e8-4348-8da0-3729bc2aa106
 
-	// 👏 GOLD-FLAG REVIEW: use fact_referral[is_awaiting_offer] instead of rebuilding the referral set.
-	measure 'Active Referrals Awaiting Offers' = ```
-
-			VAR LatestExportDate =
-			    MAXX(
-			        ALL(fact_referral),
-			        fact_referral[as_of_date]
-			    )-1
-
-			VAR LiveProviderReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_provider[referral_id]),
-			        REMOVEFILTERS(fact_referral_provider),
-			        REMOVEFILTERS(dim_date),
-			        fact_referral_provider[is_cancelled] = FALSE(),
-			        fact_referral_provider[is_closed] = FALSE(),
-			        fact_referral_provider[is_excluded] = FALSE()
-			    )
-
-			VAR OpenWithinResponseWindowIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral[referral_id]),
-			        REMOVEFILTERS(dim_date),
-			        fact_referral[current_status] = "OPEN",
-			        fact_referral[response_required_date] >= LatestExportDate
-			    )
-
-			VAR ActiveOpenReferralIDs =
-			    DISTINCT(
-			        UNION(
-			            LiveProviderReferralIDs,
-			            OpenWithinResponseWindowIDs
-			        )
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_referral[referral_id]),
-			    REMOVEFILTERS(dim_date),
-			    fact_referral[current_status] = "OPEN",   -- ✅ Only OPEN
-			    TREATAS(
-			        ActiveOpenReferralIDs,
-			        fact_referral[referral_id]
-			    )
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Active Referrals Awaiting Offers' =
+		CALCULATE ( [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE () )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 4d514fb3-8116-4be6-8a8a-f4f2672976f5
@@ -435,218 +301,111 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: 7e1bb40e-dbc4-426e-957f-74fe1871955d
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[is_draft_no_activity]; remove legacy table hops.
-	measure 'Draft No Activity Since Creation (Under Offer Referrals)' = ```
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(dim_referral[referral_id]),
-			        dim_referral[referral_status] = "UNDER_OFFER"
-			    )
-
-			VAR DraftOfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_offer[offer_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
-			    )
-
-			RETURN
-			COALESCE(
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Draft",
-			        TREATAS(DraftOfferIDs, fact_offer[offer_id]),
-			        FILTER(
-			            fact_offer,
-			            NOT ISBLANK(fact_offer[offer_date]) &&
-			            NOT ISBLANK(fact_offer[last_modified_date]) &&
-			            LEFT(fact_offer[last_modified_date], 10) =
-			            LEFT(fact_offer[offer_date], 10)
-			        )
-			    ),
-			    0
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Draft No Activity Since Creation (Under Offer Referrals)' =
+		CALCULATE (
+			[Offers Submitted],
+			'fact_offer'[is_draft_no_activity] = TRUE (),
+			FILTER (
+				'fact_referral',
+				LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+					IN { "under_offer", "under offer", "offer" }
 			)
-
-			```
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 0805fd7c-83e1-4caa-9d97-cda725926c7a
 
-	// 👏 GOLD-FLAG REVIEW: use is_draft_no_activity = FALSE and is_draft_missing_dates = FALSE.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers With Activity Since Creation' =
-
-			CALCULATE (
-			    [Offers Submitted],
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && 'fact_offer'[offer_reviewed_date] > 'fact_offer'[offer_submitted_date]
-			    )
-			)
+		CALCULATE (
+			[Offers Submitted],
+			'fact_offer'[is_draft_no_activity] = FALSE (),
+			'fact_offer'[is_draft_missing_dates] = FALSE ()
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 7297ff37-222c-44ef-ac1c-119d63a20a60
 
-	// 👏 GOLD-FLAG REVIEW: replace date-null logic with fact_offer[is_draft_missing_dates].
-	measure 'Draft Offers Missing Dates' = ```
-
-			CALCULATE (
-			    [Offers Submitted],
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && (
-			                ISBLANK ( 'fact_offer'[offer_submitted_date] )
-			                    || ISBLANK ( 'fact_offer'[offer_reviewed_date] )
-			            )
-			    )
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Draft Offers Missing Dates' =
+		CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_missing_dates] = TRUE () )
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 8c7fc1d9-b83b-4eaa-9fde-0fd8a713a2bb
 
-	// 👏 GOLD-FLAG REVIEW: use is_draft_no_activity = FALSE and is_draft_missing_dates = FALSE.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers Updated After Creation' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Draft",
-			    FILTER(
-			        fact_offer,
-			        NOT ISBLANK(fact_offer[offer_date]) &&
-			        NOT ISBLANK(fact_offer[last_modified_date]) &&
-			        LEFT(fact_offer[last_modified_date], 10) <> LEFT(fact_offer[offer_date], 10)
-			    )
-			)
+		CALCULATE (
+			[Offers Submitted],
+			'fact_offer'[is_draft_no_activity] = FALSE (),
+			'fact_offer'[is_draft_missing_dates] = FALSE ()
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 436dda3c-963e-473b-8b41-f957d762de6d
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
-	measure 'Draft No Activity 7+ Days' = ```
-
-			COALESCE(
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Draft",
-			        FILTER(
-			            fact_offer,
-			            ISBLANK(fact_offer[last_modified_date]) ||
-			            DATEDIFF(
-			                DATEVALUE(LEFT(fact_offer[last_modified_date], 10)),
-			                TODAY(),
-			                DAY
-			            ) >= 7
-			        )
-			    ),
-			    0
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Draft No Activity 7+ Days' =
+		CALCULATE (
+			[Offers Submitted],
+			'fact_offer'[is_draft_no_activity] = TRUE (),
+			'fact_offer'[days_since_offer_activity] >= 7
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 8c6c5599-05ae-4005-a629-3732423e1120
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
-	measure 'Drafts No Activity 14+ Days (Under Offer Referrals)' = ```
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(dim_referral[referral_id]),
-			        dim_referral[referral_status] = "UNDER_OFFER"
-			    )
-
-			VAR DraftOfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_offer[offer_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
-			    )
-
-			RETURN
-			COALESCE(
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Draft",
-			        TREATAS(DraftOfferIDs, fact_offer[offer_id]),
-			        FILTER(
-			            fact_offer,
-			            ISBLANK(fact_offer[last_modified_date]) ||
-			            DATEDIFF(
-			                DATEVALUE(LEFT(fact_offer[last_modified_date], 10)),
-			                TODAY(),
-			                DAY
-			            ) >= 14
-			        )
-			    ),
-			    0
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Drafts No Activity 14+ Days (Under Offer Referrals)' =
+		CALCULATE (
+			[Offers Submitted],
+			'fact_offer'[is_draft_no_activity] = TRUE (),
+			'fact_offer'[days_since_offer_activity] >= 14,
+			FILTER (
+				'fact_referral',
+				LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+					IN { "under_offer", "under offer", "offer" }
 			)
-
-			```
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 32521366-3a68-49be-9571-dc02df8807ba
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[offer_age_days].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Average Days in Draft' =
-
-			AVERAGEX (
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && NOT ISBLANK ( 'fact_offer'[offer_submitted_date] )
-			    ),
-			    DATEDIFF ( 'fact_offer'[offer_submitted_date], TODAY (), DAY )
-			)
+		AVERAGEX (
+			FILTER (
+				'fact_offer',
+				LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+					&& NOT ISBLANK ( 'fact_offer'[offer_age_days] )
+			),
+			'fact_offer'[offer_age_days]
+		)
 		displayFolder: Draft/Pending Offers
 		lineageTag: 626c0f5e-b234-4358-a49f-338c3050cfec
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[offer_age_days].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Oldest Draft Age Days' =
-
-			MAXX (
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && NOT ISBLANK ( 'fact_offer'[offer_submitted_date] )
-			    ),
-			    DATEDIFF ( 'fact_offer'[offer_submitted_date], TODAY (), DAY )
-			)
+		MAXX (
+			FILTER (
+				'fact_offer',
+				LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+					&& NOT ISBLANK ( 'fact_offer'[offer_age_days] )
+			),
+			'fact_offer'[offer_age_days]
+		)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
 		lineageTag: 074b02a5-c5f5-4e9f-a1e7-b062981aa55b
 
-	// 👏 GOLD-MODEL REVIEW: replace dim_referral, fact_referral_offer and Is_Latest_Record.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offer Count (Under Offer Referrals)' =
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(dim_referral[referral_id]),
-			        dim_referral[referral_status] = "UNDER_OFFER"
-			    )
-
-			VAR DraftOfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_offer[offer_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_offer[referral_id])
-			    )
-
-			RETURN
-			COALESCE(
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Draft",
-			        TREATAS(DraftOfferIDs, fact_offer[offer_id])
-			    ),
-			    0
+			CALCULATE (
+			    [Offers in Draft],
+			    FILTER ( 'fact_referral', LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) ) IN { "under_offer", "under offer", "offer" } )
 			)
 		formatString: 0
 		displayFolder: Draft/Pending Offers
@@ -814,13 +573,11 @@ table _Measures
 		displayFolder: Provider Registry
 		lineageTag: dd2a461e-b3bc-4f5f-97c1-d7d470c45e87
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Pending Offers by Age Bucket' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending"
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[days_since_offer_activity] ) )
 			)
 		formatString: 0
 		displayFolder: Pending offers
@@ -859,86 +616,61 @@ table _Measures
 		displayFolder: Pending offers
 		lineageTag: 6ae703ee-2b7a-459b-b140-db57f0a3b3be
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
-	measure 'Pending Offers 0–7 Days' = ```
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] <= 7
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Pending Offers 0–7 Days' =
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] <= 7 )
 			)
-
-			```
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 2f93e1fc-0734-4d78-bf32-ad604513b698
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
-	measure 'Pending Offers 8–14 Days' = ```
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] > 7 &&
-			    fact_offer[Pending Offer Age (Days)] <= 14
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Pending Offers 8–14 Days' =
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 8 && 'fact_offer'[days_since_offer_activity] <= 14 )
 			)
-
-			```
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 202c659c-fee5-4153-8335-345c2e1f427a
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Provider with Offers over 30+ Days' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] > 30
+			CALCULATE (
+			    DISTINCTCOUNT ( 'fact_offer'[provider_id] ),
+			    FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "pending" && 'fact_offer'[days_since_offer_activity] >= 30 )
 			)
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 6a876819-2f18-4c1e-87f9-b81032486248
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Offers At Risk (8–14 Days)' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] > 7 &&
-			    fact_offer[Pending Offer Age (Days)] <= 14
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 8 && 'fact_offer'[days_since_offer_activity] <= 14 )
 			)
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: 2ba2fa3f-af10-4d17-a2e8-1c4d892b5ecc
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Offers Outside Timeframe (15–30 Days)' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] > 14 &&
-			    fact_offer[Pending Offer Age (Days)] <= 30
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 15 && 'fact_offer'[days_since_offer_activity] <= 30 )
 			)
 		formatString: 0
 		displayFolder: Pending offers
 		lineageTag: e80ec6cb-7cf4-466b-8038-5c6186ffe562
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use fact_offer[days_since_offer_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Critical Offers (30+ Days)' =
-
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Pending",
-			    fact_offer[Pending Offer Age (Days)] > 30
+			CALCULATE (
+			    [Pending Offers],
+			    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 30 )
 			)
 		formatString: 0
 		displayFolder: Pending offers
@@ -974,13 +706,18 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: rebuild from fact_referral[is_open] and fact_referral_provider[is_engaged].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Active Referrals With Provider Engagement' =
-
+		VAR engaged_referral_ids =
+			CALCULATETABLE (
+				VALUES ( 'fact_referral_provider'[referral_id] ),
+				'fact_referral_provider'[is_engaged] = TRUE ()
+			)
+		RETURN
 			CALCULATE (
-			    [Total Referrals],
-			    'fact_referral'[is_open] = TRUE (),
-			    'fact_referral'[has_offer] = TRUE ()
+				[Total Referrals],
+				'fact_referral'[is_open] = TRUE (),
+				TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
 			)
 		formatString: 0
 		displayFolder: Provider Activity KPIs
@@ -994,51 +731,52 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: rebuild at referral grain from is_awaiting_offer and fact_referral_provider[is_engaged].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Active Awaiting Offers With Engagement' =
-
+		VAR engaged_referral_ids =
+			CALCULATETABLE (
+				VALUES ( 'fact_referral_provider'[referral_id] ),
+				'fact_referral_provider'[is_engaged] = TRUE ()
+			)
+		RETURN
 			CALCULATE (
-			    [Total Referrals],
-			    'fact_referral'[is_open] = TRUE (),
-			    'fact_referral'[has_offer] = TRUE ()
+				[Total Referrals],
+				'fact_referral'[is_awaiting_offer] = TRUE (),
+				TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
 			)
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: 0584de65-d334-43eb-96ee-2bd6ef0da472
 
-	// 👏 GOLD-FLAG REVIEW: rebuild at referral grain from is_awaiting_offer and fact_referral_provider[is_engaged].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Active Awaiting Offers Without Engagement' =
-
+		VAR awaiting_referral_ids =
+			CALCULATETABLE (
+				VALUES ( 'fact_referral'[referral_id] ),
+				'fact_referral'[is_awaiting_offer] = TRUE ()
+			)
+		VAR engaged_referral_ids =
+			CALCULATETABLE (
+				VALUES ( 'fact_referral_provider'[referral_id] ),
+				'fact_referral_provider'[is_engaged] = TRUE ()
+			)
+		RETURN
 			CALCULATE (
-			    [Total Referrals],
-			    'fact_referral'[is_open] = TRUE (),
-			    'fact_referral'[has_offer] = FALSE ()
+				[Total Referrals],
+				TREATAS (
+					EXCEPT ( awaiting_referral_ids, engaged_referral_ids ),
+					'fact_referral'[referral_id]
+				)
 			)
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: 64509714-cb8c-419c-97d7-2d49be8bd9c8
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild on active Gold facts.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Total Offers Made (Active Referrals Under Offer)' =
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral[referral_id]),
-			        fact_referral[current_status] = "UNDER_OFFER"
-			    )
-
-			VAR OfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_provider[referral_provider_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_provider_id])
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] <> "Draft",
-			    TREATAS(OfferIDs, fact_offer[offer_id])
+			CALCULATE (
+			    [Non-Draft Offers],
+			    FILTER ( 'fact_referral', LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) ) IN { "under_offer", "under offer", "offer" } )
 			)
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1062,30 +800,9 @@ table _Measures
 		displayFolder: Referral Offers
 		lineageTag: 241fb00a-70fe-44fc-a1f9-42d787ab5d6b
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild on active Gold facts.
-	measure 'Offers per Provider (Under Offer Referrals)' = ```
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral[referral_id]),
-			        fact_referral[current_status] = "UNDER_OFFER"
-			    )
-
-			VAR OfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_provider[referral_provider_id]),
-			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_id])
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] <> "Draft",
-			    TREATAS(OfferIDs, fact_offer[offer_id])
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Offers per Provider (Under Offer Referrals)' =
+			DIVIDE ( [Total Offers Made (Active Referrals Under Offer)], [No. Providers Who Made Offers], 0 )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 5791ed90-5c15-4d99-b037-a85fc959dbbe
@@ -1099,272 +816,113 @@ table _Measures
 		displayFolder: Spot vs Framework
 		lineageTag: 208782f4-b742-4576-afc3-65f5119cd817
 
-	// 👏 GOLD-MODEL REVIEW: rebuild from the active Gold spot/framework fields; is_closed is not an is_spot test.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Framework Offers (Under Offer Referrals)' =
-
-			VAR UnderOfferReferralIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral[referral_id]),
-			        fact_referral[current_status] = "UNDER_OFFER"
-			    )
-
-			VAR FrameworkOfferIDs =
-			    CALCULATETABLE(
-			        VALUES(fact_referral_provider[referral_provider_id]),
-			        fact_referral_provider[is_closed] = FALSE(), //is_spot
-			        TREATAS(UnderOfferReferralIDs, fact_referral_provider[referral_id])
-			    )
-
-			RETURN
-			COALESCE(
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] <> "Draft",
-			        TREATAS(FrameworkOfferIDs, fact_offer[offer_id])
-			    ),
-			    0
+		CALCULATE (
+			[Non-Spot Offers],
+			FILTER (
+				'fact_referral',
+				LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+					IN { "under_offer", "under offer", "offer" }
 			)
+		)
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 8758d6ad-10cd-4c0f-a71e-4c0da4a82d29
 
-	// 👏 GOLD-FLAG REVIEW: replace the fact_ipa TREATAS check with the offer-grain IPA flags.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'IPA Exists' =
-
-			VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
-			RETURN
-			    IF (
-			        CALCULATE (
-			            COUNTROWS ( 'fact_ipa' ),
-			            TREATAS ( { current_offer }, 'fact_ipa'[accepted_offer_id] )
-			        ) > 0,
-			        "Yes",
-			        "No"
-			    )
+		VAR current_status = LOWER ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[offer_status] ), "" ) )
+		RETURN
+			IF (
+				current_status IN { "accepted", "approved", "selected", "offer_successful" }
+					&& SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ) = FALSE (),
+				"Yes",
+				"No"
+			)
 		displayFolder: IPA Measures
 		lineageTag: c6f0d16d-500d-4960-8ed3-c8588d56355d
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and rebuild its invalid referral filter.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Accepted Offers (Scoped Table)' =
-
-			CALCULATETABLE(
-			    VALUES(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    dim_offer_status[offer_status_label] = "Accepted",
-			    TREATAS(
-			        CALCULATETABLE(
-			            VALUES(fact_referral_provider[referral_provider_id]),
-			            fact_referral[complexity_band] = "UNDER_OFFER"
-			        ),
-			        fact_offer[offer_id]
-			    )
-			)
+			[Accepted Offers]
 		displayFolder: Referral Offers
 		lineageTag: 045fc5f2-7b2b-4f9f-811c-ad4b948939c2
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use the Gold accepted-status contract.
-	measure 'Is In Accepted KPI' = ```
-
-			VAR CurrentOffer =
-			    SELECTEDVALUE(fact_offer[offer_id])
-
-			RETURN
-			IF(
-			    CALCULATE(
-			        COUNTROWS(fact_offer),
-			        fact_offer[Is_Latest_Record] = 1,
-			        dim_offer_status[offer_status_label] = "Accepted",
-			        fact_offer[offer_id] = CurrentOffer
-			    ) > 0,
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Is In Accepted KPI' =
+			IF (
+			    LOWER ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[offer_status] ), "" ) ) IN { "accepted", "approved", "selected", "offer_successful" },
 			    "Yes",
 			    "No"
 			)
-
-			```
 		displayFolder: IPA Measures
 		lineageTag: 6842c1b2-aaae-4202-971f-62a35840465c
 
-	// 👏 GOLD-MODEL REVIEW: remove Is_Latest_Record and use the Gold accepted-status contract.
-	measure 'Accepted Offers Base' = ```
-
-			CALCULATETABLE(
-			    VALUES(fact_offer[offer_id]),
-			    fact_offer[Is_Latest_Record] = 1,
-			    fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Accepted Offers Base' =
+			[Accepted Offers]
 		displayFolder: IPA Measures
 		lineageTag: 56fce66f-aed5-4f75-8ebe-2099158f5312
 
-	// 👏 GOLD-FLAG REVIEW: rebuild from fact_offer[is_awaiting_ipa_creation].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'IPA Created' =
-
-			VAR BaseOffers =
-			    CALCULATETABLE(
-			        VALUES(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
-			    TREATAS(BaseOffers, fact_ipa[accepted_offer_id])
+		CALCULATE (
+			DISTINCTCOUNT ( 'fact_offer'[offer_id] ),
+			'fact_offer'[is_awaiting_ipa_creation] = FALSE (),
+			FILTER (
+				'fact_offer',
+				LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
+					IN { "accepted", "approved", "selected", "offer_successful" }
 			)
+		)
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: b0bd7e49-2026-4d49-bbe0-45560de0937d
 
-	// 👏 GOLD-FLAG REVIEW: replace signature joins with fact_offer[is_ipa_completed].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'IPA Completed' =
-
-			VAR BaseOffers =
-			    CALCULATETABLE(
-			        VALUES(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
-			    fact_ipa[signed_by_provider] = TRUE(),
-			    fact_ipa[signed_by_local_authority] = TRUE(),
-			    TREATAS(BaseOffers, fact_ipa[accepted_offer_id])
-			)
+		CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_completed] = TRUE () )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 99782e69-a2fc-4d06-b1d2-4cd73bfced49
 
-	// 👏 GOLD-FLAG REVIEW: replace signature joins with fact_offer[is_ipa_pending].
-	measure 'IPAs Pending Completion' = ```
-
-			VAR BaseOffers =
-			    CALCULATETABLE(
-			        VALUES(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			    )
-
-			RETURN
-			CALCULATE(
-			    DISTINCTCOUNT(fact_ipa[accepted_offer_id]),
-			    TREATAS(BaseOffers, fact_ipa[accepted_offer_id]),
-			    FILTER(
-			        fact_ipa,
-			        NOT (
-			            COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE()
-			            &&
-			            COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()
-			        )
-			    )
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'IPAs Pending Completion' =
+		CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_pending] = TRUE () )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 0c473b07-46d6-47ef-80fc-4ed8d69c38d1
 
-	// 👏 GOLD-FLAG REVIEW: replace EXCEPT logic with fact_offer[is_awaiting_ipa_creation].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Offers Awaiting IPA Creation' =
-
-			VAR accepted_offer_ids =
-			    CALCULATETABLE (
-			        VALUES ( 'fact_offer'[offer_id] ),
-			        FILTER (
-			            'fact_offer',
-			            LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
-			                IN { "accepted", "approved", "selected", "offer_successful" }
-			        )
-			    )
-			VAR ipa_offer_ids =
-			    FILTER (
-			        VALUES ( 'fact_ipa'[accepted_offer_id] ),
-			        NOT ISBLANK ( 'fact_ipa'[accepted_offer_id] )
-			    )
-			RETURN
-			    COUNTROWS ( EXCEPT ( accepted_offer_ids, ipa_offer_ids ) )
+		CALCULATE ( [Offers Submitted], 'fact_offer'[is_awaiting_ipa_creation] = TRUE () )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 635fe8f7-f5ed-4383-a14b-bd2889938b07
 
-	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_ipa_pending].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Is IPA Pending' =
-
-			VAR CurrentOffer =
-			    SELECTEDVALUE(fact_ipa[accepted_offer_id])
-
-			RETURN
-			IF(
-			    CALCULATE(
-			        COUNTROWS(fact_ipa),
-			        FILTER(
-			            fact_ipa,
-			            fact_ipa[accepted_offer_id] = CurrentOffer &&
-			            NOT (
-			                COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE() &&
-			                COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()
-			            )
-			        )
-			    ) > 0,
-			    1,
-			    0
-			)
+		IF ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_ipa_pending] ), FALSE () ), 1, 0 )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: c6dc9179-c710-49fd-8909-8cc69d8ceb38
 
-	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_awaiting_ipa_creation].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Is Awaiting IPA Creation' =
-
-			VAR current_offer = SELECTEDVALUE ( 'fact_offer'[offer_id] )
-			VAR accepted_offers =
-			    CALCULATETABLE (
-			        VALUES ( 'fact_offer'[offer_id] ),
-			        FILTER (
-			            'fact_offer',
-			            LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
-			                IN { "accepted", "approved", "selected", "offer_successful" }
-			        )
-			    )
-			VAR ipa_offers =
-			    CALCULATETABLE (
-			        VALUES ( fact_ipa[accepted_offer_id] ),
-			        FILTER ( fact_ipa, NOT ISBLANK ( fact_ipa[accepted_offer_id] ) )
-			    )
-			RETURN
-			    IF ( current_offer IN EXCEPT ( accepted_offers, ipa_offers ), 1, 0 )
+		IF ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), FALSE () ), 1, 0 )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 058b9fac-f4cd-492f-ac2d-39d20c70b376
 
-	// 👏 GOLD-FLAG REVIEW: replace row logic with fact_offer[is_ipa_completed].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Is IPA Completed' =
-
-			VAR CurrentOffer =
-			    SELECTEDVALUE(fact_offer[offer_id])
-
-			RETURN
-			IF(
-			    CALCULATE(
-			        COUNTROWS(fact_ipa),
-			        FILTER(
-			            fact_ipa,
-			            fact_ipa[accepted_offer_id] = CurrentOffer &&
-			            COALESCE(fact_ipa[signed_by_provider], FALSE()) = TRUE() &&
-			            COALESCE(fact_ipa[signed_by_local_authority], FALSE()) = TRUE()
-			        )
-			    ) > 0,
-			    1,
-			    0
-			)
+		IF ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_ipa_completed] ), FALSE () ), 1, 0 )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 5158372f-9e2a-4e4b-8dff-bb7776795aac
 
-	// 👏 GOLD-FLAG REVIEW: calculate from the new offer-grain IPA flag measures.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Accepted Offer to IPA Conversion %' = ```
 
 			DIVIDE ( [Accepted Offers With IPA], [Accepted Offers] )
@@ -1375,52 +933,25 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_awaiting_ipa_creation].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Offers Still to Progress to IPA' =
-
-			DIVIDE(
-			    [Offers Awaiting IPA Creation],
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			    ),
-			    0
-			)
+		DIVIDE ( [Offers Awaiting IPA Creation], [Accepted Offers], 0 )
 		displayFolder: IPA Measures
 		lineageTag: 202fc7f6-a1af-4a44-b046-a81f7dac2b9a
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_ipa_completed].
-	measure 'IPA Created to Completion %' = ```
-
-			DIVIDE(
-			    [IPA Completed],
-			    [IPA Created],
-			    0
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'IPA Created to Completion %' =
+		DIVIDE ( [IPA Completed], [IPA Created], 0 )
 		displayFolder: IPA Measures
 		lineageTag: f5fda4ea-024a-4890-9c2c-48812dda6409
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: calculate from fact_offer[is_ipa_completed].
-	measure 'Successful Offers to IPA Completed %' = ```
-
-			DIVIDE(
-			    [IPA Completed],
-			    CALCULATE(
-			        DISTINCTCOUNT(fact_offer[offer_id]),
-			        fact_offer[Is_Latest_Record] = 1,
-			        fact_offer[offer_status] = "OFFER_SUCCESSFUL"
-			    ),
-			    0
-			)
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Successful Offers to IPA Completed %' =
+		DIVIDE ( [IPA Completed], [Accepted Offers], 0 )
 		displayFolder: IPA Measures
 		lineageTag: 4d78fd96-29ad-45a3-ab50-e4dddad3b585
 
@@ -1434,10 +965,9 @@ table _Measures
 		formatString: 0
 		lineageTag: 54c2b74a-7a4a-4821-8086-5a7d8d0e618c
 
-	// 👏 GOLD-FLAG REVIEW: replace status text matching with fact_referral[is_open].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Open Referral' =
-
-			CALCULATE ( DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[current_status] IN {"OPEN", "UNDER_OFFER"})
+		CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 34758a00-8077-40f6-87c6-5a6a839100ef
@@ -1839,18 +1369,9 @@ table _Measures
 		displayFolder: Snapshot
 		lineageTag: 7bf09b67-cd96-4faa-8b8e-47ad953eb11f
 
-	// 👏 GOLD-FLAG REVIEW: replace date comparison with fact_referral[is_open_overdue].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Open Overdue Referrals' =
-
-			CALCULATE (
-			    [Total Referrals],
-			    FILTER (
-			        'fact_referral',
-			        'fact_referral'[is_open] = TRUE ()
-			            && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-			            && 'fact_referral'[required_placement_date] < 'fact_referral'[as_of_date]
-			    )
-			)
+		CALCULATE ( [Total Referrals], 'fact_referral'[is_open_overdue] = TRUE () )
 		formatString: 0
 		displayFolder: Snapshot
 		lineageTag: 19992548-9c7e-42eb-b01f-490492c02894
@@ -1888,12 +1409,11 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Estimated Active Weekly Cost' =
-
 			CALCULATE (
-			    SUM ( 'fact_ipa'[estimated_weekly_cost] ),
-			    'fact_ipa'[is_placement_closed] = FALSE ()
+			    SUM ( 'fct_ipa'[estimated_weekly_cost] ),
+			    'fct_ipa'[is_placement_closed] = FALSE ()
 			)
 		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
 		displayFolder: IPA Measures
@@ -1901,19 +1421,16 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
-	measure 'IPAs Created' = DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'IPAs Created' =
+			DISTINCTCOUNT ( 'fct_ipa'[ipa_id] )
 		formatString: 0
 		displayFolder: IPA Measures
 		lineageTag: 5af87e93-d889-4b27-b22e-ba3988a0d728
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Average Active Weekly Cost' =
-
-			CALCULATE (
-			    AVERAGE( 'fact_ipa'[estimated_weekly_cost] ),
-			    'fact_ipa'[is_placement_closed] = FALSE ()
-			)
+			DIVIDE ( [Estimated Active Weekly Cost], [Active IPAs] )
 		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
 		displayFolder: IPA Measures
 		lineageTag: a65e9984-8827-4300-a074-a4d7dbb0c509
@@ -2046,12 +1563,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
-	measure 'Active IPAs' = ```
-
-			CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = FALSE () )
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Active IPAs' =
+			CALCULATE ( [IPAs Created], 'fct_ipa'[is_placement_closed] = FALSE () )
 		formatString: 0
 		lineageTag: 5706f71b-3f8a-47a0-ac4f-4628a9e7fb06
 
@@ -2069,13 +1583,9 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: replace outcome text matching with fact_referral_snapshot[is_open_overdue].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Open Overdue Referrals at Snapshot' =
-
-			CALCULATE (
-			    [Snapshot Referrals],
-			    'fact_referral_snapshot'[required_placement_date_outcome] = "Open overdue"
-			)
+		CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open_overdue] = TRUE () )
 		formatString: 0
 		lineageTag: b231c381-d7dc-4c33-8449-513e536ce697
 
@@ -2135,22 +1645,9 @@ table _Measures
 		formatString: 0
 		lineageTag: 85728ce2-f2a3-44ed-9c26-de5fe413e697
 
-	// 👏 GOLD-FLAG REVIEW: replace DATEDIFF logic with fact_referral[is_emergency_placement].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Emergency Referrals' =
-
-			CALCULATE (
-			    [Total Referrals],
-			    FILTER (
-			        'fact_referral',
-			        NOT ISBLANK ( 'fact_referral'[referral_created_date] )
-			            && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-			            && DATEDIFF (
-			                'fact_referral'[referral_created_date],
-			                'fact_referral'[required_placement_date],
-			                DAY
-			            ) = 0
-			    )
-			)
+		CALCULATE ( [Total Referrals], 'fact_referral'[is_emergency_placement] = TRUE () )
 		formatString: 0
 		lineageTag: 40e3aa99-be1e-4d29-a43e-5047658820f2
 
@@ -2319,23 +1816,19 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa and restore the guide's date relationship.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'IPAs Issued This Month' =
-
 			CALCULATE (
 			    [IPAs Created],
-			    //USERELATIONSHIP ( 'dim_date'[date], 'fact_ipa'[ipa_issued_date]),
+			    USERELATIONSHIP ( 'dim_date'[date], 'fct_ipa'[ipa_issued_date] ),
 			    DATESMTD ( 'dim_date'[date] )
 			)
 		formatString: 0
 		lineageTag: 25b3a90a-4572-4218-a7f3-9d4fe06bb325
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
-	measure 'Closed IPAs' = ```
-
-			CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = TRUE () )
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Closed IPAs' =
+			CALCULATE ( [IPAs Created], 'fct_ipa'[is_placement_closed] = TRUE () )
 		formatString: 0
 		lineageTag: db78cd5e-ad29-47ec-ad1d-4ca985ef3a99
 
@@ -2346,25 +1839,16 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-MODEL REVIEW: replace retired fact_ipa with fct_ipa.
-	measure 'Total IPA Weekly Cost' = ```
-			SUM ( 'fact_ipa'[estimated_weekly_cost])
-
-			```
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
+	measure 'Total IPA Weekly Cost' =
+			SUM ( 'fct_ipa'[estimated_weekly_cost] )
 		lineageTag: 2ee323be-df3e-44a4-b638-ac97323b6e21
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: replace fact_ipa TREATAS logic with fact_offer[is_awaiting_ipa_creation] = FALSE.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Accepted Offers With IPA' =
-
-			VAR ipa_offer_ids =
-			    FILTER (
-			        VALUES ( 'fact_ipa'[accepted_offer_id] ),
-			        NOT ISBLANK ( 'fact_ipa'[accepted_offer_id] )
-			    )
-			RETURN
-			    CALCULATE ( [Accepted Offers], TREATAS ( ipa_offer_ids, 'fact_offer'[offer_id] ) )
+		CALCULATE ( [Accepted Offers], 'fact_offer'[is_awaiting_ipa_creation] = FALSE () )
 		formatString: 0
 		lineageTag: 70febad4-d59f-4eee-8eb2-2621622d5fa2
 
@@ -2694,17 +2178,12 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: rebuild as a distinct referral count from fact_offer[is_ipa_pending].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Referrals With IPA Pending Signature' =
-
-			CALCULATE (
-			    [Total Referrals],
-			    FILTER (
-			        'fact_referral',
-			        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
-			            && COALESCE ( 'fact_referral'[ipa_2_signatures], FALSE () ) = FALSE ()
-			    )
-			)
+		CALCULATE (
+			DISTINCTCOUNT ( 'fact_offer'[referral_id] ),
+			'fact_offer'[is_ipa_pending] = TRUE ()
+		)
 		formatString: 0
 		lineageTag: 962b62e7-c03d-4459-ac3c-4d43dc97a7fc
 
@@ -2728,17 +2207,16 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers Stalled 7+ Days' =
-
-			CALCULATE (
-			    [Offers Submitted],
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( 'fact_offer'[offer_status] ) = "draft"
-			            && DATEDIFF ( 'fact_offer'[offer_reviewed_date], TODAY (), DAY ) >= 7
-			    )
+		CALCULATE (
+			[Offers Submitted],
+			FILTER (
+				'fact_offer',
+				LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+					&& 'fact_offer'[days_since_offer_activity] >= 7
 			)
+		)
 		formatString: 0
 		lineageTag: 1d9c9a15-7bf4-4c5d-96c7-4c61b1d473f5
 
@@ -2747,15 +2225,9 @@ table _Measures
 
 		annotation 43dbc3e8-3a1c-4b6f-9923-b49ff7d6691c = True
 
-	// 👏 GOLD-FLAG REVIEW: replace provider-table iteration with fact_referral[provider_assignment_count] > 1.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Referrals With Multiple Provider Assignments' =
-
-			COUNTROWS (
-			    FILTER (
-			        VALUES ( 'fact_referral_provider'[referral_id] ),
-			        CALCULATE ( DISTINCTCOUNT ( 'fact_referral_provider'[provider_id] ) ) > 1
-			    )
-			)
+		CALCULATE ( [Total Referrals], 'fact_referral'[provider_assignment_count] > 1 )
 		lineageTag: f71d1359-0ed8-4b03-802e-6453e1a767dc
 
 	measure 'Offers With Recorded Rejection Reason' = ```
@@ -2774,34 +2246,22 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	// 👏 GOLD-FLAG REVIEW: replace date equality with fact_offer[is_draft_no_activity].
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers With No Activity Since Creation' =
-
-			CALCULATE (
-			    [Offers Submitted],
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && 'fact_offer'[offer_submitted_date] = 'fact_offer'[offer_reviewed_date]
-			    )
-			)
+		CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_no_activity] = TRUE () )
 		formatString: 0
 		lineageTag: 38ea9d96-1737-4c4b-8a8a-61f7f214063c
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity], not legacy DATEDIFF fields.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers Stalled 14+ Days' =
-
-			CALCULATE (
-			    [Offers Submitted],
-			    FILTER (
-			        'fact_offer',
-			        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-			            && DATEDIFF (
-			                COALESCE ( 'fact_offer'[offer_reviewed_date], 'fact_offer'[offer_submitted_date] ),
-			                TODAY (), DAY
-			            ) >= 14
-			    )
+		CALCULATE (
+			[Offers Submitted],
+			FILTER (
+				'fact_offer',
+				LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+					&& 'fact_offer'[days_since_offer_activity] >= 14
 			)
+		)
 		formatString: 0
 		lineageTag: afc7faf2-e71c-4e76-8454-8b9eba280660
 
@@ -2945,31 +2405,29 @@ table _Measures
 			```
 		lineageTag: 7b267687-6fb2-47ab-9724-cf145b39ccc1
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[is_draft_no_activity] before applying the referral filter.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers With No Activity - Under Offer Referrals' =
-
-			CALCULATE (
-			    [Draft Offers With No Activity Since Creation],
-			    FILTER (
-			        'fact_referral',
-			        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-			            IN { "under_offer", "under offer", "offer" }
-			    )
+		CALCULATE (
+			[Draft Offers With No Activity Since Creation],
+			FILTER (
+				'fact_referral',
+				LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+					IN { "under_offer", "under offer", "offer" }
 			)
+		)
 		formatString: 0
 		lineageTag: 27aaecf4-f038-4db6-ad0c-a7bd2c5526e3
 
-	// 👏 GOLD-FLAG REVIEW: use fact_offer[days_since_offer_activity] before applying the referral filter.
+	// 👏 Gold DAX applied; this measure now uses the current Gold contract.
 	measure 'Draft Offers Stalled 14+ Days - Under Offer Referrals' =
-
-			CALCULATE (
-			    [Draft Offers Stalled 14+ Days],
-			    FILTER (
-			        'fact_referral',
-			        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-			            IN { "under_offer", "under offer", "offer" }
-			    )
+		CALCULATE (
+			[Draft Offers Stalled 14+ Days],
+			FILTER (
+				'fact_referral',
+				LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
+					IN { "under_offer", "under offer", "offer" }
 			)
+		)
 		formatString: 0
 		lineageTag: f4334e4f-04d1-42c7-8ce0-b45484ae30d9
 
