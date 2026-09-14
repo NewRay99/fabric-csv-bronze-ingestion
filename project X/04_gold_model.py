@@ -66,6 +66,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 # CELL ********************
 
 from datetime import date, datetime
+import uuid
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
 
@@ -74,6 +75,7 @@ if AS_OF_DATE:
 else:
     AS_OF_DATE_VALUE = date.today()
 AS_OF_SQL = f"DATE '{AS_OF_DATE_VALUE.isoformat()}'"
+GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {GOLD_SCHEMA}")
 print(f"Gold as-of date: {AS_OF_DATE_VALUE}")
 
@@ -223,6 +225,7 @@ closure_reason AS (
 ),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+    CAST(r.export_date AS TIMESTAMP) AS export_date,
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
@@ -260,7 +263,7 @@ base AS (
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
-  referral_id, person_id, referral_created_date, required_placement_date,
+  export_date, referral_id, person_id, referral_created_date, required_placement_date,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
   referral_closure_reason, last_activity_date, current_status,
@@ -311,7 +314,7 @@ SELECT {AS_OF_SQL} AS as_of_date,
     ELSE 'Closed without placement'
   END AS required_placement_date_outcome,
   planned_placement_start_date, estimated_weekly_cost,
-  CURRENT_TIMESTAMP() AS gold_modelled_at
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM base
 WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}
 """)
@@ -361,7 +364,7 @@ if spark.catalog.tableExists(SNAPSHOT_TABLE):
 
 snapshot = spark.table("gold.fact_referral").select(
     F.lit(AS_OF_DATE_VALUE).cast("date").alias("snapshot_date"),
-    "referral_id", "person_id", "referral_created_date", "required_placement_date",
+    "job_run_id", "export_date", "referral_id", "person_id", "referral_created_date", "required_placement_date",
     "first_action_date", "first_offer_date", "offer_accepted_date", "ipa_issued_date",
     "referral_closed_date", "referral_closure_reason", "current_status",
     "last_activity_date", "placement_type_required", "region", "priority",
@@ -408,8 +411,14 @@ print(
 
 spark.sql(f"""
 CREATE OR REPLACE TABLE gold.fact_referral_lifecycle_event AS
-SELECT event_id, referral_id, event_type, event_timestamp, sequence_number, created_by
-FROM {EVENT_ROLLUP_SOURCE}
+SELECT e.event_id, e.referral_id, e.event_type, e.event_timestamp,
+  e.sequence_number, e.created_by, r.export_date, '{GOLD_JOB_RUN_ID}' AS job_run_id
+FROM {EVENT_ROLLUP_SOURCE} e
+LEFT JOIN (
+  SELECT referral_id, MAX(CAST(export_date AS TIMESTAMP)) AS export_date
+  FROM silver.referral
+  GROUP BY referral_id
+) r ON e.referral_id = r.referral_id
 """)
 
 # Source-grain Gold facts. These retain the individual offer, IPA placement
@@ -456,8 +465,9 @@ SELECT {AS_OF_SQL} AS as_of_date,
   COALESCE(ip.ipa_count, 0) > 0 AND COALESCE(ip.has_completed_ipa, 0) = 0
     AS is_ipa_pending,
   COALESCE(ip.has_completed_ipa, 0) = 1 AS is_ipa_completed,
+  CAST(o.export_date AS TIMESTAMP) AS export_date,
   CAST(o.export_date AS TIMESTAMP) AS source_export_date,
-  CURRENT_TIMESTAMP() AS gold_modelled_at
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM silver.offer o
 INNER JOIN silver.referral_provider rp
   ON o.referral_provider_id = rp.referral_provider_id
@@ -489,8 +499,9 @@ SELECT {AS_OF_SQL} AS as_of_date,
   i.status AS placement_status, CAST(i.closed AS BOOLEAN) AS is_placement_closed,
   CAST(i.closed_datetime AS TIMESTAMP) AS placement_ended_date,
   CAST(NULL AS STRING) AS placement_end_reason,
+  CAST(i.export_date AS TIMESTAMP) AS export_date,
   CAST(i.export_date AS TIMESTAMP) AS source_export_date,
-  CURRENT_TIMESTAMP() AS gold_modelled_at
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM silver.ipa i
 WHERE i.created_datetime IS NULL OR TO_DATE(i.created_datetime) <= {AS_OF_SQL}
 """)
@@ -500,6 +511,7 @@ CREATE OR REPLACE TABLE gold.fact_referral_provider AS
 SELECT {AS_OF_SQL} AS as_of_date,
   rp.referral_provider_id AS referral_provider_id, rp.referral_id AS referral_id,
   rp.provider_id AS provider_id, CAST(rp.export_date AS TIMESTAMP) AS first_observed_date,
+  CAST(rp.export_date AS TIMESTAMP) AS export_date,
   CAST(rp.is_excluded AS BOOLEAN) AS is_excluded,
   CAST(rp.is_declined AS BOOLEAN) AS is_declined,
   CAST(rp.is_cancelled AS BOOLEAN) AS is_cancelled,
@@ -516,7 +528,7 @@ SELECT {AS_OF_SQL} AS as_of_date,
     WHEN rp.is_excluded THEN 'Excluded'
     ELSE 'Assigned'
   END AS provider_response_status,
-  CURRENT_TIMESTAMP() AS gold_modelled_at
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM silver.referral_provider rp
 WHERE rp.export_date IS NULL OR TO_DATE(rp.export_date) <= {AS_OF_SQL}
 """)

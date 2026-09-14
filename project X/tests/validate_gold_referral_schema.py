@@ -91,6 +91,22 @@ for gold_fact_table in gold_fact_tables:
     )
 print("PASS Gold facts are materialised tables for Lakehouse semantic-model discovery")
 
+for gold_fact_table in gold_fact_tables:
+    start = source.index(f"CREATE OR REPLACE TABLE {gold_fact_table} AS")
+    end = source.find("CREATE OR REPLACE TABLE gold.", start + 1)
+    fact_sql = source[start:] if end == -1 else source[start:end]
+    assert re.search(r"\bexport_date\b", fact_sql), (
+        f"{gold_fact_table} does not publish export_date lineage"
+    )
+    assert re.search(r"\bjob_run_id\b", fact_sql), (
+        f"{gold_fact_table} does not publish job_run_id lineage"
+    )
+assert '"job_run_id", "export_date", "referral_id"' in source, (
+    "fact_referral_snapshot does not retain fact_referral job_run_id and export_date"
+)
+assert "GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())" in source
+print("PASS all Gold facts and the referral snapshot publish export_date and job_run_id")
+
 for required_field in [
     "referral_id", "referral_created_date", "first_action_date",
     "ipa_issued_date", "estimated_weekly_cost", "is_open",
@@ -154,6 +170,10 @@ assert "referral_modified_date" in issue_log
 assert "validate_gold_referral_schema.py" in issue_log
 assert "## SI-023" in issue_log
 assert "Lakehouse semantic model" in issue_log
+assert "## GLD-014" in issue_log
+assert "Gold export-date lineage" in issue_log
+assert "## LIN-002" in issue_log
+assert "Silver and Gold job-run lineage" in issue_log
 print("PASS change log records SI-006 and its validation")
 
 
@@ -178,5 +198,38 @@ for label, pattern in stale_patterns.items():
 assert "FROM silver.referral" in fixture_sql
 assert "FROM silver.referral_aud" not in fixture_sql
 print("PASS Spark simulation fixture mirrors the production flattened referral model")
+
+gold_dimensions = ROOT / "05_gold_dimensions.py"
+dimensions_source = "\n".join(
+    "".join(cell.get("source", []))
+    for cell in read_notebook(gold_dimensions)["cells"]
+)
+for expected in (
+    "GOLD_EXPORT_DATE = AS_OF_DATE",
+    "GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())",
+    'alias("export_date")',
+    'alias("job_run_id")',
+    "CAST('{GOLD_EXPORT_DATE}' AS TIMESTAMP) AS export_date",
+    "'{GOLD_JOB_RUN_ID}' AS job_run_id",
+    'groupBy("placement_type").agg(F.max("export_date")',
+    'groupBy("referral_status").agg(F.max("export_date")',
+):
+    assert expected in dimensions_source, f"Gold dimensions are missing export_date lineage: {expected}"
+
+for deployed_notebook in (
+    ROOT / "reports" / "current" / "WMPP" / "notebooks" / "04_gold_model.Notebook" / "notebook-content.py",
+    ROOT / "reports" / "current" / "WMPP" / "notebooks" / "05_gold_dimensions.Notebook" / "notebook-content.py",
+):
+    deployed_source = "\n".join(
+        "".join(cell.get("source", []))
+        for cell in read_notebook(deployed_notebook)["cells"]
+    )
+    assert "export_date" in deployed_source, (
+        f"{deployed_notebook.name} is missing the Gold export-date feature"
+    )
+    assert "job_run_id" in deployed_source, (
+        f"{deployed_notebook.name} is missing the Gold job-run lineage feature"
+    )
+print("PASS deployed WMPP Gold notebooks retain export_date and job_run_id lineage")
 
 print("VALIDATION PASSED")

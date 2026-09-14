@@ -59,7 +59,7 @@ def main():
             f"{notebook.name} can write Silver without the SI-025 export_date guarantee"
         )
         if notebook.name.startswith("02_silver_formatter"):
-            assert "if should_skip(" in text and "not target_requires_refresh" in text, (
+            assert "should_skip(" in text and "not target_requires_refresh" in text, (
                 f"{notebook.name} can skip a successful load without checking the target schema"
             )
         else:

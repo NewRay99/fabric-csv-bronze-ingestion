@@ -159,6 +159,15 @@ Set `reload = true` for the exact `source_kind`, source table, and export
 timestamp in `monitoring.cfg_silver_export_load`, then rerun the latest Silver
 formatter and downstream notebooks.
 
+### Live-pipeline one-off rerun
+
+For an urgent same-day reload after a code or configuration change, run
+`90_run_live_pipeline` with `FORCE_RERUN = true`. The runner forwards the
+parameter to `02_silver_formatter`, which bypasses a prior successful
+Bronze-to-Silver audit for that execution only. It does not alter the audit
+table's `reload` flags, so the next normal run returns to the standard skip
+behaviour. Leave the parameter as `false` for scheduled runs.
+
 ### Archive file/date
 
 Set `reload = true` in `cfg_archive_zip_load` and/or

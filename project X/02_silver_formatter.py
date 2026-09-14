@@ -52,6 +52,7 @@ FAIL_ON_TABLE_ERROR = True
 DATE_FORMATS = ["yyyy-MM-dd", "dd/MM/yyyy", "yyyy-MM-dd'T'HH:mm:ss"]
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
+FORCE_RERUN = "false"  # Bypass a prior successful Silver-export audit once.
 TIMESTAMP_FORMATS = [
     "yyyy-MM-dd",
     "yyyy-MM-dd HH:mm:ss.SSSSSS",
@@ -91,6 +92,7 @@ TIMESTAMP_FORMATS = [
 # functions are supplied by 99_common_library. Keep the preceding %run
 # cell isolated: Fabric rejects a magic command combined with Python code.
 JOB_RUN_ID = JOB_RUN_ID or RUN_ID
+FORCE_RERUN = str(FORCE_RERUN).strip().lower() in {"true", "1", "yes", "y"}
 # Pipeline status joins to the parent job; per-table metrics retain RUN_ID.
 PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
 spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)
@@ -259,10 +261,14 @@ for physical_table in physical_tables:
         schema_cols = ensure_export_date_contract(contracts[contract_key])
         target_table = f"{SILVER_SCHEMA}.{contract_table}"
 
-        if should_skip(source_kind, BRONZE_SCHEMA, source_table, export_date) and not target_requires_refresh(target_table, schema_cols):
+        if (not FORCE_RERUN
+                and should_skip(source_kind, BRONZE_SCHEMA, source_table, export_date)
+                and not target_requires_refresh(target_table, schema_cols)):
             skipped += 1
             print(f"SKIP {source_table} @ {export_date}: already successful")
             continue
+        if FORCE_RERUN:
+            print(f"FORCE RERUN {source_table} @ {export_date}: bypassing prior success")
 
         audit_begin(source_kind, BRONZE_SCHEMA, source_table, target_table, export_date)
         batch = frame.where(F.to_timestamp("export_date") == F.lit(export_date).cast("timestamp"))

@@ -37,6 +37,8 @@ for table in (
 runner = notebook_source("90_run_live_pipeline.py")
 for expected in (
     "JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())",
+    'FORCE_RERUN = "false"',
+    'child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()',
     "monitoring.cfg_job_run",
     "monitoring.cfg_job_step_run",
     '"JOB_RUN_ID": JOB_RUN_ID',
@@ -45,16 +47,35 @@ for expected in (
 ):
     assert expected in runner, f"live runner missing {expected}"
 
+deployed_runner_notebook = read_notebook(
+    ROOT / "reports" / "current" / "WMPP" / "notebooks"
+    / "90_run_live_pipeline.Notebook" / "notebook-content.py"
+)
+deployed_runner = "\n".join(
+    "".join(cell.get("source", []))
+    for cell in deployed_runner_notebook["cells"]
+)
+for expected in (
+    'FORCE_RERUN = "false"',
+    'child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()',
+):
+    assert expected in deployed_runner, f"deployed live runner missing {expected}"
+
 common = notebook_source("99_common_library.py")
 assert 'JOB_RUN_ID = globals().get("JOB_RUN_ID", "")' in common
 assert 'StructField("job_run_id", StringType(), True)' in common
 assert '"job_run_id": "s.job_run_id"' in common
+assert '.withColumn("job_run_id", F.lit(JOB_RUN_ID).cast("string"))' in common
 
 silver = notebook_source("02_silver_formatter.py")
 assert "job_run_id string" in silver
 assert "JOB_RUN_ID or None" in silver
+assert 'FORCE_RERUN = "false"' in silver
+assert "if (not FORCE_RERUN" in silver
+assert "FORCE RERUN" in silver
 
 dq = notebook_source("03_silver_business_rules.py")
+assert 'frame.withColumn("job_run_id", F.lit(JOB_RUN_ID).cast("string"))' in dq
 for table in (
     "monitoring.cfg_data_quality_result",
     "monitoring.cfg_rejected_row",

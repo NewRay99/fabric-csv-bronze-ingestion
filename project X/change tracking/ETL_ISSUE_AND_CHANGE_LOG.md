@@ -10,6 +10,34 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## LIN-002 — Silver and Gold job-run lineage
+
+- **Feature:** every Silver and Gold materialisation now includes a
+  `job_run_id` column for end-to-end correlation with the parent live-pipeline
+  run.
+- **Implementation:** `99_common_library` writes the parent ID to contract
+  Silver tables and `03_silver_business_rules` adds it to derived Silver
+  tables. `04_gold_model` and `05_gold_dimensions` add the same ID to every
+  fact, snapshot, dimension and bridge. Standalone Gold runs generate an ID
+  when a parent ID is not supplied.
+- **Validation:** the root and deployed WMPP notebook regression checks assert
+  that the field remains present. Rerun affected Gold notebooks after
+  deployment to update their Delta schemas.
+
+## GLD-014 — Gold export-date lineage
+
+- **Feature:** every materialised Gold fact, snapshot, dimension and bridge now
+  publishes an `export_date` timestamp. Source-backed tables retain their
+  selected Silver row's export timestamp; generated dimensions use the active
+  Gold as-of date. Existing `source_export_date` fields remain for compatibility.
+- **Implementation:** `04_gold_model` adds the field to referral, offer, IPA,
+  referral-provider and lifecycle facts plus the referral snapshot.
+  `05_gold_dimensions` adds it to source-backed dimensions and bridges, and to
+  the generated date, placement-type, referral-status and offer-status dimensions.
+- **Validation:** regression checks require the root and deployed WMPP Gold
+  notebooks to retain the field; rerun `04_gold_model` and
+  `05_gold_dimensions` after deployment to rebuild the Delta schemas.
+
 ## 2026-09-13 — Silver export_date propagation and Gold semantic-model push-downs
 
 - SI-025: `export_date` now propagates from Bronze into every Silver table via a

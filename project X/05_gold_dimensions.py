@@ -51,6 +51,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 # CELL ********************
 
 from datetime import datetime
+import uuid
 
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
@@ -58,6 +59,8 @@ from pyspark.sql.window import Window
 # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {GOLD_SCHEMA}")
 RUN_STARTED_AT = datetime.utcnow()
+GOLD_EXPORT_DATE = AS_OF_DATE or RUN_STARTED_AT.date().isoformat()
+GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
 
 # METADATA ********************
 
@@ -93,9 +96,11 @@ def latest_dimension(source_table, target_table, key_columns, select_columns):
         .where(F.col("_gold_dimension_rank") == 1)
         .drop("_gold_dimension_rank")
     )
-    dimension = current.select(*[
-        F.col(source).alias(target) for source, target in select_columns
-    ])
+    dimension = current.select(
+        *[F.col(source).alias(target) for source, target in select_columns],
+        F.col("export_date").cast("timestamp").alias("export_date"),
+        F.lit(GOLD_JOB_RUN_ID).alias("job_run_id"),
+    )
     (dimension.write.format("delta").mode("overwrite")
         .option("overwriteSchema", "true").saveAsTable(target_table))
     print(f"{target_table}: {dimension.count():,} rows from {source_table}")
@@ -103,9 +108,11 @@ def latest_dimension(source_table, target_table, key_columns, select_columns):
 
 def copy_bridge(source_table, target_table, required_columns, select_columns):
     require_columns(source_table, required_columns)
-    bridge = spark.table(source_table).select(*[
-        F.col(source).alias(target) for source, target in select_columns
-    ]).dropDuplicates()
+    bridge = spark.table(source_table).select(
+        *[F.col(source).alias(target) for source, target in select_columns],
+        F.col("export_date").cast("timestamp").alias("export_date"),
+        F.lit(GOLD_JOB_RUN_ID).alias("job_run_id"),
+    ).dropDuplicates()
     (bridge.write.format("delta").mode("overwrite")
         .option("overwriteSchema", "true").saveAsTable(target_table))
     print(f"{target_table}: {bridge.count():,} rows from {source_table}")
@@ -132,6 +139,8 @@ SELECT
   DATE_FORMAT(date_value, 'EEEE') AS day_of_week_name,
   DAYOFMONTH(date_value) AS day_of_month,
   CASE WHEN DAYOFWEEK(date_value) IN (1, 7) THEN false ELSE true END AS is_weekday,
+  CAST('{GOLD_EXPORT_DATE}' AS TIMESTAMP) AS export_date,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id,
   CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM (
   SELECT EXPLODE(SEQUENCE(DATE '2020-01-01', DATE '2035-12-31', INTERVAL 1 DAY)) AS date_value
@@ -206,22 +215,33 @@ latest_dimension(
      ("start_date", "start_date"), ("export_date", "source_export_date")],
 )
 
-require_columns("silver.referral", ["placement_type", "referral_status"])
-require_columns("silver.ipa", ["placement_type"])
+require_columns("silver.referral", ["placement_type", "referral_status", "export_date"])
+require_columns("silver.ipa", ["placement_type", "export_date"])
 placement_types = (
-    spark.table("silver.referral").select(F.col("placement_type").alias("placement_type"))
-    .unionByName(spark.table("silver.ipa").select(F.col("placement_type").alias("placement_type")))
+    spark.table("silver.referral").select(
+        F.col("placement_type").alias("placement_type"),
+        F.col("export_date").cast("timestamp").alias("export_date"),
+    )
+    .unionByName(spark.table("silver.ipa").select(
+        F.col("placement_type").alias("placement_type"),
+        F.col("export_date").cast("timestamp").alias("export_date"),
+    ))
     .where(F.col("placement_type").isNotNull() & (F.trim(F.col("placement_type")) != ""))
-    .dropDuplicates()
+    .groupBy("placement_type").agg(F.max("export_date").alias("export_date"))
+    .withColumn("job_run_id", F.lit(GOLD_JOB_RUN_ID))
     .withColumn("gold_modelled_at", F.current_timestamp())
 )
 (placement_types.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true").saveAsTable("gold.dim_placement_type"))
 
 referral_statuses = (
-    spark.table("silver.referral").select(F.col("referral_status").alias("referral_status"))
+    spark.table("silver.referral").select(
+        F.col("referral_status").alias("referral_status"),
+        F.col("export_date").cast("timestamp").alias("export_date"),
+    )
     .where(F.col("referral_status").isNotNull() & (F.trim(F.col("referral_status")) != ""))
-    .dropDuplicates()
+    .groupBy("referral_status").agg(F.max("export_date").alias("export_date"))
+    .withColumn("job_run_id", F.lit(GOLD_JOB_RUN_ID))
     .withColumn("gold_modelled_at", F.current_timestamp())
 )
 (referral_statuses.write.format("delta").mode("overwrite")
@@ -264,6 +284,8 @@ dim_person = person_current.select(
     F.col("ethnicity").alias("ethnicity"),
     F.col("religion").alias("religion"),
     F.col("preferred_language").alias("preferred_language"),
+    F.col("export_date").cast("timestamp").alias("export_date"),
+    F.lit(GOLD_JOB_RUN_ID).alias("job_run_id"),
     F.col("export_date").alias("source_export_date"),
 )
 (dim_person.write.format("delta").mode("overwrite")
@@ -273,12 +295,15 @@ print(f"gold.dim_person: {dim_person.count():,} rows from silver.referral_person
 # GLD-008: offer-status dimension with labels and lifecycle flags, rebuilt
 # from the distinct offer_status codes observed in Silver. Unknown future
 # codes are kept with a null label, matching the legacy model behaviour.
-require_columns("silver.offer", ["offer_status"])
+require_columns("silver.offer", ["offer_status", "export_date"])
 offer_statuses = (
     spark.table("silver.offer")
-    .select(F.col("offer_status").alias("offer_status"))
+    .select(
+        F.col("offer_status").alias("offer_status"),
+        F.col("export_date").cast("timestamp").alias("export_date"),
+    )
     .where(F.col("offer_status").isNotNull() & (F.trim(F.col("offer_status")) != ""))
-    .dropDuplicates()
+    .groupBy("offer_status").agg(F.max("export_date").alias("export_date"))
     .withColumn(
         "offer_status_label",
         F.when(F.col("offer_status") == "OFFER_SUCCESSFUL", "Accepted")
@@ -299,8 +324,9 @@ offer_statuses = (
     )
     .select(
         "offer_status_sk", "offer_status", "offer_status_label",
-        "is_active_offer", "is_accepted", "is_terminal",
+        "is_active_offer", "is_accepted", "is_terminal", "export_date",
     )
+    .withColumn("job_run_id", F.lit(GOLD_JOB_RUN_ID))
     .withColumn("gold_modelled_at", F.current_timestamp())
 )
 (offer_statuses.write.format("delta").mode("overwrite")

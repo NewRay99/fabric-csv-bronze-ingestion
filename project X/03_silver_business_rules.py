@@ -361,7 +361,8 @@ log_step(f"Main DQ pass complete: {len(result_rows)} checks, {len(critical_failu
 from pyspark.sql.types import DateType, IntegerType, StringType, StructField, StructType
 
 def replace_silver_materialisation(frame, table_name):
-    (frame.write.format("delta").mode("overwrite")
+    (frame.withColumn("job_run_id", F.lit(JOB_RUN_ID).cast("string"))
+        .write.format("delta").mode("overwrite")
         .option("overwriteSchema", "true")
         .saveAsTable(f"{SILVER_SCHEMA}.{table_name}"))
 

@@ -327,6 +327,7 @@ def format_frame(frame, schema_cols, source_kind, source_table):
         .withColumn("_record_source", F.lit(source_kind))
         .withColumn("_source_table", F.lit(source_table))
         .withColumn("_silver_run_id", F.lit(RUN_ID))
+        .withColumn("job_run_id", F.lit(JOB_RUN_ID).cast("string"))
         .withColumn("_silver_load_ts", F.current_timestamp()))
 
 
