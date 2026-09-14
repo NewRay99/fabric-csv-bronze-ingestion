@@ -10,62 +10,6 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
-
-## Issue identifier legend
-
-| Prefix | Issue type | Number of issues |
-| --- | --- | ---: |
-| `AR` | Archive-layer loader and replay issue | 13 |
-| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
-| `LIVE-ETL` | Live ETL pipeline issue | 3 |
-| `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 13 |
-| `CFG` | Configuration and monitoring issue | 9 |
-| `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **66** |
-
-Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
-where applicable. `Status` records whether the source change is complete; a
-Fabric replay remains a separate deployment verification unless stated.
-
-## DQ-004 — Essential versus thorough Silver DQ runs
-
-- **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking
-  `CRITICAL` rules in `03_silver_business_rules` on weekdays, or all active
-  DQ rules when set to `false` for a thorough run.
-- **Implementation:** the live runner passes the parameter only to the Silver
-  DQ child. The notebook filters both source-table and derived-referral rules
-  by configured severity in essential mode, while always rebuilding derived
-  Silver reporting tables. The run mode is recorded in `cfg_pipeline_run`.
-
-## LIN-002 — Silver and Gold job-run lineage
-
-- **Feature:** every Silver and Gold materialisation now includes a
-  `job_run_id` column for end-to-end correlation with the parent live-pipeline
-  run.
-- **Implementation:** `99_common_library` writes the parent ID to contract
-  Silver tables and `03_silver_business_rules` adds it to derived Silver
-  tables. `04_gold_model` and `05_gold_dimensions` add the same ID to every
-  fact, snapshot, dimension and bridge. Standalone Gold runs generate an ID
-  when a parent ID is not supplied.
-- **Validation:** the root and deployed WMPP notebook regression checks assert
-  that the field remains present. Rerun affected Gold notebooks after
-  deployment to update their Delta schemas.
-
-## GLD-014 — Gold export-date lineage
-
-- **Feature:** every materialised Gold fact, snapshot, dimension and bridge now
-  publishes an `export_date` timestamp. Source-backed tables retain their
-  selected Silver row's export timestamp; generated dimensions use the active
-  Gold as-of date. Existing `source_export_date` fields remain for compatibility.
-- **Implementation:** `04_gold_model` adds the field to referral, offer, IPA,
-  referral-provider and lifecycle facts plus the referral snapshot.
-  `05_gold_dimensions` adds it to source-backed dimensions and bridges, and to
-  the generated date, placement-type, referral-status and offer-status dimensions.
-- **Validation:** regression checks require the root and deployed WMPP Gold
-  notebooks to retain the field; rerun `04_gold_model` and
-  `05_gold_dimensions` after deployment to rebuild the Delta schemas.
-
 ## 2026-09-13 — Silver export_date propagation and Gold semantic-model push-downs
 
 - SI-025: `export_date` now propagates from Bronze into every Silver table via a
@@ -135,6 +79,62 @@ Fabric replay remains a separate deployment verification unless stated.
 - Evidence and reproducible diffs: [notebook comparison](../reports/notebook-comparison/README.md).
 - Validation: all 22 existing validators pass against the converted source.
   Fabric execution and import remain separate acceptance checks.
+
+## Issue identifier legend
+
+| Prefix | Issue type | Number of issues |
+| --- | --- | ---: |
+| `AR` | Archive-layer loader and replay issue | 13 |
+| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
+| `LIVE-ETL` | Live ETL pipeline issue | 3 |
+| `SI` / `SIL` | Silver-layer issue | 25 |
+| `GLD` | Gold-layer issue | 13 |
+| `CFG` | Configuration and monitoring issue | 9 |
+| `RG` | Repository reorganisation issue | 1 |
+| **Total classified issues** |  | **66** |
+
+Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
+where applicable. `Status` records whether the source change is complete; a
+Fabric replay remains a separate deployment verification unless stated.
+
+## DQ-004 — Essential versus thorough Silver DQ runs
+
+- **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking
+  `CRITICAL` rules in `03_silver_business_rules` on weekdays, or all active
+  DQ rules when set to `false` for a thorough run.
+- **Implementation:** the live runner passes the parameter only to the Silver
+  DQ child. The notebook filters both source-table and derived-referral rules
+  by configured severity in essential mode, while always rebuilding derived
+  Silver reporting tables. The run mode is recorded in `cfg_pipeline_run`.
+
+## LIN-002 — Silver and Gold job-run lineage
+
+- **Feature:** every Silver and Gold materialisation now includes a
+  `job_run_id` column for end-to-end correlation with the parent live-pipeline
+  run.
+- **Implementation:** `99_common_library` writes the parent ID to contract
+  Silver tables and `03_silver_business_rules` adds it to derived Silver
+  tables. `04_gold_model` and `05_gold_dimensions` add the same ID to every
+  fact, snapshot, dimension and bridge. Standalone Gold runs generate an ID
+  when a parent ID is not supplied.
+- **Validation:** the root and deployed WMPP notebook regression checks assert
+  that the field remains present. Rerun affected Gold notebooks after
+  deployment to update their Delta schemas.
+
+## GLD-014 — Gold export-date lineage
+
+- **Feature:** every materialised Gold fact, snapshot, dimension and bridge now
+  publishes an `export_date` timestamp. Source-backed tables retain their
+  selected Silver row's export timestamp; generated dimensions use the active
+  Gold as-of date. Existing `source_export_date` fields remain for compatibility.
+- **Implementation:** `04_gold_model` adds the field to referral, offer, IPA,
+  referral-provider and lifecycle facts plus the referral snapshot.
+  `05_gold_dimensions` adds it to source-backed dimensions and bridges, and to
+  the generated date, placement-type, referral-status and offer-status dimensions.
+- **Validation:** regression checks require the root and deployed WMPP Gold
+  notebooks to retain the field; rerun `04_gold_model` and
+  `05_gold_dimensions` after deployment to rebuild the Delta schemas.
+
 
 ## AR-001 — Only one archive batch processed
 
