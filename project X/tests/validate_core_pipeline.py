@@ -68,6 +68,13 @@ for name in SILVER_NOTEBOOKS:
     assert REQUIRED_FRACTIONAL_FORMATS.issubset(formats), (
         f"{name}: missing fractional timestamp formats"
     )
+    assert "yyyy-MM-dd" in set(parameters.get("TIMESTAMP_FORMATS", [])), (
+        f"{name}: date-only export_date values must parse as TIMESTAMP"
+    )
+    if name == "02a_archive_silver.py":
+        assert "yyyy-MM-dd'T'HH-mm-ssX" in set(parameters.get("TIMESTAMP_FORMATS", [])), (
+            f"{name}: legacy archive export_date values must parse"
+        )
     assert 'spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)' in notebook_source(notebook)
     print(f"PASS fractional timestamp regression: {name}")
 
@@ -76,7 +83,8 @@ assert "month_end_dates = sorted(month_last_dates.values())" in archive_source
 assert "for snapshot_date in month_end_dates:" in archive_source
 assert "for batch_date in batch_dates:" not in archive_source
 assert "spark.table(source_table).where(" in archive_source
-assert 'F.to_date("export_date") == F.lit(source_date)' in archive_source
+assert "parsed_archive_export_timestamp" in archive_source
+assert "F.to_date(parsed_archive_export_timestamp(F.col(\"export_date\")))" in archive_source
 common_notebook = read_notebook(ROOT / "99_common_library.py")
 common_source = notebook_source(common_notebook)
 assert "deduplicate_frame(raw_frame, schema_cols)" in archive_source

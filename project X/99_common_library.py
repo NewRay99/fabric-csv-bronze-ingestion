@@ -52,6 +52,7 @@ TIMESTAMP_FORMATS = globals().get(
         "yyyy-MM-dd HH:mm:ss.S", "yyyy-MM-dd HH:mm:ss",
         "yyyy-MM-dd'T'HH:mm:ss.SSSSSS", "yyyy-MM-dd'T'HH:mm:ss.SSS",
         "yyyy-MM-dd'T'HH:mm:ss.S", "yyyy-MM-dd'T'HH:mm:ss",
+        "yyyy-MM-dd'T'HH-mm-ssX",
     ],
 )
 VERBOSE_DIAGNOSTICS = globals().get("VERBOSE_DIAGNOSTICS", False)

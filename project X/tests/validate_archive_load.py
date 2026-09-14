@@ -168,7 +168,9 @@ print("PASS archive-audit toggle filters audit files at the inventory seam")
 # Legacy target conversion must complete before any dated/source rows are deleted.
 assert "def ensure_archive_export_date_timestamp(" in helpers
 assert "_source_export_date" not in all_source
-assert 'F.to_timestamp(F.col("export_date"))' in helpers
+assert "def parse_archive_export_date_timestamp(" in helpers
+assert '"yyyy-MM-dd\'T\'HH-mm-ssX"' in helpers
+assert "parse_archive_export_date_timestamp(" in helpers
 assert 'option("overwriteSchema", "true")' in helpers
 assert "Invalid legacy export_date values" in helpers
 assert "ensure_archive_export_date_timestamp(target_object)" in file_loop

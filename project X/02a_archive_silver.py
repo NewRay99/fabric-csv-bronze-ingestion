@@ -118,6 +118,7 @@ TIMESTAMP_FORMATS = [
     "yyyy-MM-dd'T'HH:mm:ss",
     "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
     "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX",
+    "yyyy-MM-dd'T'HH-mm-ssX",
 ]
 
 # METADATA ********************
@@ -376,6 +377,11 @@ def complete_framework_schema(schema_cols, source_table, target_table):
         key=lambda column: int(column.get("ordinal_position") or 999999),
     )
 
+def parsed_archive_export_timestamp(column):
+    """Parse both canonical and legacy archive export-date representations."""
+    return first_parsed(F.trim(column.cast("string")), TIMESTAMP_FORMATS, F.to_timestamp)
+
+
 for physical_table in physical_tables:
     source_table = f"{ARCHIVE_SCHEMA}.{physical_table}"
     source_frame = spark.table(source_table)
@@ -387,7 +393,9 @@ for physical_table in physical_tables:
     table_dates = sorted(
         row["export_date"]
         for row in source_frame
-            .select(F.to_date("export_date").alias("export_date"))
+            .select(F.to_date(
+                parsed_archive_export_timestamp(F.col("export_date"))
+            ).alias("export_date"))
             .where(F.col("export_date").isNotNull())
             .distinct().collect()
     )
@@ -690,7 +698,8 @@ def materialise_table_month_end(table_info, snapshot_date):
             read_framework_fallback(snapshot_date)
             if use_fallback
             else spark.table(source_table).where(
-                F.to_date("export_date") == F.lit(source_date)
+                F.to_date(parsed_archive_export_timestamp(F.col("export_date")))
+                == F.lit(source_date)
             )
         )
         source_count = raw_frame.count()

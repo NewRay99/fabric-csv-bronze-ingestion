@@ -53,6 +53,7 @@ DATE_FORMATS = ["yyyy-MM-dd", "dd/MM/yyyy", "yyyy-MM-dd'T'HH:mm:ss"]
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 TIMESTAMP_FORMATS = [
+    "yyyy-MM-dd",
     "yyyy-MM-dd HH:mm:ss.SSSSSS",
     "yyyy-MM-dd HH:mm:ss.SSS",
     "yyyy-MM-dd HH:mm:ss.S",
@@ -63,6 +64,7 @@ TIMESTAMP_FORMATS = [
     "yyyy-MM-dd'T'HH:mm:ss",
     "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
     "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX",
+    "yyyy-MM-dd'T'HH-mm-ssX",
 ]
 
 # METADATA ********************

@@ -320,6 +320,30 @@ def ensure_legacy_audit_lineage(target_object):
 
 
 
+ARCHIVE_EXPORT_DATE_FORMATS = [
+    "yyyy-MM-dd",
+    "yyyy-MM-dd HH:mm:ss.SSSSSS",
+    "yyyy-MM-dd HH:mm:ss.SSS",
+    "yyyy-MM-dd HH:mm:ss.S",
+    "yyyy-MM-dd HH:mm:ss",
+    "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+    "yyyy-MM-dd'T'HH:mm:ss.SSS",
+    "yyyy-MM-dd'T'HH:mm:ss.S",
+    "yyyy-MM-dd'T'HH:mm:ss",
+    "yyyy-MM-dd'T'HH:mm:ssX",
+    "yyyy-MM-dd'T'HH-mm-ssX",
+]
+
+
+def parse_archive_export_date_timestamp(column):
+    """Parse canonical and legacy archive export-date strings to TIMESTAMP."""
+    value = F.trim(column.cast("string"))
+    return F.coalesce(*[
+        F.to_timestamp(value, date_format)
+        for date_format in ARCHIVE_EXPORT_DATE_FORMATS
+    ])
+
+
 def ensure_archive_export_date_timestamp(target_object):
     """Safely migrate a legacy archive target's export_date to TIMESTAMP.
 
@@ -343,7 +367,9 @@ def ensure_archive_export_date_timestamp(target_object):
         return False
 
     source_df = spark.table(target_object)
-    converted_export_date = F.to_timestamp(F.col("export_date"))
+    converted_export_date = parse_archive_export_date_timestamp(
+        F.col("export_date")
+    )
     invalid_samples = (
         source_df
         .select(

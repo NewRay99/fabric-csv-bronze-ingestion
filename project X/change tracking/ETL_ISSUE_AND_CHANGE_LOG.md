@@ -16,6 +16,11 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
   self-healing contract guard (`ensure_export_date_contract`) in
   `99_common_library`, applied by `02_silver_formatter` and
   `02a_archive_silver`; four new DQ rules guard the column.
+- SI-025 correction: the deployed WMPP formatter now carries the same
+  self-healing contract guard, parses date-only Bronze values such as
+  `2026-09-12`, and recognises the legacy archive representation
+  `2026-09-12T00-00-00Z`. Archive date discovery, snapshot selection and
+  legacy-table migration use the explicit parser before a Silver run.
 - GLD-013: mined the 268 measures in `SM WMPP v15 (3).zip` and pushed the
   remaining computable business rules into the pipeline:
   `silver.referral_enrichment` gained `provider_assignment_count`;
