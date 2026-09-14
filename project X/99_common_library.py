@@ -64,6 +64,9 @@ RUN_ID = globals().get("RUN_ID", str(uuid.uuid4()))
 JOB_RUN_ID = globals().get("JOB_RUN_ID", "")
 STARTED_AT = globals().get("STARTED_AT", datetime.utcnow())
 spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)
+# Fabric is a Spark 3+ runtime. Preserve historical source timestamps while
+# allowing Delta/Parquet writes for values before 1900 (LIVE-ETL-004).
+spark.conf.set("spark.sql.parquet.datetimeRebaseModeInWrite", "CORRECTED")
 
 ETL_EXCLUDED_TABLES = [
     "ref_KPI_Definition",

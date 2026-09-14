@@ -49,6 +49,9 @@ def main():
     assert "def ensure_export_date_contract" in common_text, (
         "Common library lacks the SI-025 export_date contract guard"
     )
+    assert 'spark.conf.set("spark.sql.parquet.datetimeRebaseModeInWrite", "CORRECTED")' in common_text, (
+        "Common library lacks the Spark 3 Parquet ancient-datetime write policy"
+    )
 
     for notebook in NOTEBOOKS:
         text = source(notebook)
@@ -79,6 +82,9 @@ def main():
     deployed_common_text = source(DEPLOYED_COMMON_LIBRARY)
     assert "def ensure_export_date_contract" in deployed_common_text, (
         "Deployed WMPP common library lacks the SI-025 export_date contract guard"
+    )
+    assert 'spark.conf.set("spark.sql.parquet.datetimeRebaseModeInWrite", "CORRECTED")' in deployed_common_text, (
+        "Deployed WMPP common library lacks the Spark 3 Parquet ancient-datetime write policy"
     )
     assert "ensure_export_date_contract(contracts[contract_key])" in deployed_text, (
         "Deployed WMPP formatter can drop export_date from a stale control-table contract"
