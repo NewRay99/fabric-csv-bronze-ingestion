@@ -10,6 +10,24 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+
+## Issue identifier legend
+
+| Prefix | Issue type | Number of issues |
+| --- | --- | ---: |
+| `AR` | Archive-layer loader and replay issue | 13 |
+| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
+| `LIVE-ETL` | Live ETL pipeline issue | 3 |
+| `SI` / `SIL` | Silver-layer issue | 25 |
+| `GLD` | Gold-layer issue | 13 |
+| `CFG` | Configuration and monitoring issue | 9 |
+| `RG` | Repository reorganisation issue | 1 |
+| **Total classified issues** |  | **66** |
+
+Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
+where applicable. `Status` records whether the source change is complete; a
+Fabric replay remains a separate deployment verification unless stated.
+
 ## DQ-004 — Essential versus thorough Silver DQ runs
 
 - **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking
@@ -117,23 +135,6 @@ Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 - Evidence and reproducible diffs: [notebook comparison](../reports/notebook-comparison/README.md).
 - Validation: all 22 existing validators pass against the converted source.
   Fabric execution and import remain separate acceptance checks.
-
-## Issue identifier legend
-
-| Prefix | Issue type | Number of issues |
-| --- | --- | ---: |
-| `AR` | Archive-layer loader and replay issue | 13 |
-| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
-| `LIVE-ETL` | Live ETL pipeline issue | 3 |
-| `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 13 |
-| `CFG` | Configuration and monitoring issue | 9 |
-| `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **66** |
-
-Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
-where applicable. `Status` records whether the source change is complete; a
-Fabric replay remains a separate deployment verification unless stated.
 
 ## AR-001 — Only one archive batch processed
 
@@ -1836,3 +1837,89 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
   covers the new flags (runs in Fabric); a 15-case DuckDB smoke test verified
   the new Gold SQL semantics locally.
 - **Status:** source change complete.
+
+## LIVE-ETL-004 error with silver_fomratter notebook
+
+JOB_RUN_ID=afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e
+FORCE_RERUN=True
+RUN_ESSENTIAL_DQ=True
+=== START 00_setup_cfg ===
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+00_setup_cfg
+Succeeded
+100%
+56 sec 433 ms	
+-
+-
+=== SUCCESS 00_setup_cfg ===
+=== START 01_bronze_get_latest; JOB_RUN_ID=afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e ===
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+01_bronze_get_latest
+Succeeded
+100%
+2 min 55 sec 98 ms	
+-
+-
+=== SUCCESS 01_bronze_get_latest ===
+=== START 01a_cfg_schema_capture_live; JOB_RUN_ID=afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e ===
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+01a_cfg_schema_capture_live
+Succeeded
+100%
+1 min 4 sec 73 ms	
+-
+-
+=== SUCCESS 01a_cfg_schema_capture_live ===
+=== START 02_silver_formatter; JOB_RUN_ID=afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e ===
+Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
+0
+02_silver_formatter
+Failed
+92%
+18 min 11 sec 308 ms	
+-
+Silver formatting failed for 1 table(s): bronze.provider_submission_docs: An error occurred while calling o7486.saveAsTable. : org.apache.spark.SparkException: Job aborted due to stage failure: Task 1 in stage 7659.0 failed 4 times, most recent failure: Lost task 1.3 in stage 7659.0 (TID 72689) (vm-d9b38539 executor 3): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/provider_submission_docs. at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387) at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93) at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166) at org.apache.spark.scheduler.Task.run(Task.scala:141) at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636) at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64) at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61) at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95) at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639) at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) at java.base/java.lang.Thread.run(Thread.java:829) Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.WRITE_ANCIENT_DATETIME] You may get a different result due to the upgrading to Spark >= 3.0: writing dates before 1582-10-15 or timestamps before 1900-01-01T00:00:00Z into Parquet files can be dangerous, as the files may be read by Spark 2.x or legacy versions of Hive later, which uses a legacy hybrid calendar that is different from Spark 3.0+'s Proleptic Gregorian calendar. See more details in SPARK-31404. You can set "spark.sql.parquet.datetimeRebaseModeInWrite" to "LEGACY" to rebase the datetime values w.r.t. the calendar difference during writing, to get maximum interoperability. Or set the config to "CORRECTED" to write the datetime values as it is, if you are sure that the written files will only be read by Spark 3.0+ or other systems that use Proleptic Gregorian calendar. at org.apache.spark.sql.errors.QueryExecutionErrors$.sparkUpgradeInWritingDatesError(QueryExecutionErrors.scala:762) at org.apache.spark.sql.execution.datasources.DataSourceUtils$.newRebaseExceptionInWrite(DataSourceUtils.scala:187) at org.apache.spark.sql.execution.datasources.DataSourceUtils$.$anonfun$createTimestampRebaseFuncInWrite$1(DataSourceUtils.scala:232) at org.apache.spark.sql.execution.arrow.RebasingTimestampWriter.setValue(RebasingArrowWriter.scala:130) at org.apache.spark.sql.execution.arrow.ArrowFieldWriter.write(ArrowWriter.scala:135) at org.apache.spark.sql.execution.arrow.ExceptionSafeArrowWriter.write(RebasingArrowWriter.scala:148) at com.microsoft.azure.spark.nativeparquetwriter.ArrowBatchWriter.write(ArrowBatchWriter.scala:37) at com.microsoft.azure.spark.nativeparquetwriter.NativeParquetOutputWriter.write(NativeParquetOutputWriter.scala:186) at org.apache.spark.sql.execution.datasources.SingleDirectoryDataWriter.write(FileFormatDataWriter.scala:241) at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithMetrics(FileFormatDataWriter.scala:115) at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603) at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallba ---------------------------------------------------------------------------RuntimeError Traceback (most recent call last)Cell In[14], line 154 152 print(f"Latest Silver run {RUN_ID}: {status}; loaded={ok}, skipped={skipped}, failed={failed}") 153 if errors and FAIL_ON_TABLE_ERROR: --> 154 raise RuntimeError(f"Silver formatting failed for {failed} table(s): {error_text}") RuntimeError: Silver formatting failed for 1 table(s): bronze.provider_submission_docs: An error occurred while calling o7486.saveAsTable. : org.apache.spark.SparkException: Job aborted due to stage failure: Task 1 in stage 7659.0 failed 4 times, most recent failure: Lost task 1.3 in stage 7659.0 (TID 72689) (vm-d9b38539 executor 3): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/provider_submission_docs. at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387) at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93) at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166) at org.apache.spark.scheduler.Task.run(Task.scala:141) at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636) at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64) at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61) at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95) at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639) at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128) at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628) at java.base/java.lang.Thread.run(Thread.java:829) Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.WRITE_ANCIENT_DATETIME] You may get a different result due to the upgrading to Spark >= 3.0: writing dates before 1582-10-15 or timestamps before 1900-01-01T00:00:00Z into Parquet files can be dangerous, as the files may be read by Spark 2.x or legacy versions of Hive later, which uses a legacy hybrid calendar that is different from Spark 3.0+'s Proleptic Gregorian calendar. See more details in SPARK-31404. You can set "spark.sql.parquet.datetimeRebaseModeInWrite" to "LEGACY" to rebase the datetime values w.r.t. the calendar difference during writing, to get maximum interoperability. Or set the config to "CORRECTED" to write the datetime values as it is, if you are sure that the written files will only be read by Spark 3.0+ or other systems that use Proleptic Gregorian calendar. at org.apache.spark.sql.errors.QueryExecutionErrors$.sparkUpgradeInWritingDatesError(QueryExecutionErrors.scala:762) at org.apache.spark.sql.execution.datasources.DataSourceUtils$.newRebaseExceptionInWrite(DataSourceUtils.scala:187) at org.apache.spark.sql.execution.datasources.DataSourceUtils$.$anonfun$createTimestampRebaseFuncInWrite$1(DataSourceUtils.scala:232) at org.apache.spark.sql.execution.arrow.RebasingTimestampWriter.setValue(RebasingArrowWriter.scala:130) at org.apache.spark.sql.execution.arrow.ArrowFieldWriter.write(ArrowWriter.scala:135) at org.apache.spark.sql.execution.arrow.ExceptionSafeArrowWriter.write(RebasingArrowWriter.scala:148) at com.microsoft.azure.spark.nativeparquetwriter.ArrowBatchWriter.write(ArrowBatchWriter.scala:37) at com.microsoft.azure.spark.nativeparquetwriter.NativeParquetOutputWriter.write(NativeParquetOutputWriter.scala:186) at org.apache.spark.sql.execution.datasources.SingleDirectoryDataWriter.write(FileFormatDataWriter.scala:241) at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithMetrics(FileFormatDataWriter.scala:115) at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122) at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeTask$3(DeltaFileFormatWriter.scala:603) at org.apache.spark.util.Utils$.tryWithSafeFinallyAndFailureCallbaYou can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
+=== FAILED 02_silver_formatter: An error occurred while calling o7202.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Silver formatting failed for 1 table(s): bronze.provider_submission_docs: An error occurred while calling o7486.saveAsTable.
+: org.apache.spark.SparkException: Job aborted due to stage failure: Task 1 in stage 7659.0 failed 4 times, most recent failure: Lost task 1.3 in stage 7659.0 (TID 72689) (vm-d9b38539 executor 3): org.apache.spark.SparkException: [TASK_WRITE_FAILED] Task failed while writing rows to abfss://fefdb483-d26c-4bd9-9a4f-0c41cc786770@onelake.dfs.fabric.microsoft.com/d286fa39-f255-4ba7-a982-32cb69362ef7/Tables/silver/provider_submission_docs.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.taskFailedWhileWritingRowsError(QueryExecutionErrors.scala:777)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.executeTask(DeltaFileFormatWriter.scala:621)
+	at org.apache.spark.sql.delta.files.DeltaFileFormatWriter$.$anonfun$executeWrite$4(DeltaFileFormatWriter.scala:387)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:166)
+	at org.apache.spark.scheduler.Task.run(Task.scala:141)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$4(Executor.scala:636)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:64)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:61)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:95)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:639)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+	at java.base/java.lang.Thread.run(Thread.java:829)
+Caused by: org.apache.spark.SparkUpgradeException: [INCONSISTENT_BEHAVIOR_CROSS_VERSION.WRITE_ANCIENT_DATETIME] You may get a different result due to the upgrading to Spark >= 3.0:
+writing dates before 1582-10-15 or timestamps before 1900-01-01T00:00:00Z
+into Parquet files can be dangerous, as the files may be read by Spark 2.x
+or legacy versions of Hive later, which uses a legacy hybrid calendar that
+is different from Spark 3.0+'s Proleptic Gregorian calendar. See more
+details in SPARK-31404. You can set "spark.sql.parquet.datetimeRebaseModeInWrite" to "LEGACY" to rebase the
+datetime values w.r.t. the calendar difference during writing, to get maximum
+interoperability. Or set the config to "CORRECTED" to write the datetime
+values as it is, if you are sure that the written files will only be read by
+Spark 3.0+ or other systems that use Proleptic Gregorian calendar.
+	at org.apache.spark.sql.errors.QueryExecutionErrors$.sparkUpgradeInWritingDatesError(QueryExecutionErrors.scala:762)
+	at org.apache.spark.sql.execution.datasources.DataSourceUtils$.newRebaseExceptionInWrite(DataSourceUtils.scala:187)
+	at org.apache.spark.sql.execution.datasources.DataSourceUtils$.$anonfun$createTimestampRebaseFuncInWrite$1(DataSourceUtils.scala:232)
+	at org.apache.spark.sql.execution.arrow.RebasingTimestampWriter.setValue(RebasingArrowWriter.scala:130)
+	at org.apache.spark.sql.execution.arrow.ArrowFieldWriter.write(ArrowWriter.scala:135)
+	at org.apache.spark.sql.execution.arrow.ExceptionSafeArrowWriter.write(RebasingArrowWriter.scala:148)
+	at com.microsoft.azure.spark.nativeparquetwriter.ArrowBatchWriter.write(ArrowBatchWriter.scala:37)
+	at com.microsoft.azure.spark.nativeparquetwriter.NativeParquetOutputWriter.write(NativeParquetOutputWriter.scala:186)
+	at org.apache.spark.sql.execution.datasources.SingleDirectoryDataWriter.write(FileFormatDataWriter.scala:241)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithMetrics(FileFormatDataWriter.scala:115)
+	at org.apache.spark.sql.execution.datasources.FileFormatDataWriter.writeWithIterator(FileFormatDataWriter.scala:122)
+	at org.apache. === 
+
+
