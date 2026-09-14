@@ -39,7 +39,8 @@
 NOTEBOOK_TIMEOUT_SECONDS = 1800
 STOP_ON_ERROR = True
 JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
-FORCE_RERUN = "false"  # Set true to reprocess an already-successful Bronze export.
+FORCE_RERUN = False  # Set True to reprocess an already-successful Bronze export.
+RUN_ESSENTIAL_DQ = False  # True runs only CRITICAL DQ rules in step 03.
 
 LIVE_STEPS = [
     ("00_setup_cfg", {}),
@@ -79,6 +80,7 @@ from notebookutils import mssparkutils
 PIPELINE_NAME = "90_run_live_pipeline"
 JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
 FORCE_RERUN = str(FORCE_RERUN).strip().lower() in {"true", "1", "yes", "y"}
+RUN_ESSENTIAL_DQ = str(RUN_ESSENTIAL_DQ).strip().lower() in {"true", "1", "yes", "y"}
 started_at = datetime.utcnow()
 results = []
 def record_step(step_sequence, notebook_name, status, step_started,
@@ -100,6 +102,7 @@ setup_name, setup_parameters = LIVE_STEPS[0]
 setup_started = datetime.utcnow()
 print(f"JOB_RUN_ID={JOB_RUN_ID}")
 print(f"FORCE_RERUN={FORCE_RERUN}")
+print(f"RUN_ESSENTIAL_DQ={RUN_ESSENTIAL_DQ}")
 print(f"=== START {setup_name} ===")
 try:
     setup_result = mssparkutils.notebook.run(
@@ -131,6 +134,8 @@ try:
             child_parameters = {**parameters, "JOB_RUN_ID": JOB_RUN_ID}
             if notebook_name == "02_silver_formatter":
                 child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()
+            if notebook_name == "03_silver_business_rules":
+                child_parameters["RUN_ESSENTIAL_DQ"] = str(RUN_ESSENTIAL_DQ).lower()
             result = mssparkutils.notebook.run(
                 notebook_name, NOTEBOOK_TIMEOUT_SECONDS,
                 child_parameters,

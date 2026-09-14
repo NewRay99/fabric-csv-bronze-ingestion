@@ -43,6 +43,7 @@
 SILVER_SCHEMA = "silver"
 MAX_REJECT_REFERENCES_PER_RULE = 100
 FAIL_ON_CRITICAL = True
+RUN_ESSENTIAL_DQ = False  # True runs only rules marked CRITICAL.
 
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
@@ -112,6 +113,8 @@ STARTED_AT = datetime.utcnow()
 JOB_RUN_ID = JOB_RUN_ID or RUN_ID
 # Pipeline status joins to the parent job; individual DQ results retain RUN_ID.
 PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
+RUN_ESSENTIAL_DQ = str(RUN_ESSENTIAL_DQ).strip().lower() in {"true", "1", "yes", "y"}
+DQ_RUN_MODE = "ESSENTIAL" if RUN_ESSENTIAL_DQ else "THOROUGH"
 
 # METADATA ********************
 
@@ -122,7 +125,7 @@ PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
 
 # CELL ********************
 
-append_rows("monitoring.cfg_pipeline_run", [(PIPELINE_RUN_ID, "03_silver_business_rules", "SILVER", "LATEST",
+append_rows("monitoring.cfg_pipeline_run", [(PIPELINE_RUN_ID, "03_silver_business_rules", "SILVER", f"LATEST_{DQ_RUN_MODE}",
     STARTED_AT, None, "RUNNING", 0, 0, 0, 0, None, JOB_RUN_ID or None)],
     "run_id string,pipeline_name string,layer string,source_kind string,started_at timestamp,ended_at timestamp,status string,tables_succeeded int,tables_failed int,rows_read long,rows_written long,error_message string,job_run_id string")
 log_step("Pipeline run row registered")
@@ -178,6 +181,18 @@ validation_rules = [
     rule for rule in rules
     if rule.get("table_name") != "referral_enrichment"
 ]
+if RUN_ESSENTIAL_DQ:
+    # The weekday path retains every blocking integrity rule. Full
+    # referential, date-order and advisory business checks run in THOROUGH
+    # mode, normally scheduled for the weekend.
+    validation_rules = [
+        rule for rule in validation_rules
+        if (rule.get("severity") or "").upper() == "CRITICAL"
+    ]
+    derived_dq_rules = [
+        rule for rule in derived_dq_rules
+        if (rule.get("severity") or "").upper() == "CRITICAL"
+    ]
 rule_fields = ["rule_id", "active", "severity", "rule_type", "source_schema", "table_name",
     "column_name", "referenced_schema", "referenced_table", "referenced_column",
     "operator", "rule_value", "description"]
@@ -186,8 +201,9 @@ spark.createDataFrame(normalised_rule_rows,
     "rule_id string,active string,severity string,rule_type string,source_schema string,table_name string,column_name string,referenced_schema string,referenced_table string,referenced_column string,operator string,rule_value string,description string,loaded_at timestamp") \
     .write.format("delta").mode("overwrite").option("overwriteSchema", "true") \
     .saveAsTable("monitoring.cfg_data_quality_rule")
-print(f"Prepared {len(rules):,} data-quality rules")
-log_step(f"Prepared {len(rules):,} data-quality rules")
+scheduled_rule_count = len(validation_rules) + len(derived_dq_rules)
+print(f"Prepared {len(rules):,} data-quality rules; {DQ_RUN_MODE} mode will run {scheduled_rule_count:,}")
+log_step(f"Prepared {len(rules):,} data-quality rules; DQ mode={DQ_RUN_MODE}; scheduled={scheduled_rule_count:,}")
 
 # METADATA ********************
 

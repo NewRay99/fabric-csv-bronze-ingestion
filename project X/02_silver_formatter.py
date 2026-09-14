@@ -52,7 +52,7 @@ FAIL_ON_TABLE_ERROR = True
 DATE_FORMATS = ["yyyy-MM-dd", "dd/MM/yyyy", "yyyy-MM-dd'T'HH:mm:ss"]
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
-FORCE_RERUN = "false"  # Bypass a prior successful Silver-export audit once.
+FORCE_RERUN = False  # Bypass a prior successful Silver-export audit once.
 TIMESTAMP_FORMATS = [
     "yyyy-MM-dd",
     "yyyy-MM-dd HH:mm:ss.SSSSSS",

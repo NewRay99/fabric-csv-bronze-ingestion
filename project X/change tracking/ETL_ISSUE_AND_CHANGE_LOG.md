@@ -10,6 +10,16 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## DQ-004 — Essential versus thorough Silver DQ runs
+
+- **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking
+  `CRITICAL` rules in `03_silver_business_rules` on weekdays, or all active
+  DQ rules when set to `false` for a thorough run.
+- **Implementation:** the live runner passes the parameter only to the Silver
+  DQ child. The notebook filters both source-table and derived-referral rules
+  by configured severity in essential mode, while always rebuilding derived
+  Silver reporting tables. The run mode is recorded in `cfg_pipeline_run`.
+
 ## LIN-002 — Silver and Gold job-run lineage
 
 - **Feature:** every Silver and Gold materialisation now includes a

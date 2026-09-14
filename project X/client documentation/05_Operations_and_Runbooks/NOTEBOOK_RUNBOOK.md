@@ -162,11 +162,21 @@ formatter and downstream notebooks.
 ### Live-pipeline one-off rerun
 
 For an urgent same-day reload after a code or configuration change, run
-`90_run_live_pipeline` with `FORCE_RERUN = true`. The runner forwards the
+`90_run_live_pipeline` with `FORCE_RERUN = True`. The runner forwards the
 parameter to `02_silver_formatter`, which bypasses a prior successful
 Bronze-to-Silver audit for that execution only. It does not alter the audit
 table's `reload` flags, so the next normal run returns to the standard skip
-behaviour. Leave the parameter as `false` for scheduled runs.
+behaviour. Leave the parameter as `False` for scheduled runs.
+
+### Live-pipeline DQ mode
+
+`90_run_live_pipeline` accepts `RUN_ESSENTIAL_DQ`. Set it to `True` for the
+weekday path: step `03_silver_business_rules` runs only rules whose configured
+severity is `CRITICAL`, while still rebuilding its Silver reporting tables.
+Set it to `False` (the default) for the thorough run, which executes every
+active DQ rule. The `cfg_pipeline_run.source_kind` value records
+`LATEST_ESSENTIAL` or `LATEST_THOROUGH` for the step, so scheduled weekend
+runs can be distinguished in monitoring.
 
 ### Archive file/date
 
