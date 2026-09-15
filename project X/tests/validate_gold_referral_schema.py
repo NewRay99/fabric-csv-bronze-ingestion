@@ -79,7 +79,7 @@ gold_fact_tables = {
     "gold.fact_referral",
     "gold.fact_referral_lifecycle_event",
     "gold.fact_offer",
-    "gold.fct_ipa",
+    "gold.fact_ipa",
     "gold.fact_referral_provider",
 }
 for gold_fact_table in gold_fact_tables:
@@ -119,8 +119,8 @@ for required_field in [
     )
 assert "gold.fact_placement" in source, "missing controlled retirement of fact_placement"
 assert "CREATE OR REPLACE TABLE gold.fact_placement AS" not in source
-assert "CREATE OR REPLACE TABLE gold.fct_ipa AS" in source
-print("PASS Gold facts use the snake_case semantic contract and fct_ipa name")
+assert "CREATE OR REPLACE TABLE gold.fact_ipa AS" in source
+print("PASS Gold facts use the snake_case semantic contract and fact_ipa name")
 
 
 assert "GOLD_SOURCE_REQUIREMENTS" in source, "missing Gold source preflight"

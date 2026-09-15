@@ -19,7 +19,7 @@ This catalogue is generated from the committed v01 TMDL and replaces the older V
 This is an inventory of the extracted **v01** Power BI model, not a declaration
 of the active notebook-created Gold schema. In particular,
 `fact_referral_offer` and `fact_ipa` are v01 names. The active objects are
-`gold.fact_referral_provider` and `gold.fct_ipa`, with lower-case snake-case
+`gold.fact_referral_provider` and `gold.fact_ipa`, with lower-case snake-case
 fields throughout the active Gold model. This file is retained only as a v01
 archive; do not recreate its measures against its legacy tables. The active
 DAX build instructions are in

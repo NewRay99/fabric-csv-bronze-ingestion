@@ -10,6 +10,17 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## SEM-001 — Gold-only v15 report and requirement-aligned measures
+
+**15 September 2026 — implemented in repository; Fabric refresh and business acceptance pending.**
+
+- Migrated the extracted v15 business report to Gold-only business sources and consistent Import mode; embedded KPI/requirement reference metadata from Markdown. Removed legacy Silver staging and unused report views with missing-field dependencies.
+- Repaired referral/date relationships, stale calculated columns and 31 report JSON files with retired field bindings. Kept the provider-to-home relationship inactive to avoid two filter paths into offers; home/QA counts transfer provider IDs explicitly.
+- Corrected draft, pending-age, active/under-offer, gender, QA and refresh-label measures. Retained the original inclusive 15–30 KPI alongside the non-overlapping 15–29 dashboard band.
+- Added per-IPA signature flags to `gold.fact_ipa` and changed IPA counts/rates to meet the original IPA-grain requirements. Open unsigned and closed unsigned IPAs are distinguished. Same-day draft timestamp edits now count as activity.
+- Updated both measure libraries, the WIP guide, KPI reference, schema contract and the complete requirement disposition. See [implementation and acceptance details](../client%20documentation/04_Data_and_Reporting/GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md).
+- Validation: portable model/visual reference and graph checks, SQL signature predicate cases, and Microsoft TMDL deserialization. Live DAX and Fabric refresh have not been executed. Deploy the changed Gold notebook before refreshing the report.
+
 ## 2026-09-13 — Silver export_date propagation and Gold semantic-model push-downs
 
 - SI-025: `export_date` now propagates from Bronze into every Silver table via a
@@ -1288,7 +1299,7 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
 - **Symptom:** The Gold semantic model build guide lists 109 supported DAX measures and 15 unsupported KPI groups, but there was no audited proof that the active Gold layer (`04_gold_model.ipynb` + `05_gold_dimensions.ipynb`) actually supplies every column those measures require. Architecture docs also lacked a formal Gold-to-DAX schema contract and project navigation was fragmented.
 - **Cause:** Documentation drift — the build guide was written ahead of the notebooks, and no reverse-mapping exercise had been performed to confirm every DAX field exists in the current Gold tables. The `03_Architecture_and_Design` folder had no contract doc enforcing the rule that DAX must never reference `bronze.*`, `silver.*`, or retired tables.
 - **Fix:**
-  1. **Audit:** Cross-referenced all 109 supported DAX measures in `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` against the active Gold layer. Every required column was confirmed present in `gold.fct_ipa`, `gold.fact_referral_provider`, `gold.dim_date`, `gold.dim_provider`, `gold.dim_child`, `gold.dim_school`, `gold.dim_la`, `gold.dim_age_band`, `gold.dim_directory_summary_axis`, `gold.dim_fostering_axis`, `gold.dim_referral_closure_reason`, and related dimension tables.
+  1. **Audit:** Cross-referenced all 109 supported DAX measures in `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` against the active Gold layer. Every required column was confirmed present in `gold.fact_ipa`, `gold.fact_referral_provider`, `gold.dim_date`, `gold.dim_provider`, `gold.dim_child`, `gold.dim_school`, `gold.dim_la`, `gold.dim_age_band`, `gold.dim_directory_summary_axis`, `gold.dim_fostering_axis`, `gold.dim_referral_closure_reason`, and related dimension tables.
   2. **Coverage report:** Created `04_Data_and_Reporting/GOLD_DAX_FIELD_COVERAGE_AUDIT.md` containing the full 109-measure mapping table, visual dimension summary, and the 15 unsupported KPI groups with blocking reasons.
   3. **Schema contract:** Created `03_Architecture_and_Design/Gold_DAX_Schema_Contract.md` with Gold object inventory, column-to-DAX mapping rules, relationship cardinality rules, blocked/retired tables list, and extension rules for new measures.
   4. **Navigation skill:** Created `skills/PROJECT_NAVIGATION.md` with repo layout, notebook execution chain, document quick-reference, naming conventions, and common pitfalls.
@@ -1366,10 +1377,10 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
      expressions, `prep_stg_*`, `ref_*`, `KPI Selector`, axis/summary helper
      tables, and retired dims/facts listed in the schema contract Section 7).
   3. Rebuilt `relationships.tmdl` per `Gold_DAX_Schema_Contract.md`
-     Section 4 (14 relationships; `fct_ipa[ipa_issued_date]`,
+     Section 4 (14 relationships; `fact_ipa[ipa_issued_date]`,
      `fact_referral[required_placement_date]` and
      `fact_referral[referral_closed_date]` to `dim_date[date]` inactive;
-     no `fact_offer` -> `fct_ipa` route).
+     no `fact_offer` -> `fact_ipa` route).
   4. Rebuilt `_Measures.tmdl` with all 185 measures from
      `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (109 original + 76 legacy
      ports), format strings applied by type (counts `0`, costs `0.00`,

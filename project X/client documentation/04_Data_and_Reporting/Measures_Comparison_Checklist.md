@@ -11,7 +11,7 @@
 ---
 
 > **Historical comparison only.** The active notebook-created Gold semantic
-> model uses lower-case snake-case fields and `gold.fct_ipa`. Create or amend
+> model uses lower-case snake-case fields and `gold.fact_ipa`. Create or amend
 > measures only from the [Gold semantic-model DAX build guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
 > and [KPI reference guide](KPI_Reference_Guide.md).
 

@@ -1,64 +1,86 @@
-# KPI Reference Guide — Active Gold semantic model
+# Gold report implementation and requirements
 
-## Implemented Gold migration — 15 September 2026
+Implementation date: 15 September 2026.
 
-The extracted v15 project now uses the active Gold layer for business data. The current implementation and remaining acceptance work are recorded in [Gold report implementation and requirements](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md). The earlier [coverage audit](GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md) is the **pre-migration baseline**, not the current defect list.
+## Delivered model
 
-All 195 concrete guide measures remain available. Formulas below now match the implemented report where requirements required a correction. The report uses semantic `fact_ipa` over physical `gold.fact_ipa`, and imports `dim_person[gender_clean]` directly from Gold. Deploy the updated `04_gold_model.py` and refresh Gold before refreshing this report: the IPA-grain signature fields are new. File validation is complete; Fabric refresh, DAX results and business acceptance are still required.
+`reports/client-deliverables/SM WMPP v15/SM_WMPP.pbip` now contains 281 measures across 67 tables (including automatic date tables and local report metadata). `reports/current/_Measures.tmdl` contains 283 measures, retaining its extra source-only measure. All 195 concrete WIP definitions are present. This is the business report, separate from Mission Control.
 
-This is the authoritative KPI reference for the notebook-created Gold model.
-Business KPIs must use the notebook-created Gold tables. The migrated v15 semantic model is a consumer of that Gold contract; Bronze, Silver and retired Gold objects must not be queried by the report.
+**Deployment prerequisite:** publish and execute the changed `04_gold_model.py` against the intended Lakehouse before refreshing Power BI. It adds four real fields to `gold.fact_ipa`: `signed_by_provider`, `signed_by_local_authority`, `is_ipa_completed`, `is_ipa_pending`. Run `05_gold_dimensions.py` if the latest Gold dimensions are not already deployed. The report retains the existing Lakehouse SQL endpoint and uses Import mode for a consistent snapshot.
 
-## Naming convention
+## Source contract
 
-All active Gold table and column names are lower-case `snake_case`, matching
-Silver. The IPA fact is `gold.fact_ipa`; the retired `gold.fact_placement`
-object is removed by the Gold model deployment.
+- Business SQL queries select only `Schema="gold"` objects. `fact_ipa` is the semantic name for physical `gold.fact_ipa`.
+- `dim_person` imports Gold `gender_clean`; `dim_offer_status` imports the Gold status dimension. Silver person staging, category/person joins and unused legacy directory views were removed. Unsupported contact/inspection placeholders were not copied into the Gold model.
+- `ref_RID`, `ref_KPI` and `ref_KPI_RID_Linkage` are embedded documentation metadata derived from the versioned Markdown. They do not access Bronze. Their assessment status is historical evidence, not a deployment sign-off.
+- Existing calculated date/age helpers use Gold timestamps and age fields. No calculated column refers to retired `offer_date`, `last_modified_date`, `created_datetime` or `fact_ipa[offer_id]` fields.
+- 31 report JSON files were rebound to available Gold fields, including referral, snapshot, date, gender and IPA visuals. Visuals using closure reasons now use `fact_referral[referral_closure_reason]`; this is not a provider-decline history measure.
 
-| Role | Active Gold table | Grain | Key |
-| --- | --- | --- | --- |
-| Current referral | `gold.fact_referral` | One current row per referral | `referral_id` |
-| Historic referral state | `gold.fact_referral_snapshot` | One referral per reporting snapshot | `snapshot_date`, `referral_id` |
-| Offer | `gold.fact_offer` | One offer | `offer_id` |
-| IPA | `gold.fact_ipa` | One IPA | `ipa_id` |
-| Provider response | `gold.fact_referral_provider` | One referral-provider assignment | `referral_provider_id` |
-| Lifecycle evidence | `gold.fact_referral_lifecycle_event` | One derived event | `event_id` |
+## Relationship and filter behaviour
 
-The active supporting tables are `gold.dim_date`, `gold.dim_provider`,
-`gold.dim_provider_home`, `gold.dim_framework`,
-`gold.dim_framework_category`, `gold.dim_placement_type`,
-`gold.dim_referral_status`, `gold.dim_provider_submission_document`,
-`gold.dim_person` (GLD-006), `gold.dim_offer_status` (GLD-008),
-`gold.bridge_provider_framework`, and `gold.bridge_provider_sic_code`.
+The active business graph is single direction and has no duplicate filter paths. Referral filters flow to offers, IPAs, assignments and lifecycle events. Person filters flow to referrals. Provider filters flow directly to offers, assignments and framework/SIC bridges. Home filters flow to offers and submission documents.
 
-## Semantic-model build rules
+The provider-to-home relationship is deliberately inactive: making it active alongside both provider-to-offer and home-to-offer produces two provider-to-offer paths. Provider Homes Registered and QA Flagged Homes explicitly transfer the selected provider IDs. A home slicer does not automatically cascade from a provider slicer. Test the intended directory navigation before enabling alternative relationships.
 
-Import only the active tables above. Create single-direction relationships from
-`fact_referral[referral_id]` to the referral keys on `fact_offer`, `fact_ipa`,
-and `fact_referral_provider`. Use inactive role-playing date relationships for
-creation, required-placement, IPA-issued and closure dates. Keep
-`fact_referral_snapshot` separate from current-state facts and use its
-`snapshot_date` for historic trends. GLD-006–008 add two further
-single-direction relationships: `dim_person` → `fact_referral[person_id]`
-and `dim_offer_status` → `fact_offer[offer_status]`.
+`dim_date` is marked as the date table. Referral creation and snapshot date links are active; the snapshot fact has no relationship to current referrals. Required-placement, referral-closure and IPA-issued dates are inactive roles. IPAs Issued This Month disables the referral-creation date path before activating the IPA-issued role. Current measures compared by creation month describe current state of a creation cohort; historic state must use snapshot measures.
 
-## Requirement mapping
+Natural keys on the one side must be unique. Static graph checks cannot prove that the deployed rows satisfy this; run the refresh acceptance checks below.
 
-| KPI area | Requirement IDs | Active evidence |
-| --- | --- | --- |
-| Referral status, target, responsiveness and snapshot trend | R24, R51–R53, R69 | Referral and snapshot facts |
-| Offer submission, decision and acceptance | R28, R29, R36, R51 | Offer fact |
-| Digitised IPA, current IPA and cost analysis | R35, R51, R62, R71 | `fact_ipa` and referral IPA fields |
-| Provider assignment and decline analysis | R25, R28, R51, R54 | Referral-provider fact |
+## Requirement-driven corrections
 
-### Full KPI-to-requirement mapping (KPI-01–117)
+| Requirement/KPI group | Implemented behaviour |
+| --- | --- |
+| KPI-01–10 / R24,R51 | Gold referral grain and Gold person attributes; separate received-offer count and rate; referral creation date filters the current cohort. |
+| KPI-12,25,28,35 / R25–29,R67–68 | Non-draft submission totals are distinct from all offer records; under-offer measures require active UNDER_OFFER referrals. |
+| KPI-19–22,29–33 / R24,R26,R36 | Active, awaiting and under-offer counts use the correct referral cohort. Engagement transfers the eligible assignment referral IDs. |
+| KPI-40–52,97,99 / R41,R91–96 | Provider/home counts read Gold; QA counts provider flags and home-or-provider flags; fostering includes framework registrations without a home. |
+| KPI-53–63 / R24 | Draft activity requires draft status and valid timestamps. Same-day edits are activity. Original age cards and inactivity/stall measures are explicitly separate. |
+| KPI-65–72 / R24,R26 | Pending includes PENDING and OFFER_MADE; age is Gold offer_age_days (since submission, as of Gold build), with a separate unknown/future-date count. |
+| KPI-73–86,114 / R28,R35 | IPA-level signatures and counts now use fact_ipa. Closed unsigned IPAs do not count as pending. Offer/IPA ratios follow the assessment and retain their distinct grains. |
+| KPI-87–88 / R53,R82 | Refresh labels show persisted Gold build/export timestamps; opening the report no longer falsely changes the displayed refresh time. |
+| KPI-91–94 / R18,R57 | Emergency is the Gold same-day flag on OPEN/UNDER_OFFER statuses, independent of spot purchasing. Planned requires both dates and different dates. |
 
-The table below maps every as-is KPI from the V13.1 assessment ([§4.7 of the As-Is Assessment Report](../02_Assessment_and_Requirements/As_Is_Assessment_Report.md#47-kpi-calculation-inventory-as-is), ported from `Supplementary/02_01_As_Is_KPI.md`) to the **active Gold semantic model**, including the GLD-005–008 additions (`dim_person`, `dim_offer_status`, provider-home contact fields, `person_id` on `fact_referral`). Copy-ready DAX for each covered measure is in the [DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md); field-level evidence is in the [Field Coverage Audit](GOLD_DAX_FIELD_COVERAGE_AUDIT.md).
+## Deliberate differences and boundary rules
 
-Status legend: **✅ Covered** — active Gold measure; **🔁 Alias** — served by an existing Gold measure under a different name (rename the visual, do not recreate); **⚠️ Proxy** — supported at a different grain or with estimated logic, caveat applies; **🗄 Retired** — report-construct helper, deliberately not recreated; **❌ Blocked** — required field/grain missing from Gold, do not point DAX at Bronze, Silver or legacy tables.
+- The original KPI-65 and KPI-71 use inclusive 15–30 days. Those measures are retained with that exact boundary. The WIP 15–29 measure remains for a mutually exclusive dashboard. Day 30 belongs to both original 15–30 and original 30+; do not add those two original cards to reconcile the total.
+- All pending bands use `offer_age_days`, not time since last edit. Blank/future submission dates are excluded from the four bands and counted separately. Refresh Gold to advance the clock; report queries do not mix TODAY with stored ages.
+- Draft No Activity 7+ Days and Drafts No Activity 14+ Days follow the original assessment’s age predicates (all drafts beyond the age). Draft Offers Stalled 7+/14+ Days measure time since activity. The names in the historic document are imperfect; tooltips should explain the distinction.
+- The original IPA conversion and successful-offer completion ratios divide an IPA count by an offer count. Multiple IPAs per offer can produce a value over 100%; the complement can be negative. They are retained to match the assessment. Use Accepted Offers Linked to IPA % for a bounded offer conversion KPI. Do not treat either as interchangeable with the IPA completion rate.
+- IPA Completed includes all fully signed IPAs, including closed ones, as requested. IPAs Pending Completion includes only open unsigned IPAs. Therefore completed plus pending need not equal all IPAs: closed unsigned records form a separate state.
+- QA Flagged Homes uses a home flag OR its parent provider flag. A framework flag alone is a different scope and is not silently treated as a home flag.
+- Gold is_open includes the approved operational response-window/provider-engagement rules. Emergency/planned KPIs follow the assessment’s OPEN/UNDER_OFFER status predicate plus the Gold same-day flag. A status-open referral need not satisfy operational is_open.
+- Planned follows the assessment’s different-date rule, including negative date intervals. Data-quality review must distinguish invalid dates from valid planned placements; missing dates are excluded from both emergency and planned.
 
-| KPI | Req IDs | As-is KPI (V13.1) | Active Gold object(s) | Gold measure / disposition | Status |
-|---|---|---|---|---|---|
+## Still blocked or partial
+
+The 117-row mapping below records each KPI disposition. Covered means a definition is implemented against available Gold fields, **not** that UAT has passed or that every linked requirement is fulfilled. The 80 assessed R-IDs remain linked in the [baseline traceability audit](GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md); no unlisted R-ID is assumed satisfied.
+
+- R22 / KPI-95–96: no reliable referral/placement region. Overlap Referrals is a cohort diagnostic, not evidence of out-of-region placement.
+- R41 / KPI-98: no QA flag-type breakdown. R47/R48 / KPI-102–103: expiry dates support expiry KPIs, but not reminder delivery, an expected-document set or blocking decisions.
+- R54/R58 / KPI-105–106: no complete referral-provider decline reason or framework-change history.
+- R62 / KPI-108–109: no payment method, invoice or payment-status data. Weekly cost is an estimate, not verified signed fee liability.
+- R14 / KPI-111–112: no response-time/unread-message evidence. Message volume and lifecycle events retain their documented proxy meanings.
+- R19 / KPI-115: no durable referral update history; R20 audit events are derived events, not a complete source audit trail.
+- R59 / KPI-117: approval-state proportion is a proxy for onboarding and cannot certify bulk-job success.
+- R12/R55/R76/R78/R79 security/access, R31 resolved-request visibility, notification delivery, accessibility, disaster recovery and performance/SLA requirements need separate acceptance evidence. No security roles were invented without access rules.
+
+## Validation and rollout
+
+1. Deploy the updated Gold notebook; run the pipeline/Gold rebuild using the intended export date and job_run_id. Verify the new IPA signature columns in the Lakehouse SQL endpoint.
+2. Check unique keys for referral_id, offer_id, ipa_id, provider_id, provider_home_id and person_id, plus offer_status in its dimension. Check orphan referral/provider/home keys and that date ranges fit dim_date.
+3. Close the old Desktop project without overwriting these externally edited files, then reopen SM_WMPP.pbip and refresh from Gold. The saved model now expects the new IPA columns.
+4. Reconcile a known export: male/female/other/unknown; active/awaiting/under-offer; draft timestamp changes within one day; pending day 7/8/14/15/29/30, blank/future dates; multiple IPAs per offer; closed unsigned IPAs; provider-only and home-only QA.
+5. Exercise referral, provider, home, gender and date slicers. Verify creation-cohort comparisons versus snapshot trends and IPA-issued date selection. Check original versus non-overlapping age cards separately.
+6. Sign off each supported KPI with expected results. Record unsupported data/security/workflow requirements as open rather than interpreting blank or proxy values as completion.
+
+**Validation result: 73 tests passed; Microsoft TMDL parser accepted 67 tables, 281 measures and 64 relationships.** Automatic relationship detection/import is disabled to preserve the reviewed graph. The unchanged extracted cache was removed after verifying it matched the original ZIP; the ZIP remains the rollback copy.
+
+Repository validation checks every table/column/measure visual binding, Gold-only SQL navigation, single-direction unambiguous relationships and IPA signature predicates. Microsoft TMDL deserialization succeeds. Live DAX execution was not run because its earlier confirmation was declined; a file parse is not a successful Fabric refresh or runtime calculation test.
+
+## Complete KPI disposition
+
+| KPI | Requirement IDs | Original KPI | Gold object(s) | Implemented measure / remaining gap | Disposition |
+| --- | --- | --- | --- | --- | --- |
 | KPI-01 | [R24,R51] | Total Referrals | `fact_referral` | Total Referrals | ✅ Covered |
 | KPI-02 | [R24,R36] | Referrals With Offers | `fact_referral` + `fact_offer` | Referrals With an Offer | ✅ Covered |
 | KPI-03 | [R24,R36] | Referrals Awaiting Offer | `fact_referral` + `fact_offer` | Referrals Awaiting Offer | ✅ Covered |
@@ -176,80 +198,3 @@ Status legend: **✅ Covered** — active Gold measure; **🔁 Alias** — serve
 | KPI-115 | [R19] | Referral Updates per Day | — | Blocked — no durable referral update timestamp; lifecycle events provide the supported activity measure | ❌ Blocked |
 | KPI-116 | [R59] | Provider Onboarding Pipeline | `dim_provider[provider_status]` | Providers Pending Onboarding | ✅ Covered |
 | KPI-117 | [R59] | Bulk Onboarding Success Rate | dim_provider[provider_status] | Provider Onboarding Success Rate; current approval-state proportion, not bulk-operation outcome | Proxy |
-
-#### Disposition summary
-
-| Status | Count | Meaning |
-|---|---:|---|
-| ✅ Covered | 74 | Active Gold measure computes the KPI |
-| 🔁 Alias | 19 | Existing Gold measure under a different name; rename the visual |
-| ⚠️ Proxy | 4 | Supported at a different grain or with estimated logic |
-| 🗄 Retired | 7 | v15 report-construct helper, not recreated |
-| ❌ Blocked | 13 | Missing Gold field/grain; add the data first |
-| **Total** | **117** | KPI-01–117 |
-
-> **Gender measures (KPI-04–07)** were blocked in earlier revisions and are now covered: `gold.dim_person[gender_clean]` joins to `fact_referral[person_id]` (GLD-006/GLD-007). **Offer-status measures** filter through `gold.dim_offer_status` (GLD-008) rather than hard-coded status strings. **IPA-signature measures (KPI-77–78, 80–82, 85–86)** moved from blocked/proxy to covered in GLD-013: `gold.fact_offer` now carries `is_ipa_completed`, `is_ipa_pending` and `is_awaiting_ipa_creation` at offer grain. KPI-74 (Is In Accepted KPI) remains blocked.
-
-## DAX implementation
-
-Copy-ready DAX, the v15 reconciliation, required relationships, and the
-measures that cannot yet be recreated are in
-[Gold Semantic Model DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md).
-
-## Maintained catalogue and lineage
-
-`configuration/Dashboard Legend.xlsx` is the maintained Excel catalogue of
-the Gold v02 DAX measure names, legacy mappings, requirement IDs, Gold source
-objects and publication status. It currently contains **109 active measures**:
-**108 Ready** measures and **one Gold lifecycle-event proxy**. It also records
-ten roadmap gaps that must not be published until their fields exist in Gold.
-The [DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md) and the
-[Field Coverage Audit](GOLD_DAX_FIELD_COVERAGE_AUDIT.md) (rev 4) carry the wider
-supported set of **195 measures**: the 109 catalogue measures plus the 82
-legacy v15 ports (76 from rev 2 plus 6 offer-grain IPA-signature measures from
-GLD-013) and the 4 gender referral measures enabled by GLD-006/GLD-007.
-
-The workbook is deliberately a DAX catalogue, not the system-of-record for
-technical lineage. Use [KPI Lineage](KPI_Lineage.md) to trace each KPI family
-from functional requirement through the source extract, Bronze, Silver,
-Gold object and DAX measure. The original assessment documents remain useful
-as historic evidence, but are not the current implementation record:
-
-- [KPI Enhancement Requirements](../02_Assessment_and_Requirements/KPI_Enhancement_Requirements.md)
-- [Gap Analysis Report](../02_Assessment_and_Requirements/Gap_Analysis_Report.md)
-
-### Latest Gold-only calculations
-
-These measures are included in the active DAX catalogue and are repeated here
-because they close the most recent reporting requests. Both use active Gold
-fields only.
-
-```DAX
-Average Estimated Weekly Cost — Confirmed Referrals =
-AVERAGEX (
-    FILTER (
-        'fact_referral',
-        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
-            && NOT ISBLANK ( 'fact_referral'[estimated_weekly_cost] )
-    ),
-    'fact_referral'[estimated_weekly_cost]
-)
-
-Provider Messages Sent =
-CALCULATE (
-    [Referral Lifecycle Events],
-    'fact_referral_lifecycle_event'[event_type] = "ProviderMessageSent"
-)
-```
-
-`Average Estimated Weekly Cost — Confirmed Referrals` uses a referral with an
-issued IPA as confirmation; it is not an actual-payment measure. `Provider
-Messages Sent` is a Gold lifecycle-event proxy for message volume only. It
-does not provide response-time, unread-message or message-content analysis.
-
-## Source limitations
-
-`estimated_weekly_cost` is an estimate, not an invoice or actual payment.
-`region`, `complexity_band`, actual placement dates/cost, duration and end
-reason remain null until a reliable source supplies them. A measure should not
-turn those nulls into invented business values.

@@ -1,4 +1,4 @@
-"""Keep published Gold v02 DAX measures independent of Bronze and Silver."""
+"""Keep the maintained Gold DAX guide independent of Bronze and Silver."""
 
 import re
 import sys
@@ -14,7 +14,7 @@ GUIDE = (
     ROOT
     / "client documentation"
     / "04_Data_and_Reporting"
-    / "GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md"
+    / "GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md"
 )
 
 guide = GUIDE.read_text(encoding="utf-8")
@@ -24,6 +24,7 @@ assert dax_blocks, "the Gold semantic-model guide has no DAX code blocks"
 allowed_gold_tables = {
     "bridge_provider_framework",
     "dim_date",
+    "dim_framework",
     "dim_offer_status",
     "dim_person",
     "dim_provider",
@@ -34,7 +35,7 @@ allowed_gold_tables = {
     "fact_referral_lifecycle_event",
     "fact_referral_provider",
     "fact_referral_snapshot",
-    "fct_ipa",
+    "fact_ipa",
 }
 for block_number, dax in enumerate(dax_blocks, start=1):
     normalised = dax.lower()

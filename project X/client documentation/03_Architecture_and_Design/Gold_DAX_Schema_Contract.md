@@ -8,6 +8,22 @@
 
 ---
 
+
+## 15 September 2026 — IPA signature contract and migrated report
+
+`04_gold_model.py` now publishes four non-null boolean fields on `gold.fact_ipa`:
+
+| Field | Meaning |
+| --- | --- |
+| `signed_by_provider` | Source provider signature flag; missing flag becomes false |
+| `signed_by_local_authority` | Source local-authority signature flag; missing flag becomes false |
+| `is_ipa_completed` | Both signatures present, irrespective of closure |
+| `is_ipa_pending` | At least one signature absent and IPA not closed |
+
+The report imports this table as `fact_ipa`. Counts and signature rates use `ipa_id`, preserving multiple IPAs for the same offer. Offer-grain flags remain on `fact_offer`; its pending flag now means at least one open unsigned IPA and can coexist with the completed flag. Its IPA rollup respects the as-of creation cutoff. Draft no-activity compares full timestamps, so a later edit on the same day is activity.
+
+Deploy/rebuild Gold before refreshing the migrated report. See [implementation and requirements](../04_Data_and_Reporting/GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) for source, relationship, grain and acceptance details.
+
 ## 1. Purpose
 
 This document defines the contract between the notebook-created Gold layer and the Power BI semantic model. It specifies:
@@ -30,7 +46,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `gold.fact_referral` | One current row per referral | `04_gold_model.ipynb` | All referral-count, status, target, duration and cost measures |
 | `gold.fact_referral_snapshot` | One referral per reporting snapshot | `04_gold_model.ipynb` | All point-in-time and historic-trend measures |
 | `gold.fact_offer` | One offer | `04_gold_model.ipynb` | Offer-count, acceptance, draft/pending age and spot/framework measures |
-| `gold.fct_ipa` | One IPA | `04_gold_model.ipynb` | IPA-count, cost, closure and accepted-offer conversion measures |
+| `gold.fact_ipa` | One IPA | `04_gold_model.ipynb` | IPA-count, cost, closure and accepted-offer conversion measures |
 | `gold.fact_referral_provider` | One referral-provider assignment | `04_gold_model.ipynb` | Provider-decline and assignment-overlap measures |
 | `gold.fact_referral_lifecycle_event` | One derived event | `04_gold_model.ipynb` | Lifecycle-event count and provider-message proxy |
 
@@ -135,7 +151,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `is_ipa_pending` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPAs Pending Completion |
 | `is_ipa_completed` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPA Completed, IPA Created to Completion % |
 
-### 3.4 `fct_ipa` — IPA grain
+### 3.4 `fact_ipa` — IPA grain
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -175,7 +191,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | From | To | Cardinality | Notes |
 |---|---|---|---|
 | `fact_referral[referral_id]` | `fact_offer[referral_id]` | 1:* | |
-| `fact_referral[referral_id]` | `fct_ipa[referral_id]` | 1:* | |
+| `fact_referral[referral_id]` | `fact_ipa[referral_id]` | 1:* | |
 | `fact_referral[referral_id]` | `fact_referral_provider[referral_id]` | 1:* | |
 | `dim_provider[provider_id]` | `fact_offer[provider_id]` | 1:* | |
 | `dim_provider[provider_id]` | `fact_referral_provider[provider_id]` | 1:* | |
@@ -192,13 +208,13 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 |---|---|---|---|
 | `dim_date[date]` | `fact_referral[referral_created_date]` | Active (or role-playing) | Referral-created time intelligence |
 | `dim_date[date]` | `fact_referral_snapshot[snapshot_date]` | Active (or role-playing) | Snapshot timeline |
-| `dim_date[date]` | `fct_ipa[ipa_issued_date]` | **Inactive** — use USERELATIONSHIP | IPA-issued time intelligence |
+| `dim_date[date]` | `fact_ipa[ipa_issued_date]` | **Inactive** — use USERELATIONSHIP | IPA-issued time intelligence |
 | `dim_date[date]` | `fact_referral[required_placement_date]` | Inactive | Target date analysis |
 | `dim_date[date]` | `fact_referral[referral_closed_date]` | Inactive | Closure date analysis |
 
 ### 4.3 Relationship to avoid
 
-Do **not** create an active `fact_offer[offer_id]` → `fct_ipa[accepted_offer_id]` relationship when it creates an ambiguous route. Use `USERELATIONSHIP` or `TREATAS` in specific conversion measures only.
+Do **not** create an active `fact_offer[offer_id]` → `fact_ipa[accepted_offer_id]` relationship when it creates an ambiguous route. Use `USERELATIONSHIP` or `TREATAS` in specific conversion measures only.
 
 ---
 
@@ -211,10 +227,10 @@ The following fields exist in the Gold schema but are **not populated** by the c
 | `fact_referral[region]` | `CAST(NULL AS STRING)` | Source CSV must deliver reliable referral region |
 | `fact_referral[complexity_band]` | `CAST(NULL AS STRING)` | Source must deliver complexity/need classification |
 | `fact_referral[contact_made]` | Not in source (legacy `dim_referral[contact_made]`) | Source must deliver a provider-contact flag at referral grain (legacy Provider Contact Referral card family) |
-| `fct_ipa[actual_placement_start_date]` | Not in source | Source must deliver actual placement dates |
-| `fct_ipa[actual_placement_end_date]` | Not in source | Source must deliver actual placement dates |
-| `fct_ipa[actual_weekly_cost]` | Not in source | Source must deliver actual cost/invoice data |
-| `fct_ipa[end_reason]` | Not in source | Source must deliver placement end reason |
+| `fact_ipa[actual_placement_start_date]` | Not in source | Source must deliver actual placement dates |
+| `fact_ipa[actual_placement_end_date]` | Not in source | Source must deliver actual placement dates |
+| `fact_ipa[actual_weekly_cost]` | Not in source | Source must deliver actual cost/invoice data |
+| `fact_ipa[end_reason]` | Not in source | Source must deliver placement end reason |
 
 The following KPI groups require fields that do not exist in **any** Gold table:
 
@@ -255,7 +271,7 @@ Before declaring the semantic model ready:
 - [ ] All tables in Section 2.1–2.2 are imported
 - [ ] All relationships in Section 4.1 are created
 - [ ] Date relationships in Section 4.2 are configured (active or inactive as specified)
-- [ ] No ambiguous `fact_offer` → `fct_ipa` relationship exists
+- [ ] No ambiguous `fact_offer` → `fact_ipa` relationship exists
 - [ ] All 195 measures in `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (109 original + 82 legacy v15 ports + 4 gender measures) are created and total correctly
 - [ ] Every measure extracted from the legacy `SM WMPP v15.zip` model has a disposition in the build guide's legacy v15 full-library port section (ported, alias, retired, or blocked)
 - [ ] `DISTINCTCOUNT` totals reconcile for `referral_id`, `offer_id`, `ipa_id`, `referral_provider_id`

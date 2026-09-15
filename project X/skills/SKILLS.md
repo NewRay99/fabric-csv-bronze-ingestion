@@ -80,14 +80,14 @@ entry; add a validator in `tests/` where possible.
 
 ## 6. Hard pitfalls
 
-1. `fact_placement` is retired → use `gold.fct_ipa`.
+1. `fact_placement` is retired → use `gold.fact_ipa`.
 2. `fact_referral_offer` never existed in Gold → use
    `gold.fact_referral_provider`.
-3. No active `fact_offer[offer_id]` → `fct_ipa[accepted_offer_id]`
+3. No active `fact_offer[offer_id]` → `fact_ipa[accepted_offer_id]`
    relationship (ambiguous path) → use `TREATAS`/`USERELATIONSHIP`.
 4. NULL Gold fields (`region`, `complexity_band`, actual placement dates,
    `contact_made`) are blocked source gaps — never invent values in DAX.
-5. `dim_date` → `fct_ipa[ipa_issued_date]` must stay inactive; use
+5. `dim_date` → `fact_ipa[ipa_issued_date]` must stay inactive; use
    `USERELATIONSHIP` in IPA time-intelligence measures.
 6. Run portable validators (`tests/`) before committing; confirm Fabric
    runtime behaviour in a dev Lakehouse.

@@ -287,7 +287,7 @@ The first three status rows reconcile the 90 legacy catalogue entries (85 + 2 + 
 
 > **Do not use the DAX below for the current semantic model.** The active
 > notebook-created Gold contract now uses lower-case snake-case fields and
-> `gold.fct_ipa`, not the former placement table. Use the authoritative
+> `gold.fact_ipa`, not the former placement table. Use the authoritative
 > [Gold semantic-model DAX build guide](../04_Data_and_Reporting/GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
 > and [KPI reference guide](../04_Data_and_Reporting/KPI_Reference_Guide.md)
 > for all new or replacement measures.
@@ -302,7 +302,7 @@ notebook-created objects.
 | `gold.fact_referral` | One current row per referral | Referral status, lifecycle, target and estimated-cost indicators. |
 | `gold.fact_referral_snapshot` | One referral per reporting snapshot | Point-in-time referral timeline. The active calendar month is replaced by its latest extract. |
 | `gold.fact_offer` | One offer | Offer submission/review/decision, cost and rejection analysis. |
-| `gold.fct_ipa` | One IPA | IPA issue, planned admission, supplied closure/status and weekly cost. |
+| `gold.fact_ipa` | One IPA | IPA issue, planned admission, supplied closure/status and weekly cost. |
 | `gold.fact_referral_provider` | One referral-provider assignment | Provider assignment, exclusion, decline, cancellation and closure response. |
 | `gold.fact_referral_lifecycle_event` | One derived source timestamp | Available lifecycle evidence; not a complete source audit trail. |
 | `gold.vw_kpi_referral_board_summary` | As-of date, urgency, target outcome | Referral board totals. |

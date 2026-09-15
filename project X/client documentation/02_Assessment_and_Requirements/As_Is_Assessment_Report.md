@@ -1,5 +1,9 @@
 # As-Is Assessment Report
 
+> Current replacement report: [Gold implementation and requirements](../04_Data_and_Reporting/GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md). This assessment remains the historical requirement baseline; its original implementation statuses have not been rewritten.
+
+> **Current-build cross-reference (15 September 2026):** This report remains the historical V13.1 baseline. The [Gold measure and requirements coverage audit](../04_Data_and_Reporting/GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md) reconciles all 80 requirements listed in section 0 and all 117 KPIs against the extracted v15 backup and WIP DAX guide. All 195 concrete guide measures exist, but source, relationship, formula, security and workflow gaps prevent full requirement sign-off. Historical status labels and percentages below have not been rewritten as current implementation claims.
+
 ## WMPP Power BI Dashboard — Current State Evaluation
 
 | Field | Value |

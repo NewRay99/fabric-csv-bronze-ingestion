@@ -57,7 +57,7 @@ Source extract <logical_table>.csv
 | Person linkage and demographics | `referral_person.csv` → `bronze.referral_person` | `silver.referral_person`; one person identifier selected per referral for the current referral fact | `fact_referral[person_id]`; `dim_person` (with `gender_clean`) | Referral linkage and the gender KPIs (KPI-04–07) via the `dim_person` relationship |
 | Provider assignment | `referral_provider.csv` → `bronze.referral_provider` | `silver.referral_provider`; joins offers and supports enrichment/provider-observation calculations | `fact_referral_provider`; `fact_offer[referral_id, provider_id]` | Assignment, engagement, decline and provider-performance KPIs |
 | Offer activity | `offer.csv` → `bronze.offer` | `silver.offer`; offer dates/statuses contribute to `silver.referral_enrichment`; Gold joins each offer to its provider assignment | `fact_offer` | Offer submission, decision, acceptance, draft/pending ageing, cost and rejection-reason KPIs |
-| IPA/placement activity | `ipa.csv` → `bronze.ipa` | `silver.ipa`; IPA dates and costs contribute to referral enrichment | `fct_ipa`; referral IPA fields in `fact_referral` | IPA volume, conversion, placement status, weekly estimated cost and target KPIs |
+| IPA/placement activity | `ipa.csv` → `bronze.ipa` | `silver.ipa`; IPA dates and costs contribute to referral enrichment | `fact_ipa`; referral IPA fields in `fact_referral` | IPA volume, conversion, placement status, weekly estimated cost and target KPIs |
 | Lifecycle/message activity | Referral, offer and IPA change data; `referral_provider_message.csv` where delivered | `silver.referral_lifecycle_event` is a derived roll-up. A provider message adds the `ProviderMessageSent` event only when the message source is available. | `fact_referral_lifecycle_event[event_id, referral_id, event_type, event_timestamp]` | Lifecycle activity and message-volume proxy KPI |
 | Provider, home and holding company | `holding_company.csv`, `provider.csv`, `provider_home.csv` | Corresponding Silver tables are conformed without KPI aggregation | `dim_holding_company`, `dim_provider`, `dim_provider_home` | Provider/home register, service-type, QA flag and onboarding KPIs |
 | Framework reference and membership | `framework.csv`, `framework_category.csv`, `provider_framework.csv`, `provider_sic_codes.csv` | Corresponding Silver tables are conformed; membership is retained as a bridge | `dim_framework`, `dim_framework_category`, `bridge_provider_framework`, `bridge_provider_sic_code` | Framework coverage and provider framework KPIs |
@@ -78,14 +78,14 @@ does not meet the original detailed requirement.
 | R22 | `Referrals With Multiple Provider Assignments` | `fact_referral_provider` | Partial: no referral-level out-of-region field. |
 | R24, R26, R36 | Referral status, unattended/awaiting offer, provider assignment and offer measures | `fact_referral`, `fact_referral_provider`, `fact_offer` | Ready. |
 | R25–R29 | Offer submitted, decision, accepted/unsuccessful and provider offer measures | `fact_offer`, `fact_referral_provider` | Ready. |
-| R35 | IPA issue, conversion, active/closed IPA and time-to-IPA measures | `fct_ipa`, `fact_offer`, `fact_referral` | Ready except detailed IPA-signature KPIs. |
+| R35 | IPA issue, conversion, active/closed IPA and time-to-IPA measures | `fact_ipa`, `fact_offer`, `fact_referral` | Ready except detailed IPA-signature KPIs. |
 | R41 | `Providers With QA Flags` | `dim_provider`, `dim_provider_home` | Partial: no historical QA flag-type fact. |
 | R46, R67 | Framework provider measures | `bridge_provider_framework`, `dim_provider` | Ready. |
 | R47, R48 | Document expiry measures | `dim_provider_submission_document` | Ready for expiry; no expected-document set or blocking outcome. |
 | R51, R52 | Referral volume, offer, snapshot and current-year measures | `fact_referral`, `fact_referral_snapshot` | Ready. |
 | R54 | Provider decline and decline-rate measures | `fact_referral_provider` | Ready for delivered assignment decline flags; referral-level decline reason remains a gap. |
 | R59 | Provider onboarding measures | `dim_provider` | Ready for provider-status proxy. |
-| R62 | Estimated weekly cost, active cost and confirmed-referral average cost | `fact_referral`, `fct_ipa` | Ready for estimates only; payment/invoice reporting remains a gap. |
+| R62 | Estimated weekly cost, active cost and confirmed-referral average cost | `fact_referral`, `fact_ipa` | Ready for estimates only; payment/invoice reporting remains a gap. |
 | R82 | `Gold Model Last Refreshed` | `fact_referral[gold_modelled_at]` | Ready. |
 | R91, R93 | Provider/home-register measures | `dim_provider`, `dim_provider_home` | Ready. |
 
@@ -102,14 +102,14 @@ every active Gold KPI by its DAX source and lineage path.
 | KPI family | Gold KPI IDs | Gold DAX source | Upstream source path |
 | --- | --- | --- | --- |
 | Referral performance | `GOLD-KPI-001`–`013` (non-contiguous) | `fact_referral` | `referral` → Silver referral/enrichment → `fact_referral` |
-| Offer, provider and IPA | `GOLD-KPI-012`, `014`–`023` | `fact_offer`, `fct_ipa`, `fact_referral`, lifecycle fact | offer/referral-provider/IPA → Silver conformance/enrichment → Gold facts |
+| Offer, provider and IPA | `GOLD-KPI-012`, `014`–`023` | `fact_offer`, `fact_ipa`, `fact_referral`, lifecycle fact | offer/referral-provider/IPA → Silver conformance/enrichment → Gold facts |
 | Confirmed-referral cost | `GOLD-KPI-024` | `fact_referral[ipa_issued_date, estimated_weekly_cost]` | referral + linked IPA → Silver enrichment → referral fact |
 | Provider engagement | `GOLD-KPI-025`–`027`, `051` | `fact_referral_provider`, `dim_provider` | referral-provider → Silver referral provider → Gold fact/dimension |
 | Referral snapshot | `GOLD-KPI-028`–`035` | `fact_referral_snapshot` | Gold referral fact snapshot materialisation |
 | Referral/provider trends | `GOLD-KPI-036`–`050` | `fact_referral`, `fact_referral_provider` | referral/referral-provider → Silver enrichment → Gold facts |
 | Offer portfolio and ageing | `GOLD-KPI-052`–`075` | `fact_offer`, `dim_provider_home`, `dim_provider` | offer/referral-provider/provider/home → Silver → Gold facts/dimensions |
 | Provider, framework and documents | `GOLD-KPI-076`–`094` | provider/home/framework/document dimensions and bridge | provider, home, framework and document extracts → Silver → Gold dimensions/bridge |
-| IPA, cost and lifecycle | `GOLD-KPI-095`–`108` | `fct_ipa`, `fact_offer`, `fact_referral`, lifecycle fact | IPA/offer/referral/lifecycle roll-up → Silver → Gold facts |
+| IPA, cost and lifecycle | `GOLD-KPI-095`–`108` | `fact_ipa`, `fact_offer`, `fact_referral`, lifecycle fact | IPA/offer/referral/lifecycle roll-up → Silver → Gold facts |
 | Message volume | `GOLD-KPI-109` | `fact_referral_lifecycle_event[event_type]` | provider-message event → Silver lifecycle roll-up → Gold event fact |
 
 ## Non-publishable roadmap items

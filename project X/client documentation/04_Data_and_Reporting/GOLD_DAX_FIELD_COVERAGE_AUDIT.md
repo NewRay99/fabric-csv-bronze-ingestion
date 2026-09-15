@@ -1,5 +1,7 @@
 # Gold DAX Field Coverage Audit
 
+> September 15 implementation update: the migrated v15 report now uses per-IPA signature fields and corrected requirement cohorts. This document preserves the earlier design/audit revision. Use [current report implementation and acceptance](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) and the [updated WIP expressions](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for the implemented report.
+
 **Project:** WMPP Fabric data platform
 **Date:** 13 September 2026 (rev 4 — GLD-013 offer-grain IPA-signature and aging push-downs)
 **Auditor:** Kimi Agent
@@ -43,7 +45,7 @@
 | `gold.fact_referral` | One current row per referral | `referral_id`, `person_id`, `is_open`, `has_offer`, `is_not_seen_by_providers`, `required_placement_date`, `as_of_date`, `placed_by_required_date`, `days_to_first_action`, `days_to_first_offer`, `days_to_ipa`, `days_without_activity`, `current_status`, `referral_closure_reason`, `placement_type_required`, `priority`, `estimated_weekly_cost`, `ipa_2_signatures`, `ipa_issued_date`, `gold_modelled_at`, `provider_assignment_count`, `is_emergency_placement`, `is_open_overdue` (rev 4, GLD-013) |
 | `gold.fact_referral_snapshot` | One referral per reporting snapshot | All `fact_referral` columns (including `person_id`; legacy `ChildID`/`child_id` is migrated to `person_id`) plus `snapshot_date`, `required_placement_date_outcome` |
 | `gold.fact_offer` | One offer | `offer_id`, `referral_id`, `provider_id`, `home_id`, `offer_submitted_date`, `offer_reviewed_date`, `offer_decision_date`, `offer_status`, `offer_type`, `rejection_reason`, `estimated_weekly_cost`, `source_export_date`, `offer_age_days`, `days_since_offer_activity`, `is_draft_no_activity`, `is_draft_missing_dates`, `is_awaiting_ipa_creation`, `is_ipa_pending`, `is_ipa_completed` (rev 4, GLD-013) |
-| `gold.fct_ipa` | One IPA | `ipa_id`, `referral_id`, `accepted_offer_id`, `ipa_issued_date`, `estimated_weekly_cost`, `is_placement_closed` |
+| `gold.fact_ipa` | One IPA | `ipa_id`, `referral_id`, `accepted_offer_id`, `ipa_issued_date`, `estimated_weekly_cost`, `is_placement_closed` |
 | `gold.fact_referral_provider` | One referral-provider assignment | `referral_provider_id`, `referral_id`, `provider_id`, `is_declined` |
 | `gold.fact_referral_lifecycle_event` | One derived event | `event_id`, `referral_id`, `event_type` |
 | `gold.dim_date` | Date dimension | `date` |
@@ -87,9 +89,9 @@
 | 18 | Average Offers per Referral | `fact_offer` | `offer_id` / `fact_referral` `has_offer` | ✅ | |
 | 19 | Offers in Draft | `fact_offer` | `offer_id`, `offer_status` | ✅ | |
 | 20 | Draft Offers Stalled 7+ Days | `fact_offer` | `offer_id`, `offer_status`, `days_since_offer_activity` | ✅ | rev 4, GLD-013 |
-| 21 | IPAs Created | `fct_ipa` | `ipa_id` | ✅ | |
-| 22 | Active IPAs | `fct_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
-| 23 | Estimated Active Weekly Cost | `fct_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
+| 21 | IPAs Created | `fact_ipa` | `ipa_id` | ✅ | |
+| 22 | Active IPAs | `fact_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
+| 23 | Estimated Active Weekly Cost | `fact_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
 | 24 | Average Estimated Weekly Cost — Confirmed Referrals | `fact_referral` | `estimated_weekly_cost`, `ipa_issued_date` | ✅ | |
 | 25 | Provider Assignments | `fact_referral_provider` | `referral_provider_id` | ✅ | |
 | 26 | Provider Declines | `fact_referral_provider` | `referral_provider_id`, `is_declined` | ✅ | |
@@ -186,14 +188,14 @@
 
 | # | Measure | Gold table | Gold column(s) | Status | Notes |
 |---|---------|------------|----------------|--------|-------|
-| 95 | IPAs Issued This Month | `fct_ipa` / `dim_date` | `ipa_id`, `ipa_issued_date` | ✅ | USERELATIONSHIP required |
-| 96 | Closed IPAs | `fct_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
-| 97 | Average Active IPA Weekly Cost | `fct_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
-| 98 | Total IPA Weekly Cost | `fct_ipa` | `estimated_weekly_cost` | ✅ | |
+| 95 | IPAs Issued This Month | `fact_ipa` / `dim_date` | `ipa_id`, `ipa_issued_date` | ✅ | USERELATIONSHIP required |
+| 96 | Closed IPAs | `fact_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
+| 97 | Average Active IPA Weekly Cost | `fact_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
+| 98 | Total IPA Weekly Cost | `fact_ipa` | `estimated_weekly_cost` | ✅ | |
 | 99 | Accepted Offers With IPA | `fact_offer` | `is_awaiting_ipa_creation`, `offer_status` | ✅ | rev 4, GLD-013 push-down |
 | 100 | Offers Awaiting IPA Creation | `fact_offer` | `is_awaiting_ipa_creation` | ✅ | rev 4, GLD-013 push-down |
-| 101 | Accepted Offer to IPA Conversion % | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
-| 102 | Offers Still to Progress to IPA % | `fct_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
+| 101 | Accepted Offer to IPA Conversion % | `fact_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
+| 102 | Offers Still to Progress to IPA % | `fact_ipa` / `fact_offer` | `accepted_offer_id`, `offer_id`, `offer_status` | ✅ | |
 | 103 | Referrals With Fully Signed IPA | `fact_referral` | `referral_id`, `ipa_issued_date`, `ipa_2_signatures` | ✅ | Referral-level proxy |
 | 104 | IPA Signature Completion Rate | `fact_referral` | `ipa_issued_date`, `ipa_2_signatures` | ✅ | |
 | 105 | Referral Lifecycle Events | `fact_referral_lifecycle_event` | `event_id` | ✅ | |
@@ -219,7 +221,7 @@ columns already verified in Sections 2.1–2.7. No new Gold field is required.
 | 117 | IPA Signature Pending Rate | 1 | `fact_referral` | `ipa_issued_date`, `ipa_2_signatures` | ✅ | Proxy |
 | 118 | Referrals Placed by Target at Snapshot | 1 | `fact_referral_snapshot` | `placed_by_required_date` | ✅ | Snapshot carries all `fact_referral` columns |
 | 119 | Target Hit Rate at Snapshot | 1 | `fact_referral_snapshot` | `placed_by_required_date`, `ipa_issued_date`, `required_placement_date` | ✅ | |
-| 120 | Row-level visual helpers (Is Non Framework Provider, IPA Exists, Is Awaiting IPA Creation, Is IPA Completed, Is IPA Pending) | 5 | `bridge_provider_framework` / `fct_ipa` / `fact_offer` | `provider_id`, `accepted_offer_id`, `offer_id`, `offer_status`, `is_awaiting_ipa_creation`, `is_ipa_completed`, `is_ipa_pending` | ✅ | Single-row visual context only; IPA helpers rev 4, GLD-013 |
+| 120 | Row-level visual helpers (Is Non Framework Provider, IPA Exists, Is Awaiting IPA Creation, Is IPA Completed, Is IPA Pending) | 5 | `bridge_provider_framework` / `fact_ipa` / `fact_offer` | `provider_id`, `accepted_offer_id`, `offer_id`, `offer_status`, `is_awaiting_ipa_creation`, `is_ipa_completed`, `is_ipa_pending` | ✅ | Single-row visual context only; IPA helpers rev 4, GLD-013 |
 
 ### 2.9 Gender referral measures (rev 3, GLD-006/GLD-007)
 
@@ -299,7 +301,7 @@ These KPI groups are **correctly documented as unsupported** in the build guide.
 
 1. **Gold notebook changes applied (rev 3).** `05_gold_dimensions.ipynb` now publishes `dim_provider_home` with `home_contact_number` / `registered_manager_contact_number`, plus new `dim_person` and `dim_offer_status`; `04_gold_model.ipynb` adds `person_id` to `fact_referral`. Deploy both notebooks and rerun Gold before rebuilding the semantic model.
 2. **Semantic model build priority:** Proceed with importing the active Gold tables and creating the DAX measures in Sections 2.1–2.9 above, including the two new relationships `dim_person[person_id]` → `fact_referral[person_id]` and `dim_offer_status[offer_status]` → `fact_offer[offer_status]`.
-3. **Do not import retired tables.** `fact_placement` is retired; use `fct_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects. (`dim_offer_status` is no longer retired — it is an active Gold dimension per GLD-008.)
+3. **Do not import retired tables.** `fact_placement` is retired; use `fact_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects. (`dim_offer_status` is no longer retired — it is an active Gold dimension per GLD-008.)
 4. **For blocked KPIs:** Track source-field delivery in the enhancement backlog. When a source field becomes available, add it to `schema_definition.csv`, rerun the Silver formatter, then extend the Gold model before creating the corresponding DAX.
 5. **Reconciliation:** Before rebuilding visual pages, reconcile `DISTINCTCOUNT` totals for `referral_id`, `offer_id`, `ipa_id`, and `referral_provider_id` against the legacy v15 report, reconcile each MoM card stack against the corresponding v15 card, and reconcile the four gender measures against the legacy `dim_referral[Gender Clean]` card totals (referral-grain, `Unknown` handling included).
 6. **Dangling-reference fix:** `IPA Signature Completion Rate` previously referenced an undefined `Referrals with IPA` measure; `Referrals With IPA` is now defined in the build guide (Section 2.8, row 115).

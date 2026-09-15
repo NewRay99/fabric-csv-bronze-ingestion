@@ -191,7 +191,7 @@ for field in {
     assert field in gold, f"Gold referral model does not expose {field}"
 for gold_fact in [
     "CREATE OR REPLACE TABLE gold.fact_offer AS",
-    "CREATE OR REPLACE TABLE gold.fct_ipa AS",
+    "CREATE OR REPLACE TABLE gold.fact_ipa AS",
     "CREATE OR REPLACE TABLE gold.fact_referral_provider AS",
 ]:
     assert gold_fact in gold, f"missing source-grain Gold fact: {gold_fact}"

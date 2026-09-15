@@ -169,7 +169,7 @@ Before fixing a bug: find the next available number in the log, write the issue 
 | Archive | `archived.` | `archived.referral` |
 | Silver | `silver.` | `silver.referral` |
 | Gold fact | `gold.fact_` | `gold.fact_referral` |
-| Gold IPA fact | `gold.fct_` | `gold.fct_ipa` |
+| Gold IPA fact | `gold.fct_` | `gold.fact_ipa` |
 | Gold dimension | `gold.dim_` | `gold.dim_provider` |
 | Gold bridge | `gold.bridge_` | `gold.bridge_provider_framework` |
 | Gold view | `gold.vw_` | `gold.vw_kpi_referral_board_summary` |
@@ -181,10 +181,10 @@ Before fixing a bug: find the next available number in the log, write the issue 
 
 ## 7. Common pitfalls
 
-1. **Do not import `fact_placement`.** It is retired. Use `gold.fct_ipa`.
+1. **Do not import `fact_placement`.** It is retired. Use `gold.fact_ipa`.
 2. **Do not import `fact_referral_offer`.** It is a v01 proposal name. The active object is `gold.fact_referral_provider`.
 3. **Do not point DAX at Bronze or Silver.** The Gold layer is the only KPI contract.
-4. **Do not create an active `fact_offer[offer_id]` → `fct_ipa[accepted_offer_id]` relationship.** It creates an ambiguous path. Use `TREATAS` or `USERELATIONSHIP`.
+4. **Do not create an active `fact_offer[offer_id]` → `fact_ipa[accepted_offer_id]` relationship.** It creates an ambiguous path. Use `TREATAS` or `USERELATIONSHIP`.
 5. **Do not treat NULL as a business category.** `region`, `complexity_band`, and actual placement dates are null until the source delivers them.
 6. **Always run validators before committing.** `python validate_archive_load.py`, `python validate_notebook_integration.py`, etc.
 7. **Fabric behaviour must be confirmed in a dev Lakehouse.** Local validators catch logic errors; Fabric catches runtime issues.

@@ -1,5 +1,11 @@
 # Gold semantic model DAX build guide
 
+## Implemented Gold migration — 15 September 2026
+
+The extracted v15 project now uses the active Gold layer for business data. The current implementation and remaining acceptance work are recorded in [Gold report implementation and requirements](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md). The earlier [coverage audit](GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md) is the **pre-migration baseline**, not the current defect list.
+
+All 195 concrete guide measures remain available. Formulas below now match the implemented report where requirements required a correction. The report uses semantic `fact_ipa` over physical `gold.fact_ipa`, and imports `dim_person[gender_clean]` directly from Gold. Deploy the updated `04_gold_model.py` and refresh Gold before refreshing this report: the IPA-grain signature fields are new. File validation is complete; Fabric refresh, DAX results and business acceptance are still required.
+
 ## Purpose
 
 Use this guide to build the replacement Power BI semantic model over the
@@ -43,7 +49,7 @@ Create these active relationships:
 | `dim_provider[provider_id]` | `fact_offer[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider[provider_id]` | `fact_referral_provider[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider_home[provider_home_id]` | `fact_offer[home_id]` | One-to-many, single direction | Active |
-| `dim_provider[provider_id]` | `dim_provider_home[provider_id]` | One-to-many, single direction | Active |
+| `dim_provider[provider_id]` | `dim_provider_home[provider_id]` | One-to-many, single direction | Inactive: avoids a second provider-to-offer path; home/QA measures transfer provider IDs explicitly |
 | `dim_provider[provider_id]` | `bridge_provider_framework[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider_home[provider_home_id]` | `dim_provider_submission_document[home_id]` | One-to-many, single direction | Active |
 | `dim_person[person_id]` | `fact_referral[person_id]` | One-to-many, single direction | Active |
@@ -63,7 +69,8 @@ Create the measures below in a dedicated `_measures` table. They refer only to
 the new Gold model.
 
 ```DAX
-Total Referrals = DISTINCTCOUNT ( 'fact_referral'[referral_id] )
+Total Referrals =
+DISTINCTCOUNT ( 'fact_referral'[referral_id] )
 
 Open Referrals =
 CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
@@ -75,9 +82,7 @@ Referrals With an Offer =
 CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 
 Referrals Awaiting Offer =
-CALCULATE (
-    [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE ()
-)
+CALCULATE ( [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE () )
 
 Referrals Without Provider Assignment =
 CALCULATE ( [Total Referrals], 'fact_referral'[is_not_seen_by_providers] = TRUE () )
@@ -127,7 +132,8 @@ CALCULATE (
 ```
 
 ```DAX
-Offers Submitted = DISTINCTCOUNT ( 'fact_offer'[offer_id] )
+Offers Submitted =
+DISTINCTCOUNT ( 'fact_offer'[offer_id] )
 
 Accepted Offers =
 CALCULATE (
@@ -144,24 +150,27 @@ CALCULATE (
     FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_decision_date] ) )
 )
 
-Offer Acceptance Rate = DIVIDE ( [Accepted Offers], [Offers with a Decision] )
+Offer Acceptance Rate =
+DIVIDE ( [Accepted Offers], [Offers with a Decision] )
 
-Average Offers per Referral = DIVIDE ( [Offers Submitted], [Referrals With an Offer] )
+Average Offers per Referral =
+DIVIDE ( [Offers Submitted], [Referrals With an Offer] )
 
 Offers in Draft =
 CALCULATE ( [Offers Submitted], LOWER ( 'fact_offer'[offer_status] ) = "draft" )
 
 Draft Offers Stalled 7+ Days =
 CALCULATE (
-    [Offers Submitted],
-    FILTER (
-        'fact_offer',
-        LOWER ( 'fact_offer'[offer_status] ) = "draft"
-            && 'fact_offer'[days_since_offer_activity] >= 7
-    )
+	[Offers Submitted],
+	FILTER (
+		'fact_offer',
+		LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+			&& 'fact_offer'[days_since_offer_activity] >= 7
+	)
 )
 
-IPAs Created = DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
+IPAs Created =
+DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
 
 Active IPAs =
 CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = FALSE () )
@@ -182,16 +191,19 @@ AVERAGEX (
     'fact_referral'[estimated_weekly_cost]
 )
 
-Provider Assignments = DISTINCTCOUNT ( 'fact_referral_provider'[referral_provider_id] )
+Provider Assignments =
+DISTINCTCOUNT ( 'fact_referral_provider'[referral_provider_id] )
 
 Provider Declines =
 CALCULATE ( [Provider Assignments], 'fact_referral_provider'[is_declined] = TRUE () )
 
-Provider Decline Rate = DIVIDE ( [Provider Declines], [Provider Assignments] )
+Provider Decline Rate =
+DIVIDE ( [Provider Declines], [Provider Assignments] )
 ```
 
 ```DAX
-Snapshot Referrals = DISTINCTCOUNT ( 'fact_referral_snapshot'[referral_id] )
+Snapshot Referrals =
+DISTINCTCOUNT ( 'fact_referral_snapshot'[referral_id] )
 
 Open Referrals at Snapshot =
 CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open] = TRUE () )
@@ -217,10 +229,7 @@ CALCULATE (
 )
 
 Open Overdue Referrals at Snapshot =
-CALCULATE (
-    [Snapshot Referrals],
-    'fact_referral_snapshot'[is_open_overdue] = TRUE ()
-)
+CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open_overdue] = TRUE () )
 
 Open On-Track Referrals at Snapshot =
 CALCULATE (
@@ -228,9 +237,11 @@ CALCULATE (
     'fact_referral_snapshot'[required_placement_date_outcome] = "Open on track"
 )
 
-Open Referral Rate at Snapshot = DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
+Open Referral Rate at Snapshot =
+DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
 
-Placement Rate at Snapshot = DIVIDE ( [Referrals with IPA at Snapshot], [Snapshot Referrals] )
+Placement Rate at Snapshot =
+DIVIDE ( [Referrals with IPA at Snapshot], [Snapshot Referrals] )
 ```
 
 ### Gender referral measures (KPI-04–07)
@@ -252,7 +263,7 @@ Other Gender Referrals =
 CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Other" )
 
 Total Gendered Referrals =
-CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] <> "Unknown" )
+CALCULATE ( [Total Referrals], KEEPFILTERS ( FILTER ( 'dim_person', NOT ISBLANK ( 'dim_person'[gender_clean] ) && 'dim_person'[gender_clean] <> "Unknown" ) ) )
 ```
 
 ## Additional legacy KPI ports
@@ -266,7 +277,8 @@ reconciled.
 
 ```DAX
 Referrals Created This Month =
-CALCULATE ( [Total Referrals], DATESMTD ( 'dim_date'[date] ) )
+VAR as_of = MAX ( 'fact_referral'[as_of_date] )
+RETURN IF ( NOT ISBLANK ( as_of ), CALCULATE ( [Total Referrals], DATESBETWEEN ( 'dim_date'[date], DATE ( YEAR ( as_of ), MONTH ( as_of ), 1 ), as_of ) ) )
 
 Referrals Created Previous Month =
 CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
@@ -278,26 +290,15 @@ Referral Volume Month on Month % =
 DIVIDE ( [Referral Volume Month on Month], [Referrals Created Previous Month] )
 
 Referrals Created This Financial Year =
-VAR financial_year_start =
-    DATE ( YEAR ( TODAY () ) - IF ( MONTH ( TODAY () ) < 4, 1, 0 ), 4, 1 )
-RETURN
-    CALCULATE (
-        [Total Referrals],
-        DATESBETWEEN ( 'dim_date'[date], financial_year_start, TODAY () )
-    )
+VAR as_of = MAX ( 'fact_referral'[as_of_date] )
+VAR year_start = DATE ( YEAR ( as_of ) - IF ( MONTH ( as_of ) < 4, 1, 0 ), 4, 1 )
+RETURN IF ( NOT ISBLANK ( as_of ), CALCULATE ( [Total Referrals], DATESBETWEEN ( 'dim_date'[date], year_start, as_of ) ) )
 
 Referrals Currently Active =
 CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 
 Referrals Under Offer =
-CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
-    )
-)
+CALCULATE ( [Total Referrals], KEEPFILTERS ( 'fact_referral'[is_open] = TRUE () ), KEEPFILTERS ( 'fact_referral'[current_status] = "UNDER_OFFER" ) )
 
 Closed or Cancelled Referrals =
 CALCULATE (
@@ -311,69 +312,65 @@ CALCULATE (
 
 Active Referrals With Provider Engagement =
 VAR engaged_referral_ids =
-    CALCULATETABLE (
-        VALUES ( 'fact_referral_provider'[referral_id] ),
-        'fact_referral_provider'[is_engaged] = TRUE ()
-    )
+	CALCULATETABLE (
+		VALUES ( 'fact_referral_provider'[referral_id] ),
+		'fact_referral_provider'[is_engaged] = TRUE ()
+	)
 RETURN
-    CALCULATE (
-        [Total Referrals],
-        'fact_referral'[is_open] = TRUE (),
-        TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
-    )
+	CALCULATE (
+		[Total Referrals],
+		'fact_referral'[is_open] = TRUE (),
+		TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
+	)
 
 Active Referral Engagement Rate =
 DIVIDE ( [Active Referrals With Provider Engagement], [Referrals Currently Active] )
 
 Active Awaiting Offers With Engagement =
 VAR engaged_referral_ids =
-    CALCULATETABLE (
-        VALUES ( 'fact_referral_provider'[referral_id] ),
-        'fact_referral_provider'[is_engaged] = TRUE ()
-    )
+	CALCULATETABLE (
+		VALUES ( 'fact_referral_provider'[referral_id] ),
+		'fact_referral_provider'[is_engaged] = TRUE ()
+	)
 RETURN
-    CALCULATE (
-        [Total Referrals],
-        'fact_referral'[is_open] = TRUE (),
-        'fact_referral'[is_awaiting_offer] = TRUE (),
-        TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
-    )
+	CALCULATE (
+		[Total Referrals],
+		'fact_referral'[is_open] = TRUE (),
+'fact_referral'[is_awaiting_offer] = TRUE (),
+		TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
+	)
 
 Active Awaiting Offers Without Engagement =
 VAR awaiting_referral_ids =
-    CALCULATETABLE (
-        VALUES ( 'fact_referral'[referral_id] ),
-        'fact_referral'[is_open] = TRUE (),
-        'fact_referral'[is_awaiting_offer] = TRUE ()
-    )
+	CALCULATETABLE (
+		VALUES ( 'fact_referral'[referral_id] ),
+		'fact_referral'[is_awaiting_offer] = TRUE ()
+	)
 VAR engaged_referral_ids =
-    CALCULATETABLE (
-        VALUES ( 'fact_referral_provider'[referral_id] ),
-        'fact_referral_provider'[is_engaged] = TRUE ()
-    )
+	CALCULATETABLE (
+		VALUES ( 'fact_referral_provider'[referral_id] ),
+		'fact_referral_provider'[is_engaged] = TRUE ()
+	)
 RETURN
-    CALCULATE (
-        [Total Referrals],
-        TREATAS (
-            EXCEPT ( awaiting_referral_ids, engaged_referral_ids ),
-            'fact_referral'[referral_id]
-        )
-    )
+	CALCULATE (
+		[Total Referrals],
+		TREATAS (
+			EXCEPT ( awaiting_referral_ids, engaged_referral_ids ),
+			'fact_referral'[referral_id]
+		)
+	)
 
 Emergency Referrals =
-CALCULATE ( [Total Referrals], 'fact_referral'[is_emergency_placement] = TRUE () )
+CALCULATE ( [Total Referrals], KEEPFILTERS ( 'fact_referral'[current_status] IN { "OPEN", "UNDER_OFFER" } ), KEEPFILTERS ( 'fact_referral'[is_emergency_placement] = TRUE () ) )
 
 Planned Referrals =
 CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        NOT ISBLANK ( 'fact_referral'[referral_created_date] )
-            && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
-            && 'fact_referral'[is_emergency_placement] = FALSE ()
-    )
+    [Total Referrals], KEEPFILTERS ( 'fact_referral'[current_status] IN { "OPEN", "UNDER_OFFER" } ),
+    KEEPFILTERS ( FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[referral_created_date] ) && NOT ISBLANK ( 'fact_referral'[required_placement_date] ) && 'fact_referral'[is_emergency_placement] = FALSE () ) )
 )
-Emergency Placement Rate = DIVIDE ( [Emergency Referrals], [Total Referrals] )
+
+Emergency Placement Rate =
+DIVIDE ( [Emergency Referrals], [Total Referrals] )
 
 Referrals With Multiple Provider Assignments =
 CALCULATE ( [Total Referrals], 'fact_referral'[provider_assignment_count] > 1 )
@@ -391,13 +388,13 @@ placement-type visual logic without creating redundant measures.
 Non-Draft Offers =
 CALCULATE (
     [Offers Submitted],
-    FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) <> "draft" )
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_status] ) && LOWER ( 'fact_offer'[offer_status] ) <> "draft" ) )
 )
 
 Pending Offers =
 CALCULATE (
     [Offers Submitted],
-    FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "pending" )
+    KEEPFILTERS ( FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) IN { "pending", "offer_made" } ) )
 )
 
 Unsuccessful Offers =
@@ -425,8 +422,7 @@ CALCULATE (
             LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) )
                 IN { "draft", "withdrawn", "offer_withdrawn" }
         )
-    )
-)
+    ))
 
 Average Offers per Provider =
 DIVIDE ( [Non-Draft Offers], [Providers Who Made Offers] )
@@ -437,8 +433,7 @@ DIVIDE (
         [Non-Draft Offers],
         FILTER (
             'fact_referral',
-            LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-                IN { "under_offer", "under offer", "offer" }
+            'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
         )
     ),
     [Referrals Under Offer]
@@ -449,8 +444,7 @@ CALCULATE (
     [Non-Draft Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -460,20 +454,17 @@ CALCULATE ( [Non-Draft Offers], 'dim_provider_home'[is_spot] = TRUE () )
 Non-Spot Offers =
 CALCULATE ( [Non-Draft Offers], 'dim_provider_home'[is_spot] = FALSE () )
 
-Spot Offer Rate = DIVIDE ( [Spot Offers], [Non-Draft Offers] )
+Spot Offer Rate =
+DIVIDE ( [Spot Offers], [Non-Draft Offers] )
 
 Draft Offers With No Activity Since Creation =
 CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_no_activity] = TRUE () )
 
 Draft Offers With Activity Since Creation =
 CALCULATE (
-    [Offers Submitted],
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && 'fact_offer'[is_draft_no_activity] = FALSE ()
-            && 'fact_offer'[is_draft_missing_dates] = FALSE ()
-    )
+    [Offers in Draft],
+    KEEPFILTERS ( 'fact_offer'[is_draft_no_activity] = FALSE () ),
+    KEEPFILTERS ( 'fact_offer'[is_draft_missing_dates] = FALSE () )
 )
 
 Draft Offers Missing Dates =
@@ -481,32 +472,32 @@ CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_missing_dates] = TRUE () )
 
 Draft Offers Stalled 14+ Days =
 CALCULATE (
-    [Offers Submitted],
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && 'fact_offer'[days_since_offer_activity] >= 14
-    )
+	[Offers Submitted],
+	FILTER (
+		'fact_offer',
+		LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+			&& 'fact_offer'[days_since_offer_activity] >= 14
+	)
 )
 
 Average Days in Draft =
 AVERAGEX (
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && NOT ISBLANK ( 'fact_offer'[offer_age_days] )
-    ),
-    'fact_offer'[offer_age_days]
+	FILTER (
+		'fact_offer',
+		LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+			&& NOT ISBLANK ( 'fact_offer'[offer_age_days] )
+	),
+	'fact_offer'[offer_age_days]
 )
 
 Oldest Draft Age Days =
 MAXX (
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
-            && NOT ISBLANK ( 'fact_offer'[offer_age_days] )
-    ),
-    'fact_offer'[offer_age_days]
+	FILTER (
+		'fact_offer',
+		LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "draft"
+			&& NOT ISBLANK ( 'fact_offer'[offer_age_days] )
+	),
+	'fact_offer'[offer_age_days]
 )
 
 Draft Offers With No Activity % =
@@ -515,46 +506,35 @@ DIVIDE ( [Draft Offers With No Activity Since Creation], [Offers in Draft] )
 Pending Offers 0-7 Days =
 CALCULATE (
     [Pending Offers],
-    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] <= 7 )
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_age_days] ) && 'fact_offer'[offer_age_days] >= 0 && 'fact_offer'[offer_age_days] <= 7 ) )
 )
 
 Pending Offers 8-14 Days =
 CALCULATE (
     [Pending Offers],
-    FILTER (
-        'fact_offer',
-        'fact_offer'[days_since_offer_activity] >= 8
-            && 'fact_offer'[days_since_offer_activity] <= 14
-    )
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_age_days] ) && 'fact_offer'[offer_age_days] >= 8 && 'fact_offer'[offer_age_days] <= 14 ) )
 )
 
 Pending Offers 15-29 Days =
 CALCULATE (
     [Pending Offers],
-    FILTER (
-        'fact_offer',
-        'fact_offer'[days_since_offer_activity] >= 15
-            && 'fact_offer'[days_since_offer_activity] <= 29
-    )
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_age_days] ) && 'fact_offer'[offer_age_days] >= 15 && 'fact_offer'[offer_age_days] <= 29 ) )
 )
 
 Pending Offers 30+ Days =
 CALCULATE (
     [Pending Offers],
-    FILTER ( 'fact_offer', 'fact_offer'[days_since_offer_activity] >= 30 )
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[offer_age_days] ) && 'fact_offer'[offer_age_days] >= 30 ) )
 )
 
 Providers With Pending Offers 30+ Days =
 CALCULATE (
     DISTINCTCOUNT ( 'fact_offer'[provider_id] ),
-    FILTER (
-        'fact_offer',
-        LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) = "pending"
-            && 'fact_offer'[days_since_offer_activity] >= 30
-    )
+    KEEPFILTERS ( FILTER ( 'fact_offer', LOWER ( COALESCE ( 'fact_offer'[offer_status], "" ) ) IN { "pending", "offer_made" } && 'fact_offer'[offer_age_days] >= 30 ) )
 )
 
-Latest Offer Source Export = MAX ( 'fact_offer'[source_export_date] )
+Latest Offer Source Export =
+MAX ( 'fact_offer'[source_export_date] )
 ```
 
 Use `fact_offer[offer_status]`, `fact_offer[offer_type]`,
@@ -565,15 +545,19 @@ tables.
 ### Provider register, framework, QA and documentation
 
 ```DAX
-Provider Homes Registered = DISTINCTCOUNT ( 'dim_provider_home'[provider_home_id] )
+Provider Homes Registered =
+IF ( ISFILTERED ( 'dim_provider' ),
+    CALCULATE ( DISTINCTCOUNT ( 'dim_provider_home'[provider_home_id] ), KEEPFILTERS ( TREATAS ( VALUES ( 'dim_provider'[provider_id] ), 'dim_provider_home'[provider_id] ) ) ),
+    DISTINCTCOUNT ( 'dim_provider_home'[provider_home_id] )
+)
 
-Providers Registered = DISTINCTCOUNT ( 'dim_provider'[provider_id] )
+Providers Registered =
+DISTINCTCOUNT(dim_provider[provider_id])
 
 Providers - Fostering =
-CALCULATE (
-    DISTINCTCOUNT ( 'dim_provider_home'[provider_id] ),
-    'dim_provider_home'[service_type] = "Fostering"
-)
+VAR framework_providers = CALCULATETABLE ( VALUES ( 'bridge_provider_framework'[provider_id] ), FILTER ( 'dim_framework', LOWER ( 'dim_framework'[placement_type] ) IN { "fostering", "plcm-fost" } ) )
+VAR home_providers = CALCULATETABLE ( VALUES ( 'dim_provider_home'[provider_id] ), FILTER ( 'dim_provider_home', LOWER ( 'dim_provider_home'[service_type] ) IN { "fostering", "plcm-fost" } ) )
+RETURN CALCULATE ( [Providers Registered], KEEPFILTERS ( TREATAS ( DISTINCT ( UNION ( framework_providers, home_providers ) ), 'dim_provider'[provider_id] ) ) )
 
 Providers - Residential =
 CALCULATE (
@@ -599,7 +583,8 @@ CALCULATE (
 Fostering Homes =
 CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[service_type] = "Fostering" )
 
-Framework Providers = DISTINCTCOUNT ( 'bridge_provider_framework'[provider_id] )
+Framework Providers =
+DISTINCTCOUNT(bridge_provider_framework[provider_id])
 
 Non-Framework Providers =
 COUNTROWS (
@@ -608,11 +593,19 @@ COUNTROWS (
         VALUES ( 'bridge_provider_framework'[provider_id] )
     )
 )
+
 Providers With QA Flags =
-CALCULATE ( [Providers Registered], 'dim_provider'[qa_flag] = TRUE () )
+CALCULATE ( [Providers Registered], KEEPFILTERS ( 'dim_provider'[qa_flag] = TRUE () ) )
 
 QA Flagged Homes =
-CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[qa_flag] = TRUE () )
+VAR flagged_providers = CALCULATETABLE ( VALUES ( 'dim_provider'[provider_id] ), 'dim_provider'[qa_flag] = TRUE () )
+VAR selected_providers = VALUES ( 'dim_provider'[provider_id] )
+RETURN
+    CALCULATE (
+        [Provider Homes Registered],
+        KEEPFILTERS ( TREATAS ( selected_providers, 'dim_provider_home'[provider_id] ) ),
+        KEEPFILTERS ( FILTER ( 'dim_provider_home', 'dim_provider_home'[qa_flag] = TRUE () || 'dim_provider_home'[provider_id] IN flagged_providers ) )
+    )
 
 Providers Pending Onboarding =
 CALCULATE (
@@ -626,7 +619,8 @@ CALCULATE (
     FILTER ( 'dim_provider', LOWER ( COALESCE ( 'dim_provider'[provider_status], "" ) ) = "approved" )
 )
 
-Provider Onboarding Success Rate = DIVIDE ( [Providers Approved], [Providers Registered] )
+Provider Onboarding Success Rate =
+DIVIDE ( [Providers Approved], [Providers Registered] )
 
 Provider Submission Documents =
 DISTINCTCOUNT ( 'dim_provider_submission_document'[document_id] )
@@ -671,38 +665,42 @@ report page) for the issued-date time-intelligence measures below.
 
 ```DAX
 IPAs Issued This Month =
-CALCULATE (
-    [IPAs Created],
-    USERELATIONSHIP ( 'dim_date'[date], 'fact_ipa'[ipa_issued_date] ),
-    DATESMTD ( 'dim_date'[date] )
+VAR as_of = MAX ( 'fact_ipa'[as_of_date] )
+RETURN IF ( NOT ISBLANK ( as_of ),
+    CALCULATE ( [IPAs Created],
+        CROSSFILTER ( 'dim_date'[date], 'fact_referral'[referral_created_date], NONE ),
+        USERELATIONSHIP ( 'dim_date'[date], 'fact_ipa'[ipa_issued_date] ),
+        DATESBETWEEN ( 'dim_date'[date], DATE ( YEAR ( as_of ), MONTH ( as_of ), 1 ), as_of )
+    )
 )
+
 Closed IPAs =
 CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = TRUE () )
 
 Average Active IPA Weekly Cost =
 DIVIDE ( [Estimated Active Weekly Cost], [Active IPAs] )
 
-Total IPA Weekly Cost = SUM ( 'fact_ipa'[estimated_weekly_cost] )
+Total IPA Weekly Cost =
+SUM ( 'fact_ipa'[estimated_weekly_cost] )
+
 Accepted Offers With IPA =
-CALCULATE ( [Accepted Offers], 'fact_offer'[is_awaiting_ipa_creation] = FALSE () )
+VAR linked_offers = VALUES ( 'fact_ipa'[accepted_offer_id] )
+RETURN CALCULATE ( [Accepted Offers], KEEPFILTERS ( TREATAS ( linked_offers, 'fact_offer'[offer_id] ) ) )
+
 Offers Awaiting IPA Creation =
 CALCULATE ( [Offers Submitted], 'fact_offer'[is_awaiting_ipa_creation] = TRUE () )
-Accepted Offer to IPA Conversion % =
-DIVIDE ( [Accepted Offers With IPA], [Accepted Offers] )
 
-Offers Still to Progress to IPA % = 1 - [Accepted Offer to IPA Conversion %]
+Accepted Offer to IPA Conversion % =
+DIVIDE ( [IPAs Created], [Accepted Offers] )
+
+Offers Still to Progress to IPA % =
+IF ( NOT ISBLANK ( [Accepted Offer to IPA Conversion %] ), 1 - [Accepted Offer to IPA Conversion %] )
 
 Referrals With Fully Signed IPA =
-CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
-            && 'fact_referral'[ipa_2_signatures] = TRUE ()
-    )
-)
+CALCULATE ( DISTINCTCOUNT ( 'fact_ipa'[referral_id] ), KEEPFILTERS ( 'fact_ipa'[is_ipa_completed] = TRUE () ) )
+
 IPA Signature Completion Rate =
-DIVIDE ( [Referrals With Fully Signed IPA], [Referrals With IPA] )
+DIVIDE ( [IPA Completed], [IPAs Created] )
 
 Referral Lifecycle Events =
 DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[event_id] )
@@ -719,12 +717,11 @@ CALCULATE (
     'fact_referral_lifecycle_event'[event_type] = "ProviderMessageSent"
 )
 
-Gold Model Last Refreshed = MAX ( 'fact_referral'[gold_modelled_at] )
+Gold Model Last Refreshed =
+MAX ( 'fact_referral'[gold_modelled_at] )
 ```
 
-`Accepted Offers With IPA` is pushed down to Gold: `fact_offer[is_awaiting_ipa_creation]`
-is computed in `04_gold_model` from the accepted-status list and the
-offer-grain IPA rollup, so no `TREATAS` hop to `fact_ipa` is needed.
+`Accepted Offers With IPA` transfers the current IPA offer IDs to the offer fact and counts accepted offers. The separate `IPAs Created` measure counts individual IPAs. `Offers Awaiting IPA Creation` uses the Gold offer flag. These measures deliberately retain their different grains.
 
 ## Legacy v15 reconciliation
 
@@ -734,12 +731,12 @@ offer-grain IPA rollup, so no `TREATAS` hop to `fact_ipa` is needed.
 | KPI-11–18, 25–28, 53–72 | Provider activity, offer portfolio, spot/non-spot, draft and pending age measures. |
 | KPI-40–52, 97, 99–101, 104, 116–117 | Provider/home register, framework coverage, QA flags, document expiry and onboarding measures. |
 | KPI-73–76, 79, 83–84, 107, 110 and 113 | IPA volume/cost, accepted-offer conversion, provider-message volume proxy and lifecycle-activity measures. |
-| KPI-114 and KPI-115 | Referral-level IPA-signature and lifecycle-event **proxies** are supplied; they are not like-for-like IPA-signature or referral-update measures. |
+| KPI-114 | IPA-level signature counts and completion rate now use the new Gold signature fields. |
+| KPI-115 | Durable referral-update history remains unavailable; lifecycle events are a separate activity measure. |
 | KPI-91–94 | Emergency/planned referral measures using created and required-placement dates. |
 
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
-| KPI-77–78, 80–82, 85–86, 114 | Offer-grain signature flags now exist (GLD-013: `fact_offer[is_ipa_pending]` / `[is_ipa_completed]`); per-IPA-grain signature rows still do not — `ipa_2_signatures` remains the referral-level proxy for referral-grain views. |
 | KPI-95–96 | `fact_referral[region]` is not populated; provider geography is not a safe referral-region substitute. |
 | KPI-98 | Only one provider/home QA flag is published, not the historic flag-type breakdown. |
 | KPI-102–103 | The current document fact has no documented expected-document set or blocking outcome, so compliance cannot be calculated. |
@@ -804,7 +801,6 @@ All stacks use the active `dim_date[date]` to
 Copy-ready stacks for every legacy KPI card:
 
 ```DAX
-
 -- Legacy card: Total Referrals
 Total Referrals Previous Month =
 CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
@@ -821,7 +817,6 @@ IF ( [Total Referrals Variance] > 0, "▲", IF ( [Total Referrals Variance] < 0,
 Total Referrals Variance Indicator Color =
 IF ( [Total Referrals Variance] > 0, "green", IF ( [Total Referrals Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Open Referral
 Open Referrals Previous Month =
 CALCULATE ( [Open Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -837,7 +832,6 @@ IF ( [Open Referrals Variance] > 0, "▲", IF ( [Open Referrals Variance] < 0, "
 Open Referrals Variance Indicator Color =
 IF ( [Open Referrals Variance] > 0, "green", IF ( [Open Referrals Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Closed Referrals (by Reason)
 Closed Referrals Previous Month =
 CALCULATE ( [Closed Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -853,7 +847,6 @@ IF ( [Closed Referrals Variance] > 0, "▲", IF ( [Closed Referrals Variance] < 
 Closed Referrals Variance Indicator Color =
 IF ( [Closed Referrals Variance] > 0, "green", IF ( [Closed Referrals Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Referrals With Offers
 Referrals With an Offer Previous Month =
 CALCULATE ( [Referrals With an Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -869,7 +862,6 @@ IF ( [Referrals With an Offer Variance] > 0, "▲", IF ( [Referrals With an Offe
 Referrals With an Offer Variance Indicator Color =
 IF ( [Referrals With an Offer Variance] > 0, "green", IF ( [Referrals With an Offer Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Active Referrals Awaiting Offers
 Referrals Awaiting Offer Previous Month =
 CALCULATE ( [Referrals Awaiting Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -885,7 +877,6 @@ IF ( [Referrals Awaiting Offer Variance] > 0, "▲", IF ( [Referrals Awaiting Of
 Referrals Awaiting Offer Variance Indicator Color =
 IF ( [Referrals Awaiting Offer Variance] > 0, "green", IF ( [Referrals Awaiting Offer Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Active Referrals Under Offer
 Referrals Under Offer Previous Month =
 CALCULATE ( [Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -901,7 +892,6 @@ IF ( [Referrals Under Offer Variance] > 0, "▲", IF ( [Referrals Under Offer Va
 Referrals Under Offer Variance Indicator Color =
 IF ( [Referrals Under Offer Variance] > 0, "green", IF ( [Referrals Under Offer Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Referrals Currently Active
 Referrals Currently Active Previous Month =
 CALCULATE ( [Referrals Currently Active], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -917,7 +907,6 @@ IF ( [Referrals Currently Active Variance] > 0, "▲", IF ( [Referrals Currently
 Referrals Currently Active Variance Indicator Color =
 IF ( [Referrals Currently Active Variance] > 0, "green", IF ( [Referrals Currently Active Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Referrals Cancelled/Closed
 Closed or Cancelled Referrals Previous Month =
 CALCULATE ( [Closed or Cancelled Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -933,7 +922,6 @@ IF ( [Closed or Cancelled Referrals Variance] > 0, "▲", IF ( [Closed or Cancel
 Closed or Cancelled Referrals Variance Indicator Color =
 IF ( [Closed or Cancelled Referrals Variance] > 0, "green", IF ( [Closed or Cancelled Referrals Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Active Referral Engagement Rate
 Active Referral Engagement Rate Previous Month =
 CALCULATE ( [Active Referral Engagement Rate], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -949,7 +937,6 @@ IF ( [Active Referral Engagement Rate Variance] > 0, "▲", IF ( [Active Referra
 Active Referral Engagement Rate Variance Indicator Color =
 IF ( [Active Referral Engagement Rate Variance] > 0, "green", IF ( [Active Referral Engagement Rate Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Total Offers Made (Active Referrals Under Offer)
 Offers on Referrals Under Offer Previous Month =
 CALCULATE ( [Offers on Referrals Under Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -965,7 +952,6 @@ IF ( [Offers on Referrals Under Offer Variance] > 0, "▲", IF ( [Offers on Refe
 Offers on Referrals Under Offer Variance Indicator Color =
 IF ( [Offers on Referrals Under Offer Variance] > 0, "green", IF ( [Offers on Referrals Under Offer Variance] < 0, "red", "grey" ) )
 
--- Legacy card: Total Referrals That Received Offers
 Offer Receipt Rate (Created in Period) Previous Month =
 CALCULATE ( [Offer Receipt Rate (Created in Period)], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 
@@ -980,7 +966,6 @@ IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "▲", IF ( [Offer R
 
 Offer Receipt Rate (Created in Period) Variance Indicator Color =
 IF ( [Offer Receipt Rate (Created in Period) Variance] > 0, "green", IF ( [Offer Receipt Rate (Created in Period) Variance] < 0, "red", "grey" ) )
-
 ```
 
 > The legacy `Provider Contact Referral` card family (6 measures) is
@@ -1023,8 +1008,7 @@ CALCULATE (
     [Offers in Draft],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1033,8 +1017,7 @@ CALCULATE (
     [Pending Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1043,8 +1026,7 @@ CALCULATE (
     [Accepted Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1053,8 +1035,7 @@ CALCULATE (
     [Unsuccessful Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1063,8 +1044,7 @@ CALCULATE (
     [Spot Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1073,8 +1053,7 @@ CALCULATE (
     [Non-Spot Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1083,8 +1062,7 @@ CALCULATE (
     [Providers Who Made Offers],
     FILTER (
         'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
+        'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
     )
 )
 
@@ -1096,22 +1074,20 @@ DIVIDE (
 
 Draft Offers With No Activity - Under Offer Referrals =
 CALCULATE (
-    [Draft Offers With No Activity Since Creation],
-    FILTER (
-        'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
-    )
+	[Draft Offers With No Activity Since Creation],
+	FILTER (
+		'fact_referral',
+		'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
+	)
 )
 
 Draft Offers Stalled 14+ Days - Under Offer Referrals =
 CALCULATE (
-    [Draft Offers Stalled 14+ Days],
-    FILTER (
-        'fact_referral',
-        LOWER ( COALESCE ( 'fact_referral'[current_status], "" ) )
-            IN { "under_offer", "under offer", "offer" }
-    )
+	[Draft Offers Stalled 14+ Days],
+	FILTER (
+		'fact_referral',
+		'fact_referral'[is_open] = TRUE () && 'fact_referral'[current_status] = "UNDER_OFFER"
+	)
 )
 ```
 
@@ -1125,45 +1101,31 @@ CALCULATE (
 The legacy funnel (`IPA Created`, `IPA Completed`, `IPAs Pending Completion`,
 `IPA Created to Completion %`, `Successful Offers to IPA Completed %`) read
 `fact_ipa[signed_by_provider]` and `fact_ipa[signed_by_local_authority]`.
-Gold now carries offer-grain signature status: `fact_offer[is_ipa_pending]`
-and `fact_offer[is_ipa_completed]` are pushed down from the Silver IPA
-signature flags (GLD-013), so the funnel is rebuilt at offer grain. The
-referral-grain proxies below remain for referral-level views.
+Gold now also exposes `signed_by_provider`, `signed_by_local_authority`, `is_ipa_completed` and `is_ipa_pending` on `fact_ipa`. The report counts individual IPAs for the original signature requirements. Pending excludes closed IPAs. The existing offer flags remain available for offer-row helpers; an offer with several IPAs can have both a completed and a pending IPA.
 
-`Referrals With IPA` also closes a dangling dependency: `IPA Signature
-Completion Rate` already references it, but it was never defined.
+`Referrals With IPA` counts distinct referral IDs in the IPA fact. `IPA Signature Completion Rate` uses completed IPAs divided by all IPAs; it is no longer a referral-grain proxy.
 
 ```DAX
 IPA Completed =
-CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_completed] = TRUE () )
+CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[is_ipa_completed] = TRUE () ) )
 
 IPAs Pending Completion =
-CALCULATE ( [Offers Submitted], 'fact_offer'[is_ipa_pending] = TRUE () )
+CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[is_ipa_pending] = TRUE () ) )
 
 IPA Created to Completion % =
-DIVIDE ( [IPA Completed], [Accepted Offers With IPA] )
+DIVIDE ( [IPA Completed], [IPAs Created] )
 
 Successful Offers to IPA Completed % =
 DIVIDE ( [IPA Completed], [Accepted Offers] )
 
 Referrals With IPA =
-CALCULATE (
-    [Total Referrals],
-    FILTER ( 'fact_referral', NOT ISBLANK ( 'fact_referral'[ipa_issued_date] ) )
-)
+DISTINCTCOUNT ( 'fact_ipa'[referral_id] )
 
 Referrals With IPA Pending Signature =
-CALCULATE (
-    [Total Referrals],
-    FILTER (
-        'fact_referral',
-        NOT ISBLANK ( 'fact_referral'[ipa_issued_date] )
-            && COALESCE ( 'fact_referral'[ipa_2_signatures], FALSE () ) = FALSE ()
-    )
-)
+CALCULATE ( DISTINCTCOUNT ( 'fact_ipa'[referral_id] ), KEEPFILTERS ( 'fact_ipa'[is_ipa_pending] = TRUE () ) )
 
 IPA Signature Pending Rate =
-DIVIDE ( [Referrals With IPA Pending Signature], [Referrals With IPA] )
+DIVIDE ( [IPAs Pending Completion], [IPAs Created] )
 ```
 
 ### Snapshot target measures
@@ -1206,19 +1168,30 @@ IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
 
 IPA Exists =
 IF (
-    COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), TRUE () ) = FALSE (),
-    "Yes",
-    "No"
+    ISINSCOPE ( 'fact_offer'[offer_id] ) || ( HASONEVALUE ( 'fact_offer'[offer_id] ) && NOT ISINSCOPE ( 'fact_ipa'[ipa_id] ) ),
+    VAR offer_ids = VALUES ( 'fact_offer'[offer_id] )
+    RETURN IF ( CALCULATE ( [IPAs Created], KEEPFILTERS ( TREATAS ( offer_ids, 'fact_ipa'[accepted_offer_id] ) ) ) > 0, "Yes", "No" ),
+    IF ( [IPAs Created] > 0, "Yes", "No" )
 )
 
 Is Awaiting IPA Creation =
-IF ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), 1, 0 )
+IF ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), FALSE () ), 1, 0 )
 
 Is IPA Completed =
-IF ( SELECTEDVALUE ( 'fact_offer'[is_ipa_completed] ), 1, 0 )
+IF (
+    ISINSCOPE ( 'fact_offer'[offer_id] ) || ( HASONEVALUE ( 'fact_offer'[offer_id] ) && NOT ISINSCOPE ( 'fact_ipa'[ipa_id] ) ),
+    VAR offer_ids = VALUES ( 'fact_offer'[offer_id] )
+    RETURN IF ( CALCULATE ( [IPAs Created], KEEPFILTERS ( TREATAS ( offer_ids, 'fact_ipa'[accepted_offer_id] ) ), 'fact_ipa'[is_ipa_completed] = TRUE () ) > 0, 1, 0 ),
+    IF ( SELECTEDVALUE ( 'fact_ipa'[is_ipa_completed], FALSE () ), 1, 0 )
+)
 
 Is IPA Pending =
-IF ( SELECTEDVALUE ( 'fact_offer'[is_ipa_pending] ), 1, 0 )
+IF (
+    ISINSCOPE ( 'fact_offer'[offer_id] ) || ( HASONEVALUE ( 'fact_offer'[offer_id] ) && NOT ISINSCOPE ( 'fact_ipa'[ipa_id] ) ),
+    VAR offer_ids = VALUES ( 'fact_offer'[offer_id] )
+    RETURN IF ( CALCULATE ( [IPAs Created], KEEPFILTERS ( TREATAS ( offer_ids, 'fact_ipa'[accepted_offer_id] ) ), 'fact_ipa'[is_ipa_pending] = TRUE () ) > 0, 1, 0 ),
+    IF ( SELECTEDVALUE ( 'fact_ipa'[is_ipa_pending], FALSE () ), 1, 0 )
+)
 ```
 
 
@@ -1243,7 +1216,7 @@ recreate.
 | Offer Count / Total Offers Made Historically / (NEW)Total Offers Made / Latest Offer Status Count | Offers Submitted (Gold `fact_offer` holds the latest state per offer) |
 | Placement Type Totals (Visual) | Total Referrals + `fact_referral[placement_type_required]` visual dimension |
 | Offers At Risk (8-14 Days) | Pending Offers 8-14 Days |
-| Offers Outside Timeframe (15-30 Days) | Pending Offers 15-29 Days |
+| Offers Outside Timeframe (15-30 Days) | Pending Offers 15–30 Days (original inclusive boundary; overlaps 30+ on day 30) |
 | Critical Offers (30+ Days) | Pending Offers 30+ Days |
 | Provider with Offers over 30+ Days | Providers With Pending Offers 30+ Days |
 | Draft No Activity 7+ Days | Draft Offers Stalled 7+ Days |
@@ -1287,7 +1260,7 @@ at Bronze, Silver or legacy tables.
 | Do not recreate yet | Missing active-Gold field or grain |
 | --- | --- |
 | Provider Contact Referral card family (6 measures: base, Previous Month, Variance, MoM %, Indicator, Indicator Color) | No provider-contact flag (legacy `dim_referral[contact_made]`) anywhere in the active Gold referral fact. `is_not_seen_by_providers` is an offer-visibility flag, not a safe substitute. |
-| Is In Accepted KPI | Row-level accepted-KPI visual state from the legacy report layout; use the offer-grain `Is IPA Completed` / `Is IPA Pending` / `Is Awaiting IPA Creation` helpers and the `Accepted Offers` measure instead. |
+| Is In Accepted KPI | Row-level accepted-KPI visual state from the legacy report layout; use the IPA/offer-context `Is IPA Completed` / `Is IPA Pending` and offer-only `Is Awaiting IPA Creation` helpers and the `Accepted Offers` measure instead. |
 
 The legacy Female / Male / Other / Total Gendered Referrals measures are no
 longer blocked: `dim_person[gender_clean]` and `fact_referral[person_id]`

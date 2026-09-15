@@ -172,7 +172,7 @@ EVENT_ROLLUP_SOURCE = "silver.referral_lifecycle_event"
 # statements can retain the same public names during deployment.
 GOLD_FACT_TABLES = [
     'gold.fact_referral', 'gold.fact_referral_lifecycle_event',
-    'gold.fact_offer', 'gold.fct_ipa', 'gold.fact_referral_provider',
+    'gold.fact_offer', 'gold.fact_ipa', 'gold.fact_referral_provider',
 ]
 for gold_fact_table in GOLD_FACT_TABLES:
     if spark.catalog.tableExists(gold_fact_table):
@@ -182,7 +182,7 @@ for gold_fact_table in GOLD_FACT_TABLES:
             print(f"Dropped legacy view: {gold_fact_table}")
 
 # The IPA fact was formerly named fact_placement. Remove that retired
-# object so semantic models cannot continue to bind to it after fct_ipa
+# object so semantic models cannot continue to bind to it after fact_ipa
 # becomes the active Gold IPA fact.
 RETIRED_GOLD_FACT_OBJECTS = ['gold.fact_placement']
 for retired_object in RETIRED_GOLD_FACT_OBJECTS:
@@ -457,13 +457,12 @@ SELECT {AS_OF_SQL} AS as_of_date,
     AS is_draft_missing_dates,
   LOWER(COALESCE(o.offer_status, '')) = 'draft'
     AND o.offer_date IS NOT NULL AND o.last_modified_date IS NOT NULL
-    AND TO_DATE(o.offer_date) = TO_DATE(o.last_modified_date)
+    AND CAST(o.offer_date AS TIMESTAMP) = CAST(o.last_modified_date AS TIMESTAMP)
     AS is_draft_no_activity,
   LOWER(COALESCE(o.offer_status, '')) IN
     ('accepted', 'approved', 'selected', 'offer_successful')
     AND COALESCE(ip.ipa_count, 0) = 0 AS is_awaiting_ipa_creation,
-  COALESCE(ip.ipa_count, 0) > 0 AND COALESCE(ip.has_completed_ipa, 0) = 0
-    AS is_ipa_pending,
+  COALESCE(ip.has_pending_ipa, 0) = 1 AS is_ipa_pending,
   COALESCE(ip.has_completed_ipa, 0) = 1 AS is_ipa_completed,
   CAST(o.export_date AS TIMESTAMP) AS export_date,
   CAST(o.export_date AS TIMESTAMP) AS source_export_date,
@@ -475,19 +474,31 @@ LEFT JOIN (
   SELECT offer_id, COUNT(*) AS ipa_count,
     MAX(CASE WHEN COALESCE(CAST(signed_by_provider AS BOOLEAN), false)
       AND COALESCE(CAST(signed_by_local_authority AS BOOLEAN), false)
-      THEN 1 ELSE 0 END) AS has_completed_ipa
+      THEN 1 ELSE 0 END) AS has_completed_ipa,
+    MAX(CASE WHEN NOT COALESCE(CAST(closed AS BOOLEAN), false)
+      AND NOT (COALESCE(CAST(signed_by_provider AS BOOLEAN), false)
+        AND COALESCE(CAST(signed_by_local_authority AS BOOLEAN), false))
+      THEN 1 ELSE 0 END) AS has_pending_ipa
   FROM silver.ipa
   WHERE offer_id IS NOT NULL
+    AND (created_datetime IS NULL OR TO_DATE(created_datetime) <= {AS_OF_SQL})
   GROUP BY offer_id
 ) ip ON o.offer_id = ip.offer_id
 WHERE o.offer_date IS NULL OR TO_DATE(o.offer_date) <= {AS_OF_SQL}
 """)
 
 spark.sql(f"""
-CREATE OR REPLACE TABLE gold.fct_ipa AS
+CREATE OR REPLACE TABLE gold.fact_ipa AS
 SELECT {AS_OF_SQL} AS as_of_date,
   i.ipa_id AS ipa_id, i.referral_id AS referral_id,
   i.offer_id AS accepted_offer_id,
+  COALESCE(CAST(i.signed_by_provider AS BOOLEAN), false) AS signed_by_provider,
+  COALESCE(CAST(i.signed_by_local_authority AS BOOLEAN), false) AS signed_by_local_authority,
+  COALESCE(CAST(i.signed_by_provider AS BOOLEAN), false)
+    AND COALESCE(CAST(i.signed_by_local_authority AS BOOLEAN), false) AS is_ipa_completed,
+  NOT COALESCE(CAST(i.closed AS BOOLEAN), false)
+    AND NOT (COALESCE(CAST(i.signed_by_provider AS BOOLEAN), false)
+      AND COALESCE(CAST(i.signed_by_local_authority AS BOOLEAN), false)) AS is_ipa_pending,
   CAST(i.created_datetime AS TIMESTAMP) AS ipa_issued_date,
   CAST(i.placement_admission_date AS TIMESTAMP) AS planned_placement_start_date,
   CAST(NULL AS TIMESTAMP) AS actual_placement_start_date,
