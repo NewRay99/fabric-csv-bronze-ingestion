@@ -535,3 +535,10 @@ table _MissionControl_Measures
 
 			```
 		displayFolder: Control health
+
+	partition _MissionControl_Measures = m
+		mode: import
+		source =
+				#table ( type table [], {} )
+
+	annotation PBI_ResultType = Table

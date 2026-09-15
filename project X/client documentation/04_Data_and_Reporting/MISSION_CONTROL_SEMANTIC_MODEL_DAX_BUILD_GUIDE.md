@@ -37,6 +37,16 @@ Treat statuses case-insensitively. The measures recognise `SUCCESS`/`SUCCEEDED`,
 
 `reports/current/_MissionControl_Measures.tmdl` contains the 67 measures below using the project’s required triple-backtick TMDL expression format. Import it as the `_MissionControl_Measures` table in the Mission Control semantic model.
 
+The extracted PBIP includes this table at `reports/client-deliverables/SM WMPP Mission Control/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl`, with a matching `ref table` in `model.tmdl`. Keep the measure formulas and partition definition aligned between source and deployment. Power BI adds `lineageTag` IDs and changes serialization whitespace when saving; the validator accepts these differences while preserving checks on expressions, names, formats and the Import partition. Do not overwrite Desktop-generated lineage tags merely to make the files textually identical.
+
+### Opening the project after adding the measures
+
+The initial table addition omitted its partition. Power BI Desktop then reported `Model validation failed. A composite model cannot be used with entity based query sources.` The TMDL parsed successfully, but `_MissionControl_Measures` was the only table without a partition; all 32 existing tables used Import mode. This made the new table's Desktop load definition incomplete.
+
+Both measure-table copies now include an explicit Import Power Query partition returning an empty table: `#table ( type table [], {} )`. This supplies the measure container without loading business rows or introducing another external data source. Preserve that partition when editing or copying the measures. The triple-backtick DAX expression delimiters are valid and remain in place. Microsoft describes partitions as the table's data-source definition in its [tables documentation](https://learn.microsoft.com/en-us/analysis-services/tmsl/tables-object-tmsl).
+
+Validation includes the Microsoft TMDL deserializer and `python "project X/tests/validate_mission_control_model.py"`, which also runs through the existing pytest validator wrapper. These checks verify syntax and the saved table structure; they do not execute Power BI Desktop's private model-load validator or the DAX against live data. Reopen the saved `.pbip` in Desktop to confirm the reported load error is resolved. If it persists, retain the new error details for further diagnosis.
+
 ## Copy-ready DAX
 
 ```DAX
