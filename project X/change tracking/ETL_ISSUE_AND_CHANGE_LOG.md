@@ -1884,3 +1884,683 @@ FROM LH_BCT_WMPP.silver.referral_provider a
 inner join LH_BCT_WMPP.silver.referral b on a.referral_id=b.referral_id
 group by all
 ```
+## SEM-02 semantic model - SM WMPP Mission Control project fails to open
+error message i get in session is
+
+```
+Feedback Type:
+Frown (Error)
+
+Timestamp:
+2026-09-15T16:06:24.1349065Z
+
+Local Time:
+2026-09-15T17:06:24.1349065+01:00
+
+Session ID:
+f1d1608b-b62d-4bf3-b3de-1ad4e6747bbe
+
+Release:
+March 2026
+
+Product Version:
+2.152.1279.0 (26.03)+7cb753613ff9dbf770467b6b4012425246d1fe94 (x64)
+
+Error Message:
+There's a problem with the definition content in your Power BI Project.
+Cannot resolve all the paths while de-serializing Database.
+Resolution Errors:
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_seen_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column contract_loaded_at in table cfg_archived_schema_live" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column checked_at in table cfg_data_quality_result" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column loaded_at in table cfg_data_quality_rule" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column snapshot_date in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8a03f47b-59a8-443c-ae84-f81983d38ad5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8eca158c-66e9-4ce7-95f0-e64488cdf0d6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c278a583-3271-4a5b-8866-bd6acd38dac2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 5d8d3ee1-49d2-4e4d-b78d-fd714b176e17" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2d1cbb15-59f0-4681-920b-495d0388bd74" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d35bde3a-e7a1-4953-9059-5b64fd5460d3" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 9e41ec59-6fa2-4293-9a5a-14b1a7f73bbb" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 993703f4-3ecf-4581-b251-8e2b2e3c8704" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d5372f3c-99bc-4f80-8451-fc1339ebe575" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 410e6346-3abd-4f78-8393-ab7074c952f6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship b66ca894-f1df-453f-a36a-fb6f9ade38f1" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f5c7f792-95d9-4b97-9e5d-68a31c9a9303" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f10fddca-eaa4-43a5-ad88-e2c1e92860c7" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d9586b8a-1a49-4086-98c5-8f37df4a91e5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship ee5b8a81-83fe-417c-a888-19e20437fa16" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 4d69fb19-5656-4cb2-a217-c8418476cb09" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c4408eb6-e652-4729-8840-54f524878116" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 54557305-8422-4fac-9962-0a316b559d70" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 32c7eed2-eb06-4fa3-a8c5-5f6e629486e2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2f566675-81bc-42e0-9453-f99fbded604e" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 72358ac3-6fd8-4270-a6c9-63594e8b3907" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d84e761b-b89d-496c-9e9d-97e874bf5c10" refers to an object which cannot be found
+
+Stack Trace:
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<LoadFromProject>g__RethrowAsPowerBIException|49_2(LocalizedString errorDetails, String learnMoreLinkUrl, <>c__DisplayClass49_0& , <>c__DisplayClass49_2& )
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<LoadFromProject>d__49.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<>c__DisplayClass46_0.<<LoadFromPbip>g__LoadFromPbipCore|0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Telemetry.PowerBITelemetryServiceExtensions.<EmitStandardizedClientReportingEventWithDebugEvent>d__7`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<EmitStandardizedClientReportingEventWithDebugEvent>d__48`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<LoadFromPbip>d__46.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<LoadArtifact>d__40.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.CurrentArtifactManager.<>c__DisplayClass56_0.<<ExecuteAndHandleFileOpenErrors>b__0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Telemetry.PowerBITelemetryServiceExtensions.<EmitStandardizedClientReportingEventWithDebugEvent>d__7`1.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.CurrentArtifactManager.<ExecuteAndHandleFileOpenErrors>d__56.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.CurrentArtifactManager.<>c__DisplayClass37_0.<<OpenArtifactAndSetAsCurrent>b__0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.Services.UIBlockingService.<>c__DisplayClass19_0`1.<<BlockUIAndRun>b__0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.PowerBI.Client.Windows.Services.UIBlockingService.WaitOnUIThreadForTaskCompletion[T](Task`1 task)
+   at Microsoft.PowerBI.Client.Windows.Services.UIBlockingService.BlockUIAndRun[T](Func`1 asyncMethod, PowerBIProgress progress, String activityId)
+   at Microsoft.PowerBI.Client.Windows.Services.CurrentArtifactManager.OpenArtifactAndSetAsCurrent(IPowerBIWindowService windowService, IPowerBIArtifact artifactToOpen, IExceptionHandler exceptionHandler, Nullable`1 entryPoint)
+   at Microsoft.PowerBI.Client.CommandLineFileService.TryOpenOrCreateReport(IPowerBIWindowService windowService, IExceptionHandler exceptionHandler, Boolean forceCreate)
+   at Microsoft.PowerBI.Client.AppReportFlow.<OpenExistingReport>d__50.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Microsoft.PowerBI.Client.AppReportFlow.<OpenExistingReport>d__50.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.AppReportFlow.<ContinueLoadWithMainWindow>d__43.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_2.<<Run>b__4>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.MainWindow.<<ActivateMainWindow>b__41_1>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<HandleAwaitableAsyncExceptions>d__1.MoveNext()
+
+Stack Trace Message:
+Cannot resolve all the paths while de-serializing Database.
+Resolution Errors:
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_seen_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column contract_loaded_at in table cfg_archived_schema_live" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column checked_at in table cfg_data_quality_result" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column loaded_at in table cfg_data_quality_rule" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column snapshot_date in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8a03f47b-59a8-443c-ae84-f81983d38ad5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8eca158c-66e9-4ce7-95f0-e64488cdf0d6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c278a583-3271-4a5b-8866-bd6acd38dac2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 5d8d3ee1-49d2-4e4d-b78d-fd714b176e17" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2d1cbb15-59f0-4681-920b-495d0388bd74" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d35bde3a-e7a1-4953-9059-5b64fd5460d3" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 9e41ec59-6fa2-4293-9a5a-14b1a7f73bbb" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 993703f4-3ecf-4581-b251-8e2b2e3c8704" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d5372f3c-99bc-4f80-8451-fc1339ebe575" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 410e6346-3abd-4f78-8393-ab7074c952f6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship b66ca894-f1df-453f-a36a-fb6f9ade38f1" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f5c7f792-95d9-4b97-9e5d-68a31c9a9303" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f10fddca-eaa4-43a5-ad88-e2c1e92860c7" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d9586b8a-1a49-4086-98c5-8f37df4a91e5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship ee5b8a81-83fe-417c-a888-19e20437fa16" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 4d69fb19-5656-4cb2-a217-c8418476cb09" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c4408eb6-e652-4729-8840-54f524878116" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 54557305-8422-4fac-9962-0a316b559d70" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 32c7eed2-eb06-4fa3-a8c5-5f6e629486e2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2f566675-81bc-42e0-9453-f99fbded604e" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 72358ac3-6fd8-4270-a6c9-63594e8b3907" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d84e761b-b89d-496c-9e9d-97e874bf5c10" refers to an object which cannot be found
+
+Invocation Stack Trace:
+   at Microsoft.Mashup.Host.Document.ExceptionExtensions.GetCurrentInvocationStackTrace()
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo..ctor(String message, Exception exception, Nullable`1 stackTraceInfo, String messageDetail)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleKnownExceptions(Exception e)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.Utilities.PowerBIFormUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<HandleAwaitableAsyncExceptions>d__1.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.Windows.MainWindow.<<ActivateMainWindow>b__41_1>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_2.<<Run>b__4>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<ContinueLoadWithMainWindow>d__43.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<OpenExistingReport>d__50.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<EnsureEmptyDatabase>d__49.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<CreateEmptyDatabase>d__48.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Delegate.DynamicInvokeImpl(Object[] args)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbacks()
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Form.ShowDialog(IWin32Window owner)
+   at Microsoft.Mashup.Client.UI.Shared.WindowManager.ShowModal[T](T dialog, Func`1 showModalFunction)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_0.<Run>b__0()
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<>c__DisplayClass3_0.<HandleExceptionsWithNestedTasks>b__0()
+   at Microsoft.Mashup.Host.Document.ExceptionHandlerExtensions.HandleExceptions(IExceptionHandler exceptionHandler, Action action)
+   at Microsoft.PowerBI.Client.AppModule.Run()
+   at Microsoft.PowerBI.Client.Program.RunApplicationFlow(String[] args, IPowerBIRootTrace trace)
+   at Microsoft.PowerBI.Client.Program.Main(String[] args)
+
+
+InnerException0.Stack Trace Message:
+Cannot resolve all the paths while de-serializing Database.
+Resolution Errors:
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_seen_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column contract_loaded_at in table cfg_archived_schema_live" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column checked_at in table cfg_data_quality_result" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column loaded_at in table cfg_data_quality_rule" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column snapshot_date in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8a03f47b-59a8-443c-ae84-f81983d38ad5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8eca158c-66e9-4ce7-95f0-e64488cdf0d6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c278a583-3271-4a5b-8866-bd6acd38dac2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 5d8d3ee1-49d2-4e4d-b78d-fd714b176e17" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2d1cbb15-59f0-4681-920b-495d0388bd74" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d35bde3a-e7a1-4953-9059-5b64fd5460d3" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 9e41ec59-6fa2-4293-9a5a-14b1a7f73bbb" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 993703f4-3ecf-4581-b251-8e2b2e3c8704" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d5372f3c-99bc-4f80-8451-fc1339ebe575" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 410e6346-3abd-4f78-8393-ab7074c952f6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship b66ca894-f1df-453f-a36a-fb6f9ade38f1" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f5c7f792-95d9-4b97-9e5d-68a31c9a9303" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f10fddca-eaa4-43a5-ad88-e2c1e92860c7" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d9586b8a-1a49-4086-98c5-8f37df4a91e5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship ee5b8a81-83fe-417c-a888-19e20437fa16" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 4d69fb19-5656-4cb2-a217-c8418476cb09" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c4408eb6-e652-4729-8840-54f524878116" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 54557305-8422-4fac-9962-0a316b559d70" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 32c7eed2-eb06-4fa3-a8c5-5f6e629486e2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2f566675-81bc-42e0-9453-f99fbded604e" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 72358ac3-6fd8-4270-a6c9-63594e8b3907" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d84e761b-b89d-496c-9e9d-97e874bf5c10" refers to an object which cannot be found
+
+InnerException0.Stack Trace:
+   at Microsoft.PowerBI.Client.Windows.Services.TmdlSchemaContent.GetDatabase()
+   at Microsoft.PowerBI.Client.Windows.Services.BiProjectOperationHandler.<LoadFromProject>d__49.MoveNext()
+
+InnerException0.Invocation Stack Trace:
+   at Microsoft.Mashup.Host.Document.ExceptionExtensions.GetCurrentInvocationStackTrace()
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.GetFeedbackValuesFromException(Exception e, String prefix)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.GetFeedbackValuesFromInnerExceptions(Exception e, Int32 depth)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.CreateAdditionalErrorInfo(Exception e)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo..ctor(String message, Exception exception, Nullable`1 stackTraceInfo, String messageDetail)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleKnownExceptions(Exception e)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.Utilities.PowerBIFormUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<HandleAwaitableAsyncExceptions>d__1.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.Windows.MainWindow.<<ActivateMainWindow>b__41_1>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_2.<<Run>b__4>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<ContinueLoadWithMainWindow>d__43.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<OpenExistingReport>d__50.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<EnsureEmptyDatabase>d__49.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<CreateEmptyDatabase>d__48.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Delegate.DynamicInvokeImpl(Object[] args)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbacks()
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Form.ShowDialog(IWin32Window owner)
+   at Microsoft.Mashup.Client.UI.Shared.WindowManager.ShowModal[T](T dialog, Func`1 showModalFunction)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_0.<Run>b__0()
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<>c__DisplayClass3_0.<HandleExceptionsWithNestedTasks>b__0()
+   at Microsoft.Mashup.Host.Document.ExceptionHandlerExtensions.HandleExceptions(IExceptionHandler exceptionHandler, Action action)
+   at Microsoft.PowerBI.Client.AppModule.Run()
+   at Microsoft.PowerBI.Client.Program.RunApplicationFlow(String[] args, IPowerBIRootTrace trace)
+   at Microsoft.PowerBI.Client.Program.Main(String[] args)
+
+
+InnerException1.Stack Trace Message:
+Cannot resolve all the paths while de-serializing Database.
+Resolution Errors:
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_file_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_seen_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_table_export_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column export_date in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column first_loaded_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_archive_zip_load" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column contract_loaded_at in table cfg_archived_schema_live" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column checked_at in table cfg_data_quality_result" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column loaded_at in table cfg_data_quality_rule" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column snapshot_date in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column last_updated_at in table cfg_month_end_gold_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column started_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property DefaultHierarchy of object "variation Variation in column ended_at in table cfg_pipeline_run" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8a03f47b-59a8-443c-ae84-f81983d38ad5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 8eca158c-66e9-4ce7-95f0-e64488cdf0d6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c278a583-3271-4a5b-8866-bd6acd38dac2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 5d8d3ee1-49d2-4e4d-b78d-fd714b176e17" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2d1cbb15-59f0-4681-920b-495d0388bd74" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d35bde3a-e7a1-4953-9059-5b64fd5460d3" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 9e41ec59-6fa2-4293-9a5a-14b1a7f73bbb" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 993703f4-3ecf-4581-b251-8e2b2e3c8704" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d5372f3c-99bc-4f80-8451-fc1339ebe575" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 410e6346-3abd-4f78-8393-ab7074c952f6" refers to an object which cannot be found,
+	Property ToColumn of object "relationship b66ca894-f1df-453f-a36a-fb6f9ade38f1" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f5c7f792-95d9-4b97-9e5d-68a31c9a9303" refers to an object which cannot be found,
+	Property ToColumn of object "relationship f10fddca-eaa4-43a5-ad88-e2c1e92860c7" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d9586b8a-1a49-4086-98c5-8f37df4a91e5" refers to an object which cannot be found,
+	Property ToColumn of object "relationship ee5b8a81-83fe-417c-a888-19e20437fa16" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 4d69fb19-5656-4cb2-a217-c8418476cb09" refers to an object which cannot be found,
+	Property ToColumn of object "relationship c4408eb6-e652-4729-8840-54f524878116" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 54557305-8422-4fac-9962-0a316b559d70" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 32c7eed2-eb06-4fa3-a8c5-5f6e629486e2" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 2f566675-81bc-42e0-9453-f99fbded604e" refers to an object which cannot be found,
+	Property ToColumn of object "relationship 72358ac3-6fd8-4270-a6c9-63594e8b3907" refers to an object which cannot be found,
+	Property ToColumn of object "relationship d84e761b-b89d-496c-9e9d-97e874bf5c10" refers to an object which cannot be found
+
+InnerException1.Stack Trace:
+   at Microsoft.AnalysisServices.Tabular.Serialization.TmdlSerializationHelper.LoadDatabaseFromTmdlObject[TDatabase](TDatabase db, TmdlObject tmdlDatabase, SerializationActivityContext context)
+   at Microsoft.AnalysisServices.Tabular.Serialization.TmdlSerializationHelper.DeserializeDatabaseFromTmdlProject[TDatabase](TmdlProject project, SerializationActivityContext context)
+   at Microsoft.AnalysisServices.Tabular.TmdlSerializer.DeserializeDatabaseImpl(MetadataDeserializationOptions options, TmdlContentSource contentSource, IMetadataDeserializationController controller, Object context)
+   at Microsoft.PowerBI.Client.Windows.Services.TmdlSchemaContent.GetDatabase()
+
+InnerException1.Invocation Stack Trace:
+   at Microsoft.Mashup.Host.Document.ExceptionExtensions.GetCurrentInvocationStackTrace()
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.GetFeedbackValuesFromException(Exception e, String prefix)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.GetFeedbackValuesFromInnerExceptions(Exception e, Int32 depth)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.GetFeedbackValuesFromInnerExceptions(Exception e, Int32 depth)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo.CreateAdditionalErrorInfo(Exception e)
+   at Microsoft.Mashup.Client.UI.Shared.FeedbackErrorInfo..ctor(String message, Exception exception, Nullable`1 stackTraceInfo, String messageDetail)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleKnownExceptions(Exception e)
+   at Microsoft.PowerBI.Client.PowerBIUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.Utilities.PowerBIFormUnexpectedExceptionHandler.HandleException(Exception e)
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<HandleAwaitableAsyncExceptions>d__1.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.Windows.MainWindow.<<ActivateMainWindow>b__41_1>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_2.<<Run>b__4>d.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<ContinueLoadWithMainWindow>d__43.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task.Finish(Boolean bUserDelegateExecuted)
+   at System.Threading.Tasks.Task`1.TrySetException(Object exceptionObject)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(Exception exception)
+   at Microsoft.PowerBI.Client.AppReportFlow.<OpenExistingReport>d__50.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<EnsureEmptyDatabase>d__49.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.Threading.Tasks.AwaitTaskContinuation.RunCallback(ContextCallback callback, Object state, Task& currentTask)
+   at System.Threading.Tasks.Task.FinishContinuations()
+   at System.Threading.Tasks.Task`1.TrySetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(TResult result)
+   at System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetResult(Task`1 completedTask)
+   at Microsoft.PowerBI.Client.AppReportFlow.<CreateEmptyDatabase>d__48.MoveNext()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.MoveNextRunner.Run()
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Object[] arguments, Signature sig, Boolean constructor)
+   at System.Reflection.RuntimeMethodInfo.UnsafeInvokeInternal(Object obj, Object[] parameters, Object[] arguments)
+   at System.Delegate.DynamicInvokeImpl(Object[] args)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme)
+   at System.Windows.Forms.Control.InvokeMarshaledCallbacks()
+   at System.Windows.Forms.Control.WndProc(Message& m)
+   at System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.UnsafeNativeMethods.DispatchMessageW(MSG& msg)
+   at System.Windows.Forms.Application.ComponentManager.System.Windows.Forms.UnsafeNativeMethods.IMsoComponentManager.FPushMessageLoop(IntPtr dwComponentID, Int32 reason, Int32 pvLoopData)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoopInner(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Application.ThreadContext.RunMessageLoop(Int32 reason, ApplicationContext context)
+   at System.Windows.Forms.Form.ShowDialog(IWin32Window owner)
+   at Microsoft.Mashup.Client.UI.Shared.WindowManager.ShowModal[T](T dialog, Func`1 showModalFunction)
+   at Microsoft.PowerBI.Client.AppModule.<>c__DisplayClass4_0.<Run>b__0()
+   at Microsoft.PowerBI.Client.Windows.IExceptionHandlerExtensions.<>c__DisplayClass3_0.<HandleExceptionsWithNestedTasks>b__0()
+   at Microsoft.Mashup.Host.Document.ExceptionHandlerExtensions.HandleExceptions(IExceptionHandler exceptionHandler, Action action)
+   at Microsoft.PowerBI.Client.AppModule.Run()
+   at Microsoft.PowerBI.Client.Program.RunApplicationFlow(String[] args, IPowerBIRootTrace trace)
+   at Microsoft.PowerBI.Client.Program.Main(String[] args)
+
+
+OS Version:
+Microsoft Windows NT 10.0.26200.0 (x64 en-GB)
+
+CLR Version:
+4.8 or later [Release Number = 533509]
+
+Peak Virtual Memory:
+89.7 GB
+
+Private Memory:
+270 MB
+
+Peak Working Set:
+411 MB
+
+IE Version:
+11.1882.26100.0
+
+User ID:
+85d4bdda-cc32-4612-bc77-dcfcf787d515
+
+Workbook Package Info:
+1* - en-GB, Query Groups: 0, fastCombine: Disabled, runBackgroundAnalysis: False.
+
+Telemetry Enabled:
+True
+
+Snapshot Trace Logs:
+C:\Users\tmpaarmh\AppData\Local\Microsoft\Power BI Desktop\FrownSnapShot022869e5-cf33-4832-806f-9d987ac2210d.zip
+
+Model Default Mode:
+Empty
+
+Model Version:
+PowerBI_V3
+
+Performance Trace Logs:
+C:\Users\tmpaarmh\AppData\Local\Microsoft\Power BI Desktop\PerformanceTraces.zip
+
+Enabled Preview Features:
+PBI_DatabricksAdbcVersionEnabled
+PBI_googleBigQueryAdbcVersionEnabled
+PBI_scorecardVisual
+PBI_setLabelOnExportPdf
+PBI_oneDriveSave
+PBI_oneDriveShare
+PBI_odspSaveBackgroundUpload
+PBI_modernOfficeFilePicker
+PBI_useModernPublishDialogs
+PBI_gitIntegration
+PBI_tmdlInDataset
+PBI_enhancedReportFormat
+PBI_enhancedReportFormatPBIX
+PBI_advancedSlicerTypeList
+PBI_aiNarrativesVisual
+PBI_visualCalculationsAuthoring
+PBI_customCalendars
+PBI_copilotUnifiedTooling
+PBI_UserInstalledNetezzaODBCDriver
+PBI_sqlDbNativeArtifactsOnDesktop
+PBI_supportUDFs
+PBI_newVisualDefaults2026
+PBI_enableExportQueries
+
+Disabled Preview Features:
+PBI_UseRedshiftODBCV2
+PBI_snowflakeLegacyOdbcVersionEnabled
+PBI_shapeMapVisualEnabled
+PBI_SpanishLinguisticsEnabled
+PBI_qnaLiveConnect
+PBI_b2bExternalDatasetSharing
+PBI_onObject
+PBI_publishDialogsSupportSubfolders
+PBI_qnaImproveLsdlCopilot
+MashupFlight_EnableOracleBundledOdacProviderV2
+
+Disabled DirectQuery Options:
+TreatHanaAsRelationalSource
+
+Cloud:
+GlobalCloud
+
+PowerBINonFatalError_ErrorCode:
+
+
+InnerException0.PowerBINonFatalError_ErrorCode:
+DataModelLoadFailed
+
+DPI Scale:
+100%
+
+Supported Services:
+Power BI
+
+Formulas:
+
+
+section Section1;
+
+WebView2 Runtime Version:
+152.0.4191.66
+
+WebView2 SDK Version:
+1.0.2365.46
+```
