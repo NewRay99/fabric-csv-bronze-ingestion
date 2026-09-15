@@ -1873,3 +1873,14 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
 - **Validation:** `validate_silver_required_columns.py` checks the root and
   deployed shared libraries for the policy. Re-run the live pipeline; the
   failed table's audit state lets the formatter retry it.
+
+## GLD-014 - referral is_spot is not accurate
+in the notebook `\Project\fabric-csv-bronze-ingestion\project X\04_gold_model.py`... when creating the gold.fact_referral (line 198) AS CAST(r.is_spot AS BOOLEAN) AS is_spot, that field is not accurate. the accurate field that needs to be pulled through is
+
+should we add the logic below  to the silver.referrals table or silver.referral_enrichment and then mapped to gold.fact_referral and then gold.fact_referral_snapshot?
+```
+SELECT count(*), a.is_spot
+FROM LH_BCT_WMPP.silver.referral_provider a
+inner join LH_BCT_WMPP.silver.referral b on a.referral_id=b.referral_id
+group by all
+```
