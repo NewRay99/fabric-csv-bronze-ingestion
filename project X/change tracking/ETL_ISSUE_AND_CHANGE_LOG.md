@@ -1874,13 +1874,23 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
   deployed shared libraries for the policy. Re-run the live pipeline; the
   failed table's audit state lets the formatter retry it.
 
-## GLD-014 - referral is_spot is not accurate
-in the notebook `\Project\fabric-csv-bronze-ingestion\project X\04_gold_model.py`... when creating the gold.fact_referral (line 198) AS CAST(r.is_spot AS BOOLEAN) AS is_spot, that field is not accurate. the accurate field that needs to be pulled through is
+## GLD-014 — Referral spot status used the wrong source
 
-should we add the logic below  to the silver.referrals table or silver.referral_enrichment and then mapped to gold.fact_referral and then gold.fact_referral_snapshot?
-```
-SELECT count(*), a.is_spot
-FROM LH_BCT_WMPP.silver.referral_provider a
-inner join LH_BCT_WMPP.silver.referral b on a.referral_id=b.referral_id
-group by all
-```
+- **Symptom (reported 2026-09-15):** `gold.fact_referral.is_spot` was taken
+  from `silver.referral.is_spot`, which can disagree with the provider
+  assignment value.
+- **Cause:** the Gold referral fact has one row per referral, but it directly
+  read a referral-level source field instead of deriving the value from the
+  authoritative `silver.referral_provider` rows.
+- **Fix (2026-09-15):** `03_silver_business_rules` now materialises
+  `silver.referral_enrichment.is_spot`. It is `true` when any linked provider
+  assignment has `is_spot = true`; no source-conformed columns were changed.
+  `04_gold_model` reads that enrichment value into `gold.fact_referral`, and
+  the existing snapshot selection carries it into
+  `gold.fact_referral_snapshot`.
+- **Validation:** the regression test creates a referral where the referral
+  field is false and its provider assignment is true. Static checks verify the
+  Silver aggregation, Gold promotion, snapshot field and deployed WMPP copies.
+- **Status:** source and deployed notebook definitions updated. Run
+  `03_silver_business_rules` before `04_gold_model` so the revised enrichment
+  schema and data are present.

@@ -28,11 +28,14 @@ closure_reason AS (
 ),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+    CAST(r.export_date AS TIMESTAMP) AS export_date,
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
-    CAST(r.is_spot AS BOOLEAN) AS is_spot,
+    -- GLD-014: provider assignment is authoritative; Silver aggregates it
+    -- at referral grain so this remains one Gold row per referral.
+    COALESCE(x.is_spot, false) AS is_spot,
     x.is_open, x.is_awaiting_offer,
     x.provider_assignment_count,
     x.first_action_date, x.first_offer_date,
@@ -65,7 +68,7 @@ base AS (
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
-  referral_id, person_id, referral_created_date, required_placement_date,
+  export_date, referral_id, person_id, referral_created_date, required_placement_date,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
   referral_closure_reason, last_activity_date, current_status,
@@ -116,6 +119,6 @@ SELECT {AS_OF_SQL} AS as_of_date,
     ELSE 'Closed without placement'
   END AS required_placement_date_outcome,
   planned_placement_start_date, estimated_weekly_cost,
-  CURRENT_TIMESTAMP() AS gold_modelled_at
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM base
 WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}

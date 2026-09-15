@@ -107,7 +107,13 @@ r5 = add_referral(date(2025,1,25), date(2025,3,1))   # planned, placed after tar
 feb = date(2025, 2, 5)
 r6 = add_referral(feb, date(2025,2,6))               # critical placed by target
 o6 = add_offer(r6, date(2025,2,6), "accepted"); add_ipa(r6, o6, date(2025,2,6), date(2025,2,6))
-r7 = add_referral(date(2025,2,10), date(2025,2,25), is_spot=True)  # high, spot, no engagement
+# GLD-014: the referral-level source flag is stale/false while the linked
+# provider assignment is spot.  The Gold fact must use the provider value.
+r7 = add_referral(date(2025,2,10), date(2025,2,25), is_spot=False)
+providers.append(dict(referral_provider_id=str(uuid.uuid4()), referral_id=r7,
+    provider_id=random.choice(provider_ids), is_excluded=False, is_declined=False,
+    created_by="sim", modified_by="sim", is_cancelled=False, is_closed=True,
+    is_spot=True, export_date=ts(date(2025,2,10))))
 r8 = add_referral(date(2025,2,12), date(2025,3,15))  # planned
 r9 = add_referral(date(2025,2,20), date(2025,2,22))  # critical, closed without placement in Mar
 # in-month update: close r3 (created Jan) -> new flattened version in Feb
@@ -194,6 +200,9 @@ for rid, r in current.items():
         ipa_due_diligence_min_review_date=None,
         is_open=is_open,
         is_awaiting_offer=is_awaiting_offer,
+        # GLD-014: fact_referral has one row per referral, so any spot
+        # provider assignment makes the referral spot.
+        is_spot=any(bool(p["is_spot"]) for p in rps),
         # GLD-013: distinct providers assigned to the referral
         provider_assignment_count=len({p["provider_id"] for p in rps}),
     ))
@@ -234,7 +243,10 @@ GOLD_FACT_SQL = open(os.path.join(TEST_ROOT, "_gold_fact_sql.sql"), encoding="ut
 
 def run_gold(as_of):
     as_of_sql = f"DATE '{as_of.isoformat()}'"
-    spark.sql(GOLD_FACT_SQL.format(AS_OF_SQL=as_of_sql))
+    spark.sql(GOLD_FACT_SQL.format(
+        AS_OF_SQL=as_of_sql,
+        GOLD_JOB_RUN_ID="gold-simulation",
+    ))
     snapshot = spark.table("gold.fact_referral").select(
         F.lit(as_of).cast("date").alias("snapshot_date"),
         "referral_id", "current_status", "placement_urgency_band", "required_placement_date",
@@ -302,8 +314,8 @@ check(out_f[r3].required_placement_date_outcome == "Closed without placement", "
 check(out_f[r6].required_placement_date_outcome == "Placed by target", "r6 placed by target (Feb)")
 check(out_f[r4].required_placement_date_outcome == "Open overdue", "r4 still open overdue (Feb)")
 check(feb_df.count() == 9, f"Feb has 9 referrals (got {feb_df.count()})")
-# GLD-010: is_spot propagates from silver.referral
-check(out_f[r7].is_spot == True, "r7 is_spot true (GLD-010)")
+# GLD-014: r7 has a false referral source flag but a true provider flag.
+check(out_f[r7].is_spot == True, "r7 is_spot true from referral_provider (GLD-014)")
 check(out_f[r6].is_spot == False, "r6 is_spot false")
 # GLD-009: r7 has no provider engagement and its response window (2/23) expired
 check(out_f[r7].is_open == False, "r7 not open under GLD-009 rule (spot, no engagement, expired window)")

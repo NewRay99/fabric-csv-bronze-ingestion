@@ -80,6 +80,7 @@ required_fields = {
     "ipa_due_diligence_min_review_date",
     "is_open",
     "is_awaiting_offer",
+    "is_spot",
     "provider_assignment_count",
 }
 for field in required_fields:
@@ -119,8 +120,14 @@ assert "CROSS JOIN latest_export le" in dq
 assert "COALESCE(is_open, false) AS is_open" in fact_source
 assert "COALESCE(is_awaiting_offer, false) AS is_awaiting_offer" in fact_source
 assert "x.is_open, x.is_awaiting_offer," in fact_source
-# GLD-010: is_spot is restored to gold.fact_referral from silver.referral.
-assert "CAST(r.is_spot AS BOOLEAN) AS is_spot" in fact_source
+# GLD-014: referral_provider is authoritative for spot placement.  The
+# referral-grain enrichment is true when any linked provider assignment is spot.
+assert "provider_spot AS" in dq
+assert "MAX(CASE WHEN COALESCE(CAST(is_spot AS BOOLEAN), false)" in dq
+assert "COALESCE(ps.is_spot, false) AS is_spot" in dq
+assert "LEFT JOIN provider_spot ps ON r.referral_id = ps.referral_id" in dq
+assert "COALESCE(x.is_spot, false) AS is_spot" in fact_source
+assert "CAST(r.is_spot AS BOOLEAN) AS is_spot" not in fact_source
 assert '"is_spot", "has_offer"' in gold
 # GLD-012: is_engaged flags provider referrals that are not cancelled,
 # closed or excluded.
@@ -133,7 +140,7 @@ assert "AS is_engaged" in provider_source
 assert "NOT COALESCE(CAST(rp.is_cancelled AS BOOLEAN), false)" in provider_source
 assert "NOT COALESCE(CAST(rp.is_closed AS BOOLEAN), false)" in provider_source
 assert "NOT COALESCE(CAST(rp.is_excluded AS BOOLEAN), false)" in provider_source
-print("PASS GLD-009/010/011/012 open, awaiting-offer, is_spot and is_engaged logic is present")
+print("PASS GLD-009/011/012/014 open, awaiting-offer, provider-derived spot and is_engaged logic is present")
 
 # GLD-013: semantic-model push-downs mined from SM WMPP v15. Referral-grain
 # columns ride the Silver enrichment relation; offer-grain flags are computed

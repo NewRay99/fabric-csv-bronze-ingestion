@@ -444,7 +444,7 @@ log_step("Materialised referral_closure_reason_summary")
 # Gold, snapshots, and ad-hoc reporting.
 enrichment_schema = (
     "referral_id string, referral_created_date timestamp, cnt_offer_made long, "
-    "unique_homes_offered long, provider_assignment_count long, "
+    "unique_homes_offered long, provider_assignment_count long, is_spot boolean, "
     "estimated_weekly_cost decimal(19,2), "
     "first_action_date timestamp, first_offer_date timestamp, offer_accepted_date timestamp, "
     "ipa_issued_date timestamp, referral_closed_date timestamp, last_activity_date timestamp, "
@@ -545,6 +545,15 @@ if (spark.catalog.tableExists("silver.referral")
           FROM silver.referral_provider
           GROUP BY referral_id
         ),
+        provider_spot AS (
+          -- GLD-014: provider assignment is the authoritative spot signal.
+          -- fact_referral is referral-grain, so any spot assignment is spot.
+          SELECT CAST(referral_id AS STRING) AS referral_id,
+            MAX(CASE WHEN COALESCE(CAST(is_spot AS BOOLEAN), false)
+              THEN 1 ELSE 0 END) = 1 AS is_spot
+          FROM silver.referral_provider
+          GROUP BY referral_id
+        ),
         ipa_rollup AS (
           SELECT referral_id, MIN(CAST(created_datetime AS TIMESTAMP))
               AS ipa_issued_date,
@@ -591,6 +600,7 @@ if (spark.catalog.tableExists("silver.referral")
           COALESCE(o.cnt_offer_made, 0) AS cnt_offer_made,
           COALESCE(o.unique_homes_offered, 0) AS unique_homes_offered,
           COALESCE(o.provider_assignment_count, 0) AS provider_assignment_count,
+          COALESCE(ps.is_spot, false) AS is_spot,
           i.estimated_weekly_cost,
           a.first_action_date, o.first_offer_date, o.offer_accepted_date,
           i.ipa_issued_date,
@@ -636,6 +646,7 @@ if (spark.catalog.tableExists("silver.referral")
         LEFT JOIN offer_rollup o ON r.referral_id = o.referral_id
         LEFT JOIN activity_rollup a ON r.referral_id = a.referral_id
         LEFT JOIN provider_seen p ON r.referral_id = p.referral_id
+        LEFT JOIN provider_spot ps ON r.referral_id = ps.referral_id
         LEFT JOIN ipa_rollup i ON r.referral_id = i.referral_id
         LEFT JOIN ipa_documents d ON r.referral_id = d.referral_id
         LEFT JOIN live_provider lp ON r.referral_id = lp.referral_id
@@ -645,7 +656,7 @@ else:
     referral_enrichment = spark.createDataFrame([], enrichment_schema)
 replace_silver_materialisation(referral_enrichment, "referral_enrichment")
 print("Silver referral enrichment ready: offer, provider-observation, IPA-signature, "
-      "due-diligence, is_open, is_awaiting_offer and provider-assignment fields")
+      "due-diligence, is_open, is_awaiting_offer, provider-assignment and spot fields")
 log_step("Materialised referral_enrichment")
 
 # Run derived checks only after the current enrichment has been written.

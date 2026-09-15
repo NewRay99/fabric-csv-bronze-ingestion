@@ -232,4 +232,18 @@ for deployed_notebook in (
     )
 print("PASS deployed WMPP Gold notebooks retain export_date and job_run_id lineage")
 
+deployed_silver = (
+    ROOT / "reports" / "current" / "WMPP" / "notebooks"
+    / "03_silver_business_rules.Notebook" / "notebook-content.py"
+).read_text(encoding="utf-8")
+deployed_gold = (
+    ROOT / "reports" / "current" / "WMPP" / "notebooks"
+    / "04_gold_model.Notebook" / "notebook-content.py"
+).read_text(encoding="utf-8")
+assert "provider_spot AS" in deployed_silver
+assert "COALESCE(ps.is_spot, false) AS is_spot" in deployed_silver
+assert "COALESCE(x.is_spot, false) AS is_spot" in deployed_gold
+assert '"is_open", "is_spot", "has_offer"' in deployed_gold
+print("PASS GLD-014 provider-derived spot logic is present in deployed WMPP notebooks")
+
 print("VALIDATION PASSED")

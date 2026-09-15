@@ -92,7 +92,7 @@ GOLD_SOURCE_REQUIREMENTS = {
     "silver.referral": {
         "referral_id", "required_start_date", "response_required_by_date",
         "placement_type", "referral_created_date", "referral_modified_date",
-        "referral_status", "is_spot", "export_date",
+        "referral_status", "export_date",
     },
     "silver.offer": {
         "offer_id", "referral_provider_id", "offer_status", "provider_home_id",
@@ -103,7 +103,7 @@ GOLD_SOURCE_REQUIREMENTS = {
     },
     "silver.referral_provider": {
         "referral_provider_id", "referral_id", "provider_id", "export_date",
-        "is_excluded", "is_declined", "is_cancelled", "is_closed",
+        "is_excluded", "is_declined", "is_cancelled", "is_closed", "is_spot",
     },
     "silver.ipa": {
         "referral_id", "created_datetime", "updated_datetime",
@@ -130,7 +130,7 @@ GOLD_SOURCE_REQUIREMENTS = {
         "first_provider_seen_date", "is_not_seen_by_providers",
         "ipa_placement_admission_date", "ipa_2_signatures",
         "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
-        "is_open", "is_awaiting_offer", "provider_assignment_count",
+        "is_open", "is_awaiting_offer", "is_spot", "provider_assignment_count",
     },
 }
 
@@ -230,7 +230,9 @@ base AS (
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
-    CAST(r.is_spot AS BOOLEAN) AS is_spot,
+    -- GLD-014: provider assignment is authoritative; Silver aggregates it
+    -- at referral grain so this remains one Gold row per referral.
+    COALESCE(x.is_spot, false) AS is_spot,
     x.is_open, x.is_awaiting_offer,
     x.provider_assignment_count,
     x.first_action_date, x.first_offer_date,
