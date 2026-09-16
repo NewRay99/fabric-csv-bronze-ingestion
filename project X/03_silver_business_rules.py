@@ -23,12 +23,10 @@
 # MARKDOWN ********************
 
 # # 03 — Silver business and data-quality rules
-#
-# Run metadata-driven checks against the schema-conformed Silver tables.
+# # Run metadata-driven checks against the schema-conformed Silver tables.
 # Primary-key and foreign-key rules come from `schema_definition.csv`; additional
 # date and numeric rules come from `dq_rule_definition.csv`.
-#
-# Rejected-row logging stores only key references, not complete child records.
+# # Rejected-row logging stores only key references, not complete child records.
 
 # CELL ********************
 
@@ -540,10 +538,12 @@ if (spark.catalog.tableExists("silver.referral")
         provider_spot AS (
           -- GLD-014: provider assignment is the authoritative spot signal.
           -- fact_referral is referral-grain, so any spot assignment is spot.
-          SELECT CAST(referral_id AS STRING) AS referral_id,
+          SELECT CAST(c.referral_id AS STRING) AS referral_id,
             MAX(CASE WHEN COALESCE(CAST(is_spot AS BOOLEAN), false)
               THEN 1 ELSE 0 END) = 1 AS is_spot
-          FROM silver.referral_provider
+          FROM  LH_BCT_WMPP.silver.offer a
+            inner join LH_BCT_WMPP.silver.ipa b on a.offer_id=b.offer_id
+            inner join LH_BCT_WMPP.silver.referral_provider c on c.referral_provider_id = a.referral_provider_id
           GROUP BY referral_id
         ),
         ipa_rollup AS (
