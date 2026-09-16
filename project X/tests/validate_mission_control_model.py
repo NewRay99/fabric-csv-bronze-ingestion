@@ -1,4 +1,4 @@
-"""Guard the Mission Control measures table's Power BI Import-table structure.
+"""Guard the Mission Control model's Power BI project structure.
 
 This checks the saved deployment contract, not Power BI's private load validator.
 """
@@ -10,12 +10,15 @@ import textwrap
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "reports/current/_MissionControl_Measures.tmdl"
-DEFINITION = (
+DEPLOYED_PROJECT = (
     ROOT
-    / "reports/client-deliverables/SM WMPP Mission Control"
-    / "SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition"
+    / "reports/client-deliverables/SM WMPP Mission Control - SEM-02 repaired"
 )
+DEFINITION = DEPLOYED_PROJECT / "SM WMPP Mission Control.SemanticModel/definition"
 TABLE_NAME = "_MissionControl_Measures"
+REPORT_DEFINITION = (
+    DEPLOYED_PROJECT / "SM WMPP Mission Control.Report/definition"
+)
 
 
 def comparable_tmdl(text):
@@ -73,9 +76,42 @@ def validate_measures_table(path):
     return text, measures
 
 
+def validate_no_automatic_date_metadata():
+    """Reject the generated date paths that March 2026 Desktop cannot resolve."""
+    date_tables = sorted((DEFINITION / "tables").glob("LocalDateTable_*.tmdl"))
+    assert not date_tables, (
+        "SEM-02: generated LocalDateTable definitions reproduce the client's "
+        "unresolved DefaultHierarchy/ToColumn load failure"
+    )
+
+    semantic_text = "\n".join(
+        path.read_text(encoding="utf-8-sig")
+        for path in DEFINITION.rglob("*.tmdl")
+    )
+    report_text = "\n".join(
+        path.read_text(encoding="utf-8-sig")
+        for path in REPORT_DEFINITION.rglob("*.json")
+    )
+    for forbidden in (
+        "LocalDateTable_",
+        "DateTableTemplate_",
+        "variation Variation",
+        "PropertyVariationSource",
+        ".Variation.Date Hierarchy",
+    ):
+        assert forbidden not in semantic_text
+        assert forbidden not in report_text
+
+    private_cache_dirs = list(DEPLOYED_PROJECT.rglob(".pbi"))
+    assert not private_cache_dirs, (
+        "Client package must not contain Desktop-local .pbi caches"
+    )
+
+
 def main():
     source_text, source_measures = validate_measures_table(SOURCE)
     if DEFINITION.exists():
+        validate_no_automatic_date_metadata()
         deployed_text, deployed_measures = validate_measures_table(
             DEFINITION / "tables" / f"{TABLE_NAME}.tmdl"
         )
@@ -85,6 +121,10 @@ def main():
         )
         model = (DEFINITION / "model.tmdl").read_text(encoding="utf-8-sig")
         assert model.splitlines().count(f"ref table {TABLE_NAME}") == 1
+        database = (DEFINITION / "database.tmdl").read_text(encoding="utf-8-sig")
+        # Keep the repaired copy at the compatibility level used by the client.
+        assert "compatibilityLevel: 1600" in database
+        assert "compatibilityLevel: 1606" not in database
         print(f"PASS deployed model registers all {len(deployed_measures)} measures")
     else:
         print("NOTE client-deliverables extraction is absent; checked source table only")

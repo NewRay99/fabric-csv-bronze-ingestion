@@ -2576,3 +2576,22 @@ WebView2 Runtime Version:
 WebView2 SDK Version:
 1.0.2365.46
 ```
+
+- **Cause (corrected 2026-09-15):** the compatibility-level-only repair did
+  not fix the client error. The March 2026 Desktop deserializer cannot resolve
+  the 22 automatic `LocalDateTable_*` objects saved with the August-authored
+  project. Each source-column variation and generated relationship therefore
+  points to a date hierarchy or `Date` column that the client never creates.
+- **Fix (2026-09-15):** created the separate
+  `SM WMPP Mission Control - SEM-02 repaired` project, disabled automatic time
+  intelligence, removed its generated date-table template, 22 local date
+  tables, 22 generated relationships and source-column variations, and changed
+  the five affected report visuals to use the underlying date columns. All 67
+  Mission Control measures remain registered.
+- **Validation:** `validate_mission_control_model.py` rejects the exact
+  `DefaultHierarchy`/`ToColumn` reference pattern from the client error. The
+  repaired project passes the repository validators and opens far enough in
+  local Power BI Desktop to create its Analysis Services database without a
+  model-resolution error.
+- **Status:** repaired client package prepared; final acceptance remains to
+  open that package in the client's March 2026 Desktop build.
