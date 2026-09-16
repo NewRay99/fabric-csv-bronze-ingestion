@@ -8,22 +8,14 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
+# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+# META       "default_lakehouse_name": "LH_BCT_WMPP",
+# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
 # META       "known_lakehouses": [
 # META         {
 # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
 # META         }
-# META       ],
-# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
-# META       "default_lakehouse_name": "LH_BCT_WMPP",
-# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770"
-# META     }
-# META   },
-# META   "spark_compute": {
-# META     "compute_id": "/trident/default",
-# META     "session_options": {
-# META       "conf": {
-# META         "spark.synapse.nbs.session.timeout": "1200000"
-# META       }
+# META       ]
 # META     }
 # META   }
 # META }
