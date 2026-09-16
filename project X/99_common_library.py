@@ -6,15 +6,7 @@
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
 # META   },
-# META   "dependencies": {},
-# META   "spark_compute": {
-# META     "compute_id": "/trident/default",
-# META     "session_options": {
-# META       "conf": {
-# META         "spark.synapse.nbs.session.timeout": "1200000"
-# META       }
-# META     }
-# META   }
+# META   "dependencies": {}
 # META }
 
 # MARKDOWN ********************
