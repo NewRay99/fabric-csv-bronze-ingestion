@@ -4,7 +4,6 @@
 
 # META {
 # META   "kernel_info": {
-# META     "jupyter_kernel_name": null,
 # META     "name": "synapse_pyspark"
 # META   },
 # META   "dependencies": {
@@ -18,17 +17,7 @@
 # META         }
 # META       ]
 # META     }
-# META   },
-# META   "spark_compute": {
-# META     "compute_id": "/trident/default",
-# META     "session_options": {
-# META       "conf": {
-# META         "spark.synapse.nbs.session.timeout": "1200000"
-# META       }
-# META     }
-# META   },
-# META   "sessionKeepAliveTimeout": 0,
-# META   "a365ComputeOptions": null
+# META   }
 # META }
 
 # MARKDOWN ********************
