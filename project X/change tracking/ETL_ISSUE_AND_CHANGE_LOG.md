@@ -1969,3 +1969,106 @@ these need to be added in
 - **Status:** source change complete. Run `03_silver_business_rules` before
   `04_gold_model` so both new and existing enrichment materialisations are
   refreshed together.
+
+## GLD-015- 
+add the following to dim_referral_provider_reject_reason... 
+rule 
+```
+Closure Reason Clean = 
+VAR ReasonText =
+    COALESCE(
+        fact_referral_offer[cancel_reason_other],
+        fact_referral_offer[offer_cancel_reason],
+        fact_referral_offer[offer_decline_reason_other],
+        fact_referral_offer[offer_decline_reason]
+    )
+VAR CleanReason =
+    TRIM(ReasonText)
+RETURN
+SWITCH(
+    TRUE(),
+    ISBLANK(CleanReason) || CleanReason = "", "No reason recorded",
+    LOWER(CleanReason) = "test", BLANK(),
+    CleanReason
+)
+
+
+Closure Reason Grouped = 
+VAR R = LOWER(
+    COALESCE(
+        fact_referral_offer[Closure Reason Clean],
+        "no reason recorded"
+    )
+)
+RETURN
+SWITCH(
+    TRUE(),
+
+    // No reason captured
+    R = "no reason recorded", "No reason recorded",
+
+    // Location / matching issues
+    CONTAINSSTRING(R, "location"), "Location / Matching issue",
+
+    // Off-portal / alternative placements
+    CONTAINSSTRING(R, "off portal"), "Off-portal / alternative placement",
+    CONTAINSSTRING(R, "not on the portal"), "Off-portal / alternative placement",
+    CONTAINSSTRING(R, "doesn't have access"), "Off-portal / alternative placement",
+
+    // Placement found elsewhere
+    CONTAINSSTRING(R, "placed"), "Placement found elsewhere",
+    CONTAINSSTRING(R, "moved"), "Placement found elsewhere",
+
+    // Case / admin closure
+    CONTAINSSTRING(R, "case closed"), "Case / administrative closure",
+    CONTAINSSTRING(R, "remove"), "Case / administrative closure",
+    CONTAINSSTRING(R, "update"), "Case / administrative closure",
+
+    // Offer / system issues
+    CONTAINSSTRING(R, "email"), "System / process issue",
+    CONTAINSSTRING(R, "portal not working"), "System / process issue",
+
+    // Fallback
+    "Other"
+)
+
+
+Closed Referral Reason Bucket = 
+VAR R =
+    LOWER(
+        TRIM(
+            COALESCE(fact_referral_offer[Closure Reason Clean], "")
+        )
+    )
+
+RETURN
+SWITCH(
+    TRUE(),
+
+    R = "", "No reason recorded",
+
+    CONTAINSSTRING(R, "location"), "Location / Matching issue",
+
+    CONTAINSSTRING(R, "off portal")
+        || CONTAINSSTRING(R, "not on the portal")
+        || CONTAINSSTRING(R, "doesn't have access"),
+        "Off-portal / alternative placement",
+
+    CONTAINSSTRING(R, "placed")
+        || CONTAINSSTRING(R, "moved"),
+        "Placement found elsewhere",
+
+    CONTAINSSTRING(R, "case closed")
+        || CONTAINSSTRING(R, "remove")
+        || CONTAINSSTRING(R, "update"),
+        "Case / administrative closure",
+
+    CONTAINSSTRING(R, "email")
+        || CONTAINSSTRING(R, "portal not working"),
+        "System / process issue",
+
+    "Other"
+)
+```
+
+there should only be one dim_referral_provider_reject_reason for fact_referral_provider so to make sure just ass a sequence_order with the latest reason being 1 and the oldest being nTH number. 
