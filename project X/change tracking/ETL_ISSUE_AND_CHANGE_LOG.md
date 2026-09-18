@@ -2595,3 +2595,15 @@ WebView2 SDK Version:
   model-resolution error.
 - **Status:** repaired client package prepared; final acceptance remains to
   open that package in the client's March 2026 Desktop build.
+
+## GLD-014 - missing referral_provider_details from GLD
+
+following tables are missing in the GOLD Layer
+
+bronze.referral_provider_message -> gold.dim_referral_provider_message
+bronze.referral_provider_cancel_reason -> gold.dim_referral_provider_reject_reason as field/s in it reject_type='cancel', reason, reason_other, create_date (**use the correct naming conventions for the columns)
+bronze.referral_provider_decline_reason ->  gold.dim_referral_provider_reject_reason as field/s in it reject_type='decline', reason, reason_other, create_date (**use the correct naming conventions for the columns)
+
+these need to be added in
+
+
