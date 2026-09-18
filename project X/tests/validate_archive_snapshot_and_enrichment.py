@@ -42,9 +42,10 @@ dq = notebook_source(DQ)
 print("PASS Fabric notebook cells and Python syntax")
 
 assert "NOTEBOOK_TIMEOUT_SECONDS = 7200" in archive_runner
-assert '"spark.synapse.nbs.session.timeout": "7200000"' in ARCHIVE_RUNNER.read_text(
-    encoding="utf-8-sig"
-)
+# Fabric exports can omit spark_compute metadata. Guard the timeout supplied
+# to child execution instead of relying on an optional session metadata key.
+assert "setup_name, NOTEBOOK_TIMEOUT_SECONDS," in archive_runner
+assert "notebook_name, NOTEBOOK_TIMEOUT_SECONDS," in archive_runner
 assert "NOTEBOOK_TIMEOUT_SECONDS = 7200" in archive_silver
 assert "DQ_NOTEBOOK_NAME, NOTEBOOK_TIMEOUT_SECONDS" in archive_silver
 assert "GOLD_NOTEBOOK_NAME,\n                NOTEBOOK_TIMEOUT_SECONDS" in archive_silver
@@ -107,12 +108,17 @@ assert "x.unique_homes_offered," in fact_source
 assert "x.estimated_weekly_cost," in fact_source
 print("PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present")
 
-# GLD-009/GLD-011: the open and awaiting-offer flags implement the original
-# business rules in Silver and are propagated, not recalculated, in Gold.
+# PERF-001/GLD-009/GLD-011: one provider-level rollup feeds the enrichment
+# relation, so the open and awaiting-offer flags retain their business rules
+# without repeatedly scanning silver.referral_provider.
 assert "latest_export AS" in dq
 assert "MAX(TO_DATE(export_date)) AS latest_export_date" in dq
-assert "live_provider AS" in dq
-assert "engaged_provider AS" in dq
+assert 'replace_silver_materialisation(referral_provider_rollup, "referral_provider_rollup")' in dq
+assert "silver.referral_provider_rollup pr" in dq
+assert "has_live_provider" in dq
+assert "has_engaged_provider" in dq
+assert "live_provider AS" not in dq
+assert "engaged_provider AS" not in dq
 assert "'UNDER_OFFER'" in dq
 assert "TO_DATE(r.response_required_by_date) >= le.latest_export_date" in dq
 assert "is_open boolean, is_awaiting_offer boolean" in dq
@@ -146,7 +152,7 @@ print("PASS GLD-009/011/012/014 open, awaiting-offer, provider-derived spot and 
 # columns ride the Silver enrichment relation; offer-grain flags are computed
 # in Gold with an IPA rollup join.
 assert "COUNT(DISTINCT rp.provider_id) AS provider_assignment_count" in dq
-assert "COALESCE(o.provider_assignment_count, 0) AS provider_assignment_count" in dq
+assert "COALESCE(pr.provider_assignment_count, 0) AS provider_assignment_count" in dq
 assert "provider_assignment_count long" in dq
 assert "x.provider_assignment_count," in fact_source
 assert "COALESCE(provider_assignment_count, 0) AS provider_assignment_count" in fact_source

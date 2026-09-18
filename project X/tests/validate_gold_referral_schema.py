@@ -216,6 +216,38 @@ for expected in (
 ):
     assert expected in dimensions_source, f"Gold dimensions are missing export_date lineage: {expected}"
 
+# GLD-014: provider messages are a normal, current-record dimension; the two
+# provider-rejection source tables are intentionally consolidated so consumers
+# can filter one dimension by reject_type without source-specific logic.
+for expected in (
+    '"silver.referral_provider_message", "gold.dim_referral_provider_message"',
+    '"silver.referral_provider_cancel_reason"',
+    '"silver.referral_provider_decline_reason"',
+    '"gold.dim_referral_provider_reject_reason"',
+    "reject_type",
+    "reason_other",
+    "created_date",
+):
+    assert expected in dimensions_source, (
+        f"GLD-014 provider-message/rejection dimension is missing {expected}"
+    )
+assert re.search(
+    r"(?s)SELECT\s+.*'cancel'\s+AS\s+reject_type.*UNION\s+ALL.*"
+    r"'decline'\s+AS\s+reject_type",
+    dimensions_source,
+), "GLD-014 must label both rejection source types in one Gold dimension"
+for expected in (
+    "CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id",
+    "CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS reject_reason_id",
+    "cancel_reason_other_text AS reason_other",
+    "decline_reason_other_text AS reason_other",
+    "CAST(created_date AS TIMESTAMP) AS created_date",
+):
+    assert expected in dimensions_source, (
+        f"GLD-014 does not retain the canonical rejection-reason mapping: {expected}"
+    )
+print("PASS GLD-014 materialises provider messages and consolidated rejection reasons")
+
 for deployed_notebook in (
     ROOT / "reports" / "current" / "WMPP" / "notebooks" / "04_gold_model.Notebook" / "notebook-content.py",
     ROOT / "reports" / "current" / "WMPP" / "notebooks" / "05_gold_dimensions.Notebook" / "notebook-content.py",
@@ -230,6 +262,16 @@ for deployed_notebook in (
     assert "job_run_id" in deployed_source, (
         f"{deployed_notebook.name} is missing the Gold job-run lineage feature"
     )
+    if deployed_notebook.name == "notebook-content.py" and "05_gold_dimensions" in str(deployed_notebook):
+        for expected in (
+            "gold.dim_referral_provider_message",
+            "gold.dim_referral_provider_reject_reason",
+            "cancel_reason_other_text AS reason_other",
+            "decline_reason_other_text AS reason_other",
+        ):
+            assert expected in deployed_source, (
+                f"{deployed_notebook.name} is missing deployed GLD-014 mapping: {expected}"
+            )
 print("PASS deployed WMPP Gold notebooks retain export_date and job_run_id lineage")
 
 deployed_silver = (

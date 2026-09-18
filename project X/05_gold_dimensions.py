@@ -207,6 +207,66 @@ latest_dimension(
      ("start_date", "start_date"), ("export_date", "source_export_date")],
 )
 
+# GLD-014: keep provider messages as a current-record dimension and combine
+# cancellation and decline reasons into one consistently named lookup. The
+# prefixed key preserves provenance because the two source ID sequences are
+# independent and can overlap.
+latest_dimension(
+    "silver.referral_provider_message", "gold.dim_referral_provider_message", ["message_id"],
+    [("message_id", "message_id"), ("referral_provider_id", "referral_provider_id"),
+     ("message_read_by", "message_read_by"),
+     ("message_read_timestamp", "message_read_timestamp"),
+     ("message_text", "message_text"), ("created_timestamp", "created_timestamp"),
+     ("created_by", "created_by"), ("export_date", "source_export_date")],
+)
+
+for rejection_source, required_columns in {
+    "silver.referral_provider_cancel_reason": {
+        "cancel_reason_id", "referral_provider_id", "cancel_reason",
+        "cancel_reason_other_text", "created_by", "created_date", "export_date",
+    },
+    "silver.referral_provider_decline_reason": {
+        "decline_reason_id", "referral_provider_id", "decline_reason",
+        "decline_reason_other_text", "created_by", "created_date", "export_date",
+    },
+}.items():
+    require_columns(rejection_source, required_columns)
+
+rejection_reasons = spark.sql(f"""
+WITH rejection_source AS (
+  SELECT CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id,
+    referral_provider_id, 'cancel' AS reject_type, cancel_reason AS reason,
+    cancel_reason_other_text AS reason_other, created_by,
+    CAST(created_date AS TIMESTAMP) AS created_date,
+    CAST(export_date AS TIMESTAMP) AS source_export_date
+  FROM silver.referral_provider_cancel_reason
+  UNION ALL
+  SELECT CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS reject_reason_id,
+    referral_provider_id, 'decline' AS reject_type, decline_reason AS reason,
+    decline_reason_other_text AS reason_other, created_by,
+    CAST(created_date AS TIMESTAMP) AS created_date,
+    CAST(export_date AS TIMESTAMP) AS source_export_date
+  FROM silver.referral_provider_decline_reason
+), current_rejection_reason AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY reject_reason_id
+    ORDER BY source_export_date DESC NULLS LAST
+  ) AS rejection_reason_rank
+  FROM rejection_source
+)
+SELECT reject_reason_id, referral_provider_id, reject_type, reason, reason_other,
+  created_by, created_date, source_export_date,
+  source_export_date AS export_date,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM current_rejection_reason
+WHERE rejection_reason_rank = 1
+""")
+(rejection_reasons.write.format("delta").mode("overwrite")
+    .option("overwriteSchema", "true")
+    .saveAsTable("gold.dim_referral_provider_reject_reason"))
+print("gold.dim_referral_provider_reject_reason: "
+      f"{rejection_reasons.count():,} rows from cancellation and decline reasons")
+
 require_columns("silver.referral", ["placement_type", "referral_status", "export_date"])
 require_columns("silver.ipa", ["placement_type", "export_date"])
 placement_types = (

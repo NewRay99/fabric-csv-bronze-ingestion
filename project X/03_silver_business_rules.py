@@ -428,6 +428,48 @@ else:
 replace_silver_materialisation(closure_summary, "referral_closure_reason_summary")
 log_step("Materialised referral_closure_reason_summary")
 
+# PERF-001: scan provider assignments and offers once, then materialise the
+# referral-grain values reused by referral_enrichment. Keeping the write at
+# the rollup grain avoids recomputing the same join for counts, first-seen
+# dates and engagement flags inside the enrichment query.
+provider_rollup_schema = (
+    "referral_id string, cnt_offer_made long, unique_homes_offered long, "
+    "provider_assignment_count long, first_offer_date timestamp, "
+    "offer_accepted_date timestamp, first_provider_seen_date timestamp, "
+    "has_live_provider boolean, has_engaged_provider boolean"
+)
+if (spark.catalog.tableExists("silver.referral_provider")
+        and spark.catalog.tableExists("silver.offer")):
+    referral_provider_rollup = spark.sql("""
+        SELECT CAST(rp.referral_id AS STRING) AS referral_id,
+          COUNT(DISTINCT o.offer_id) AS cnt_offer_made,
+          COUNT(DISTINCT o.provider_home_id) AS unique_homes_offered,
+          COUNT(DISTINCT rp.provider_id) AS provider_assignment_count,
+          MIN(CAST(o.offer_date AS TIMESTAMP)) AS first_offer_date,
+          MIN(CASE WHEN LOWER(COALESCE(o.offer_status, '')) IN
+            ('accepted', 'approved', 'selected', 'offer_successful')
+            THEN CAST(COALESCE(o.last_modified_date, o.offer_date) AS TIMESTAMP)
+          END) AS offer_accepted_date,
+          MIN(CAST(rp.export_date AS TIMESTAMP)) AS first_provider_seen_date,
+          MAX(CASE WHEN NOT COALESCE(rp.is_closed, false)
+              AND NOT COALESCE(rp.is_declined, false)
+              AND NOT COALESCE(rp.is_excluded, false)
+              AND NOT COALESCE(rp.is_cancelled, false)
+            THEN 1 ELSE 0 END) = 1 AS has_live_provider,
+          MAX(CASE WHEN NOT COALESCE(rp.is_cancelled, false)
+              AND NOT COALESCE(rp.is_closed, false)
+              AND NOT COALESCE(rp.is_excluded, false)
+            THEN 1 ELSE 0 END) = 1 AS has_engaged_provider
+        FROM silver.referral_provider rp
+        LEFT JOIN silver.offer o
+          ON rp.referral_provider_id = o.referral_provider_id
+        GROUP BY rp.referral_id
+    """)
+else:
+    referral_provider_rollup = spark.createDataFrame([], provider_rollup_schema)
+replace_silver_materialisation(referral_provider_rollup, "referral_provider_rollup")
+log_step("Materialised referral_provider_rollup")
+
 # SI-018/SI-019: referral-level enrichment is intentionally a separate
 # derived Silver relation. The source-conformed silver.referral contract
 # remains immutable; this relation makes cross-table KPI logic reusable by
@@ -468,24 +510,7 @@ if (spark.catalog.tableExists("silver.referral")
         else "ipa_documents AS (SELECT CAST(NULL AS STRING) AS referral_id, CAST(NULL AS TIMESTAMP) AS ipa_due_diligence_min_review_date WHERE 1 = 0)"
     )
     referral_enrichment = spark.sql(f"""
-        WITH offer_rollup AS (
-          SELECT rp.referral_id, COUNT(DISTINCT o.offer_id) AS cnt_offer_made,
-            COUNT(DISTINCT o.provider_home_id) AS unique_homes_offered,
-            -- GLD-013: distinct providers assigned to the referral; the
-            -- semantic model's Referrals With Multiple Provider Assignments
-            -- measure becomes a single threshold filter on this column.
-            COUNT(DISTINCT rp.provider_id) AS provider_assignment_count,
-            MIN(CAST(o.offer_date AS TIMESTAMP)) AS first_offer_date,
-            MIN(CASE WHEN LOWER(COALESCE(o.offer_status, '')) IN
-              ('accepted', 'approved', 'selected', 'offer_successful')
-              THEN CAST(COALESCE(o.last_modified_date, o.offer_date) AS TIMESTAMP)
-            END) AS offer_accepted_date
-          FROM silver.referral_provider rp
-          LEFT JOIN silver.offer o
-            ON rp.referral_provider_id = o.referral_provider_id
-          GROUP BY rp.referral_id
-        ),
-        activity_candidates AS (
+        WITH activity_candidates AS (
           SELECT CAST(referral_id AS STRING) AS referral_id,
             CAST(referral_created_date AS TIMESTAMP) AS activity_timestamp,
             'ReferralCreated' AS activity_type
@@ -529,12 +554,6 @@ if (spark.catalog.tableExists("silver.referral")
           FROM activity_candidates
           GROUP BY referral_id
         ),
-        provider_seen AS (
-          SELECT referral_id, MIN(CAST(export_date AS TIMESTAMP))
-            AS first_provider_seen_date
-          FROM silver.referral_provider
-          GROUP BY referral_id
-        ),
         provider_spot AS (
           -- GLD-014: provider assignment is the authoritative spot signal.
           -- fact_referral is referral-grain, so any spot assignment is spot.
@@ -567,41 +586,22 @@ if (spark.catalog.tableExists("silver.referral")
           SELECT MAX(TO_DATE(export_date)) AS latest_export_date
           FROM silver.referral
         ),
-        live_provider AS (
-          -- GLD-009: referral has at least one provider referral that is not
-          -- closed, declined, excluded or cancelled.
-          SELECT DISTINCT CAST(referral_id AS STRING) AS referral_id
-          FROM silver.referral_provider
-          WHERE NOT COALESCE(is_closed, false)
-            AND NOT COALESCE(is_declined, false)
-            AND NOT COALESCE(is_excluded, false)
-            AND NOT COALESCE(is_cancelled, false)
-        ),
-        engaged_provider AS (
-          -- GLD-011/GLD-012: provider engagement excludes declined referrals;
-          -- it only requires not cancelled, not closed and not excluded.
-          SELECT DISTINCT CAST(referral_id AS STRING) AS referral_id
-          FROM silver.referral_provider
-          WHERE NOT COALESCE(is_cancelled, false)
-            AND NOT COALESCE(is_closed, false)
-            AND NOT COALESCE(is_excluded, false)
-        ),
         {documents_cte}
         SELECT CAST(r.referral_id AS STRING) AS referral_id,
           CAST(r.referral_created_date AS TIMESTAMP) AS referral_created_date,
-          COALESCE(o.cnt_offer_made, 0) AS cnt_offer_made,
-          COALESCE(o.unique_homes_offered, 0) AS unique_homes_offered,
-          COALESCE(o.provider_assignment_count, 0) AS provider_assignment_count,
+          COALESCE(pr.cnt_offer_made, 0) AS cnt_offer_made,
+          COALESCE(pr.unique_homes_offered, 0) AS unique_homes_offered,
+          COALESCE(pr.provider_assignment_count, 0) AS provider_assignment_count,
           COALESCE(ps.is_spot, false) AS is_spot,
           i.estimated_weekly_cost,
-          a.first_action_date, o.first_offer_date, o.offer_accepted_date,
+          a.first_action_date, pr.first_offer_date, pr.offer_accepted_date,
           i.ipa_issued_date,
           CASE WHEN LOWER(COALESCE(r.referral_status, '')) IN
             ('closed', 'cancelled', 'withdrawn', 'completed')
             THEN CAST(COALESCE(r.referral_modified_date, r.export_date) AS TIMESTAMP)
           END AS referral_closed_date,
-          a.last_activity_date, p.first_provider_seen_date,
-          p.referral_id IS NULL AS is_not_seen_by_providers,
+          a.last_activity_date, pr.first_provider_seen_date,
+          pr.referral_id IS NULL AS is_not_seen_by_providers,
           i.ipa_placement_admission_date,
           COALESCE(i.ipa_2_signatures, false) AS ipa_2_signatures,
           i.ipa_last_signature_date,
@@ -613,7 +613,7 @@ if (spark.catalog.tableExists("silver.referral")
           -- export date).
           CASE WHEN UPPER(COALESCE(r.referral_status, '')) IN ('OPEN', 'UNDER_OFFER')
             AND (
-              lp.referral_id IS NOT NULL
+              COALESCE(pr.has_live_provider, false)
               OR UPPER(COALESCE(r.referral_status, '')) = 'UNDER_OFFER'
               OR (
                 UPPER(COALESCE(r.referral_status, '')) = 'OPEN'
@@ -627,7 +627,7 @@ if (spark.catalog.tableExists("silver.referral")
           -- window.
           CASE WHEN UPPER(COALESCE(r.referral_status, '')) = 'OPEN'
             AND (
-              ep.referral_id IS NOT NULL
+              COALESCE(pr.has_engaged_provider, false)
               OR (
                 r.response_required_by_date IS NOT NULL
                 AND TO_DATE(r.response_required_by_date) >= le.latest_export_date
@@ -635,14 +635,11 @@ if (spark.catalog.tableExists("silver.referral")
             ) THEN TRUE ELSE FALSE END AS is_awaiting_offer
         FROM silver.referral r
         CROSS JOIN latest_export le
-        LEFT JOIN offer_rollup o ON r.referral_id = o.referral_id
+        LEFT JOIN silver.referral_provider_rollup pr ON r.referral_id = pr.referral_id
         LEFT JOIN activity_rollup a ON r.referral_id = a.referral_id
-        LEFT JOIN provider_seen p ON r.referral_id = p.referral_id
         LEFT JOIN provider_spot ps ON r.referral_id = ps.referral_id
         LEFT JOIN ipa_rollup i ON r.referral_id = i.referral_id
         LEFT JOIN ipa_documents d ON r.referral_id = d.referral_id
-        LEFT JOIN live_provider lp ON r.referral_id = lp.referral_id
-        LEFT JOIN engaged_provider ep ON r.referral_id = ep.referral_id
     """)
 else:
     referral_enrichment = spark.createDataFrame([], enrichment_schema)
