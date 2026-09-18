@@ -217,7 +217,7 @@ for expected in (
     assert expected in dimensions_source, f"Gold dimensions are missing export_date lineage: {expected}"
 
 # GLD-014: provider messages are a normal, current-record dimension; the two
-# provider-rejection source tables are intentionally consolidated so consumers
+# provider-closure source tables are intentionally consolidated so consumers
 # can filter one dimension by reject_type without source-specific logic.
 for expected in (
     '"silver.referral_provider_message", "gold.dim_referral_provider_message"',
@@ -229,13 +229,13 @@ for expected in (
     "created_date",
 ):
     assert expected in dimensions_source, (
-        f"GLD-014 provider-message/rejection dimension is missing {expected}"
+        f"GLD-014 provider-message/closure dimension is missing {expected}"
     )
 assert re.search(
     r"(?s)SELECT\s+.*'cancel'\s+AS\s+reject_type.*UNION\s+ALL.*"
     r"'decline'\s+AS\s+reject_type",
     dimensions_source,
-), "GLD-014 must label both rejection source types in one Gold dimension"
+), "GLD-014 must label both closure source types in one Gold dimension"
 for expected in (
     "CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id",
     "CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS reject_reason_id",
@@ -244,9 +244,9 @@ for expected in (
     "CAST(created_date AS TIMESTAMP) AS created_date",
 ):
     assert expected in dimensions_source, (
-        f"GLD-014 does not retain the canonical rejection-reason mapping: {expected}"
+        f"GLD-014 does not retain the canonical closure-reason mapping: {expected}"
     )
-print("PASS GLD-014 materialises provider messages and consolidated rejection reasons")
+print("PASS GLD-014 materialises provider messages and consolidated closure reasons")
 
 for deployed_notebook in (
     ROOT / "reports" / "current" / "WMPP" / "notebooks" / "04_gold_model.Notebook" / "notebook-content.py",

@@ -1970,11 +1970,11 @@ these need to be added in
   `04_gold_model` so both new and existing enrichment materialisations are
   refreshed together.
 
-## GLD-015- 
-add the following to dim_referral_provider_reject_reason... 
-rule 
+## GLD-015-
+add the following to dim_referral_provider_reject_reason...
+rule
 ```
-Closure Reason Clean = 
+Closure Reason Clean =
 VAR ReasonText =
     COALESCE(
         fact_referral_offer[cancel_reason_other],
@@ -1993,7 +1993,7 @@ SWITCH(
 )
 
 
-Closure Reason Grouped = 
+Closure Reason Grouped =
 VAR R = LOWER(
     COALESCE(
         fact_referral_offer[Closure Reason Clean],
@@ -2033,7 +2033,7 @@ SWITCH(
 )
 
 
-Closed Referral Reason Bucket = 
+Closed Referral Reason Bucket =
 VAR R =
     LOWER(
         TRIM(
@@ -2071,4 +2071,22 @@ SWITCH(
 )
 ```
 
-there should only be one dim_referral_provider_reject_reason for fact_referral_provider so to make sure just ass a sequence_order with the latest reason being 1 and the oldest being nTH number. 
+there should only be one dim_referral_provider_reject_reason for fact_referral_provider so to make sure just ass a sequence_order with the latest reason being 1 and the oldest being nTH number.
+
+- **Cause (2026-09-18):** the consolidated rejection-reason dimension exposed
+  the raw cancel/decline reason fields but did not persist the report's cleaned
+  and grouped closure classifications. Its existing row number only removed
+  repeated source snapshots for each reason ID; it did not order the distinct
+  reasons belonging to one referral-provider assignment.
+- **Fix (2026-09-18):** `gold.dim_referral_provider_reject_reason` now adds
+  `closure_reason_clean`, `closure_reason_grouped`, and
+  `closed_referral_reason_bucket` using the supplied rule translated from DAX
+  to Spark SQL. It also adds `sequence_order`, partitioned by
+  `referral_provider_id` and ordered by `created_date`, source export timestamp,
+  and the collision-safe reason ID. The newest reason is 1. The cancel and
+  decline sources remain consolidated in this single dimension.
+- **Validation:** `validate_gld015_reject_reason_dimension.py` checks both the
+  primary and deployed Gold-dimensions notebooks for every classification,
+  source-snapshot deduplication, and deterministic per-provider sequencing.
+- **Status:** resolved; rerun `05_gold_dimensions` to rebuild the Delta table
+  with the new columns and sequence values.

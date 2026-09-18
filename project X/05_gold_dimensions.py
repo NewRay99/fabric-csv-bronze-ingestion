@@ -220,7 +220,7 @@ latest_dimension(
      ("created_by", "created_by"), ("export_date", "source_export_date")],
 )
 
-for rejection_source, required_columns in {
+for closure_source, required_columns in {
     "silver.referral_provider_cancel_reason": {
         "cancel_reason_id", "referral_provider_id", "cancel_reason",
         "cancel_reason_other_text", "created_by", "created_date", "export_date",
@@ -230,10 +230,10 @@ for rejection_source, required_columns in {
         "decline_reason_other_text", "created_by", "created_date", "export_date",
     },
 }.items():
-    require_columns(rejection_source, required_columns)
+    require_columns(closure_source, required_columns)
 
-rejection_reasons = spark.sql(f"""
-WITH rejection_source AS (
+closure_reasons = spark.sql(f"""
+WITH closure_source AS (
   SELECT CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id,
     referral_provider_id, 'cancel' AS reject_type, cancel_reason AS reason,
     cancel_reason_other_text AS reason_other, created_by,
@@ -247,25 +247,71 @@ WITH rejection_source AS (
     CAST(created_date AS TIMESTAMP) AS created_date,
     CAST(export_date AS TIMESTAMP) AS source_export_date
   FROM silver.referral_provider_decline_reason
-), current_rejection_reason AS (
+), current_closure_reason AS (
   SELECT *, ROW_NUMBER() OVER (
     PARTITION BY reject_reason_id
     ORDER BY source_export_date DESC NULLS LAST
-  ) AS rejection_reason_rank
-  FROM rejection_source
+  ) AS closure_reason_snapshot_rank
+  FROM closure_source
+), cleaned_closure_reason AS (
+  SELECT reject_reason_id, referral_provider_id, reject_type, reason, reason_other,
+    created_by, created_date, source_export_date,
+    CASE
+      WHEN TRIM(COALESCE(reason_other, reason, '')) = ''
+        THEN 'No reason recorded'
+      WHEN LOWER(TRIM(COALESCE(reason_other, reason, ''))) = 'test'
+        THEN CAST(NULL AS STRING)
+      ELSE TRIM(COALESCE(reason_other, reason))
+    END AS closure_reason_clean
+  FROM current_closure_reason
+  WHERE closure_reason_snapshot_rank = 1
+), grouped_closure_reason AS (
+  SELECT *,
+    CASE
+      WHEN closure_reason_clean IS NULL
+        OR LOWER(closure_reason_clean) = 'no reason recorded'
+        THEN 'No reason recorded'
+      WHEN LOWER(closure_reason_clean) LIKE '%location%'
+        THEN 'Location / Matching issue'
+      WHEN LOWER(closure_reason_clean) LIKE '%off portal%'
+        OR LOWER(closure_reason_clean) LIKE '%not on the portal%'
+        OR LOWER(closure_reason_clean) LIKE '%doesn''t have access%'
+        THEN 'Off-portal / alternative placement'
+      WHEN LOWER(closure_reason_clean) LIKE '%placed%'
+        OR LOWER(closure_reason_clean) LIKE '%moved%'
+        THEN 'Placement found elsewhere'
+      WHEN LOWER(closure_reason_clean) LIKE '%case closed%'
+        OR LOWER(closure_reason_clean) LIKE '%remove%'
+        OR LOWER(closure_reason_clean) LIKE '%update%'
+        THEN 'Case / administrative closure'
+      WHEN LOWER(closure_reason_clean) LIKE '%email%'
+        OR LOWER(closure_reason_clean) LIKE '%portal not working%'
+        THEN 'System / process issue'
+      ELSE 'Other'
+    END AS closure_reason_grouped
+  FROM cleaned_closure_reason
+), ranked_closure_reason AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY referral_provider_id
+    ORDER BY created_date DESC NULLS LAST,
+      source_export_date DESC NULLS LAST,
+      reject_reason_id DESC
+  ) AS sequence_order
+  FROM grouped_closure_reason
 )
 SELECT reject_reason_id, referral_provider_id, reject_type, reason, reason_other,
-  created_by, created_date, source_export_date,
+  closure_reason_clean, closure_reason_grouped,
+  closure_reason_grouped AS closed_referral_reason_bucket,
+  sequence_order, created_by, created_date, source_export_date,
   source_export_date AS export_date,
   '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
-FROM current_rejection_reason
-WHERE rejection_reason_rank = 1
+FROM ranked_closure_reason
 """)
-(rejection_reasons.write.format("delta").mode("overwrite")
+(closure_reasons.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true")
     .saveAsTable("gold.dim_referral_provider_reject_reason"))
 print("gold.dim_referral_provider_reject_reason: "
-      f"{rejection_reasons.count():,} rows from cancellation and decline reasons")
+      f"{closure_reasons.count():,} rows from cancellation and decline reasons")
 
 require_columns("silver.referral", ["placement_type", "referral_status", "export_date"])
 require_columns("silver.ipa", ["placement_type", "export_date"])
