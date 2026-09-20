@@ -25,6 +25,14 @@ Issue and change tracking is deliberately separate at
 4. [ETL Operations Control Tower](05_Operations_and_Runbooks/ETL_OPERATIONS_CONTROL_TOWER.md)
 5. [HOLD register](06_Governance/HOLD_Register.md)
 
+## Reporting implementation guides
+
+1. [Gold semantic model DAX build guide](04_Data_and_Reporting/GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md)
+2. [Mission Control semantic model DAX build guide](04_Data_and_Reporting/MISSION_CONTROL_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md)
+3. [Snapshot Month-on-Month KPI guide](04_Data_and_Reporting/SNAPSHOT_MONTH_ON_MONTH_KPI_GUIDE.md)
+4. [Provider engagement and value scoring implementation guide](04_Data_and_Reporting/PROVIDER_SCORING_IMPLEMENTATION_GUIDE.md)
+5. [RLS and partial aggregate access guide](04_Data_and_Reporting/RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md)
+
 Documents retained from earlier discovery phases may describe target-state
 features not yet implemented. The HLD, TFD, active notebooks, and current
 configuration files take precedence for the deployed data-engineering flow.

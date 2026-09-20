@@ -1,4 +1,4 @@
-"""Validate the deployed Gold report's sources, graph and expression references.
+"""Validate the reconciled v16 Gold report sources, graph and field bindings.
 
 Static model checks complement, rather than replace, a Fabric refresh and DAX UAT.
 """
@@ -9,8 +9,8 @@ import re
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PROJECT = ROOT / "reports/client-deliverables/SM WMPP v15"
-MODEL = PROJECT / "SM_WMPP.SemanticModel/definition"
+PROJECT = ROOT / "reports/current/SM WMPP v16 updated"
+MODEL = PROJECT / "SM_WMPP_v16.SemanticModel/definition"
 
 
 def object_names(text, kind):
@@ -101,7 +101,7 @@ def check_model():
     assert 'gender_clean' in columns['dim_person']
     assert {'signed_by_provider', 'signed_by_local_authority', 'is_ipa_completed',
             'is_ipa_pending'} <= columns['fact_ipa']
-    for path in (PROJECT / "SM_WMPP.Report/definition").rglob("*.json"):
+    for path in (PROJECT / "SM_WMPP_v16.Report/definition").rglob("*.json"):
         def walk(value):
             if isinstance(value, dict):
                 for kind, inventory in (("Column", columns), ("Measure", measures)):

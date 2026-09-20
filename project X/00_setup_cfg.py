@@ -235,6 +235,25 @@ CONFIG_TABLE_DEFINITIONS = {
         "transformation_notebook STRING", "relationship_role STRING",
         "is_required BOOLEAN", "description STRING",
     ],
+    # Security mappings are deliberately configuration-driven. Empty tables
+    # produce deny-by-default RLS once the semantic-model role is deployed;
+    # access is never inferred from the currently-null fact_referral.region.
+    "monitoring.cfg_security_scope": [
+        "security_scope_key STRING", "scope_type STRING", "scope_code STRING",
+        "scope_name STRING", "allows_global_summary BOOLEAN", "is_active BOOLEAN",
+        "valid_from DATE", "valid_to DATE", "approved_by STRING",
+        "updated_at TIMESTAMP",
+    ],
+    "monitoring.cfg_user_scope_access": [
+        "user_principal_name STRING", "security_scope_key STRING",
+        "is_active BOOLEAN", "valid_from DATE", "valid_to DATE",
+        "approved_by STRING", "access_reason STRING", "updated_at TIMESTAMP",
+    ],
+    "monitoring.cfg_referral_scope": [
+        "referral_id STRING", "security_scope_key STRING", "is_active BOOLEAN",
+        "valid_from DATE", "valid_to DATE", "assigned_by STRING",
+        "assignment_reason STRING", "updated_at TIMESTAMP",
+    ],
     "gold.cfg_placement_urgency_rule": [
         "PlacementUrgencyBand STRING", "MaximumTargetDays INT",
         "WarningHoursBeforeTarget INT", "SortOrder INT", "IsActive BOOLEAN",
@@ -404,11 +423,18 @@ USING (
     ('gold.dim_provider_home', 'silver.provider_home', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider home dimension'),
     ('gold.dim_framework', 'silver.framework', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Framework dimension'),
     ('gold.dim_framework_category', 'silver.framework_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Framework category dimension'),
+    ('gold.bridge_provider_home_framework_category', 'silver.provider_home_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider-home/framework-category bridge used for category-scoped provider KPI analysis'),
     ('gold.bridge_provider_framework', 'silver.provider_framework', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider/framework bridge'),
     ('gold.bridge_provider_sic_code', 'silver.provider_sic_codes', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider SIC bridge'),
     ('gold.dim_provider_submission_document', 'silver.provider_submission_docs', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider submission-document dimension'),
     ('gold.dim_placement_type', 'silver.referral', 'SILVER', '05_gold_dimensions', 'DERIVED', true, 'Distinct referral placement types'),
-    ('gold.dim_referral_status', 'silver.referral', 'SILVER', '05_gold_dimensions', 'DERIVED', true, 'Distinct referral statuses')
+    ('gold.dim_referral_status', 'silver.referral', 'SILVER', '05_gold_dimensions', 'DERIVED', true, 'Distinct referral statuses'),
+    ('gold.dim_snapshot_month', 'gold.dim_date', 'GOLD', '05_gold_dimensions', 'DERIVED', true, 'Dedicated month role for state-at-snapshot reporting'),
+    ('gold.dim_security_scope', 'monitoring.cfg_security_scope', 'CONFIG', '05_gold_dimensions', 'SECURITY', true, 'Approved reporting security scopes'),
+    ('gold.sec_user_scope_access', 'monitoring.cfg_user_scope_access', 'CONFIG', '05_gold_dimensions', 'SECURITY', true, 'Normalised UPN-to-scope access mapping'),
+    ('gold.bridge_referral_scope', 'monitoring.cfg_referral_scope', 'CONFIG', '05_gold_dimensions', 'SECURITY', true, 'Many-to-many referral-to-security-scope mapping'),
+    ('gold.fact_provider_kpi_monthly', 'gold.fact_referral_provider', 'GOLD', '04_gold_model', 'DERIVED', true, 'Auditable unweighted provider KPI components by assignment cohort month'),
+    ('gold.fact_referral_global_summary', 'gold.fact_referral_snapshot', 'GOLD', '04_gold_model', 'DERIVED', true, 'Identifier-free monthly snapshot summary for approved partial-RLS visuals')
   AS source(gold_object, source_object, source_layer, transformation_notebook,
             relationship_role, is_required, description)
 ) AS source

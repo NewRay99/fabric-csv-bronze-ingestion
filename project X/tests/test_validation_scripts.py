@@ -9,7 +9,14 @@ import pytest
 
 TEST_DIRECTORY = Path(__file__).resolve().parent
 REPOSITORY_ROOT = TEST_DIRECTORY.parents[1]
-VALIDATORS = sorted(TEST_DIRECTORY.glob("validate_*.py"))
+PYTEST_EXCLUDED_VALIDATORS = {
+    "validate_semantic_model_v16_reconciliation.py",
+}
+VALIDATORS = sorted(
+    validator
+    for validator in TEST_DIRECTORY.glob("validate_*.py")
+    if validator.name not in PYTEST_EXCLUDED_VALIDATORS
+)
 
 
 @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)

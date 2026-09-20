@@ -10,6 +10,35 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## SEM-002 — Reconciled v16 snapshots, provider KPI evidence and dynamic RLS
+
+**20 September 2026 — implemented in repository; Fabric refresh, Desktop
+validation, security population and business acceptance pending.**
+
+- Preserved `MWPP Repo 20092026.zip` as the immutable client baseline and
+  created `reports/current/SM WMPP v16 updated` as the repository PBIP
+  candidate. `tools/reconcile_semantic_model_v16.py` makes the reconciliation
+  repeatable.
+- Added a dedicated snapshot-month role and physical month/rule fields,
+  migrated state Month-on-Month measures to snapshot data, removed the active
+  current/snapshot fact path, changed business relationships to single
+  direction and removed automatic date tables.
+- Added conservative assignment-to-response evidence from offers and recorded
+  decline/cancel reasons. Messages remain excluded until authorship is
+  governed. Published scoped, unweighted provider KPI components and the
+  provider-home/framework-category bridge; no composite score was invented.
+- Added deny-by-default security configuration/Gold tables, a dynamic TMDL
+  role for current detail, snapshot detail and provider KPI aggregates, and an
+  identifier-free global monthly summary for the separately approved partial-
+  RLS path.
+- Repaired every statically detectable report field binding, including the 23
+  legacy referral-closure-reason references, four placement-type references
+  and missing measure aliases.
+- Validation: 76 repository tests pass. Static TMDL/reference checks cover 37
+  model tables, all report JSON bindings, relationship direction, snapshot
+  fields and the RLS role. Fabric SQL execution, refresh, DAX result
+  reconciliation and real-identity RLS UAT remain required.
+
 ## SEM-001 — Gold-only v15 report and requirement-aligned measures
 
 **15 September 2026 — implemented in repository; Fabric refresh and business acceptance pending.**

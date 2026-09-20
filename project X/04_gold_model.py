@@ -95,7 +95,14 @@ GOLD_SOURCE_REQUIREMENTS = {
     },
     "silver.referral_provider": {
         "referral_provider_id", "referral_id", "provider_id", "export_date",
-        "is_excluded", "is_declined", "is_cancelled", "is_closed", "is_spot",
+        "created_date", "modified_date", "is_excluded", "is_declined",
+        "is_cancelled", "is_closed", "is_spot",
+    },
+    "silver.referral_provider_cancel_reason": {
+        "referral_provider_id", "created_date", "export_date",
+    },
+    "silver.referral_provider_decline_reason": {
+        "referral_provider_id", "created_date", "export_date",
     },
     "silver.ipa": {
         "referral_id", "created_datetime", "updated_datetime",
@@ -165,6 +172,7 @@ EVENT_ROLLUP_SOURCE = "silver.referral_lifecycle_event"
 GOLD_FACT_TABLES = [
     'gold.fact_referral', 'gold.fact_referral_lifecycle_event',
     'gold.fact_offer', 'gold.fact_ipa', 'gold.fact_referral_provider',
+    'gold.fact_provider_kpi_monthly', 'gold.fact_referral_global_summary',
 ]
 for gold_fact_table in GOLD_FACT_TABLES:
     if spark.catalog.tableExists(gold_fact_table):
@@ -215,6 +223,66 @@ closure_reason AS (
   SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
   FROM silver.referral_closure_reason_summary
 ),
+provider_offer_response AS (
+  SELECT referral_provider_id,
+    MIN(CAST(offer_date AS TIMESTAMP)) AS first_offer_response_at
+  FROM silver.offer
+  WHERE offer_date IS NOT NULL AND TO_DATE(offer_date) <= {AS_OF_SQL}
+  GROUP BY referral_provider_id
+),
+provider_reason_response AS (
+  SELECT referral_provider_id, MIN(response_at) AS first_reason_response_at
+  FROM (
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_cancel_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+    UNION ALL
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_decline_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+  ) reason_event
+  GROUP BY referral_provider_id
+),
+referral_provider_history AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY referral_provider_id
+    ORDER BY COALESCE(modified_date, created_date, export_date) DESC,
+             export_date DESC
+  ) AS row_number_current
+  FROM silver.referral_provider
+  WHERE created_date IS NULL OR TO_DATE(created_date) <= {AS_OF_SQL}
+),
+referral_provider_current AS (
+  SELECT * FROM referral_provider_history WHERE row_number_current = 1
+),
+provider_assignment_response AS (
+  SELECT rp.referral_provider_id, rp.referral_id, rp.provider_id,
+    COALESCE(CAST(rp.created_date AS TIMESTAMP), CAST(rp.export_date AS TIMESTAMP)) AS assigned_at,
+    CASE
+      WHEN offer_response.first_offer_response_at IS NULL
+        THEN reason_response.first_reason_response_at
+      WHEN reason_response.first_reason_response_at IS NULL
+        THEN offer_response.first_offer_response_at
+      ELSE LEAST(offer_response.first_offer_response_at, reason_response.first_reason_response_at)
+    END AS response_at
+  FROM referral_provider_current rp
+  LEFT JOIN provider_offer_response offer_response
+    ON rp.referral_provider_id = offer_response.referral_provider_id
+  LEFT JOIN provider_reason_response reason_response
+    ON rp.referral_provider_id = reason_response.referral_provider_id
+),
+provider_response AS (
+  SELECT referral_id,
+    COUNT(DISTINCT provider_id) AS provider_assignment_count,
+    SUM(CASE WHEN response_at IS NOT NULL
+      AND (assigned_at IS NULL OR response_at >= assigned_at) THEN 1 ELSE 0 END)
+      AS provider_responded_count,
+    MIN(CASE WHEN response_at IS NOT NULL
+      AND (assigned_at IS NULL OR response_at >= assigned_at) THEN response_at END)
+      AS first_provider_response_date
+  FROM provider_assignment_response
+  GROUP BY referral_id
+),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
     CAST(r.export_date AS TIMESTAMP) AS export_date,
@@ -226,7 +294,10 @@ base AS (
     -- at referral grain so this remains one Gold row per referral.
     COALESCE(x.is_spot, false) AS is_spot,
     x.is_open, x.is_awaiting_offer,
-    x.provider_assignment_count,
+    COALESCE(p.provider_assignment_count, x.provider_assignment_count, 0)
+      AS provider_assignment_count,
+    COALESCE(p.provider_responded_count, 0) AS provider_responded_count,
+    p.first_provider_response_date,
     x.first_action_date, x.first_offer_date,
     x.offer_accepted_date, x.ipa_issued_date,
     x.referral_closed_date,
@@ -255,6 +326,7 @@ base AS (
   LEFT JOIN referral_child child ON r.referral_id = child.referral_id
   LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
+  LEFT JOIN provider_response p ON r.referral_id = p.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, referral_created_date, required_placement_date,
@@ -290,6 +362,9 @@ SELECT {AS_OF_SQL} AS as_of_date,
   -- Emergency/Planned Referrals same-day rule; is_open_overdue mirrors the
   -- Open Overdue Referrals filter (open and past the required date).
   COALESCE(provider_assignment_count, 0) AS provider_assignment_count,
+  COALESCE(provider_responded_count, 0) AS provider_responded_count,
+  COALESCE(provider_responded_count, 0) > 0 AS has_provider_response,
+  first_provider_response_date,
   required_placement_date IS NOT NULL AND referral_created_date IS NOT NULL
     AND DATEDIFF(TO_DATE(required_placement_date), TO_DATE(referral_created_date)) = 0
     AS is_emergency_placement,
@@ -358,6 +433,9 @@ if spark.catalog.tableExists(SNAPSHOT_TABLE):
 
 snapshot = spark.table("gold.fact_referral").select(
     F.lit(AS_OF_DATE_VALUE).cast("date").alias("snapshot_date"),
+    F.trunc(F.lit(AS_OF_DATE_VALUE).cast("date"), "month").alias("snapshot_month_start"),
+    F.last_day(F.lit(AS_OF_DATE_VALUE).cast("date")).alias("snapshot_month_end"),
+    F.lit("WMPP_SNAPSHOT_V2").alias("snapshot_rule_version"),
     "job_run_id", "export_date", "referral_id", "person_id", "referral_created_date", "required_placement_date",
     "first_action_date", "first_offer_date", "offer_accepted_date", "ipa_issued_date",
     "referral_closed_date", "referral_closure_reason", "current_status",
@@ -367,7 +445,8 @@ snapshot = spark.table("gold.fact_referral").select(
     "ipa_placement_admission_date", "ipa_2_signatures",
     "ipa_last_signature_date", "ipa_due_diligence_min_review_date",
     "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
-    "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
+    "provider_assignment_count", "provider_responded_count", "has_provider_response",
+    "first_provider_response_date", "is_emergency_placement", "is_open_overdue",
     "days_without_activity", "days_past_required_date",
     "placed_by_required_date", "required_placement_date_outcome",
 )
@@ -389,10 +468,46 @@ else:
         .option("replaceWhere", month_predicate)
         .option("mergeSchema", "true")
         .saveAsTable(SNAPSHOT_TABLE))
+# Older retained snapshots pre-date the explicit month key and response rule.
+# Backfill only deterministic calendar metadata; leave response evidence NULL
+# so an unavailable historic response KPI cannot be mistaken for zero.
+spark.sql(f"""
+UPDATE {SNAPSHOT_TABLE}
+SET snapshot_month_start = TRUNC(snapshot_date, 'month'),
+    snapshot_month_end = LAST_DAY(snapshot_date),
+    snapshot_rule_version = COALESCE(snapshot_rule_version, 'LEGACY_PRE_V2')
+WHERE snapshot_month_start IS NULL
+   OR snapshot_month_end IS NULL
+   OR snapshot_rule_version IS NULL
+""")
 print(
     f"Snapshot refreshed for {AS_OF_DATE_VALUE}: {snapshot.count():,} referrals; "
     f"replaced active month {month_start:%Y-%m}"
 )
+
+# Identifier-free aggregate used only by specifically approved market-wide
+# visuals. It intentionally excludes referral, person, provider, authority and
+# free-text identifiers so detail RLS cannot be bypassed through this table.
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.fact_referral_global_summary AS
+SELECT snapshot_month_start, snapshot_month_end, current_status,
+  placement_type_required, priority, placement_urgency_band,
+  required_placement_date_outcome,
+  COUNT(DISTINCT referral_id) AS referral_count,
+  SUM(CASE WHEN is_open THEN 1 ELSE 0 END) AS open_referral_count,
+  SUM(CASE WHEN NOT is_open THEN 1 ELSE 0 END) AS closed_referral_count,
+  SUM(CASE WHEN is_awaiting_offer THEN 1 ELSE 0 END) AS awaiting_offer_count,
+  SUM(CASE WHEN has_offer THEN 1 ELSE 0 END) AS referrals_with_offer_count,
+  SUM(COALESCE(offer_count, 0)) AS offer_count,
+  SUM(CASE WHEN has_provider_response THEN 1 ELSE 0 END) AS provider_response_referral_count,
+  SUM(CASE WHEN placed_by_required_date THEN 1 ELSE 0 END) AS placed_by_required_date_count,
+  MAX(snapshot_rule_version) AS snapshot_rule_version,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM gold.fact_referral_snapshot
+GROUP BY snapshot_month_start, snapshot_month_end, current_status,
+  placement_type_required, priority, placement_urgency_band,
+  required_placement_date_outcome
+""")
 
 # METADATA ********************
 
@@ -513,9 +628,68 @@ WHERE i.created_datetime IS NULL OR TO_DATE(i.created_datetime) <= {AS_OF_SQL}
 
 spark.sql(f"""
 CREATE OR REPLACE TABLE gold.fact_referral_provider AS
+WITH referral_provider_history AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY referral_provider_id
+    ORDER BY COALESCE(modified_date, created_date, export_date) DESC,
+             export_date DESC
+  ) AS row_number_current
+  FROM silver.referral_provider
+  WHERE created_date IS NULL OR TO_DATE(created_date) <= {AS_OF_SQL}
+), referral_provider_current AS (
+  SELECT * FROM referral_provider_history WHERE row_number_current = 1
+), offer_response AS (
+  SELECT referral_provider_id,
+    MIN(CAST(offer_date AS TIMESTAMP)) AS first_offer_response_at
+  FROM silver.offer
+  WHERE offer_date IS NOT NULL AND TO_DATE(offer_date) <= {AS_OF_SQL}
+  GROUP BY referral_provider_id
+), reason_response AS (
+  SELECT referral_provider_id, MIN(response_at) AS first_reason_response_at
+  FROM (
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_cancel_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+    UNION ALL
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_decline_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+  ) response_event
+  GROUP BY referral_provider_id
+), assignment_response AS (
+  SELECT rp.*,
+    COALESCE(CAST(rp.created_date AS TIMESTAMP), CAST(rp.export_date AS TIMESTAMP)) AS assigned_at,
+    offer_response.first_offer_response_at,
+    reason_response.first_reason_response_at,
+    CASE
+      WHEN offer_response.first_offer_response_at IS NULL
+        THEN reason_response.first_reason_response_at
+      WHEN reason_response.first_reason_response_at IS NULL
+        THEN offer_response.first_offer_response_at
+      ELSE LEAST(offer_response.first_offer_response_at, reason_response.first_reason_response_at)
+    END AS candidate_response_at
+  FROM referral_provider_current rp
+  LEFT JOIN offer_response
+    ON rp.referral_provider_id = offer_response.referral_provider_id
+  LEFT JOIN reason_response
+    ON rp.referral_provider_id = reason_response.referral_provider_id
+)
 SELECT {AS_OF_SQL} AS as_of_date,
   rp.referral_provider_id AS referral_provider_id, rp.referral_id AS referral_id,
-  rp.provider_id AS provider_id, CAST(rp.export_date AS TIMESTAMP) AS first_observed_date,
+  rp.provider_id AS provider_id, rp.assigned_at,
+  rp.assigned_at AS first_observed_date,
+  rp.first_offer_response_at, rp.first_reason_response_at,
+  CASE WHEN rp.candidate_response_at IS NOT NULL
+    AND (rp.assigned_at IS NULL OR rp.candidate_response_at >= rp.assigned_at)
+    THEN rp.candidate_response_at END AS first_qualifying_response_at,
+  CASE WHEN rp.candidate_response_at IS NOT NULL
+    AND (rp.assigned_at IS NULL OR rp.candidate_response_at >= rp.assigned_at)
+    THEN true ELSE false END AS has_qualifying_response,
+  CASE WHEN rp.candidate_response_at IS NOT NULL AND rp.assigned_at IS NOT NULL
+    AND rp.candidate_response_at >= rp.assigned_at
+    THEN CAST((UNIX_TIMESTAMP(rp.candidate_response_at) - UNIX_TIMESTAMP(rp.assigned_at)) / 60 AS BIGINT)
+    END AS response_elapsed_minutes,
+  'OFFER_OR_RECORDED_REASON_V1' AS response_evidence_scope,
   CAST(rp.export_date AS TIMESTAMP) AS export_date,
   CAST(rp.is_excluded AS BOOLEAN) AS is_excluded,
   CAST(rp.is_declined AS BOOLEAN) AS is_declined,
@@ -534,8 +708,57 @@ SELECT {AS_OF_SQL} AS as_of_date,
     ELSE 'Assigned'
   END AS provider_response_status,
   '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
-FROM silver.referral_provider rp
-WHERE rp.export_date IS NULL OR TO_DATE(rp.export_date) <= {AS_OF_SQL}
+FROM assignment_response rp
+""")
+
+# Provider score inputs are materialised without a composite score. Weighting,
+# SLA thresholds and minimum-volume rules remain governed business decisions;
+# this fact keeps the underlying components auditable until they are approved.
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.fact_provider_kpi_monthly AS
+WITH offer_component AS (
+  SELECT referral_provider_id,
+    COUNT(DISTINCT offer_id) AS offers_submitted_count,
+    COUNT(DISTINCT CASE WHEN LOWER(COALESCE(offer_status, '')) IN
+      ('accepted', 'approved', 'selected', 'offer_successful') THEN offer_id END)
+      AS accepted_offer_count
+  FROM gold.fact_offer
+  GROUP BY referral_provider_id
+), assignment_component AS (
+  SELECT rp.provider_id, DATE_TRUNC('month', rp.assigned_at) AS assignment_month,
+    scope.security_scope_key, rp.referral_provider_id, rp.referral_id,
+    rp.has_qualifying_response,
+    rp.response_elapsed_minutes,
+    COALESCE(o.offers_submitted_count, 0) AS offers_submitted_count,
+    COALESCE(o.accepted_offer_count, 0) AS accepted_offer_count,
+    COALESCE(f.placed_by_required_date, false) AS placed_by_required_date
+  FROM gold.fact_referral_provider rp
+  LEFT JOIN offer_component o
+    ON rp.referral_provider_id = o.referral_provider_id
+  LEFT JOIN gold.fact_referral f ON rp.referral_id = f.referral_id
+  LEFT JOIN monitoring.cfg_referral_scope scope
+    ON rp.referral_id = scope.referral_id
+    AND COALESCE(scope.is_active, false)
+    AND (scope.valid_from IS NULL OR scope.valid_from <= {AS_OF_SQL})
+    AND (scope.valid_to IS NULL OR scope.valid_to >= {AS_OF_SQL})
+  WHERE rp.assigned_at IS NOT NULL
+)
+SELECT provider_id, CAST(assignment_month AS DATE) AS assignment_month,
+  security_scope_key,
+  COUNT(DISTINCT referral_provider_id) AS response_opportunity_count,
+  SUM(CASE WHEN has_qualifying_response THEN 1 ELSE 0 END) AS qualifying_response_count,
+  SUM(offers_submitted_count) AS offers_submitted_count,
+  SUM(accepted_offer_count) AS accepted_offer_count,
+  COUNT(DISTINCT CASE WHEN accepted_offer_count > 0 THEN referral_id END)
+    AS successful_referral_count,
+  COUNT(DISTINCT CASE WHEN accepted_offer_count > 0 AND placed_by_required_date
+    THEN referral_id END) AS placed_by_target_count,
+  AVG(CAST(response_elapsed_minutes AS DOUBLE)) AS average_response_minutes,
+  PERCENTILE_APPROX(response_elapsed_minutes, 0.5) AS median_response_minutes,
+  'ASSIGNMENT_COHORT_OFFER_OR_REASON_V1' AS kpi_rule_version,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM assignment_component
+GROUP BY provider_id, assignment_month, security_scope_key
 """)
 spark.sql("""
 CREATE OR REPLACE VIEW gold.vw_kpi_referral_board_summary AS

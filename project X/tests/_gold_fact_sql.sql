@@ -26,6 +26,66 @@ closure_reason AS (
   SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
   FROM silver.referral_closure_reason_summary
 ),
+provider_offer_response AS (
+  SELECT referral_provider_id,
+    MIN(CAST(offer_date AS TIMESTAMP)) AS first_offer_response_at
+  FROM silver.offer
+  WHERE offer_date IS NOT NULL AND TO_DATE(offer_date) <= {AS_OF_SQL}
+  GROUP BY referral_provider_id
+),
+provider_reason_response AS (
+  SELECT referral_provider_id, MIN(response_at) AS first_reason_response_at
+  FROM (
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_cancel_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+    UNION ALL
+    SELECT referral_provider_id, CAST(created_date AS TIMESTAMP) AS response_at
+    FROM silver.referral_provider_decline_reason
+    WHERE TO_DATE(created_date) <= {AS_OF_SQL}
+  ) reason_event
+  GROUP BY referral_provider_id
+),
+referral_provider_history AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY referral_provider_id
+    ORDER BY COALESCE(modified_date, created_date, export_date) DESC,
+             export_date DESC
+  ) AS row_number_current
+  FROM silver.referral_provider
+  WHERE created_date IS NULL OR TO_DATE(created_date) <= {AS_OF_SQL}
+),
+referral_provider_current AS (
+  SELECT * FROM referral_provider_history WHERE row_number_current = 1
+),
+provider_assignment_response AS (
+  SELECT rp.referral_provider_id, rp.referral_id, rp.provider_id,
+    COALESCE(CAST(rp.created_date AS TIMESTAMP), CAST(rp.export_date AS TIMESTAMP)) AS assigned_at,
+    CASE
+      WHEN offer_response.first_offer_response_at IS NULL
+        THEN reason_response.first_reason_response_at
+      WHEN reason_response.first_reason_response_at IS NULL
+        THEN offer_response.first_offer_response_at
+      ELSE LEAST(offer_response.first_offer_response_at, reason_response.first_reason_response_at)
+    END AS response_at
+  FROM referral_provider_current rp
+  LEFT JOIN provider_offer_response offer_response
+    ON rp.referral_provider_id = offer_response.referral_provider_id
+  LEFT JOIN provider_reason_response reason_response
+    ON rp.referral_provider_id = reason_response.referral_provider_id
+),
+provider_response AS (
+  SELECT referral_id,
+    COUNT(DISTINCT provider_id) AS provider_assignment_count,
+    SUM(CASE WHEN response_at IS NOT NULL
+      AND (assigned_at IS NULL OR response_at >= assigned_at) THEN 1 ELSE 0 END)
+      AS provider_responded_count,
+    MIN(CASE WHEN response_at IS NOT NULL
+      AND (assigned_at IS NULL OR response_at >= assigned_at) THEN response_at END)
+      AS first_provider_response_date
+  FROM provider_assignment_response
+  GROUP BY referral_id
+),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
     CAST(r.export_date AS TIMESTAMP) AS export_date,
@@ -37,7 +97,10 @@ base AS (
     -- at referral grain so this remains one Gold row per referral.
     COALESCE(x.is_spot, false) AS is_spot,
     x.is_open, x.is_awaiting_offer,
-    x.provider_assignment_count,
+    COALESCE(p.provider_assignment_count, x.provider_assignment_count, 0)
+      AS provider_assignment_count,
+    COALESCE(p.provider_responded_count, 0) AS provider_responded_count,
+    p.first_provider_response_date,
     x.first_action_date, x.first_offer_date,
     x.offer_accepted_date, x.ipa_issued_date,
     x.referral_closed_date,
@@ -66,6 +129,7 @@ base AS (
   LEFT JOIN referral_child child ON r.referral_id = child.referral_id
   LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
+  LEFT JOIN provider_response p ON r.referral_id = p.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, referral_created_date, required_placement_date,
@@ -101,6 +165,9 @@ SELECT {AS_OF_SQL} AS as_of_date,
   -- Emergency/Planned Referrals same-day rule; is_open_overdue mirrors the
   -- Open Overdue Referrals filter (open and past the required date).
   COALESCE(provider_assignment_count, 0) AS provider_assignment_count,
+  COALESCE(provider_responded_count, 0) AS provider_responded_count,
+  COALESCE(provider_responded_count, 0) > 0 AS has_provider_response,
+  first_provider_response_date,
   required_placement_date IS NOT NULL AND referral_created_date IS NOT NULL
     AND DATEDIFF(TO_DATE(required_placement_date), TO_DATE(referral_created_date)) = 0
     AS is_emergency_placement,

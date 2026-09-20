@@ -1,5 +1,81 @@
 # Gold semantic model DAX build guide
 
+## Client-site v16 reconciliation — 20 September 2026
+
+`reports/current/MWPP Repo 20092026.zip` is the current client-site baseline
+for this guide. The reviewed PBIP is `SM_WMPP_v16`. This section supersedes
+the v15 deployment-status wording below; the v15 section remains as migration
+history.
+
+### What is present
+
+| Check | Client-site v16 result | Assessment |
+| --- | ---: | --- |
+| Semantic tables | 117 | 29 business/model tables plus 87 automatic local-date tables and one date template. |
+| Measures | 274 | All 195 concrete measures defined in this guide are present by name. |
+| Storage | 115 Import, 2 DirectQuery | `gold referral_journey_flow` and `gold rpt_kpi_referral_board_summary` are DirectQuery; the rest, including automatic date tables, are Import. |
+| RLS roles | 0 | R55 and the requested UserGroup partial-RLS pattern are not implemented. |
+| Mission Control tables/measures | 0 | Correctly remains a separate subject/model; see the Mission Control guide. |
+
+Name coverage does not mean the client model is ready for acceptance. Static
+inspection of the semantic and report definitions found the following changes
+still required.
+
+### Repository implementation candidate
+
+`reports/current/SM WMPP v16 updated` is now a version-controlled candidate
+built from that ZIP by `tools/reconcile_semantic_model_v16.py`. The candidate
+repairs all statically detectable report bindings, uses the maintained measure
+source, moves stock MoM logic to the snapshot month role, removes the
+fact-to-fact and bidirectional business paths, connects placement type,
+disables/removes automatic date tables, normalises storage to Import, adds the
+provider KPI evidence layer, and adds deny-by-default dynamic detail RLS plus
+an identifier-free global summary.
+
+This is a repository implementation, not proof of deployment or acceptance.
+Run the updated `00_setup_cfg.py`, `04_gold_model.py` and
+`05_gold_dimensions.py`, populate approved security mappings, refresh the
+model, open it in Power BI Desktop, test DAX results and execute the RLS test
+matrix before replacing the client-site version.
+
+### Required model updates
+
+| Priority | Update | Evidence in client-site v16 | Required action |
+| --- | --- | --- | --- |
+| P0 | Repair report bindings | 73 report field-reference occurrences point to nine fields that are absent from the semantic model. | Rebind or add governed compatibility aliases before publishing; use the mapping below. |
+| P0 | Replace state-based Month-on-Month logic | Every legacy card stack shifts `dim_date[date]`, whose active relationship is referral creation date. This compares creation cohorts, not what was open/closed/under-offer at each month. | Source stock/state cards from `fact_referral_snapshot`; retain event facts only for flow measures. Follow [Snapshot Month-on-Month KPI guide](SNAPSHOT_MONTH_ON_MONTH_KPI_GUIDE.md). |
+| P0 | Remove the active fact-to-fact snapshot path | `fact_referral_snapshot[referral_id]` and `fact_referral[referral_id]` are active and bidirectional while the snapshot-date relationship is inactive. | Remove or deactivate the fact-to-fact relationship. Relate both facts directly to conformed dimensions and give snapshots an active month/date role. |
+| P0 | Implement and test RLS | There is no `roles/` definition, no UPN-to-authority/UserGroup mapping and no RLS-ready authority or UserGroup key in the current semantic model. `fact_referral[region]` is populated as `NULL` by the reviewed Gold notebook. | Implement the Gold security keys, mapping tables, role and partial-aggregate design in [RLS and partial aggregate access guide](RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md). |
+| P1 | Restore a single-direction star | Four relationships use `bothDirections`: referral-to-provider assignment, provider-home-to-offer, provider-assignment-to-reject-reason, and current-referral-to-snapshot. | Make business relationships dimension-to-fact and single-direction. Allow a bidirectional security filter only on the one approved security bridge, if that design is selected and tested. |
+| P1 | Connect placement type | `dim_placement_type` is imported but has no relationship to either referral fact. | Relate `dim_placement_type[placement_type]` to current and snapshot placement-type keys after uniqueness and value coverage checks. |
+| P1 | Remove automatic date tables | `__PBI_TimeIntelligenceEnabled = 1` has generated 87 `LocalDateTable_*` objects plus a date template. | Disable Auto date/time, remove generated date metadata and use controlled date/month dimensions only. |
+| P1 | Reconcile three guide/client expression drifts | Client v16 scopes `Offers in Draft` to under-offer referrals, implements `Referrals Not Yet Closed (Created in Period)` from two status values instead of `is_open`, and returns zero for an empty Offer Receipt Rate denominator. | Use the guide definitions for the unscoped/canonical measures. Keep separately named scoped measures when required by a visual; return blank for an undefined rate unless the business explicitly approves zero. |
+| P1 | Remove the unapproved provider-contact proxy | Client v16 contains the legacy `Provider Contact Referral` family using `first_action_date`; that field is not proven to mean provider contact. | Remove, hide or rename it as a first-action KPI until a governed provider-contact event exists. |
+| P2 | Decide the composite-model contract | Two Gold reporting objects are DirectQuery while the remainder is Import. | Either document and performance-test the composite model, or align those objects to the chosen storage mode. Do not leave the storage split accidental. |
+| P2 | Add governed provider scoring | No score facts, score version, required-document rules, feedback rating or home-to-framework-category bridge are present. | Follow [Provider scoring implementation guide](PROVIDER_SCORING_IMPLEMENTATION_GUIDE.md); do not calculate an overall score until the documented blockers are resolved. |
+
+### Broken binding repair map
+
+The count below is the number of static references in report JSON, not the
+number of visible visuals. Hidden or scrapbook pages still need repair or
+removal because they remain part of the PBIP.
+
+| Missing report field | References | Repair |
+| --- | ---: | --- |
+| `Referral Closure Reason Summary_old[Closed Referral Reason Bucket]` | 23 | Replace with a governed referral-closure-reason dimension. As an interim display only, use `fact_referral[referral_closure_reason]`; do not substitute provider decline reasons. |
+| `dim_referral[placement_type]` | 4 | Rebind to `dim_placement_type[placement_type]` after adding its fact relationships. |
+| `_Measures[Active Awaiting Offers (Engaged)]` | 2 | Rebind to `Active Awaiting Offers With Engagement`, or retain a compatibility alias. |
+| `_Measures[Active Awaiting Offers (No Engagement)]` | 1 | Rebind to `Active Awaiting Offers Without Engagement`, or retain a compatibility alias. |
+| `_Measures[Offers in Draft (Under Offer Referrals)]` | 3 | Rebind to `Draft Offers on Referrals Under Offer`. |
+| `_Measures[Open Referral]` | 3 | Rebind current-state uses to `Open Referrals`; use `Open Referrals at Snapshot` for as-of cards. |
+| `_Measures[Open Referral Previous Month]` | 34 | Do not restore the creation-date alias as the final fix. Rebind historical stock cards to the snapshot previous-month measure. |
+| `_Measures[Spot Offers (Under Offer Referrals)]` | 1 | Rebind to `Spot Offers on Referrals Under Offer`. |
+| `_Measures[Successful Offers (Under Offer Referrals)]` | 2 | Rebind to `Successful Offers on Referrals Under Offer`. |
+
+After repair, run a static binding check across every report JSON file and then
+open the PBIP in Power BI Desktop. Static inspection cannot prove DAX results,
+relationship cardinality against refreshed data, or RLS behaviour.
+
 ## Implemented Gold migration — 15 September 2026
 
 The extracted v15 project now uses the active Gold layer for business data. The current implementation and remaining acceptance work are recorded in [Gold report implementation and requirements](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md). The earlier [coverage audit](GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md) is the **pre-migration baseline**, not the current defect list.
@@ -53,15 +129,27 @@ Create these active relationships:
 | `dim_provider[provider_id]` | `bridge_provider_framework[provider_id]` | One-to-many, single direction | Active |
 | `dim_provider_home[provider_home_id]` | `dim_provider_submission_document[home_id]` | One-to-many, single direction | Active |
 | `dim_person[person_id]` | `fact_referral[person_id]` | One-to-many, single direction | Active |
+| `dim_person[person_id]` | `fact_referral_snapshot[person_id]` | One-to-many, single direction | Active |
+| `dim_placement_type[placement_type]` | `fact_referral[placement_type_required]` | One-to-many, single direction | Active after value-coverage validation |
+| `dim_placement_type[placement_type]` | `fact_referral_snapshot[placement_type_required]` | One-to-many, single direction | Active after value-coverage validation |
+| `dim_snapshot_month[month_start]` | `fact_referral_snapshot[snapshot_month_start]` | One-to-many, single direction | Active; required for monthly as-of reporting |
 | `dim_offer_status[offer_status]` | `fact_offer[offer_status]` | One-to-many, single direction | Active |
 
-Use `dim_date[date]` as the Date table. Keep the relationships to
-`fact_referral[referral_created_date]` and
-`fact_referral_snapshot[snapshot_date]` active only in the relevant model or
-use inactive role-playing relationships for the remaining dates. Do not create
-an active `fact_offer[offer_id]` to `fact_ipa[accepted_offer_id]` relationship
-when it creates an ambiguous route; use `USERELATIONSHIP` in a specific
-conversion measure instead.
+Use `dim_date[date]` for event dates such as referral creation. Use a governed
+monthly role (`dim_snapshot_month`) for state-at-snapshot reporting. Add
+`snapshot_month_start` to Gold as the first day of the calendar month so that
+irregular physical snapshot dates (for example a live snapshot on the 20th and
+a prior month-end snapshot on the 31st) still compare like-for-like months.
+
+Do **not** relate `fact_referral` directly to `fact_referral_snapshot`. The
+client-site v16 fact-to-fact relationship is bidirectional and lets the active
+referral-creation date path constrain snapshot rows to creation cohorts. Relate
+each fact to the conformed person, placement type and other approved dimensions
+instead. Keep other event-date relationships inactive or implement explicit
+role-playing date dimensions. Do not create an active
+`fact_offer[offer_id]` to `fact_ipa[accepted_offer_id]` relationship when it
+creates an ambiguous route; use `USERELATIONSHIP` in a specific conversion
+measure instead.
 
 ## Copy-ready DAX
 
@@ -779,16 +867,40 @@ or `LocalDateTable` reference survives the port. (`dim_offer_status` is now
 an active Gold table per GLD-008, rebuilt from Gold `fact_offer` status
 codes.)
 
-### Month-on-month card variance and indicator family
+### Month-on-month measures — state versus flow decision
 
-Every v15 KPI card ships with a previous-month companion, an absolute
-variance, a month-on-month percentage, and arrow/colour indicator measures.
-The legacy model defined these inconsistently (some cards lack the MoM %
-member); the port completes every card to the same five-measure stack.
+The client-site v16 model gives each legacy KPI card a previous-month
+companion, an absolute variance, a month-on-month percentage, and arrow/colour
+indicator measures. However, every stack uses the active `dim_date[date]` to
+`fact_referral[referral_created_date]` relationship. For open, closed,
+awaiting-offer, under-offer and engagement cards, that answers the wrong
+historical question: it compares the **current status of referrals created in
+each month**, rather than the status of all referrals **as it stood in each
+month**.
 
-All stacks use the active `dim_date[date]` to
-`fact_referral[referral_created_date]` relationship, so no
-`USERELATIONSHIP` is required. The stack pattern is:
+Use this rule:
+
+| KPI type | Examples | Historical source |
+| --- | --- | --- |
+| Stock/state at a point in time | Open, closed, awaiting offer, under offer, open overdue, offer count held by the under-offer population, placement/IPA state | `fact_referral_snapshot`, filtered by the governed snapshot month |
+| Flow/event during a period | Referrals created, offers submitted, IPAs issued, closures occurring during the month | The event-grain fact and its event-date relationship |
+| Cohort outcome | Share of referrals created in a month that later received an offer | `fact_referral` by creation month, with a clearly labelled maturation/as-of rule |
+
+The approved snapshot pattern, required Gold fields, DAX and validation tests
+are in [Snapshot Month-on-Month KPI guide](SNAPSHOT_MONTH_ON_MONTH_KPI_GUIDE.md).
+In particular, add historical engagement evidence to the snapshot before
+moving `Active Referral Engagement Rate`; the current snapshot has
+`provider_assignment_count` but not the current provider-level `is_engaged`
+state.
+
+The creation-date stacks below are retained only as a **legacy binding
+inventory**. They are valid for a measure that is explicitly a creation cohort
+or event flow. Do not use them for state-at-month cards. Repair the missing
+`Open Referral Previous Month` report bindings by moving those visuals to the
+snapshot family, not by reinstating the old creation-date calculation as the
+final solution.
+
+For an approved event/cohort stack, the generic pattern remains:
 
 ```DAX
 <Base> Previous Month = CALCULATE ( [<Base>], DATEADD ( 'dim_date'[date], -1, MONTH ) )

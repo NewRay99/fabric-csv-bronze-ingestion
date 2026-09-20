@@ -162,7 +162,11 @@ assert (
     in fact_source
 )
 assert "AS is_open_overdue" in fact_source
-assert '"provider_assignment_count", "is_emergency_placement", "is_open_overdue",' in gold
+assert (
+    '"provider_assignment_count", "provider_responded_count", "has_provider_response",'
+    in gold
+)
+assert '"first_provider_response_date", "is_emergency_placement", "is_open_overdue",' in gold
 assert '"signed_by_provider", "signed_by_local_authority",' in gold
 offer_cell = next(
     cell for cell in read_notebook(GOLD)["cells"]

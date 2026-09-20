@@ -192,6 +192,14 @@ copy_bridge(
      ("export_date", "source_export_date")],
 )
 copy_bridge(
+    "silver.provider_home_category", "gold.bridge_provider_home_framework_category",
+    ["provider_home_category_id", "provider_home_id", "framework_category_id", "export_date"],
+    [("provider_home_category_id", "provider_home_category_id"),
+     ("provider_home_id", "provider_home_id"),
+     ("framework_category_id", "framework_category_id"),
+     ("export_date", "source_export_date")],
+)
+copy_bridge(
     "silver.provider_sic_codes", "gold.bridge_provider_sic_code",
     ["provider_id", "sic_code", "export_date"],
     [("provider_id", "provider_id"), ("sic_code", "sic_code"),
@@ -344,6 +352,64 @@ referral_statuses = (
 )
 (referral_statuses.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true").saveAsTable("gold.dim_referral_status"))
+
+# A separate month dimension keeps state-at-snapshot time intelligence away
+# from the active referral-created date role. One row is emitted per calendar
+# month and the month_start key joins directly to the snapshot fact.
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.dim_snapshot_month AS
+SELECT
+  date_value AS month_start,
+  LAST_DAY(date_value) AS month_end,
+  YEAR(date_value) AS calendar_year,
+  MONTH(date_value) AS calendar_month_number,
+  DATE_FORMAT(date_value, 'MMMM') AS calendar_month_name,
+  DATE_FORMAT(date_value, 'yyyy-MM') AS year_month,
+  CAST('{GOLD_EXPORT_DATE}' AS TIMESTAMP) AS export_date,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id,
+  CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM (
+  SELECT EXPLODE(SEQUENCE(DATE '2020-01-01', DATE '2035-12-01', INTERVAL 1 MONTH)) AS date_value
+)
+""")
+
+# Dynamic RLS inputs. The setup notebook creates these configuration tables
+# empty, so a newly deployed role denies detail until explicitly approved
+# mappings are loaded. Effective dates are applied in Gold to keep the model
+# role small and deterministic.
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.dim_security_scope AS
+SELECT security_scope_key, UPPER(TRIM(scope_type)) AS scope_type,
+  TRIM(scope_code) AS scope_code, scope_name,
+  COALESCE(allows_global_summary, false) AS allows_global_summary,
+  valid_from, valid_to, approved_by, updated_at,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM monitoring.cfg_security_scope
+WHERE COALESCE(is_active, false)
+  AND (valid_from IS NULL OR valid_from <= CURRENT_DATE())
+  AND (valid_to IS NULL OR valid_to >= CURRENT_DATE())
+""")
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.sec_user_scope_access AS
+SELECT LOWER(TRIM(user_principal_name)) AS user_principal_name,
+  security_scope_key, valid_from, valid_to, approved_by, access_reason,
+  updated_at, '{GOLD_JOB_RUN_ID}' AS job_run_id,
+  CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM monitoring.cfg_user_scope_access
+WHERE COALESCE(is_active, false)
+  AND (valid_from IS NULL OR valid_from <= CURRENT_DATE())
+  AND (valid_to IS NULL OR valid_to >= CURRENT_DATE())
+""")
+spark.sql(f"""
+CREATE OR REPLACE TABLE gold.bridge_referral_scope AS
+SELECT CAST(referral_id AS STRING) AS referral_id, security_scope_key,
+  valid_from, valid_to, assigned_by, assignment_reason, updated_at,
+  '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM monitoring.cfg_referral_scope
+WHERE COALESCE(is_active, false)
+  AND (valid_from IS NULL OR valid_from <= CURRENT_DATE())
+  AND (valid_to IS NULL OR valid_to >= CURRENT_DATE())
+""")
 
 # GLD-006/GLD-007: person dimension with the legacy "Gender Clean" mapping.
 # One current row per person; fact_referral[person_id] relates to this

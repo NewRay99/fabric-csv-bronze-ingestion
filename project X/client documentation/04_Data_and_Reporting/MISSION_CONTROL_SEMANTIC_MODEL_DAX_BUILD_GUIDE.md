@@ -4,9 +4,39 @@
 
 This guide defines the operational measures for the WMPP Mission Control model. They use the monitoring control tables present in the client-delivered semantic-model package, rather than referral, offer or placement facts.
 
+## Client-site package reconciliation — 20 September 2026
+
+`reports/current/MWPP Repo 20092026.zip` is the latest client-site export
+reviewed for this update. It contains the business-report project
+`SM_WMPP_v16`; it does **not** contain a Mission Control semantic model.
+
+The static inventory is:
+
+| Check | `SM_WMPP_v16` result | Mission Control consequence |
+| --- | ---: | --- |
+| Semantic tables | 117 TMDL tables: 29 business/model tables, 87 `LocalDateTable_*` tables and one `DateTableTemplate_*` | This is the business model, not the monitoring model. |
+| Measures | 274 | None of the 67 `_MissionControl_Measures` are present. |
+| `cfg_*` tables | 0 | The operational measures in this guide cannot run in this model. |
+| `_MissionControl_Measures` table | Absent | Import the maintained artifact only into the dedicated Mission Control model. |
+| RLS roles | 0 | Security is also not implemented in this business-model export; see [RLS and partial aggregate access guide](RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md). |
+
+The client-site ZIP therefore does not replace or supersede the separate
+Mission Control model. Do not add the monitoring measures to `SM_WMPP_v16`
+unless the architecture is deliberately changed to import the eight required
+monitoring tables. The preferred deployment remains two semantic models:
+
+1. `SM_WMPP_v16` for Gold referral, offer, IPA and provider reporting; and
+2. a dedicated Mission Control model for `cfg_pipeline_run`, archive controls,
+   Gold replay controls, data-quality results and schema inventory.
+
+Before the next Mission Control release, export the deployed monitoring PBIP
+from the client site and repeat the table, relationship, partition and report-
+binding checks. The latest client-site ZIP provides no evidence that the
+Mission Control model or its 67 measures are deployed.
+
 ## Delivery assessment
 
-The client package at `reports/client-deliverables/SM WMPP Mission Control.zip` was extracted and inspected. Its semantic model contains the monitoring configuration/control tables below, but no `_Measures.tmdl` table. The included Power BI report references `_Measures` and currently binds 18 referral-oriented measures such as `Total Referrals` and `Active Referrals Under Offer`; those measures cannot be calculated from the delivered monitoring tables. Replace or rebind those visuals to the measures in `reports/current/_MissionControl_Measures.tmdl` before publishing the operational report.
+The earlier client package at `reports/client-deliverables/SM WMPP Mission Control.zip` was extracted and inspected for the original assessment below. Its semantic model contains the monitoring configuration/control tables below, but no `_Measures.tmdl` table. The included Power BI report references `_Measures` and currently binds 18 referral-oriented measures such as `Total Referrals` and `Active Referrals Under Offer`; those measures cannot be calculated from the delivered monitoring tables. Replace or rebind those visuals to the measures in `reports/current/_MissionControl_Measures.tmdl` before publishing the operational report. This remains a historical package assessment until a newer Mission Control PBIP is supplied from the client site.
 
 The package contains an `SM WMPP v15.zip` referral model as a separate nested deliverable. It is not a source for Mission Control operational KPIs.
 

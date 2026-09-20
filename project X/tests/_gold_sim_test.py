@@ -46,6 +46,8 @@ referrals = []   # flattened referral rows, including later versions for test co
 providers = []   # referral_provider (feeds the fabricated enrichment)
 offers = []      # offer (feeds the fabricated enrichment)
 ipas = []        # ipa (feeds the fabricated enrichment)
+cancel_reasons = []
+decline_reasons = []
 persons = []     # referral_person
 closures = []    # referral_closure_reason_summary
 
@@ -67,7 +69,8 @@ def add_offer(rid, when, status="pending"):
     rp = str(uuid.uuid4())
     providers.append(dict(referral_provider_id=rp, referral_id=rid,
         provider_id=random.choice(provider_ids), is_excluded=False, is_declined=False,
-        created_by="sim", modified_by="sim", is_cancelled=False, is_closed=False,
+        created_by="sim", modified_by="sim", created_date=ts(when, 9),
+        modified_date=ts(when, 9), is_cancelled=False, is_closed=False,
         is_spot=False, export_date=ts(when)))
     oid = str(uuid.uuid4())
     offers.append(dict(offer_id=oid, referral_provider_id=rp, referral_id=rid,
@@ -97,7 +100,8 @@ add_offer(r2, date(2025,1,13), "pending")
 for extra_pid in provider_ids[1:]:
     providers.append(dict(referral_provider_id=str(uuid.uuid4()), referral_id=r2,
         provider_id=extra_pid, is_excluded=False, is_declined=False,
-        created_by="sim", modified_by="sim", is_cancelled=False, is_closed=False,
+        created_by="sim", modified_by="sim", created_date=ts(date(2025,1,14), 9),
+        modified_date=ts(date(2025,1,14), 9), is_cancelled=False, is_closed=False,
         is_spot=False, export_date=ts(date(2025,1,14))))
 r3 = add_referral(date(2025,1,15), date(2025,2,10))  # planned, closes in Feb
 r4 = add_referral(date(2025,1,20), date(2025,1,21))  # critical, no offer -> overdue
@@ -112,7 +116,8 @@ o6 = add_offer(r6, date(2025,2,6), "accepted"); add_ipa(r6, o6, date(2025,2,6), 
 r7 = add_referral(date(2025,2,10), date(2025,2,25), is_spot=False)
 providers.append(dict(referral_provider_id=str(uuid.uuid4()), referral_id=r7,
     provider_id=random.choice(provider_ids), is_excluded=False, is_declined=False,
-    created_by="sim", modified_by="sim", is_cancelled=False, is_closed=True,
+    created_by="sim", modified_by="sim", created_date=ts(date(2025,2,10), 9),
+    modified_date=ts(date(2025,2,10), 9), is_cancelled=False, is_closed=True,
     is_spot=True, export_date=ts(date(2025,2,10))))
 r8 = add_referral(date(2025,2,12), date(2025,3,15))  # planned
 r9 = add_referral(date(2025,2,20), date(2025,2,22))  # critical, closed without placement in Mar
@@ -237,6 +242,25 @@ write(mkdf(referrals), "referral")
 write(mkdf(enrichment), "referral_enrichment")
 write(mkdf(persons), "referral_person")
 write(mkdf(closures), "referral_closure_reason_summary")
+write(mkdf(providers), "referral_provider")
+write(mkdf(offers), "offer")
+# Keep both reason-event sources present. The response rule uses their
+# timestamps conservatively and does not require a reason on every assignment.
+r2_response_provider = next(
+    offer["referral_provider_id"] for offer in offers if offer["referral_id"] == r2
+)
+cancel_reasons.append(dict(
+    referral_provider_id=r2_response_provider,
+    created_date=ts(date(2025, 1, 14), 10),
+    export_date=ts(date(2025, 1, 14), 10),
+))
+decline_reasons.append(dict(
+    referral_provider_id=r2_response_provider,
+    created_date=ts(date(2025, 1, 15), 10),
+    export_date=ts(date(2025, 1, 15), 10),
+))
+write(mkdf(cancel_reasons), "referral_provider_cancel_reason")
+write(mkdf(decline_reasons), "referral_provider_decline_reason")
 print("Silver tables written")
 
 GOLD_FACT_SQL = open(os.path.join(TEST_ROOT, "_gold_fact_sql.sql"), encoding="utf-8").read()
@@ -251,7 +275,8 @@ def run_gold(as_of):
         F.lit(as_of).cast("date").alias("snapshot_date"),
         "referral_id", "current_status", "placement_urgency_band", "required_placement_date",
         "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
-        "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
+        "provider_assignment_count", "provider_responded_count", "has_provider_response",
+        "first_provider_response_date", "is_emergency_placement", "is_open_overdue",
         "days_without_activity", "days_past_required_date", "placed_by_required_date",
         "required_placement_date_outcome")
     snap_table = "gold.fact_referral_snapshot"
@@ -288,6 +313,7 @@ check(out[r1].placed_by_required_date == True, "r1 placed_by_required_date true"
 check(out[r4].required_placement_date_outcome == "Open overdue", "r4 open overdue (Jan, required 1/21 < 1/31)")
 check(out[r4].days_past_required_date == 10, f"r4 10 days past required (got {out[r4].days_past_required_date})")
 check(out[r2].has_offer == True and out[r2].is_open == True, "r2 has offer and open (live provider branch)")
+check(out[r2].has_provider_response == True, "r2 has qualifying provider response evidence")
 check(out[r2].is_awaiting_offer == True, "r2 awaiting offer (open with engaged provider)")
 # GLD-013: pushed-down referral-grain columns
 check(out[r2].provider_assignment_count >= 2,

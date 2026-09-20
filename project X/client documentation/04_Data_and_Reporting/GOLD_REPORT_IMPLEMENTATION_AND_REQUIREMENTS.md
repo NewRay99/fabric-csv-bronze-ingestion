@@ -2,6 +2,31 @@
 
 Implementation date: 15 September 2026.
 
+## Current client-site status — 20 September 2026
+
+The current client-site baseline is now
+`reports/current/MWPP Repo 20092026.zip` (`SM_WMPP_v16`), not the v15 project
+described below. The v16 model differs materially: it has 117 tables, 274
+measures, two DirectQuery tables, four bidirectional business relationships,
+an active current-referral-to-snapshot fact relationship, no RLS roles and 73
+broken report field-reference occurrences across nine missing fields.
+
+Use the [v16 reconciliation and required model updates](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md)
+as the current action list. In particular, implement snapshot-based historical
+state KPIs, repair report bindings, restore the single-direction star and add
+the documented RLS/security data before acceptance. The remainder of this
+document records the 15 September v15 migration and should not be read as a
+current v16 deployment sign-off.
+
+A repository implementation candidate is now available at
+`reports/current/SM WMPP v16 updated`. It completes those structural changes
+and is generated repeatably by `tools/reconcile_semantic_model_v16.py` from the
+immutable ZIP baseline. The supporting Gold contracts are in the current
+`00_setup_cfg.py`, `04_gold_model.py` and `05_gold_dimensions.py`. Static
+validation passes, but Fabric refresh, Power BI Desktop open/save, DAX result
+reconciliation, populated security mappings and identity-based RLS UAT remain
+deployment prerequisites.
+
 ## Delivered model
 
 `reports/client-deliverables/SM WMPP v15/SM_WMPP.pbip` now contains 281 measures across 67 tables (including automatic date tables and local report metadata). `reports/current/_Measures.tmdl` contains 283 measures, retaining its extra source-only measure. All 195 concrete WIP definitions are present. This is the business report, separate from Mission Control.
@@ -59,10 +84,10 @@ The 117-row mapping below records each KPI disposition. Covered means a definiti
 - R41 / KPI-98: no QA flag-type breakdown. R47/R48 / KPI-102–103: expiry dates support expiry KPIs, but not reminder delivery, an expected-document set or blocking decisions.
 - R54/R58 / KPI-105–106: no complete referral-provider decline reason or framework-change history.
 - R62 / KPI-108–109: no payment method, invoice or payment-status data. Weekly cost is an estimate, not verified signed fee liability.
-- R14 / KPI-111–112: no response-time/unread-message evidence. Message volume and lifecycle events retain their documented proxy meanings.
+- R14 / KPI-111–112: offer/reason-based assignment-to-response evidence is now implemented, but provider-authored message classification, unread-state semantics, business-calendar SLA and approved threshold remain open.
 - R19 / KPI-115: no durable referral update history; R20 audit events are derived events, not a complete source audit trail.
 - R59 / KPI-117: approval-state proportion is a proxy for onboarding and cannot certify bulk-job success.
-- R12/R55/R76/R78/R79 security/access, R31 resolved-request visibility, notification delivery, accessibility, disaster recovery and performance/SLA requirements need separate acceptance evidence. No security roles were invented without access rules.
+- R12/R55/R76/R78/R79: deny-by-default security tables and a dynamic role now exist in the repository candidate, but authoritative mappings, aggregate-disclosure policy, Service role assignment and identity-based acceptance evidence remain open. R31 resolved-request visibility, notification delivery, accessibility, disaster recovery and performance/SLA requirements also need separate acceptance evidence.
 
 ## Validation and rollout
 

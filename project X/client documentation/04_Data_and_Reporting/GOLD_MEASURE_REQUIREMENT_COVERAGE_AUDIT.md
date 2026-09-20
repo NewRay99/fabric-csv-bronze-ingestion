@@ -1,6 +1,6 @@
 # Gold measures and requirements coverage audit
 
-Audit date: 15 September 2026. **Historical baseline: the model has since been migrated. See [implemented changes and remaining requirements](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) for current status.** Scope: the extracted **SM WMPP v15 - bu 15092026.zip** project, not Mission Control.
+Audit date: 15 September 2026. **Historical baseline: the model has since been migrated. See the [20 September client-site v16 reconciliation](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for current status.** Scope: the extracted **SM WMPP v15 - bu 15092026.zip** project, not Mission Control.
 
 ## Pre-migration result
 

@@ -592,17 +592,11 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Active Referrals With Provider Engagement' = ```
-			VAR engaged_referral_ids =
-				CALCULATETABLE (
-					VALUES ( 'fact_referral_provider'[referral_id] ),
-					'fact_referral_provider'[is_engaged] = TRUE ()
-				)
-			RETURN
-				CALCULATE (
-					[Total Referrals],
-					'fact_referral'[is_open] = TRUE (),
-					TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
-				)
+			CALCULATE (
+				[Total Referrals],
+				'fact_referral'[is_open] = TRUE (),
+				'fact_referral'[has_provider_response] = TRUE ()
+			)
 			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
@@ -617,42 +611,24 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Active Awaiting Offers With Engagement' = ```
-			VAR engaged_referral_ids =
-				CALCULATETABLE (
-					VALUES ( 'fact_referral_provider'[referral_id] ),
-					'fact_referral_provider'[is_engaged] = TRUE ()
-				)
-			RETURN
-				CALCULATE (
-					[Total Referrals],
-					'fact_referral'[is_open] = TRUE (),
-			'fact_referral'[is_awaiting_offer] = TRUE (),
-					TREATAS ( engaged_referral_ids, 'fact_referral'[referral_id] )
-				)
+			CALCULATE (
+				[Total Referrals],
+				'fact_referral'[is_open] = TRUE (),
+				'fact_referral'[is_awaiting_offer] = TRUE (),
+				'fact_referral'[has_provider_response] = TRUE ()
+			)
 			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
 		lineageTag: 0584de65-d334-43eb-96ee-2bd6ef0da472
 
 	measure 'Active Awaiting Offers Without Engagement' = ```
-			VAR awaiting_referral_ids =
-				CALCULATETABLE (
-					VALUES ( 'fact_referral'[referral_id] ),
-					'fact_referral'[is_awaiting_offer] = TRUE ()
-				)
-			VAR engaged_referral_ids =
-				CALCULATETABLE (
-					VALUES ( 'fact_referral_provider'[referral_id] ),
-					'fact_referral_provider'[is_engaged] = TRUE ()
-				)
-			RETURN
-				CALCULATE (
-					[Total Referrals],
-					TREATAS (
-						EXCEPT ( awaiting_referral_ids, engaged_referral_ids ),
-						'fact_referral'[referral_id]
-					)
-				)
+			CALCULATE (
+				[Total Referrals],
+				'fact_referral'[is_open] = TRUE (),
+				'fact_referral'[is_awaiting_offer] = TRUE (),
+				'fact_referral'[has_provider_response] = FALSE ()
+			)
 			```
 		formatString: 0
 		displayFolder: Provider Activity KPIs
@@ -834,21 +810,21 @@ table _Measures
 		lineageTag: 54c2b74a-7a4a-4821-8086-5a7d8d0e618c
 
 	measure 'Open Referral' = ```
-			CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
+			[Open Referrals at Snapshot]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 34758a00-8077-40f6-87c6-5a6a839100ef
 
 	measure 'Open Referrals Previous Month' = ```
-			CALCULATE ( [Open Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+			CALCULATE ( [Open Referrals at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f1ba9238-f3d5-456e-ab4f-72fe9ec46554
 
 	measure 'Closed Referrals Previous Month' = ```
-			CALCULATE ( [Closed Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+			CALCULATE ( [Closed or Cancelled Referrals at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -876,7 +852,7 @@ table _Measures
 		lineageTag: bf61a9e6-d428-40ec-ba23-4ee03575fe04
 
 	measure 'Provider Contact Referral Previous Month' = ```
-			CALCULATE ([Provider Contact Referral], DATEADD(dim_date[Date],-1,MONTH))
+			CALCULATE ( [Provider Contact Referrals at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -897,21 +873,21 @@ table _Measures
 		lineageTag: 45133170-e42c-4f2e-bb8a-0e4433ce82c1
 
 	measure 'Closed Referrals Variance' = ```
-			[Closed Referrals] - [Closed Referrals Previous Month]
+			[Closed or Cancelled Referrals at Snapshot] - [Closed Referrals Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: e23ccfee-41cf-4d16-8e93-21ae46eb5510
 
 	measure 'Open Referrals Variance' = ```
-			[Open Referrals] - [Open Referrals Previous Month]
+			[Open Referrals at Snapshot] - [Open Referrals Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 3cde0de2-1a18-42e4-ad66-c830269da211
 
 	measure 'Provider Contact Referral Variance' = ```
-			[Provider Contact Referral]-[Provider Contact Referral Previous Month]
+			[Provider Contact Referrals at Snapshot] - [Provider Contact Referral Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -948,28 +924,28 @@ table _Measures
 		lineageTag: 6ce24cf7-802e-4a40-b2d5-7ab196d56750
 
 	measure 'Referrals Cancelled/Closed Previous Month' = ```
-			CALCULATE ([Closed or Cancelled Referrals], DATEADD(dim_date[Date],-1,MONTH))
+			CALCULATE ( [Closed or Cancelled Referrals at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f0b8467d-98e2-49cb-bab7-3d3780a9e754
 
 	measure 'Referrals With an Offer Previous Month' = ```
-			CALCULATE ( [Referrals With an Offer], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+			CALCULATE ( [Referrals With an Offer at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: f3004652-6778-4a84-97a8-57a39418b7a5
 
 	measure 'Total Offers Made Previous Month' = ```
-			CALCULATE ([Total Offers Made (Active Referrals Under Offer)], DATEADD(dim_date[Date],-1,MONTH))
+			CALCULATE ( [Total Offers at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 93fcc86f-6b69-4f6f-a900-8049c128771b
 
 	measure 'Referrals Currently Active Previous Month' = ```
-			CALCULATE ( [Referrals Currently Active], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+			CALCULATE ( [Open Referrals at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -982,7 +958,7 @@ table _Measures
 		lineageTag: dcbbced5-d980-4699-89e1-ee6039f91f0a
 
 	measure 'Referrals Cancelled/Closed Variance' = ```
-			[Closed or Cancelled Referrals]-[Referrals Cancelled/Closed Previous Month]
+			[Closed or Cancelled Referrals at Snapshot] - [Referrals Cancelled/Closed Previous Month]
 			```
 		displayFolder: Referral Offers
 		lineageTag: e6a63217-5624-431d-8181-4dab03e0f5ec
@@ -990,21 +966,21 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Referrals Currently Active Variance' = ```
-			[Referrals Currently Active] - [Referrals Currently Active Previous Month]
+			[Open Referrals at Snapshot] - [Referrals Currently Active Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 7b28ba2e-d56a-49c7-86f3-2002aa570bae
 
 	measure 'Referrals With an Offer Variance' = ```
-			[Referrals With an Offer] - [Referrals With an Offer Previous Month]
+			[Referrals With an Offer at Snapshot] - [Referrals With an Offer Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: 9a5caaff-b428-4ff0-a0c0-f746e53b7af0
 
 	measure 'Total Offers Made Variance' = ```
-			[Total Offers Made (Active Referrals Under Offer)]-[Total Offers Made Previous Month]
+			[Total Offers at Snapshot] - [Total Offers Made Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1086,21 +1062,21 @@ table _Measures
 		lineageTag: 3fb6bac8-f204-4589-9881-df4e0bc38759
 
 	measure 'Active Referrals Awaiting Offers Previous Month' = ```
-			CALCULATE ([Active Referrals Awaiting Offers], DATEADD(dim_date[Date],-1,MONTH))
+			CALCULATE ( [Active Referrals Awaiting Offers at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: b453738f-f44a-4805-9b4a-5f397312defb
 
 	measure 'Active Referrals Under Offer Previous Month' = ```
-			CALCULATE ([Active Referrals Under Offer], DATEADD(dim_date[Date],-1,MONTH))
+			CALCULATE ( [Active Referrals Under Offer at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		formatString: 0
 		displayFolder: Referral Offers
 		lineageTag: ce4a3b50-5202-4895-921d-c831783b6c16
 
 	measure 'Active Referrals Awaiting Offers Variance' = ```
-			[Active Referrals Awaiting Offers]-[Active Referrals Awaiting Offers Previous Month]
+			[Active Referrals Awaiting Offers at Snapshot] - [Active Referrals Awaiting Offers Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1119,7 +1095,7 @@ table _Measures
 		lineageTag: 5a18888f-db05-4aeb-8e8c-cf47ed682bb8
 
 	measure 'Active Referrals Under Offer Variance' = ```
-			[Active Referrals Under Offer]-[Active Referrals Under Offer Previous Month]
+			[Active Referrals Under Offer at Snapshot] - [Active Referrals Under Offer Previous Month]
 			```
 		formatString: 0
 		displayFolder: Referral Offers
@@ -1138,7 +1114,7 @@ table _Measures
 		lineageTag: 45b36bf9-72d4-4d77-ae6e-7830c26cf4f2
 
 	measure 'Active Referral Engagement Rate Previous Month' = ```
-			CALCULATE ( [Active Referral Engagement Rate], DATEADD ( 'dim_date'[date], -1, MONTH ) )
+			CALCULATE ( [Active Provider Response Rate at Snapshot], DATEADD ( 'dim_snapshot_month'[month_start], -1, MONTH ) )
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: 525eea5c-1e4c-4fdd-8026-2c66b6b2bea3
@@ -1146,7 +1122,7 @@ table _Measures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Active Referral Engagement Rate Variance' = ```
-			[Active Referral Engagement Rate] - [Active Referral Engagement Rate Previous Month]
+			[Active Provider Response Rate at Snapshot] - [Active Referral Engagement Rate Previous Month]
 			```
 		displayFolder: Provider Activity KPIs
 		lineageTag: 521ba058-5696-4e57-b096-fcb5c7931d1c
@@ -1185,6 +1161,95 @@ table _Measures
 		formatString: 0
 		displayFolder: Snapshot
 		lineageTag: d9fa258e-310f-4562-9c43-b9dbaf53f581
+
+	/// State KPI evaluated from the retained month-end snapshot, not today's referral row.
+	measure 'Closed or Cancelled Referrals at Snapshot' = ```
+			CALCULATE (
+				[Snapshot Referrals],
+				FILTER (
+					'fact_referral_snapshot',
+					LOWER ( COALESCE ( 'fact_referral_snapshot'[current_status], "" ) )
+						IN { "closed", "cancelled", "withdrawn", "completed" }
+				)
+			)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Active Referrals Awaiting Offers at Snapshot' = ```
+			CALCULATE (
+				[Snapshot Referrals],
+				'fact_referral_snapshot'[is_open] = TRUE (),
+				'fact_referral_snapshot'[is_awaiting_offer] = TRUE ()
+			)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Active Referrals Under Offer at Snapshot' = ```
+			CALCULATE (
+				[Snapshot Referrals],
+				'fact_referral_snapshot'[is_open] = TRUE (),
+				'fact_referral_snapshot'[current_status] = "UNDER_OFFER"
+			)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Referrals With an Offer at Snapshot' = ```
+			CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[has_offer] = TRUE () )
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Total Offers at Snapshot' = ```
+			SUM ( 'fact_referral_snapshot'[offer_count] )
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Provider Contact Referrals at Snapshot' = ```
+			CALCULATE (
+				[Snapshot Referrals],
+				FILTER (
+					'fact_referral_snapshot',
+					NOT ISBLANK ( 'fact_referral_snapshot'[first_action_date] )
+						&& 'fact_referral_snapshot'[first_action_date]
+							< 'fact_referral_snapshot'[snapshot_date] + 1
+				)
+			)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Active Referrals With Provider Response at Snapshot' = ```
+			CALCULATE (
+				[Snapshot Referrals],
+				'fact_referral_snapshot'[is_open] = TRUE (),
+				'fact_referral_snapshot'[has_provider_response] = TRUE ()
+			)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Active Provider Response Rate at Snapshot' = ```
+			VAR eligible_open_referrals =
+				CALCULATE (
+					[Snapshot Referrals],
+					'fact_referral_snapshot'[is_open] = TRUE (),
+					FILTER (
+						'fact_referral_snapshot',
+						NOT ISBLANK ( 'fact_referral_snapshot'[has_provider_response] )
+					)
+				)
+			RETURN
+				DIVIDE (
+					[Active Referrals With Provider Response at Snapshot],
+					eligible_open_referrals
+				)
+			```
+		formatString: 0.0%
+		displayFolder: Snapshot\Month on Month
 
 	measure 'Closed Referrals at Snapshot' = ```
 			CALCULATE (
@@ -2303,6 +2368,144 @@ table _Measures
 		formatString: 0.0%
 		displayFolder: Gold Requirements
 		lineageTag: 6666a564-e56b-43ca-8862-738f45449f12
+
+	measure 'Offers in Draft (Under Offer Referrals)' = ```
+			[Draft Offer Count (Under Offer Referrals)]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Spot Offers (Under Offer Referrals)' = ```
+			[Spot Offers on Referrals Under Offer]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Successful Offers (Under Offer Referrals)' = ```
+			[Successful Offers on Referrals Under Offer]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Oldest Draft Age (Days)' = ```
+			[Oldest Draft Age Days]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'NON Framework Providers' = ```
+			[Non-Framework Providers]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Other Referrals' = ```
+			[Total Gendered Referrals] - [Male Referrals] - [Female Referrals]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Referrals Cancelled/Closed' = ```
+			[Closed or Cancelled Referrals at Snapshot]
+			```
+		formatString: 0
+		displayFolder: Gold Requirements
+
+	measure 'Referrals With Offers Indicator' = ```
+			[Referrals With an Offer Variance Indicator]
+			```
+		displayFolder: Gold Requirements
+
+	/// Unweighted, auditable provider-scoring inputs. The composite score is
+	/// intentionally withheld until weights, SLA and minimum-volume rules are approved.
+	measure 'Provider Response Opportunities' = ```
+			SUM ( 'fact_provider_kpi_monthly'[response_opportunity_count] )
+			```
+		formatString: 0
+		displayFolder: Provider Scoring\Inputs
+
+	measure 'Provider Qualifying Responses' = ```
+			SUM ( 'fact_provider_kpi_monthly'[qualifying_response_count] )
+			```
+		formatString: 0
+		displayFolder: Provider Scoring\Inputs
+
+	measure 'Provider Response Rate' = ```
+			DIVIDE ( [Provider Qualifying Responses], [Provider Response Opportunities] )
+			```
+		formatString: 0.0%
+		displayFolder: Provider Scoring\Components
+
+	measure 'Provider Offer Conversion Rate' = ```
+			DIVIDE (
+				SUM ( 'fact_provider_kpi_monthly'[accepted_offer_count] ),
+				SUM ( 'fact_provider_kpi_monthly'[offers_submitted_count] )
+			)
+			```
+		formatString: 0.0%
+		displayFolder: Provider Scoring\Components
+
+	measure 'Provider Target Placement Rate' = ```
+			DIVIDE (
+				SUM ( 'fact_provider_kpi_monthly'[placed_by_target_count] ),
+				SUM ( 'fact_provider_kpi_monthly'[successful_referral_count] )
+			)
+			```
+		formatString: 0.0%
+		displayFolder: Provider Scoring\Components
+
+	measure 'Provider Average Response Hours' = ```
+			DIVIDE (
+				SUMX (
+					'fact_provider_kpi_monthly',
+					'fact_provider_kpi_monthly'[average_response_minutes]
+						* 'fact_provider_kpi_monthly'[qualifying_response_count]
+				),
+				[Provider Qualifying Responses] * 60
+			)
+			```
+		formatString: 0.0
+		displayFolder: Provider Scoring\Components
+
+	measure 'Lifetime Placement Cost' = ```
+			SUMX (
+				'fact_ipa',
+				VAR start_date =
+					COALESCE (
+						'fact_ipa'[planned_placement_start_date],
+						'fact_ipa'[placement_admission_date]
+					)
+				VAR end_date = COALESCE ( 'fact_ipa'[placement_ended_date], TODAY () )
+				RETURN
+					DIVIDE ( DATEDIFF ( start_date, end_date, DAY ) + 1, 7 )
+						* 'fact_ipa'[estimated_weekly_cost]
+			)
+			```
+		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
+		displayFolder: IPA Measures
+
+	measure 'Total Lifetime Cost' = ```
+			CALCULATE ( [Lifetime Placement Cost], REMOVEFILTERS ( 'fact_ipa' ) )
+			```
+		formatString: "£"#,0.00;-"£"#,0.00;"£"#,0.00
+		displayFolder: IPA Measures
+
+	measure 'Previous Snapshot Referrals' = ```
+			VAR current_month = MAX ( 'dim_snapshot_month'[month_start] )
+			RETURN
+				CALCULATE (
+					[Snapshot Referrals],
+					'dim_snapshot_month'[month_start] = EDATE ( current_month, -1 )
+				)
+			```
+		formatString: 0
+		displayFolder: Snapshot\Month on Month
+
+	measure 'Last Snapshot Date' = ```
+			MAX ( 'fact_referral_snapshot'[snapshot_date] )
+			```
+		formatString: General Date
+		displayFolder: Snapshot
 
 	partition _Measures = m
 		mode: import
