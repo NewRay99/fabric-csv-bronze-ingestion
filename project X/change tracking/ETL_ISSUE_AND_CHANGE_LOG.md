@@ -2119,3 +2119,28 @@ there should only be one dim_referral_provider_reject_reason for fact_referral_p
   source-snapshot deduplication, and deterministic per-provider sequencing.
 - **Status:** resolved; rerun `05_gold_dimensions` to rebuild the Delta table
   with the new columns and sequence values.
+
+
+## GLD-016 error in Live pipeline 
+error on 04_gold_model step:
+
+=== FAILED 04_gold_model: An error occurred while calling o7082.throwExceptionIfHave.
+: com.microsoft.spark.notebook.msutils.NotebookExecutionException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `referral_provider_id` cannot be resolved. Did you mean one of the following? [`provider_id`, `referral_id`, `offer_id`, `as_of_date`, `export_date`].; line 4 pos 9;
+'ReplaceTableAsSelect TableSpec(Map(),None,Map(),None,None,None,false), true, false
+:- ResolvedIdentifier org.apache.spark.sql.delta.catalog.DeltaCatalog@5776e9ac, chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg.fact_provider_kpi_monthly
++- 'Aggregate ['provider_id, 'assignment_month, 'security_scope_key], ['provider_id, cast('assignment_month as date) AS assignment_month#7511417, 'security_scope_key, 'COUNT(distinct 'referral_provider_id) AS response_opportunity_count#7511418, 'SUM(CASE WHEN 'has_qualifying_response THEN 1 ELSE 0 END) AS qualifying_response_count#7511419, 'SUM('offers_submitted_count) AS offers_submitted_count#7511420, 'SUM('accepted_offer_count) AS accepted_offer_count#7511421, 'COUNT(distinct CASE WHEN ('accepted_offer_count > 0) THEN 'referral_id END) AS successful_referral_count#7511422, 'COUNT(distinct CASE WHEN (('accepted_offer_count > 0) AND 'placed_by_required_date) THEN 'referral_id END) AS placed_by_target_count#7511423, 'AVG(cast('response_elapsed_minutes as double)) AS average_response_minutes#7511424, 'PERCENTILE_APPROX('response_elapsed_minutes, 0.5) AS median_response_minutes#7511425, ASSIGNMENT_COHORT_OFFER_OR_REASON_V1 AS kpi_rule_version#7511426, 6e8e7eb7-515f-4863-ad4e-15ee116aa187 AS job_run_id#7511427, current_timestamp() AS gold_modelled_at#7511428]
+   +- 'SubqueryAlias assignment_component
+      +- 'Project ['rp.provider_id, 'DATE_TRUNC(month, 'rp.assigned_at) AS assignment_month#7511431, 'scope.security_scope_key, 'rp.referral_provider_id, 'rp.referral_id, 'rp.has_qualifying_response, 'rp.response_elapsed_minutes, 'COALESCE('o.offers_submitted_count, 0) AS offers_submitted_count#7511432, 'COALESCE('o.accepted_offer_count, 0) AS accepted_offer_count#7511433, 'COALESCE('f.placed_by_required_date, false) AS placed_by_required_date#7511434]
+         +- 'Filter isnotnull('rp.assigned_at)
+            +- 'Join LeftOuter, ((('rp.referral_id = 'scope.referral_id) AND 'COALESCE('scope.is_active, false)) AND ((isnull('scope.valid_from) OR ('scope.valid_from <= 2026-09-21)) AND (isnull('scope.valid_to) OR ('scope.valid_to >= 2026-09-21))))
+               :- 'Join LeftOuter, ('rp.referral_id = 'f.referral_id)
+               :  :- 'Join LeftOuter, ('rp.referral_provider_id = 'o.referral_provider_id)
+               :  :  :- SubqueryAlias rp
+               :  :  :  +- SubqueryAlias spark_catalog.chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg.fact_referral_provider
+               :  :  :     +- Relation spark_catalog.chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg.fact_referral_provider[as_of_date#7511435,referral_provider_id#7511436,referral_id#7511437,provider_id#7511438,assigned_at#7511439,first_observed_date#7511440,first_offer_response_at#7511441,first_reason_response_at#7511442,first_qualifying_response_at#7511443,has_qualifying_response#7511444,response_elapsed_minutes#7511445L,response_evidence_scope#7511446,export_date#7511447,is_excluded#7511448,is_declined#7511449,is_cancelled#7511450,is_closed#7511451,is_engaged#7511452,provider_response_status#7511453,job_run_id#7511454,gold_modelled_at#7511455] parquet
+               :  :  +- 'SubqueryAlias o
+               :  :     +- 'SubqueryAlias offer_component
+               :  :        +- 'Aggregate ['referral_provider_id], ['referral_provider_id, count(distinct offer_id#7511457) AS offers_submitted_count#7511429L, count(distinct CASE WHEN lower(coalesce(offer_status#7511464, )) IN (accepted,approved,selected,offer_successful) THEN offer_id#7511457 END) AS accepted_offer_count#7511430L]
+               :  :           +- SubqueryAlias spark_catalog.chim ===
+
+			   
