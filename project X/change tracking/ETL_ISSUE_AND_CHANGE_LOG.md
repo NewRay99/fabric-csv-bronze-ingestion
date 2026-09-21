@@ -2121,7 +2121,7 @@ there should only be one dim_referral_provider_reject_reason for fact_referral_p
   with the new columns and sequence values.
 
 
-## GLD-016 error in Live pipeline 
+## GLD-016 error in Live pipeline
 error on 04_gold_model step:
 
 === FAILED 04_gold_model: An error occurred while calling o7082.throwExceptionIfHave.
@@ -2143,4 +2143,23 @@ error on 04_gold_model step:
                :  :        +- 'Aggregate ['referral_provider_id], ['referral_provider_id, count(distinct offer_id#7511457) AS offers_submitted_count#7511429L, count(distinct CASE WHEN lower(coalesce(offer_status#7511464, )) IN (accepted,approved,selected,offer_successful) THEN offer_id#7511457 END) AS accepted_offer_count#7511430L]
                :  :           +- SubqueryAlias spark_catalog.chim ===
 
-			   
+
+
+### Resolution (2026-09-21)
+
+- **Cause:** the provider KPI `offer_component` correctly grouped the Gold
+  offer fact by `referral_provider_id`, but the deployed `gold.fact_offer`
+  projection omitted that assignment key. Spark therefore failed query
+  analysis before `fact_provider_kpi_monthly` could be replaced.
+- **Fix:** `04_gold_model` now publishes `referral_provider_id` on
+  `gold.fact_offer`. The provider KPI continues to read the governed Gold fact
+  and joins to `gold.fact_referral_provider` at the exact assignment grain.
+  The fact's existing as-of cut-off keeps historical execution reproducible
+  and avoids a potentially lossy `provider_id` + `referral_id` fallback when a
+  provider is assigned to the same referral more than once.
+- **Validation:** `validate_gld016_provider_kpi_offer_keys.py` now verifies the
+  assignment key in the Gold offer projection, the source as-of cut-off, and
+  the downstream Gold-to-Gold group and join contract.
+- **Status:** resolved in repository source. Apply the revised
+  `04_gold_model.py` cell to the client notebook and rerun `04_gold_model`;
+  Fabric execution remains the deployment acceptance test.

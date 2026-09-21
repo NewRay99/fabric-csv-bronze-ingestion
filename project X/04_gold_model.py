@@ -535,7 +535,8 @@ LEFT JOIN (
 spark.sql(f"""
 CREATE OR REPLACE TABLE gold.fact_offer AS
 SELECT {AS_OF_SQL} AS as_of_date,
-  o.offer_id AS offer_id, rp.referral_id AS referral_id,o.referral_provider_id,
+  o.offer_id AS offer_id, rp.referral_id AS referral_id,
+  o.referral_provider_id AS referral_provider_id,
   rp.provider_id AS provider_id, o.provider_home_id AS home_id,
   CAST(o.offer_date AS TIMESTAMP) AS offer_submitted_date,
   CAST(o.last_modified_date AS TIMESTAMP) AS offer_reviewed_date,

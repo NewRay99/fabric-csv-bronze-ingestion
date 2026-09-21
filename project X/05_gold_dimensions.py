@@ -242,27 +242,27 @@ for closure_source, required_columns in {
 
 closure_reasons = spark.sql(f"""
 WITH closure_source AS (
-  SELECT CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS closure_reason_id,
-    referral_provider_id, 'cancel' AS closure_type, cancel_reason AS reason,
+  SELECT CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id,
+    referral_provider_id, 'cancel' AS reject_type, cancel_reason AS reason,
     cancel_reason_other_text AS reason_other, created_by,
     CAST(created_date AS TIMESTAMP) AS created_date,
     CAST(export_date AS TIMESTAMP) AS source_export_date
   FROM silver.referral_provider_cancel_reason
   UNION ALL
-  SELECT CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS closure_reason_id,
-    referral_provider_id, 'decline' AS closure_type, decline_reason AS reason,
+  SELECT CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS reject_reason_id,
+    referral_provider_id, 'decline' AS reject_type, decline_reason AS reason,
     decline_reason_other_text AS reason_other, created_by,
     CAST(created_date AS TIMESTAMP) AS created_date,
     CAST(export_date AS TIMESTAMP) AS source_export_date
   FROM silver.referral_provider_decline_reason
 ), current_closure_reason AS (
   SELECT *, ROW_NUMBER() OVER (
-    PARTITION BY closure_reason_id
+    PARTITION BY reject_reason_id
     ORDER BY source_export_date DESC NULLS LAST
   ) AS closure_reason_snapshot_rank
   FROM closure_source
 ), cleaned_closure_reason AS (
-  SELECT closure_reason_id, referral_provider_id, closure_type, reason, reason_other,
+  SELECT reject_reason_id, referral_provider_id, reject_type, reason, reason_other,
     created_by, created_date, source_export_date,
     CASE
       WHEN TRIM(COALESCE(reason_other, reason, '')) = ''

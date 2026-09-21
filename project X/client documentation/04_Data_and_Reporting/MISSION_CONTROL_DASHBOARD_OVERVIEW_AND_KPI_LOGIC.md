@@ -8,7 +8,11 @@ Use this document with [the Mission Control DAX build guide](MISSION_CONTROL_SEM
 
 ## What the client package supports now
 
-The inspected client-deliverable semantic model provides `cfg_pipeline_run`, archive control tables, month-end Gold run control, DQ results/rules, and archived schema capture. It does not currently include the job-step, schema-drift, referential-exception, rejected-row or data-domain tables shown as future sources in the wireframe.
+The aligned client-deliverable semantic model provides `cfg_pipeline_run`,
+archive control tables, month-end Gold run control, DQ results/rules, archived
+schema capture, `rpt_job_run_summary` and `rpt_job_step_timing`. Schema-drift,
+referential-exception, rejected-row and data-domain detail remain future
+imports.
 
 The package also has no measure-table file even though the report references `_Measures`. Its 18 referenced measures are referral KPIs, including `Total Referrals`, `Active Referrals Under Offer`, and `Open Referral Previous Month`. They are not valid Mission Control metrics. Rebind those report visuals to `_MissionControl_Measures` or replace the visuals before publishing.
 
@@ -16,6 +20,9 @@ The package also has no measure-table file even though the report references `_M
 
 ```mermaid
 flowchart LR
+    J[rpt_job_run_summary] --> M
+    J --> T[rpt_job_step_timing]
+    T --> M
     P[cfg_pipeline_run] --> M[_MissionControl_Measures]
     Z[cfg_archive_zip_load] --> M
     F[cfg_archive_file_load] --> M
@@ -27,7 +34,8 @@ flowchart LR
     M --> C[Mission Control report]
 ```
 
-`run_id` is the intended operational drillthrough key. Confirm that `cfg_pipeline_run` has one row per run before creating one-to-many relationships. If it does not, create a one-row-per-run dimension in Power Query.
+`job_run_id` is the orchestration and cross-visual key. `run_id` identifies a
+child notebook execution and remains useful for deeper pipeline drillthrough.
 
 ## Pages and visual contract
 
@@ -38,7 +46,7 @@ flowchart LR
 | Archive ETL | Available now | Archive ZIP/file/export, Gold snapshot control, pipeline run | Archive ZIP Batches, Archive File Failures, Archive Files Awaiting Reload, Archive Table Exports Awaiting Reload, Gold Snapshots Awaiting Replay | Export date, snapshot date, reload and status; never mix archive batch metrics with the Live page |
 | Data quality | Available now | DQ result and DQ rule | DQ Checks, DQ Failure Rate, DQ Failed Rows, Critical Rules Failing, RI Rules Failing | Rule ID, severity, rule type, table/column and run ID; sample-key detail only on authorised pages |
 | Archived schema inventory | Available now | `cfg_archived_schema_live` | Archived Schema Columns, Archived Schema Tables, Latest Archived Schema Capture, Archived Nullable Columns, Archived Schema Data Types | Schema, table, data type and capture date |
-| Job steps and errors | Deferred | Missing `vw_job_step_timing` or equivalent | No publishable measures yet | Import step sequence, duration, status, error text and preceding-step gap first |
+| Job steps and errors | Available now | `rpt_job_run_summary`, `rpt_job_step_timing` | Selected/latest job status and error, Job Steps, Failed Job Steps, step duration and latest-run visual filter | Pipeline/date filter; click `job_run_id` in the historical Gantt to filter the same-page step table |
 | Schema drift and contract | Deferred | Missing drift event/contract source | No publishable drift counts yet | Import event key, event status/type, detected/resolved timestamps and expected/actual types first |
 | Referential exceptions | Deferred | Missing referential-exception source | DQ-derived RI rule counts only | Import exception grain and relationship identifiers before showing orphan-record counts |
 | Data domains | Deferred | Missing `cfg_data_domain` source | No publishable profile measures yet | Import profile timestamp, source/column and controlled value keys first |
@@ -68,8 +76,14 @@ Use the `index.html` wireframe as the layout guide. Bind each card and chart to 
 - Archive ETL: ZIP/file/export status matrix with export date and reload slicers, plus Gold snapshot readiness by snapshot date.
 - Data quality: failed rules by severity and rule type, a failed-row trend by `checked_at`, and a secure detail table with rule ID, source table, column, message and sample-key availability.
 - Archived schema: schema/table/column matrix, data-type distribution and capture-recency card.
+- Job steps and errors: historical job Gantt plus an ordered same-page step
+  table. Apply `[Show Step for Selected or Latest Job Run] = 1`; clicking a
+  Gantt bar filters the table by `job_run_id`, while no selection shows the
+  latest job in the current pipeline/date filters.
 
-Hide or label as planned the wireframe pages for steps, drift, referential exceptions and domains until their supporting sources are imported. Do not use placeholder values in production cards.
+Hide or label as planned the wireframe pages for drift, referential exceptions
+and domains until their supporting sources are imported. Do not use
+placeholder values in production cards.
 
 ## Thresholds and alerting
 
@@ -88,9 +102,12 @@ Error messages and `sample_key_json` may contain operationally sensitive detail.
 
 ## Acceptance checks
 
-1. `_MissionControl_Measures` loads with all 67 measures and no unresolved table or column references.
+1. `_MissionControl_Measures` loads with all 87 measures and no unresolved table or column references.
 2. Status cards reconcile to table visuals after confirming the real status values.
-3. A selected `run_id` filters DQ, archive and Gold-control evidence through a validated relationship or a one-row-per-run bridge.
-4. Live page excludes archive batch metrics; archive page includes export/snapshot/reload controls.
-5. The report no longer uses the delivered referral KPI bindings.
-6. Deferred pages are hidden or explicitly labelled until their source tables are available.
+3. With no Gantt selection, the step table shows the latest job in the current
+   date/pipeline filters.
+4. Selecting a historical `job_run_id` filters the step table to every step in
+   that job and exposes job/step errors without truncating the source value.
+5. Live page excludes archive batch metrics; archive page includes export/snapshot/reload controls.
+6. The report no longer uses the delivered referral KPI bindings.
+7. Remaining deferred pages are hidden or explicitly labelled until their source tables are available.

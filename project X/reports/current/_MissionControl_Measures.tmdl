@@ -536,6 +536,210 @@ table _MissionControl_Measures
 			```
 		displayFolder: Control health
 
+
+	measure 'Job Runs' = ```
+
+			DISTINCTCOUNT ( 'rpt_job_run_summary'[job_run_id] )
+
+			```
+		formatString: 0
+		displayFolder: Job runs
+
+	measure 'Successful Job Runs' = ```
+
+			CALCULATE ( [Job Runs], FILTER ( 'rpt_job_run_summary', UPPER ( COALESCE ( 'rpt_job_run_summary'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Job runs
+
+	measure 'Failed Job Runs' = ```
+
+			CALCULATE ( [Job Runs], FILTER ( 'rpt_job_run_summary', UPPER ( COALESCE ( 'rpt_job_run_summary'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Job runs
+
+	measure 'Job Success Rate' = ```
+
+			DIVIDE ( [Successful Job Runs], [Successful Job Runs] + [Failed Job Runs] )
+
+			```
+		formatString: 0.00%
+		displayFolder: Job runs
+
+	measure 'Latest Job Run Started' = ```
+
+			MAXX ( FILTER ( ALLSELECTED ( 'rpt_job_run_summary' ), NOT ISBLANK ( 'rpt_job_run_summary'[started_at] ) ), 'rpt_job_run_summary'[started_at] )
+
+			```
+		formatString: General Date
+		displayFolder: Job selection
+
+	measure 'Latest Job Run ID' = ```
+
+			VAR latest_job =
+				TOPN (
+					1,
+					FILTER ( ALLSELECTED ( 'rpt_job_run_summary' ), NOT ISBLANK ( 'rpt_job_run_summary'[started_at] ) ),
+					'rpt_job_run_summary'[started_at], DESC,
+					'rpt_job_run_summary'[job_run_id], DESC
+				)
+			RETURN
+				MAXX ( latest_job, 'rpt_job_run_summary'[job_run_id] )
+
+			```
+		displayFolder: Job selection
+
+	measure 'Selected or Latest Job Run ID' = ```
+
+			COALESCE ( SELECTEDVALUE ( 'rpt_job_run_summary'[job_run_id] ), [Latest Job Run ID] )
+
+			```
+		displayFolder: Job selection
+
+	measure 'Selected or Latest Job Status' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			RETURN
+				CALCULATE (
+					SELECTEDVALUE ( 'rpt_job_run_summary'[status] ),
+					'rpt_job_run_summary'[job_run_id] = selected_job_run_id
+				)
+
+			```
+		displayFolder: Job selection
+
+	measure 'Selected or Latest Job Error' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			RETURN
+				CALCULATE (
+					SELECTEDVALUE ( 'rpt_job_run_summary'[error_message] ),
+					'rpt_job_run_summary'[job_run_id] = selected_job_run_id
+				)
+
+			```
+		displayFolder: Job selection
+
+	measure 'Selected or Latest Job Duration (min)' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			RETURN
+				CALCULATE (
+					DIVIDE ( MAX ( 'rpt_job_run_summary'[job_duration_seconds] ), 60.0 ),
+					'rpt_job_run_summary'[job_run_id] = selected_job_run_id
+				)
+
+			```
+		formatString: 0.0
+		displayFolder: Job selection
+
+	measure 'Job Steps' = ```
+
+			COUNTROWS ( 'rpt_job_step_timing' )
+
+			```
+		formatString: 0
+		displayFolder: Job steps
+
+	measure 'Successful Job Steps' = ```
+
+			CALCULATE ( [Job Steps], FILTER ( 'rpt_job_step_timing', UPPER ( COALESCE ( 'rpt_job_step_timing'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Job steps
+
+	measure 'Failed Job Steps' = ```
+
+			CALCULATE ( [Job Steps], FILTER ( 'rpt_job_step_timing', UPPER ( COALESCE ( 'rpt_job_step_timing'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+			```
+		formatString: 0
+		displayFolder: Job steps
+
+	measure 'Job Steps With Error' = ```
+
+			COUNTROWS ( FILTER ( 'rpt_job_step_timing', NOT ISBLANK ( 'rpt_job_step_timing'[error_message] ) && 'rpt_job_step_timing'[error_message] <> "" ) )
+
+			```
+		formatString: 0
+		displayFolder: Job steps
+
+	measure 'Selected or Latest Job Steps' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			RETURN
+				CALCULATE (
+					[Job Steps],
+					KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id )
+				)
+
+			```
+		formatString: 0
+		displayFolder: Job selection
+
+	measure 'Selected or Latest Failed Steps' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			RETURN
+				CALCULATE (
+					[Failed Job Steps],
+					KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id )
+				)
+
+			```
+		formatString: 0
+		displayFolder: Job selection
+
+	measure 'Total Job Step Duration (min)' = ```
+
+			DIVIDE ( SUM ( 'rpt_job_step_timing'[step_duration_seconds] ), 60.0 )
+
+			```
+		formatString: 0.0
+		displayFolder: Job steps
+
+	measure 'Longest Job Step Duration (min)' = ```
+
+			DIVIDE ( MAX ( 'rpt_job_step_timing'[step_duration_seconds] ), 60.0 )
+
+			```
+		formatString: 0.0
+		displayFolder: Job steps
+
+	measure 'Show Step for Selected or Latest Job Run' = ```
+
+			VAR selected_job_run_id = [Selected or Latest Job Run ID]
+			VAR matching_steps =
+				CALCULATE (
+					COUNTROWS ( 'rpt_job_step_timing' ),
+					KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id )
+				)
+			RETURN
+				IF ( NOT ISBLANK ( selected_job_run_id ) && matching_steps > 0, 1, 0 )
+
+			```
+		formatString: 0
+		displayFolder: Job selection
+
+	measure 'Selected Step Error Detail' = ```
+
+			CONCATENATEX (
+				FILTER (
+					VALUES ( 'rpt_job_step_timing'[error_message] ),
+					NOT ISBLANK ( 'rpt_job_step_timing'[error_message] )
+						&& 'rpt_job_step_timing'[error_message] <> ""
+				),
+				'rpt_job_step_timing'[error_message],
+				UNICHAR ( 10 ) & UNICHAR ( 10 )
+			)
+
+			```
+		displayFolder: Job selection
+
 	partition _MissionControl_Measures = m
 		mode: import
 		source =

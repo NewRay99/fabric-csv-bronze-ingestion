@@ -312,33 +312,33 @@ the control tables.
 
 | View | Purpose |
 |---|---|
-| `monitoring.vw_job_run_summary` | Whole-job status, elapsed time, Silver counts, DQ and active-drift totals |
-| `monitoring.vw_job_step_timing` | Ordered step status, duration and wait time since the preceding step |
-| `monitoring.vw_job_step_summary` | Per-step pipeline counts, Silver metrics, DQ outcomes and drift totals |
-| `monitoring.vw_job_schema_drift` | Job-linked drift events with the approved schema-definition join metadata |
-| `monitoring.vw_job_data_quality` | Rule outcomes, failed rows, rejected keys and referential exceptions |
-| `monitoring.vw_job_layer_lineage` | Bronze/Archive-to-Silver and Silver-to-Gold lineage/status rows |
+| `monitoring.rpt_job_run_summary` | Whole-job status, elapsed time, Silver counts, DQ and active-drift totals |
+| `monitoring.rpt_job_step_timing` | Ordered step status, duration and wait time since the preceding step |
+| `monitoring.rpt_job_step_summary` | Per-step pipeline counts, Silver metrics, DQ outcomes and drift totals |
+| `monitoring.rpt_job_schema_drift` | Job-linked drift events with the approved schema-definition join metadata |
+| `monitoring.rpt_job_data_quality` | Rule outcomes, failed rows, rejected keys and referential exceptions |
+| `monitoring.rpt_job_layer_lineage` | Bronze/Archive-to-Silver and Silver-to-Gold lineage/status rows |
 
 For a single execution, replace `<JOB_RUN_ID>` with the ID printed by the live
 runner:
 
 ```sql
-SELECT * FROM monitoring.vw_job_run_summary
+SELECT * FROM monitoring.rpt_job_run_summary
 WHERE job_run_id = '<JOB_RUN_ID>';
 
-SELECT * FROM monitoring.vw_job_step_summary
+SELECT * FROM monitoring.rpt_job_step_summary
 WHERE job_run_id = '<JOB_RUN_ID>'
 ORDER BY step_sequence;
 
-SELECT * FROM monitoring.vw_job_layer_lineage
+SELECT * FROM monitoring.rpt_job_layer_lineage
 WHERE job_run_id = '<JOB_RUN_ID>'
 ORDER BY lineage_stage, source_object, target_object;
 
-SELECT * FROM monitoring.vw_job_schema_drift
+SELECT * FROM monitoring.rpt_job_schema_drift
 WHERE job_run_id = '<JOB_RUN_ID>'
 ORDER BY status, source_table, column_name;
 
-SELECT * FROM monitoring.vw_job_data_quality
+SELECT * FROM monitoring.rpt_job_data_quality
 WHERE job_run_id = '<JOB_RUN_ID>'
 ORDER BY severity, status, source_table, rule_id;
 ```

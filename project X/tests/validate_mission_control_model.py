@@ -6,6 +6,7 @@ This checks the saved deployment contract, not Power BI's private load validator
 from pathlib import Path
 import re
 import textwrap
+from zipfile import ZipFile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,6 +20,12 @@ TABLE_NAME = "_MissionControl_Measures"
 REPORT_DEFINITION = (
     DEPLOYED_PROJECT / "SM WMPP Mission Control.Report/definition"
 )
+ALIGNED_ZIP = (
+    ROOT
+    / "reports/client-deliverables"
+    / "SM WMPP Mission Control - SEM-02 repaired - job drill aligned.zip"
+)
+ALIGNED_PREFIX = "SM WMPP Mission Control - SEM-02 repaired/"
 
 
 def comparable_tmdl(text):
@@ -110,7 +117,42 @@ def validate_no_automatic_date_metadata():
 
 def main():
     source_text, source_measures = validate_measures_table(SOURCE)
-    if DEFINITION.exists():
+    if ALIGNED_ZIP.exists():
+        with ZipFile(ALIGNED_ZIP) as archive:
+            names = archive.namelist()
+            deployed_text = archive.read(
+                ALIGNED_PREFIX
+                + "SM WMPP Mission Control.SemanticModel/definition/tables/"
+                + f"{TABLE_NAME}.tmdl"
+            ).decode("utf-8-sig")
+            model = archive.read(
+                ALIGNED_PREFIX
+                + "SM WMPP Mission Control.SemanticModel/definition/model.tmdl"
+            ).decode("utf-8-sig")
+            database = archive.read(
+                ALIGNED_PREFIX
+                + "SM WMPP Mission Control.SemanticModel/definition/database.tmdl"
+            ).decode("utf-8-sig")
+            model_text = "\n".join(
+                archive.read(name).decode("utf-8-sig")
+                for name in names
+                if name.endswith((".tmdl", ".json"))
+            )
+        deployed_measures = re.findall(
+            r"(?m)^\tmeasure '((?:[^']|'')+)' =", deployed_text
+        )
+        assert comparable_tmdl(source_text) == comparable_tmdl(deployed_text)
+        for forbidden in (
+            "LocalDateTable_", "DateTableTemplate_", "variation Variation",
+            "PropertyVariationSource", ".Variation.Date Hierarchy",
+        ):
+            assert forbidden not in model_text
+        assert not any("/.pbi/" in name for name in names)
+        assert model.splitlines().count(f"ref table {TABLE_NAME}") == 1
+        assert "compatibilityLevel: 1600" in database
+        assert "compatibilityLevel: 1606" not in database
+        print(f"PASS aligned ZIP registers all {len(deployed_measures)} measures")
+    elif DEFINITION.exists():
         validate_no_automatic_date_metadata()
         deployed_text, deployed_measures = validate_measures_table(
             DEFINITION / "tables" / f"{TABLE_NAME}.tmdl"

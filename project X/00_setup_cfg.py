@@ -508,7 +508,7 @@ SELECT s.*, p.rows_read AS pipeline_rows_read, p.rows_written AS pipeline_rows_w
   CASE WHEN s.notebook_name = '03_silver_business_rules' THEN dq.checks_failed END AS dq_checks_failed,
   CASE WHEN s.notebook_name = '03_silver_business_rules' THEN dq.failed_row_count END AS dq_failed_row_count,
   d.drift_event_count, d.active_drift_count
-FROM monitoring.vw_job_step_timing s
+FROM monitoring.rpt_job_step_timing s
 LEFT JOIN pipeline p ON p.job_run_id = s.job_run_id
   AND p.pipeline_name = regexp_replace(s.notebook_name, '\\.ipynb$', '')
 LEFT JOIN metric m ON m.job_run_id = s.job_run_id
@@ -602,7 +602,7 @@ INNER JOIN monitoring.cfg_gold_lineage_mapping m
 WHERE s.notebook_name IN ('04_gold_model', '05_gold_dimensions', '04_gold_model.ipynb', '05_gold_dimensions.ipynb')
 """)
 
-print("Monitoring reporting views created: job summary, steps, lineage, schema drift and data quality")
+print("Monitoring reporting objects created: materialised rpt_* tables")
 
 # METADATA ********************
 

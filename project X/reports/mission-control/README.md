@@ -23,7 +23,7 @@ job-based visual and drillthrough path respectively:
 The archive page additionally uses `export_date` and `snapshot_date` from the
 archive controls. Do not include those archive batch metrics on the live page.
 
-Use `monitoring.vw_job_run_summary` as the job-run hub, related one-to-many by
+Use `monitoring.rpt_job_run_summary` as the job-run hub, related one-to-many by
 `job_run_id` to job step, data-quality, schema-drift, table-load-metric and
 referential-exception facts. Use single-direction filtering from Job Run to
 child facts. Cast timestamp fields to dates in Power Query for page-level date

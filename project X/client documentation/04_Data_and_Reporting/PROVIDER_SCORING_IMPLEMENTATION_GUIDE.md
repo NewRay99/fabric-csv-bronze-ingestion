@@ -35,7 +35,10 @@ The response evidence scope is `OFFER_OR_RECORDED_REASON_V1`. Provider messages
 remain excluded because `created_by` is not yet classified as provider,
 officer or system. The monthly fact is an assignment-cohort view and carries
 `security_scope_key` so provider KPIs are not accidentally exposed outside the
-user's approved referral scope.
+user's approved referral scope. Its offer component reads the validated
+`gold.fact_offer[referral_provider_id]` assignment key. The Gold offer fact now
+publishes that key explicitly and applies the as-of cut-off before the monthly
+provider KPI is aggregated (GLD-016).
 
 ## Current implementation assessment
 
