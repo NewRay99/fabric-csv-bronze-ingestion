@@ -303,11 +303,11 @@ WITH closure_source AS (
     PARTITION BY referral_provider_id
     ORDER BY created_date DESC NULLS LAST,
       source_export_date DESC NULLS LAST,
-      reject_reason_id DESC
+      closure_reason_id DESC
   ) AS sequence_order
   FROM grouped_closure_reason
 )
-SELECT reject_reason_id, referral_provider_id, reject_type, reason, reason_other,
+SELECT closure_reason_id, referral_provider_id, closure_type, reason, reason_other,
   closure_reason_clean, closure_reason_grouped,
   closure_reason_grouped AS closed_referral_reason_bucket,
   sequence_order, created_by, created_date, source_export_date,
@@ -317,8 +317,8 @@ FROM ranked_closure_reason
 """)
 (closure_reasons.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true")
-    .saveAsTable("gold.dim_referral_provider_reject_reason"))
-print("gold.dim_referral_provider_reject_reason: "
+    .saveAsTable("gold.dim_referral_provider_closure_reason"))
+print("gold.dim_referral_provider_closure_reason: "
       f"{closure_reasons.count():,} rows from cancellation and decline reasons")
 
 require_columns("silver.referral", ["placement_type", "referral_status", "export_date"])
