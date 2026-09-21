@@ -535,7 +535,7 @@ LEFT JOIN (
 spark.sql(f"""
 CREATE OR REPLACE TABLE gold.fact_offer AS
 SELECT {AS_OF_SQL} AS as_of_date,
-  o.offer_id AS offer_id, rp.referral_id AS referral_id,
+  o.offer_id AS offer_id, rp.referral_id AS referral_id,o.referral_provider_id,
   rp.provider_id AS provider_id, o.provider_home_id AS home_id,
   CAST(o.offer_date AS TIMESTAMP) AS offer_submitted_date,
   CAST(o.last_modified_date AS TIMESTAMP) AS offer_reviewed_date,
@@ -761,7 +761,7 @@ FROM assignment_component
 GROUP BY provider_id, assignment_month, security_scope_key
 """)
 spark.sql("""
-CREATE OR REPLACE VIEW gold.vw_kpi_referral_board_summary AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW gold.rpt_kpi_referral_board_summary AS
 SELECT as_of_date, placement_urgency_band, required_placement_date_outcome,
   COUNT(DISTINCT referral_id) AS referral_count,
   SUM(CASE WHEN is_open THEN 1 ELSE 0 END) AS open_referral_count,
@@ -774,7 +774,7 @@ FROM gold.fact_referral
 GROUP BY as_of_date, placement_urgency_band, required_placement_date_outcome
 """)
 spark.sql("""
-CREATE OR REPLACE VIEW gold.vw_kpi_referral_monthly AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW gold.rpt_kpi_referral_monthly AS
 SELECT DATE_TRUNC('month', referral_created_date) AS referral_created_month,
   COUNT(DISTINCT referral_id) AS new_referral_count,
   SUM(CASE WHEN has_offer THEN 1 ELSE 0 END) AS referrals_with_offer_count,
@@ -785,7 +785,7 @@ FROM gold.fact_referral
 GROUP BY DATE_TRUNC('month', referral_created_date)
 """)
 spark.sql("""
-CREATE OR REPLACE VIEW gold.vw_provider_offer_performance AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW gold.rpt_provider_offer_performance AS
 SELECT rp.provider_id AS provider_id,
   COUNT(DISTINCT rp.referral_id) AS referrals_received,
   COUNT(DISTINCT o.offer_id) AS offers_submitted,
