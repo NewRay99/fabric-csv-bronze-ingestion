@@ -445,7 +445,7 @@ WHEN NOT MATCHED THEN INSERT *
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_step_timing AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_timing AS
 WITH ordered_steps AS (
   SELECT
     job_run_id, step_sequence, notebook_name, started_at, ended_at, status,
@@ -462,7 +462,7 @@ FROM ordered_steps
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_step_summary AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_summary AS
 WITH pipeline AS (
   SELECT job_run_id, pipeline_name, status, rows_read, rows_written,
          tables_succeeded, tables_failed, error_message
@@ -519,7 +519,7 @@ LEFT JOIN drift d ON d.job_run_id = s.job_run_id
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_run_summary AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_run_summary AS
 WITH metric AS (
   SELECT job_run_id, COUNT(DISTINCT target_object) AS silver_targets,
          SUM(rows_read) AS rows_read, SUM(rows_written) AS rows_written,
@@ -544,7 +544,7 @@ LEFT JOIN drift ON drift.job_run_id = j.job_run_id
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_schema_drift AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_schema_drift AS
 SELECT e.job_run_id, e.run_id, e.source_kind, e.source_table, e.target_table,
   e.drift_type, e.column_name, e.expected_type, e.actual_type,
   e.referenced_table, e.referenced_column, e.status, e.occurrence_count,
@@ -558,7 +558,7 @@ LEFT JOIN monitoring.cfg_schema_drift_definition d
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_data_quality AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_data_quality AS
 WITH rejected AS (
   SELECT job_run_id, run_id, rule_id, COUNT(*) AS rejected_key_count
   FROM monitoring.cfg_rejected_row WHERE job_run_id IS NOT NULL
@@ -580,7 +580,7 @@ WHERE r.job_run_id IS NOT NULL
 """)
 
 spark.sql("""
-CREATE OR REPLACE VIEW monitoring.vw_job_layer_lineage AS
+CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_layer_lineage AS
 SELECT a.job_run_id,
   CASE WHEN a.source_kind = 'LATEST' THEN 'BRONZE' ELSE 'ARCHIVE' END AS source_layer,
   a.source_table AS source_object, 'SILVER' AS target_layer, a.target_table AS target_object,
