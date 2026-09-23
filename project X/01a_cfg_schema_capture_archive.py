@@ -41,6 +41,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 NOTEBOOK_TIMEOUT_SECONDS = 1800
 
+
 # METADATA ********************
 
 # META {
@@ -73,6 +74,7 @@ if not IS_ORCHESTRATED_RUN:
 else:
     print("SKIP configuration setup: parent runner completed 00_setup_cfg")
 
+
 # METADATA ********************
 
 # META {
@@ -89,6 +91,8 @@ from pyspark.sql.types import StructType, StructField, StringType
 
 RUN_ID = str(uuid.uuid4())
 STARTED_AT = datetime.utcnow()
+
+
 
 # METADATA ********************
 
@@ -127,6 +131,10 @@ schema_df.withColumn("contract_loaded_at", F.current_timestamp()) \
         .write.format("delta").mode("append")\
             .saveAsTable("monitoring.cfg_archived_schema_live")
 
+
+
+
+
 # METADATA ********************
 
 # META {
@@ -155,36 +163,12 @@ schema_df.withColumn("contract_loaded_at", F.current_timestamp()) \
 # MAGIC WHERE c.column_name IS NULL
 # MAGIC    OR l.column_name IS NULL
 # MAGIC    OR c.data_type <> l.data_type;
+# MAGIC
+
 
 # METADATA ********************
 
 # META {
 # META   "language": "sparksql",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv")
-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/audit/jul26/2026-07-31.csv".
-display(df)
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-df = spark.read.format("csv").option("header","true").load("Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv")
-# df now is a Spark DataFrame containing CSV data from "Files/wmpp-production-data-export-birmingham/latest/provider_submission_docs.csv".
-display(df)
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }

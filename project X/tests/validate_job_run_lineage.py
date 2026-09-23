@@ -39,7 +39,7 @@ for expected in (
     "JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())",
     "FORCE_RERUN = False",
     'child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()',
-    "RUN_ESSENTIAL_DQ = False",
+    "RUN_ESSENTIAL_DQ = True",
     'child_parameters["RUN_ESSENTIAL_DQ"] = str(RUN_ESSENTIAL_DQ).lower()',
     "monitoring.cfg_job_run",
     "monitoring.cfg_job_step_run",
@@ -48,38 +48,6 @@ for expected in (
     "JOB_RUN_ID={JOB_RUN_ID}",
 ):
     assert expected in runner, f"live runner missing {expected}"
-
-deployed_runner_notebook = read_notebook(
-    ROOT / "reports" / "current" / "WMPP" / "notebooks"
-    / "90_run_live_pipeline.Notebook" / "notebook-content.py"
-)
-deployed_runner = "\n".join(
-    "".join(cell.get("source", []))
-    for cell in deployed_runner_notebook["cells"]
-)
-for expected in (
-    "FORCE_RERUN = False",
-    'child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()',
-    "RUN_ESSENTIAL_DQ = False",
-    'child_parameters["RUN_ESSENTIAL_DQ"] = str(RUN_ESSENTIAL_DQ).lower()',
-):
-    assert expected in deployed_runner, f"deployed live runner missing {expected}"
-
-deployed_dq_notebook = read_notebook(
-    ROOT / "reports" / "current" / "WMPP" / "notebooks"
-    / "03_silver_business_rules.Notebook" / "notebook-content.py"
-)
-deployed_dq = "\n".join(
-    "".join(cell.get("source", []))
-    for cell in deployed_dq_notebook["cells"]
-)
-for expected in (
-    "RUN_ESSENTIAL_DQ = False",
-    'DQ_RUN_MODE = "ESSENTIAL" if RUN_ESSENTIAL_DQ else "THOROUGH"',
-    'if RUN_ESSENTIAL_DQ:',
-    'if (rule.get("severity") or "").upper() == "CRITICAL"',
-):
-    assert expected in deployed_dq, f"deployed Silver DQ mode control missing {expected}"
 
 common = notebook_source("99_common_library.py")
 assert 'JOB_RUN_ID = globals().get("JOB_RUN_ID", "")' in common

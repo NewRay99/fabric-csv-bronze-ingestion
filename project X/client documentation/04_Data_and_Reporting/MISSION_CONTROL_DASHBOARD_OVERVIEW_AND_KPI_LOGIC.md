@@ -8,13 +8,17 @@ Use this document with [the Mission Control DAX build guide](MISSION_CONTROL_SEM
 
 ## What the client package supports now
 
-The aligned client-deliverable semantic model provides `cfg_pipeline_run`,
-archive control tables, month-end Gold run control, DQ results/rules, archived
-schema capture, `rpt_job_run_summary` and `rpt_job_step_timing`. Schema-drift,
-referential-exception, rejected-row and data-domain detail remain future
-imports.
+The repository candidate at `reports/current/SM WMPP Mission Control v16`
+provides `cfg_pipeline_run`, archive controls, month-end Gold run control, DQ
+results/rules, archived schema capture, `rpt_job_run_summary` and
+`rpt_job_step_timing`. It now includes `_MissionControl_Measures` with 87
+measures and a six-page monitoring-only PBIR report. The earlier referral KPI
+bindings have been removed from this candidate.
 
-The package also has no measure-table file even though the report references `_Measures`. Its 18 referenced measures are referral KPIs, including `Total Referrals`, `Active Referrals Under Offer`, and `Open Referral Previous Month`. They are not valid Mission Control metrics. Rebind those report visuals to `_MissionControl_Measures` or replace the visuals before publishing.
+Schema-drift event detail, referential-exception detail, rejected-row detail
+and data-domain profiling remain future imports. Current job-summary drift
+counts and DQ-derived RI metrics must not be presented as row-level event or
+orphan-record evidence.
 
 ## Operating model
 
@@ -41,15 +45,13 @@ child notebook execution and remains useful for deeper pipeline drillthrough.
 
 | Page | State | Sources | Required measures | Slicers and drillthrough |
 | --- | --- | --- | --- | --- |
-| Executive overview | Available now | Pipeline, archive, DQ, snapshot control | Pipeline Runs, Pipeline Success Rate, Failed Pipeline Runs, DQ Failed Checks, Reload Requests, Operational Exception Count | Pipeline name, status, run/date; drill to a run or failed control item |
-| Live ETL | Available now | `cfg_pipeline_run` | Live Pipeline Runs, Live Pipeline Failures, Average Pipeline Duration (min), Pipeline Tables Succeeded, Pipeline Rows Written | Fixed `pipeline_name = "90_run_live_pipeline"`; optional status and date |
-| Archive ETL | Available now | Archive ZIP/file/export, Gold snapshot control, pipeline run | Archive ZIP Batches, Archive File Failures, Archive Files Awaiting Reload, Archive Table Exports Awaiting Reload, Gold Snapshots Awaiting Replay | Export date, snapshot date, reload and status; never mix archive batch metrics with the Live page |
-| Data quality | Available now | DQ result and DQ rule | DQ Checks, DQ Failure Rate, DQ Failed Rows, Critical Rules Failing, RI Rules Failing | Rule ID, severity, rule type, table/column and run ID; sample-key detail only on authorised pages |
-| Archived schema inventory | Available now | `cfg_archived_schema_live` | Archived Schema Columns, Archived Schema Tables, Latest Archived Schema Capture, Archived Nullable Columns, Archived Schema Data Types | Schema, table, data type and capture date |
-| Job steps and errors | Available now | `rpt_job_run_summary`, `rpt_job_step_timing` | Selected/latest job status and error, Job Steps, Failed Job Steps, step duration and latest-run visual filter | Pipeline/date filter; click `job_run_id` in the historical Gantt to filter the same-page step table |
-| Schema drift and contract | Deferred | Missing drift event/contract source | No publishable drift counts yet | Import event key, event status/type, detected/resolved timestamps and expected/actual types first |
-| Referential exceptions | Deferred | Missing referential-exception source | DQ-derived RI rule counts only | Import exception grain and relationship identifiers before showing orphan-record counts |
-| Data domains | Deferred | Missing `cfg_data_domain` source | No publishable profile measures yet | Import profile timestamp, source/column and controlled value keys first |
+| Mission Control Overview | Implemented | Job summary and pipeline execution | Control health, job-run and all 21 pipeline-execution measures | Status distribution and recent job/exception table; use the timeline page for run-level drill |
+| Job Runs & Steps \| Last 14 Days | Implemented | `rpt_job_run_summary`, `rpt_job_step_timing` | Job selection and job-step measures | Locked refreshed 14-day window; pipeline/status/job slicers; job Gantt cross-filters step Gantt and table; right-click drillthrough by `job_run_id` |
+| Data Quality & Schema | Implemented | DQ result/rule and archived schema | All 16 DQ and five schema-inventory measures | Severity, outcome and rule-type slicers; sample-key detail is restricted to authorised audiences |
+| Archive & Replay | Implemented | Archive ZIP/file/export and Gold snapshot control | All 21 archive-control measures | ZIP, file-load and snapshot tables expose reload, attempt, status and error evidence |
+| Job Step Detail | Implemented, hidden | Job summary, step timing and pipeline execution | Selected job status, duration and step counts | Drillthrough filter on `rpt_job_run_summary[job_run_id]` |
+| Job Run Tooltip | Implemented, hidden | Selected/latest job measures | Job ID, status, duration and failed steps | Used by the timeline visual containers |
+| Schema drift, referential exceptions and data domains | Deferred | Missing event/exception/domain source grain | No source-complete detailed measures yet | Import governed source tables before creating dedicated pages |
 
 ## KPI logic
 
@@ -69,21 +71,24 @@ child notebook execution and remains useful for deeper pipeline drillthrough.
 
 ## Visual implementation
 
-Use the `index.html` wireframe as the layout guide. Bind each card and chart to the available-now measures only:
+The current PBIR is generated by
+`tools/rebuild_mission_control_dashboard_v16.py`. Every one of the 87 measures
+is referenced by at least one KPI card, while the supporting tables retain the
+row-level identifiers, times, outcomes, volumes and error evidence needed for
+triage.
 
-- Executive cards: Pipeline Success Rate, Failed Pipeline Runs, DQ Failed Checks, Reload Requests and Operational Exception Count.
-- Live ETL: pipeline status matrix by `pipeline_name`, duration trend, tables succeeded/failed, rows written and error-message drillthrough.
-- Archive ETL: ZIP/file/export status matrix with export date and reload slicers, plus Gold snapshot readiness by snapshot date.
-- Data quality: failed rules by severity and rule type, a failed-row trend by `checked_at`, and a secure detail table with rule ID, source table, column, message and sample-key availability.
-- Archived schema: schema/table/column matrix, data-type distribution and capture-recency card.
-- Job steps and errors: historical job Gantt plus an ordered same-page step
-  table. Apply `[Show Step for Selected or Latest Job Run] = 1`; clicking a
-  Gantt bar filters the table by `job_run_id`, while no selection shows the
-  latest job in the current pipeline/date filters.
+The job timeline uses two `Gantt1448688115699` visuals. The job Gantt binds
+start/end time, pipeline, status and `job_run_id`; the step Gantt binds start
+time, corrected duration-in-days, job ID, notebook and status. Explicit visual
+interactions make the job Gantt and job table selection sources for both step
+targets. The hidden drillthrough page provides the full job/step/pipeline
+record when a single job requires investigation.
 
-Hide or label as planned the wireframe pages for drift, referential exceptions
-and domains until their supporting sources are imported. Do not use
-placeholder values in production cards.
+The 14-day window is represented by
+`rpt_job_run_summary[job_run_window]`, calculated at semantic-model refresh,
+and a locked page filter on `Last 14 days`. Keep the refresh schedule current
+and do not reinterpret this as a rolling DirectQuery predicate between
+refreshes.
 
 ## Thresholds and alerting
 
@@ -104,10 +109,15 @@ Error messages and `sample_key_json` may contain operationally sensitive detail.
 
 1. `_MissionControl_Measures` loads with all 87 measures and no unresolved table or column references.
 2. Status cards reconcile to table visuals after confirming the real status values.
-3. With no Gantt selection, the step table shows the latest job in the current
-   date/pipeline filters.
-4. Selecting a historical `job_run_id` filters the step table to every step in
-   that job and exposes job/step errors without truncating the source value.
-5. Live page excludes archive batch metrics; archive page includes export/snapshot/reload controls.
-6. The report no longer uses the delivered referral KPI bindings.
-7. Remaining deferred pages are hidden or explicitly labelled until their source tables are available.
+3. The Job Runs & Steps page is locked to `job_run_window = "Last 14 days"`
+   after refresh.
+4. Selecting a `job_run_id` in the job Gantt or job table filters both the step
+   Gantt and ordered step-detail table to that job.
+5. Right-click drillthrough opens the hidden job page with its summary, every
+   notebook step and linked pipeline execution rows.
+6. Step Gantt duration is `step_duration_seconds / 86400.0` and is never
+   multiplied by zero.
+7. Every report field resolves to the local Mission Control model, all 87
+   measures are referenced, and no referral KPI binding remains.
+8. Live client refresh, tenant custom-visual approval, layout inspection and
+   sensitive-field authorization are confirmed before publish.

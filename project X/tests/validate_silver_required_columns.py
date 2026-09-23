@@ -12,9 +12,6 @@ NOTEBOOKS = [
     ROOT / "02a_archive_silver.py",
 ]
 COMMON_LIBRARY = ROOT / "99_common_library.py"
-DEPLOYED_NOTEBOOK = ROOT / "reports" / "current" / "WMPP" / "notebooks" / "02_silver_formatter.Notebook" / "notebook-content.py"
-DEPLOYED_ARCHIVE_NOTEBOOK = ROOT / "reports" / "current" / "WMPP" / "notebooks" / "02a_archive_silver.Notebook" / "notebook-content.py"
-DEPLOYED_COMMON_LIBRARY = ROOT / "reports" / "current" / "WMPP" / "notebooks" / "99_common_library.Notebook" / "notebook-content.py"
 REQUIRED_REFERRAL = {
     "referral_id",
     "placement_type",
@@ -65,6 +62,12 @@ def main():
             assert "should_skip(" in text and "not target_requires_refresh" in text, (
                 f"{notebook.name} can skip a successful load without checking the target schema"
             )
+            assert "ensure_export_date_contract(contracts[contract_key])" in text, (
+                "Active formatter can drop export_date from a stale control-table contract"
+            )
+            assert '"yyyy-MM-dd"' in text, (
+                "Active formatter cannot parse date-only Bronze export_date values"
+            )
         else:
             assert "stale_targets" in text and "not stale_targets" in text, (
                 f"{notebook.name} can skip a successful month without checking target schemas"
@@ -72,33 +75,15 @@ def main():
             assert "complete_framework_schema" in text, (
                 f"{notebook.name} can write an incomplete framework target from a stale contract"
             )
+            assert "parsed_archive_export_timestamp" in text, (
+                "Active archive formatter cannot select legacy export_date values"
+            )
         assert "schema_cols" in text and "format_frame" in text, (
             f"{notebook.name} does not project the contract columns through format_frame"
         )
         print(f"PASS {notebook.name} refreshes a stale Silver schema")
 
-    deployed_text = source(DEPLOYED_NOTEBOOK)
-    deployed_archive_text = source(DEPLOYED_ARCHIVE_NOTEBOOK)
-    deployed_common_text = source(DEPLOYED_COMMON_LIBRARY)
-    assert "def ensure_export_date_contract" in deployed_common_text, (
-        "Deployed WMPP common library lacks the SI-025 export_date contract guard"
-    )
-    assert 'spark.conf.set("spark.sql.parquet.datetimeRebaseModeInWrite", "CORRECTED")' in deployed_common_text, (
-        "Deployed WMPP common library lacks the Spark 3 Parquet ancient-datetime write policy"
-    )
-    assert "ensure_export_date_contract(contracts[contract_key])" in deployed_text, (
-        "Deployed WMPP formatter can drop export_date from a stale control-table contract"
-    )
-    assert '"yyyy-MM-dd"' in deployed_text, (
-        "Deployed WMPP formatter cannot parse date-only Bronze export_date values"
-    )
-    assert "ensure_export_date_contract(" in deployed_archive_text, (
-        "Deployed WMPP archive formatter can drop export_date from a stale control-table contract"
-    )
-    assert "parsed_archive_export_timestamp" in deployed_archive_text, (
-        "Deployed WMPP archive formatter cannot select legacy export_date values"
-    )
-    print("PASS deployed WMPP formatter retains and parses referral export_date")
+    print("PASS active formatters retain and parse referral export_date")
 
     print("VALIDATION PASSED")
 

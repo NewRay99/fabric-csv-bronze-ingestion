@@ -26,17 +26,14 @@
 # MARKDOWN ********************
 
 # # 02a — Canonical month-end archive replay
-#
-# Materialise one canonical Silver state per archive month, then run the DQ
+# # Materialise one canonical Silver state per archive month, then run the DQ
 # and Gold notebooks for that snapshot. Archive ZIP exports are treated as
 # complete table snapshots, so each table uses its latest available export
 # on or before the month's final available export date.
-#
-# This avoids loading every daily export. Primary-key duplicates inside the
+# # This avoids loading every daily export. Primary-key duplicates inside the
 # selected export are resolved with `row_number()`. Row-level `export_date`
 # is retained in `silver.<table>` and checked before Gold is invoked.
-#
-# When no archived `framework` snapshot exists on or before a canonical month,
+# # When no archived `framework` snapshot exists on or before a canonical month,
 # the replay reads the controlled framework fallback CSV, stamps that snapshot
 # date, and writes `silver.framework` with explicit fallback provenance.
 

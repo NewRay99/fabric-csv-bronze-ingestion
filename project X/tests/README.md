@@ -18,7 +18,10 @@ python -m pytest
 python "project X/tests/validate_table_naming_and_archive_runner.py"
 ```
 
-`test_validation_scripts.py` runs all `validate_*.py` scripts as subprocesses.
+`test_validation_scripts.py` runs an explicit allowlist of active Python/ETL
+validators as subprocesses. Obsolete semantic-model, DAX, report-project and
+associated helper tests have been removed from this folder, so neither pytest
+nor the test-folder Ruff pre-commit hook checks them. No ignore list is needed.
 `test_fabric_notebooks.py` covers the format boundary and every primary notebook.
 Tests do not require the supplied client snapshot; the comparison is generated
 separately with `python "project X/tools/fabric_notebooks.py" compare`.

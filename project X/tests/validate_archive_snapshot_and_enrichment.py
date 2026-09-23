@@ -41,7 +41,7 @@ gold = notebook_source(GOLD)
 dq = notebook_source(DQ)
 print("PASS Fabric notebook cells and Python syntax")
 
-assert "NOTEBOOK_TIMEOUT_SECONDS = 7200" in archive_runner
+assert "NOTEBOOK_TIMEOUT_SECONDS = 9200" in archive_runner
 # Fabric exports can omit spark_compute metadata. Guard the timeout supplied
 # to child execution instead of relying on an optional session metadata key.
 assert "setup_name, NOTEBOOK_TIMEOUT_SECONDS," in archive_runner
@@ -49,7 +49,7 @@ assert "notebook_name, NOTEBOOK_TIMEOUT_SECONDS," in archive_runner
 assert "NOTEBOOK_TIMEOUT_SECONDS = 7200" in archive_silver
 assert "DQ_NOTEBOOK_NAME, NOTEBOOK_TIMEOUT_SECONDS" in archive_silver
 assert "GOLD_NOTEBOOK_NAME,\n                NOTEBOOK_TIMEOUT_SECONDS" in archive_silver
-print("PASS ARCH-ETL-001 archive timeout is two hours through child execution")
+print("PASS ARCH-ETL-001 runner allows 9,200 seconds; nested DQ/Gold allow two hours")
 
 assert "month_last_dates" in archive_silver
 assert "canonical month-end export" in archive_silver

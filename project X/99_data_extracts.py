@@ -43,6 +43,8 @@ CONTRACT_TABLE = ["cfg_schema_drift_definition"
 ]
 OVERWRITE_FILES = True
 
+
+
 # METADATA ********************
 
 # META {
@@ -69,6 +71,7 @@ from uuid import uuid4
 RUN_ID = str(uuid4())
 PROFILED_AT = datetime.now(timezone.utc)
 
+
 # METADATA ********************
 
 # META {
@@ -89,6 +92,8 @@ for _table in CONTRACT_TABLE:
     pdf.to_csv(_CSV_PATH, index=False)
     print(f"table exported: {full_name} written to {_CSV_PATH}")
 
+
+
 # METADATA ********************
 
 # META {
@@ -97,6 +102,7 @@ for _table in CONTRACT_TABLE:
 # META }
 
 # CELL ********************
+
 
 import shutil
 from notebookutils import mssparkutils

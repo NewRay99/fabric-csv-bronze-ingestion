@@ -1,5 +1,78 @@
 # Mission Control semantic model DAX build guide
 
+## Supplied v16 package verification — 23 September 2026
+
+The extracted package at `reports/current/SM WMPP Mission Control v16` has
+been checked alongside the business-model/report reconciliation. Its report
+uses a repository-local `byPath` binding to
+`SM WMPP Mission Control.SemanticModel`; `_MissionControl_Measures` contains
+87 measures, and every semantic table has an explicit partition. The report
+JSON parses, its local semantic-model path resolves, and the existing Mission
+Control validators pass.
+
+### Dashboard rebuild — 23 September 2026
+
+The repository PBIR report has now been rebuilt as a monitoring-only Mission
+Control experience. The six-page report contains 137 visuals and exposes all
+87 measures from `_MissionControl_Measures` without retaining the referral-
+dashboard bindings that were copied into the original report.
+
+The report pages are:
+
+1. **Mission Control Overview** — control-health, job-run and pipeline KPI
+   cards, job-status distribution and recent job/exception detail.
+2. **Job Runs & Steps | Last 14 Days** — pipeline, status and job-run slicers;
+   a job-run Gantt; a second notebook-step Gantt; job and step detail tables;
+   and the job-selection/step measure groups.
+3. **Data Quality & Schema** — all DQ and schema-inventory measures with rule,
+   severity, outcome and archived-column evidence.
+4. **Archive & Replay** — all archive-control measures with ZIP, file-load and
+   month-end Gold snapshot details.
+5. Hidden **Job Step Detail (Drillthrough)** — complete job, notebook-step and
+   pipeline execution evidence for a selected `job_run_id`.
+6. Hidden **Job Run Tooltip** — selected job status, duration and failed-step
+   context for the timeline visuals.
+
+`rpt_job_run_summary[job_run_window]` classifies refreshed rows as `Last 14
+days` or `Older`. The timeline page has a locked page filter on `Last 14 days`.
+This is evaluated when the semantic model refreshes, so the client refresh
+schedule must remain current. Selecting a job-run Gantt bar or job-table row
+has explicit `DataFilter` interactions to both the step Gantt and the step
+detail table. `rpt_job_step_timing[steps_duration_days]` was corrected to
+`DIVIDE ( [step_duration_seconds], 86400.0 )`; the supplied expression
+multiplied the result by zero and therefore could not render step durations.
+
+The deterministic rebuild and acceptance checks are:
+
+- `tools/rebuild_mission_control_dashboard_v16.py`; and
+- `tools/validate_mission_control_dashboard_v16.py`.
+
+The acceptance check parses every PBIR JSON document, resolves every visual
+field against the semantic model, asserts the two Gantt bindings and their
+cross-filter interactions, checks the 14-day filter and drillthrough binding,
+and confirms all 87 measures are referenced by the report.
+
+This is static repository validation. Power BI Desktop is not installed on the
+review machine, and the client monitoring sources/credentials are not
+available here, so a live refresh and Desktop load cannot be claimed.
+
+### What's outstanding
+
+1. Run the current `00_setup_cfg` in Fabric so the materialized job-run and
+   job-step reporting objects exist and contain current client data.
+2. Open the supplied Mission Control PBIP in Power BI Desktop, set the client
+   Lakehouse connection, refresh and confirm the 87 measures load without a
+   model validation error.
+3. Exercise the latest-job fallback, historical job selection, job-Gantt-to-
+   step-Gantt/table interaction, drillthrough, complete error text and
+   authorized child-result detail against refreshed client data.
+4. Validate status vocabulary, refresh timestamps and sensitive operational
+   fields against the real monitoring tables.
+5. **Final task, only after the user has reviewed and checked in all completed
+   repository work:** repeat the open/refresh/publish check in the client
+   environment and resolve any client-only credential, gateway or semantic-
+   model binding error before release.
+
 ## Purpose
 
 This guide defines the operational measures and job-to-step interaction for the
@@ -128,7 +201,7 @@ The initial table addition omitted its partition. Power BI Desktop then reported
 
 Both measure-table copies now include an explicit Import Power Query partition returning an empty table: `#table ( type table [], {} )`. This supplies the measure container without loading business rows or introducing another external data source. Preserve that partition when editing or copying the measures. The triple-backtick DAX expression delimiters are valid and remain in place. Microsoft describes partitions as the table's data-source definition in its [tables documentation](https://learn.microsoft.com/en-us/analysis-services/tmsl/tables-object-tmsl).
 
-Validation includes the Microsoft TMDL deserializer and `python "project X/tests/validate_mission_control_model.py"`, which also runs through the existing pytest validator wrapper. These checks verify syntax and the saved table structure; they do not execute Power BI Desktop's private model-load validator or the DAX against live data. Reopen the saved `.pbip` in Desktop to confirm the reported load error is resolved. If it persists, retain the new error details for further diagnosis.
+The earlier validation used the Microsoft TMDL deserializer and a static Mission Control validator. The version-dependent semantic/report test scripts have since been removed from the repository suite per user direction. Those historical checks covered syntax and saved table structure, not Desktop model loading or live DAX results. When client acceptance is requested, reopen the current project's `.pbip` in Desktop to confirm the reported load error is resolved. If it persists, retain the new error details for further diagnosis.
 
 ## Copy-ready DAX
 
@@ -577,3 +650,19 @@ the basic latest-job and clicked-history workflow.
    `checked_at`, and `contract_loaded_at` in one relationship.
 8. Keep sample-key JSON, child results and full errors on authorised
    operational pages; do not surface sensitive evidence on executive pages.
+
+## Shared report theme — 2026-09-23
+
+The current Mission Control report now uses the same maintained theme as the
+WMPP dashboard: `project X/reports/templates/WMPP_Common_Theme.json`.
+Its KPI/card and container style variants are captured as shared presets; the
+job/step Gantt custom-visual settings, status colours, two-week filter,
+cross-filter interactions, measures and semantic-model connection are preserved.
+See `project X/reports/templates/README.md` for the five-report rollout and the
+offline sync command. This changes report styling, not model data or DAX.
+
+Outstanding: reopen in Power BI Desktop and visually check cards, tables,
+buttons and job/step Gantt colours after theme application. No live refresh or
+rendering verification is claimed. Keep client-environment reconnection and
+deployment as the final workstatement, after user check-in and acceptance of
+all other completed work.

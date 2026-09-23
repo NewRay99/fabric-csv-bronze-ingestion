@@ -1,0 +1,218 @@
+{
+  "source": "project X/reports/Notebooks v16.zip",
+  "source_sha256": "343182373526a4f5bf60c117eecbe5deac7f08775ddc664fe1a95e532bca536c",
+  "date": "2026-09-23",
+  "direction": "ZIP -> project X primary numbered Python notebook files",
+  "normalization": "UTF-8, LF line endings; terminal newline added where the ZIP omits it",
+  "notebooks": [
+    {
+      "file": "00a_rehydrate_archive_cfg.py",
+      "zip_entry": "Notebooks v16/00a_rehydrate_archive_cfg.Notebook/notebook-content.py",
+      "before_sha256": "0c43483c9bbf642b9af3edff6bdd07e010f0daf7bc0cfc9c789d9ce8c4de9e36",
+      "source_sha256": "4d31cb04129832c7ace35e3fc1384a6cbe85d3d041157e3ecda86d41c160e9ee",
+      "synced_lf_sha256": "8673231ccda70600f7e3ebd56569bfe10f1bf4a3c48bc4a1525a527be9dbd3cf",
+      "code_changed": false,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "00b_reset_silver_cfg.py",
+      "zip_entry": "Notebooks v16/00b_reset_silver_cfg.Notebook/notebook-content.py",
+      "before_sha256": "a34c87b50fe47c23eb563ca878d7b28d1d86aa93486f1f53f51f4b7a54908096",
+      "source_sha256": "64a8526fc75da6a435b7e3319f01b061d0092717a68b73a26e0b692e7f77ff04",
+      "synced_lf_sha256": "e8ac6287e6800378de51d07d5bcba6222bae4576c826f83ed5ed1e4f055ae54f",
+      "code_changed": false,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "00_archive_load.py",
+      "zip_entry": "Notebooks v16/00_archive_load.Notebook/notebook-content.py",
+      "before_sha256": "38d80e5f0280ce0dd19d99ce15886c3cd9e897e3e61d99fca427b2e407bd665f",
+      "source_sha256": "f6fc88eecefff7baf5df4bb6b6518183c876a9bc67c5af55cec394da7863d995",
+      "synced_lf_sha256": "1d2d48668680f7e8afd1fc4a9e569b1b8bfb533dccdb65dc00ef863a98b5ceb4",
+      "code_changed": false,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "00_setup_cfg.py",
+      "zip_entry": "Notebooks v16/00_setup_cfg.Notebook/notebook-content.py",
+      "before_sha256": "a96cb1e94b2ef7f4a451008603a8c8a75a8354af0175ef444cc6c7a9cde3ee0b",
+      "source_sha256": "8aa026efbcd7bb644d370584868cfcffbaa896d4487e6ac5921a36e65d26ebd0",
+      "synced_lf_sha256": "aeaf127d6de2e94b386e1bfdb090bf685cc17091a4027a4e816f5f2be41886f9",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": [
+        "Retain materialised rpt_job_step_timing dependency and matching status message; ZIP refers to retired vw_job_step_timing."
+      ]
+    },
+    {
+      "file": "01a_cfg_schema_capture_archive.py",
+      "zip_entry": "Notebooks v16/01a_cfg_schema_capture_archive.Notebook/notebook-content.py",
+      "before_sha256": "cb7e47e451aa839070c2abb14d5bf3f1d97713bcbe0b8d7700baa4f058738ea6",
+      "source_sha256": "a463347163716b05600672f996c4780a97d8ae3da2da248dd993c26b2967b5f9",
+      "synced_lf_sha256": "92fd885f641c16b5dd17676f4d96dc30bf6de74dcde63fe2dbaddcfe8f408477",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": true,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "01a_cfg_schema_capture_live.py",
+      "zip_entry": "Notebooks v16/01a_cfg_schema_capture_live.Notebook/notebook-content.py",
+      "before_sha256": "108d8938dd478589bdf44a4cb9ce058a5d85e78ee105bdf7d15669ed2848f066",
+      "source_sha256": "66bb9391a0a4f357bdd1f04f13b0cdaacadf40ac7095ce5e42ebd8bc27b46913",
+      "synced_lf_sha256": "41292a4351b9304617d179848bffe99a53aff6fbf45d10940a81ce94a65660b5",
+      "code_changed": false,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "01_bronze_get_latest.py",
+      "zip_entry": "Notebooks v16/01_bronze_get_latest.Notebook/notebook-content.py",
+      "before_sha256": "12afe4c3e34ad84a49f2f20d10c9e198747285075fb49ace76631633dca9401e",
+      "source_sha256": "cb5ec02c35934a38efdb3d04a831b0e0f2129b153b46af9d614a219c2d537bee",
+      "synced_lf_sha256": "fa38d1abee08920a1b6f1e5b5a8b0073a1f47fe782e1e0717a20f3f9c3d2f9b4",
+      "code_changed": true,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "02a_archive_silver.py",
+      "zip_entry": "Notebooks v16/02a_archive_silver.Notebook/notebook-content.py",
+      "before_sha256": "fd727fbc58648b53795afc39f57de06f23dff4b62865ed7d4d3a743a21231f90",
+      "source_sha256": "ccad96b9353f8d65926a276df3bf1c2f8c7fc1ed25a3082a87849886712079a3",
+      "synced_lf_sha256": "c5c652b72e22187d21a9122985ae207afebca1ba1e70a37f91f6d160dea6adfa",
+      "code_changed": false,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "02_silver_formatter.py",
+      "zip_entry": "Notebooks v16/02_silver_formatter.Notebook/notebook-content.py",
+      "before_sha256": "8232115111e54200348fd6bb1a764478bba9d7766ad58726cbeb7f2b73c483a0",
+      "source_sha256": "1cc58fa695939ac209d40efa447c9ca6493eb0eff9bac2afb4338959a9eb7f11",
+      "synced_lf_sha256": "749c8c4f24d5d5f7a34623321249fe3d2d03b52f174e5ab8b8fd09e37483519b",
+      "code_changed": false,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "03_silver_business_rules.py",
+      "zip_entry": "Notebooks v16/03_silver_business_rules.Notebook/notebook-content.py",
+      "before_sha256": "78fa384899d09dab2f5c565bd9edc6dc7fd17b3be7f13a36636457f0ad1330e7",
+      "source_sha256": "af9657ee36fd4909342ea28ef397b3665c3fbfb69191304d1b2c897ce79a8f46",
+      "synced_lf_sha256": "29267eb2e66e4d9c5dd556dedf1a9957ae800b991362636305640662e020f69a",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "04_gold_model.py",
+      "zip_entry": "Notebooks v16/04_gold_model.Notebook/notebook-content.py",
+      "before_sha256": "096b0f96e2a23f81e92dbd1c65f03c6a51b069f17d5e77a61737448af90319c7",
+      "source_sha256": "cf012425479640b452f9b4bd60451f182a01757fb659b7c0cfc93cf58774293c",
+      "synced_lf_sha256": "87fddea083d78759d12ad62340d6a8d4d47e8ed58fc096d323ba0859424d406f",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "05_gold_dimensions.py",
+      "zip_entry": "Notebooks v16/05_gold_dimensions.Notebook/notebook-content.py",
+      "before_sha256": "e66d938875c7ae698c4fc55c218aaed13ad7f69723f85afc65ea32fbeb6a4ad2",
+      "source_sha256": "877879fb775cd42585d4c439569edde13999271e1d8a64f095f54ad04be11f3d",
+      "synced_lf_sha256": "358895eb9c1a4ad64da3fa364c06e2218033ce47bfcd3e049c91e9ed816fc36c",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "90_run_archive_pipeline.py",
+      "zip_entry": "Notebooks v16/90_run_archive_pipeline.Notebook/notebook-content.py",
+      "before_sha256": "31653c14c5e01c80c63eba18b08766da1c3a9d373d1fc3f2220b095a74cc2b20",
+      "source_sha256": "43432f454a520e08d5c1fb5357a323fca45a929123410963faf3368fea42b9c6",
+      "synced_lf_sha256": "ca36bd18f9ffd686b709618400f7c88f7aac942f0cf85b619a382e96d1f06730",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": [
+        "Retain safe no-month/no-reset defaults; do not pre-authorise the ZIP July 2026 reset.",
+        "Correct timeout comment to match imported 9,200-second value."
+      ]
+    },
+    {
+      "file": "90_run_live_pipeline.py",
+      "zip_entry": "Notebooks v16/90_run_live_pipeline.Notebook/notebook-content.py",
+      "before_sha256": "f1ec2cb9aa3c3be1a5c8c43fe2a86ff88edd9fc58dfd05c3c2deb5e1e0161147",
+      "source_sha256": "5818183048c6571596228954030053f2c1eff386a37401d4add5c53a76a02c6c",
+      "synced_lf_sha256": "21829eeb1564ed239f70dfdbcfbf805220286e95640ac332c86920d7c97d07de",
+      "code_changed": true,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "99_common_library.py",
+      "zip_entry": "Notebooks v16/99_common_library.Notebook/notebook-content.py",
+      "before_sha256": "5d4e0b904917a299684cd24c6a88a1d1ed67d8f5c8f090215088d2551d8dcbc2",
+      "source_sha256": "6ea7b8c7031b1dc765f318553adf3c1d6272f3e5000e41a4e3b6299fcb14b71a",
+      "synced_lf_sha256": "bba367339fad021f3df0812df5ca060cf3416fce852a12d1badc339fd17186eb",
+      "code_changed": false,
+      "markdown_changed": true,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "99_data_domain.py",
+      "zip_entry": "Notebooks v16/99_data_domain.Notebook/notebook-content.py",
+      "before_sha256": "b87dfa107cca227ccdb340eae49cacf0cfa4e97fbac3180a018beed415f9f2d8",
+      "source_sha256": "ed13c7d3503866223e4be1523200b95e408a7f4064f5cf07f04db8455d498984",
+      "synced_lf_sha256": "a5813542976d5c0aec08cf3bf3ad5f64380c5ee83cfd4190eabcd5162678e260",
+      "code_changed": false,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    },
+    {
+      "file": "99_data_extracts.py",
+      "zip_entry": "Notebooks v16/99_data_extracts.Notebook/notebook-content.py",
+      "before_sha256": "d3e40b6352a6a106fbec6d6d1b8d98da9d95cc0ed801ccc5fd00dfddb5e0df5a",
+      "source_sha256": "a567855147b6c433ddc8a76b3bae093b90b7de3115645a562dff0762341aeccc",
+      "synced_lf_sha256": "9ce2f6ba85ae43181e1188e157098c4a9cf515fc3b9cc02bc4f353b66b90bf72",
+      "code_changed": true,
+      "markdown_changed": false,
+      "cell_contract_changed": false,
+      "metadata_changed": false,
+      "exceptions": []
+    }
+  ]
+}

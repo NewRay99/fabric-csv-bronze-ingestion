@@ -10,6 +10,66 @@ python validate_archive_load.py
 
 Fabric runtime behaviour must also be confirmed in a development Lakehouse.
 
+## 2026-09-23 — Removed obsolete Power BI test files from lint scope
+
+- Pytest-only exclusions left semantic/report test files under Ruff's independent
+  `tests/(validate_.*|test_.*).py` pre-commit filter. Reproduced the reported two
+  E402 errors in `validate_wmpp_end_goal_design.py` with Ruff before changing it.
+- Deleted 11 obsolete semantic-model/DAX/report validators, two related helper
+  test modules and the now-unneeded pytest exclusion `conftest.py`. Their
+  previous contents remain recoverable from Git history/index. No active
+  Python/ETL validators or report implementation tools were removed.
+- This supersedes the earlier decision to retain those test files for manual
+  use. No lint suppressions or broader lint exclusions were introduced.
+- Verified: Ruff 0.16.6 passes all remaining files matched by the pre-commit
+  test-folder filter; **73 pytest tests pass**. The hook is pinned to 0.16.3;
+  the available local binary was used without changing that pin. Existing
+  staged content was left untouched; stage the deletions before committing.
+
+## 2026-09-23 — Removed obsolete snapshot dependencies from Python validators
+
+- Reproduced all four remaining failures: each read an older client notebook
+  snapshot instead of relying only on the maintained numbered Python sources.
+- Removed duplicate snapshot assertions from GLD-015, Gold schema, job lineage
+  and Silver-column validators. Retargeted unique provider-spot and export-date
+  checks to active notebooks; all four validators remain in routine pytest.
+- Fixed a brittle Gold snapshot assertion: it now checks AST select arguments
+  for required columns without requiring an obsolete adjacent column order.
+- Added four regression cases that run validators in an isolated active-source
+  tree without any report/snapshot folder, then prove missing primary inputs
+  still fail. New cases failed before the correction and pass afterwards.
+- Full Python-only pytest: **73 passed, 0 failed**. No semantic/report tests ran;
+  no production notebook or historical snapshot was changed in this follow-up.
+
+## 2026-09-23 — Routine pytest excludes client Power BI projects
+
+- Per user direction, semantic-model, DAX/measure coverage and report-project
+  checks are no longer part of routine pytest. Client project names and versions
+  are not stable repository test contracts.
+- Python validators use an explicit allowlist; model/DAX helper unit tests are
+  excluded from directory collection. Existing Power BI scripts remain available
+  only for separately requested reviews. No model/report files were changed.
+- Verified collection contains 69 Python/notebook tests and no Power BI tests.
+  Result: **65 passed, 4 failed**. The four failures are unchanged comparisons
+  against the older WMPP Python notebook snapshot, not semantic/report checks.
+
+## 2026-09-23 — Primary Python notebooks reconciled with Notebooks v16.zip
+
+- Compared all 17 ZIP notebook sources with the active numbered Python files.
+  Fifteen match after newline normalisation; two retain documented exceptions.
+- Imported the completed Gold closure-column rename, qualified IPA referral
+  grouping, removal of ad-hoc CSV preview cells, and ZIP runner timeout/DQ
+  settings (archive 9,200 seconds; live 7,800 seconds; essential DQ enabled).
+- Retained the valid `monitoring.rpt_job_step_timing` dependency rather than
+  reintroducing the ZIP's retired `vw_*` reference. Retained opt-in archive
+  reset defaults instead of the ZIP's preconfirmed July 2026 reset.
+- Added six regression tests, including synthetic-data execution of the closure
+  query. Focused source/syntax/regression tests: **30 passed**. Full pytest:
+  **79 passed, 9 failed**, versus **73 passed, 9 failed** before the sync.
+  Remaining failures concern the older WMPP snapshot and absent Power BI assets;
+  no test was skipped or removed. No Fabric runtime execution or deployment.
+- [Comparison, hashes, exceptions and outstanding failures](../reports/notebook-v16-sync/README.md).
+
 ## SEM-002 — Reconciled v16 snapshots, provider KPI evidence and dynamic RLS
 
 **20 September 2026 — implemented in repository; Fabric refresh, Desktop

@@ -10,6 +10,12 @@ The Python files preserve Fabric cell/parameter markers, Markdown, language
 metadata, `%run` commands, and dependency bindings. They are notebook source
 files, not standalone scripts to execute with `python`.
 
+On 23 September 2026 the 17 active notebooks were reconciled against
+`reports/Notebooks v16.zip`. See the [v16 sync record](reports/notebook-v16-sync/README.md)
+for imported changes, the two intentional safety/correctness exceptions and
+the original sync's pytest results. The routine test scope was subsequently
+restricted to Python/notebook checks as described below.
+
 For Git integration, the content of `<name>.py` belongs in
 `<name>.Notebook/notebook-content.py` alongside the destination item's existing
 `.platform` and optional resources/settings. The supplied client snapshot is
@@ -25,6 +31,19 @@ comparison from the repository root:
 python "project X/tools/fabric_notebooks.py" compare
 python -m pytest
 ```
+
+Routine pytest runs cover Python notebooks, ETL/configuration contracts and
+pipeline logic. They do **not** validate semantic models, DAX guide/model
+coverage, report layouts, themes, PBIP projects or client project versions.
+Client Power BI projects can be added, removed or renamed without being a test
+requirement. Obsolete Power BI test/validator files and their helper tests have
+been removed from `tests`, not merely excluded from pytest; this also removes
+them from test-folder Ruff checks. Python validators are
+explicitly listed in `tests/test_validation_scripts.py`, rather than auto-added
+from every `validate_*.py` file. They validate the active numbered notebooks,
+not historical client notebook snapshots. Regression tests verify the affected
+validators work with no `reports` directory and still reject missing active inputs.
+Latest Python-only run (23 September 2026): **73 passed, 0 failed**.
 
 `tools/fabric_notebooks.py convert <path.ipynb>` supports migration of an additional
 notebook and refuses to overwrite an existing primary `.py` file. Do not regenerate

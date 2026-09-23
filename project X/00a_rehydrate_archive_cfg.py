@@ -32,6 +32,7 @@
 # `_archive_source_path`. File-path lineage is used only for exact per-file
 # replacement and is not a prerequisite for Silver or Gold replay.
 
+
 # PARAMETERS CELL ********************
 
 CFG_NOTEBOOK_NAME = "00_setup_cfg"
@@ -45,6 +46,7 @@ INCLUDE_ZIP_SCAN = True
 AUDIT_TABLE = "monitoring.cfg_silver_export_load"
 TIME_PARSER_POLICY = "CORRECTED"
 NOTEBOOK_TIMEOUT_SECONDS = 1800
+
 
 # METADATA ********************
 
@@ -90,6 +92,8 @@ def merge_frame(target_name, source, condition):
 def qident(value):
     return "`" + str(value).replace("`", "``") + "`"
 
+
+
 # METADATA ********************
 
 # META {
@@ -107,6 +111,7 @@ cfg_result = mssparkutils.notebook.run(
     {"AUDIT_TABLE": AUDIT_TABLE, "TIME_PARSER_POLICY": TIME_PARSER_POLICY},
 )
 print(f"Configuration setup completed: {cfg_result}")
+
 
 # METADATA ********************
 
@@ -152,6 +157,7 @@ if INCLUDE_LEGACY_CONTROL and spark.catalog.tableExists(f"{ARCHIVE_SCHEMA}.cfg_l
     )
 
 print(f"Legacy control rows rehydrated: {rehydrated_legacy:,}")
+
 
 # METADATA ********************
 
@@ -248,6 +254,7 @@ if INCLUDE_LINEAGE_TABLE_SCAN:
 print(f"Table/export audit rows rehydrated: {rehydrated_table_exports:,}")
 print(f"File-lineage audit rows rehydrated: {rehydrated_file_lineage:,}")
 
+
 # METADATA ********************
 
 # META {
@@ -293,6 +300,7 @@ if INCLUDE_ZIP_SCAN:
 
 print(f"ZIP rows rehydrated: {rehydrated_zips:,}")
 
+
 # METADATA ********************
 
 # META {
@@ -327,6 +335,7 @@ if tables_missing_export_date:
         "Only the tables listed as missing export_date require correction or "
         "re-ingestion before historical replay."
     )
+
 
 # METADATA ********************
 

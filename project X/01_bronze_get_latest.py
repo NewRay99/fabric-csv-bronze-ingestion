@@ -28,6 +28,7 @@
 # 3. This will overwrite the data in the bronze layer
 # 4. When the notebook run is completed, return to your lakehouse and refresh your lake views graph.
 
+
 # CELL ********************
 
 # ── Parameters ─────────────────────────────────────────────────
@@ -85,6 +86,7 @@ if not IS_ORCHESTRATED_RUN:
     print(f"Configuration setup completed: {cfg_result}")
 else:
     print("SKIP configuration setup: parent runner completed 00_setup_cfg")
+
 
 # METADATA ********************
 
@@ -175,6 +177,7 @@ except Exception as e:
 print(f"Successfully processed {table_count} tables")
 print("All tables processed successfully!")
 
+
 # METADATA ********************
 
 # META {
@@ -223,7 +226,6 @@ except Exception as e:
 # META }
 
 # CELL ********************
-
 
 
 # METADATA ********************

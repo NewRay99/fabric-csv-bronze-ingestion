@@ -1,5 +1,77 @@
 # Gold semantic model DAX build guide
 
+## End-goal KPI pages and snapshot window — 23 September 2026
+
+The report under `reports/current/RPT WMPP v16` now includes **Board Dashboard**,
+**Provider & Placement Supply**, **Target & Urgency Performance** and
+**Referral Snapshots**, alongside its existing pages. The snapshot graph and
+detail table have a single-select **Last 6 months / Last 12 months** control
+(default 12), ending at the displayed latest available snapshot month.
+
+The local model adds six disconnected axis/control tables and 18 supporting
+measures in `_Design Measures`; existing canonical measures are preserved.
+See [end-goal implementation and KPI mapping](WMPP_END_GOAL_DESIGN_IMPLEMENTATION.md)
+for exact definitions and verification results.
+
+**What's outstanding:** Desktop refresh/rendering and live KPI reconciliation;
+governed region, escalation, review and shortlist evidence for labelled gaps;
+business agreement on cohort and prior-month comparison semantics; and, as
+the final task after user review/check-in, deployment of the new model fields
+to the client semantic model followed by client-bound report validation.
+Use `definition-local.pbir` for repository review in the meantime.
+
+## Repository v16 report and model completion — 23 September 2026
+
+The supplied v16 bundle, original 117-row KPI workbook, Word KPI/visual guide,
+target dashboard images and repository client documentation have now been
+reconciled. The implementation candidate is
+`reports/current/SM WMPP v16 updated`; the styled report is
+`reports/current/RPT WMPP v16/WMPP_DASHBOARD_v16.Report`.
+
+Completed repository work:
+
+- 49 legacy measure aliases with a canonical replacement and two empty
+  placeholder measures were removed, reducing `_Measures` from 309 to 258;
+- all report/DAX references were rebound before measure removal;
+- `KPI Selector` was de-duplicated to 74 canonical entries and an eight-entry
+  `Dashboard Metric Selector` field parameter was added;
+- the styled report now has Provider Single View, Referral Single View and a
+  referral-ID drillthrough detail page covering offers, provider responses and
+  IPA detail;
+- provider and referral searches use fields actually present in Gold; person
+  search is `initials | person_id` because full child/person name is absent;
+- the client live connection remains in `definition.pbir`, with a separate
+  `definition-local.pbir` for the reconciled repository model; and
+- static validation passes for JSON, model/report fields, measures, page
+  bindings, Gold reconciliation, RLS structure and the Mission Control model.
+
+The source KPI disposition is 101 implemented/covered, four explicitly
+labelled proxies and 12 blocked by missing governed source evidence. See
+[WMPP v16 KPI and report reconciliation](WMPP_V16_KPI_AND_REPORT_RECONCILIATION.md)
+for the exact KPI groups, report changes and validation boundary.
+
+### What's outstanding
+
+1. Refresh the current Gold build in Fabric and validate representative DAX
+   results, relationship cardinality and the dynamic RLS matrix with real data.
+2. Obtain business approval for the four proxy KPIs (KPI-107, KPI-110,
+   KPI-113 and KPI-117), or replace them when source-perfect facts exist.
+3. Supply governed source fields/history for KPI-95, KPI-96, KPI-98,
+   KPI-102, KPI-103, KPI-105, KPI-106, KPI-108, KPI-109, KPI-111, KPI-112 and
+   KPI-115 before implementing them.
+4. Decide whether `initials | person_id` is sufficient for person search. A
+   full-name field must be deliberately promoted to Gold and protected by the
+   approved governance/RLS design; it must not be inferred or copied from an
+   unapproved layer.
+5. Open `definition-local.pbir` in Power BI Desktop, refresh, test the dynamic
+   metric selectors, provider/referral searches and referral drillthrough, and
+   complete layout/accessibility review.
+6. **Final task, only after the user has reviewed and checked in the completed
+   repository work:** open the preserved client-bound `definition.pbir` in the
+   client environment, repair its workspace credential/binding if necessary,
+   complete a full refresh and confirm the report and semantic model open
+   without errors before publishing.
+
 ## Client-site v16 reconciliation — 20 September 2026
 
 `reports/current/MWPP Repo 20092026.zip` is the current client-site baseline
@@ -1378,3 +1450,63 @@ The legacy Female / Male / Other / Total Gendered Referrals measures are no
 longer blocked: `dim_person[gender_clean]` and `fact_referral[person_id]`
 (GLD-006/GLD-007) support them. Use the copy-ready definitions in the
 "Gender referral measures (KPI-04–07)" section.
+
+## Shared report theme — 2026-09-23
+
+Implemented a common Power BI report theme at
+`project X/reports/templates/WMPP_Common_Theme.json`, with maintenance instructions
+in that folder's `README.md`. The dashboard colours, typography and supported
+visual styling are consolidated into 97 reusable presets and applied to all five
+current report projects, including the reports paired with the WMPP semantic
+models and Mission Control. This is report formatting only: DAX, models,
+connections, filters, referral/provider drill-through and the 6/12-month snapshot
+window remain unchanged. Source ZIPs and client-deliverables were not modified.
+
+Outstanding: Power BI Desktop visual acceptance of the common theme/presets,
+especially table/matrix styling, button states and text contrast. Static checks
+do not establish rendered appearance or live-data access. Client-environment
+connection and deployment remain the final workstatement, after user check-in
+and acceptance of the other completed work.
+
+The theme QA also identified one pre-existing PBIR schema exception on the
+`Requirements Complete` card (`0aef383ced90ab2d5c70`, page
+`b95eb4c0b53cd8c60710`) in RPT WMPP v16. It also fails in the original ZIP and
+with the pre-theme formatting restored in memory. Investigate/re-save it in
+Desktop; no field, filter or data-connection change was made by this theme task.
+
+## Local project consolidation — 2026-09-23
+
+Use `project X/reports/current/SM WMPP v16 updated/SM_WMPP_v16.pbip` as the
+latest local WMPP project. Its 45-table semantic model is newer than the
+retired nested `SM WMPP v16` model (37 tables). All 16 dashboard pages / 255
+visuals, bookmarks and resources have been copied from RPT WMPP v16 into the
+active model's attached report. The local `byPath` connection, report identity
+and all 53 model files are preserved. Static field, snapshot and drill-through
+checks pass; the theme manifest now targets four active reports.
+
+The older `project X/reports/current/SM WMPP v16` folder was removed from
+`current` by moving it intact to
+`project X/reports/retired/2026-09-23-local-report-consolidation/SM WMPP v16`.
+The previous attached report and migration audit are backed up alongside it.
+No permanent deletion was performed; source ZIPs and the client-connected RPT
+project remain intact.
+
+Outstanding: open the active PBIP in Desktop and accept report rendering. The
+existing Requirements Complete card schema exception is inherited by the local
+copy and still needs investigation. Local linkage does not supply an offline
+data cache; refreshing client-backed partitions still needs client access.
+Client reconnection/deployment remains last, after user check-in and acceptance.
+
+## Reference-style correction — 2026-09-23
+
+The rejected boxed dashboard layout has been replaced on Board Dashboard,
+Provider & Placement Supply and Target & Urgency Performance: single KPI strip
+with icons, borderless headings, compact 3 × 2 panels and chart/table switches.
+Both report copies have 16 pages / 315 visuals. All 53 model files are unchanged;
+no illustrative sample values or unapproved KPI comparisons were introduced.
+See `WMPP_REFERENCE_DESIGN_REVIEW.md` for precise changes and recovery locations.
+
+Outstanding: **final design sign-off is blocked on actual Power BI rendering**.
+The current session has no accessible Desktop renderer. Obtain Fit-to-page
+screenshots of the three pages and complete the visual/interaction acceptance
+pass; schema and static layout checks do not meet that acceptance requirement.

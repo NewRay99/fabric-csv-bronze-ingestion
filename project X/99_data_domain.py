@@ -43,6 +43,7 @@ TIME_PARSER_POLICY = "CORRECTED"
 NOTEBOOK_TIMEOUT_SECONDS = 1800
 JOB_RUN_ID = ""
 
+
 # METADATA ********************
 
 # META {
@@ -94,6 +95,7 @@ PROFILED_AT = datetime.now(timezone.utc)
 if CLEAR_TARGET_TABLE:
     clear_data_domain_table(DOMAIN_TABLE)
     print(f"Cleared target data-domain table: {DOMAIN_TABLE}")
+
 
 # METADATA ********************
 

@@ -26,11 +26,12 @@
 #
 # Run the archive-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
 
+
 # CELL ********************
 
-# Archive replays can process several complete monthly extracts. Two hours
-# prevents the runner from terminating 02a_archive_silver at the old 30-minute limit.
-NOTEBOOK_TIMEOUT_SECONDS = 7200
+# Archive replays can process several complete monthly extracts. Allow 9,200
+# seconds per child notebook; avoid the old 30-minute orchestration limit.
+NOTEBOOK_TIMEOUT_SECONDS = 9200
 print(
     f"Child notebook timeout: {NOTEBOOK_TIMEOUT_SECONDS:,} seconds "
     f"({NOTEBOOK_TIMEOUT_SECONDS / 60:.0f} minutes)"
@@ -59,6 +60,7 @@ ARCHIVE_STEPS = [
     }),
     ("05_gold_dimensions", {}),
 ]
+
 
 # METADATA ********************
 
@@ -172,6 +174,7 @@ print(
 )
 if failed:
     raise RuntimeError(f"Archive pipeline failed notebook(s): {failed}")
+
 
 # METADATA ********************
 

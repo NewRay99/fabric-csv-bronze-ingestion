@@ -218,13 +218,13 @@ for expected in (
 
 # GLD-014: provider messages are a normal, current-record dimension; the two
 # provider-closure source tables are intentionally consolidated so consumers
-# can filter one dimension by reject_type without source-specific logic.
+# can filter one dimension by closure_type without source-specific logic.
 for expected in (
     '"silver.referral_provider_message", "gold.dim_referral_provider_message"',
     '"silver.referral_provider_cancel_reason"',
     '"silver.referral_provider_decline_reason"',
-    '"gold.dim_referral_provider_reject_reason"',
-    "reject_type",
+    '"gold.dim_referral_provider_closure_reason"',
+    "closure_type",
     "reason_other",
     "created_date",
 ):
@@ -232,13 +232,13 @@ for expected in (
         f"GLD-014 provider-message/closure dimension is missing {expected}"
     )
 assert re.search(
-    r"(?s)SELECT\s+.*'cancel'\s+AS\s+reject_type.*UNION\s+ALL.*"
-    r"'decline'\s+AS\s+reject_type",
+    r"(?s)SELECT\s+.*'cancel'\s+AS\s+closure_type.*UNION\s+ALL.*"
+    r"'decline'\s+AS\s+closure_type",
     dimensions_source,
 ), "GLD-014 must label both closure source types in one Gold dimension"
 for expected in (
-    "CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS reject_reason_id",
-    "CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS reject_reason_id",
+    "CONCAT('cancel:', CAST(cancel_reason_id AS STRING)) AS closure_reason_id",
+    "CONCAT('decline:', CAST(decline_reason_id AS STRING)) AS closure_reason_id",
     "cancel_reason_other_text AS reason_other",
     "decline_reason_other_text AS reason_other",
     "CAST(created_date AS TIMESTAMP) AS created_date",
@@ -248,44 +248,32 @@ for expected in (
     )
 print("PASS GLD-014 materialises provider messages and consolidated closure reasons")
 
-for deployed_notebook in (
-    ROOT / "reports" / "current" / "WMPP" / "notebooks" / "04_gold_model.Notebook" / "notebook-content.py",
-    ROOT / "reports" / "current" / "WMPP" / "notebooks" / "05_gold_dimensions.Notebook" / "notebook-content.py",
-):
-    deployed_source = "\n".join(
-        "".join(cell.get("source", []))
-        for cell in read_notebook(deployed_notebook)["cells"]
-    )
-    assert "export_date" in deployed_source, (
-        f"{deployed_notebook.name} is missing the Gold export-date feature"
-    )
-    assert "job_run_id" in deployed_source, (
-        f"{deployed_notebook.name} is missing the Gold job-run lineage feature"
-    )
-    if deployed_notebook.name == "notebook-content.py" and "05_gold_dimensions" in str(deployed_notebook):
-        for expected in (
-            "gold.dim_referral_provider_message",
-            "gold.dim_referral_provider_reject_reason",
-            "cancel_reason_other_text AS reason_other",
-            "decline_reason_other_text AS reason_other",
-        ):
-            assert expected in deployed_source, (
-                f"{deployed_notebook.name} is missing deployed GLD-014 mapping: {expected}"
-            )
-print("PASS deployed WMPP Gold notebooks retain export_date and job_run_id lineage")
-
-deployed_silver = (
-    ROOT / "reports" / "current" / "WMPP" / "notebooks"
-    / "03_silver_business_rules.Notebook" / "notebook-content.py"
-).read_text(encoding="utf-8")
-deployed_gold = (
-    ROOT / "reports" / "current" / "WMPP" / "notebooks"
-    / "04_gold_model.Notebook" / "notebook-content.py"
-).read_text(encoding="utf-8")
-assert "provider_spot AS" in deployed_silver
-assert "COALESCE(ps.is_spot, false) AS is_spot" in deployed_silver
-assert "COALESCE(x.is_spot, false) AS is_spot" in deployed_gold
-assert '"is_open", "is_spot", "has_offer"' in deployed_gold
-print("PASS GLD-014 provider-derived spot logic is present in deployed WMPP notebooks")
+# Preserve spot-logic coverage against maintained sources, not a client snapshot.
+silver_source = "\n".join(
+    "".join(cell.get("source", []))
+    for cell in read_notebook(ROOT / "03_silver_business_rules.py")["cells"]
+)
+assert "provider_spot AS" in silver_source
+assert "COALESCE(ps.is_spot, false) AS is_spot" in silver_source
+assert "COALESCE(x.is_spot, false) AS is_spot" in source
+# Additional snapshot fields can legitimately separate these columns; validate
+# the actual select arguments rather than requiring an old adjacent text slice.
+snapshot_select = next(
+    node.value
+    for cell in notebook["cells"]
+    if cell["cell_type"] == "code" and not "".join(cell["source"]).lstrip().startswith("%")
+    for node in ast.walk(ast.parse("".join(cell["source"])))
+    if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == "snapshot" for target in node.targets)
+    and isinstance(node.value, ast.Call)
+    and isinstance(node.value.func, ast.Attribute)
+    and node.value.func.attr == "select"
+)
+snapshot_fields = {
+    argument.value for argument in snapshot_select.args
+    if isinstance(argument, ast.Constant) and isinstance(argument.value, str)
+}
+assert {"is_open", "is_spot", "has_offer"} <= snapshot_fields
+print("PASS GLD-014 provider-derived spot logic is present in active notebooks")
 
 print("VALIDATION PASSED")

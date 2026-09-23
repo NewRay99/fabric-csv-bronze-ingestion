@@ -23,29 +23,23 @@
 # MARKDOWN ********************
 
 # # 00 - Archive ingestion
-#
-# ZIP extraction and archive-file loading are independent stages. ZIPs can
+# # ZIP extraction and archive-file loading are independent stages. ZIPs can
 # populate the archive folder, but every run rebuilds a dataframe inventory from
 # `ARCHIVE_FILE_ROOT`, including files copied there manually.
-#
-# Each file must sit below a `YYYY-MM-DD` folder, for example
+# # Each file must sit below a `YYYY-MM-DD` folder, for example
 # `Files/archive_unzipped/2026-04-30/ipa.csv`. All rows from that file are loaded
 # to `archived.ipa` and stamped with `export_date = 2026-04-30`.
-#
-# The inventory dataframe is filtered in one operation against
+# # The inventory dataframe is filtered in one operation against
 # `monitoring.cfg_archive_file_load`. Successful files with `reload = false` are
 # removed; unseen, failed, interrupted, or reload-requested files remain pending.
 # There is no required processing order.
-#
-# Before a pending file is appended, the notebook deletes that file's existing
+# # Before a pending file is appended, the notebook deletes that file's existing
 # target slice. Source-path lineage is used when available; legacy targets fall
 # back to deleting the matching `export_date`. This makes file reruns idempotent.
-#
-# Date-named CSV files such as `2026-06-29.csv` load into
+# # Date-named CSV files such as `2026-06-29.csv` load into
 # `archived.audit`, retain their filename date as `audit_file_date`, and
 # receive the dated archive-folder snapshot as `export_date`.
-#
-# `LOAD_ARCHIVE_AUDIT` controls whether files targeting
+# # `LOAD_ARCHIVE_AUDIT` controls whether files targeting
 # `archived.audit` enter the load queue. It defaults to `False` so slow
 # audit ingestion can be deferred without affecting the business archive files.
 

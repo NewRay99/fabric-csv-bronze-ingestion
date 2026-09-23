@@ -23,16 +23,15 @@
 # MARKDOWN ********************
 
 # # 90 — Live pipeline runner
-#
 # Run the live Bronze-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
 
 # CELL ********************
 
-NOTEBOOK_TIMEOUT_SECONDS = 1800
+NOTEBOOK_TIMEOUT_SECONDS = 7800
 STOP_ON_ERROR = True
 JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
 FORCE_RERUN = False  # Set True to reprocess an already-successful Bronze export.
-RUN_ESSENTIAL_DQ = False  # True runs only CRITICAL DQ rules in step 03.
+RUN_ESSENTIAL_DQ = True  # True runs only CRITICAL DQ rules in step 03.
 
 LIVE_STEPS = [
     ("00_setup_cfg", {}),

@@ -23,15 +23,12 @@
 # MARKDOWN ********************
 
 # # 02 — Resumable latest-to-Silver formatter
-#
-# Load the latest Bronze export into `silver.<table>`. Each source table and
+# # Load the latest Bronze export into `silver.<table>`. Each source table and
 # export timestamp is audited in `monitoring.cfg_silver_export_load`.
-#
-# - `SUCCESS` + `reload = false`: skip.
+# # - `SUCCESS` + `reload = false`: skip.
 # - `FAILED` or missing audit row: process on the next run.
 # - `reload = true`: force a successful export to run again, then reset the flag.
-#
-# This means a failure on the nth table can be resumed without reloading the
+# # This means a failure on the nth table can be resumed without reloading the
 # tables that already completed successfully.
 
 # PARAMETERS CELL ********************

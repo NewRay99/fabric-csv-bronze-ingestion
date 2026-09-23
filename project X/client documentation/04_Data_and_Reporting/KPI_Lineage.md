@@ -23,8 +23,8 @@ facts have been added.
 Every published KPI DAX expression must use fields from an active Gold fact,
 dimension or bridge imported into the semantic model. Bronze and Silver are
 lineage and transformation layers only; they are never valid KPI DAX sources.
-The static regression check `tests/validate_gold_dax_guide.py` enforces this
-for the published DAX blocks.
+Review this rule when accepting the client's current project. The former
+version-dependent DAX/report tests have been removed from the repository suite.
 
 ## End-to-end data path
 

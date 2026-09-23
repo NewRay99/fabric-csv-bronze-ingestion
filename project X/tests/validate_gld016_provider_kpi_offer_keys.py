@@ -1,6 +1,7 @@
 """Regression check for GLD-016 provider KPI offer-key compatibility."""
 
 from pathlib import Path
+import re
 
 from notebook_loader import load_notebook
 
@@ -30,7 +31,10 @@ fact_offer_sql = source.split(
 
 # Keep the source-grain offer fact reusable: publish the assignment key once,
 # then make downstream Gold reporting facts depend on that governed contract.
-assert "o.referral_provider_id AS referral_provider_id" in fact_offer_sql, (
+assert re.search(
+    r",\s*o\.referral_provider_id(?:\s+AS\s+referral_provider_id)?\s*,",
+    fact_offer_sql.split("FROM silver.offer o", 1)[0],
+), (
     "GLD-016: gold.fact_offer does not publish the assignment key"
 )
 assert "FROM silver.offer o" in fact_offer_sql

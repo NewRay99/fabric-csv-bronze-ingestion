@@ -563,7 +563,7 @@ if (spark.catalog.tableExists("silver.referral")
           FROM  LH_BCT_WMPP.silver.offer a
             inner join LH_BCT_WMPP.silver.ipa b on a.offer_id=b.offer_id
             inner join LH_BCT_WMPP.silver.referral_provider c on c.referral_provider_id = a.referral_provider_id
-          GROUP BY referral_id
+          GROUP BY c.referral_id
         ),
         ipa_rollup AS (
           SELECT referral_id, MIN(CAST(created_datetime AS TIMESTAMP))

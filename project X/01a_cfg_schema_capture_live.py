@@ -36,6 +36,7 @@ TABLE_PREFIXES = ()
 
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
+
 # METADATA ********************
 
 # META {
@@ -58,6 +59,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
 # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
 # Run the pipeline runner rather than this notebook for a fresh environment.
+
 
 # METADATA ********************
 
@@ -102,6 +104,7 @@ LIVE_SCHEMA = StructType([
 ])
 
 DRIFT_SCHEMA = "run_id string,source_kind string,source_table string,target_table string,drift_type string,column_name string,expected_type string,actual_type string,referenced_table string,referenced_column string,drift_key string,status string,occurrence_count long,first_detected_at timestamp,last_detected_at timestamp,resolved_at timestamp,detected_at timestamp,job_run_id string"
+
 
 # METADATA ********************
 
@@ -168,6 +171,7 @@ definition_df.createOrReplaceTempView("_schema_definition")
 current_live.createOrReplaceTempView("_schema_live_current")
 previous_live.createOrReplaceTempView("_schema_live_previous")
 print(f"Loaded {definition_df.count():,} definition rows; captured {current_live.count():,} live columns")
+
 
 # METADATA ********************
 
@@ -284,6 +288,7 @@ candidate = candidate.select(
     .option("overwriteSchema", "true")
     .saveAsTable("monitoring.cfg_schema_definition_candidate"))
 
+
 # METADATA ********************
 
 # META {
@@ -333,6 +338,7 @@ if not resolved.rdd.isEmpty():
     .option("overwriteSchema", "true")
     .saveAsTable("monitoring.cfg_bronze_schema_live"))
 
+
 # METADATA ********************
 
 # META {
@@ -350,6 +356,7 @@ display(active)
 
 print("Candidate definition (same columns as the loaded schema contract):")
 display(spark.table("monitoring.cfg_schema_definition_candidate").orderBy("table_name", "ordinal_position"))
+
 
 # METADATA ********************
 

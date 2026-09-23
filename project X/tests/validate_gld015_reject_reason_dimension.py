@@ -7,8 +7,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOKS = (
     ROOT / "05_gold_dimensions.py",
-    ROOT / "reports" / "current" / "WMPP" / "notebooks"
-    / "05_gold_dimensions.Notebook" / "notebook-content.py",
 )
 
 
@@ -30,7 +28,7 @@ for notebook in NOTEBOOKS:
         "PARTITION BY referral_provider_id",
         "ORDER BY created_date DESC NULLS LAST,",
         "source_export_date DESC NULLS LAST,",
-        "reject_reason_id DESC",
+        "closure_reason_id DESC",
         "= 'test'",
         "THEN CAST(NULL AS STRING)",
         "CONTAINSSTRING",
@@ -55,7 +53,7 @@ for notebook in NOTEBOOKS:
         "LIKE '%portal not working%'",
     ):
         assert expected in text, f"{notebook.name} is missing GLD-015 grouping: {expected}"
-    assert "PARTITION BY reject_reason_id" in text, (
+    assert "PARTITION BY closure_reason_id" in text, (
         f"{notebook.name} no longer deduplicates repeated source snapshots"
     )
 

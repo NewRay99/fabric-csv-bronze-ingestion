@@ -12,8 +12,7 @@
 # MARKDOWN ********************
 
 # # Shared ETL library
-#
-# One source for ETL exclusions, schema conformance, audit helpers, and Silver formatting utilities.
+# # One source for ETL exclusions, schema conformance, audit helpers, and Silver formatting utilities.
 
 # CELL ********************
 
@@ -456,8 +455,7 @@ def target_requires_refresh(target_table, schema_cols):
 # MARKDOWN ********************
 
 # ## Data-domain helpers
-#
-# Shared helpers for contract-driven, low-cardinality Bronze value domains.
+# # Shared helpers for contract-driven, low-cardinality Bronze value domains.
 
 # CELL ********************
 

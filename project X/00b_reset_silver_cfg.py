@@ -59,6 +59,7 @@ DROP_SILVER_TABLES = True
 CLEAR_DQ_EXECUTION_HISTORY = True
 CLEAR_SCHEMA_CONTRACT_CACHE = True
 
+
 # METADATA ********************
 
 # META {
@@ -137,6 +138,7 @@ def silver_tables():
         if not row.isTemporary and row.tableName.lower().startswith(SILVER_TABLE_PREFIX)
     )
 
+
 # METADATA ********************
 
 # META {
@@ -155,6 +157,7 @@ cfg_result = mssparkutils.notebook.run(
     {"AUDIT_TABLE": AUDIT_TABLE, "TIME_PARSER_POLICY": TIME_PARSER_POLICY},
 )
 print(f"Configuration setup completed: {cfg_result}")
+
 
 # METADATA ********************
 
@@ -198,6 +201,7 @@ print(f"PREVIEW Silver tables to drop ({len(tables_to_drop)}): {tables_to_drop}"
 print("Preserved: bronze.*, archived.*, gold.*, monitoring.cfg_archive_*, and monitoring.cfg_data_quality_rule")
 if CONFIRM_RESET != "RESET SILVER":
     print("PREVIEW ONLY: set CONFIRM_RESET = 'RESET SILVER' and rerun to execute")
+
 
 # METADATA ********************
 
@@ -266,6 +270,7 @@ print(
     f"cleared {removed_rows:,} monitoring rows"
 )
 print("Next: run either 02_silver_formatter or 02a_archive_silver.")
+
 
 # METADATA ********************
 
