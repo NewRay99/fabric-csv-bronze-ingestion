@@ -90,6 +90,7 @@ CONTRACT_COLUMNS = [
     "is_nullable", "column_default", "primary_key_name", "is_primary_key",
     "foreign_key_name", "referenced_schema", "referenced_table",
     "referenced_column", "column_description", "table_description",
+    "join_class", "join_evidence",
 ]
 
 LIVE_SCHEMA = StructType([

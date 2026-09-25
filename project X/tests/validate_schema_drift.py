@@ -1,3 +1,4 @@
+import ast
 import csv
 from notebook_loader import load_notebook as read_notebook
 from pathlib import Path
@@ -42,6 +43,20 @@ for name in contract_consumers:
 
 live_source = notebook_source("01a_cfg_schema_capture_live.py")
 common_source = notebook_source("99_common_library.py")
+capture_columns = next(
+    ast.literal_eval(node.value)
+    for cell in read_notebook(ROOT / "01a_cfg_schema_capture_live.py")["cells"]
+    if cell.get("cell_type") == "code"
+    for code in ["".join(cell.get("source", []))]
+    if code.strip() and not code.lstrip().startswith("%")
+    for node in ast.walk(ast.parse(code))
+    if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == "CONTRACT_COLUMNS" for target in node.targets)
+)
+check(
+    {"join_class", "join_evidence"}.issubset(capture_columns),
+    "live capture overwrites cfg_schema_drift_definition without join metadata required by 06_reports",
+)
 check(
     "def etl_logical_table_name" in common_source,
     "common library does not define etl_logical_table_name",
