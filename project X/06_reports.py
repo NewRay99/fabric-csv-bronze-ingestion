@@ -16,9 +16,6 @@
 # META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
 # META         }
 # META       ]
-# META     },
-# META     "warehouse": {
-# META       "known_warehouses": []
 # META     }
 # META   }
 # META }
@@ -26,7 +23,6 @@
 # MARKDOWN ********************
 
 # # 06 — Monitoring reports
-#
 # Define the monitoring materialized lake views after the Silver and Gold steps.
 # `00_setup_cfg` creates their configuration and control sources. Schedule the
 # materialized lake view refresh in the Lakehouse after the parent pipeline job
@@ -61,6 +57,18 @@ SELECT
   child_result, error_message
 FROM ordered_steps
 """)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 
 spark.sql("""
 CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_summary AS
@@ -119,6 +127,16 @@ LEFT JOIN drift d ON d.job_run_id = s.job_run_id
   AND d.notebook_name = regexp_replace(s.notebook_name, '\\.ipynb$', '')
 """)
 
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+
 spark.sql("""
 CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_run_summary AS
 WITH metric AS (
@@ -144,6 +162,17 @@ LEFT JOIN dq ON dq.job_run_id = j.job_run_id
 LEFT JOIN drift ON drift.job_run_id = j.job_run_id
 """)
 
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+
 spark.sql("""
 CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_schema_drift AS
 SELECT e.job_run_id, e.run_id, e.source_kind, e.source_table, e.target_table,
@@ -157,6 +186,17 @@ LEFT JOIN monitoring.cfg_schema_drift_definition d
   ON lower(d.table_name) = lower(regexp_replace(e.source_table, '^[^.]+\\.', ''))
  AND (e.column_name IS NULL OR lower(d.column_name) = lower(e.column_name))
 """)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 
 spark.sql("""
 CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_data_quality AS
@@ -179,6 +219,17 @@ LEFT JOIN rejected x ON x.job_run_id = r.job_run_id AND x.run_id = r.run_id AND 
 LEFT JOIN exceptions e ON e.job_run_id = r.job_run_id AND e.run_id = r.run_id AND e.rule_id = r.rule_id
 WHERE r.job_run_id IS NOT NULL
 """)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 
 spark.sql("""
 CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_layer_lineage AS
