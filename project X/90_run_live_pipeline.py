@@ -52,6 +52,7 @@ LIVE_STEPS = [
     ("03_silver_business_rules", {}),
     ("04_gold_model", {}),
     ("05_gold_dimensions", {}),
+    ("06_reports", {}),
 ]
 
 # METADATA ********************

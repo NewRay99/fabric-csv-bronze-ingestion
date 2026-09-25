@@ -645,8 +645,10 @@ the basic latest-job and clicked-history workflow.
 
 ## Deployment checklist
 
-1. Run the current `00_setup_cfg` so `rpt_job_run_summary` and
-   `rpt_job_step_timing` exist as materialised Lake views.
+1. Run the current live or archive pipeline. `00_setup_cfg` creates the
+   monitoring control tables; its final `06_reports` step defines
+   `rpt_job_run_summary` and `rpt_job_step_timing` as materialized lake views.
+   Refresh the views after the parent job completes to include its final status.
 2. Open the aligned PBIP, set the Lakehouse connection if prompted, and run a
    full semantic-model refresh.
 3. Confirm `rpt_job_run_summary[job_run_id]` is unique and the two

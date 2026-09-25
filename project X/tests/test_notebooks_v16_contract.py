@@ -57,11 +57,13 @@ def test_live_runner_imports_v16_timeout_and_dq_mode():
     )
 
 
-def test_monitoring_step_summary_uses_object_created_by_setup():
-    code = source("00_setup_cfg")
-    assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_timing AS" in code
-    assert "FROM monitoring.rpt_job_step_timing s" in code
-    assert "FROM monitoring.vw_job_step_timing" not in code
+def test_monitoring_step_summary_uses_object_created_by_reporting_notebook():
+    setup = source("00_setup_cfg")
+    reports = source("06_reports")
+    assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW" not in setup
+    assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_timing AS" in reports
+    assert "FROM monitoring.rpt_job_step_timing s" in reports
+    assert "FROM monitoring.vw_job_step_timing" not in reports
 
 
 def test_archive_schema_capture_no_longer_reads_ad_hoc_production_csvs():

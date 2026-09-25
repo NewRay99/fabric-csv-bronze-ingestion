@@ -75,6 +75,7 @@ the primary notebooks from the retained originals after editing them.
 | `03_silver_business_rules.py` | Runs schema-driven DQ and referential-integrity checks |
 | `04_gold_model.py` | Builds the current/historical referral Gold model and snapshots |
 | `05_gold_dimensions.py` | Builds Gold reporting dimensions and provider bridges from Silver |
+| `06_reports.py` | Defines monitoring materialized lake views after the Gold steps |
 | `90_run_live_pipeline.py` | Runs the standard live Bronze-to-Gold notebook sequence |
 | `90_run_archive_pipeline.py` | Runs the monitored archive hydration and historical replay sequence |
 | `99_data_domain.py` | Profiles data domains against the configuration contract |

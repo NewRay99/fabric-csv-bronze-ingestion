@@ -38,21 +38,22 @@ Use `90_run_archive_pipeline` for the standard archive route. It creates one
 3. `01a_cfg_schema_capture_archive`
 4. `02a_archive_silver`
 5. `05_gold_dimensions`
+6. `06_reports`
 
 The runner lets `02a_archive_silver` invoke DQ and Gold facts for each month,
-then runs dimensions once as the explicit final step. Use the individual
+then runs dimensions once and defines the monitoring reports. Use the individual
 notebooks only to investigate schema drift before replay or to perform a
 controlled single-month recovery.
 
 Before step 3, verify that `COMPARED_SCHEMA` points to the deployed archive
-schema. Before step 5, confirm archive business tables contain a valid row-level
+schema. Before step 4, confirm archive business tables contain a valid row-level
 `export_date`. If any canonical month lacks an eligible archived `framework`
 snapshot—or the table is absent—confirm
 `Files/deprecated_wmpp_files/framework.csv` exists and contains
 `framework_code`, `framework_name`, `start_date`, `end_date`, and
 `placement_type` before starting archive Silver replay.
 
-With `RUN_GOLD_AT_MONTH_END = True`, step 5 processes each canonical month in
+With `RUN_GOLD_AT_MONTH_END = True`, step 4 processes each canonical month in
 chronological order and invokes:
 
 1. `03_silver_business_rules`
@@ -111,6 +112,7 @@ Run this stream for each new latest-extract delivery:
 6. `03_silver_business_rules`
 7. `04_gold_model`
 8. `05_gold_dimensions`
+9. `06_reports`
 
 `common_util` excludes explicit internal reference tables and every logical
 `ref_*` table before extract-date/contract checks. Do not add synthetic
@@ -282,7 +284,11 @@ intentional contract/rule refresh, then return it to `False`.
 
 ## 8. Linked live execution
 
-Use `90_run_live_pipeline.ipynb` for the standard live sequence: setup, Bronze latest, live schema capture, Silver formatter, Silver business rules, Gold facts and Gold dimensions. Use `90_run_archive_pipeline.ipynb` for the standard archive sequence. The detailed archive procedure is in `ARCHIVE_PIPELINE_RUNBOOK.md`.
+Use `90_run_live_pipeline` for the standard live sequence: setup, Bronze latest,
+live schema capture, Silver formatter, Silver business rules, Gold facts, Gold
+dimensions, then `06_reports`. Use `90_run_archive_pipeline` for the standard
+archive sequence. The detailed archive procedure is in
+`ARCHIVE_PIPELINE_RUNBOOK.md`.
 
 The runner prints one `JOB_RUN_ID` and passes it to every child notebook. Use
 that value to follow the whole execution through the monitor tables:
@@ -306,9 +312,19 @@ the linked live execution.
 
 ## 9. Job monitoring, lineage and data quality views
 
-`00_setup_cfg.ipynb` creates the following read-only reporting views. They are
-the supported way to inspect a linked live run rather than manually joining
+`00_setup_cfg` creates the monitoring configuration and control tables.
+`06_reports` defines the following materialized lake views after Gold dimensions.
+They are the supported way to inspect a linked run without manually joining
 the control tables.
+
+Configure a Fabric Lakehouse materialized lake view refresh after the parent
+live/archive pipeline completes. The final parent job status and the
+`06_reports` step outcome are written after `06_reports` defines the views;
+the post-run refresh includes those final records. Use a suitable Lakehouse
+refresh schedule or, where enabled, a job-completion event trigger. Creating
+the definitions does not configure that refresh schedule.
+See [Microsoft's materialized lake view refresh guidance](https://learn.microsoft.com/en-us/fabric/data-engineering/materialized-lake-views/schedule-lineage-run)
+when configuring the client Lakehouse.
 
 | View | Purpose |
 |---|---|

@@ -23,6 +23,7 @@ RUNNER_MANAGED_CONSUMERS = [
     "03_silver_business_rules.py",
     "04_gold_model.py",
     "05_gold_dimensions.py",
+    "06_reports.py",
 ]
 REQUIRED_TABLES = {
     "monitoring.cfg_silver_export_load",
@@ -130,6 +131,7 @@ expected_live_steps = [
     "03_silver_business_rules",
     "04_gold_model",
     "05_gold_dimensions",
+    "06_reports",
 ]
 for step_name in expected_live_steps:
     if step_name not in live_runner_source:

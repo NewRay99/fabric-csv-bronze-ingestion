@@ -25,6 +25,7 @@ in Fabric in this order:
 3. `03_silver_business_rules.ipynb`
 4. `04_gold_model.ipynb`
 5. `05_gold_dimensions.ipynb`
+6. `06_reports.ipynb`
 
 Historical replay should be tested separately with `02a_archive_silver.ipynb`
 after running `00_archive_load.ipynb` and confirming the archive tables contain

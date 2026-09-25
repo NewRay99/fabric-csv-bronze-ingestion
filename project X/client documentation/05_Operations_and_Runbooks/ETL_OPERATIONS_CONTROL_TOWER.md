@@ -31,6 +31,7 @@ notebook execution within that job.
 | Derived Silver | `03_silver_business_rules` creates/replaces derived `silver.*` relations | Notebook transformation logic and DQ rules | `cfg_pipeline_run`, `cfg_data_quality_result`, `cfg_schema_drift_event` where applicable |
 | Gold facts/snapshots | `04_gold_model` creates/replaces `gold.fact_referral`, `gold.fact_offer`, `gold.fact_placement`, `gold.fact_referral_provider`, lifecycle/KPI reporting objects and the referral snapshot Delta table | Gold notebook SQL, `silver.referral_enrichment` and `monitoring.cfg_gold_lineage_mapping` | job/step monitoring and `rpt_job_layer_lineage` |
 | Gold dimensions/bridges | `05_gold_dimensions` creates/replaces `gold.dim_*` and `gold.bridge_*` | Gold notebook projection and required-column checks | job/step monitoring and `rpt_job_layer_lineage` |
+| Monitoring reports | `06_reports` defines the six `monitoring.rpt_*` materialized lake views | `00_setup_cfg` creates their configuration and control sources | Refresh the views after the parent job completes to include final statuses |
 
 `monitoring.cfg_schema_contract_column` is the active runtime contract. A
 change in the repository CSV does not change a populated runtime contract

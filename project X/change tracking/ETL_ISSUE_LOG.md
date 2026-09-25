@@ -12,15 +12,35 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | `LIVE-ETL` | Live ETL pipeline issues | 4 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
 | `GLD` | Gold-layer issues | 21 |
-| `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 11 |
+| `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **81** |
+| **Total classified issues** | | **82** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
 Fabric replay remains a separate deployment verification unless stated.
+
+## CFG-010 — Monitoring reporting views ran during configuration setup
+
+- **Symptom (2026-09-25):** `00_setup_cfg` defined all six
+  `monitoring.rpt_*` materialized lake views at the start of both pipelines,
+  before Silver, Gold and the parent job had completed.
+- **Cause:** reporting definitions were placed in the setup notebook alongside
+  the Gold lineage configuration mapping.
+- **Fix:** `00_setup_cfg` retains configuration table creation and the lineage
+  mapping. New `06_reports` defines the six reporting views after
+  `05_gold_dimensions`. Both live and archive runners include it as their last
+  child step; the archive runner still builds Gold facts for each month and
+  dimensions once before reporting.
+- **Validation:** ETL regressions check all six definitions appear once in
+  `06_reports`, none remain in setup, and the runners call it after dimensions.
+  The Python/ETL suite passes 100 tests and direct Ruff checks pass.
+- **Status:** implemented in repository source. Import `06_reports` with the
+  revised runners, verify Fabric execution, and configure a Lakehouse
+  materialized lake view refresh after the parent pipeline completes so the
+  final job and `06_reports` step statuses are included.
 
 ## DQ-004 — Essential versus thorough Silver DQ runs
 

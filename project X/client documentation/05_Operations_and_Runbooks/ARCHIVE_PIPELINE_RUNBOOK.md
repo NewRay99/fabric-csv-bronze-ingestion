@@ -12,13 +12,18 @@ schema; the active loader does not add an `archived_` table prefix.
 1. Deploy `90_run_archive_pipeline.ipynb` and the child notebooks.
 2. Run `90_run_archive_pipeline.ipynb`. It executes, under one `JOB_RUN_ID`:
    `00_setup_cfg`, `00_archive_load`, `01a_cfg_schema_capture_archive`,
-   `02a_archive_silver`, and `05_gold_dimensions`.
+   `02a_archive_silver`, `05_gold_dimensions`, and `06_reports`.
 3. The archive loader writes source-named Delta tables such as
    `archived.referral`, `archived.provider_submission_docs`, and
    `archived.audit` (when audit loading is enabled).
 4. The runner lets archive Silver execute its per-month DQ and Gold-fact
-   steps, then executes Gold dimensions once as its final step. It passes
+   steps, then executes Gold dimensions once and defines the monitoring reports
+   as its final step. It passes
    `RUN_GOLD_DIMENSIONS_AT_MONTH_END=False` to avoid duplicating that work.
+
+Refresh the materialized lake views after the parent archive job finishes so
+the completed job and `06_reports` step statuses appear in reporting. Configure
+that refresh in the Fabric Lakehouse; `06_reports` defines the views.
 
 Use the individual notebooks only for diagnosis or controlled replay. Set
 `PROCESS_ONLY` to `YYYY-MM` in `02a_archive_silver` for a single canonical

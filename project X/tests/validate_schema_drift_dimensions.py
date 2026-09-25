@@ -115,6 +115,7 @@ expected_live_order = [
     "00_setup_cfg", "01_bronze_get_latest",
     "01a_cfg_schema_capture_live", "02_silver_formatter",
     "03_silver_business_rules", "04_gold_model", "05_gold_dimensions",
+    "06_reports",
 ]
 positions = [live_source.index(name) for name in expected_live_order]
 assert positions == sorted(positions), "Live runner order is incorrect"

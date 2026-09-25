@@ -19,25 +19,35 @@ def source(name):
 
 
 setup = source("00_setup_cfg.py")
+reports = source("06_reports.py")
 for expected in (
-    "monitoring.cfg_gold_lineage_mapping",
     "monitoring.rpt_job_step_timing",
     "monitoring.rpt_job_step_summary",
     "monitoring.rpt_job_run_summary",
     "monitoring.rpt_job_schema_drift",
     "monitoring.rpt_job_data_quality",
     "monitoring.rpt_job_layer_lineage",
-    "cfg_schema_drift_event",
-    "job_run_id STRING",
 ):
-    assert expected in setup, f"setup is missing {expected}"
+    assert reports.count(f"CREATE OR REPLACE MATERIALIZED LAKE VIEW {expected} AS") == 1, (
+        f"06_reports is missing or duplicates {expected}"
+    )
 
-assert "FROM monitoring.rpt_job_step_timing s" in setup, (
+assert "monitoring.cfg_gold_lineage_mapping" in setup
+assert "cfg_schema_drift_event" in setup
+assert "job_run_id STRING" in setup
+assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW" not in setup, (
+    "00_setup_cfg must not define reporting views before the ETL runs"
+)
+assert "FROM monitoring.rpt_job_step_timing s" in reports, (
     "rpt_job_step_summary still depends on a retired vw_* object"
 )
-assert "CREATE OR REPLACE VIEW monitoring.vw_job_" not in setup, (
-    "setup must not recreate retired monitoring vw_* objects"
+assert "CREATE OR REPLACE VIEW monitoring.vw_job_" not in reports, (
+    "06_reports must not recreate retired monitoring vw_* objects"
 )
+for runner in ("90_run_live_pipeline.py", "90_run_archive_pipeline.py"):
+    steps = source(runner)
+    assert steps.index('("05_gold_dimensions", {})') < steps.index('("06_reports", {})')
+    assert steps.count('("06_reports", {})') == 1
 
 for notebook in (
     "01a_cfg_schema_capture_live.py",

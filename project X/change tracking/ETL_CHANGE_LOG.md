@@ -4,6 +4,20 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-09-25 — Move monitoring reports to the end of both ETL pipelines
+
+- Added `06_reports` with the six `monitoring.rpt_*` materialized lake view
+  definitions and removed those definitions from `00_setup_cfg`. Setup retains
+  the configuration tables and Gold lineage mapping.
+- Live and archive runners now call `06_reports` after Gold dimensions. Updated
+  the runbooks and ETL validators; **100 Python/ETL tests pass** and direct Ruff
+  checks pass.
+- Client work: import the new notebook with both runners, verify it in Fabric,
+  and configure the materialized lake view refresh after the parent job completes
+  to capture final job and reporting-step statuses.
+
+Issue: [CFG-010](ETL_ISSUE_LOG.md#cfg-010--monitoring-reporting-views-ran-during-configuration-setup).
+
 ## 2026-09-25 — Category and location ETL batch
 
 - Updated the active Silver and Gold notebooks, setup lineage and both runners

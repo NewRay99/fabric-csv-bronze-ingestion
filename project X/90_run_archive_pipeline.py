@@ -71,6 +71,7 @@ ARCHIVE_STEPS = [
         "CONFIRM_PROCESS_ONLY_RESET": CONFIRM_PROCESS_ONLY_RESET,
     }),
     ("05_gold_dimensions", {}),
+    ("06_reports", {}),
 ]
 
 

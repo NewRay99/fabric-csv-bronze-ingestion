@@ -56,6 +56,7 @@ for notebook_name in [
     '"01a_cfg_schema_capture_archive"',
     '"02a_archive_silver"',
     '"05_gold_dimensions"',
+    '"06_reports"',
 ]:
     assert notebook_name in archive_runner, f"archive runner missing {notebook_name}"
 assert '"RUN_GOLD_DIMENSIONS_AT_MONTH_END": False' in archive_runner

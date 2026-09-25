@@ -16,6 +16,7 @@ NOTEBOOKS = [
     "02_silver_formatter.py",
     "02a_archive_silver.py",
     "05_gold_dimensions.py",
+    "06_reports.py",
 ]
 
 
