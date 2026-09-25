@@ -20,6 +20,15 @@ def notebook_source(name):
 
 
 setup = notebook_source("00_setup_cfg.py")
+config_definitions = next(
+    ast.literal_eval(node.value)
+    for cell in read_notebook(ROOT / "00_setup_cfg.py")["cells"]
+    if cell["cell_type"] == "code" and not "".join(cell["source"]).lstrip().startswith("%")
+    for node in ast.parse("".join(cell["source"])).body
+    if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == "CONFIG_TABLE_DEFINITIONS"
+            for target in node.targets)
+)
 for table in ("monitoring.cfg_job_run", "monitoring.cfg_job_step_run"):
     assert table in setup, f"setup must create/upgrade {table}"
 for table in (
@@ -30,9 +39,7 @@ for table in (
     "cfg_rejected_row",
     "cfg_referential_exception",
 ):
-    start = setup.index(f'"monitoring.{table}"')
-    end = setup.find("    ],", start)
-    assert "job_run_id STRING" in setup[start:end], f"{table} lacks job_run_id"
+    assert "job_run_id STRING" in config_definitions[f"monitoring.{table}"], f"{table} lacks job_run_id"
 
 runner = notebook_source("90_run_live_pipeline.py")
 for expected in (
@@ -73,7 +80,7 @@ for expected in (
 ):
     assert expected in dq, f"Silver DQ mode control missing {expected}"
 
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8"
 )
 assert "## DQ-004" in issue_log

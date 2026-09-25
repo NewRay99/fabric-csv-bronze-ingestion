@@ -28,9 +28,10 @@
 # date and numeric rules come from `dq_rule_definition.csv`.
 # # Rejected-row logging stores only key references, not complete child records.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
 SILVER_SCHEMA = "silver"
+DEFAULT_LOCATION_CITY = "Birmingham"  # Explicit fallback, never a verified child address.
 MAX_REJECT_REFERENCES_PER_RULE = 100
 FAIL_ON_CRITICAL = True
 RUN_ESSENTIAL_DQ = False  # True runs only rules marked CRITICAL.
@@ -371,6 +372,114 @@ def replace_silver_materialisation(frame, table_name):
         .write.format("delta").mode("overwrite")
         .option("overwriteSchema", "true")
         .saveAsTable(f"{SILVER_SCHEMA}.{table_name}"))
+
+
+def classify_referral_location(value, default_city="Birmingham", city_names=()):
+    """Conservative local place-name extraction; never geocode referral free text."""
+    import re
+
+    default_city = str(default_city or "").strip()
+    if not default_city:
+        raise ValueError("DEFAULT_LOCATION_CITY must be a non-empty city/locality")
+    text = re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+    if not text:
+        return default_city, "DEFAULT_MISSING", True, False
+    # A preference can describe prohibited locations, not a positive origin.
+    if re.search(r"\b(outside|out of|avoid\w*|not|no|away from|exclud\w*|except)\b", text):
+        return default_city, "DEFAULT_REVIEW_EXCLUSION", True, True
+    known_places = (
+        "Birmingham", "Coventry", "Wolverhampton", "Walsall", "Dudley", "Solihull",
+        "Nottingham", "Leicester", "London", "Liverpool", "Manchester", "Sheffield",
+        "Leeds", "Worcester", "Oxford", "Bristol", "Derby", "Stoke-on-Trent",
+    )
+    aliases = {city.strip().casefold(): city.strip() for city in (*known_places, *city_names, default_city)
+               if city and city.strip()}
+    aliases.update({"bham": "Birmingham", "b'ham": "Birmingham"})
+    matches = {city for alias, city in aliases.items()
+               if re.search(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", text)}
+    if len(matches) > 1 or re.search(r"\b(or|either)\b|/", text):
+        return default_city, "DEFAULT_REVIEW_MULTIPLE", True, True
+    if len(matches) == 1:
+        return next(iter(matches)), "CITY_MATCH", False, False
+    return default_city, "DEFAULT_REVIEW_UNRECOGNISED", True, True
+
+
+def approved_location_reference():
+    """Validate local reference keys before any join; duplicates must not fan out facts."""
+    table = "monitoring.cfg_location_coordinate"
+    schema = ("location_type string, location_key string, latitude double, longitude double, "
+              "reference_source string, reference_version string")
+    frame = spark.table(table) if spark.catalog.tableExists(table) else spark.createDataFrame([], schema)
+    frame = (frame.selectExpr(*[field.split()[0] for field in schema.split(", ")])
+        .withColumn("location_type", F.upper(F.trim("location_type")))
+        .withColumn("location_key", F.trim("location_key"))
+        .withColumn("_key", F.when(F.col("location_type") == "POSTCODE",
+            F.regexp_replace(F.upper("location_key"), r"\s+", ""))
+            .otherwise(F.lower("location_key")))
+        .dropDuplicates())
+    invalid = (
+        F.col("location_type").isNull() | ~F.col("location_type").isin("CITY", "POSTCODE")
+        | F.col("_key").isNull() | (F.length("_key") == 0)
+        | (F.col("latitude").isNull() != F.col("longitude").isNull())
+        | F.isnan("latitude") | F.isnan("longitude")
+        | (F.abs("latitude") > 90) | (F.abs("longitude") > 180)
+        | (F.col("latitude").isNotNull() & (
+            F.col("reference_source").isNull() | (F.length(F.trim("reference_source")) == 0)
+            | F.col("reference_version").isNull() | (F.length(F.trim("reference_version")) == 0)))
+    )
+    if frame.where(invalid).limit(1).count():
+        raise ValueError(f"{table}: invalid type/key/coordinate/provenance; correct approved reference data")
+    if frame.groupBy("location_type", "_key").count().where("count > 1").limit(1).count():
+        raise ValueError(f"{table}: conflicting duplicate normalised keys; retain one approved row per key")
+    return frame
+
+
+def latest_location_source(table, key, value):
+    from pyspark.sql.window import Window
+
+    frame = spark.table(table)
+    date_columns = [name for name in ("referral_modified_date", "referral_created_date", "export_date")
+                    if name in frame.columns]
+    ordering = [F.coalesce(*[F.col(name).cast("timestamp") for name in date_columns]).desc_nulls_last(),
+                F.col("export_date").desc_nulls_last(), F.col(value).desc_nulls_last()]
+    return (frame.withColumn("_location_rank", F.row_number().over(Window.partitionBy(key).orderBy(*ordering)))
+        .where("_location_rank = 1").select(key, value, "export_date"))
+
+
+# SLV-001: derived tables leave the schema-conformed source entities unchanged.
+# Empty reference data is valid: the output remains usable with NULL coordinates.
+geo_reference = approved_location_reference()
+city_reference = geo_reference.where("location_type = 'CITY'")
+city_rows = city_reference.select("location_key").limit(10001).collect()
+if len(city_rows) > 10000:
+    raise ValueError("City reference exceeds the 10,000-name local matching limit")
+city_names = tuple(row.location_key for row in city_rows)
+location_classifier = F.udf(
+    lambda value: classify_referral_location(value, DEFAULT_LOCATION_CITY, city_names),
+    "location string, location_match_status string, location_is_default boolean, location_requires_review boolean",
+)
+referral_locations = (latest_location_source(f"{SILVER_SCHEMA}.referral", "referral_id", "location_preference_details")
+    .withColumn("_location", location_classifier("location_preference_details"))
+    .select("referral_id", "export_date", "_location.*"))
+referral_locations = (referral_locations.alias("r").join(city_reference.alias("g"),
+    F.lower(F.col("r.location")) == F.col("g._key"), "left")
+    .select("r.*", F.col("g.latitude").alias("location_latitude"),
+        F.col("g.longitude").alias("location_longitude"),
+        F.col("g.reference_source").alias("location_reference_source"),
+        F.col("g.reference_version").alias("location_reference_version")))
+replace_silver_materialisation(referral_locations, "referral_location")
+
+home_locations = (latest_location_source(f"{SILVER_SCHEMA}.provider_home", "provider_home_id", "postcode")
+    .withColumn("postcode_normalized", F.regexp_replace(F.upper(F.trim("postcode")), r"\s+", "")))
+home_locations = (home_locations.alias("h").join(
+    geo_reference.where("location_type = 'POSTCODE'").alias("g"),
+    F.col("h.postcode_normalized") == F.col("g._key"), "left")
+    .select("h.provider_home_id", "h.export_date", "h.postcode_normalized",
+        F.col("g.latitude").alias("home_latitude"), F.col("g.longitude").alias("home_longitude"),
+        F.col("g.reference_source").alias("home_reference_source"),
+        F.col("g.reference_version").alias("home_reference_version")))
+replace_silver_materialisation(home_locations, "provider_home_location")
+log_step("Local city/postcode enrichment complete; no referral text sent to external services")
 
 
 # SI-008: stable age-band axis.

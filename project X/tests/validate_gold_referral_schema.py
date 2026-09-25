@@ -163,7 +163,7 @@ print("PASS fact_referral intermediate SQL aliases use lower snake_case")
 
 
 issue_log = (
-    ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md"
+    ROOT / "change tracking" / "ETL_ISSUE_LOG.md"
 ).read_text(encoding="utf-8", errors="replace")
 assert "## SI-006" in issue_log
 assert "referral_modified_date" in issue_log
@@ -174,7 +174,7 @@ assert "## GLD-014" in issue_log
 assert "Gold export-date lineage" in issue_log
 assert "## LIN-002" in issue_log
 assert "Silver and Gold job-run lineage" in issue_log
-print("PASS change log records SI-006 and its validation")
+print("PASS issue log records SI-006 and its validation")
 
 
 simulation = (ROOT / "tests" / "_gold_sim_test.py").read_text(encoding="utf-8")

@@ -45,7 +45,7 @@ check("checked_counts" in rules, "03 DQ loop does not reuse per-table row counts
 check("cached_frames" in rules, "03 DQ loop does not cache multi-rule tables")
 check("unpersist" in rules, "03 DQ loop does not unpersist cached tables")
 
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8", errors="replace"
 )
 check("LIVE-ETL-002" in issue_log, "issue log does not record LIVE-ETL-002")

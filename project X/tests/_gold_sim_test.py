@@ -239,6 +239,9 @@ def mkdf(rows):
     return spark.read.json("file:///" + d.replace("\\", "/"))
 
 write(mkdf(referrals), "referral")
+write(spark.createDataFrame([], "referral_id string, framework_category_id int"), "referral_category")
+write(spark.createDataFrame([], "referral_id string, location string, location_match_status string, "
+                           "location_is_default boolean, location_requires_review boolean"), "referral_location")
 write(mkdf(enrichment), "referral_enrichment")
 write(mkdf(persons), "referral_person")
 write(mkdf(closures), "referral_closure_reason_summary")

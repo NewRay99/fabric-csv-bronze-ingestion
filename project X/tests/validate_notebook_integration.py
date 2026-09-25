@@ -44,7 +44,7 @@ formatter_run_cells = [
 assert formatter_run_cells == ["%run ./99_common_library\n"], (
     "02_silver_formatter: Fabric %run must be the only command in its cell"
 )
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8"
 )
 assert "## SI-024" in issue_log

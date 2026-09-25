@@ -29,7 +29,8 @@ def test_validates_active_notebooks_without_client_snapshots(
         PROJECT / "tests/_gold_fact_sql.sql",
         PROJECT / "tools/fabric_notebooks.py",
         PROJECT / "configuration/schema_definition.csv",
-        PROJECT / "change tracking/ETL_ISSUE_AND_CHANGE_LOG.md",
+        PROJECT / "change tracking/ETL_ISSUE_LOG.md",
+        PROJECT / "change tracking/ETL_CHANGE_LOG.md",
     ]
     for original in inputs:
         destination = project / original.relative_to(PROJECT)

@@ -66,7 +66,7 @@ check("Excluded internal/reference Bronze tables" in latest_source, "latest Silv
 archive_source = notebook_source("02a_archive_silver.py")
 check("Excluded internal/reference archive tables" in archive_source, "archive Silver does not report exclusions")
 
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(encoding="utf-8", errors="replace")
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8", errors="replace")
 check("SI-001" in issue_log, "issue_log.md does not record the ref_* export_date failure")
 
 if failures:

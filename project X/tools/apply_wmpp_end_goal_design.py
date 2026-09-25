@@ -116,8 +116,8 @@ RETURN IF ( NOT ISBLANK ( asof ), CALCULATE ( [Total Referrals], REMOVEFILTERS (
     NOT ISBLANK ( 'fact_referral'[ipa_issued_date] ) && NOT ISBLANK ( 'fact_referral'[required_placement_date] )
     && 'fact_referral'[placed_by_required_date] = TRUE () ),
     DATEDIFF ( 'fact_referral'[ipa_issued_date], 'fact_referral'[required_placement_date], DAY ) )''', '0.0')
-    add_measure('Homes Offered', '''CALCULATE ( DISTINCTCOUNT ( 'fact_offer'[home_id] ),
-    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[home_id] ) && 'fact_offer'[home_id] <> "" ) ) )''')
+    add_measure('Homes Offered', '''CALCULATE ( DISTINCTCOUNT ( 'fact_offer'[provider_home_id] ),
+    KEEPFILTERS ( FILTER ( 'fact_offer', NOT ISBLANK ( 'fact_offer'[provider_home_id] ) && 'fact_offer'[provider_home_id] <> "" ) ) )''')
     add_measure('Median Offered Weekly Cost', "MEDIAN ( 'fact_offer'[estimated_weekly_cost] )", '£#,0.00')
     add_measure('Provider Median Days to First Offer', '''VAR per_referral =
     ADDCOLUMNS ( VALUES ( 'fact_offer'[referral_id] ),

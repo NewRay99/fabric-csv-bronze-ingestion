@@ -1,197 +1,22 @@
-# ETL issue and change log
+# ETL issue log
 
-This file records resolved archive, pipeline, Silver, Gold, configuration, and
-repository issues. Before publishing future changes, run the relevant portable
-validator suite, for example:
-
-```text
-python validate_archive_load.py
-```
-
-Fabric runtime behaviour must also be confirmed in a development Lakehouse.
-
-## 2026-09-23 — Removed obsolete Power BI test files from lint scope
-
-- Pytest-only exclusions left semantic/report test files under Ruff's independent
-  `tests/(validate_.*|test_.*).py` pre-commit filter. Reproduced the reported two
-  E402 errors in `validate_wmpp_end_goal_design.py` with Ruff before changing it.
-- Deleted 11 obsolete semantic-model/DAX/report validators, two related helper
-  test modules and the now-unneeded pytest exclusion `conftest.py`. Their
-  previous contents remain recoverable from Git history/index. No active
-  Python/ETL validators or report implementation tools were removed.
-- This supersedes the earlier decision to retain those test files for manual
-  use. No lint suppressions or broader lint exclusions were introduced.
-- Verified: Ruff 0.16.6 passes all remaining files matched by the pre-commit
-  test-folder filter; **73 pytest tests pass**. The hook is pinned to 0.16.3;
-  the available local binary was used without changing that pin. Existing
-  staged content was left untouched; stage the deletions before committing.
-
-## 2026-09-23 — Removed obsolete snapshot dependencies from Python validators
-
-- Reproduced all four remaining failures: each read an older client notebook
-  snapshot instead of relying only on the maintained numbered Python sources.
-- Removed duplicate snapshot assertions from GLD-015, Gold schema, job lineage
-  and Silver-column validators. Retargeted unique provider-spot and export-date
-  checks to active notebooks; all four validators remain in routine pytest.
-- Fixed a brittle Gold snapshot assertion: it now checks AST select arguments
-  for required columns without requiring an obsolete adjacent column order.
-- Added four regression cases that run validators in an isolated active-source
-  tree without any report/snapshot folder, then prove missing primary inputs
-  still fail. New cases failed before the correction and pass afterwards.
-- Full Python-only pytest: **73 passed, 0 failed**. No semantic/report tests ran;
-  no production notebook or historical snapshot was changed in this follow-up.
-
-## 2026-09-23 — Routine pytest excludes client Power BI projects
-
-- Per user direction, semantic-model, DAX/measure coverage and report-project
-  checks are no longer part of routine pytest. Client project names and versions
-  are not stable repository test contracts.
-- Python validators use an explicit allowlist; model/DAX helper unit tests are
-  excluded from directory collection. Existing Power BI scripts remain available
-  only for separately requested reviews. No model/report files were changed.
-- Verified collection contains 69 Python/notebook tests and no Power BI tests.
-  Result: **65 passed, 4 failed**. The four failures are unchanged comparisons
-  against the older WMPP Python notebook snapshot, not semantic/report checks.
-
-## 2026-09-23 — Primary Python notebooks reconciled with Notebooks v16.zip
-
-- Compared all 17 ZIP notebook sources with the active numbered Python files.
-  Fifteen match after newline normalisation; two retain documented exceptions.
-- Imported the completed Gold closure-column rename, qualified IPA referral
-  grouping, removal of ad-hoc CSV preview cells, and ZIP runner timeout/DQ
-  settings (archive 9,200 seconds; live 7,800 seconds; essential DQ enabled).
-- Retained the valid `monitoring.rpt_job_step_timing` dependency rather than
-  reintroducing the ZIP's retired `vw_*` reference. Retained opt-in archive
-  reset defaults instead of the ZIP's preconfirmed July 2026 reset.
-- Added six regression tests, including synthetic-data execution of the closure
-  query. Focused source/syntax/regression tests: **30 passed**. Full pytest:
-  **79 passed, 9 failed**, versus **73 passed, 9 failed** before the sync.
-  Remaining failures concern the older WMPP snapshot and absent Power BI assets;
-  no test was skipped or removed. No Fabric runtime execution or deployment.
-- [Comparison, hashes, exceptions and outstanding failures](../reports/notebook-v16-sync/README.md).
-
-## SEM-002 — Reconciled v16 snapshots, provider KPI evidence and dynamic RLS
-
-**20 September 2026 — implemented in repository; Fabric refresh, Desktop
-validation, security population and business acceptance pending.**
-
-- Preserved `MWPP Repo 20092026.zip` as the immutable client baseline and
-  created `reports/current/SM WMPP v16 updated` as the repository PBIP
-  candidate. `tools/reconcile_semantic_model_v16.py` makes the reconciliation
-  repeatable.
-- Added a dedicated snapshot-month role and physical month/rule fields,
-  migrated state Month-on-Month measures to snapshot data, removed the active
-  current/snapshot fact path, changed business relationships to single
-  direction and removed automatic date tables.
-- Added conservative assignment-to-response evidence from offers and recorded
-  decline/cancel reasons. Messages remain excluded until authorship is
-  governed. Published scoped, unweighted provider KPI components and the
-  provider-home/framework-category bridge; no composite score was invented.
-- Added deny-by-default security configuration/Gold tables, a dynamic TMDL
-  role for current detail, snapshot detail and provider KPI aggregates, and an
-  identifier-free global monthly summary for the separately approved partial-
-  RLS path.
-- Repaired every statically detectable report field binding, including the 23
-  legacy referral-closure-reason references, four placement-type references
-  and missing measure aliases.
-- Validation: 76 repository tests pass. Static TMDL/reference checks cover 37
-  model tables, all report JSON bindings, relationship direction, snapshot
-  fields and the RLS role. Fabric SQL execution, refresh, DAX result
-  reconciliation and real-identity RLS UAT remain required.
-
-## SEM-001 — Gold-only v15 report and requirement-aligned measures
-
-**15 September 2026 — implemented in repository; Fabric refresh and business acceptance pending.**
-
-- Migrated the extracted v15 business report to Gold-only business sources and consistent Import mode; embedded KPI/requirement reference metadata from Markdown. Removed legacy Silver staging and unused report views with missing-field dependencies.
-- Repaired referral/date relationships, stale calculated columns and 31 report JSON files with retired field bindings. Kept the provider-to-home relationship inactive to avoid two filter paths into offers; home/QA counts transfer provider IDs explicitly.
-- Corrected draft, pending-age, active/under-offer, gender, QA and refresh-label measures. Retained the original inclusive 15–30 KPI alongside the non-overlapping 15–29 dashboard band.
-- Added per-IPA signature flags to `gold.fact_ipa` and changed IPA counts/rates to meet the original IPA-grain requirements. Open unsigned and closed unsigned IPAs are distinguished. Same-day draft timestamp edits now count as activity.
-- Updated both measure libraries, the WIP guide, KPI reference, schema contract and the complete requirement disposition. See [implementation and acceptance details](../client%20documentation/04_Data_and_Reporting/GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md).
-- Validation: portable model/visual reference and graph checks, SQL signature predicate cases, and Microsoft TMDL deserialization. Live DAX and Fabric refresh have not been executed. Deploy the changed Gold notebook before refreshing the report.
-
-## 2026-09-13 — Silver export_date propagation and Gold semantic-model push-downs
-
-- SI-025: `export_date` now propagates from Bronze into every Silver table via a
-  self-healing contract guard (`ensure_export_date_contract`) in
-  `99_common_library`, applied by `02_silver_formatter` and
-  `02a_archive_silver`; four new DQ rules guard the column.
-- SI-025 correction: the deployed WMPP formatter now carries the same
-  self-healing contract guard, parses date-only Bronze values such as
-  `2026-09-12`, and recognises the legacy archive representation
-  `2026-09-12T00-00-00Z`. Archive date discovery, snapshot selection and
-  legacy-table migration use the explicit parser before a Silver run.
-- GLD-013: mined the 268 measures in `SM WMPP v15 (3).zip` and pushed the
-  remaining computable business rules into the pipeline:
-  `silver.referral_enrichment` gained `provider_assignment_count`;
-  `gold.fact_referral` gained `provider_assignment_count`,
-  `is_emergency_placement` and `is_open_overdue` (all three carried into
-  `gold.fact_referral_snapshot`); `gold.fact_offer` gained `offer_age_days`,
-  `days_since_offer_activity`, `is_draft_no_activity`,
-  `is_draft_missing_dates`, `is_awaiting_ipa_creation`, `is_ipa_pending` and
-  `is_ipa_completed` (rolled up from `silver.ipa` signature flags).
-- Updated `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`,
-  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WIP.md`,
-  `Gold_DAX_Schema_Contract.md`, `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (rev 4) and
-  `KPI_Reference_Guide.md`: 18 DAX measures rewritten as single flag/column
-  filters, the IPA-signature funnel rebuilt at offer grain, KPI-77–78, 80–82,
-  85–86 moved from blocked/proxy to covered (195 supported measures; legacy
-  v15 reconciliation now 62 covered · 68 ported · 15 retired · 8 blocked).
-- Validation: all portable validators pass, including new GLD-013 guards in
-  `validate_archive_snapshot_and_enrichment.py` and
-  `validate_gold_referral_schema.py`, plus a 15-case DuckDB smoke test of the
-  new Gold SQL. Fabric execution and import remain separate acceptance checks.
-
-## 2026-09-12 — Gold referral flags aligned to the original business rules
-
-- GLD-009: `is_open` now implements the original business rule in
-  `silver.referral_enrichment` (`03_silver_business_rules`) and propagates to
-  `gold.fact_referral` and the snapshot, replacing the inline status check.
-- GLD-010: `is_spot` restored to `gold.fact_referral` from
-  `silver.referral.is_spot` and carried into the snapshot.
-- GLD-011: new `is_awaiting_offer` flag in `silver.referral_enrichment`,
-  propagated to `gold.fact_referral`; the `Referrals Awaiting Offer` DAX
-  measure is now a single flag filter.
-- GLD-012: new `is_engaged` flag on `gold.fact_referral_provider`
-  (not cancelled, not closed, not excluded).
-- Regenerated the `tests/_gold_fact_sql.sql` simulation fixture from the
-  updated `04_gold_model` (extractor now locates the fact cell by content)
-  and rewrote `tests/_gold_sim_test.py` for the snake_case model: it
-  fabricates `silver.referral_enrichment`, `silver.referral_person` and
-  `silver.referral_closure_reason_summary`, derives the GLD-009/GLD-011
-  flags from fabricated provider/offer/IPA records, and checks the
-  propagated `is_open` / `is_awaiting_offer` / `is_spot` values.
-- Validation: all 23 portable validators pass against the updated source,
-  including new regression guards for the four fixes. Fabric execution and
-  import remain separate acceptance checks.
-
-## 2026-09-11 — Primary notebook source converted to Fabric Python
-
-- Converted all 17 root `.ipynb` notebooks to primary `.py` Fabric notebook
-  source, preserving business logic, run defaults, cells, parameter tags,
-  dependency bindings and original Spark/session metadata. Retained `.ipynb`
-  files are migration references; future edits use `.py`.
-- Updated portable validators and the Gold SQL extractor to parse `.py` source;
-  added format-boundary and per-notebook syntax/round-trip coverage.
-- Compared the primary sources against the supplied client WMPP snapshot:
-  nine matching code definitions, six with code differences, and two originals
-  missing from that snapshot. No client definitions were overwritten.
-- Evidence and reproducible diffs: [notebook comparison](../reports/notebook-comparison/README.md).
-- Validation: all 22 existing validators pass against the converted source.
-  Fabric execution and import remain separate acceptance checks.
+Add new issues here with a unique ID and the observed behaviour. Append dated
+cause, fix, validation and status notes to the same issue when it is addressed.
+Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 
 ## Issue identifier legend
 
 | Prefix | Issue type | Number of issues |
 | --- | --- | ---: |
-| `AR` | Archive-layer loader and replay issue | 13 |
-| `ARCH-ETL` | Archive ETL pipeline issue | 2 |
-| `LIVE-ETL` | Live ETL pipeline issue | 3 |
-| `SI` / `SIL` | Silver-layer issue | 25 |
-| `GLD` | Gold-layer issue | 13 |
-| `CFG` | Configuration and monitoring issue | 9 |
-| `RG` | Repository reorganisation issue | 1 |
-| **Total classified issues** |  | **66** |
+| `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
+| `LIVE-ETL` | Live ETL pipeline issues | 4 |
+| `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
+| `GLD` | Gold-layer issues | 21 |
+| `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 11 |
+| `PERF` | Performance issues | 1 |
+| `RG` | Repository issues | 1 |
+| `SEM` | Semantic-model issues | 1 |
+| **Total classified issues** | | **81** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1964,7 +1789,7 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
   deployed shared libraries for the policy. Re-run the live pipeline; the
   failed table's audit state lets the formatter retry it.
 
-## GLD-014 — Referral spot status used the wrong source
+## GLD-015 — Referral spot status used the wrong source
 
 - **Symptom (reported 2026-09-15):** `gold.fact_referral.is_spot` was taken
   from `silver.referral.is_spot`, which can disagree with the provider
@@ -2009,7 +1834,7 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
 - **Status:** repaired client package prepared; final acceptance remains to
   open that package in the client's March 2026 Desktop build.
 
-## GLD-014 - missing referral_provider_details from GLD
+## GLD-016 — Missing referral-provider details from Gold
 
 following tables are missing in the GOLD Layer
 
@@ -2059,7 +1884,8 @@ these need to be added in
   `04_gold_model` so both new and existing enrichment materialisations are
   refreshed together.
 
-## GLD-015-
+## GLD-017 — Closure-reason classifications and sequence order
+
 add the following to dim_referral_provider_reject_reason...
 rule
 ```
@@ -2181,7 +2007,8 @@ there should only be one dim_referral_provider_reject_reason for fact_referral_p
   with the new columns and sequence values.
 
 
-## GLD-016 error in Live pipeline
+## GLD-018 — Missing offer assignment key caused live provider KPI failure
+
 error on 04_gold_model step:
 
 === FAILED 04_gold_model: An error occurred while calling o7082.throwExceptionIfHave.
@@ -2224,10 +2051,10 @@ error on 04_gold_model step:
   `04_gold_model.py` cell to the client notebook and rerun `04_gold_model`;
   Fabric execution remains the deployment acceptance test.
 
-## GLD-014 missing fields in Fact Table to join to the dim_framework_category table
+## GLD-019 — Missing framework-category links in referral and offer facts
 
 ### issue
-missing fields in the fact tables that stop us from reporting critical details of the referrals. i have created a summarised script of the codes that are required 
+missing fields in the fact tables that stop us from reporting critical details of the referrals. i have created a summarised script of the codes that are required
 ```
 SELECT a23.category_name, a1.category_name,*
 FROM LH_BCT_WMPP.silver.offer as a
@@ -2251,11 +2078,40 @@ where b.referral_id  = 'ced6730c-da21-452d-960e-1e27d54f6810'
 ideally we need a id for the following
 - fact_referral.framework_category_id from c2.framework_category_id **category assigned initial referral creation
 
-  
-## GLD-015 change fact_offer field 
+
+### Resolution (2026-09-25)
+
+- **Fix:** the offer fact now exposes the proposed `framework_category_id` and
+  a separate `provider_home_framework_category_id`. Referral and home category
+  roll-ups return a single ID only when exactly one distinct membership exists;
+  category counts distinguish missing and multiple memberships. The new
+  `bridge_referral_framework_category` and existing home framework bridge retain
+  all category links without multiplying fact rows. Referral snapshots retain
+  the new single-category key and count.
+- **Validation:** synthetic ETL regressions cover duplicate links, multiple
+  memberships, missing/unknown keys and distinct offer/home category roles.
+- **Status:** implemented in repository source. Client Fabric execution and
+  downstream category relationships remain outstanding. The supplied current
+  Silver state does not prove category membership at initial referral creation;
+  that requires effective-dated source evidence.
+
+## GLD-020 — Rename the offer home key to provider_home_id
+
 change the home_id to provider_home_id to remove ambiguity
 
-## GLD-016
+### Resolution (2026-09-25)
+
+- **Fix:** `gold.fact_offer.provider_home_id` replaces `home_id`; no duplicate
+  legacy alias is retained. The reusable report builder's Homes Offered
+  expression uses the renamed key.
+- **Validation:** the ETL contract test requires `provider_home_id` and rejects
+  the old offer alias.
+- **Status:** implemented in repository source. Deploy the revised Gold notebook
+  and rebind downstream imports, relationships and measures. Versioned client
+  semantic models/reports were not edited or tested for this ETL change.
+
+## GLD-021 — Add provider-home and referral spot-category bridges
+
 it will be good to add spot bridge table/s
 
 LH_BCT_WMPP.silver.provider_home_spot_category
@@ -2263,15 +2119,43 @@ LH_BCT_WMPP.silver.referral_spot_category
 
 call them bridge_ followed by the original name
 
-## SLV-0[NEXT NUMBER] - location of the child referred
+### Resolution (2026-09-25)
+
+- **Fix:** `05_gold_dimensions` now creates
+  `gold.bridge_provider_home_spot_category` and
+  `gold.bridge_referral_spot_category`. Source IDs and the distinct
+  `spot_category_code`/`spot_category` names are retained, together with export
+  metadata and job correlation. Setup registers both bridges in Gold lineage.
+- **Validation:** ETL regressions check both bridge contracts and their lineage
+  registrations; no semantic/report project tests are involved.
+- **Status:** implemented in repository source; client execution and downstream
+  adoption remain outstanding.
+
+## SLV-001 — Generalised referral location and approximate offer distance
+
+### Resolution (2026-09-25)
+
+- **Fix:** derived referral/provider-home location tables use local matching and
+  approved city/postcode reference data. The default city is the forwarded
+  notebook parameter `DEFAULT_LOCATION_CITY` (Birmingham). Offer distance is
+  explicitly approximate, straight-line and in kilometres, with endpoint
+  provenance and missing/default/review statuses. Ambiguous or excluded locations
+  cannot produce a distance; no referral text is sent to an external geocoder.
+- **Validation:** local ETL tests cover classification, defaults, exclusions,
+  multiple cities, missing/invalid coordinates, distance calculation and offer
+  join grain. The full Python/ETL suite passed 99 tests; direct Ruff checks passed.
+- **Status:** implemented in repository source. Approved coordinate data,
+  classification acceptance and client Fabric verification remain outstanding;
+  distance values remain null until suitable local coordinates are supplied.
+  See the [implementation guide](../client%20documentation/04_Data_and_Reporting/CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+
+### Original request and supplied source examples
+
 this location is generalised location
-here is a list exported as json from SELECT  location_preference_details , count(*) 
-FROM LH_BCT_WMPP.silver.referral 
+here is a list exported as json from SELECT  location_preference_details , count(*)
+FROM LH_BCT_WMPP.silver.referral
 group by all
 
 {"fields":[{"key":"0","name":"location_preference_details","tag":{"type":"string"}},{"key":"1","name":"count(1)","tag":{"type":"long"}}],"rows":[{"location_preference_details":"Surrounding areas of Birmingham","count(1)":"2"},{"location_preference_details":"Birmingham, school to be maintained","count(1)":"1"},{"location_preference_details":"Anywhere in Birmingham, except South of Birmingham - areas like Kings Norton where Birth Family lives.","count(1)":"1"},{"location_preference_details":"Not in Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham, East area if possible.","count(1)":"1"},{"location_preference_details":"South of Birmingham as MV has started Reception this month - Sept 2026.","count(1)":"1"},{"location_preference_details":"Birmingham to maintain school in Edgbaston","count(1)":"1"},{"location_preference_details":"Birmingham, preferably north","count(1)":"1"},{"location_preference_details":"Rednal area of Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham areas","count(1)":"1"},{"location_preference_details":"Birmingham / Close surrounding areas may be considered but Neveah wants to be in Birmingham or close as possible / West Midlands","count(1)":"1"},{"location_preference_details":"LD is currently living in Liverpool and has settled in well in her current placement.  She is having her braces fitted in next week and the wait for an appointment has been a long one.  LD is also receiving therapeutic support from CAMHS in Liverpool.","count(1)":"5"},{"location_preference_details":"RB will be attending Sheffield College.","count(1)":"1"},{"location_preference_details":"Birmingham, however other areas will be considered.","count(1)":"1"},{"location_preference_details":"Birmingham - East or South preferred due to school location and their 2 siblings are placed in East Birmingham however other areas will be considered too","count(1)":"1"},{"location_preference_details":"Birmingham  preferably near Sandwell Valley.","count(1)":"1"},{"location_preference_details":"Preferably within Birmingham as AO has completed Year 11, and the plan is for him to start college in September.","count(1)":"1"},{"location_preference_details":"Areas around Moreton Morrell college which is in Warwick. Area's ideally to look at Stratford Upon Avon, Banbury, Compton Verney, Lighthorne and Moreton Morell.","count(1)":"1"},{"location_preference_details":"Birmingham.","count(1)":"5"},{"location_preference_details":"Outside of Birmingham","count(1)":"5"},{"location_preference_details":"Within Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham or Wolverhampton","count(1)":"1"},{"location_preference_details":"South of Birmingham, but avoiding Black Country and Sandwell.","count(1)":"1"},{"location_preference_details":"requested location :-\nStratford Upon Avon\nBanbury\nMorton Morell\nCompton Verney\n","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding Areas","count(1)":"24"},{"location_preference_details":"LV & MV attend school in Rubery, so preferably not too far from the area. \n","count(1)":"1"},{"location_preference_details":"outside Birmingham","count(1)":"1"},{"location_preference_details":"Preferably within Birmingham","count(1)":"1"},{"location_preference_details":"Surrounding areas of West Midlands","count(1)":"1"},{"location_preference_details":"South of Birmingham as LV attends Reaside Academy in Rubery.","count(1)":"1"},{"location_preference_details":"Solihull ideally as Evan is registered for college there.","count(1)":"1"},{"location_preference_details":"Birmingham, but all locations will be considered.","count(1)":"1"},{"location_preference_details":"Birminngham","count(1)":"1"},{"location_preference_details":"Birmingham or West Midlands region.","count(1)":"1"},{"location_preference_details":"Birmingham  - ideally Tipton or surrounding Areas","count(1)":"1"},{"location_preference_details":"Within Birmingham area so the children will remain in the same school","count(1)":"1"},{"location_preference_details":"Withing Birmingham and surrounding areas.","count(1)":"1"},{"location_preference_details":"Within Birmingham.","count(1)":"2"},{"location_preference_details":"Birmingham or surrounding","count(1)":"1"},{"location_preference_details":"Sandwell area","count(1)":"1"},{"location_preference_details":"Sheldon or Yardley for education purposes.","count(1)":"1"},{"location_preference_details":"South Birmingham","count(1)":"3"},{"location_preference_details":"Preferably Wolverhampton to maintain his school. However, we will also consider a nationwide search for a foster placement","count(1)":"1"},{"location_preference_details":"Outside of Birmingham and Surrounding areas due to CCE risks.","count(1)":"1"},{"location_preference_details":"Dudley/Staffordshire","count(1)":"1"},{"location_preference_details":"Location ideally Nottingham or surrounding Areas , however all locations will be considered","count(1)":"2"},{"location_preference_details":"Ideally Birmingham or surrounding Areas","count(1)":"4"},{"location_preference_details":"DM would like to reside in the Lozells/Handsworth area due to being near to his college and also being familiar with the local area as this is where he is currently residing.","count(1)":"1"},{"location_preference_details":"test test test","count(1)":"1"},{"location_preference_details":"Birmingham or Surrounding areas","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding Areas to support maintaining school","count(1)":"1"},{"location_preference_details":"Digbeth\n• Bordesley\n• Five ways\n• Park central\n• West Bromwich.\n• Stretford, near retail park\n• Or 10/ 15 minutes away from Birmingham City Centre","count(1)":"1"},{"location_preference_details":"Birmingham or Surrounding Areas","count(1)":"1"},{"location_preference_details":"Birmingham and Longbridge","count(1)":"1"},{"location_preference_details":"Birmingham / Surrounding areas. \nYP is currently also living in Wigan which the YP may prefer.","count(1)":"1"},{"location_preference_details":"Jack is currently studying at Telford College, therefore a placement near or around Telford will allow Jack to continue his studies.","count(1)":"1"},{"location_preference_details":null,"count(1)":"155"},{"location_preference_details":"Preferred location is Birmingham","count(1)":"2"},{"location_preference_details":"Rednal, B45 area","count(1)":"1"},{"location_preference_details":"Preferably Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham to maintain education","count(1)":"2"},{"location_preference_details":"Birmingham Preferred","count(1)":"1"},{"location_preference_details":"Wolverhampton area.","count(1)":"1"},{"location_preference_details":"Birmingham and surrounding areas","count(1)":"8"},{"location_preference_details":"outside of Birmingham, rural location","count(1)":"1"},{"location_preference_details":"Preferred location is Birmingham, please avoid Yardley.","count(1)":"1"},{"location_preference_details":"Outside of Birmingham but within the West Midlands","count(1)":"1"},{"location_preference_details":"Aneeq to remain at his current school if possible. Please see address below however Social Work Team are willing to discuss school change:\n\nST JOHN AND ST MONICA RC PRIMARY SCHOOL\nChantry Road, Birmingham, Moseley, B13 8DW\n\n","count(1)":"1"},{"location_preference_details":"Rural locations","count(1)":"1"},{"location_preference_details":"Within Birmingham as SK will be starting at Archbishop Ilsley school from September 2026.","count(1)":"1"},{"location_preference_details":"Staffordshire in order to maintain Education","count(1)":"1"},{"location_preference_details":"Derby or surrounding areas","count(1)":"4"},{"location_preference_details":"Coventry to maintain current school.","count(1)":"1"},{"location_preference_details":"Birmingham or surroundings Areas","count(1)":"1"},{"location_preference_details":"Within Birmingham and/or if possible to enable him to remain at his current school.","count(1)":"1"},{"location_preference_details":"Birmingham - school to be maintained","count(1)":"1"},{"location_preference_details":"Outside of Birmingham is preferred.","count(1)":"1"},{"location_preference_details":"Birmingham","count(1)":"278"},{"location_preference_details":"Solihull area, Birmingham","count(1)":"1"},{"location_preference_details":"Outside of Birmingham rural location","count(1)":"3"},{"location_preference_details":"Lichfield in Birmingham, or nearby. All other locations will also be considered.","count(1)":"1"},{"location_preference_details":"Preferably Wolverhampton to maintain school, if not any area will be considered for fostering","count(1)":"1"},{"location_preference_details":"Birmingham, West Midlands, Worcestershire and Staffordshire locations that can met \nher needs will be considered.","count(1)":"1"},{"location_preference_details":"Dudley, Walsall, Wolverhampton, Sandwell.","count(1)":"1"},{"location_preference_details":"Birmingham, near Halesowen College if possible","count(1)":"1"},{"location_preference_details":"Any area within Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham or surround areas","count(1)":"1"},{"location_preference_details":"Preferably East Birmingham","count(1)":"1"},{"location_preference_details":"outside West Midlands","count(1)":"1"},{"location_preference_details":"HRR currently lives in a Residential placement in Ellesmere, however he would like to move closer to his brother who lives in Lincoln.","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding area, attends education in B26 area","count(1)":"1"},{"location_preference_details":"Birmingham- School needs to be maintained","count(1)":"1"},{"location_preference_details":"Ryan currently lives in a Residential placement in Ellesmere, however he would like to move closer to his brother who lives in Lincoln.","count(1)":"1"},{"location_preference_details":"Within Birmingham and the surrounding areas.","count(1)":"1"},{"location_preference_details":"Birmingham area.","count(1)":"1"},{"location_preference_details":"Birmingham - South if possible or surrounding areas. School place is in Stirchley.","count(1)":"1"},{"location_preference_details":"Birmingham or Sandwell surrounding Areas","count(1)":"2"},{"location_preference_details":"Birmingham and Surrounding areas","count(1)":"1"},{"location_preference_details":"Outside of Birmingham is felt safer to her.","count(1)":"1"},{"location_preference_details":"Birmingham area, Ideally Aston.","count(1)":"1"},{"location_preference_details":"Birmingham - as Stechford, Shard End, Smith's Wood, Yardley, or Coleshill.","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding area to accommodate education","count(1)":"1"},{"location_preference_details":"South or east Birmingham","count(1)":"2"},{"location_preference_details":"Rednal area, B45","count(1)":"1"},{"location_preference_details":"Placements outside of Birmingham Region","count(1)":"1"},{"location_preference_details":"Near the school or a placement that can take him to school","count(1)":"1"},{"location_preference_details":"Rural areas in Wet Midlands","count(1)":"2"},{"location_preference_details":"Birmingham - preferably Castle Bromwich or Yardley area. However, we will consider all areas in Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham so young person can remain in contact with Family and continue to attend college.","count(1)":"3"},{"location_preference_details":"Test Test Test","count(1)":"1"},{"location_preference_details":"Preferably outside of Birmingham to reduce the risks of unsafe peer relationships.","count(1)":"1"},{"location_preference_details":"RF has indicated that he would like his Placement to be within Birmingham.","count(1)":"1"},{"location_preference_details":"Birmingham area - Harbourne, west Bromwich, Bartley Green.","count(1)":"1"},{"location_preference_details":"Preferably in Birmingham as SIA attends school in Bournville and has family time on Wednesdays after school.","count(1)":"1"},{"location_preference_details":"tes test test","count(1)":"1"},{"location_preference_details":"Sutton Coldfield \nErdington","count(1)":"2"},{"location_preference_details":"Birmingham or Crewe","count(1)":"1"},{"location_preference_details":"Birmingham to maintain hospital appointments","count(1)":"1"},{"location_preference_details":"Birmingham\n","count(1)":"2"},{"location_preference_details":"Outside of Birmingham due to CCE risks.","count(1)":"1"},{"location_preference_details":"Within Liverpool to aid continuation of education as well as attend dental appointments for recently fitted braces.","count(1)":"1"},{"location_preference_details":"Birmingahm","count(1)":"2"},{"location_preference_details":"Birmingham, but all options will be considered.","count(1)":"1"},{"location_preference_details":"Any areas near to the Weoley castle, area due to school.","count(1)":"1"},{"location_preference_details":"Birmingham, other locations considered","count(1)":"2"},{"location_preference_details":"Handsworth Birmingham","count(1)":"1"},{"location_preference_details":"Birmingham - as close to the city centre where K goes to school (Jewellery Quarter)","count(1)":"1"},{"location_preference_details":"BIRMINGHAM","count(1)":"21"},{"location_preference_details":"Sandwell locality","count(1)":"3"},{"location_preference_details":"Birmingham-Due to his school.","count(1)":"1"},{"location_preference_details":"requested location :-\nareas close to CV35\nStratford Upon Avon\nBanbury\nMorton Morell\nCompton Verney\nLighthorne\n","count(1)":"1"},{"location_preference_details":"Faaris would need to be close to his current educational provision - Kings Heath.","count(1)":"2"},{"location_preference_details":"Birmingham as IAW attends The Oaks Primary School, Bells Lane, Druids Heath, B14 5RY.","count(1)":"1"},{"location_preference_details":"Areas around Moreton Morrell college which is in Warwick.  \n\nArea's ideally to look at Stratford Upon Avon, Banbury, Compton Verney, Lighthorne and Moreton Morell.\n\n","count(1)":"1"},{"location_preference_details":"They do prefer Greater Manchester and a commutable distance to Lowton.","count(1)":"1"},{"location_preference_details":"Preferred location is Birmingham.","count(1)":"1"},{"location_preference_details":"Walsall, Wolverhampton, Staffordshire area to maintain school","count(1)":"1"},{"location_preference_details":"BRISTOL - Close to college","count(1)":"1"},{"location_preference_details":"Birmingham area, Aston","count(1)":"3"},{"location_preference_details":"Birmingham is the preferred location.","count(1)":"1"},{"location_preference_details":"South Birmingham.","count(1)":"1"},{"location_preference_details":"Birmingham/surrounding areas","count(1)":"1"},{"location_preference_details":"Outside Birmingham","count(1)":"3"},{"location_preference_details":"Birmingham/ West Midlands","count(1)":"1"},{"location_preference_details":"Lincolnshire if possible but anywhere considered","count(1)":"1"},{"location_preference_details":"Kidderminster or surrounding areas","count(1)":"3"},{"location_preference_details":"The young person is due to start college September, she would like to be placed in Birmingham.","count(1)":"1"},{"location_preference_details":"Sutton Coldfield or Stirchley","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding areas","count(1)":"11"},{"location_preference_details":"Birmingham, to maintain school (B27 7QG)","count(1)":"1"},{"location_preference_details":"Birmingham, B29 5QB","count(1)":"1"},{"location_preference_details":"Ideally South of Birmingham","count(1)":"2"},{"location_preference_details":"Birmingham for school to be maintained","count(1)":"1"},{"location_preference_details":"It is felt safer to place her outside of Birmingham.","count(1)":"1"},{"location_preference_details":"Birmingham if possible","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding area","count(1)":"1"},{"location_preference_details":"Cannock, Telford, Shrewsbury","count(1)":"1"},{"location_preference_details":"Within South of Birmingham - preferably in the Rednal area to assist with school.","count(1)":"1"},{"location_preference_details":"Outside the Midlands","count(1)":"1"},{"location_preference_details":"East Birmingham, near Small Heath","count(1)":"1"},{"location_preference_details":"Outside of Birmingham area.","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding areas.","count(1)":"3"},{"location_preference_details":"Birmingham, Edgbaston or surrounding areas if possible due to school location.","count(1)":"1"},{"location_preference_details":"Peter’s preference is to remain within South Birmingham, as this is an area he knows and enables him to maintain important links. However, given the need to identify the right provision, \nconsideration can be given to suitable placements within the wider West Midlands","count(1)":"1"},{"location_preference_details":"On the outskirts of Birmingham is preferred to limit exposure to gangs and areas in the city known for high gang activity.","count(1)":"1"},{"location_preference_details":"Sandwell if possible","count(1)":"1"},{"location_preference_details":"If possible Dean to remain with current school - Dean does receive travel assistance to school.\n\t\nALLENS CROFT PRIMARY SCHOOL\nAllen's Croft Road, Birmingham, B14 6RP","count(1)":"1"},{"location_preference_details":"Sutton Coldfield / Perry Barr","count(1)":"1"},{"location_preference_details":"Birmingham & Surrounding Areas","count(1)":"1"},{"location_preference_details":"Wolverhampton, due to A Levels","count(1)":"1"},{"location_preference_details":"Birmingham and surrounding areas.","count(1)":"9"},{"location_preference_details":"Birmingham- Close to Coleshill Secondary School,","count(1)":"1"},{"location_preference_details":"To maintain Kingsmead school","count(1)":"1"},{"location_preference_details":"Outside of the West Midlands due to CSE related risks.","count(1)":"1"},{"location_preference_details":"Within Birmingham but avoiding Hawksley/Kings Norton areas in South Birmingham","count(1)":"1"},{"location_preference_details":"Areas in Birmingham or if outside this area Wolverhampton, Coventry, Sandwell is preferred / West Midlands","count(1)":"1"},{"location_preference_details":"Milton Keynes","count(1)":"2"},{"location_preference_details":"Near Hodge Hill school","count(1)":"1"},{"location_preference_details":"Area of Halesowen or surrounding areas due to the college he will be attending in September 2026.","count(1)":"1"},{"location_preference_details":"Staffs, Wolverhampton, Walsall","count(1)":"1"},{"location_preference_details":"Derbyshire","count(1)":"1"},{"location_preference_details":"Oldbury, Rowley Regis, Tividale, West Bromwich, Smethwick but also Great Barr and Dudley","count(1)":"1"},{"location_preference_details":"Preference for Longbridge, Northfield & Kings Norton however all areas within Birmingham will be considered","count(1)":"1"},{"location_preference_details":"Not in Northfield and surrounding areas as there are historical concerns TS will abscond to visit peers in the area.","count(1)":"1"},{"location_preference_details":"Sandwell / West Bromwich / Surrounding Areas to be close to family.","count(1)":"1"},{"location_preference_details":"Erdington, Sutton Coldfield or North Birmingham","count(1)":"2"},{"location_preference_details":"Birmingham B16 area preferably","count(1)":"2"},{"location_preference_details":"Currently placed in Evesham, this location or surrounding areas / Birmingham / West Midlands is preferred.","count(1)":"1"},{"location_preference_details":"South Birmingham- Due to school","count(1)":"2"},{"location_preference_details":"Birmingham or surrounding areas / West Midlands","count(1)":"2"},{"location_preference_details":"All areas of Birmingham other than in Sparkhill, Sparkbrook, Hall \nGreen, Balsall Heath and Kings Heath area.\n","count(1)":"1"},{"location_preference_details":"Preferably within Birmingham.","count(1)":"1"},{"location_preference_details":"Birmingham and surrounding boroughs.","count(1)":"1"},{"location_preference_details":"Birmingham , however surrounding Areas will be considered","count(1)":"1"},{"location_preference_details":"Birmingham area:-\nStechford, Garretts Green, Bordesley Green and Solihull","count(1)":"1"},{"location_preference_details":"East Birmingham","count(1)":"1"},{"location_preference_details":"Close to Birmingham/ West Midlands","count(1)":"1"},{"location_preference_details":"Birmingham and wider area","count(1)":"1"},{"location_preference_details":"Birmingham for family time","count(1)":"1"},{"location_preference_details":"Birmingham or the wider West Midlands area.","count(1)":"1"},{"location_preference_details":"Ideally Dudley, Walsall, Wolverhampton, Sandwell.","count(1)":"2"},{"location_preference_details":"Birmingham - to maintain school at Swanhurst Academy","count(1)":"1"},{"location_preference_details":"Staffordshire so he can be close to his educational provision (Cannock) or West Midlands area.  Not Burton; and ideally not Birmingham either.","count(1)":"1"},{"location_preference_details":"Dudley area","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding Areas to support family contact and maintain school","count(1)":"1"},{"location_preference_details":"West Midlands","count(1)":"1"},{"location_preference_details":"Birmingham area","count(1)":"18"},{"location_preference_details":"Solihull or surrounding areas only.","count(1)":"1"},{"location_preference_details":"South of Birmingham","count(1)":"2"},{"location_preference_details":"Wolverhampton and West Midlands","count(1)":"1"},{"location_preference_details":"Manchester and Wigan - Areas commutable to Warrington, Lowton, Leigh, Wigan, or by the Manchester Trafford \ncentre, and Goldburn.","count(1)":"1"},{"location_preference_details":"outside of Birmingham due to negative peers.","count(1)":"1"},{"location_preference_details":"Birmingham / Central if possible or surrounding areas.","count(1)":"1"},{"location_preference_details":"Avoid the B27 and B11 areas of Birmingham, also Aston, Lozells and Nechells areas.","count(1)":"1"},{"location_preference_details":"Avoid Birmingham, Manchester and Scotland due to risks posed to PEM.","count(1)":"1"},{"location_preference_details":"South Birmingham to maintain education","count(1)":"1"},{"location_preference_details":"Birmingham and surrounding","count(1)":"1"},{"location_preference_details":"Preference for the Edgbaston Area of Birmingham","count(1)":"1"},{"location_preference_details":"Nottingham","count(1)":"1"},{"location_preference_details":"In the Cannock area, close to school.","count(1)":"1"},{"location_preference_details":"Birmingham or very close surrounding areas to Birmingham given he has youth justice appointments to attend.","count(1)":"1"},{"location_preference_details":"Derby, Alvaston.","count(1)":"1"},{"location_preference_details":"needs to be able to collect and drop N to his school - Sundridge Primary, B44 9NY","count(1)":"1"},{"location_preference_details":"North Birmingham","count(1)":"1"},{"location_preference_details":"Erdington area.","count(1)":"1"},{"location_preference_details":"South Birmingham, including areas such as\nNorthfield, Kings Norton, Bournville, Selly Oak, Bartley Green, Kings Health, Hall Green or neighbouring areas.","count(1)":"1"},{"location_preference_details":"Telford and surrounding areas.","count(1)":"1"},{"location_preference_details":"Birmingham / surrounding areas / West Midlands due to young persons wishes and feelings.","count(1)":"1"},{"location_preference_details":"Birmingham / surrounding areas or London / surrounding areas due to preference around maintaining family time with his father.","count(1)":"1"},{"location_preference_details":"This is a NATIONWIDE search for a placement.","count(1)":"1"},{"location_preference_details":"Great Barr although all areas of Birmingham will be considered","count(1)":"1"},{"location_preference_details":"Birmingham for professional support to be continued and also to be close to mother.","count(1)":"1"},{"location_preference_details":"Ideally Birmingham or surrounding areas , however ALL locations will be considered","count(1)":"1"},{"location_preference_details":"Birmingham or surrounding Areas -A placement within the West Midlands is preferred","count(1)":"1"},{"location_preference_details":"Birmingham, close to Bournville","count(1)":"1"},{"location_preference_details":"Birmingham and surrounding broughs","count(1)":"1"},{"location_preference_details":"Close to Birmingham","count(1)":"1"},{"location_preference_details":"Wolverhampton to maintain school","count(1)":"2"},{"location_preference_details":"Out of Birmingham and the surrounding areas that is West Bromwich, Walsall, Dudley, \nSandwell, Wolverhampton, Solihull and Coventry","count(1)":"1"},{"location_preference_details":"Preferably near Hockley to assist with the school runs, however away from Ladywood area where Birth Mother resides.","count(1)":"1"},{"location_preference_details":"Area's around :-\nStratford upon Avon\nBanbury\nMorton Morell Compton Verney","count(1)":"1"},{"location_preference_details":"Birmingham / surrounding areas","count(1)":"1"},{"location_preference_details":"Ideally Birmingham or surrounding Areas , however ALL LOCATIONS WILL BE CONSIDERED","count(1)":"1"},{"location_preference_details":"Staffordshire to maintain school","count(1)":"2"},{"location_preference_details":"To maintain college in Halesowen preferred","count(1)":"1"},{"location_preference_details":"Rural Setting","count(1)":"2"},{"location_preference_details":"Birmingham ideally to maintain school","count(1)":"1"},{"location_preference_details":"Outside of Birmingham and West Midlands","count(1)":"3"},{"location_preference_details":"Not close to main roads -rural location","count(1)":"1"},{"location_preference_details":"West Midlands / Surrounding Areas","count(1)":"2"},{"location_preference_details":"Outside of Birmingham due to concerns regarding CCE.","count(1)":"1"},{"location_preference_details":"Ideally Out of Birmingham and the surrounding areas that is West Bromwich, Walsall, Dudley, Sandwell, \nWolverhampton and Coventry","count(1)":"1"},{"location_preference_details":"Staffordshire to maintain school preferably","count(1)":"1"},{"location_preference_details":"In Edgbaston or easy access to the area.","count(1)":"1"},{"location_preference_details":"Please share all options for social worker to consider.","count(1)":"1"},{"location_preference_details":"West Midlands and Surrounding Areas","count(1)":"1"},{"location_preference_details":"We will consider Birmingham or Manchester","count(1)":"1"},{"location_preference_details":"Erdington area, current school.","count(1)":"1"},{"location_preference_details":"Within Birmingham and surrounding areas.","count(1)":"1"}]}
 
 can we clean the location up to the city or default to a notebook parameterised field set as "Birmingham" ? i want to use this to map the distance from the silver.referral.[location] (geo point) between  (offer.provider_home_id->provider_home.provider_home_id.[postcode]) and add that distance to the fct_offer table
-
-
-

@@ -166,7 +166,7 @@ for path in (
         except SyntaxError as exc:
             errors.append(f"{path.name} cell {index}: {exc}")
 
-issue_log = (PROJECT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(encoding="utf-8")
+issue_log = (PROJECT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8")
 if "SI-002" not in issue_log:
     errors.append("issue_log.md: missing SI-002")
 

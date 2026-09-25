@@ -98,13 +98,20 @@ def latest_dimension(source_table, target_table, key_columns, select_columns):
     print(f"{target_table}: {dimension.count():,} rows from {source_table}")
 
 
-def copy_bridge(source_table, target_table, required_columns, select_columns):
+def copy_bridge(source_table, target_table, required_columns, select_columns, key_columns=None):
     require_columns(source_table, required_columns)
     bridge = spark.table(source_table).select(
         *[F.col(source).alias(target) for source, target in select_columns],
         F.col("export_date").cast("timestamp").alias("export_date"),
         F.lit(GOLD_JOB_RUN_ID).alias("job_run_id"),
     ).dropDuplicates()
+    if key_columns:
+        # Export metadata must not turn one category link into several links.
+        tie_breakers = [F.col(name).cast("string").desc_nulls_last()
+                        for name in sorted(bridge.columns) if name not in key_columns]
+        bridge = (bridge.withColumn("_bridge_rank", F.row_number().over(
+            Window.partitionBy(*key_columns).orderBy(F.col("export_date").desc_nulls_last(), *tie_breakers)))
+            .where("_bridge_rank = 1").drop("_bridge_rank"))
     (bridge.write.format("delta").mode("overwrite")
         .option("overwriteSchema", "true").saveAsTable(target_table))
     print(f"{target_table}: {bridge.count():,} rows from {source_table}")
@@ -198,6 +205,30 @@ copy_bridge(
      ("provider_home_id", "provider_home_id"),
      ("framework_category_id", "framework_category_id"),
      ("export_date", "source_export_date")],
+    key_columns=["provider_home_id", "framework_category_id"],
+)
+copy_bridge(
+    "silver.referral_category", "gold.bridge_referral_framework_category",
+    ["referral_id", "framework_category_id", "export_date"],
+    [("referral_id", "referral_id"), ("framework_category_id", "framework_category_id"),
+     ("export_date", "source_export_date")],
+    key_columns=["referral_id", "framework_category_id"],
+)
+copy_bridge(
+    "silver.provider_home_spot_category", "gold.bridge_provider_home_spot_category",
+    ["provider_home_spot_category_id", "provider_home_id", "spot_category_code", "export_date"],
+    [("provider_home_spot_category_id", "provider_home_spot_category_id"),
+     ("provider_home_id", "provider_home_id"), ("spot_category_code", "spot_category_code"),
+     ("export_date", "source_export_date")],
+    key_columns=["provider_home_spot_category_id"],
+)
+copy_bridge(
+    "silver.referral_spot_category", "gold.bridge_referral_spot_category",
+    ["referral_spot_category_id", "referral_id", "spot_category", "export_date"],
+    [("referral_spot_category_id", "referral_spot_category_id"),
+     ("referral_id", "referral_id"), ("spot_category", "spot_category"),
+     ("export_date", "source_export_date")],
+    key_columns=["referral_spot_category_id"],
 )
 copy_bridge(
     "silver.provider_sic_codes", "gold.bridge_provider_sic_code",

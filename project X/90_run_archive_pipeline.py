@@ -27,6 +27,17 @@
 # Run the archive-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
 
 
+# PARAMETERS CELL ********************
+
+DEFAULT_LOCATION_CITY = "Birmingham"
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 # Archive replays can process several complete monthly extracts. Allow 9,200
@@ -52,6 +63,7 @@ ARCHIVE_STEPS = [
     # Archive Silver runs its DQ and Gold-fact child steps. Dimensions are
     # deliberately deferred to the final explicit step below.
     ("02a_archive_silver", {
+        "DEFAULT_LOCATION_CITY": DEFAULT_LOCATION_CITY,
         "RUN_GOLD_DIMENSIONS_AT_MONTH_END": False,
         "PROCESS_ONLY": PROCESS_ONLY,
         "RESET_MONTH_MONITORING": RESET_MONTH_MONITORING,

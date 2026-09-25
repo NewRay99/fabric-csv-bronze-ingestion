@@ -22,6 +22,14 @@ referral_child AS (
   FROM silver.referral_person
   GROUP BY referral_id
 ),
+referral_framework_category AS (
+  SELECT referral_id,
+    CASE WHEN COUNT(DISTINCT framework_category_id) = 1
+      THEN MIN(framework_category_id) END AS framework_category_id,
+    COUNT(DISTINCT framework_category_id) AS framework_category_count
+  FROM silver.referral_category
+  GROUP BY referral_id
+),
 closure_reason AS (
   SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
   FROM silver.referral_closure_reason_summary
@@ -88,6 +96,9 @@ provider_response AS (
 ),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+    category.framework_category_id,
+    COALESCE(category.framework_category_count, 0) AS framework_category_count,
+    loc.location, loc.location_match_status, loc.location_is_default, loc.location_requires_review,
     CAST(r.export_date AS TIMESTAMP) AS export_date,
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
@@ -130,9 +141,13 @@ base AS (
   LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
   LEFT JOIN provider_response p ON r.referral_id = p.referral_id
+  LEFT JOIN referral_framework_category category ON r.referral_id = category.referral_id
+  LEFT JOIN silver.referral_location loc ON r.referral_id = loc.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, referral_created_date, required_placement_date,
+  framework_category_id, framework_category_count,
+  location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
   referral_closure_reason, last_activity_date, current_status,

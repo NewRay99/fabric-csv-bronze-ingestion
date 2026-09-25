@@ -25,6 +25,17 @@
 # # 90 — Live pipeline runner
 # Run the live Bronze-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
 
+# PARAMETERS CELL ********************
+
+DEFAULT_LOCATION_CITY = "Birmingham"  # Forwarded to local preference-location enrichment.
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
 # CELL ********************
 
 NOTEBOOK_TIMEOUT_SECONDS = 7800
@@ -127,6 +138,7 @@ try:
                 child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()
             if notebook_name == "03_silver_business_rules":
                 child_parameters["RUN_ESSENTIAL_DQ"] = str(RUN_ESSENTIAL_DQ).lower()
+                child_parameters["DEFAULT_LOCATION_CITY"] = DEFAULT_LOCATION_CITY
             result = mssparkutils.notebook.run(
                 notebook_name, NOTEBOOK_TIMEOUT_SECONDS,
                 child_parameters,

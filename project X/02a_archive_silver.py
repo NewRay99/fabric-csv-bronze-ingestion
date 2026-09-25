@@ -79,6 +79,7 @@ if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROC
 RUN_GOLD_AT_MONTH_END = True
 RUN_GOLD_DIMENSIONS_AT_MONTH_END = True
 DQ_NOTEBOOK_NAME = "03_silver_business_rules"
+DEFAULT_LOCATION_CITY = "Birmingham"
 GOLD_NOTEBOOK_NAME = "04_gold_model"
 GOLD_DIMENSIONS_NOTEBOOK_NAME = "05_gold_dimensions"
 # Archive Silver can rebuild multiple complete snapshots and then invoke DQ
@@ -910,7 +911,8 @@ for snapshot_date in month_end_dates:
     if RUN_GOLD_AT_MONTH_END:
         try:
             dq_result = mssparkutils.notebook.run(
-                DQ_NOTEBOOK_NAME, NOTEBOOK_TIMEOUT_SECONDS
+                DQ_NOTEBOOK_NAME, NOTEBOOK_TIMEOUT_SECONDS,
+                {"DEFAULT_LOCATION_CITY": DEFAULT_LOCATION_CITY, "JOB_RUN_ID": JOB_RUN_ID},
             )
             gold_result = mssparkutils.notebook.run(
                 GOLD_NOTEBOOK_NAME,

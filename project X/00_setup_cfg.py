@@ -94,6 +94,11 @@ def ensure_delta_table(table_name, column_definitions):
 # CELL ********************
 
 CONFIG_TABLE_DEFINITIONS = {
+    # Approved local reference data only. Setup never seeds or replaces coordinates.
+    "monitoring.cfg_location_coordinate": [
+        "location_type STRING", "location_key STRING", "latitude DOUBLE",
+        "longitude DOUBLE", "reference_source STRING", "reference_version STRING",
+    ],
     "monitoring.cfg_silver_export_load": [
         "source_kind STRING", "source_schema STRING", "source_table STRING",
         "target_table STRING", "export_date TIMESTAMP", "status STRING",
@@ -413,6 +418,12 @@ MERGE INTO monitoring.cfg_gold_lineage_mapping AS target
 USING (
   SELECT * FROM VALUES
     ('gold.fact_referral', 'silver.referral', 'SILVER', '04_gold_model', 'PRIMARY', true, 'Current referral reporting fact'),
+    ('gold.fact_referral', 'silver.referral_category', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Single category key only when unambiguous; full membership retained in bridge'),
+    ('gold.fact_referral', 'silver.referral_location', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Generalised preference city with default and review flags'),
+    ('gold.fact_offer', 'silver.offer', 'SILVER', '04_gold_model', 'PRIMARY', true, 'Offer grain and proposed framework category'),
+    ('gold.fact_offer', 'silver.provider_home_category', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Home category roll-up without multiplying offers'),
+    ('gold.fact_offer', 'silver.referral_location', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Approximate city-centroid distance origin'),
+    ('gold.fact_offer', 'silver.provider_home_location', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Locally matched postcode coordinates; distance provenance retained'),
     ('gold.fact_referral', 'silver.offer', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Offer roll-up'),
     ('gold.fact_referral', 'silver.referral_provider', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Referral/provider bridge'),
     ('gold.fact_referral', 'silver.ipa', 'SILVER', '04_gold_model', 'SUPPORTING', true, 'Placement agreement roll-up'),
@@ -424,6 +435,9 @@ USING (
     ('gold.dim_framework', 'silver.framework', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Framework dimension'),
     ('gold.dim_framework_category', 'silver.framework_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Framework category dimension'),
     ('gold.bridge_provider_home_framework_category', 'silver.provider_home_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider-home/framework-category bridge used for category-scoped provider KPI analysis'),
+    ('gold.bridge_referral_framework_category', 'silver.referral_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Complete referral/framework category membership'),
+    ('gold.bridge_provider_home_spot_category', 'silver.provider_home_spot_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider-home spot categories preserving source field names'),
+    ('gold.bridge_referral_spot_category', 'silver.referral_spot_category', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Referral spot categories preserving source field names'),
     ('gold.bridge_provider_framework', 'silver.provider_framework', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider/framework bridge'),
     ('gold.bridge_provider_sic_code', 'silver.provider_sic_codes', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider SIC bridge'),
     ('gold.dim_provider_submission_document', 'silver.provider_submission_docs', 'SILVER', '05_gold_dimensions', 'PRIMARY', true, 'Provider submission-document dimension'),

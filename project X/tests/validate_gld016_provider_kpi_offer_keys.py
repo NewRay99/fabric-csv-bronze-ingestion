@@ -44,11 +44,11 @@ assert "SELECT referral_provider_id," in offer_component
 assert "GROUP BY referral_provider_id" in offer_component
 assert "ON rp.referral_provider_id = o.referral_provider_id" in kpi_sql
 
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8"
 )
-gld016 = issue_log.split("## GLD-016", 1)[1]
-assert "### Resolution (2026-09-21)" in gld016
-assert "**Status:** resolved in repository source" in gld016
+gld018 = issue_log.split("## GLD-018", 1)[1].split("\n## ", 1)[0]
+assert "### Resolution (2026-09-21)" in gld018
+assert "**Status:** resolved in repository source" in gld018
 
 print("PASS GLD-016 publishes and consumes the Gold offer assignment key")

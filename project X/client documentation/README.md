@@ -14,8 +14,9 @@ Trust WMPP Fabric implementation.
 | `05_Operations_and_Runbooks/` | Notebook order, archive operations, validation, and support instructions |
 | `06_Governance/` | Assumptions, constraints, dependencies, decisions, and open items |
 
-Issue and change tracking is deliberately separate at
-`../change tracking/ETL_ISSUE_AND_CHANGE_LOG.md`.
+Issue and change tracking is separate from client design documentation. See
+`../change tracking/ETL_ISSUE_LOG.md` for reports and resolutions, and
+`../change tracking/ETL_CHANGE_LOG.md` for delivered batches.
 
 ## Primary controlled documents
 

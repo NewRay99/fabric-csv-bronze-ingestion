@@ -1,5 +1,19 @@
 # Mission Control semantic model DAX build guide
 
+## ETL lineage update — 25 September 2026
+
+Setup now registers the new referral framework/spot bridges and category/location
+fact inputs in `monitoring.cfg_gold_lineage_mapping`. The local coordinate
+reference is created empty; missing coordinates are supported, not a fabricated
+zero-distance success. See the
+[category/location deployment and audit guide](CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+
+**What's outstanding:** verify the changed ETL in the client Lakehouse; refresh
+Mission Control's lineage/object list after deployment; check the derived location
+tables and coordinate provenance; and obtain client approval of location rules
+and reference data. No Mission Control semantic-model/report tests were run and
+no version-specific project was changed for this ETL update.
+
 ## Supplied v16 package verification — 23 September 2026
 
 The extracted package at `reports/current/SM WMPP Mission Control v16` has

@@ -115,9 +115,9 @@ assert "saveAsTable(\"archived.framework\")" not in source
 print("PASS fallback enters normal Silver conformance without inventing archive data")
 
 issue_log = (
-    ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md"
+    ROOT / "change tracking" / "ETL_ISSUE_LOG.md"
 ).read_text(encoding="utf-8", errors="replace")
-assert "SI-005" in issue_log, "ETL change log is missing SI-005"
-print("PASS ETL change log records the fallback")
+assert "SI-005" in issue_log, "ETL issue log is missing SI-005"
+print("PASS ETL issue log records the fallback")
 
 print("VALIDATION PASSED")

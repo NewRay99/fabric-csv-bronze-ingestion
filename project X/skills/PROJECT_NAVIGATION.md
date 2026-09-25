@@ -27,7 +27,8 @@
 3. Update `project X/04_gold_model.ipynb` or `05_gold_dimensions.ipynb`
 4. Update `client documentation/03_Architecture_and_Design/Gold_DAX_Schema_Contract.md`
 5. Update `client documentation/04_Data_and_Reporting/GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`
-6. Log in `project X/change tracking/ETL_ISSUE_AND_CHANGE_LOG.md`
+6. Record the issue and resolution in `project X/change tracking/ETL_ISSUE_LOG.md`;
+   summarise the delivered batch in `project X/change tracking/ETL_CHANGE_LOG.md`
 
 ### I want to build the Power BI semantic model
 1. Read `client documentation/04_Data_and_Reporting/GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`
@@ -85,7 +86,8 @@ project X/
 │       └── Measures_Comparison_Checklist.md  # v00 vs functional spec
 │
 ├── change tracking/
-│   └── ETL_ISSUE_AND_CHANGE_LOG.md       # All resolved & open ETL issues
+│   ├── ETL_ISSUE_LOG.md                  # Reported issues and resolutions
+│   └── ETL_CHANGE_LOG.md                 # Delivered ETL batches
 │
 ├── configuration/
 │   ├── schema_definition.csv             # Central schema contract
@@ -138,14 +140,16 @@ Archive ZIPs ──► 00 Archive ──► 02a Archive Silver ──► 03 Busi
 | Why is my KPI blocked? | `04_Data_and_Reporting/GOLD_DAX_FIELD_COVERAGE_AUDIT.md` Section 4 |
 | How do relationships work? | `03_Architecture_and_Design/Gold_DAX_Schema_Contract.md` Section 4 |
 | What is the processing flow? | `03_Architecture_and_Design/HLD.md` Section 4 |
-| What was the last ETL fix? | `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md` (tail) |
+| What was the last ETL delivery? | `change tracking/ETL_CHANGE_LOG.md` (newest batch first) |
+| What is the status of a reported issue? | `change tracking/ETL_ISSUE_LOG.md` (find its ID) |
 | What validators exist? | `tests/` folder |
 
 ---
 
 ## 5. Issue and change tracking conventions
 
-All ETL changes are logged in `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md`.
+Add and resolve issues in `change tracking/ETL_ISSUE_LOG.md`. Summarise each
+delivered ETL batch in `change tracking/ETL_CHANGE_LOG.md` and link its issues.
 
 | Prefix | Meaning | Example |
 |---|---|---|

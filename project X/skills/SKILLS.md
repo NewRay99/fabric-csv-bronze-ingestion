@@ -33,7 +33,8 @@ Mission Control monitoring report.
 | Architecture (HLD/TFD/contract) | `client documentation/03_Architecture_and_Design/` |
 | DAX & KPI docs | `client documentation/04_Data_and_Reporting/` |
 | Runbooks | `client documentation/05_Operations_and_Runbooks/` |
-| Change log | `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md` |
+| Issue log | `change tracking/ETL_ISSUE_LOG.md` |
+| Change log | `change tracking/ETL_CHANGE_LOG.md` |
 | Legacy Power BI deliverables | `reports/client-deliverables/` (`SM WMPP v15.zip`, `report v15.zip`, `SM WMPP Mission Control.zip`) |
 | Regression validators | `tests/` |
 
@@ -69,9 +70,10 @@ Mission Control monitoring report.
 | Add a source column to Gold | `schema_definition.csv` → `02_silver_formatter` (auto) → `03_silver_business_rules`/`04_gold_model`/`05_gold_dimensions` → build guide → schema contract → change log (`GLD` prefix) |
 | Build the Power BI semantic model | Build guide → coverage audit → schema contract relationship rules → reconcile `DISTINCTCOUNT` of `referral_id`, `offer_id`, `ipa_id`, `referral_provider_id` |
 | Check whether a KPI is supported | Coverage audit Section 2 (supported) / Section 4 (blocked) |
-| Log an issue or change | `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md`, Symptom/Cause/Fix/Validation format; see prefix table below |
+| Log an issue | `change tracking/ETL_ISSUE_LOG.md`; keep the report and later resolution under the same ID |
+| Log a delivered batch | `change tracking/ETL_CHANGE_LOG.md`; summarise the batch once and link its issues |
 
-## 5. Change-log prefixes
+## 5. Issue ID prefixes
 
 `AR` archive loader · `ARCH-ETL` archive pipeline · `LIVE-ETL` live pipeline ·
 `SI`/`SIL` silver · `GLD` gold · `CFG` configuration/monitoring · `RG` repo

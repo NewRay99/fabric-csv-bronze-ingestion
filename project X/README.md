@@ -55,7 +55,8 @@ the primary notebooks from the retained originals after editing them.
 - [High-Level Design](client%20documentation/03_Architecture_and_Design/HLD.md)
 - [Technical/Functional Design](client%20documentation/03_Architecture_and_Design/TFD.md)
 - [Client documentation index](client%20documentation/README.md)
-- [ETL issue and change log](change%20tracking/ETL_ISSUE_AND_CHANGE_LOG.md)
+- [ETL issue log](change%20tracking/ETL_ISSUE_LOG.md)
+- [ETL change log](change%20tracking/ETL_CHANGE_LOG.md)
 
 ## Active notebook set
 

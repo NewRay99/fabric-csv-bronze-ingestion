@@ -101,8 +101,9 @@ then runs DQ and Gold.
 - Schema changes are recorded in `monitoring.cfg_schema_drift_event`; the
   approved definition is materialised in
   `monitoring.cfg_schema_drift_definition`.
-- ETL defects and material implementation changes are recorded separately in
-  `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md`.
+- ETL defects and their resolutions are recorded in
+  `change tracking/ETL_ISSUE_LOG.md`; material implementation batches are
+  summarised in `change tracking/ETL_CHANGE_LOG.md`.
 
 ## 6. Resilience and recoverability
 

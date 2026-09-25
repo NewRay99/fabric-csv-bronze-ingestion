@@ -260,7 +260,7 @@ When a new source field becomes available:
 4. **Gold fact/dimension:** Add the column to the appropriate Gold table in `04_gold_model.ipynb` or `05_gold_dimensions.ipynb`.
 5. **DAX:** Update `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` with the new measure(s).
 6. **This contract:** Update the column-to-DAX mapping in Section 3 and remove the field from Section 5.
-7. **ETL log:** Record the change in `change tracking/ETL_ISSUE_AND_CHANGE_LOG.md` with prefix `GLD`.
+7. **ETL logs:** Record a Gold issue and its resolution in `change tracking/ETL_ISSUE_LOG.md` with prefix `GLD`. Summarise the delivered batch in `change tracking/ETL_CHANGE_LOG.md`.
 
 ---
 

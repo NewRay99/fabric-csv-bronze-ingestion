@@ -37,7 +37,7 @@ def validate_rollup(text, label):
 
 
 validate_rollup(source(SILVER_RULES), "03_silver_business_rules")
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8"
 )
 assert "## PERF-001" in issue_log, "PERF-001 is not recorded in the issue log"

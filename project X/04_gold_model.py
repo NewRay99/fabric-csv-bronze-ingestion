@@ -62,6 +62,23 @@ import uuid
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
 
+
+def distance_km_sql(latitude_a, longitude_a, latitude_b, longitude_b):
+    """Native Spark SQL haversine, mean Earth radius in km; no Python row UDF."""
+    return f"""CASE
+      WHEN {latitude_a} BETWEEN -90 AND 90 AND {latitude_b} BETWEEN -90 AND 90
+        AND {longitude_a} BETWEEN -180 AND 180 AND {longitude_b} BETWEEN -180 AND 180
+      THEN 2 * 6371.0088 * ASIN(SQRT(LEAST(1.0, GREATEST(0.0,
+        POWER(SIN(RADIANS({latitude_b} - {latitude_a}) / 2), 2)
+        + COS(RADIANS({latitude_a})) * COS(RADIANS({latitude_b}))
+        * POWER(SIN(RADIANS({longitude_b} - {longitude_a}) / 2), 2)))))
+      ELSE NULL END"""
+
+
+OFFER_DISTANCE_KM_SQL = distance_km_sql(
+    "loc.location_latitude", "loc.location_longitude", "home.home_latitude", "home.home_longitude",
+)
+
 if AS_OF_DATE:
     AS_OF_DATE_VALUE = datetime.strptime(AS_OF_DATE, "%Y-%m-%d").date()
 else:
@@ -91,7 +108,18 @@ GOLD_SOURCE_REQUIREMENTS = {
         "offer_date", "last_modified_date", "offer_type",
         "estimated_start_date", "core_weekly_fee", "education_weekly_fee",
         "decline_reason_other", "decline_reason", "withdraw_reason",
-        "child_summary_needs", "export_date",
+        "child_summary_needs", "export_date", "category",
+    },
+    "silver.referral_category": {"referral_id", "framework_category_id"},
+    "silver.provider_home_category": {"provider_home_id", "framework_category_id"},
+    "silver.referral_location": {
+        "referral_id", "location", "location_match_status", "location_is_default",
+        "location_requires_review", "location_latitude", "location_longitude",
+        "location_reference_source", "location_reference_version",
+    },
+    "silver.provider_home_location": {
+        "provider_home_id", "postcode_normalized", "home_latitude", "home_longitude",
+        "home_reference_source", "home_reference_version",
     },
     "silver.referral_provider": {
         "referral_provider_id", "referral_id", "provider_id", "export_date",
@@ -219,6 +247,14 @@ referral_child AS (
   FROM silver.referral_person
   GROUP BY referral_id
 ),
+referral_framework_category AS (
+  SELECT referral_id,
+    CASE WHEN COUNT(DISTINCT framework_category_id) = 1
+      THEN MIN(framework_category_id) END AS framework_category_id,
+    COUNT(DISTINCT framework_category_id) AS framework_category_count
+  FROM silver.referral_category
+  GROUP BY referral_id
+),
 closure_reason AS (
   SELECT referral_id, closed_referral_reason_bucket AS referral_closure_reason
   FROM silver.referral_closure_reason_summary
@@ -285,6 +321,9 @@ provider_response AS (
 ),
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+    category.framework_category_id,
+    COALESCE(category.framework_category_count, 0) AS framework_category_count,
+    loc.location, loc.location_match_status, loc.location_is_default, loc.location_requires_review,
     CAST(r.export_date AS TIMESTAMP) AS export_date,
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
@@ -327,9 +366,13 @@ base AS (
   LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
   LEFT JOIN provider_response p ON r.referral_id = p.referral_id
+  LEFT JOIN referral_framework_category category ON r.referral_id = category.referral_id
+  LEFT JOIN silver.referral_location loc ON r.referral_id = loc.referral_id
 )
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, referral_created_date, required_placement_date,
+  framework_category_id, framework_category_count,
+  location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
   referral_closure_reason, last_activity_date, current_status,
@@ -437,6 +480,8 @@ snapshot = spark.table("gold.fact_referral").select(
     F.last_day(F.lit(AS_OF_DATE_VALUE).cast("date")).alias("snapshot_month_end"),
     F.lit("WMPP_SNAPSHOT_V2").alias("snapshot_rule_version"),
     "job_run_id", "export_date", "referral_id", "person_id", "referral_created_date", "required_placement_date",
+    "framework_category_id", "framework_category_count",
+    "location", "location_match_status", "location_is_default", "location_requires_review",
     "first_action_date", "first_offer_date", "offer_accepted_date", "ipa_issued_date",
     "referral_closed_date", "referral_closure_reason", "current_status",
     "last_activity_date", "placement_type_required", "region", "priority",
@@ -534,9 +579,36 @@ LEFT JOIN (
 # and referral-provider records rather than collapsing them into FactReferral.
 spark.sql(f"""
 CREATE OR REPLACE TABLE gold.fact_offer AS
+WITH home_framework_category AS (
+  SELECT provider_home_id,
+    CASE WHEN COUNT(DISTINCT framework_category_id) = 1
+      THEN MIN(framework_category_id) END AS framework_category_id,
+    COUNT(DISTINCT framework_category_id) AS framework_category_count
+  FROM silver.provider_home_category
+  GROUP BY provider_home_id
+)
 SELECT {AS_OF_SQL} AS as_of_date,
   o.offer_id AS offer_id, rp.referral_id AS referral_id,o.referral_provider_id,
-  rp.provider_id AS provider_id, o.provider_home_id AS home_id,
+  rp.provider_id AS provider_id, o.provider_home_id AS provider_home_id,
+  o.category AS framework_category_id,
+  category.framework_category_id AS provider_home_framework_category_id,
+  COALESCE(category.framework_category_count, 0) AS provider_home_framework_category_count,
+  loc.location AS referral_location,
+  loc.location_match_status, loc.location_is_default, loc.location_requires_review,
+  home.postcode_normalized AS provider_home_postcode,
+  CASE WHEN loc.location_requires_review THEN NULL
+    ELSE {OFFER_DISTANCE_KM_SQL} END AS referral_to_home_distance_km,
+  CASE
+    WHEN loc.referral_id IS NULL THEN 'MISSING_REFERRAL_LOCATION'
+    WHEN loc.location_requires_review THEN 'LOCATION_REQUIRES_REVIEW'
+    WHEN loc.location_latitude IS NULL OR loc.location_longitude IS NULL THEN 'MISSING_CITY_COORDINATES'
+    WHEN home.home_latitude IS NULL OR home.home_longitude IS NULL THEN 'MISSING_HOME_COORDINATES'
+    WHEN loc.location_is_default THEN 'APPROXIMATE_DEFAULT_CITY'
+    ELSE 'APPROXIMATE_PREFERENCE_CITY'
+  END AS referral_to_home_distance_status,
+  'CITY_CENTROID_TO_POSTCODE_STRAIGHT_LINE' AS referral_to_home_distance_basis,
+  loc.location_reference_source, loc.location_reference_version,
+  home.home_reference_source, home.home_reference_version,
   CAST(o.offer_date AS TIMESTAMP) AS offer_submitted_date,
   CAST(o.last_modified_date AS TIMESTAMP) AS offer_reviewed_date,
   CASE WHEN LOWER(COALESCE(o.offer_status, '')) IN
@@ -579,6 +651,9 @@ SELECT {AS_OF_SQL} AS as_of_date,
 FROM silver.offer o
 INNER JOIN silver.referral_provider rp
   ON o.referral_provider_id = rp.referral_provider_id
+LEFT JOIN home_framework_category category ON o.provider_home_id = category.provider_home_id
+LEFT JOIN silver.referral_location loc ON rp.referral_id = loc.referral_id
+LEFT JOIN silver.provider_home_location home ON o.provider_home_id = home.provider_home_id
 LEFT JOIN (
   SELECT offer_id, COUNT(*) AS ipa_count,
     MAX(CASE WHEN COALESCE(CAST(signed_by_provider AS BOOLEAN), false)

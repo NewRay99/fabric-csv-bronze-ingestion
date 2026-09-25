@@ -1,5 +1,22 @@
 # Gold semantic model DAX build guide
 
+## ETL category and location contract — 25 September 2026
+
+The active ETL now separates proposed offer category from actual home category,
+adds referral framework and spot bridges, and renames `fact_offer.home_id` to
+`provider_home_id`. Generalised referral locations and approximate offer distances
+include explicit default/review/missing-data flags. See the
+[implementation and deployment guide](CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+
+**What's outstanding:** deploy/verify the notebooks in Fabric, load approved
+city/postcode coordinates, approve location parsing/default rules, and rebind
+downstream keys/category relationships. Use bridges for multi-category membership;
+do not treat a null single-category key as no membership without checking its
+count. Distances are approximate straight-line city-to-postcode distances, not
+child addresses or travel distances. Client semantic/report projects were not
+edited or tested for this ETL change. Retained historical months require a
+separately approved rebuild to populate the new snapshot fields.
+
 ## End-goal KPI pages and snapshot window — 23 September 2026
 
 The report under `reports/current/RPT WMPP v16` now includes **Board Dashboard**,

@@ -57,9 +57,9 @@ for notebook in NOTEBOOKS:
         f"{notebook.name} no longer deduplicates repeated source snapshots"
     )
 
-issue_log = (ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md").read_text(
+issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
     encoding="utf-8"
 )
-assert "## GLD-015" in issue_log
-assert "**Status:** resolved" in issue_log.split("## GLD-015", 1)[1]
-print("PASS GLD-015 cleans, groups and sequences provider closure reasons")
+gld017 = issue_log.split("## GLD-017", 1)[1].split("\n## ", 1)[0]
+assert "**Status:** resolved" in gld017
+print("PASS GLD-017 cleans, groups and sequences provider closure reasons")

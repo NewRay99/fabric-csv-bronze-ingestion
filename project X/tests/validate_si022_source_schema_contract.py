@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "configuration" / "schema_definition.csv"
 CANDIDATE = ROOT / "configuration" / "cfg_tables" / "cfg_schema_definition_candidate.csv"
 EXTRACT_ZIP = CANDIDATE.parent / "cfg_extracts.zip"
-ISSUE_LOG = ROOT / "change tracking" / "ETL_ISSUE_AND_CHANGE_LOG.md"
+ISSUE_LOG = ROOT / "change tracking" / "ETL_ISSUE_LOG.md"
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
