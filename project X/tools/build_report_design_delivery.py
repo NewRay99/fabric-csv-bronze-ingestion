@@ -229,7 +229,7 @@ class Page:
         self.bg, self.panel, self.ink, self.muted, self.accent = (
             ("#101713", "#1B241E", "#F3F7EF", "#A7B6A9", "#CBF576")
             if dark
-            else ("#F8F1F4", "#FFFFFF", "#2B2427", "#61575C", "#E96B7D")
+            else ("#F8F5F1", "#FFFFFF", "#2B2427", "#61575C", "#E96B7D")
         )
         self.data["objects"] = {"background": obj(color=fill(self.bg), transparency=L("0D"))}
         self.visuals = []
@@ -261,6 +261,9 @@ class Page:
             for k in ("background", "border", "dropShadow", "title", "subTitle")
         }
         v["visual"]["visualContainerObjects"]["general"] = obj(altText=L(quoted(key)))
+        v["visual"]["visualContainerObjects"]["padding"] = obj(
+            top=L("0D"), bottom=L("0D"), left=L("0D"), right=L("0D")
+        )
         self.visuals.append(v)
         return v
 
@@ -288,6 +291,9 @@ class Page:
         return v
 
     def panel_box(self, pos, title=None, caption=None, color=None):
+        from apply_report_soft_glow import native_panel
+
+        self.visuals.append(native_panel(self.id, pos, self.dark, color))
         x, y, w, h = pos
         self.svg.append(
             f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="18" fill="{color or (self.panel if self.dark else "url(#glass)")}"'
@@ -334,8 +340,16 @@ class Page:
                 fontFamily=L("'Segoe UI Semibold'"),
                 horizontalAlignment=L("'left'"),
             ),
-            "layout": obj(
-                autoGrid=L("true"), rowCount=L("1L"), columnCount=L("1L"), cellPadding=L("0L")
+            "layout": default(
+                autoGrid=L("true"),
+                rowCount=L("1L"),
+                columnCount=L("1L"),
+                cellPadding=L("0L"),
+                leftOuterMargin=L("0L"),
+                rightOuterMargin=L("0L"),
+                topOuterMargin=L("0L"),
+                bottomOuterMargin=L("0L"),
+                backgroundShow=L("false"),
             ),
             "padding": default(
                 paddingSelection=L("'Custom'"),
@@ -373,9 +387,18 @@ class Page:
                 selectAllCheckboxEnabled=L(str(not single).lower()),
             ),
             "header": obj(
-                show=L("true"), text=L(quoted(key)), fontColor=fill(self.muted), textSize=L("10D")
+                show=L("true"),
+                text=L(quoted(key)),
+                fontColor=fill(self.muted),
+                background=fill(self.panel),
+                textSize=L("10D"),
             ),
-            "items": obj(fontColor=fill(self.ink), background=fill(self.panel), textSize=L("11D")),
+            "items": obj(
+                fontColor=fill(self.ink),
+                background=fill(self.panel),
+                textSize=L("11D"),
+                padding=L("2D"),
+            ),
             "general": obj(selfFilterEnabled=L("true")),
         }
         if default:
@@ -515,31 +538,10 @@ class Page:
         save(metadata_path, metadata)
 
     def finish(self):
-        resource = "delivery-" + self.id + ".svg"
-        assets = self.report / "StaticResources/RegisteredResources"
-        assets.mkdir(parents=True, exist_ok=True)
-        (assets / resource).write_text("".join(self.svg) + "</svg>", encoding="utf-8")
-        v = self.shell("page-background", "image", (0, 0, 1680, 945))
-        v["position"].update(z=0, tabOrder=0)
-        v["visual"]["objects"] = {
-            "image": obj(
-                sourceFile={
-                    "image": {
-                        "name": L(quoted(resource)),
-                        "url": {
-                            "expr": {
-                                "ResourcePackageItem": {
-                                    "PackageName": "RegisteredResources",
-                                    "PackageType": 1,
-                                    "ItemName": resource,
-                                }
-                            }
-                        },
-                        "scaling": L("'Fit'"),
-                    }
-                }
-            )
-        }
+        # The requested plain surface uses the native page colour only. Do not
+        # reintroduce a composite skin or baked-in icons. Soft shadows belong
+        # to individual editable native panels produced by panel_box.
+        self.svg = self.svg[:1]
         save(self.path / "page.json", self.data)
         for visual in self.visuals:
             save(self.path / "visuals" / visual["name"] / "visual.json", visual)
@@ -562,14 +564,6 @@ class Page:
                     target = target.with_name(target.name + "-" + uuid.uuid4().hex[:8])
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(source), str(target))
-        path = self.report / "definition/report.json"
-        report = read(path)
-        resources = next(
-            p for p in report["resourcePackages"] if p["name"] == "RegisteredResources"
-        )["items"]
-        if not any(r["name"] == resource for r in resources):
-            resources.append({"name": resource, "path": resource, "type": "Image"})
-        save(path, report)
         path = self.report / "definition/pages/pages.json"
         pages = read(path)
         if self.id not in pages["pageOrder"]:
@@ -1843,6 +1837,58 @@ def render_chart_proofs(bundle):
     print("Rendered chart-spec proofs with synthetic data only.")
 
 
+def plain_surfaces(bundle):
+    """Update only the generated report surfaces; do not rebuild semantic models."""
+    for report in bundle.glob("*/*.Report"):
+        for page_path in report.glob("definition/pages/*/page.json"):
+            page_id = page_path.parent.name
+            skin = page_path.parent / "visuals" / ident(page_id + "page-background")
+            if not (skin / "visual.json").exists():
+                continue
+            backup = bundle / "_review/pre-plain" / report.name / page_id
+            if backup.exists():
+                raise ValueError(f"Preserve existing surface backup: {backup}")
+            backup.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(page_path.parent, backup)
+            source = skin.resolve()
+            target = (backup / "removed-skin").resolve()
+            if not source.is_relative_to(report.resolve()) or not target.is_relative_to(
+                (bundle / "_review").resolve()
+            ):
+                raise ValueError("Skin archive outside scoped delivery paths")
+            shutil.move(str(source), str(target))
+            data = read(page_path)
+            dark = "Mission Control" in report.name
+            panel = "#1B241E" if dark else "#FFFFFF"
+            visuals = []
+            for path in page_path.parent.glob("visuals/*/visual.json"):
+                value = read(path)
+                visual = value["visual"]
+                visual.setdefault("visualContainerObjects", {})["padding"] = obj(
+                    top=L("0D"), bottom=L("0D"), left=L("0D"), right=L("0D")
+                )
+                if visual["visualType"] == "slicer":
+                    visual["objects"]["items"][0]["properties"]["padding"] = L("2D")
+                    visual["objects"]["header"][0]["properties"]["background"] = fill(panel)
+                save(path, value)
+                visuals.append(value)
+            # Regenerate the honest layout-only proof from the edited report,
+            # retaining actual queries, bookmarks, positions and text content.
+            preview = Page.__new__(Page)
+            preview.bundle, preview.report, preview.id = bundle, report, page_id
+            preview.bg = "#101713" if dark else "#F8F5F1"
+            preview.panel = panel
+            preview.ink = "#F3F7EF" if dark else "#2B2427"
+            preview.muted = "#A7B6A9" if dark else "#61575C"
+            preview.accent = "#CBF576" if dark else "#E96B7D"
+            preview.visuals = sorted(visuals, key=lambda v: v["position"].get("z", 0))
+            preview.svg = [
+                f'<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="945"><rect width="1680" height="945" fill="{preview.bg}"/>'
+            ]
+            preview.preview()
+            print("Plain surface and explicit padding:", report.name, data["displayName"])
+
+
 def validate_delivery_paths(bundle):
     """Guard Desktop's observed legacy path limits; review archives are not loaded."""
     for root in bundle.iterdir():
@@ -1862,6 +1908,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("bundle", type=Path)
     parser.add_argument(
+        "--plain-surfaces-only",
+        action="store_true",
+        help="Remove generated skins and override inherited padding without changing models",
+    )
+    parser.add_argument(
         "--render-proofs",
         action="store_true",
         help="Render isolated synthetic Vega-Lite proofs; requires vl-convert-python",
@@ -1872,6 +1923,10 @@ def main():
     if not bundle.is_relative_to(allowed.resolve()) or bundle == allowed.resolve():
         raise ValueError("Use a dedicated extracted directory under client-deliverables.")
     validate_delivery_paths(bundle)
+    if args.plain_surfaces_only:
+        plain_surfaces(bundle)
+        validate_delivery_paths(bundle)
+        return
     for root in sorted(bundle.iterdir()):
         if not root.is_dir() or root.name.startswith("_"):
             continue

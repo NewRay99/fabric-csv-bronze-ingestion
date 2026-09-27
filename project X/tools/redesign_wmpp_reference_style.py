@@ -69,11 +69,11 @@ class Page:
         self.path = SOURCE / 'definition/pages' / self.id
         self.data = read(self.path / 'page.json')
         self.data.update(width=1680, height=945, displayOption='FitToPage')
-        self.data['objects'] = {'background': obj(color=fill('#FAFAFA'), transparency=L('0D'))}
+        self.data['objects'] = {'background': obj(color=fill('#F8F5F1'), transparency=L('0D'))}
         self.count, self.written, self.bookmarks = 1, set(), []
         self.svg = ['<svg xmlns="http://www.w3.org/2000/svg" width="1680" height="945" viewBox="0 0 1680 945">',
             '<defs><filter id="shadow" x="-15%" y="-25%" width="130%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#202124" flood-opacity=".10"/></filter></defs>',
-            '<rect width="1680" height="945" fill="#FAFAFA"/>', icon('grid',28,29,42),
+            '<rect width="1680" height="945" fill="#F8F5F1"/>', icon('grid',28,29,42),
             text(96,55,'FOSTER PLACEMENT PERFORMANCE',28,weight=700), text(96,88,title,20,CORAL),
             text(96,112,'Data as of',12,'#666666')]
         self.svg.append('<rect x="1040" y="20" width="360" height="86" rx="14" fill="white" filter="url(#shadow)"/>')

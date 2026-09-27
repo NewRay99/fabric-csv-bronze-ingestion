@@ -1,0 +1,94 @@
+{
+  "downloaded_utc": "2026-09-27T15:43:59.227826+00:00",
+  "licence_source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/LICENSE",
+  "icons": [
+    {
+      "navigation": "Home",
+      "icon": "house",
+      "page": "https://lucide.dev/icons/house",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/house.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-house-white.svg",
+      "source_sha256": "28216c479005731ef5e382e7d8627eda2b129b019eb1f3d9de9f5915576d448e",
+      "white_sha256": "6c1eba19f401bc90ab96bdc6da1fec0965c8feedd653aff5883756326307afff",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Referrals",
+      "icon": "user-round-plus",
+      "page": "https://lucide.dev/icons/user-round-plus",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/user-round-plus.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-user-round-plus-white.svg",
+      "source_sha256": "03c10a74bcc653585368a82cc565c6f153d0174c52daad052d63fd30ce11d588",
+      "white_sha256": "602c2611a4631fce11df7643123f62e8217b38cd1071719200d2c8a46fef1ccc",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Offers",
+      "icon": "handshake",
+      "page": "https://lucide.dev/icons/handshake",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/handshake.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-handshake-white.svg",
+      "source_sha256": "f58638064a1884e256895720c9a665d9e98cfc6935c52e14782ce0e84ecdad02",
+      "white_sha256": "1ff9858e2ce8b7cb507426e0e0ccfa0309c84120ff6f76806336d2f0c9a46191",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Draft offers",
+      "icon": "file-pen-line",
+      "page": "https://lucide.dev/icons/file-pen-line",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/file-pen-line.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-file-pen-line-white.svg",
+      "source_sha256": "a5eb2fceab005296a3d2240396869db01c86292e95207eeef65bb11166ec9a3e",
+      "white_sha256": "f8dcee3afc1783a55d80347d647dea0df957c3c8a43843b12018c4895998076c",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "IPAs",
+      "icon": "file-check-corner",
+      "page": "https://lucide.dev/icons/file-check-corner",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/file-check-corner.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-file-check-corner-white.svg",
+      "source_sha256": "b697716c35561d0fbc65db4f60b7dcdc0074f9e4f44f4c8af9509fb73ad6d595",
+      "white_sha256": "a3f4e0368810c33dc192cc3a55205bb3daa26e46f37aef236798cd667025087c",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Providers",
+      "icon": "building-complex",
+      "page": "https://lucide.dev/icons/building-complex",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/building-complex.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-building-complex-white.svg",
+      "source_sha256": "e0d46029dac60bf48ecac4532d39e15772cf484e4d230a6b40aee98775ffae85",
+      "white_sha256": "9e868be2086e38822f9f1d5b6343c01fcccb8d2de672023c4f2d2e1ec6b8efdc",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Performance",
+      "icon": "chart-no-axes-combined",
+      "page": "https://lucide.dev/icons/chart-no-axes-combined",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/chart-no-axes-combined.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-chart-no-axes-combined-white.svg",
+      "source_sha256": "2f8a708c357488cfde7428d9b055b9bb4a99c08dc71e9296da03ecc19291c4ab",
+      "white_sha256": "95953860847566acf1f83145ed39292b8855de5f3b0dcd96d47a4406dc187fe8",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    },
+    {
+      "navigation": "Requirements",
+      "icon": "clipboard-list",
+      "page": "https://lucide.dev/icons/clipboard-list",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clipboard-list.svg",
+      "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+      "file": "lucide-nav-clipboard-list-white.svg",
+      "source_sha256": "2b91abc2e8ee8ba4c2e0f77d506a47a7a9774b0d4de3fa4b27e822a6376ab892",
+      "white_sha256": "b540682844ef1cdec4a5e43a62fa1a4c091e522dbd54a81971cba8a28d846fe6",
+      "modification": "stroke currentColor replaced by #FFFFFF; paths unchanged"
+    }
+  ]
+}

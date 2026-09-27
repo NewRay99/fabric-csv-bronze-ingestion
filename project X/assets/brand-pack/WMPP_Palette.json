@@ -1,0 +1,36 @@
+{
+  "name": "WMPP approved reporting palette",
+  "version": "2026-09-27",
+  "colours": {
+    "heroOrange": "#EF7911",
+    "navigationCoral": "#FB6540",
+    "hoverCoral": "#F98165",
+    "teal": "#4DAAAB",
+    "deepTeal": "#287C73",
+    "warmPeach": "#FFB39F",
+    "blushPeach": "#FEE1DD",
+    "cobalt": "#0D35B8",
+    "berry": "#E63496",
+    "identityGold": "#FCBF00",
+    "identityPaleGold": "#FFE672",
+    "critical": "#C0392B",
+    "warning": "#E69512",
+    "success": "#277455",
+    "criticalTint": "#FBE7E4",
+    "warningTint": "#FFF1D6",
+    "successTint": "#E4F1E9",
+    "text": "#2B2B2C",
+    "secondaryText": "#625B5B",
+    "stone": "#E3DADA",
+    "mist": "#F0EBE7",
+    "canvas": "#F8F5F1",
+    "surface": "#FFFFFF",
+    "shadow": "#C78E7A"
+  },
+  "categorical": ["#FB6540", "#2B2B2C", "#4DAAAB", "#0D35B8", "#E63496", "#FFB39F"],
+  "placementTypes": {
+    "Supported Accommodation": "#FB6540",
+    "Residential": "#4DAAAB",
+    "Fostering": "#2B2B2C"
+  }
+}

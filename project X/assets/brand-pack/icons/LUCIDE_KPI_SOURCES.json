@@ -1,0 +1,1960 @@
+{
+  "revision": "66d8f9fc394b8530377e5f6112f0b8908ba01280",
+  "downloaded_utc": "2026-09-27T16:06:54.056003+00:00",
+  "modification": "Stroke colour replaced; viewBox expanded symmetrically to -4 -4 32 32 for 25% smaller centred artwork. Paths unchanged; no background added.",
+  "assets": [
+    {
+      "icon": "activity",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/activity.svg",
+      "page": "https://lucide.dev/icons/activity",
+      "file": "lucide-kpi-activity-287c73.svg",
+      "source_sha256": "050fbcda05e13c2051cf857683645e19c6b180861ef4d0cc28a6f09ba1ea1666",
+      "variant_sha256": "6888b4453f41dde8d6f12500290e3f637f83fdad3ecb7af125913e7cebf134d3"
+    },
+    {
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/building-complex.svg",
+      "page": "https://lucide.dev/icons/building-complex",
+      "file": "lucide-kpi-building-complex-d94d2b.svg",
+      "source_sha256": "e0d46029dac60bf48ecac4532d39e15772cf484e4d230a6b40aee98775ffae85",
+      "variant_sha256": "0ed5ad5a20496dfe9c0a455128d44de19428f7f54b229681993765d760211965"
+    },
+    {
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/calendar-days.svg",
+      "page": "https://lucide.dev/icons/calendar-days",
+      "file": "lucide-kpi-calendar-days-d94d2b.svg",
+      "source_sha256": "9330eb8d7c4989e97b6361314abbf02953243c602874725c9e58ceca00da3bd7",
+      "variant_sha256": "10196ba883258e1fa0f12dd9edbce8530ed8e11d1b4710fd4a53cf21a3a0a291"
+    },
+    {
+      "icon": "chart-column",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/chart-column.svg",
+      "page": "https://lucide.dev/icons/chart-column",
+      "file": "lucide-kpi-chart-column-d94d2b.svg",
+      "source_sha256": "80664a4c5ca1bca10bcb88c1a99f62593c94d61d72d3a4bbf577eb3f3ea4da57",
+      "variant_sha256": "b6d65ee7f1409fdf9c17f00baf426f35a8a8d02b24b8f51d1bbfb5c1d4ac216d"
+    },
+    {
+      "icon": "chart-no-axes-combined",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/chart-no-axes-combined.svg",
+      "page": "https://lucide.dev/icons/chart-no-axes-combined",
+      "file": "lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "source_sha256": "2f8a708c357488cfde7428d9b055b9bb4a99c08dc71e9296da03ecc19291c4ab",
+      "variant_sha256": "34e82706e2825cc8342cdd3ffc8fec174d928b441e9e8a2baedd7d09af808904"
+    },
+    {
+      "icon": "clipboard-check",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clipboard-check.svg",
+      "page": "https://lucide.dev/icons/clipboard-check",
+      "file": "lucide-kpi-clipboard-check-287c73.svg",
+      "source_sha256": "e2bac86a6b24caa0d7d0dcc2719ec6b7870ec5eef2d21afae498d8cb5eefda96",
+      "variant_sha256": "904a095665372622d3b7e38873aa1f0831ce560d006bd139867ad09686fc6e40"
+    },
+    {
+      "icon": "clipboard-check",
+      "colour": "#625B5B",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clipboard-check.svg",
+      "page": "https://lucide.dev/icons/clipboard-check",
+      "file": "lucide-kpi-clipboard-check-575756.svg",
+      "source_sha256": "e2bac86a6b24caa0d7d0dcc2719ec6b7870ec5eef2d21afae498d8cb5eefda96",
+      "variant_sha256": "caa1b784fdbc45f2fa1af23c2ea4877a5925849e9f046ff772c45a108fdbc24f"
+    },
+    {
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clipboard-list.svg",
+      "page": "https://lucide.dev/icons/clipboard-list",
+      "file": "lucide-kpi-clipboard-list-d94d2b.svg",
+      "source_sha256": "2b91abc2e8ee8ba4c2e0f77d506a47a7a9774b0d4de3fa4b27e822a6376ab892",
+      "variant_sha256": "294e9bbd6282bda795483e1e1d17bfeff7aca24ec79222e2fc3517c29b641399"
+    },
+    {
+      "icon": "clock",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clock.svg",
+      "page": "https://lucide.dev/icons/clock",
+      "file": "lucide-kpi-clock-287c73.svg",
+      "source_sha256": "e9d3e3acf4d1c280fcf8092293439dc0a4756a908ceb859de144b12451cd1cb9",
+      "variant_sha256": "15b1b6afb3742189d44602f7c6c9e6328f2aaf0ee40ef6d6099d78e0168c7245"
+    },
+    {
+      "icon": "clock",
+      "colour": "#625B5B",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clock.svg",
+      "page": "https://lucide.dev/icons/clock",
+      "file": "lucide-kpi-clock-575756.svg",
+      "source_sha256": "e9d3e3acf4d1c280fcf8092293439dc0a4756a908ceb859de144b12451cd1cb9",
+      "variant_sha256": "bb376b1c908c183ef0013bab25d72f74a7a5504a61d60431fa4e1ba237e8b98b"
+    },
+    {
+      "icon": "clock",
+      "colour": "#E69512",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/clock.svg",
+      "page": "https://lucide.dev/icons/clock",
+      "file": "lucide-kpi-clock-a86612.svg",
+      "source_sha256": "e9d3e3acf4d1c280fcf8092293439dc0a4756a908ceb859de144b12451cd1cb9",
+      "variant_sha256": "4b2828511571e80c628bc28f60c6c24d3def216e79025f3cd54d007fff4520e3"
+    },
+    {
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/file-check-corner.svg",
+      "page": "https://lucide.dev/icons/file-check-corner",
+      "file": "lucide-kpi-file-check-corner-287c73.svg",
+      "source_sha256": "b697716c35561d0fbc65db4f60b7dcdc0074f9e4f44f4c8af9509fb73ad6d595",
+      "variant_sha256": "85c1fc696b00c601f04d87b479b2a17d17d263a7ffee98d2ea3d441fc41dd5c1"
+    },
+    {
+      "icon": "file-pen-line",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/file-pen-line.svg",
+      "page": "https://lucide.dev/icons/file-pen-line",
+      "file": "lucide-kpi-file-pen-line-d94d2b.svg",
+      "source_sha256": "a5eb2fceab005296a3d2240396869db01c86292e95207eeef65bb11166ec9a3e",
+      "variant_sha256": "e65df20bbd54bc3eb959111fdbc14ff2c4ec4f6b77f5ad89dc667f9c4bbf08f3"
+    },
+    {
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/file-plus.svg",
+      "page": "https://lucide.dev/icons/file-plus",
+      "file": "lucide-kpi-file-plus-d94d2b.svg",
+      "source_sha256": "bbcf862a2a4425baa8a5bda39c7f16ec1d283816a3db77baf84f2e8766dd223e",
+      "variant_sha256": "82c31df2046291816eceaa723e2b7a9c135ec1be7369dfde4be00526fa8099eb"
+    },
+    {
+      "icon": "handshake",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/handshake.svg",
+      "page": "https://lucide.dev/icons/handshake",
+      "file": "lucide-kpi-handshake-287c73.svg",
+      "source_sha256": "f58638064a1884e256895720c9a665d9e98cfc6935c52e14782ce0e84ecdad02",
+      "variant_sha256": "2315e101f7fb8773e011631d639bad54220c27608e1e03b39a35e9c3ef5c492f"
+    },
+    {
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/handshake.svg",
+      "page": "https://lucide.dev/icons/handshake",
+      "file": "lucide-kpi-handshake-d94d2b.svg",
+      "source_sha256": "f58638064a1884e256895720c9a665d9e98cfc6935c52e14782ce0e84ecdad02",
+      "variant_sha256": "49d418f0b99bacfd4a8bad3f139b48b7f343928e5be5d5b8165e2a7db1e56dac"
+    },
+    {
+      "icon": "hourglass",
+      "colour": "#E69512",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/hourglass.svg",
+      "page": "https://lucide.dev/icons/hourglass",
+      "file": "lucide-kpi-hourglass-a86612.svg",
+      "source_sha256": "76475d4ca3299fa243ef83de602b78621487daad45ca54fea2e3718bfba5ef2c",
+      "variant_sha256": "ed88d93bd16e664c39ebe0d7ed00ae719f739e4f519956cf21c7fae784802e58"
+    },
+    {
+      "icon": "house",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/house.svg",
+      "page": "https://lucide.dev/icons/house",
+      "file": "lucide-kpi-house-d94d2b.svg",
+      "source_sha256": "28216c479005731ef5e382e7d8627eda2b129b019eb1f3d9de9f5915576d448e",
+      "variant_sha256": "d6f0366612ac016f7a3957b6b7f8b941bed56e76a5a0940a362e8f0b9e091059"
+    },
+    {
+      "icon": "lightbulb",
+      "colour": "#E69512",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/lightbulb.svg",
+      "page": "https://lucide.dev/icons/lightbulb",
+      "file": "lucide-kpi-lightbulb-a86612.svg",
+      "source_sha256": "e33bbec15b1e64cca958e086850f951c0dc2201cd5778bb3695fda3cb6ea457d",
+      "variant_sha256": "b7e986e576156ef2a1123d41d6252388880f69e0dff46f64fcc6c5aede119b30"
+    },
+    {
+      "icon": "map-pin",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/map-pin.svg",
+      "page": "https://lucide.dev/icons/map-pin",
+      "file": "lucide-kpi-map-pin-287c73.svg",
+      "source_sha256": "16f1042a62f1bda20ebab8bfc1cb79c0be285c980dea6c2c733a17902631405b",
+      "variant_sha256": "76a94d652ca280f242980facbfec1980218f9c078bb9db0c87042d44d5667059"
+    },
+    {
+      "icon": "map-pin",
+      "colour": "#E69512",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/map-pin.svg",
+      "page": "https://lucide.dev/icons/map-pin",
+      "file": "lucide-kpi-map-pin-a86612.svg",
+      "source_sha256": "16f1042a62f1bda20ebab8bfc1cb79c0be285c980dea6c2c733a17902631405b",
+      "variant_sha256": "4fd06f54e5ea1d1f34022ecb70a04c59d33cd33d25cfcb7a35308b2f53a936b2"
+    },
+    {
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/map-pin.svg",
+      "page": "https://lucide.dev/icons/map-pin",
+      "file": "lucide-kpi-map-pin-d94d2b.svg",
+      "source_sha256": "16f1042a62f1bda20ebab8bfc1cb79c0be285c980dea6c2c733a17902631405b",
+      "variant_sha256": "2be153373483fba2eb01b6801341a2d2955c3fc6af81cf64617b97dce567ccbb"
+    },
+    {
+      "icon": "network",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/network.svg",
+      "page": "https://lucide.dev/icons/network",
+      "file": "lucide-kpi-network-d94d2b.svg",
+      "source_sha256": "626be730feea1e5ea7539fbf78b4a3fcb927ce5d7dc43364f2216908672ac792",
+      "variant_sha256": "24fc41c9d0386db73b5bd289318644755609bc2eb6a663d850186dfa8bc392ea"
+    },
+    {
+      "icon": "pound-sterling",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/pound-sterling.svg",
+      "page": "https://lucide.dev/icons/pound-sterling",
+      "file": "lucide-kpi-pound-sterling-287c73.svg",
+      "source_sha256": "a1a87d3a04be00fb5216f34d76a81b3681bf5d32742b5b32784b245e42f33cf7",
+      "variant_sha256": "bfa083420d705ea247dae7c7a1e2571a31f6810b224eedaa6a35e2685e19737f"
+    },
+    {
+      "icon": "route",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/route.svg",
+      "page": "https://lucide.dev/icons/route",
+      "file": "lucide-kpi-route-d94d2b.svg",
+      "source_sha256": "fc169fd38a9963b016ad6d60fd72baa2b0ea8e0cec085bbc53287297c3d8121a",
+      "variant_sha256": "9998d0ca404f810b5f988284808c4731fc09a2ed2424a2ca2067797cf8aa7e9f"
+    },
+    {
+      "icon": "target",
+      "colour": "#287C73",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/target.svg",
+      "page": "https://lucide.dev/icons/target",
+      "file": "lucide-kpi-target-287c73.svg",
+      "source_sha256": "96a6b16628825a1a207a77e9a5818f74c3e74ea3664783ff5c2a44e6347b90df",
+      "variant_sha256": "2dae50ed24b0b217d257747a617f811a824f006990c71b173bc5467d1d798fd3"
+    },
+    {
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/triangle-alert.svg",
+      "page": "https://lucide.dev/icons/triangle-alert",
+      "file": "lucide-kpi-triangle-alert-c13f35.svg",
+      "source_sha256": "4866f38b8560d410f21e3226413e0b77997b6dfbb6931fadfe0a0d5aef9ffeb4",
+      "variant_sha256": "e224ce960ae07b5bf1408f74dcc00b0eda967f114ffe02b7d680d045f88b4078"
+    },
+    {
+      "icon": "users",
+      "colour": "#EF7911",
+      "source": "https://raw.githubusercontent.com/lucide-icons/lucide/66d8f9fc394b8530377e5f6112f0b8908ba01280/icons/users.svg",
+      "page": "https://lucide.dev/icons/users",
+      "file": "lucide-kpi-users-d94d2b.svg",
+      "source_sha256": "eeed488a1ec95ba730dd69996536fb65061d6ea273afb2429ae47e65eebf401c",
+      "variant_sha256": "b93eb9e780474f1c68d2a21bd471cb04064b315a9da8ac759e52f22b1d1b09a7"
+    }
+  ],
+  "visual_mapping": [
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "068469c7b67746c96164",
+      "label": "Referrals Created",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "1ee55689cfbf2f176852",
+      "label": "Provider Offers vs Accepted",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "242dc0d88889df21efc8",
+      "label": "Median Days to IPA",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "2c02bedb1acebb3420ea",
+      "label": "Open Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "4918a7b780552838a4ca",
+      "label": "Open Referrals by Target Status",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "499e18314d5181b7bc27",
+      "label": "Referrals by Urgency Band",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "549fff0255f7ee92cace",
+      "label": "Est. Weekly Cost",
+      "icon": "pound-sterling",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "5d71c3ce82ae86e55699",
+      "label": "Referral Status Mix",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "5ddff0b1b57b3fa66ba8",
+      "label": "Referral Outcome Mix",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "ba74cecf502ac44332f5",
+      "label": "Target Hit Rate by Urgency",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "e7c0205d9e7fb03e7294",
+      "label": "Critical Overdue",
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "ec3b3dce60a993fffc47",
+      "label": "Placed by Target",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Board Dashboard - guide",
+      "visual": "fadceb1c0d9a03d203a7",
+      "label": "Board Dashboard | how to read this page",
+      "icon": "chart-no-axes-combined",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW",
+      "visual": "dea8be882f3427c2bc0a",
+      "label": "Provider single view",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "WMPP HOMEPAGE - guide",
+      "visual": "0f57c2313aee597c13bc",
+      "label": "WMPP HOMEPAGE | how to read this page",
+      "icon": "house",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "WMPP HOMEPAGE - guide",
+      "visual": "db65a4433ed001c7c598",
+      "label": "Gold Model Last Refreshed",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "0a6ef6a61564dabe68ca",
+      "label": "Providers Making Offers",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "1e890c9a791318369e76",
+      "label": "Homes Offered by County",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "2a8173c8c4e264e048f7",
+      "label": "Provider & Placement Supply | how to read this page",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "44722607456b13c5d2f3",
+      "label": "Offers Received",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "499cdc6d14fb121d9867",
+      "label": "Homes Offered",
+      "icon": "house",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "6834570f5d8015e6aa16",
+      "label": "Placement Type Mix",
+      "icon": "chart-column",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "6d2c3fb284de4fcf2bf3",
+      "label": "Accepted Offers by Provider",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "7ca710f6809f48053961",
+      "label": "Offer to IPA Funnel",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "95fb9ebdb026b10c1406",
+      "label": "Offers by Provider",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "abed0a2c4823e841bec5",
+      "label": "Avg Offers per Referral",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "dd9fc228fc35bbc05a68",
+      "label": "Median Weekly Cost",
+      "icon": "pound-sterling",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "f255dfd147b15cbc8cfe",
+      "label": "Provider Response Time",
+      "icon": "clock",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Provider & Placement Supply - guide",
+      "visual": "f3948a9d25389091cd1a",
+      "label": "Offer Acceptance Rate",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Snapshots - guide",
+      "visual": "22fd1901c18ec2d34e40",
+      "label": "Snapshot detail by month",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Snapshots - guide",
+      "visual": "8b5f56e100ec2c735e17",
+      "label": "Referral Snapshots | how to read this page",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Snapshots - guide",
+      "visual": "97af40b4e186d924de08",
+      "label": "Snapshot window",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Snapshots - guide",
+      "visual": "e254649e457c2c698228",
+      "label": "Referral snapshot trend",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "3312296f8cce53cbc932",
+      "label": "A clearer view of placement distance.",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "343f9b5f6dca3cde85c0",
+      "label": "Preferred-city distance coverage",
+      "icon": "map-pin",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "5987502005ba0f9bf985",
+      "label": "Median preferred-city distance km",
+      "icon": "route",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "6577572bc71294b4737d",
+      "label": "Offers without preferred-city distance",
+      "icon": "map-pin",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "976592b5dc39f1d9aa12",
+      "label": "Distance distribution",
+      "icon": "route",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "a66097722a30279048b3",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Offer Locations",
+      "visual": "c0eb1430ec8503cf7baf",
+      "label": "Offer location register",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "16452884dd3002b4c533",
+      "label": "Referrals Awaiting Offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "37b19e845c268d991d14",
+      "label": "Referrals Currently Active",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "5454e4f0bb560d050c40",
+      "label": "Active Referral Engagement Rate",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "b1cf9311400800558140",
+      "label": "Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "bd4f7880ccae3a031056",
+      "label": "Offers on Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "e293464320d09d1cb511",
+      "label": "Pending Offers (Under Offer Referrals)",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "OFFERS OVERVIEW",
+      "visual": "ffe027e1b51dfe8c4f3b",
+      "label": "Referrals With Multiple Provider Assignments",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "9f2157ace36387971593",
+      "label": "KPI ID",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "ae457b28018c1fa6b93e",
+      "label": "REQUIREMENT MATRIX OVERVIEW | how to read this page",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "cfe514ecf7785953c46f",
+      "label": "Requirements Coverage Status",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "d10fb4df26ab05a3b11a",
+      "label": "Gold Model Last Refreshed",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "f17a51b868982f437974",
+      "label": "Requirements By Priority",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRAL SINGLE VIEW",
+      "visual": "303b8230443d6ebeabeb",
+      "label": "Referral single view",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "REFERRAL DETAIL (DRILLTHROUGH)",
+      "visual": "1f68b7f6935349912210",
+      "label": "Referral detail",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "33c885e8452d66adfc47",
+      "label": "Open Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "d23749362b9721f75479",
+      "label": "Total Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "d7800e44f47661ab26d2",
+      "label": "Critical Overdue Referrals",
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "e233586b65b891426dec",
+      "label": "Median Days to IPA",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "efbf165f0a6229db7be5",
+      "label": "Board Dashboard",
+      "icon": "chart-no-axes-combined",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "f397a0c12b7fb42de335",
+      "label": "Placement Target Hit Rate",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Board Dashboard",
+      "visual": "ff71b77d6b0dd1ab99bc",
+      "label": "Estimated Active Weekly Cost",
+      "icon": "pound-sterling",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "21d8c1ed33e4247b3329",
+      "label": "Average Offers per Referral",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "5f49997a51386e2d564e",
+      "label": "Homes Offered",
+      "icon": "house",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "7d2b696891cc147a2a3b",
+      "label": "Provider & Placement Supply",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "b60b2e0fafba22b6c98d",
+      "label": "Offer Acceptance Rate",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "b72546c31aeeaeeb5080",
+      "label": "Median Offered Weekly Cost",
+      "icon": "pound-sterling",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "c251a416a3b5cc3d5978",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "Provider & Placement Supply",
+      "visual": "ea78fa3e2c4662c5277b",
+      "label": "Providers Who Made Offers",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "existing image"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "0bf952d13ccb86a000b0",
+      "label": "Successful Offers to IPA Completed %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "209abfd70128ae69cdc1",
+      "label": "Successful Offers on Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "20ec3f248d4acae37414",
+      "label": "Offers Awaiting IPA Creation",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "5a8dda7e43049941e960",
+      "label": "IPA Completed",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "5c2689c797be038a919e",
+      "label": "IPAs Pending Completion",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "b4b6802d09347111d323",
+      "label": "Accepted Offer to IPA Conversion %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "ce801cd8454673158658",
+      "label": "IPA Created to Completion %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "d741dc0deb08832a6762",
+      "label": "IPAs Created",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "IPA OVERVIEW",
+      "visual": "f8c4254053673060a909",
+      "label": "Offers Awaiting IPA Creation",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW - guide",
+      "visual": "0ff7edba9c005a01334f",
+      "label": "provider_name",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW - guide",
+      "visual": "1e9d1bc5b2e1a46bec9f",
+      "label": "provider_name",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW - guide",
+      "visual": "76905c47e558145a51d4",
+      "label": "PROVIDER SINGLE VIEW | how to read this page",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW - guide",
+      "visual": "78c140fadcb6194b5582",
+      "label": "provider_name",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "PROVIDER SINGLE VIEW - guide",
+      "visual": "ee37c1fd645f71177fc4",
+      "label": "Referrals by Placement Type",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "36b31a0f092fa9f30835",
+      "label": "Average Days Early",
+      "icon": "clock",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "3a79e15adb95c5462dcb",
+      "label": "Target & Urgency Performance",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "66e527164d5dfa823478",
+      "label": "Open Referrals Due in 3 Days",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "a24bd5feded5bb427eb2",
+      "label": "Open Overdue Referrals",
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "a84372e7f895f5f86d8f",
+      "label": "Target & Urgency Performance",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "b84a3c31174826d05b31",
+      "label": "Critical Target Hit Rate",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "existing image"
+    },
+    {
+      "page": "Target & Urgency Performance",
+      "visual": "e574aa74eba03cc80435",
+      "label": "Referrals Due This As Of Month",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "existing image"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "242a189f1643d1755910",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "4daa93b616d37d66c1d9",
+      "label": "Preferred-city distance coverage",
+      "icon": "map-pin",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "5a3fb1a3652d50ec88fc",
+      "label": "Offers without preferred-city distance",
+      "icon": "map-pin",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "5cc5d26d2ec62c8a6d35",
+      "label": "Offer Locations | how to read this page",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "7846f04c7c381c69b75b",
+      "label": "referral_id",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "c87c9018a06bc600c1ab",
+      "label": "Median preferred-city distance km",
+      "icon": "route",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Offer Locations - guide",
+      "visual": "ecfde9dc61c0bdf67fda",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "270ea7265f0c3920b0da",
+      "label": "Mapped referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "3fdbc0536fe07569046b",
+      "label": "Awaiting offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "560072c0cfee92b1d346",
+      "label": "Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "5e63486c88c725763e8c",
+      "label": "Referral Geography | how to read this page",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "bd5844d0fde5c78b7232",
+      "label": "Location review",
+      "icon": "map-pin",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "beac0b6b5b6bc0b5da14",
+      "label": "Category-aware open referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography - guide",
+      "visual": "e7324679686c5fd97fbb",
+      "label": "Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRAL DETAIL (DRILLTHROUGH) - guide",
+      "visual": "3c6b61c6a182d9835b81",
+      "label": "IPA's Pending Completion",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRAL DETAIL (DRILLTHROUGH) - guide",
+      "visual": "444582f263e7a01f5393",
+      "label": "REFERRAL DETAIL (DRILLTHROUGH) | how to read this page",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRAL DETAIL (DRILLTHROUGH) - guide",
+      "visual": "5a1ec4f68ab7130fd65a",
+      "label": "Year",
+      "icon": "chart-column",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRAL DETAIL (DRILLTHROUGH) - guide",
+      "visual": "ebace519c334e79040e8",
+      "label": "IPA Completed",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "0b6b9ca250bbeeae3210",
+      "label": "Other Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "3a5ad6629c8e25d3786c",
+      "label": "Referrals Currently Active",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "3e1738ec51010c624bb3",
+      "label": "Male Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "42090180502039c96ebe",
+      "label": "Referrals With Offers (Created in Period)",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "4af1213f61d307a905cc",
+      "label": "Female Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "56e7bf900a0672d8724d",
+      "label": "Total Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "623a6af2dc0989e60b93",
+      "label": "Interpretation note",
+      "icon": "lightbulb",
+      "colour": "#E69512",
+      "kind": "existing image"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "73d19bbd3246780d63bc",
+      "label": "Closed or Cancelled Referrals",
+      "icon": "clipboard-check",
+      "colour": "#625B5B",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "79a35762061d1e749255",
+      "label": "Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "7efe1702413e4122eb04",
+      "label": "Active Referral Engagement Rate",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "8d34896ba82e76d58849",
+      "label": "Referrals Awaiting Offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "96620a62474172e2400e",
+      "label": "Referrals Not Yet Closed (Created in Period)",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "97593473ead1c939bf90",
+      "label": "Referrals With Multiple Provider Assignments",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REFERRALS",
+      "visual": "c4d99567dc12dd9b665c",
+      "label": "Provider Contact Referral",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "Historic",
+      "visual": "49081b40ea8a91d2c0c4",
+      "label": "Referrals Currently Active",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Historic",
+      "visual": "9003ab440b866c9d3ed8",
+      "label": "Total Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Historic",
+      "visual": "ad88738325d1c683b484",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Historic",
+      "visual": "ef0d692fdb2014bc0d18",
+      "label": "Pending Offers (Under Offer Referrals)",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "06a64fae863e1056e13a",
+      "label": "Due This Month",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "0b4dd0df1c4620e712b4",
+      "label": "Avg Days Early",
+      "icon": "clock",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "0f549d6122ba547720f2",
+      "label": "Due in 3 Days",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "27f185875b945ae532ac",
+      "label": "Required Placement Date Trend",
+      "icon": "chart-column",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "418f921edfecdeb18fe7",
+      "label": "Hit Rate by Urgency Over Time",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "5dfb6ba809f35a6b18f3",
+      "label": "Target & Urgency Performance | how to read this page",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "6139382cfa48e55e6698",
+      "label": "Critical Hit Rate",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "806e5fb52aa990d853bf",
+      "label": "Open Referrals by Days to Target",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "86a20d7a26df0102612f",
+      "label": "Escalated Cases",
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "8c86a94aac04efbda965",
+      "label": "Overdue",
+      "icon": "triangle-alert",
+      "colour": "#C0392B",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "8feaf1487da5333c41e8",
+      "label": "Urgency / Target Status Matrix",
+      "icon": "target",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "91a02f8579406a7fa627",
+      "label": "Ageing of Open Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Target & Urgency Performance - guide",
+      "visual": "e4a628d194eec51c52cd",
+      "label": "Cohort Placement Within Window",
+      "icon": "chart-column",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "108416e2b939593e7acc",
+      "label": "Referrals Awaiting Offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "152f5dee0aa8b182e67e",
+      "label": "Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "4cc9a194242db4d33165",
+      "label": "Spot Offers vs Framework Offers by Placement Type",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "6c161ca6e8bc66aa586a",
+      "label": "OFFERS OVERVIEW | how to read this page",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "74b62b3a703af1934a57",
+      "label": "Referrals Currently Active",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "79dce741c5f07ed6c06e",
+      "label": "Pending Offers on Referrals Under Offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "7e8b91dadea22009112b",
+      "label": "Offers on Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "d3402514b26fc62bd956",
+      "label": "Gold Model Last Refreshed",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "dbb512c912d0a46aa668",
+      "label": "Referrals With Multiple Provider Assignments",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "e90180b5449b7dfedf6f",
+      "label": "Active Referral Engagement Rate",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "OFFERS OVERVIEW - guide",
+      "visual": "f9a1e3bbff9d9a7ef266",
+      "label": "Offers per Qualifying Provider",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "105056458708505c763a",
+      "label": "Provider Assignments",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "1d19c812ff3f7d3fe66d",
+      "label": "ipa_id",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "21376314cd762c6720b3",
+      "label": "referral_provider_id",
+      "icon": "building-complex",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "5813c334d26501bfe759",
+      "label": "IPA Completed",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "77c530a602bb3f4bf0e9",
+      "label": "Referral Single View | how to read this page",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "8c2c41ee95b76dd266e3",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "ad9234b59477f2674b0d",
+      "label": "Mapped referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "ba573e5fbbeeb5f85a45",
+      "label": "Total Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Single View - guide",
+      "visual": "dca99469bdcfa7ba034f",
+      "label": "offer_id",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS",
+      "visual": "2aee56172c32549269d5",
+      "label": "Draft Offers With No Activity %",
+      "icon": "hourglass",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "DRAFT OFFERS",
+      "visual": "3371fc42b52005d81b30",
+      "label": "Draft No Activity Since Creation (Under Offer Referrals)",
+      "icon": "hourglass",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "DRAFT OFFERS",
+      "visual": "70170d3a07c3ad53ed3c",
+      "label": "Draft Offer Count (Under Offer Referrals)",
+      "icon": "file-pen-line",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "DRAFT OFFERS",
+      "visual": "76a354c6398b50b1c5e4",
+      "label": "Oldest Draft Age Days",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "DRAFT OFFERS",
+      "visual": "937eb6943079c0516d88",
+      "label": "Draft Offers With Activity Since Creation",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "13fa45d45c8756d3f970",
+      "label": "DRAFT OFFERS | how to read this page",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "17eca4f7b4c5bb9b3381",
+      "label": "Oldest Draft Age Days",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "2f3eb6fef49d77334b8f",
+      "label": "Offers in Draft Status By Number of Days",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "49749166082e11aa55b0",
+      "label": "Gold Model Last Refreshed",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "69e5ad9a60646c6737dc",
+      "label": "Draft No Activity Since Creation %",
+      "icon": "hourglass",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "8b4ee3f978da3a471f59",
+      "label": "Draft No Activity Since Creation",
+      "icon": "hourglass",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "934388caef89016178a3",
+      "label": "Offers in Draft Status",
+      "icon": "file-pen-line",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "DRAFT OFFERS - guide",
+      "visual": "f78a156a3269327ff0d1",
+      "label": "Draft Offers With Activity Since Creation",
+      "icon": "activity",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW",
+      "visual": "058b102ca09b988287a5",
+      "label": "Original Requirements",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW",
+      "visual": "0aef383ced90ab2d5c70",
+      "label": "Requirements Complete",
+      "icon": "clipboard-check",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW",
+      "visual": "ab3a98a8d706cb054877",
+      "label": "Offers on Referrals Under Offer",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW",
+      "visual": "b7db015d6153289ce2d7",
+      "label": "KPI ID",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Snapshots",
+      "visual": "47e8bf33870e8770ed4a",
+      "label": "Snapshot detail by month",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Snapshots",
+      "visual": "6b010f201cf6968ccdd4",
+      "label": "Referral snapshot trend",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Snapshots",
+      "visual": "7f52a593f8af2b36f853",
+      "label": "REFERRAL SNAPSHOTS",
+      "icon": "calendar-days",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "065d4f4e79c611adefba",
+      "label": "Offers Not Entered IPA %",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "07e3d01230d60d30fefd",
+      "label": "Successful Offers",
+      "icon": "handshake",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "26a5b56d8e1cf34e5dbd",
+      "label": "IPA Completed",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "3533cd9e8ff809d4be91",
+      "label": "IPA OVERVIEW | how to read this page",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "3a327654a5fccda7a2c3",
+      "label": "Offers Awaiting IPA Creation NEW",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "3f4eed566881e98c47e8",
+      "label": "IPA Workflow Funnel",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "46342c45eeb1e07eed65",
+      "label": "Gold Model Last Refreshed",
+      "icon": "clock",
+      "colour": "#625B5B",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "5d3cc631d5dad16df2d6",
+      "label": "IPAs Pending Completion NEW",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "7ceba5949c225d5ae38c",
+      "label": "Successful Offers to IPA Completed %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "816a577fff16e2c62151",
+      "label": "IPAs Created NEW",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "8d4777ce96dc293d8427",
+      "label": "Offers Awaiting IPA Creation",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "a3eb2e36eb085ca4b36a",
+      "label": "IPAs Created to Completion %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "ad7705f07c604b92c763",
+      "label": "Accepted Offer to IPA Conversion %",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "ca50b4ed026be8c34241",
+      "label": "IPA's Pending Completion",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "guide"
+    },
+    {
+      "page": "IPA OVERVIEW - guide",
+      "visual": "e7c92ac9bc751cd01a9b",
+      "label": "IPA Completed NEW",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "00495ca5d6781b238384",
+      "label": "Where referrals need support.",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "0d143d7cafbded45684a",
+      "label": "Category-aware open referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "5e0681f7a799c62a517d",
+      "label": "Referral preference map",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "acd52ac0ed9a1504ad43",
+      "label": "Location review",
+      "icon": "map-pin",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "b14f89e27b0b38c9aadf",
+      "label": "Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "e5fd7b938a3ae56db47b",
+      "label": "Awaiting offer",
+      "icon": "clock",
+      "colour": "#E69512",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Geography",
+      "visual": "ef1eb2a8220460cbfbe9",
+      "label": "Your question, your breakdown",
+      "icon": "chart-no-axes-combined",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "05b1639fd100877d4ae8",
+      "label": "Preferred city",
+      "icon": "map-pin",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "0b3da88136ead183f4e9",
+      "label": "Provider Assignments",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "3bfa3d7d26d7cb98a3ce",
+      "label": "Offers & homes",
+      "icon": "house",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "5e9c784154661bf00a19",
+      "label": "One referral. The full picture.",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "65285314f9ea7c4faae6",
+      "label": "Provider referrals",
+      "icon": "network",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "67336c0309b572189a5d",
+      "label": "Individual placement agreements",
+      "icon": "file-plus",
+      "colour": "#EF7911",
+      "kind": "subpage"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "81f5ed3be8fdf287025b",
+      "label": "IPA Completed",
+      "icon": "file-check-corner",
+      "colour": "#287C73",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "9b199c17a0b9b6c0e16c",
+      "label": "Offers Submitted",
+      "icon": "handshake",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "Referral Single View",
+      "visual": "ebbde88c8c430ce9deda",
+      "label": "Total Referrals",
+      "icon": "users",
+      "colour": "#EF7911",
+      "kind": "card"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "ab9ae53ccb71ab3c8ea1",
+      "label": "Original Requirements",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "f1e216ccf9babdd0676b",
+      "label": "Requirements Complete",
+      "icon": "clipboard-check",
+      "colour": "#287C73",
+      "kind": "guide"
+    },
+    {
+      "page": "REQUIREMENT MATRIX OVERVIEW - guide",
+      "visual": "fa01e509c5f43bb0c4e0",
+      "label": "KPIs",
+      "icon": "clipboard-list",
+      "colour": "#EF7911",
+      "kind": "guide"
+    }
+  ],
+  "artwork_scale": 0.75,
+  "palette_version": "2026-09-27",
+  "filename_note": "Filename colour suffixes are stable identifiers; use colour and hash fields for current values."
+}

@@ -584,10 +584,10 @@
         ],
         "padding": [
           {
-            "top": 12,
-            "bottom": 12,
-            "left": 14,
-            "right": 14
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
           }
         ],
         "title": [
@@ -3928,6 +3928,114 @@
           }
         ]
       },
+      "WMPP Compact KPI": {
+        "padding": [
+          {
+            "$id": "default",
+            "paddingSelection": "Custom",
+            "paddingIndividual": true,
+            "leftMargin": 0,
+            "rightMargin": 0,
+            "topMargin": 0,
+            "bottomMargin": 0
+          }
+        ],
+        "layout": [
+          {
+            "$id": "default",
+            "autoGrid": true,
+            "rowCount": 1,
+            "columnCount": 1,
+            "cellPadding": 0,
+            "leftOuterMargin": 0,
+            "rightOuterMargin": 0,
+            "topOuterMargin": 0,
+            "bottomOuterMargin": 0,
+            "backgroundShow": false
+          }
+        ],
+        "value": [
+          {
+            "$id": "default",
+            "fontFamily": "Segoe UI Semibold",
+            "fontSize": 29,
+            "horizontalAlignment": "left"
+          }
+        ],
+        "label": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "fillCustom": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "outline": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "shadowCustom": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "accentBar": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "divider": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "image": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "cardImage": [
+          {
+            "$id": "default",
+            "show": false
+          }
+        ],
+        "background": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "title": [
+          {
+            "show": false
+          }
+        ],
+        "subTitle": [
+          {
+            "show": false
+          }
+        ]
+      },
       "WMPP Soft Glow": {
         "dropShadow": [
           {
@@ -5701,7 +5809,7 @@
                 "color": "#FFFFFF"
               }
             },
-            "padding": 8,
+            "padding": 2,
             "accessibilityContrastProperties": true
           }
         ],
@@ -5750,10 +5858,10 @@
         ],
         "padding": [
           {
-            "top": 8,
-            "bottom": 8,
-            "left": 8,
-            "right": 8
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
           }
         ],
         "title": [
@@ -9304,9 +9412,32 @@
         ]
       },
       "*": {
+        "background": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
         "dropShadow": [
           {
             "show": false
+          }
+        ],
+        "title": [
+          {
+            "show": false
+          }
+        ],
+        "padding": [
+          {
+            "top": 0,
+            "bottom": 0,
+            "left": 0,
+            "right": 0
           }
         ]
       }
