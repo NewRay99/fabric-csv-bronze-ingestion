@@ -1,6 +1,6 @@
 {
   "name": "WMPP approved reporting palette",
-  "version": "2026-09-27",
+  "version": "2026-09-28",
   "colours": {
     "heroOrange": "#EF7911",
     "navigationCoral": "#FB6540",
@@ -25,9 +25,18 @@
     "mist": "#F0EBE7",
     "canvas": "#F8F5F1",
     "surface": "#FFFFFF",
-    "shadow": "#C78E7A"
+    "shadow": "#C78E7A",
+    "navigationHoverPeach": "#FCA356",
+    "filterCharcoal": "#2B2427"
   },
-  "categorical": ["#FB6540", "#2B2B2C", "#4DAAAB", "#0D35B8", "#E63496", "#FFB39F"],
+  "categorical": [
+    "#FB6540",
+    "#2B2B2C",
+    "#4DAAAB",
+    "#0D35B8",
+    "#E63496",
+    "#FFB39F"
+  ],
   "placementTypes": {
     "Supported Accommodation": "#FB6540",
     "Residential": "#4DAAAB",

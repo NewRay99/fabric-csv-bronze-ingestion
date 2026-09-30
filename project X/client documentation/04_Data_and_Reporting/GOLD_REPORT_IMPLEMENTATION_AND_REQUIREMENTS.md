@@ -1,5 +1,14 @@
 # Gold report implementation and requirements
 
+## Reporting reassessment 30 September 2026
+
+The current delivery candidate is **SM WMPP v16 updated WIP**, not the older client package discussed below. Its current counts and requirement positions are recorded in the current status and requirement reassessment. Historical 117-KPI rows and past test results below retain their original scope and are not a 30 September acceptance certificate.
+
+Material corrections: IPA-grain signing, person demographics, detailed provider messages, current assignment decline/cancellation reasons and current referral/category links exist. R54 is now partial because complete reason history/attribution remain unproven; it is no longer accurate to say no reason detail exists. R14 still lacks approved response/unread-priority semantics. R22, R48 and R58 remain open data gaps, and finance estimates do not resolve invoice/payment requirements.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Implementation date: 15 September 2026.
 
 ## Current client-site status — 20 September 2026

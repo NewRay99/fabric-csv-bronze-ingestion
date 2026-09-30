@@ -1,5 +1,14 @@
 # KPI Reference Guide — Active Gold semantic model
 
+## Reporting reassessment 30 September 2026
+
+Use `configuration/Dashboard Legend.xlsx` for 144 curated entries and the current semantic catalogue for all 366 measure definitions. The 35 additions identify measures already built in WIP, not 35 newly implemented calculations. Existing GOLD-KPI identifiers are preserved, and new associations to R-identifiers are proposed for approval.
+
+Read IPA signatures at IPA grain, referral stages as refresh-time current state and provider stages as distinct-provider cohort classifications. Snapshot state, closure flow and creation cohorts are not interchangeable. Estimated costs are not actual spend; first observed assignment is not browsing; message activity is not provider-authored response time. No overall provider score is approved. Current status supersedes older readiness/gap statements below.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Implemented Gold migration — 15 September 2026
 
 The extracted v15 project now uses the active Gold layer for business data. The current implementation and remaining acceptance work are recorded in [Gold report implementation and requirements](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md). The earlier [coverage audit](GOLD_MEASURE_REQUIREMENT_COVERAGE_AUDIT.md) is the **pre-migration baseline**, not the current defect list.

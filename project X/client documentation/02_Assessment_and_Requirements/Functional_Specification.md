@@ -1,5 +1,14 @@
 # AM Functional Specification
 
+## Reporting reassessment 30 September 2026
+
+The R-identifiers and requirement wording below remain the functional baseline. The new 80-row requirement reassessment records the WIP reporting evidence and remaining actions separately. Read-only explorers, measures and journey visuals do not fulfil write workflows such as accepting an offer, signing an IPA, sending notifications or uploading documents.
+
+`Req ID` represents Requirement_Id. It must not replace KPI_ID: one requirement can have several measures and one measure can support several requirements. New associations in the Legend are proposed, pending owner approval.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Overview
 
 This document defines the functional and non-functional requirements for a regional child placement and provider matching platform across the West Midlands. The solution will enable local authorities, children's trusts, providers, QA officers, commissioners, finance officers, and other stakeholders to manage placements, provider onboarding, quality assurance, reporting, and contractual workflows through a single regional platform.

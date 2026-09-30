@@ -1,4 +1,14 @@
-> **Implemented Gold v02 status:** the active `04_gold_model` notebook now
+# Reporting enhancement backlog
+
+## Reporting reassessment 30 September 2026
+
+Moved from design to saved WIP implementation: full-width Explorer/report layouts, consistent reordered navigation, expanded main-page Filters drawers, referral/provider detail routes, category/status icon labels, Overall Performance snapshot comparison, referral current-stage/evidence strips and provider-stage exploration with selector actions.
+
+Still open: newest visual/filter UAT, priority versus urgency decision, approved activity bands and emergency semantics, provider browsing/confirmation evidence, message-author/unread rules, immutable event/reason/framework history, support-needs reporting, region evidence, document compliance/blocking, payment facts, security/disclosure and client release. Embedded Requirement Matrix references also need controlled synchronisation with the revised Legend. Older ideas below retain their historical/design status unless explicitly advanced above.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+> **Historical Gold v02 status:** the active `04_gold_model` notebook now
 > publishes `gold.fact_referral`, `gold.fact_referral_snapshot`,
 > `gold.fact_offer`, `gold.fact_ipa`, and
 > `gold.fact_referral_provider`, plus referral-board, monthly and provider

@@ -1,5 +1,14 @@
 # Gold DAX Field Coverage Audit
 
+## Reporting reassessment 30 September 2026
+
+The current inventory contains `dim_person`, IPA-level signing fields, detailed message/read fields, current assignment reasons and referral/home category bridges. Older “not in Gold” classifications for those objects below are superseded by the current Legend source-coverage sheet.
+
+Field presence alone does not certify semantics or populated data. `region` and actual-cost placeholders, missing expected-document rules, absent framework-change history and support-needs analysis, and unapproved message authorship/unread rules remain material limits. See current status for the full distinction between built, partial and acceptance-pending evidence.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 > September 15 implementation update: the migrated v15 report now uses per-IPA signature fields and corrected requirement cohorts. This document preserves the earlier design/audit revision. Use [current report implementation and acceptance](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) and the [updated WIP expressions](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for the implemented report.
 
 **Project:** WMPP Fabric data platform

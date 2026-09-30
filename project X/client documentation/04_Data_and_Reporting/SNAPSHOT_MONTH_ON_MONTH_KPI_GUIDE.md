@@ -1,5 +1,14 @@
 # Snapshot Month-on-Month KPI guide
 
+## Reporting reassessment 30 September 2026
+
+Overall Performance now includes month-end totals/closed-state trends plus `_Story Measures[Snapshot referrals previous month]`, change and percent. The previous month is the immediately preceding calendar month and missing data remains blank. `Referrals closed during month` uses closure-date context and is a separate flow.
+
+The old standalone Referral Snapshots page is hidden/recoverable. Current referral journey stages are refresh-time state, not a snapshot-stage history. Validate two adjacent retained months and distinguish `Closed Referrals at Snapshot` (closure-date predicate) from the existing closed/cancelled status measure. Older deployment statements below are historical.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Decision
 
 Use `gold.fact_referral_snapshot` for Month-on-Month comparisons of referral

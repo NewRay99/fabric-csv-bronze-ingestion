@@ -1,5 +1,14 @@
 # WMPP icon resource and provenance register
 
+## Reporting reassessment 30 September 2026
+
+The six-candidate inventory below is historical. Navigation, KPI/category and journey SVG assets now exist in the WIP root `icons` folder and registered report resources; navigation assets are also maintained under `assets/brand-pack/icons/navigation-bubbles`.
+
+Use the WIP `LUCIDE_NAVIGATION_SOURCES.json`, `LUCIDE_KPI_SOURCES.json`, `Lucide-provenance.json` and `icons/ICON_CATALOG.json` for recorded provenance. The newest journey derivatives have `-rail.svg` names and expanded click targets; they do not introduce a new icon library. Asset presence is not licence/legal or accessibility approval. Retain supplied notices and verify all actual assets against the provenance records before client packaging.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Record date / source review: **23 September 2026**.
 Status: **sources identified; asset acquisition, implementation and approval pending**.
 

@@ -1,5 +1,12 @@
 # Board KPI Catalogue
 
+## Reporting reassessment 30 September 2026
+
+The current Dashboard Legend has 144 curated measure entries, including 35 newly catalogued WIP measures for demographics/signatures, snapshot change, closure flow, journey stages, provider components and location coverage. The full model has 366 measures including helpers. Estimates, derived activity and current-cohort stages retain their limits; new requirement mappings await owner approval.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 The active Gold v02 definitions and DAX expressions are in
 [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
 Use `RequiredPlacementDateOutcome` and `PlacedByRequiredDate` from

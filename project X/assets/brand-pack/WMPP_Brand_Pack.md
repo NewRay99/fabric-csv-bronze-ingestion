@@ -1,16 +1,18 @@
 # WMPP Power BI brand pack
 
-Updated 27 September 2026. This is the current WMPP reporting style, selected by the project owner. It is not a claim of formal approval of a new Birmingham Children's Trust corporate identity.
+Updated 28 September 2026. This is the current WMPP reporting style, selected by the project owner. It is not a claim of formal approval of a new Birmingham Children's Trust corporate identity.
 
 ## Approved palette — exclusive for report formatting
 
-Use only the following 24 colours for authored WMPP report formatting. The machine-readable source is [WMPP_Palette.json](WMPP_Palette.json); the Power BI implementation is [WMPP_Theme.json](WMPP_Theme.json).
+Use only the following 26 colours for authored WMPP report formatting. The machine-readable source is [WMPP_Palette.json](WMPP_Palette.json); the Power BI implementation is [WMPP_Theme.json](WMPP_Theme.json). Navigation Hover Peach was added from the owner's edited Home hover SVG on 28 September. Filter Charcoal was subsequently selected for the Filters controls across all dashboards.
 
 | Category | Colour | Hex code | Visual role and context |
 |---|---|---|---|
 | Hero | Main Orange | `#EF7911` | Focal highlights, workload pictograms and headline emphasis |
 | Navigation | Signature Coral | `#FB6540` | Circular navigation buttons and primary actions |
 | Navigation | Hover Coral | `#F98165` | Hover treatment; no button outline |
+| Navigation | Navigation Hover Peach | `#FCA356` | Owner-selected elongated hover capsule, surrounding a Main Orange circle |
+| Utility | Filter Charcoal | `#2B2427` | Filters button fill in resting, hover, pressed and disabled states; preserve white filter artwork and white panel |
 | Supporting | Balanced Teal | `#4DAAAB` | Contrasting categorical series; Residential placement type |
 | Supporting | Deep Teal | `#287C73` | Stronger teal emphasis and supporting icons |
 | Supporting | Warm Peach | `#FFB39F` | Additional categorical series where legible |
@@ -49,12 +51,21 @@ Use only the following 24 colours for authored WMPP report formatting. The machi
 
 Preserve the warm canvas, white rounded cards and soft glow. No full-page skin, no border boxes around headings and no outlines around navigation buttons.
 
-- Main navigation: native 66px circular buttons with white Lucide icons; captions remain underneath. Dropdowns have connected white surrounds and readable dark text.
+- Main navigation: isolated circular icons at rest, with downward capsules on hover/current section. All enabled circles use Main Orange `#EF7911`; hover, current-section and pressed capsules use Navigation Hover Peach `#FCA356`. Do not use coral or blush pink for these button states. Direct white Lucide icons remain enabled. No connecting rail or outlines. Dropdowns retain connected white surrounds and readable title-case labels.
+- On 1680px report pages, use 96×108px navigation targets at x=860, y=8 with 100px horizontal pitch. The SVG circle is 62px across and the white native icon is 32px. Resting/disabled circles have centre y=36 and icon top margin 20px. Active/hover capsules have circle centre y=42 and icon top margin 26px: circle and glyph move together, leaving 9px of peach headroom above the circle. Labels use an independent lower area (top margin 74px, bottom 8px, side margins 6px), with native 8pt text. Reserve x=748, y=0, 88×104px for Filters on overview dashboards. The filter drawer opens below/left of the navigation (x=438, y=124, width=398px), with 24px content insets. Guide/tooltip return controls are separate.
+- Dropdown rows use White at rest and Navigation Hover Peach `#FCA356` for the current page, hover and pressed highlights, with Charcoal text; no coral/pink row overrides. Keep original primary buttons visible. The existing menu-cap IDs render white-backed native buttons above them at z=400010, retaining their original bookmark visibility. Use `WMPP Connected Open Menu` with 104×116 connected background SVGs; icon/text top offsets increase by 8px and text side offsets by 4px to preserve absolute placement. Clicking an open cap or the Close menu row closes the menu. The retired replacement variants stay hidden. Preserve data selections; verify the white join in Desktop after reopening.
+- Keep primary buttons above dropdown cap/neck/panel shapes: the current delivery uses z=400000 for buttons, versus z=300005–300007 for surrounds. Dropdown rows start at y=136. Opening a submenu must not cover its parent icon or label. Maintain the same geometry on all 16 navigable report pages.
+- Use the `WMPP Owner Bubble Navigation` preset plus the registered `wmpp-bubble-background-*.svg` fill assets, with fill transparency explicitly **0%**. Keep icons separate from these icon-free backgrounds. Use the owner's full `wmpp-bubble-*-active.svg` and `*-hover.svg` assets as visual/audit references. State swaps create the elongated-hover effect; this is not continuous animation and does not move adjacent buttons. Theme import alone cannot install resources or actions.
+- Main dashboard filters may collapse into display-only bookmark drawers. Keep detail-page search/filter controls visible and chart-specific parameters beside their charts. Opening a drawer or submenu closes competing overlays without restoring data selections. Use readable bookmark labels such as `Referrals | Open filters`, never page hashes in user-visible names.
+- Canvas and surrounding wallpaper must both use Warm Off-white `#F8F5F1`, including explicit per-page `outspace` overrides; the theme alone does not override previously saved page colours. Never use coral for the surrounding wallpaper.
+- Page names and guide-page suffixes use title case, preserving WMPP and IPA acronyms. Preserve internal page IDs and action targets when renaming. Distinguish `Referral Single View (Original)` from the newer `Referral Single View`.
 - KPI and guide pictograms: transparent, meaning-matched Lucide outlines. Keep the 25% smaller artwork inside its original slots; do not move cards or headings.
 - Information badges: retain their small pale-background treatment, now expressed with Soft Amber and Charcoal from this palette. Do not remove their backgrounds.
 - Typical panel corners 14–18px; spacing on an 8px rhythm, usually 16–24px between panels. Inset chart headings/content 12–16px where practical.
 - Keep grouped visual coordinates, padding, click targets, bookmarks and data bindings unchanged during palette edits.
 - Fonts remain Segoe UI in the delivered report. Lato/Arial are historical brand references, not instructions to migrate working report typography.
+- Section titles previously set to 32pt now use 24pt. Heading 4/KPI labels use regular weight, including refresh labels; small chart titles and supporting headings at 13pt or below also use regular Segoe UI, not bold or Semibold. Preserve large numeric KPI callouts and the navigation's established active-state emphasis. Apply both theme defaults and local visual overrides; browser zoom still scales the entire report.
+- Dropdown menu rows, including their section entries and Close menu, use regular Segoe UI in every state. Do not bold dropdown text on hover or selection. This does not change the main navigation buttons' active-state emphasis.
 - Starting sizes: page titles 24–30px, section titles 16–20px, chart titles 12–14px, KPI values 28–36px, body labels 11–13px. Check Power BI's property units and actual rendering before changing them.
 
 ## KPI language
@@ -62,6 +73,11 @@ Preserve the warm canvas, white rounded cards and soft glow. No full-page skin, 
 Use Current period, Previous month, Month-on-month change and Change rate consistently. Percentage-point differences use “pp”, not percentage change. Separate current snapshots, period activity and cohorts. Mockup values are illustrative, never report data. Styling does not certify requirement delivery or KPI calculation correctness.
 
 ## Implementation and audit files
+
+All reusable report SVG icons are consolidated under `icons/`; see
+[`icons/README.md`](icons/README.md) for the folder guide and migration manifest.
+Loose report-root/category/journey files have moved there. Power BI's embedded
+resource copies remain in their report packages to preserve working visuals.
 
 - `WMPP_Palette.json` — permitted colours and placement-category mapping.
 - `WMPP_Theme.json` — active theme; aligned copies are in `reports/templates` and the delivery's registered resources.
@@ -71,6 +87,7 @@ Use Current period, Previous month, Month-on-month change and Change rate consis
 - `icons/LUCIDE_KPI_SOURCES.json` — source URLs, pinned revision, current variant colours/hashes and visual mapping.
 - `icons/lucide-originals/` — unmodified upstream evidence, not directly deployed assets.
 - `icons/LUCIDE_LICENSE.txt` — retain with client delivery.
+- `icons/navigation-bubbles/` — current owner-selected bubble state references and icon-free backgrounds; see its README. The previous connecting rail remains withdrawn. Direct white `lucide-nav-*-white.svg` icons are still used alongside these backgrounds.
 - `Mockups/` and `Proposed Pack/` — historical reference material only. Their colours do not override this guide.
 - Supplied logo/guidelines/template remain under `Mockups/`; preserve their aspect ratio, clear space and identity.
 

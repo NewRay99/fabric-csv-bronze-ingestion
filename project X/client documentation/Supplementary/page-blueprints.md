@@ -1,5 +1,12 @@
 # Page Blueprints
 
+## Reporting reassessment 30 September 2026
+
+Use the current storyboard: Overall Performance for executive snapshots/cost; Referrals for current operations; Referral Explorer then Referral Detail for case evidence; Provider Explorer then Provider Detail for provider evidence. Former Geography/Snapshots routes are hidden/recoverable. Current-stage journeys are not historical Sankey transition counts.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Use the active Gold v02 fact names and measures in
 [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
 The referral outcome visual should group

@@ -1,5 +1,12 @@
 # Foster Referral Reporting Framework
 
+## Reporting reassessment 30 September 2026
+
+The current WIP implements the separation of creation flow, month-end snapshot state and closure-date flow. Overall Performance hosts the snapshot comparisons; the standalone snapshot page is hidden. Referral stages are current state at refresh, and provider stages are current-cohort evidence. Preserve these population distinctions and keep priority/urgency separately until approved.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Lifecycle separation
 
 Treat referrals as demand and placements as outcomes. Do not use estimated placement duration or estimated placement end as a referral end date.

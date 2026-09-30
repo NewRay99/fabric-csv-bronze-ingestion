@@ -1,0 +1,185 @@
+{
+  "icons": [
+    {
+      "name": "wmpp-category-critical",
+      "file": "wmpp-category-critical.svg"
+    },
+    {
+      "name": "wmpp-category-high",
+      "file": "wmpp-category-high.svg"
+    },
+    {
+      "name": "wmpp-category-medium",
+      "file": "wmpp-category-medium.svg"
+    },
+    {
+      "name": "wmpp-category-planned",
+      "file": "wmpp-category-planned.svg"
+    },
+    {
+      "name": "wmpp-category-accepted",
+      "file": "wmpp-category-accepted.svg"
+    },
+    {
+      "name": "wmpp-category-pending",
+      "file": "wmpp-category-pending.svg"
+    },
+    {
+      "name": "wmpp-category-draft",
+      "file": "wmpp-category-draft.svg"
+    },
+    {
+      "name": "wmpp-category-closed",
+      "file": "wmpp-category-closed.svg"
+    },
+    {
+      "name": "wmpp-category-assigned",
+      "file": "wmpp-category-assigned.svg"
+    },
+    {
+      "name": "wmpp-category-offer",
+      "file": "wmpp-category-offer.svg"
+    },
+    {
+      "name": "wmpp-category-active",
+      "file": "wmpp-category-active.svg"
+    },
+    {
+      "name": "wmpp-category-residential",
+      "file": "wmpp-category-residential.svg"
+    },
+    {
+      "name": "wmpp-category-fostering",
+      "file": "wmpp-category-fostering.svg"
+    },
+    {
+      "name": "wmpp-category-supported",
+      "file": "wmpp-category-supported.svg"
+    },
+    {
+      "name": "wmpp-category-framework",
+      "file": "wmpp-category-framework.svg"
+    },
+    {
+      "name": "wmpp-category-review",
+      "file": "wmpp-category-review.svg"
+    },
+    {
+      "name": "wmpp-category-location",
+      "file": "wmpp-category-location.svg"
+    },
+    {
+      "name": "wmpp-category-event",
+      "file": "wmpp-category-event.svg"
+    },
+    {
+      "name": "wmpp-category-yes",
+      "file": "wmpp-category-yes.svg"
+    },
+    {
+      "name": "wmpp-category-no",
+      "file": "wmpp-category-no.svg"
+    },
+    {
+      "name": "wmpp-category-declined",
+      "file": "wmpp-category-declined.svg"
+    },
+    {
+      "name": "wmpp-category-cancelled",
+      "file": "wmpp-category-cancelled.svg"
+    },
+    {
+      "name": "wmpp-category-unknown",
+      "file": "wmpp-category-unknown.svg"
+    },
+    {
+      "name": "wmpp-category-category",
+      "file": "wmpp-category-category.svg"
+    }
+  ],
+  "palette": {
+    "orange": "#EF7911",
+    "blue": "#0D35B8",
+    "berry": "#E63496",
+    "red": "#C0392B",
+    "amber": "#E69512",
+    "green": "#277455",
+    "teal": "#4DAAAB",
+    "ink": "#2B2B2C"
+  },
+  "table_rules": {
+    "priority": {
+      "Critical": "critical",
+      "Emergency": "critical",
+      "Urgent": "critical",
+      "High": "high",
+      "Medium": "medium",
+      "Normal": "medium",
+      "Low": "planned",
+      "Planned": "planned",
+      "Unspecified": "unknown",
+      "Unknown": "unknown",
+      "Must have": "critical",
+      "Should have": "high",
+      "Could have": "medium"
+    },
+    "status": {
+      "Open": "active",
+      "Active": "active",
+      "First contact": "assigned",
+      "Assigned": "assigned",
+      "Under_offer": "offer",
+      "Under offer": "offer",
+      "Offer made": "offer",
+      "Offer_made": "offer",
+      "Pending": "pending",
+      "Awaiting": "pending",
+      "Draft": "draft",
+      "Accepted": "accepted",
+      "Successful": "accepted",
+      "Approved": "accepted",
+      "Completed": "accepted",
+      "Complete": "accepted",
+      "Closed": "closed",
+      "Cancelled": "cancelled",
+      "Canceled": "cancelled",
+      "Withdrawn": "cancelled",
+      "Excluded": "cancelled",
+      "Declined": "declined",
+      "Rejected": "declined",
+      "Unsuccessful": "declined",
+      "Inactive": "closed",
+      "On hold": "pending",
+      "In progress": "pending",
+      "Not started": "draft",
+      "On Track": "active",
+      "Due Soon": "pending",
+      "Overdue": "critical",
+      "No target": "unknown",
+      "Implemented": "accepted",
+      "Delivered": "accepted",
+      "Yes": "yes",
+      "No": "no",
+      "Unknown": "unknown"
+    },
+    "placement": {
+      "Residential": "residential",
+      "Children's Home": "residential",
+      "Residential Care": "residential",
+      "PLCM-RESI": "residential",
+      "Fostering": "fostering",
+      "Foster Care": "fostering",
+      "PLCM-FOST": "fostering",
+      "Supported Accommodation": "supported",
+      "Supported accommodation": "supported",
+      "Supported Living": "supported",
+      "Semi Independent": "supported",
+      "PLCM-SUPA": "supported",
+      "Unspecified": "unknown",
+      "Unknown": "unknown"
+    }
+  },
+  "boolean_meaning": "Yes/No values only, not good/bad. Missing values use question-mark icon.",
+  "licence": "LUCIDE_LICENSE.txt covers adapted existing Lucide geometry; simple check/minus/cross/ban/question/grid primitives are original.",
+  "rendering": "Embedded custom theme icons; no external image hosting."
+}

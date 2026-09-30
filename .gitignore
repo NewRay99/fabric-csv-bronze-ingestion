@@ -19,3 +19,5 @@ project X/reports/client-deliverables/SM WMPP v15/*
 project X/reports/retired/*
 project X/reports/client-deliverables/*WMPP v*/*
 project X/reports/current/WMPP v16/*
+outputs/*
+project X/reports/WIP/*

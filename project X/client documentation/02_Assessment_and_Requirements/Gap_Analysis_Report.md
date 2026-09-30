@@ -1,5 +1,14 @@
 # WMPP Gap Analysis Report
 
+## Reporting reassessment 30 September 2026
+
+The current position is 8 requirements with reporting built/UAT pending, 31 partial reporting, 3 open data gaps, 5 security-acceptance items, 9 delivery-acceptance items and 24 outside the report assessment. The 80-row reassessment and current Legend supersede older completeness counts below.
+
+Demographics, IPA-grain signatures, detailed messages, current decline/cancellation reasons and referral-category links are no longer wholly missing. Remaining limits include out-of-region evidence, expected-document/blocking rules, historical framework changes, payments, support needs, message semantics, provider browsing/confirmation and release acceptance. Do not convert a KPI-presence count into a requirement-completion percentage.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** West Midlands Placement Portal (WMPP)
 **Document Reference:** WMPP-GAP-001
 **Version:** 1.0

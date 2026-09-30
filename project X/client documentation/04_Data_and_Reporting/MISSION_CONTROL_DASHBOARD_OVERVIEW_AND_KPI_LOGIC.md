@@ -1,5 +1,12 @@
 # Mission Control dashboard overview and KPI logic
 
+## Reporting reassessment 30 September 2026
+
+This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Purpose
 
 Mission Control is the operational report for the WMPP platform. It answers whether scheduled pipeline work completed, whether archive/replay work is queued, whether data-quality checks failed, and what archived-schema evidence has been captured. It is separate from the referral performance report.

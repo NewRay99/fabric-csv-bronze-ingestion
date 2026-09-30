@@ -1,5 +1,14 @@
 # Provider engagement and value scoring implementation guide
 
+## Reporting reassessment 30 September 2026
+
+Provider Explorer now has a distinct-provider journey, and Provider Detail (Drillthrough) exposes record evidence. These are exploration features, not a composite score. Available response-rate, average-response-hours, offer-conversion and target-placement components are added to the Legend with proposed requirement associations.
+
+The journey's message stage accepts activity from either party; it must not be treated as a provider response SLA. Browsing and separate provider confirmation remain unavailable. Current offer/category fields and bridges now exist in WIP, superseding the earlier missing-category observation, but comparable-cost rules, minimum samples, weights and governed reason attribution remain unapproved.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Purpose and boundary
 
 This guide captures the provider-scoring design discussed in the ChatGPT Work

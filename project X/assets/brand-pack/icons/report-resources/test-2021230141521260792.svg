@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1500"
+     height="1800"
+     viewBox="0 0 1500 1800">
+
+    <defs>
+
+        <!-- White -> Coral Base -->
+        <linearGradient id="baseGradient"
+                        x1="0%"
+                        y1="0%"
+                        x2="0%"
+                        y2="100%">
+
+            <stop offset="0%" stop-color="#FFFFFF"/>
+            <stop offset="15%" stop-color="#FFFFFF"/>
+            <stop offset="35%" stop-color="#F8FCFC"/>
+            <stop offset="75%" stop-color="#F7EFF2"/>
+            <stop offset="100%" stop-color="#F8F1F4"/>
+
+        </linearGradient>
+
+        <!-- Teal Cloud -->
+        <radialGradient id="tealGlow"
+                        cx="30%"
+                        cy="25%"
+                        r="45%">
+
+            <stop offset="0%"
+                  stop-color="#AACED3"
+                  stop-opacity="0.22"/>
+
+            <stop offset="45%"
+                  stop-color="#AACED3"
+                  stop-opacity="0.08"/>
+
+            <stop offset="100%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0"/>
+
+        </radialGradient>
+
+        <!-- Premium Lilac Corner -->
+        <radialGradient id="purpleGlow"
+                        cx="100%"
+                        cy="0%"
+                        r="75%">
+
+            <stop offset="0%"
+                  stop-color="#DCCBD8"
+                  stop-opacity="0.60"/>
+
+            <stop offset="35%"
+                  stop-color="#E9DFE7"
+                  stop-opacity="0.25"/>
+
+            <stop offset="100%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0"/>
+
+        </radialGradient>
+
+        <!-- Soft Coral Ambient -->
+        <radialGradient id="coralGlow"
+                        cx="65%"
+                        cy="60%"
+                        r="40%">
+
+            <stop offset="0%"
+                  stop-color="#F4DDE4"
+                  stop-opacity="0.18"/>
+
+            <stop offset="100%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0"/>
+
+        </radialGradient>
+
+        <!-- Glass Highlight -->
+        <linearGradient id="glassHighlight"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%">
+
+            <stop offset="0%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0"/>
+
+            <stop offset="50%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0.08"/>
+
+            <stop offset="100%"
+                  stop-color="#FFFFFF"
+                  stop-opacity="0"/>
+
+        </linearGradient>
+
+        <!-- Subtle Teal Dots -->
+        <pattern id="dots"
+                 width="40"
+                 height="40"
+                 patternUnits="userSpaceOnUse">
+
+            <circle cx="2"
+                    cy="2"
+                    r="1"
+                    fill="#AACED3"/>
+
+        </pattern>
+
+    </defs>
+
+    <!-- Base -->
+    <rect width="1500"
+          height="1800"
+          fill="url(#baseGradient)"/>
+
+    <!-- Dot texture -->
+    <rect x="0"
+          y="0"
+          width="450"
+          height="450"
+          fill="url(#dots)"
+          opacity="0.04"/>
+
+    <!-- Teal cloud -->
+    <rect width="1500"
+          height="1800"
+          fill="url(#tealGlow)"/>
+
+    <!-- Coral ambience -->
+    <rect width="1500"
+          height="1800"
+          fill="url(#coralGlow)"/>
+
+    <!-- Lilac corner -->
+    <rect width="1500"
+          height="1800"
+          fill="url(#purpleGlow)"/>
+
+    <!-- Premium glass panel shape -->
+    <path d="M950 0
+             C1250 40 1500 220 1500 650
+             L1500 0 Z"
+          fill="#FFFFFF"
+          opacity="0.14"/>
+
+    <!-- Diagonal glass streak -->
+    <polygon points="-100,0 180,0 980,1800 700,1800"
+             fill="url(#glassHighlight)"
+             opacity="0.9"/>
+
+    <!-- Bottom blend lock -->
+    <rect x="0"
+          y="1650"
+          width="1500"
+          height="150"
+          fill="#F8F1F4"
+          opacity="0.12"/>
+
+</svg>

@@ -1,5 +1,14 @@
 # High-Level Design (HLD)
 
+## Reporting reassessment 30 September 2026
+
+The report experience is now Overall Performance → Referrals → Referral Explorer → Referral Detail, with Provider Explorer → Provider Detail in parallel. The local WIP has 58 semantic tables including local helpers, and uses Import partitions. Do not describe this saved model as a deployed Direct Lake solution.
+
+Gold includes current demographic, IPA-signature, message/reason and category evidence. Calculated journey stages and selectors live in the semantic layer; they do not add source event history or write back to the portal. The dynamic role and separate global-summary design require identity/disclosure acceptance before client release.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** West Midlands Placement Portal data platform
 **Client:** Birmingham Children's Trust
 **Platform:** Microsoft Fabric Lakehouse

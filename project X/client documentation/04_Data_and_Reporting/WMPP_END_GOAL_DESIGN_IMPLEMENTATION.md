@@ -1,5 +1,14 @@
 # WMPP end-goal report implementation — 23 September 2026
 
+## Reporting reassessment 30 September 2026
+
+The end-goal implementation has progressed to the current WIP storyboard with reordered navigation, Explorer names, both drillthrough routes, category icon labels and connected clickable journey strips. Overall Performance now hosts snapshot comparison and closure-flow reporting. Geography/Snapshots pages are hidden rather than deleted.
+
+Earlier layout/schema test totals below describe their dated batches. The newest strip was rebuilt after user feedback about inherited KPI decoration; its saved-file tests pass but the revised rendering and click behaviour have not yet been accepted in Desktop.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Reference-style correction
 
 The initial boxed implementation described below was superseded after design

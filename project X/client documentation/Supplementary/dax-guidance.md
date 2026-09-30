@@ -1,5 +1,12 @@
 # Power BI / DAX Guidance
 
+## Reporting reassessment 30 September 2026
+
+Use current WIP TMDL for exact expressions. Snapshot month, current referral creation cohort and closure flow are separate filter roles. Use category-aware distinct-referral measures and explicit offer/referral or provider/IPA transfer instead of adding bidirectional paths. Journey selectors clear only their own selection. Neither REMOVEFILTERS nor ALLSELECTED should be treated as a bypass of RLS.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Assume a `DimDate` table is related to `FactReferral[ReferralCreatedDate]` and inactive date relationships are used for other lifecycle dates.
 
 ```DAX

@@ -1,5 +1,16 @@
 # WMPP v16 KPI and report reconciliation
 
+## Reporting reassessment 30 September 2026
+
+This document's 23 September reconciliation is retained below as an earlier baseline. The active reassessment is now **SM WMPP v16 updated WIP**: 58 model tables, 366 measures, 34 pages (12 visible), 158 bookmarks. All 109 existing Legend measures resolve; 35 further existing business measures are catalogued.
+
+The former 101/4/12 split concerns the old 117 legacy KPI references, not the 144-entry current catalogue or the 80 requirements. It is not carried forward as a current acceptance percentage. Current message, decline/reason, signature, demographic and category evidence has materially changed. Use the current status, requirement reassessment and Legend for the new disposition.
+
+The Requirement Matrix Overview uses embedded historical `ref_RID`, `ref_KPI` and linkage rows. It is not automatically synchronised by editing the workbook; that controlled model update remains outstanding. This documentation task did not alter or publish either WMPP or Mission Control.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Scope and source evidence
 
 This reconciliation was completed on 23 September 2026 against:

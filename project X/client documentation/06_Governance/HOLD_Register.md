@@ -1,5 +1,14 @@
 # HOLD Register
 
+## Reporting reassessment 30 September 2026
+
+Current reporting HOLD items are: latest journey visual/click acceptance; priority versus urgency and activity-band decisions; emergency definition; provider browsing and separate confirmation evidence; message authorship/unread semantics; complete reason/framework history; support-needs model; origin/destination regions; expected-document/blocking policy; finance/payment sources; RLS identity/disclosure approval; and client release sign-off.
+
+The Legend's added KPI-to-requirement associations are proposed. Its update does not synchronise embedded Requirement Matrix data. See the current requirement reassessment for per-requirement evidence and next action. No owner, due date, approval or completion is invented by this review; earlier recorded decisions below remain intact.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Assumptions, Constraints, Dependencies & Decisions
 
 | **Field** | **Value** |

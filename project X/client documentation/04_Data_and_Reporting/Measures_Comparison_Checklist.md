@@ -1,5 +1,14 @@
 # Measures Comparison Checklist — PBI Report vs Functional Specification
 
+## Reporting reassessment 30 September 2026
+
+The legacy KPI-01–117 comparison below is retained for traceability. The current Legend preserves those references while assigning separate GOLD-KPI identifiers to 144 curated measures. Use the current requirement assessment for readiness; an older check mark must not imply current full-workflow acceptance.
+
+Recheck demographics, IPA-grain signatures, message detail, decline reasons and category membership against WIP before treating them as missing. Test journey selector isolation, same-IPA signing, provider-to-offer attribution, snapshot versus closure populations and category distinct counts before signing off the current report.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** WMPP (West Midlands Placement Portal)
 **Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
 **Semantic model:** `SM_WMPP` — 95 measures in the current TMDL

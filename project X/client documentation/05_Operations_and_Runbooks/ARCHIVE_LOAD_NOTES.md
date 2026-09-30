@@ -1,5 +1,12 @@
 # Archive load behaviour
 
+## Reporting reassessment 30 September 2026
+
+The reporting layer has changed to the current WIP explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WIP, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Date-named audit CSV files
 
 Files named `YYYY-MM-DD.csv` are audit-event files and are loaded by

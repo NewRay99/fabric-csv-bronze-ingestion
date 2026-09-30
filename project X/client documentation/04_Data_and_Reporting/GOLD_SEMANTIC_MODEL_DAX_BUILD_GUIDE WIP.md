@@ -1,5 +1,14 @@
 # Gold semantic model DAX build guide
 
+## Reporting reassessment 30 September 2026
+
+The current WIP model has 259 measures in `_Measures`, 18 in `_Design Measures`, 12 in `_Explore Measures`, 7 in `_Story Measures`, 6 provider-detail helpers, 41 journey measures and 23 journey-interaction measures: 366 in total. The saved TMDL is authoritative for the exact current expression; older copy-ready examples below retain their dated scope.
+
+The new interaction layer distinguishes native referral-stage filters from disconnected provider/detail selectors. Do not make relationships bidirectional to propagate those selectors. Provider membership and IPA attribution are handled explicitly; detail clicks filter lifecycle event families without changing referral identity. Refresh helper objects and test all filters before client release.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## ETL category and location contract — 25 September 2026
 
 The active ETL now separates proposed offer category from actual home category,

@@ -1,5 +1,14 @@
 # RLS and partial aggregate access guide
 
+## Reporting reassessment 30 September 2026
+
+The current WIP contains the `WMPP Dynamic Detail RLS` role, security-scope tables and separate global summary described in the repository design. The 20 September client-site “no role” statement below is historical, not the current file inventory.
+
+No identity-based acceptance is asserted. Test new Referral Map Points, message/free-text, provider-detail and provider-journey calculations under each authorised/unauthorised identity. Journey selectors and ALLSELECTED calculations must not expand authorised data; ordinary filter behaviour is not a substitute for RLS testing. Mappings, small-cell disclosure, Build/export access and break-glass governance remain open.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Purpose
 
 This guide captures the partial-RLS design discussed in the ChatGPT Work

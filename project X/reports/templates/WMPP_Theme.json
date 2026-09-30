@@ -519,12 +519,12 @@
   "null": "#E3DADA",
   "textClasses": {
     "title": {
-      "fontFace": "Segoe UI Semibold",
+      "fontFace": "Segoe UI",
       "fontSize": 13,
       "color": "#2B2B2C"
     },
     "header": {
-      "fontFace": "Segoe UI Semibold",
+      "fontFace": "Segoe UI",
       "fontSize": 12,
       "color": "#2B2B2C"
     },
@@ -601,8 +601,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold",
+            "bold": false,
+            "fontFamily": "Segoe UI",
             "alignment": "left"
           }
         ],
@@ -617,7 +617,8 @@
             },
             "fontSize": 9,
             "fontFamily": "Segoe UI",
-            "alignment": "left"
+            "alignment": "left",
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -818,7 +819,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "textWrap": true,
             "position": "aboveValue"
           }
@@ -954,7 +955,8 @@
         "label": [
           {
             "$id": "default",
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "overFlow": [
@@ -964,7 +966,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "background": [
@@ -1023,7 +1026,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -1081,7 +1084,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -1107,7 +1110,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -1165,7 +1169,7 @@
         "label": [
           {
             "$id": "default",
-            "bold": true,
+            "bold": false,
             "fontSize": 10,
             "show": true,
             "position": "belowValue"
@@ -1233,7 +1237,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -1281,7 +1286,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -1366,7 +1371,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -1381,7 +1386,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -1447,7 +1453,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "textWrap": true,
             "position": "aboveValue"
           }
@@ -1548,7 +1554,7 @@
           {
             "$id": "default",
             "transparency": 0,
-            "bold": true,
+            "bold": false,
             "fontSize": 12,
             "textWrap": true
           }
@@ -1636,7 +1642,7 @@
           {
             "$id": "default",
             "transparency": 0,
-            "bold": true,
+            "bold": false,
             "fontSize": 18,
             "textWrap": true
           }
@@ -1725,7 +1731,7 @@
           {
             "$id": "default",
             "transparency": 0,
-            "bold": true,
+            "bold": false,
             "fontSize": 12,
             "textWrap": true
           }
@@ -1813,7 +1819,7 @@
           {
             "$id": "default",
             "transparency": 0,
-            "bold": true,
+            "bold": false,
             "fontSize": 12
           }
         ],
@@ -1884,7 +1890,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -1932,7 +1938,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -1947,7 +1953,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -2039,7 +2046,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -2079,7 +2086,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -2094,7 +2101,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -2187,7 +2195,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": false,
             "matchValueAlignment": true,
@@ -2253,7 +2261,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -2268,7 +2276,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -2349,7 +2358,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 11,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -2405,7 +2414,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -2445,7 +2454,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -2502,7 +2512,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "textWrap": true,
             "position": "aboveValue",
             "matchValueAlignment": true
@@ -2572,7 +2582,8 @@
             "heading": "Heading3",
             "titleWrap": true,
             "fontSize": 12,
-            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
+            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif",
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -2631,7 +2642,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -2687,7 +2698,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -2727,7 +2738,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -2783,7 +2795,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 11,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true,
@@ -2840,7 +2852,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -2880,7 +2892,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -2936,7 +2949,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -2981,7 +2994,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -3032,7 +3045,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -3088,7 +3102,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "position": "aboveValue",
             "textWrap": true,
             "matchValueAlignment": true
@@ -3151,7 +3165,7 @@
             },
             "alignment": "left",
             "fontSize": 12,
-            "bold": true,
+            "bold": false,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
           }
         ],
@@ -3191,7 +3205,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -3244,7 +3259,7 @@
             "$id": "default",
             "show": false,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "textWrap": true
           }
         ],
@@ -3272,7 +3287,8 @@
             "heading": "Heading3",
             "titleWrap": true,
             "fontSize": 12,
-            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
+            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif",
+            "bold": false
           }
         ],
         "border": [
@@ -3322,7 +3338,8 @@
         "label": [
           {
             "$id": "default",
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "shapeCustomRectangle": [
@@ -3342,7 +3359,8 @@
             "show": false,
             "heading": "Normal",
             "titleWrap": true,
-            "fontFamily": "Tahoma"
+            "fontFamily": "Tahoma",
+            "bold": false
           }
         ],
         "background": [
@@ -3395,7 +3413,8 @@
         "label": [
           {
             "$id": "default",
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "overFlow": [
@@ -3415,8 +3434,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "background": [
@@ -3494,7 +3513,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ]
       },
@@ -3518,7 +3538,7 @@
             "$id": "default",
             "show": true,
             "fontSize": 10,
-            "bold": true,
+            "bold": false,
             "textWrap": true,
             "position": "aboveValue"
           }
@@ -3597,7 +3617,8 @@
         "label": [
           {
             "$id": "default",
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "shapeCustomRectangle": [
@@ -3617,7 +3638,8 @@
             "show": false,
             "heading": "Normal",
             "titleWrap": true,
-            "fontFamily": "Tahoma"
+            "fontFamily": "Tahoma",
+            "bold": false
           }
         ],
         "background": [
@@ -3670,7 +3692,7 @@
             "$id": "default",
             "show": false,
             "fontSize": 13,
-            "bold": true,
+            "bold": false,
             "textWrap": true
           }
         ],
@@ -3692,7 +3714,8 @@
             "heading": "Heading3",
             "titleWrap": true,
             "fontSize": 12,
-            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif"
+            "fontFamily": "wf_standard-font, helvetica, arial, sans-serif",
+            "bold": false
           }
         ],
         "border": [
@@ -3752,7 +3775,8 @@
         ],
         "title": [
           {
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "spacing": [
@@ -3841,12 +3865,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -3882,7 +3908,8 @@
         "label": [
           {
             "$id": "default",
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "fillCustom": [
@@ -4275,8 +4302,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "padding": [
@@ -4298,7 +4325,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -4399,8 +4427,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "subTitle": [
@@ -4414,7 +4442,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -4798,8 +4827,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -4835,8 +4864,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "subTitle": [
@@ -4850,7 +4879,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -4945,12 +4975,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -5136,8 +5168,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "background": [
@@ -5216,7 +5248,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "padding": [
@@ -5306,8 +5339,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -5382,8 +5415,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -5460,12 +5493,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -5766,8 +5801,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -5830,8 +5865,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -5883,7 +5918,8 @@
               "solid": {
                 "color": "#0D35B8"
               }
-            }
+            },
+            "bold": false
           }
         ],
         "border": [
@@ -5951,7 +5987,8 @@
                 "color": "#0D35B8"
               }
             },
-            "fontFamily": "Tahoma"
+            "fontFamily": "Tahoma",
+            "bold": false
           }
         ],
         "border": [
@@ -6019,7 +6056,8 @@
                 "color": "#FFB39F"
               }
             },
-            "fontFamily": "Tahoma"
+            "fontFamily": "Tahoma",
+            "bold": false
           }
         ]
       },
@@ -6071,7 +6109,8 @@
               "solid": {
                 "color": "#FFB39F"
               }
-            }
+            },
+            "bold": false
           }
         ]
       },
@@ -6088,8 +6127,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "subTitle": [
@@ -6103,7 +6142,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -6198,12 +6238,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -6365,8 +6407,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "subTitle": [
@@ -6380,7 +6422,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "divider": [
@@ -6572,8 +6615,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -6595,12 +6638,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -6837,8 +6882,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -6930,8 +6975,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "subTitle": [
@@ -6945,7 +6990,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -7100,12 +7146,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -7679,7 +7727,7 @@
             "$id": "default",
             "fillColor": {
               "solid": {
-                "color": "#FB6540"
+                "color": "#2B2427"
               }
             },
             "transparency": 0
@@ -7688,9 +7736,28 @@
             "$id": "hover",
             "fillColor": {
               "solid": {
-                "color": "#F98165"
+                "color": "#2B2427"
               }
-            }
+            },
+            "transparency": 0
+          },
+          {
+            "$id": "selected",
+            "fillColor": {
+              "solid": {
+                "color": "#2B2427"
+              }
+            },
+            "transparency": 0
+          },
+          {
+            "$id": "disabled",
+            "fillColor": {
+              "solid": {
+                "color": "#2B2427"
+              }
+            },
+            "transparency": 0
           }
         ],
         "outline": [
@@ -8138,7 +8205,7 @@
             "$id": "default",
             "fillColor": {
               "solid": {
-                "color": "#FB6540"
+                "color": "#2B2427"
               }
             },
             "transparency": 0
@@ -8147,9 +8214,28 @@
             "$id": "hover",
             "fillColor": {
               "solid": {
-                "color": "#F98165"
+                "color": "#2B2427"
               }
-            }
+            },
+            "transparency": 0
+          },
+          {
+            "$id": "selected",
+            "fillColor": {
+              "solid": {
+                "color": "#2B2427"
+              }
+            },
+            "transparency": 0
+          },
+          {
+            "$id": "disabled",
+            "fillColor": {
+              "solid": {
+                "color": "#2B2427"
+              }
+            },
+            "transparency": 0
           }
         ],
         "outline": [
@@ -8889,6 +8975,235 @@
             "right": 0
           }
         ]
+      },
+      "WMPP Owner Bubble Navigation": {
+        "shape": [
+          {
+            "tileShape": "rectangle",
+            "roundEdge": 0
+          }
+        ],
+        "fill": [
+          {
+            "show": true,
+            "fillColor": {
+              "solid": {
+                "color": "#F8F5F1"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "icon": [
+          {
+            "show": true,
+            "shapeType": "custom",
+            "placement": "custom",
+            "iconSize": 32,
+            "horizontalAlignment": "center",
+            "verticalAlignment": "top",
+            "topMargin": 20,
+            "bottomMargin": 0,
+            "leftMargin": 0,
+            "rightMargin": 0
+          }
+        ],
+        "text": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 8,
+            "fontColor": {
+              "solid": {
+                "color": "#2B2B2C"
+              }
+            },
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle",
+            "topMargin": 74,
+            "bottomMargin": 8,
+            "leftMargin": 6,
+            "rightMargin": 6
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ],
+        "shadow": [
+          {
+            "show": false
+          }
+        ],
+        "glow": [
+          {
+            "show": false
+          }
+        ]
+      },
+      "WMPP Open Menu Bubble": {
+        "shape": [
+          {
+            "tileShape": "rectangle",
+            "roundEdge": 0
+          }
+        ],
+        "fill": [
+          {
+            "show": true,
+            "fillColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "icon": [
+          {
+            "show": true,
+            "shapeType": "custom",
+            "placement": "custom",
+            "iconSize": 32,
+            "horizontalAlignment": "center",
+            "verticalAlignment": "top",
+            "topMargin": 26,
+            "bottomMargin": 0,
+            "leftMargin": 0,
+            "rightMargin": 0
+          }
+        ],
+        "text": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 8,
+            "fontColor": {
+              "solid": {
+                "color": "#2B2B2C"
+              }
+            },
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle",
+            "topMargin": 74,
+            "bottomMargin": 8,
+            "leftMargin": 6,
+            "rightMargin": 6
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ],
+        "shadow": [
+          {
+            "show": false
+          }
+        ],
+        "glow": [
+          {
+            "show": false
+          }
+        ]
+      },
+      "WMPP Navigation Dropdown": {
+        "fill": [
+          {
+            "show": true,
+            "fillColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "text": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 11,
+            "fontColor": {
+              "solid": {
+                "color": "#2B2B2C"
+              }
+            },
+            "bold": false
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ]
+      },
+      "WMPP Connected Open Menu": {
+        "shape": [
+          {
+            "tileShape": "rectangle",
+            "roundEdge": 41
+          }
+        ],
+        "fill": [
+          {
+            "show": true,
+            "fillColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "icon": [
+          {
+            "show": true,
+            "shapeType": "custom",
+            "placement": "custom",
+            "iconSize": 32,
+            "horizontalAlignment": "center",
+            "verticalAlignment": "top",
+            "topMargin": 28,
+            "bottomMargin": 0,
+            "leftMargin": 0,
+            "rightMargin": 0
+          }
+        ],
+        "text": [
+          {
+            "show": true,
+            "fontFamily": "Segoe UI",
+            "fontSize": 8,
+            "fontColor": {
+              "solid": {
+                "color": "#2B2B2C"
+              }
+            },
+            "horizontalAlignment": "center",
+            "verticalAlignment": "middle",
+            "topMargin": 82,
+            "bottomMargin": 8,
+            "leftMargin": 10,
+            "rightMargin": 10
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ],
+        "shadow": [
+          {
+            "show": false
+          }
+        ],
+        "glow": [
+          {
+            "show": false
+          }
+        ]
       }
     },
     "textbox": {
@@ -8901,7 +9216,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -8975,8 +9291,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "spacing": [
@@ -9033,7 +9349,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "padding": [
@@ -9065,7 +9382,8 @@
       "WMPP textbox 744cadbe47": {
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "dropShadow": [
@@ -9209,7 +9527,8 @@
       "WMPP textbox 65ff3e9638": {
         "title": [
           {
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "background": [
@@ -9243,7 +9562,7 @@
             "titleWrap": true,
             "fontSize": 12,
             "fontFamily": "wf_standard-font, helvetica, arial, sans-serif",
-            "bold": true
+            "bold": false
           }
         ],
         "spacing": [
@@ -9281,12 +9600,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -9376,7 +9697,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "background": [
@@ -9438,12 +9760,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -9527,8 +9851,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "border": [
@@ -9571,7 +9895,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -9745,7 +10070,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "background": [
@@ -9884,7 +10210,8 @@
         "title": [
           {
             "show": false,
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -9976,7 +10303,8 @@
         ],
         "title": [
           {
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "background": [
@@ -10082,7 +10410,8 @@
         "title": [
           {
             "show": false,
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -10194,7 +10523,8 @@
         ],
         "title": [
           {
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "background": [
@@ -10262,7 +10592,8 @@
         ],
         "title": [
           {
-            "titleWrap": true
+            "titleWrap": true,
+            "bold": false
           }
         ],
         "background": [
@@ -10450,7 +10781,8 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ]
       }
@@ -10487,8 +10819,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "border": [
@@ -10531,7 +10863,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -10669,8 +11002,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -10692,12 +11025,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -10892,8 +11227,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -10940,8 +11275,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "border": [
@@ -10984,7 +11319,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "background": [
@@ -11118,8 +11454,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -11141,12 +11477,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -11302,8 +11640,8 @@
               }
             },
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ]
       },
@@ -11332,8 +11670,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "background": [
@@ -11412,7 +11750,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "padding": [
@@ -11496,8 +11835,8 @@
             },
             "alignment": "left",
             "fontSize": 13,
-            "bold": true,
-            "fontFamily": "Segoe UI Semibold"
+            "bold": false,
+            "fontFamily": "Segoe UI"
           }
         ],
         "background": [
@@ -11522,7 +11861,8 @@
             },
             "alignment": "left",
             "fontSize": 9,
-            "fontFamily": "Segoe UI"
+            "fontFamily": "Segoe UI",
+            "bold": false
           }
         ],
         "padding": [
@@ -11648,12 +11988,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [
@@ -11805,7 +12147,8 @@
             "show": false,
             "heading": "Normal",
             "titleWrap": true,
-            "fontFamily": "Tahoma"
+            "fontFamily": "Tahoma",
+            "bold": false
           }
         ],
         "spacing": [
@@ -11845,12 +12188,14 @@
         ],
         "title": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "subTitle": [
           {
-            "show": false
+            "show": false,
+            "bold": false
           }
         ],
         "visualHeader": [

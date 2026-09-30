@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="44"
+     height="44"
+     viewBox="0 0 44 44"
+     fill="none">
+
+    <!-- Background Circle -->
+    <circle
+        cx="22"
+        cy="22"
+        r="20"
+        fill="#EEE7EA"/>
+
+    <!-- Engagement Referral Icon -->
+    <g transform="translate(10 10)">
+
+        <path
+            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            fill="none"
+            stroke="#1E1A2D"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
+        <polyline
+            points="14 2 14 8 20 8"
+            fill="none"
+            stroke="#1E1A2D"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
+        <path
+            d="M8.5 12.5h7v3.5h-4.5l-2.5 2v-2h0z"
+            fill="none"
+            stroke="#1E1A2D"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
+    </g>
+
+</svg>

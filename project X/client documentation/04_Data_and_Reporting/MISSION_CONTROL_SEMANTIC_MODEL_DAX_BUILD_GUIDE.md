@@ -1,5 +1,12 @@
 # Mission Control semantic model DAX build guide
 
+## Reporting reassessment 30 September 2026
+
+This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## ETL lineage update — 25 September 2026
 
 Setup now registers the new referral framework/spot bridges and category/location

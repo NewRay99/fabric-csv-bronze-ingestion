@@ -1,5 +1,18 @@
 # Version 01 validation
 
+## Reporting reassessment 30 September 2026
+
+Use the current WIP acceptance checklist in the current status document. Static inventory confirms 58 tables, 366 named measures, 34 pages and 158 bookmarks; all existing 109 Legend measures and 35 added entries resolve by name. The journey repair originally recorded 10 passing tests and schema validation of 138 changed documents with five unavailable existing schemas skipped.
+
+Following owner approval on 30 September 2026, journey checks were simplified to seven script/business-rule/reference checks. Removed: byte-for-byte comparisons to historical backups, file-size limits, frozen panel dimensions, icon alignment and decoration assertions. Retained: model references, registered bookmark targets, stage-selector isolation, action links and the unavailable provider-confirmation guard. Omitted false bookmark defaults are accepted. Report appearance and rendered behaviour are Desktop UAT checks, not Python unit tests.
+
+Verification: **107 tests passed, with 158 subtests passed**, using `python -B -m pytest -o addopts= -p no:cacheprovider -q --tb=short --basetemp <fresh-temporary-directory>`. The first full run encountered a permissions error in the existing `.pytest_tmp`; the fresh temporary directory resolved it. Data-pipeline tests were not changed. Report/model files were not changed by this test cleanup.
+
+These checks do not execute Fabric, validate all DAX results or certify Desktop rendering. The limited previous live check covered three provider-stage gates only. Required next checks are full refresh/reconciliation, stage selector isolation and clear/reset, drillthrough/Back, snapshot and closure semantics, category/offer intersections, map privacy, identity RLS and release sign-off. The August validation results below remain historical and must not be restamped as newly run.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Validated locally on 4 August 2026:
 
 - All seven `.ipynb` files parse as valid Notebook 4 JSON.

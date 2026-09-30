@@ -1,4 +1,12 @@
-> **Implemented Gold v02 status:** the active `04_gold_model` notebook now
+# Historical reporting enhancement backlog
+
+## Reporting reassessment 30 September 2026
+
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+> **Historical Gold v02 status:** the active `04_gold_model` notebook now
 > publishes `gold.fact_referral`, `gold.fact_referral_snapshot`,
 > `gold.fact_offer`, `gold.fact_placement`, and
 > `gold.fact_referral_provider`, plus referral-board, monthly and provider

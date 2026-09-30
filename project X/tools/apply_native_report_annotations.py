@@ -382,14 +382,17 @@ def get_title(visual):
 
 
 def install_icons(report):
-    """Retain upstream originals and the exact rendered variants beside the PBIP."""
+    """Retain originals/variants in the shared pack and deploy embedded copies."""
+    icon_pack = ROOT / 'assets/brand-pack/icons'
+    for folder in ['lucide-originals','report-variants']:
+        (icon_pack/folder).mkdir(parents=True,exist_ok=True)
     sources = []
     registry = read(report / "definition/report.json")
     items = next(
         p["items"] for p in registry["resourcePackages"] if p["name"] == "RegisteredResources"
     )
     for icon in ICONS:
-        original = report.parent / f"lucide-{icon}.svg"
+        original = icon_pack / 'lucide-originals' / f"lucide-{icon}.svg"
         if not original.exists():
             original.write_bytes(
                 urllib.request.urlopen(UPSTREAM + f"icons/{icon}.svg", timeout=30).read()
@@ -408,7 +411,7 @@ def install_icons(report):
         for suffix, color in (("ink", "#2B2427"), ("light", "#F3F7EF")):
             filename = f"lc-{icon}-{suffix}.svg"
             variant = raw.replace('stroke="currentColor"', f'stroke="{color}"')
-            (report.parent / filename).write_text(variant, encoding="utf-8")
+            (icon_pack / 'report-variants' / filename).write_text(variant, encoding="utf-8")
             (report / "StaticResources/RegisteredResources" / filename).write_text(
                 variant, encoding="utf-8"
             )
@@ -422,7 +425,7 @@ def install_icons(report):
         {
             "revision": REVISION,
             "retrieved": "2026-09-27",
-            "modifications": "lc-* variants replace currentColor with explicit report ink/light stroke only. Upstream geometry is unchanged. Originals and license are beside this file.",
+            "modifications": "lc-* variants replace currentColor with explicit report ink/light stroke only. Upstream geometry is unchanged. Originals and variants are in project X/assets/brand-pack/icons; the delivery license remains beside this file.",
             "icons": sources,
         },
     )
@@ -884,7 +887,7 @@ def main():
             "",
             f"Source: https://lucide.dev/icons/ — official lucide-icons/lucide revision `{REVISION}`.",
             "",
-            "`lucide-*.svg` files in this project root are upstream originals. `lc-*-ink.svg` / `lc-*-light.svg` are report variants with only the stroke colour changed. The exact variants used by Power BI are also embedded as registered report resources. No API key is required.",
+            "Upstream `lucide-*.svg` originals are in `project X/assets/brand-pack/icons/lucide-originals`. The `lc-*-ink.svg` / `lc-*-light.svg` variants are in `icons/report-variants` in that pack. Exact deployed variants remain embedded as registered report resources. No API key is required.",
             "",
             "See `Lucide-provenance.json` for each source URL and SHA-256; retain `Lucide-LICENSE.txt` with client deliveries, including the ISC and applicable Feather/MIT notices.",
             "",

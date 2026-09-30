@@ -1,5 +1,14 @@
 # WMPP reference-design revision — 23 September 2026
 
+## Reporting reassessment 30 September 2026
+
+The current WIP uses the approved connected journey-strip approach with centred icon circles, labels/counts and no inherited KPI card decoration. The latest saved definitions add stage-selector actions and Clear stage on the Explorers, plus activity focus on Referral Detail.
+
+This records implementation, not visual sign-off. The previous user screenshot showed a mismatch; the corrective revision still needs a reopened Desktop inspection at the intended zoom, including text fit, circle alignment, all stage states, keyboard/selection behaviour and unchanged surrounding filters.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Status: **implemented in both report copies; final Power BI visual acceptance is
 not complete**. Do not describe schema validation or SVG previews as proof that
 the Power BI render matches the supplied images.

@@ -1,0 +1,2407 @@
+{
+  "date": "2026-09-30",
+  "backup": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\outputs\\icon-pack-migration-20260930-164258",
+  "scope": "Loose report SVG icons moved; embedded resources retained; mockups, review backups and retired reports excluded",
+  "files": [
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-calendar-days-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-calendar-days-ink.svg",
+      "sha256": "0F0FE19B42F83DE64FF666D9F29476875EE7F629034083705FCCD7F64027BCE9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-calendar-days-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-calendar-days-light.svg",
+      "sha256": "8FBEA89950E71433B51F8B9717D99DF1D51FB2F5CB2FDA50CAF5798CDF0C722E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-chart-column-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-chart-column-ink.svg",
+      "sha256": "AB5D4B1E8D66119AEB7067803B4C2772E5EA68277690032C9B1534C4B83CF8DA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-chart-column-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-chart-column-light.svg",
+      "sha256": "27F1C510076678E6BE41A6A6C6E376948B11FB9973D94C206602C74897646CF9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-clock-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-clock-ink.svg",
+      "sha256": "60D8B562E92DC2D59EC965EB4B53ED2A7DF32C6A2D0B6CEFEFAEC627703CA5C7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-clock-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-clock-light.svg",
+      "sha256": "D531296257A58C77108535E6CCEB125732716889BF0332BC52E5329AF5C6D98C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-handshake-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-handshake-ink.svg",
+      "sha256": "FDFDF1F1B686FA6805BBCA189E404E2CB485F6E71832397AF7471715A74C407F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-handshake-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-handshake-light.svg",
+      "sha256": "042AB0F646848A3B3C878BC92AA62E021FA78EFD83B09A466E6221394749AFF0",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-house-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-house-ink.svg",
+      "sha256": "6AC25D3BAEA97C092FD45CA8D861DBC1E99F4CB3D2C07A1F41393EDD53C294AC",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-house-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-house-light.svg",
+      "sha256": "BCA2BCB6A7AA53F0F1B0EF71CA58BFDF4A09CB32A3E718A90D6A247B3DA94377",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-info-ink.svg",
+      "sha256": "0015C80E71392F7B07A1D519C53F2A4BC924448E25DAC8169DA11F1D4D6D8C94",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-info-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-info-light.svg",
+      "sha256": "ABFCBF04886A84A60A7FE16A7157E1E144C536522746568306640B00C3A85145",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-pound-sterling-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-pound-sterling-ink.svg",
+      "sha256": "4C373FD7FE803B5ABDC84D1803CDC16550B50231A8F6ACC896ED5EA8AE5D2C92",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-pound-sterling-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-pound-sterling-light.svg",
+      "sha256": "EF105BA6FDF8EF34F16ED1D1CDD2D26D509E2CED84FD67C025689B3B374EC2B3",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-target-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-target-ink.svg",
+      "sha256": "6DD3ACE740546D89FACB28BE6B1F7BBA2F558B3E3652F7CA2DD844E10FBAD117",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-target-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-target-light.svg",
+      "sha256": "0C2B91835AC7AEA806399C6E8EE966C5A53C5A3ECBF50E70F8D5E76C1E846EE0",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-triangle-alert-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-triangle-alert-ink.svg",
+      "sha256": "7E239E02E66C65E85AE9968F47ED3EAB9A8D9A2D9154E8C0EBBF9715185DEEDE",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-triangle-alert-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-triangle-alert-light.svg",
+      "sha256": "BA41DB7395A08B9556492DD2571CC17CFB8745E63738348BA40F54A36651770D",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-users-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-users-ink.svg",
+      "sha256": "7A2550B9BF4CA580B3F029340AAA8E45B3F8C3EA1C4B0D1635F8A2101E4D9392",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lc-users-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-users-light.svg",
+      "sha256": "5626FCD14F94CB7E2727EC4FAAD0B5AD4F060BABCBDA11F2362F809E7E14B52E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-calendar-days.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-calendar-days.svg",
+      "sha256": "9330EB8D7C4989E97B6361314ABBF02953243C602874725C9E58CECA00DA3BD7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-chart-column.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-chart-column.svg",
+      "sha256": "80664A4C5CA1BCA10BCB88C1A99F62593C94D61D72D3A4BBF577EB3F3EA4DA57",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-clock.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-clock.svg",
+      "sha256": "E9D3E3ACF4D1C280FCF8092293439DC0A4756A908CEB859DE144B12451CD1CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-handshake.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-handshake.svg",
+      "sha256": "F58638064A1884E256895720C9A665D9E98CFC6935C52E14782CE0E84ECDAD02",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-house.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-house.svg",
+      "sha256": "28216C479005731EF5E382E7D8627EDA2B129B019EB1F3D9DE9F5915576D448E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-info.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-info.svg",
+      "sha256": "BC977A64EB96F3E9C1041FFD09A3FCEB70E3E65C02B571F76064062ED31F3CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-pound-sterling.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-pound-sterling.svg",
+      "sha256": "A1A87D3A04BE00FB5216F34D76A81B3681BF5D32742B5B32784B245E42F33CF7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-target.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-target.svg",
+      "sha256": "96A6B16628825A1A207A77E9A5818F74C3E74EA3664783FF5C2A44E6347B90DF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-triangle-alert.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-triangle-alert.svg",
+      "sha256": "4866F38B8560D410F21E3226413E0B77997B6DFBB6931FADFE0A0D5AEF9FFEB4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\lucide-users.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-users.svg",
+      "sha256": "EEED488A1EC95BA730DD69996536FB65061D6EA273AFB2429AE47E65EEBF401C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\delivery-5133b9c7cfcf12cf7f74.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\delivery-5133b9c7cfcf12cf7f74.svg",
+      "sha256": "492FBD00B93B64A9554D2AB87F09F0B214922C66FEC8930146B6293969F60ECD",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\delivery-803165f7d2f5aaccd8ac.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\delivery-803165f7d2f5aaccd8ac.svg",
+      "sha256": "E8FEBB06D96751C9B81DA8B5AF9DC9611267A3B98944CD0D44A8F6736C4A51C7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\delivery-d807778066085fbd96dc.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\delivery-d807778066085fbd96dc.svg",
+      "sha256": "6A99A5FED9EE5EAD8B39EAA98F2727150A75F2EE334A468A57C793806DE04A32",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\delivery-ed27e90d06816c7c1eee.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\delivery-ed27e90d06816c7c1eee.svg",
+      "sha256": "E1850F6788517031AFC38666F163C3E8E9EA7351C5FAA15F28AED06CE514008E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-calendar-days-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-calendar-days-ink.svg",
+      "sha256": "0F0FE19B42F83DE64FF666D9F29476875EE7F629034083705FCCD7F64027BCE9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-calendar-days-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-calendar-days-light.svg",
+      "sha256": "8FBEA89950E71433B51F8B9717D99DF1D51FB2F5CB2FDA50CAF5798CDF0C722E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-chart-column-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-chart-column-ink.svg",
+      "sha256": "AB5D4B1E8D66119AEB7067803B4C2772E5EA68277690032C9B1534C4B83CF8DA",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-chart-column-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-chart-column-light.svg",
+      "sha256": "27F1C510076678E6BE41A6A6C6E376948B11FB9973D94C206602C74897646CF9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-clock-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-clock-ink.svg",
+      "sha256": "60D8B562E92DC2D59EC965EB4B53ED2A7DF32C6A2D0B6CEFEFAEC627703CA5C7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-clock-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-clock-light.svg",
+      "sha256": "D531296257A58C77108535E6CCEB125732716889BF0332BC52E5329AF5C6D98C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-handshake-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-handshake-ink.svg",
+      "sha256": "FDFDF1F1B686FA6805BBCA189E404E2CB485F6E71832397AF7471715A74C407F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-handshake-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-handshake-light.svg",
+      "sha256": "042AB0F646848A3B3C878BC92AA62E021FA78EFD83B09A466E6221394749AFF0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-house-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-house-ink.svg",
+      "sha256": "6AC25D3BAEA97C092FD45CA8D861DBC1E99F4CB3D2C07A1F41393EDD53C294AC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-house-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-house-light.svg",
+      "sha256": "BCA2BCB6A7AA53F0F1B0EF71CA58BFDF4A09CB32A3E718A90D6A247B3DA94377",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-info-ink.svg",
+      "sha256": "0015C80E71392F7B07A1D519C53F2A4BC924448E25DAC8169DA11F1D4D6D8C94",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-info-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-info-light.svg",
+      "sha256": "ABFCBF04886A84A60A7FE16A7157E1E144C536522746568306640B00C3A85145",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-pound-sterling-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-pound-sterling-ink.svg",
+      "sha256": "4C373FD7FE803B5ABDC84D1803CDC16550B50231A8F6ACC896ED5EA8AE5D2C92",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-pound-sterling-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-pound-sterling-light.svg",
+      "sha256": "EF105BA6FDF8EF34F16ED1D1CDD2D26D509E2CED84FD67C025689B3B374EC2B3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-target-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-target-ink.svg",
+      "sha256": "6DD3ACE740546D89FACB28BE6B1F7BBA2F558B3E3652F7CA2DD844E10FBAD117",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-target-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-target-light.svg",
+      "sha256": "0C2B91835AC7AEA806399C6E8EE966C5A53C5A3ECBF50E70F8D5E76C1E846EE0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-triangle-alert-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-triangle-alert-ink.svg",
+      "sha256": "7E239E02E66C65E85AE9968F47ED3EAB9A8D9A2D9154E8C0EBBF9715185DEEDE",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-triangle-alert-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-triangle-alert-light.svg",
+      "sha256": "BA41DB7395A08B9556492DD2571CC17CFB8745E63738348BA40F54A36651770D",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-users-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-users-ink.svg",
+      "sha256": "7A2550B9BF4CA580B3F029340AAA8E45B3F8C3EA1C4B0D1635F8A2101E4D9392",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP Mission Control v16\\SM WMPP Mission Control.Report\\StaticResources\\RegisteredResources\\lc-users-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-variants\\lc-users-light.svg",
+      "sha256": "5626FCD14F94CB7E2727EC4FAAD0B5AD4F060BABCBDA11F2362F809E7E14B52E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-accepted.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-accepted.svg",
+      "sha256": "786141026832780C8AC1A447CC4856634C3C26A1F550EC33F1B1A166CC32B8BA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-active.svg",
+      "sha256": "A169D92CB4CC9B654A03E8A7B97AB9BC1E214E57FED0E682CB56A175759F601B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-assigned.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-assigned.svg",
+      "sha256": "841B9044CA8F62B03329727A7F1B17DBAB15B7778181EE015ECC24BA25153760",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-cancelled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-cancelled.svg",
+      "sha256": "CE190A821F5B092CB4CAF95D84A00E09B0CFB0DA2AB5DCB7EDE0028C2E5C67C9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-category.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-category.svg",
+      "sha256": "B9C4E611E6570AE394795E64D084C60F52D58B224BF7B993A627FFBD821209CF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-closed.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-closed.svg",
+      "sha256": "BB954DACE389DB579FF6EF74333DCB9BAEFAED4B9BD9C465C64AC46A35CF14AB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-critical.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-critical.svg",
+      "sha256": "C0BAE96177C4943250FA1F547B80D546165269790193C555775DBE52914223BE",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-declined.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-declined.svg",
+      "sha256": "44C31F660993CFA44682DBCF642FF543FFC840E89EB0E3D81172741B6EDABF48",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-draft.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-draft.svg",
+      "sha256": "48A8AC9041F20E7E4431618418C0232A981470CBECC0BE8083DE7E26E316CC3B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-event.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-event.svg",
+      "sha256": "4D1418E889B2E1D03ECBA541E573AD601CFACF76CCCBBE120823EA28D636A3BA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-fostering.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-fostering.svg",
+      "sha256": "23023D6C37C62183B264CECF38935816E2B589C812DA888CBA7C99AA9DD8A4F7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-framework.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-framework.svg",
+      "sha256": "9C2531E6181F9FE21FE20F425BE0CA7CB6E156385800AC28B8ECE8AEA0328B86",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-high.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-high.svg",
+      "sha256": "DE0F6E61DB0756867A9476901ADCAA01ADE570C49A3941E9C2F791717C967FE0",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-location.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-location.svg",
+      "sha256": "8B5BD4A183200B1238DF50031B1869691E920741FE60B460B46DD180D95F28A4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-medium.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-medium.svg",
+      "sha256": "750D5ED5EC796F4A0E9FBE410F36FCDBB9FF58EDAAF8881CD124F1A9D03F747F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-no.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-no.svg",
+      "sha256": "50782D3E61708E27F50A38BBC0831D9EFBE5FF488A3E4C730A94DB92C55B0812",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-offer.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-offer.svg",
+      "sha256": "F141D2C9DF9E7CB0302F700669021912A440D55A34A6DCC56EAC21F26710A7DA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-pending.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-pending.svg",
+      "sha256": "750D5ED5EC796F4A0E9FBE410F36FCDBB9FF58EDAAF8881CD124F1A9D03F747F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-planned.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-planned.svg",
+      "sha256": "708E177578813E859F634148D6F9E9DA536719E356123453E27BC8B16D0AC15F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-residential.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-residential.svg",
+      "sha256": "52214046E918E9FDA3042A11A71BF01E086A960BF0B0B1EF8A8E695888F96D92",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-review.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-review.svg",
+      "sha256": "5160835325ECCBE15321D5AE2AC2283379F05593DBDEBC4EDFA91BEA8F533333",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-supported.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-supported.svg",
+      "sha256": "974775B3446066FDD9D8213E8554F1B2144A594934D41E8E06C1B63D29871196",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-unknown.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-unknown.svg",
+      "sha256": "7D2F627BD74581CEBD4344C6B83EFCBA8FF42535EB4CE8241A4273A93BBEA8FB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-category-yes.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-yes.svg",
+      "sha256": "82CCEEF8DC805B4AC86F7883E093D84C325C818966472FC0829BC5C487106683",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-1-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-1-rail.svg",
+      "sha256": "A70BB349D2EC0497686459BE27D82BFC758EED6EE911A86A440486470CE1CFEB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-1.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-1.svg",
+      "sha256": "23C4355D6BCE7DA38A6794CEEE3749A027CE162E1C745D8A0928D86DB5D3957C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-2-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-2-rail.svg",
+      "sha256": "F49E38E88403AC52BFF8E334D5DDC4EC524129BBF3496DC614F9D1E060252D81",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-2.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-2.svg",
+      "sha256": "FADF0A66E12EF49E0F99FD7B00C87DA9C3C8D37B20141399B513E8B15577DC37",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-3-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-3-rail.svg",
+      "sha256": "D5C2DCDE7E22BFA7D28AED8866B5B938FAFC006FDCCEB25B29DDC43939CA29CE",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-3.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-3.svg",
+      "sha256": "7AF7866988C5CA6392C5F3A824935B7C334157C0B1AB55CE09E23B10530D91CE",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-4-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-4-rail.svg",
+      "sha256": "BF57F73AE4B8DC240E8A8FCD144A0009C899BA5A029EA64DF74C20B7A29D462A",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-4.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-4.svg",
+      "sha256": "B41E60E774DB01B9A2D49D691EFE78CD1C9998AFA1228CCB6C4CFACA9104695E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-5-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-5-rail.svg",
+      "sha256": "12057A126C89C61F0377E1A1A015C10B87E433EC9BF8958FBD29E4D934D9C449",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-5.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-5.svg",
+      "sha256": "8DBF168FE786B04F6F14603E5357FACE46E27BD03C3254B31600931B642DC9B5",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-6-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-6-rail.svg",
+      "sha256": "BF57F73AE4B8DC240E8A8FCD144A0009C899BA5A029EA64DF74C20B7A29D462A",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\icons\\wmpp-journey-6.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-6.svg",
+      "sha256": "B41E60E774DB01B9A2D49D691EFE78CD1C9998AFA1228CCB6C4CFACA9104695E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-calendar-days-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\fa86de96a00326a54c9ba3a49ab51d5d8c1d7e0209ff48b0f7be7fbbb0f97405\\lc-calendar-days-ink.svg",
+      "sha256": "FA86DE96A00326A54C9BA3A49AB51D5D8C1D7E0209FF48B0F7BE7FBBB0F97405",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-calendar-days-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\185e024ea51172ee32e15f9bfe5ba99ee3898b464424b8400121f918c55b7763\\lc-calendar-days-light.svg",
+      "sha256": "185E024EA51172EE32E15F9BFE5BA99EE3898B464424B8400121F918C55B7763",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-chart-column-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\79ef8a7453b14374b21c53b521067cb9bf84f23daf880d092694045629820d2c\\lc-chart-column-ink.svg",
+      "sha256": "79EF8A7453B14374B21C53B521067CB9BF84F23DAF880D092694045629820D2C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-chart-column-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\6e54c3a07d6d08673be4f9d0f318054dd726ddd3197de6d126835e7a2630a4c9\\lc-chart-column-light.svg",
+      "sha256": "6E54C3A07D6D08673BE4F9D0F318054DD726DDD3197DE6D126835E7A2630A4C9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-clock-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\1661d6c6fe7a8d1cbce733efa19496bbd6b219bc21c74d14c854e916cb32ea4e\\lc-clock-ink.svg",
+      "sha256": "1661D6C6FE7A8D1CBCE733EFA19496BBD6B219BC21C74D14C854E916CB32EA4E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-clock-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\0a8329fee9a7ec7c3d1876e06aa5e841c35da8e8afbeeab91bf8c4af67b19b61\\lc-clock-light.svg",
+      "sha256": "0A8329FEE9A7EC7C3D1876E06AA5E841C35DA8E8AFBEEAB91BF8C4AF67B19B61",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-handshake-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8f363c7f88f58ba57413e8e924bc103b7f99eaa431c22a7974376fca5d8b8a3a\\lc-handshake-ink.svg",
+      "sha256": "8F363C7F88F58BA57413E8E924BC103B7F99EAA431C22A7974376FCA5D8B8A3A",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-handshake-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\77746a41617bf092abca6c60e923bf7f8904e6da41075577cd779d0a054707db\\lc-handshake-light.svg",
+      "sha256": "77746A41617BF092ABCA6C60E923BF7F8904E6DA41075577CD779D0A054707DB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-house-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\177be693681ddbbd6a8b3ed22eb8f2b861fc1dec112a0ae5656498ad889b78c5\\lc-house-ink.svg",
+      "sha256": "177BE693681DDBBD6A8B3ED22EB8F2B861FC1DEC112A0AE5656498AD889B78C5",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-house-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\a240cd37e16af71503294005fff6c78fbc75ad7a47c467b39d104833422152a1\\lc-house-light.svg",
+      "sha256": "A240CD37E16AF71503294005FFF6C78FBC75AD7A47C467B39D104833422152A1",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-info-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ed10b2b97c6f5ebdb43bafdd26f0991a11e0bc9d2e8d8adb24110068873dbe84\\lc-info-light.svg",
+      "sha256": "ED10B2B97C6F5EBDB43BAFDD26F0991A11E0BC9D2E8D8ADB24110068873DBE84",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-pound-sterling-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\71ce2f990bebb5294b936f8356460810777640ce1ce4fbe051b7f06a4887c11f\\lc-pound-sterling-ink.svg",
+      "sha256": "71CE2F990BEBB5294B936F8356460810777640CE1CE4FBE051B7F06A4887C11F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-pound-sterling-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\55a4f5ffee441a0d6bd6625c390a05434043d652093e000be5efcee9ae6d1f47\\lc-pound-sterling-light.svg",
+      "sha256": "55A4F5FFEE441A0D6BD6625C390A05434043D652093E000BE5EFCEE9AE6D1F47",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-target-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\61e8d1a3a680fc3bd24c0236001609188916076c97afda9dc3953c0312952bca\\lc-target-ink.svg",
+      "sha256": "61E8D1A3A680FC3BD24C0236001609188916076C97AFDA9DC3953C0312952BCA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-target-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bbfdf550d6b31d9523020030fc21a1baee817b0f8275c2f464c48fe24f616f44\\lc-target-light.svg",
+      "sha256": "BBFDF550D6B31D9523020030FC21A1BAEE817B0F8275C2F464C48FE24F616F44",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-triangle-alert-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bedfacdacc79c19420d14133d281000fa65f3849daad3355d9e926a2bccd425b\\lc-triangle-alert-ink.svg",
+      "sha256": "BEDFACDACC79C19420D14133D281000FA65F3849DAAD3355D9E926A2BCCD425B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-triangle-alert-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8ae8a1cf879fa130b6f202f463caeeb366ed3ea6f6e5879026af7f9bee30e484\\lc-triangle-alert-light.svg",
+      "sha256": "8AE8A1CF879FA130B6F202F463CAEEB366ED3EA6F6E5879026AF7F9BEE30E484",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-users-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\e40276a79c61674193a2f05c1a6b6fa7d0c2324c2d9ee69ccf6ab4739675a149\\lc-users-ink.svg",
+      "sha256": "E40276A79C61674193A2F05C1A6B6FA7D0C2324C2D9EE69CCF6AB4739675A149",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lc-users-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\51950dd692c6f9aa9574762c39481511cbe62fc0a3bd13a1b886455f1f3552b2\\lc-users-light.svg",
+      "sha256": "51950DD692C6F9AA9574762C39481511CBE62FC0A3BD13A1B886455F1F3552B2",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-calendar-days.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-calendar-days.svg",
+      "sha256": "9330EB8D7C4989E97B6361314ABBF02953243C602874725C9E58CECA00DA3BD7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-chart-column.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-chart-column.svg",
+      "sha256": "80664A4C5CA1BCA10BCB88C1A99F62593C94D61D72D3A4BBF577EB3F3EA4DA57",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-clock.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-clock.svg",
+      "sha256": "E9D3E3ACF4D1C280FCF8092293439DC0A4756A908CEB859DE144B12451CD1CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-handshake.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-handshake.svg",
+      "sha256": "F58638064A1884E256895720C9A665D9E98CFC6935C52E14782CE0E84ECDAD02",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-house.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-house.svg",
+      "sha256": "28216C479005731EF5E382E7D8627EDA2B129B019EB1F3D9DE9F5915576D448E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-info.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-info.svg",
+      "sha256": "BC977A64EB96F3E9C1041FFD09A3FCEB70E3E65C02B571F76064062ED31F3CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-pound-sterling.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-pound-sterling.svg",
+      "sha256": "A1A87D3A04BE00FB5216F34D76A81B3681BF5D32742B5B32784B245E42F33CF7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-target.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-target.svg",
+      "sha256": "96A6B16628825A1A207A77E9A5818F74C3E74EA3664783FF5C2A44E6347B90DF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-triangle-alert.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-triangle-alert.svg",
+      "sha256": "4866F38B8560D410F21E3226413E0B77997B6DFBB6931FADFE0A0D5AEF9FFEB4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\lucide-users.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-users.svg",
+      "sha256": "EEED488A1EC95BA730DD69996536FB65061D6EA273AFB2429AE47E65EEBF401C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\filter_w6879838832520849.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\filter_w6879838832520849.svg",
+      "sha256": "2B06E3861F03B3BE494108ADBC110D7FB232D77B72D6CEB1F35B2590246767B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\house-solid-full-white8589308864652382.svg",
+      "sha256": "C769F923C291DE1A123C46EF5A798AB9F5C7FBD9F34A15D961487869A9D33994",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg14738154382938928.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg14738154382938928.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg6514320016544782.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg6514320016544782.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg4866581914609692.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg4866581914609692.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg5862904419409586.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg5862904419409586.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-activity-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-activity-287c73.svg",
+      "sha256": "6888B4453F41DDE8D6F12500290E3F637F83FDAD3ECB7AF125913E7CEBF134D3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-building-complex-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-building-complex-d94d2b.svg",
+      "sha256": "0ED5AD5A20496DFE9C0A455128D44DE19428F7F54B229681993765D760211965",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-calendar-days-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-calendar-days-d94d2b.svg",
+      "sha256": "10196BA883258E1FA0F12DD9EDBCE8530ED8E11D1B4710FD4A53CF21A3A0A291",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-column-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-column-d94d2b.svg",
+      "sha256": "B6D65EE7F1409FDF9C17F00BAF426F35A8A8D02B24B8F51D1BBFB5C1D4AC216D",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "sha256": "34E82706E2825CC8342CDD3FFC8FEC174D928B441E9E8A2BAEDD7D09AF808904",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-287c73.svg",
+      "sha256": "904A095665372622D3B7E38873AA1F0831CE560D006BD139867AD09686FC6E40",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-575756.svg",
+      "sha256": "CAA1B784FDBC45F2FA1AF23C2EA4877A5925849E9F046FF772C45A108FDBC24F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "sha256": "294E9BBD6282BDA795483E1E1D17BFEFF7ACA24EC79222E2FC3517C29B641399",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-287c73.svg",
+      "sha256": "15B1B6AFB3742189D44602F7C6C9E6328F2AAF0EE40EF6D6099D78E0168C7245",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-575756.svg",
+      "sha256": "BB376B1C908C183EF0013BAB25D72F74A7A5504A61D60431FA4E1BA237E8B98B",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-a86612.svg",
+      "sha256": "4B2828511571E80C628BC28F60C6C24D3DEF216E79025F3CD54D007FFF4520E3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-check-corner-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-check-corner-287c73.svg",
+      "sha256": "85C1FC696B00C601F04D87B479B2A17D17D263A7FFEE98D2EA3D441FC41DD5C1",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "sha256": "E65DF20BBD54BC3EB959111FDBC14FF2C4EC4F6B77F5AD89DC667F9C4BBF08F3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-plus-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-plus-d94d2b.svg",
+      "sha256": "82C31DF2046291816ECEAA723E2B7A9C135EC1BE7369DFDE4BE00526FA8099EB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-287c73.svg",
+      "sha256": "2315E101F7FB8773E011631D639BAD54220C27608E1E03B39A35E9C3EF5C492F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-d94d2b.svg",
+      "sha256": "49D418F0B99BACFD4A8BAD3F139B48B7F343928E5BE5D5B8165E2A7DB1E56DAC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-hourglass-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-hourglass-a86612.svg",
+      "sha256": "ED88D93BD16E664C39EBE0D7ED00AE719F739E4F519956CF21C7FAE784802E58",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-house-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-house-d94d2b.svg",
+      "sha256": "D6F0366612AC016F7A3957B6B7F8B941BED56E76A5A0940A362E8F0B9E091059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-lightbulb-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-lightbulb-a86612.svg",
+      "sha256": "B7E986E576156EF2A1123D41D6252388880F69E0DFF46F64FCC6C5AEDE119B30",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-287c73.svg",
+      "sha256": "76A94D652CA280F242980FACBFEC1980218F9C078BB9DB0C87042D44D5667059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-a86612.svg",
+      "sha256": "4FD06F54E5EA1D1F34022ECB70A04C59D33CD33D25CFCB7A35308B2F53A936B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-d94d2b.svg",
+      "sha256": "2BE153373483FBA2EB01B6801341A2D2955C3FC6AF81CF64617B97DCE567CCBB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-network-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-network-d94d2b.svg",
+      "sha256": "24FC41C9D0386DB73B5BD289318644755609BC2EB6A663D850186DFA8BC392EA",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-pound-sterling-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-pound-sterling-287c73.svg",
+      "sha256": "BFA083420D705EA247DAE7C7A1E2571A31F6810B224EEDAA6A35E2685E19737F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-route-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-route-d94d2b.svg",
+      "sha256": "9998D0CA404F810B5F988284808C4731FC09A2ED2424A2CA2067797CF8AA7E9F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-target-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-target-287c73.svg",
+      "sha256": "2DAE50ED24B0B217D257747A617F811A824F006990C71B173BC5467D1D798FD3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-triangle-alert-c13f35.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-triangle-alert-c13f35.svg",
+      "sha256": "E224CE960AE07B5BF1408F74DCC00B0EDA967F114FFE02B7D680D045F88B4078",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-users-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-users-d94d2b.svg",
+      "sha256": "B93EB9E780474F1C68D2A21BD471CB04064B315A9DA8AC759E52F22B1D1B09A7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-building-complex-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-building-complex-white.svg",
+      "sha256": "9E868BE2086E38822F9F1D5B6343C01FCCCB8D2DE672023C4F2D2E1EC6B8EFDC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-chart-no-axes-combined-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-chart-no-axes-combined-white.svg",
+      "sha256": "95953860847566ACF1F83145ED39292B8855DE5F3B0DCD96D47A4406DC187FE8",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-clipboard-list-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-clipboard-list-white.svg",
+      "sha256": "B540682844EF1CDEC4A5E43A62FA1A4C091E522DBD54A81971CBA8A28D846FE6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-check-corner-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-check-corner-white.svg",
+      "sha256": "A3F4E0368810C33DC192CC3A55205BB3DAA26E46F37AEF236798CD667025087C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-pen-line-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-pen-line-white.svg",
+      "sha256": "F8DCEE3AFC1783A55D80347D647DEA0DF957C3C8A43843B12018C4895998076C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-handshake-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-handshake-white.svg",
+      "sha256": "1FF9858E2CE8B7CB507426E0E0CCFA0309C84120FF6F76806336D2F0C9A46191",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-house-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-house-white.svg",
+      "sha256": "6C1EBA19F401BC90AB96BDC6DA1FEC0965C8FEEDD653AFF5883756326307AFFF",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-user-round-plus-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-user-round-plus-white.svg",
+      "sha256": "602C2611A4631FCE11DF7643123F62E8217B38CD1071719200D2C8A46FEF1CCC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-active.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-default.svg",
+      "sha256": "43B74DBCBE9B2037AB45F9BEA62D92E95D4BD7459080196B6013B5F5E55A3F26",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-disabled.svg",
+      "sha256": "7A329B148118E32F552DC8F2E3019A061277C823E250A6449A157F9E7A44FA46",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-hover.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-active.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-default.svg",
+      "sha256": "F55F999DAD06010406D0F246A09792DD3780CAB6BBF4C1AD7DA66F24A13BB027",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-disabled.svg",
+      "sha256": "6132DF18DEC2A564BB716DE9EC6A7374325CCD0782CDC760C39F3C13D3796FB6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-hover.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-1-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-1-rail.svg",
+      "sha256": "A70BB349D2EC0497686459BE27D82BFC758EED6EE911A86A440486470CE1CFEB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-2-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-2-rail.svg",
+      "sha256": "F49E38E88403AC52BFF8E334D5DDC4EC524129BBF3496DC614F9D1E060252D81",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-3-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-3-rail.svg",
+      "sha256": "D5C2DCDE7E22BFA7D28AED8866B5B938FAFC006FDCCEB25B29DDC43939CA29CE",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-4-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-4-rail.svg",
+      "sha256": "BF57F73AE4B8DC240E8A8FCD144A0009C899BA5A029EA64DF74C20B7A29D462A",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-5-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-5-rail.svg",
+      "sha256": "12057A126C89C61F0377E1A1A015C10B87E433EC9BF8958FBD29E4D934D9C449",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-journey-6-rail.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\journey\\wmpp-journey-6-rail.svg",
+      "sha256": "BF57F73AE4B8DC240E8A8FCD144A0009C899BA5A029EA64DF74C20B7A29D462A",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-calendar-days-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\fa86de96a00326a54c9ba3a49ab51d5d8c1d7e0209ff48b0f7be7fbbb0f97405\\lc-calendar-days-ink.svg",
+      "sha256": "FA86DE96A00326A54C9BA3A49AB51D5D8C1D7E0209FF48B0F7BE7FBBB0F97405",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-calendar-days-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\185e024ea51172ee32e15f9bfe5ba99ee3898b464424b8400121f918c55b7763\\lc-calendar-days-light.svg",
+      "sha256": "185E024EA51172EE32E15F9BFE5BA99EE3898B464424B8400121F918C55B7763",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-chart-column-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\79ef8a7453b14374b21c53b521067cb9bf84f23daf880d092694045629820d2c\\lc-chart-column-ink.svg",
+      "sha256": "79EF8A7453B14374B21C53B521067CB9BF84F23DAF880D092694045629820D2C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-chart-column-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\6e54c3a07d6d08673be4f9d0f318054dd726ddd3197de6d126835e7a2630a4c9\\lc-chart-column-light.svg",
+      "sha256": "6E54C3A07D6D08673BE4F9D0F318054DD726DDD3197DE6D126835E7A2630A4C9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-clock-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\1661d6c6fe7a8d1cbce733efa19496bbd6b219bc21c74d14c854e916cb32ea4e\\lc-clock-ink.svg",
+      "sha256": "1661D6C6FE7A8D1CBCE733EFA19496BBD6B219BC21C74D14C854E916CB32EA4E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-clock-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\0a8329fee9a7ec7c3d1876e06aa5e841c35da8e8afbeeab91bf8c4af67b19b61\\lc-clock-light.svg",
+      "sha256": "0A8329FEE9A7EC7C3D1876E06AA5E841C35DA8E8AFBEEAB91BF8C4AF67B19B61",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-handshake-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8f363c7f88f58ba57413e8e924bc103b7f99eaa431c22a7974376fca5d8b8a3a\\lc-handshake-ink.svg",
+      "sha256": "8F363C7F88F58BA57413E8E924BC103B7F99EAA431C22A7974376FCA5D8B8A3A",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-handshake-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\77746a41617bf092abca6c60e923bf7f8904e6da41075577cd779d0a054707db\\lc-handshake-light.svg",
+      "sha256": "77746A41617BF092ABCA6C60E923BF7F8904E6DA41075577CD779D0A054707DB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-house-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\177be693681ddbbd6a8b3ed22eb8f2b861fc1dec112a0ae5656498ad889b78c5\\lc-house-ink.svg",
+      "sha256": "177BE693681DDBBD6A8B3ED22EB8F2B861FC1DEC112A0AE5656498AD889B78C5",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-house-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\a240cd37e16af71503294005fff6c78fbc75ad7a47c467b39d104833422152a1\\lc-house-light.svg",
+      "sha256": "A240CD37E16AF71503294005FFF6C78FBC75AD7A47C467B39D104833422152A1",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-info-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ed10b2b97c6f5ebdb43bafdd26f0991a11e0bc9d2e8d8adb24110068873dbe84\\lc-info-light.svg",
+      "sha256": "ED10B2B97C6F5EBDB43BAFDD26F0991A11E0BC9D2E8D8ADB24110068873DBE84",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-pound-sterling-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\71ce2f990bebb5294b936f8356460810777640ce1ce4fbe051b7f06a4887c11f\\lc-pound-sterling-ink.svg",
+      "sha256": "71CE2F990BEBB5294B936F8356460810777640CE1CE4FBE051B7F06A4887C11F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-pound-sterling-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\55a4f5ffee441a0d6bd6625c390a05434043d652093e000be5efcee9ae6d1f47\\lc-pound-sterling-light.svg",
+      "sha256": "55A4F5FFEE441A0D6BD6625C390A05434043D652093E000BE5EFCEE9AE6D1F47",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-target-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\61e8d1a3a680fc3bd24c0236001609188916076c97afda9dc3953c0312952bca\\lc-target-ink.svg",
+      "sha256": "61E8D1A3A680FC3BD24C0236001609188916076C97AFDA9DC3953C0312952BCA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-target-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bbfdf550d6b31d9523020030fc21a1baee817b0f8275c2f464c48fe24f616f44\\lc-target-light.svg",
+      "sha256": "BBFDF550D6B31D9523020030FC21A1BAEE817B0F8275C2F464C48FE24F616F44",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-triangle-alert-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bedfacdacc79c19420d14133d281000fa65f3849daad3355d9e926a2bccd425b\\lc-triangle-alert-ink.svg",
+      "sha256": "BEDFACDACC79C19420D14133D281000FA65F3849DAAD3355D9E926A2BCCD425B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-triangle-alert-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8ae8a1cf879fa130b6f202f463caeeb366ed3ea6f6e5879026af7f9bee30e484\\lc-triangle-alert-light.svg",
+      "sha256": "8AE8A1CF879FA130B6F202F463CAEEB366ED3EA6F6E5879026AF7F9BEE30E484",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-users-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\e40276a79c61674193a2f05c1a6b6fa7d0c2324c2d9ee69ccf6ab4739675a149\\lc-users-ink.svg",
+      "sha256": "E40276A79C61674193A2F05C1A6B6FA7D0C2324C2D9EE69CCF6AB4739675A149",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lc-users-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\51950dd692c6f9aa9574762c39481511cbe62fc0a3bd13a1b886455f1f3552b2\\lc-users-light.svg",
+      "sha256": "51950DD692C6F9AA9574762C39481511CBE62FC0A3BD13A1B886455F1F3552B2",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-calendar-days.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-calendar-days.svg",
+      "sha256": "9330EB8D7C4989E97B6361314ABBF02953243C602874725C9E58CECA00DA3BD7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-chart-column.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-chart-column.svg",
+      "sha256": "80664A4C5CA1BCA10BCB88C1A99F62593C94D61D72D3A4BBF577EB3F3EA4DA57",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-clock.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-clock.svg",
+      "sha256": "E9D3E3ACF4D1C280FCF8092293439DC0A4756A908CEB859DE144B12451CD1CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-handshake.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-handshake.svg",
+      "sha256": "F58638064A1884E256895720C9A665D9E98CFC6935C52E14782CE0E84ECDAD02",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-house.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-house.svg",
+      "sha256": "28216C479005731EF5E382E7D8627EDA2B129B019EB1F3D9DE9F5915576D448E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-info.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-info.svg",
+      "sha256": "BC977A64EB96F3E9C1041FFD09A3FCEB70E3E65C02B571F76064062ED31F3CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-pound-sterling.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-pound-sterling.svg",
+      "sha256": "A1A87D3A04BE00FB5216F34D76A81B3681BF5D32742B5B32784B245E42F33CF7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-target.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-target.svg",
+      "sha256": "96A6B16628825A1A207A77E9A5818F74C3E74EA3664783FF5C2A44E6347B90DF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-triangle-alert.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-triangle-alert.svg",
+      "sha256": "4866F38B8560D410F21E3226413E0B77997B6DFBB6931FADFE0A0D5AEF9FFEB4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\lucide-users.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-users.svg",
+      "sha256": "EEED488A1EC95BA730DD69996536FB65061D6EA273AFB2429AE47E65EEBF401C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\filter_w6879838832520849.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\filter_w6879838832520849.svg",
+      "sha256": "2B06E3861F03B3BE494108ADBC110D7FB232D77B72D6CEB1F35B2590246767B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\house-solid-full-white8589308864652382.svg",
+      "sha256": "C769F923C291DE1A123C46EF5A798AB9F5C7FBD9F34A15D961487869A9D33994",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg14738154382938928.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg14738154382938928.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg6514320016544782.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg6514320016544782.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg4866581914609692.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg4866581914609692.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg5862904419409586.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg5862904419409586.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-activity-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-activity-287c73.svg",
+      "sha256": "6888B4453F41DDE8D6F12500290E3F637F83FDAD3ECB7AF125913E7CEBF134D3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-building-complex-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-building-complex-d94d2b.svg",
+      "sha256": "0ED5AD5A20496DFE9C0A455128D44DE19428F7F54B229681993765D760211965",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-calendar-days-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-calendar-days-d94d2b.svg",
+      "sha256": "10196BA883258E1FA0F12DD9EDBCE8530ED8E11D1B4710FD4A53CF21A3A0A291",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-column-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-column-d94d2b.svg",
+      "sha256": "B6D65EE7F1409FDF9C17F00BAF426F35A8A8D02B24B8F51D1BBFB5C1D4AC216D",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "sha256": "34E82706E2825CC8342CDD3FFC8FEC174D928B441E9E8A2BAEDD7D09AF808904",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-287c73.svg",
+      "sha256": "904A095665372622D3B7E38873AA1F0831CE560D006BD139867AD09686FC6E40",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-575756.svg",
+      "sha256": "CAA1B784FDBC45F2FA1AF23C2EA4877A5925849E9F046FF772C45A108FDBC24F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "sha256": "294E9BBD6282BDA795483E1E1D17BFEFF7ACA24EC79222E2FC3517C29B641399",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-287c73.svg",
+      "sha256": "15B1B6AFB3742189D44602F7C6C9E6328F2AAF0EE40EF6D6099D78E0168C7245",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-575756.svg",
+      "sha256": "BB376B1C908C183EF0013BAB25D72F74A7A5504A61D60431FA4E1BA237E8B98B",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-a86612.svg",
+      "sha256": "4B2828511571E80C628BC28F60C6C24D3DEF216E79025F3CD54D007FFF4520E3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-check-corner-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-check-corner-287c73.svg",
+      "sha256": "85C1FC696B00C601F04D87B479B2A17D17D263A7FFEE98D2EA3D441FC41DD5C1",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "sha256": "E65DF20BBD54BC3EB959111FDBC14FF2C4EC4F6B77F5AD89DC667F9C4BBF08F3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-plus-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-plus-d94d2b.svg",
+      "sha256": "82C31DF2046291816ECEAA723E2B7A9C135EC1BE7369DFDE4BE00526FA8099EB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-287c73.svg",
+      "sha256": "2315E101F7FB8773E011631D639BAD54220C27608E1E03B39A35E9C3EF5C492F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-d94d2b.svg",
+      "sha256": "49D418F0B99BACFD4A8BAD3F139B48B7F343928E5BE5D5B8165E2A7DB1E56DAC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-hourglass-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-hourglass-a86612.svg",
+      "sha256": "ED88D93BD16E664C39EBE0D7ED00AE719F739E4F519956CF21C7FAE784802E58",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-house-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-house-d94d2b.svg",
+      "sha256": "D6F0366612AC016F7A3957B6B7F8B941BED56E76A5A0940A362E8F0B9E091059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-lightbulb-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-lightbulb-a86612.svg",
+      "sha256": "B7E986E576156EF2A1123D41D6252388880F69E0DFF46F64FCC6C5AEDE119B30",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-287c73.svg",
+      "sha256": "76A94D652CA280F242980FACBFEC1980218F9C078BB9DB0C87042D44D5667059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-a86612.svg",
+      "sha256": "4FD06F54E5EA1D1F34022ECB70A04C59D33CD33D25CFCB7A35308B2F53A936B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-d94d2b.svg",
+      "sha256": "2BE153373483FBA2EB01B6801341A2D2955C3FC6AF81CF64617B97DCE567CCBB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-network-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-network-d94d2b.svg",
+      "sha256": "24FC41C9D0386DB73B5BD289318644755609BC2EB6A663D850186DFA8BC392EA",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-pound-sterling-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-pound-sterling-287c73.svg",
+      "sha256": "BFA083420D705EA247DAE7C7A1E2571A31F6810B224EEDAA6A35E2685E19737F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-route-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-route-d94d2b.svg",
+      "sha256": "9998D0CA404F810B5F988284808C4731FC09A2ED2424A2CA2067797CF8AA7E9F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-target-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-target-287c73.svg",
+      "sha256": "2DAE50ED24B0B217D257747A617F811A824F006990C71B173BC5467D1D798FD3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-triangle-alert-c13f35.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-triangle-alert-c13f35.svg",
+      "sha256": "E224CE960AE07B5BF1408F74DCC00B0EDA967F114FFE02B7D680D045F88B4078",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-users-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-users-d94d2b.svg",
+      "sha256": "B93EB9E780474F1C68D2A21BD471CB04064B315A9DA8AC759E52F22B1D1B09A7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-building-complex-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-building-complex-white.svg",
+      "sha256": "9E868BE2086E38822F9F1D5B6343C01FCCCB8D2DE672023C4F2D2E1EC6B8EFDC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-chart-no-axes-combined-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-chart-no-axes-combined-white.svg",
+      "sha256": "95953860847566ACF1F83145ED39292B8855DE5F3B0DCD96D47A4406DC187FE8",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-clipboard-list-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-clipboard-list-white.svg",
+      "sha256": "B540682844EF1CDEC4A5E43A62FA1A4C091E522DBD54A81971CBA8A28D846FE6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-check-corner-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-check-corner-white.svg",
+      "sha256": "A3F4E0368810C33DC192CC3A55205BB3DAA26E46F37AEF236798CD667025087C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-pen-line-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-pen-line-white.svg",
+      "sha256": "F8DCEE3AFC1783A55D80347D647DEA0DF957C3C8A43843B12018C4895998076C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-handshake-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-handshake-white.svg",
+      "sha256": "1FF9858E2CE8B7CB507426E0E0CCFA0309C84120FF6F76806336D2F0C9A46191",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-house-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-house-white.svg",
+      "sha256": "6C1EBA19F401BC90AB96BDC6DA1FEC0965C8FEEDD653AFF5883756326307AFFF",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-user-round-plus-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-user-round-plus-white.svg",
+      "sha256": "602C2611A4631FCE11DF7643123F62E8217B38CD1071719200D2C8A46FEF1CCC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-active.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-default.svg",
+      "sha256": "43B74DBCBE9B2037AB45F9BEA62D92E95D4BD7459080196B6013B5F5E55A3F26",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-disabled.svg",
+      "sha256": "7A329B148118E32F552DC8F2E3019A061277C823E250A6449A157F9E7A44FA46",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-hover.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-active.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-default.svg",
+      "sha256": "F55F999DAD06010406D0F246A09792DD3780CAB6BBF4C1AD7DA66F24A13BB027",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-disabled.svg",
+      "sha256": "6132DF18DEC2A564BB716DE9EC6A7374325CCD0782CDC760C39F3C13D3796FB6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\client-deliverables\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-hover.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\bulb10160805450554855.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\bulb10160805450554855.svg",
+      "sha256": "510EEDDB62CA78666A216810E83D824891C3C14184E0CF4118F3DD3A8FDB87F7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\bulb4311614343053555.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\bulb4311614343053555.svg",
+      "sha256": "510EEDDB62CA78666A216810E83D824891C3C14184E0CF4118F3DD3A8FDB87F7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\filter_w6879838832520849.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\filter_w6879838832520849.svg",
+      "sha256": "2B06E3861F03B3BE494108ADBC110D7FB232D77B72D6CEB1F35B2590246767B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\handshake-jade-bg7351965793344878.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\handshake-jade-bg7351965793344878.svg",
+      "sha256": "948062330C18114A326B945A5C8C78341D0DBAACCF4AB0A4D451AADF5418F9D9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ebdf430c3cb40e1b4c7e652108116b2e7282b1fbab087b6389a4a6fdad34f626\\house-solid-full-white8589308864652382.svg",
+      "sha256": "EBDF430C3CB40E1B4C7E652108116B2E7282B1FBAB087B6389A4A6FDAD34F626",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg14738154382938928.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\7689e2e3e2f978a61e4e08e2ce9bedfa81d1476f13c4fa19bdccd22b7a70d599\\info-black_bg14738154382938928.svg",
+      "sha256": "7689E2E3E2F978A61E4E08E2CE9BEDFA81D1476F13C4FA19BDCCD22B7A70D599",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg6514320016544782.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\7689e2e3e2f978a61e4e08e2ce9bedfa81d1476f13c4fa19bdccd22b7a70d599\\info-black_bg6514320016544782.svg",
+      "sha256": "7689E2E3E2F978A61E4E08E2CE9BEDFA81D1476F13C4FA19BDCCD22B7A70D599",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg4866581914609692.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\9fd226f2dfe5e3d16992c3f3c7b0e271f148f6e49992bc35a7f2c85a196b35b9\\info-peach_bg4866581914609692.svg",
+      "sha256": "9FD226F2DFE5E3D16992C3F3C7B0E271F148F6E49992BC35A7F2C85A196B35B9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg5862904419409586.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\9fd226f2dfe5e3d16992c3f3c7b0e271f148f6e49992bc35a7f2c85a196b35b9\\info-peach_bg5862904419409586.svg",
+      "sha256": "9FD226F2DFE5E3D16992C3F3C7B0E271F148F6E49992BC35A7F2C85A196B35B9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\referral-engaged13442486128641262.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\referral-engaged13442486128641262.svg",
+      "sha256": "9E798EDC2F766B84488EFD0439A673321471728A4E4BDF70628185EE1A9C0BF6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\referral-open-coral-bg9809463899028854.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\referral-open-coral-bg9809463899028854.svg",
+      "sha256": "13D54077C0F19383E3D214045DA7C82E91695908A6705BA4449A7396DE5EBE9F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-2021230141521260792.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-2021230141521260792.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-202968398862850663.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-202968398862850663.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-210383614982402234.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-210383614982402234.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-21718341371711517.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-21718341371711517.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-26316609997215767.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-26316609997215767.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-28974332368717246.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-28974332368717246.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\RPT WMPP v16\\WMPP_DASHBOARD_v16.Report\\StaticResources\\RegisteredResources\\test-29173379083234223.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-29173379083234223.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\bulb10160805450554855.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\bulb10160805450554855.svg",
+      "sha256": "510EEDDB62CA78666A216810E83D824891C3C14184E0CF4118F3DD3A8FDB87F7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\bulb4311614343053555.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\bulb4311614343053555.svg",
+      "sha256": "510EEDDB62CA78666A216810E83D824891C3C14184E0CF4118F3DD3A8FDB87F7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\filter_w6879838832520849.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\filter_w6879838832520849.svg",
+      "sha256": "2B06E3861F03B3BE494108ADBC110D7FB232D77B72D6CEB1F35B2590246767B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\handshake-jade-bg7351965793344878.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\handshake-jade-bg7351965793344878.svg",
+      "sha256": "948062330C18114A326B945A5C8C78341D0DBAACCF4AB0A4D451AADF5418F9D9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ebdf430c3cb40e1b4c7e652108116b2e7282b1fbab087b6389a4a6fdad34f626\\house-solid-full-white8589308864652382.svg",
+      "sha256": "EBDF430C3CB40E1B4C7E652108116B2E7282B1FBAB087B6389A4A6FDAD34F626",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg14738154382938928.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\7689e2e3e2f978a61e4e08e2ce9bedfa81d1476f13c4fa19bdccd22b7a70d599\\info-black_bg14738154382938928.svg",
+      "sha256": "7689E2E3E2F978A61E4E08E2CE9BEDFA81D1476F13C4FA19BDCCD22B7A70D599",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg6514320016544782.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\7689e2e3e2f978a61e4e08e2ce9bedfa81d1476f13c4fa19bdccd22b7a70d599\\info-black_bg6514320016544782.svg",
+      "sha256": "7689E2E3E2F978A61E4E08E2CE9BEDFA81D1476F13C4FA19BDCCD22B7A70D599",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg4866581914609692.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\9fd226f2dfe5e3d16992c3f3c7b0e271f148f6e49992bc35a7f2c85a196b35b9\\info-peach_bg4866581914609692.svg",
+      "sha256": "9FD226F2DFE5E3D16992C3F3C7B0E271F148F6E49992BC35A7F2C85A196B35B9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg5862904419409586.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\9fd226f2dfe5e3d16992c3f3c7b0e271f148f6e49992bc35a7f2c85a196b35b9\\info-peach_bg5862904419409586.svg",
+      "sha256": "9FD226F2DFE5E3D16992C3F3C7B0E271F148F6E49992BC35A7F2C85A196B35B9",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\referral-engaged13442486128641262.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\referral-engaged13442486128641262.svg",
+      "sha256": "9E798EDC2F766B84488EFD0439A673321471728A4E4BDF70628185EE1A9C0BF6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\referral-open-coral-bg9809463899028854.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\referral-open-coral-bg9809463899028854.svg",
+      "sha256": "13D54077C0F19383E3D214045DA7C82E91695908A6705BA4449A7396DE5EBE9F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-2021230141521260792.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-2021230141521260792.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-202968398862850663.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-202968398862850663.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-210383614982402234.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-210383614982402234.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-21718341371711517.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-21718341371711517.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-26316609997215767.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-26316609997215767.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-28974332368717246.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-28974332368717246.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP v16\\SM WMPP v16 updated\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\test-29173379083234223.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\test-29173379083234223.svg",
+      "sha256": "A0423216A989FBD31E7F1347194C1008C261D8D7F504E97137A41A8FBE68FD6F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\current\\WMPP\\SM_WMPP.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ebdf430c3cb40e1b4c7e652108116b2e7282b1fbab087b6389a4a6fdad34f626\\house-solid-full-white8589308864652382.svg",
+      "sha256": "EBDF430C3CB40E1B4C7E652108116B2E7282B1FBAB087B6389A4A6FDAD34F626",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-accepted.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-accepted.svg",
+      "sha256": "786141026832780C8AC1A447CC4856634C3C26A1F550EC33F1B1A166CC32B8BA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-active.svg",
+      "sha256": "A169D92CB4CC9B654A03E8A7B97AB9BC1E214E57FED0E682CB56A175759F601B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-assigned.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-assigned.svg",
+      "sha256": "841B9044CA8F62B03329727A7F1B17DBAB15B7778181EE015ECC24BA25153760",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-cancelled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-cancelled.svg",
+      "sha256": "CE190A821F5B092CB4CAF95D84A00E09B0CFB0DA2AB5DCB7EDE0028C2E5C67C9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-category.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-category.svg",
+      "sha256": "B9C4E611E6570AE394795E64D084C60F52D58B224BF7B993A627FFBD821209CF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-closed.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-closed.svg",
+      "sha256": "BB954DACE389DB579FF6EF74333DCB9BAEFAED4B9BD9C465C64AC46A35CF14AB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-critical.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-critical.svg",
+      "sha256": "C0BAE96177C4943250FA1F547B80D546165269790193C555775DBE52914223BE",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-declined.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-declined.svg",
+      "sha256": "44C31F660993CFA44682DBCF642FF543FFC840E89EB0E3D81172741B6EDABF48",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-draft.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-draft.svg",
+      "sha256": "48A8AC9041F20E7E4431618418C0232A981470CBECC0BE8083DE7E26E316CC3B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-event.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-event.svg",
+      "sha256": "4D1418E889B2E1D03ECBA541E573AD601CFACF76CCCBBE120823EA28D636A3BA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-fostering.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-fostering.svg",
+      "sha256": "23023D6C37C62183B264CECF38935816E2B589C812DA888CBA7C99AA9DD8A4F7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-framework.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-framework.svg",
+      "sha256": "9C2531E6181F9FE21FE20F425BE0CA7CB6E156385800AC28B8ECE8AEA0328B86",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-high.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-high.svg",
+      "sha256": "DE0F6E61DB0756867A9476901ADCAA01ADE570C49A3941E9C2F791717C967FE0",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-location.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-location.svg",
+      "sha256": "8B5BD4A183200B1238DF50031B1869691E920741FE60B460B46DD180D95F28A4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-medium.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-medium.svg",
+      "sha256": "750D5ED5EC796F4A0E9FBE410F36FCDBB9FF58EDAAF8881CD124F1A9D03F747F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-no.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-no.svg",
+      "sha256": "50782D3E61708E27F50A38BBC0831D9EFBE5FF488A3E4C730A94DB92C55B0812",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-offer.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-offer.svg",
+      "sha256": "F141D2C9DF9E7CB0302F700669021912A440D55A34A6DCC56EAC21F26710A7DA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-pending.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-pending.svg",
+      "sha256": "750D5ED5EC796F4A0E9FBE410F36FCDBB9FF58EDAAF8881CD124F1A9D03F747F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-planned.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-planned.svg",
+      "sha256": "708E177578813E859F634148D6F9E9DA536719E356123453E27BC8B16D0AC15F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-residential.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-residential.svg",
+      "sha256": "52214046E918E9FDA3042A11A71BF01E086A960BF0B0B1EF8A8E695888F96D92",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-review.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-review.svg",
+      "sha256": "5160835325ECCBE15321D5AE2AC2283379F05593DBDEBC4EDFA91BEA8F533333",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-supported.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-supported.svg",
+      "sha256": "974775B3446066FDD9D8213E8554F1B2144A594934D41E8E06C1B63D29871196",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-unknown.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-unknown.svg",
+      "sha256": "7D2F627BD74581CEBD4344C6B83EFCBA8FF42535EB4CE8241A4273A93BBEA8FB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\icons\\wmpp-category-yes.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\category-icons\\wmpp-category-yes.svg",
+      "sha256": "82CCEEF8DC805B4AC86F7883E093D84C325C818966472FC0829BC5C487106683",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-calendar-days-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\fa86de96a00326a54c9ba3a49ab51d5d8c1d7e0209ff48b0f7be7fbbb0f97405\\lc-calendar-days-ink.svg",
+      "sha256": "FA86DE96A00326A54C9BA3A49AB51D5D8C1D7E0209FF48B0F7BE7FBBB0F97405",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-calendar-days-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\185e024ea51172ee32e15f9bfe5ba99ee3898b464424b8400121f918c55b7763\\lc-calendar-days-light.svg",
+      "sha256": "185E024EA51172EE32E15F9BFE5BA99EE3898B464424B8400121F918C55B7763",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-chart-column-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\79ef8a7453b14374b21c53b521067cb9bf84f23daf880d092694045629820d2c\\lc-chart-column-ink.svg",
+      "sha256": "79EF8A7453B14374B21C53B521067CB9BF84F23DAF880D092694045629820D2C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-chart-column-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\6e54c3a07d6d08673be4f9d0f318054dd726ddd3197de6d126835e7a2630a4c9\\lc-chart-column-light.svg",
+      "sha256": "6E54C3A07D6D08673BE4F9D0F318054DD726DDD3197DE6D126835E7A2630A4C9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-clock-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\1661d6c6fe7a8d1cbce733efa19496bbd6b219bc21c74d14c854e916cb32ea4e\\lc-clock-ink.svg",
+      "sha256": "1661D6C6FE7A8D1CBCE733EFA19496BBD6B219BC21C74D14C854E916CB32EA4E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-clock-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\0a8329fee9a7ec7c3d1876e06aa5e841c35da8e8afbeeab91bf8c4af67b19b61\\lc-clock-light.svg",
+      "sha256": "0A8329FEE9A7EC7C3D1876E06AA5E841C35DA8E8AFBEEAB91BF8C4AF67B19B61",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-handshake-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8f363c7f88f58ba57413e8e924bc103b7f99eaa431c22a7974376fca5d8b8a3a\\lc-handshake-ink.svg",
+      "sha256": "8F363C7F88F58BA57413E8E924BC103B7F99EAA431C22A7974376FCA5D8B8A3A",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-handshake-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\77746a41617bf092abca6c60e923bf7f8904e6da41075577cd779d0a054707db\\lc-handshake-light.svg",
+      "sha256": "77746A41617BF092ABCA6C60E923BF7F8904E6DA41075577CD779D0A054707DB",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-house-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\177be693681ddbbd6a8b3ed22eb8f2b861fc1dec112a0ae5656498ad889b78c5\\lc-house-ink.svg",
+      "sha256": "177BE693681DDBBD6A8B3ED22EB8F2B861FC1DEC112A0AE5656498AD889B78C5",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-house-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\a240cd37e16af71503294005fff6c78fbc75ad7a47c467b39d104833422152a1\\lc-house-light.svg",
+      "sha256": "A240CD37E16AF71503294005FFF6C78FBC75AD7A47C467B39D104833422152A1",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-info-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\ed10b2b97c6f5ebdb43bafdd26f0991a11e0bc9d2e8d8adb24110068873dbe84\\lc-info-light.svg",
+      "sha256": "ED10B2B97C6F5EBDB43BAFDD26F0991A11E0BC9D2E8D8ADB24110068873DBE84",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-pound-sterling-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\71ce2f990bebb5294b936f8356460810777640ce1ce4fbe051b7f06a4887c11f\\lc-pound-sterling-ink.svg",
+      "sha256": "71CE2F990BEBB5294B936F8356460810777640CE1CE4FBE051B7F06A4887C11F",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-pound-sterling-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\55a4f5ffee441a0d6bd6625c390a05434043d652093e000be5efcee9ae6d1f47\\lc-pound-sterling-light.svg",
+      "sha256": "55A4F5FFEE441A0D6BD6625C390A05434043D652093E000BE5EFCEE9AE6D1F47",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-target-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\61e8d1a3a680fc3bd24c0236001609188916076c97afda9dc3953c0312952bca\\lc-target-ink.svg",
+      "sha256": "61E8D1A3A680FC3BD24C0236001609188916076C97AFDA9DC3953C0312952BCA",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-target-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bbfdf550d6b31d9523020030fc21a1baee817b0f8275c2f464c48fe24f616f44\\lc-target-light.svg",
+      "sha256": "BBFDF550D6B31D9523020030FC21A1BAEE817B0F8275C2F464C48FE24F616F44",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-triangle-alert-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\bedfacdacc79c19420d14133d281000fa65f3849daad3355d9e926a2bccd425b\\lc-triangle-alert-ink.svg",
+      "sha256": "BEDFACDACC79C19420D14133D281000FA65F3849DAAD3355D9E926A2BCCD425B",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-triangle-alert-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\8ae8a1cf879fa130b6f202f463caeeb366ed3ea6f6e5879026af7f9bee30e484\\lc-triangle-alert-light.svg",
+      "sha256": "8AE8A1CF879FA130B6F202F463CAEEB366ED3EA6F6E5879026AF7F9BEE30E484",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-users-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\e40276a79c61674193a2f05c1a6b6fa7d0c2324c2d9ee69ccf6ab4739675a149\\lc-users-ink.svg",
+      "sha256": "E40276A79C61674193A2F05C1A6B6FA7D0C2324C2D9EE69CCF6AB4739675A149",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lc-users-light.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\51950dd692c6f9aa9574762c39481511cbe62fc0a3bd13a1b886455f1f3552b2\\lc-users-light.svg",
+      "sha256": "51950DD692C6F9AA9574762C39481511CBE62FC0A3BD13A1B886455F1F3552B2",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-calendar-days.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-calendar-days.svg",
+      "sha256": "9330EB8D7C4989E97B6361314ABBF02953243C602874725C9E58CECA00DA3BD7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-chart-column.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-chart-column.svg",
+      "sha256": "80664A4C5CA1BCA10BCB88C1A99F62593C94D61D72D3A4BBF577EB3F3EA4DA57",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-clock.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-clock.svg",
+      "sha256": "E9D3E3ACF4D1C280FCF8092293439DC0A4756A908CEB859DE144B12451CD1CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-handshake.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-handshake.svg",
+      "sha256": "F58638064A1884E256895720C9A665D9E98CFC6935C52E14782CE0E84ECDAD02",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-house.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-house.svg",
+      "sha256": "28216C479005731EF5E382E7D8627EDA2B129B019EB1F3D9DE9F5915576D448E",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-info.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-info.svg",
+      "sha256": "BC977A64EB96F3E9C1041FFD09A3FCEB70E3E65C02B571F76064062ED31F3CB9",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-pound-sterling.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-pound-sterling.svg",
+      "sha256": "A1A87D3A04BE00FB5216F34D76A81B3681BF5D32742B5B32784B245E42F33CF7",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-target.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-target.svg",
+      "sha256": "96A6B16628825A1A207A77E9A5818F74C3E74EA3664783FF5C2A44E6347B90DF",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-triangle-alert.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-triangle-alert.svg",
+      "sha256": "4866F38B8560D410F21E3226413E0B77997B6DFBB6931FADFE0A0D5AEF9FFEB4",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\lucide-users.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-originals\\lucide-users.svg",
+      "sha256": "EEED488A1EC95BA730DD69996536FB65061D6EA273AFB2429AE47E65EEBF401C",
+      "action": "move loose asset"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\filter_w6879838832520849.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\filter_w6879838832520849.svg",
+      "sha256": "2B06E3861F03B3BE494108ADBC110D7FB232D77B72D6CEB1F35B2590246767B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\house-solid-full-white8589308864652382.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\house-solid-full-white8589308864652382.svg",
+      "sha256": "C769F923C291DE1A123C46EF5A798AB9F5C7FBD9F34A15D961487869A9D33994",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg14738154382938928.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg14738154382938928.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-black_bg6514320016544782.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-black_bg6514320016544782.svg",
+      "sha256": "ADA29F980229B6F514B8532B01BB7103AB94BF86764AF9D228DBF167C2B45100",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg4866581914609692.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg4866581914609692.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\info-peach_bg5862904419409586.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\report-resources\\info-peach_bg5862904419409586.svg",
+      "sha256": "FE8C718CE4D7D62CA8FD7ECB495A6D6330C6B382B6F56D104FFE1E8EC17BF516",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lc-info-ink.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\variants\\c75e9c30f5ce3969a96cd2518b65f75c3daae07c7f0d549c3bf56ca27b4e051f\\lc-info-ink.svg",
+      "sha256": "C75E9C30F5CE3969A96CD2518B65F75C3DAAE07C7F0D549C3BF56CA27B4E051F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-activity-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-activity-287c73.svg",
+      "sha256": "6888B4453F41DDE8D6F12500290E3F637F83FDAD3ECB7AF125913E7CEBF134D3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-building-complex-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-building-complex-d94d2b.svg",
+      "sha256": "0ED5AD5A20496DFE9C0A455128D44DE19428F7F54B229681993765D760211965",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-calendar-days-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-calendar-days-d94d2b.svg",
+      "sha256": "10196BA883258E1FA0F12DD9EDBCE8530ED8E11D1B4710FD4A53CF21A3A0A291",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-column-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-column-d94d2b.svg",
+      "sha256": "B6D65EE7F1409FDF9C17F00BAF426F35A8A8D02B24B8F51D1BBFB5C1D4AC216D",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-chart-no-axes-combined-d94d2b.svg",
+      "sha256": "34E82706E2825CC8342CDD3FFC8FEC174D928B441E9E8A2BAEDD7D09AF808904",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-287c73.svg",
+      "sha256": "904A095665372622D3B7E38873AA1F0831CE560D006BD139867AD09686FC6E40",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-check-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-check-575756.svg",
+      "sha256": "CAA1B784FDBC45F2FA1AF23C2EA4877A5925849E9F046FF772C45A108FDBC24F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clipboard-list-d94d2b.svg",
+      "sha256": "294E9BBD6282BDA795483E1E1D17BFEFF7ACA24EC79222E2FC3517C29B641399",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-287c73.svg",
+      "sha256": "15B1B6AFB3742189D44602F7C6C9E6328F2AAF0EE40EF6D6099D78E0168C7245",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-575756.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-575756.svg",
+      "sha256": "BB376B1C908C183EF0013BAB25D72F74A7A5504A61D60431FA4E1BA237E8B98B",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-clock-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-clock-a86612.svg",
+      "sha256": "4B2828511571E80C628BC28F60C6C24D3DEF216E79025F3CD54D007FFF4520E3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-check-corner-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-check-corner-287c73.svg",
+      "sha256": "85C1FC696B00C601F04D87B479B2A17D17D263A7FFEE98D2EA3D441FC41DD5C1",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-pen-line-d94d2b.svg",
+      "sha256": "E65DF20BBD54BC3EB959111FDBC14FF2C4EC4F6B77F5AD89DC667F9C4BBF08F3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-file-plus-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-file-plus-d94d2b.svg",
+      "sha256": "82C31DF2046291816ECEAA723E2B7A9C135EC1BE7369DFDE4BE00526FA8099EB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-287c73.svg",
+      "sha256": "2315E101F7FB8773E011631D639BAD54220C27608E1E03B39A35E9C3EF5C492F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-handshake-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-handshake-d94d2b.svg",
+      "sha256": "49D418F0B99BACFD4A8BAD3F139B48B7F343928E5BE5D5B8165E2A7DB1E56DAC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-hourglass-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-hourglass-a86612.svg",
+      "sha256": "ED88D93BD16E664C39EBE0D7ED00AE719F739E4F519956CF21C7FAE784802E58",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-house-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-house-d94d2b.svg",
+      "sha256": "D6F0366612AC016F7A3957B6B7F8B941BED56E76A5A0940A362E8F0B9E091059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-lightbulb-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-lightbulb-a86612.svg",
+      "sha256": "B7E986E576156EF2A1123D41D6252388880F69E0DFF46F64FCC6C5AEDE119B30",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-287c73.svg",
+      "sha256": "76A94D652CA280F242980FACBFEC1980218F9C078BB9DB0C87042D44D5667059",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-a86612.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-a86612.svg",
+      "sha256": "4FD06F54E5EA1D1F34022ECB70A04C59D33CD33D25CFCB7A35308B2F53A936B2",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-map-pin-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-map-pin-d94d2b.svg",
+      "sha256": "2BE153373483FBA2EB01B6801341A2D2955C3FC6AF81CF64617B97DCE567CCBB",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-network-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-network-d94d2b.svg",
+      "sha256": "24FC41C9D0386DB73B5BD289318644755609BC2EB6A663D850186DFA8BC392EA",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-pound-sterling-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-pound-sterling-287c73.svg",
+      "sha256": "BFA083420D705EA247DAE7C7A1E2571A31F6810B224EEDAA6A35E2685E19737F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-route-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-route-d94d2b.svg",
+      "sha256": "9998D0CA404F810B5F988284808C4731FC09A2ED2424A2CA2067797CF8AA7E9F",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-target-287c73.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-target-287c73.svg",
+      "sha256": "2DAE50ED24B0B217D257747A617F811A824F006990C71B173BC5467D1D798FD3",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-triangle-alert-c13f35.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-triangle-alert-c13f35.svg",
+      "sha256": "E224CE960AE07B5BF1408F74DCC00B0EDA967F114FFE02B7D680D045F88B4078",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-kpi-users-d94d2b.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-kpi-users-d94d2b.svg",
+      "sha256": "B93EB9E780474F1C68D2A21BD471CB04064B315A9DA8AC759E52F22B1D1B09A7",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-building-complex-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-building-complex-white.svg",
+      "sha256": "9E868BE2086E38822F9F1D5B6343C01FCCCB8D2DE672023C4F2D2E1EC6B8EFDC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-chart-no-axes-combined-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-chart-no-axes-combined-white.svg",
+      "sha256": "95953860847566ACF1F83145ED39292B8855DE5F3B0DCD96D47A4406DC187FE8",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-clipboard-list-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-clipboard-list-white.svg",
+      "sha256": "B540682844EF1CDEC4A5E43A62FA1A4C091E522DBD54A81971CBA8A28D846FE6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-check-corner-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-check-corner-white.svg",
+      "sha256": "A3F4E0368810C33DC192CC3A55205BB3DAA26E46F37AEF236798CD667025087C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-file-pen-line-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-file-pen-line-white.svg",
+      "sha256": "F8DCEE3AFC1783A55D80347D647DEA0DF957C3C8A43843B12018C4895998076C",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-handshake-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-handshake-white.svg",
+      "sha256": "1FF9858E2CE8B7CB507426E0E0CCFA0309C84120FF6F76806336D2F0C9A46191",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-house-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-house-white.svg",
+      "sha256": "6C1EBA19F401BC90AB96BDC6DA1FEC0965C8FEEDD653AFF5883756326307AFFF",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\lucide-nav-user-round-plus-white.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\lucide-nav-user-round-plus-white.svg",
+      "sha256": "602C2611A4631FCE11DF7643123F62E8217B38CD1071719200D2C8A46FEF1CCC",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-active.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-default.svg",
+      "sha256": "43B74DBCBE9B2037AB45F9BEA62D92E95D4BD7459080196B6013B5F5E55A3F26",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-disabled.svg",
+      "sha256": "7A329B148118E32F552DC8F2E3019A061277C823E250A6449A157F9E7A44FA46",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-background-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-background-hover.svg",
+      "sha256": "1E4DCFC3E26D388EFAFD5C7962D0FE0003D6FF1F7121C5AA615AE4183181C63E",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-active.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-active.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-default.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-default.svg",
+      "sha256": "F55F999DAD06010406D0F246A09792DD3780CAB6BBF4C1AD7DA66F24A13BB027",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-disabled.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-disabled.svg",
+      "sha256": "6132DF18DEC2A564BB716DE9EC6A7374325CCD0782CDC760C39F3C13D3796FB6",
+      "action": "retain embedded; catalogue copy"
+    },
+    {
+      "source": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP\\SM_WMPP_v16.Report\\StaticResources\\RegisteredResources\\wmpp-bubble-connected-hover.svg",
+      "destination": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\assets\\brand-pack\\icons\\navigation-bubbles\\wmpp-bubble-connected-hover.svg",
+      "sha256": "4F5AC6DBCD263480EB2D17287A889ED11D106FF0D034BA298CA2E23301931CA0",
+      "action": "retain embedded; catalogue copy"
+    }
+  ]
+}

@@ -1,5 +1,14 @@
 # Category links and approximate location distances
 
+## Reporting reassessment 30 September 2026
+
+The downstream WIP now imports the referral category bridge and category/location fields, exposes category-aware Explorer measures and includes referral/provider-offer location maps. The older note that no versioned model was changed applies only to the original 25 September ETL batch.
+
+Current membership is not historical membership; many-to-many categories require distinct counts. Approved coordinate data and runtime completeness remain to verify. The preferred-city distance is a centroid-to-postcode straight-line estimate, not a child address, road distance or out-of-region classification. No new coordinate data or Fabric execution is claimed here.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Implementation date: 25 September 2026. Scope: active Python ETL notebooks, not
 versioned Power BI projects. Local regression tests use synthetic records; they
 do not establish that these changes have executed in the client Lakehouse.

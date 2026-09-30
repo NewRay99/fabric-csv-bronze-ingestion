@@ -1,5 +1,12 @@
 # KPI Reference Guide — Tables, Calculations, and Functional Requirements
 
+## Reporting reassessment 30 September 2026
+
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** WMPP (West Midlands Placement Portal)
 **Date:** 10 July 2026
 

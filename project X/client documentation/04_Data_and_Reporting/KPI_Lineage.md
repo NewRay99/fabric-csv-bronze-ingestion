@@ -1,5 +1,16 @@
 # KPI lineage — active Gold semantic model
 
+## Reporting reassessment 30 September 2026
+
+The maintained current index is the revised Dashboard Legend: 109 prior entries plus 35 newly catalogued WIP business measures. All 144 resolve by exact measure name. The detailed 366-measure inventory includes helpers and compatibility calculations. Older “109 publishable / 108 Ready” and closed-gap claims below are historical, not current acceptance.
+
+Current lineage additions are `referral_person → dim_person → gender measures`; `ipa → fact_ipa → signature/completion measures`; `referral_provider_message → dim_referral_provider_message → detail/journey evidence`; cancellation/decline sources → `dim_referral_provider_reject_reason`; and `referral_category → bridge_referral_framework_category → category-aware distinct counts`. The business source remains Gold. Local selectors and calculated map/stage tables organise that evidence without reading Bronze/Silver directly.
+
+Journey counts, snapshot changes and closure flows have separate grains. Messages Sent remains a lifecycle proxy. Current reason/category rows are not immutable history. Out-of-region, compliance/blocking, payment/invoice and support-needs gaps remain. R22 is not supported by multiple-provider-assignment counts. See the current row-level requirement reassessment for the maintained disposition.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Purpose and status
 
 This is the maintained lineage record for the active referral reporting model.
@@ -10,7 +21,7 @@ support them.
 
 Read this with [KPI Reference Guide](KPI_Reference_Guide.md), which is the
 business definition and Gold-table reference, and [Gold Semantic Model DAX
-Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md), which contains the
+Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md), which contains the
 copy-ready DAX library.
 
 The current Dashboard Legend catalogue contains 109 publishable measures:

@@ -1,5 +1,14 @@
 # Referral and placement KPI enhancements
 
+## Reporting reassessment 30 September 2026
+
+The WIP now has Referral Explorer, Provider Explorer, referral and provider drillthrough, clickable journey-stage selectors, category/offer-aware referral counts and Overall Performance snapshot comparisons. The Legend registers 35 additional existing business measures without counting layout/filter helpers as KPIs.
+
+IPA-level completion uses `fact_ipa[is_ipa_completed]`, derived from both signatures on the same IPA. The older `IPA2Signatures` field is a separate enrichment contract and must not be substituted for current IPA-grain measures. Messages, reason detail and category bridges exist; complete audit history, message-author/SLA semantics, support-needs reporting and actual payment facts remain open.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 ## Purpose
 
 The reporting model must expose reusable referral, offer, IPA-signature and

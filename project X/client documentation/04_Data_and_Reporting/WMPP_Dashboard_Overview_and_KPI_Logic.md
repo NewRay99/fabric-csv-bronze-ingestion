@@ -1,4 +1,15 @@
 # West Midlands Placement Portal (WMPP)
+
+## Reporting reassessment 30 September 2026
+
+The current report route is Home → Performance → Referrals → Referral Explorer → Referral Detail, with Providers → Provider Explorer → Provider Detail in parallel. Former Single View pages are now Explorers. Referral Geography/Snapshots and the duplicate original explorer are hidden and recoverable; snapshot analysis is on Overall Performance.
+
+There are 12 visible report pages, all 1680 pixels wide, and 34 page definitions including guides, tooltips and hidden legacy pages. Main dashboards use expandable Filters drawers; Explorer filters remain available on the page. Native journey strips provide stage counts and icon actions. Clear stage changes only the journey selector; Detail clicks focus event families. Provider confirmation is shown as Not captured, not zero.
+
+Snapshot total/closed state, month-on-month change and closures during month have distinct meanings. Cost is estimated weekly liability. Stage counts describe current evidence, not historical conversion. The current status document provides the complete page list, business rules, limits and acceptance checklist; earlier diagrams and text below are historical where they differ.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
 ## Dashboard Overview and KPI Logic Document
 
 **Prepared by:** Hamant K Jakhu, Senior ICT Manager

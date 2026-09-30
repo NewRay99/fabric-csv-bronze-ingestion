@@ -1,5 +1,14 @@
 # Technical/Functional Design (TFD)
 
+## Reporting reassessment 30 September 2026
+
+Use the saved WIP TMDL/PBIR definitions for the current report implementation: 58 tables, 366 measures, 34 pages and 158 bookmarks. `fact_ipa` is the active IPA table; `provider_home_id` is the offer home key. Local selectors, map points and measure containers must not be documented as new physical Gold tables.
+
+The 19 new data bookmarks target individual journey selectors only. Preserve them separately from display-only navigation bookmarks. Referral stage is refresh-time current state; provider stage is evaluated in the current cohort; detail step selection focuses event families. These changes do not establish extra source event types, browse telemetry or separate provider acceptance.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** WMPP Fabric data platform
 **Client:** Birmingham Children's Trust
 **Baseline:** Active notebook set promoted from version 02 04

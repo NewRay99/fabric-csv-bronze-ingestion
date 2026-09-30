@@ -1,5 +1,16 @@
 # BCT WMPP client documentation
 
+## Reporting reassessment 30 September 2026
+
+Start with [Current reporting status](04_Data_and_Reporting/WMPP_CURRENT_STATUS.md), [Requirement reassessment](04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md) and the revised `configuration/Dashboard Legend.xlsx`. The assessed project is **SM WMPP v16 updated WIP** under `reports/client-deliverables/WMPP v16`.
+
+The WIP has 58 model tables, 366 measures and 34 page definitions (12 visible). The curated Legend now includes 144 business-measure entries. Saved-file implementation is separate from refreshed-model verification, client UAT and publication. The newest journey layout and step filtering still need Desktop acceptance.
+
+Use the [document review register](06_Governance/DOCUMENT_REVIEW_REGISTER.md) to distinguish current guides from historical discovery, Word and slide packs. Source requirements and historical assessments are retained, not retroactively signed off.
+
+See [current status and release checks](04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 This is the controlled client-documentation set for the Birmingham Children's
 Trust WMPP Fabric implementation.
 

@@ -1,5 +1,14 @@
 # Gold DAX Schema Contract
 
+## Reporting reassessment 30 September 2026
+
+The reviewed WIP imports `fact_ipa` with both signature flags and completion/pending fields, `dim_person`, `dim_referral_provider_message`, `dim_referral_provider_reject_reason` and `bridge_referral_framework_category`. Refer to the current object inventory rather than the older object counts below.
+
+`dim_category` is a second semantic import of `gold.dim_framework_category`; it is not a separate Gold object. `Referral Map Points`, journey selectors and other local helpers are model objects, not warehouse publications. Current category bridges are not historical membership. Source deployment and row-level data quality require a refresh check.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 **Project:** WMPP Fabric data platform
 **Layer:** Gold (analytical model)
 **Date:** 27 August 2026 (rev 2 — legacy v15 measure-library reconciliation)

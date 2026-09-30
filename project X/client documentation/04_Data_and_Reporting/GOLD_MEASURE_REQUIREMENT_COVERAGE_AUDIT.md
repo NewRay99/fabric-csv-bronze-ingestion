@@ -1,5 +1,14 @@
 # Gold measures and requirements coverage audit
 
+## Reporting reassessment 30 September 2026
+
+This is a historical pre-migration audit; its inventory and coverage counts are retained as baseline evidence. Current saved WIP evidence is 58 model tables, 366 measures and 144 curated catalogue entries. The new 80-row requirement reassessment supersedes the earlier requirement status table for present delivery decisions.
+
+No ratio of measure names to requirements is an acceptance score. The latest report includes explorations, both drillthrough routes, journey selectors and snapshot/closure views, but portal writes, notifications, compliance decisions, security approval and UAT are separate.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+
 Audit date: 15 September 2026. **Historical baseline: the model has since been migrated. See the [20 September client-site v16 reconciliation](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for current status.** Scope: the extracted **SM WMPP v15 - bu 15092026.zip** project, not Mission Control.
 
 ## Pre-migration result
