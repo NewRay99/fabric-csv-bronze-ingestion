@@ -1,5 +1,22 @@
 # Fabric notebook runbook
 
+## Offline coordinate reference maintenance — 30 September 2026
+
+For null offer distances caused by an empty coordinate lookup, use
+`00c_load_location_coordinates.py` and the
+[local-reference instructions](../../configuration/location-reference/README.md).
+Upload approved Code-Point Open/Open Names CSV data to Lakehouse Files; configure
+the source releases and an approved local pyproj environment. Preview first, then
+explicitly enable the merge. No public geocoding/API request or runtime package
+download is made. This notebook is not automatically invoked by the runners.
+
+Order: setup → Silver formatting → reference preview/approved merge → Silver
+business rules → Gold model/dimensions → reporting/model refresh. Repeat reference
+maintenance when new provider postcodes or approved source releases are introduced.
+The lookup only hydrates postcodes present in the current Silver provider-home
+state; separately plan historical coverage before archive replay. This local
+implementation has not been deployed or run in Fabric.
+
 ## Reporting reassessment 30 September 2026
 
 The reporting layer has changed to the current WIP explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WIP, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.

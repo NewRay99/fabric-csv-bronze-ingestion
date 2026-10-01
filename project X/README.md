@@ -64,6 +64,7 @@ the primary notebooks from the retained originals after editing them.
 |---|---|
 | `99_common_library.py` | Consolidated exclusions, schema-conformance, audit, and Silver helpers |
 | `00_setup_cfg.py` | Creates/upgrades all monitoring and configuration tables |
+| `00c_load_location_coordinates.py` | Preview/merge uploaded OS city/postcode reference data locally; deliberate maintenance step, no external lookups |
 | `00_archive_load.py` | Loads dated archive ZIP/file extracts into source-named `archived` Delta tables |
 | `00a_rehydrate_archive_cfg.py` | Reconstructs archive controls for an existing deployment |
 | `00b_reset_silver_cfg.py` | Guarded administrative reset for Silver replay |

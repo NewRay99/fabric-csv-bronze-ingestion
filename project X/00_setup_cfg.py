@@ -95,6 +95,7 @@ def ensure_delta_table(table_name, column_definitions):
 
 CONFIG_TABLE_DEFINITIONS = {
     # Approved local reference data only. Setup never seeds or replaces coordinates.
+    # Use 00c_load_location_coordinates to preview/merge uploaded OS reference files.
     "monitoring.cfg_location_coordinate": [
         "location_type STRING", "location_key STRING", "latitude DOUBLE",
         "longitude DOUBLE", "reference_source STRING", "reference_version STRING",

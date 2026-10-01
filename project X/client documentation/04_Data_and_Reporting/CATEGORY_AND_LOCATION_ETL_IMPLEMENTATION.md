@@ -1,5 +1,31 @@
 # Category links and approximate location distances
 
+## Offline lookup hydration — 30 September 2026
+
+The missing loader is now prepared as `00c_load_location_coordinates.py`. It reads
+approved OS Code-Point Open and OS Open Names CSV files uploaded inside the default
+Lakehouse, converts grid coordinates locally and merges the coordinate lookup.
+No external geocoding/API calls, referral-text export or package/grid downloads are
+used. Setup still only creates the table; the new loader is an explicit maintenance
+step after Silver formatting and before Silver business rules/Gold rebuild.
+
+See the [upload and execution instructions](../../configuration/location-reference/README.md).
+Preview is default; actual reference releases and an approved pyproj environment
+are required. Existing approved coordinates are preserved by default. Ambiguous
+city/town names and unavailable/sector-level postcode points remain unresolved.
+Code-Point/Open Names coverage is Great Britain, not Northern Ireland.
+
+For OS Open Names inputs, Gold now records
+`CITY_REPRESENTATIVE_POINT_TO_POSTCODE_STRAIGHT_LINE`: these are representative
+settlement points, not geometric centroids. Existing approved centroid references
+keep their prior basis. Always display this as approximate preferred-city-to-postcode
+straight-line distance, never a child's actual address or driving distance.
+
+Local verification: 122 tests and 158 subtests passed; new-file lint passed.
+No files have been uploaded to Fabric and no client lookup, Silver or Gold tables
+have been changed by this local implementation. Spark/Delta and actual projection
+verification remain deployment steps. Earlier implementation notes follow.
+
 ## Reporting reassessment 30 September 2026
 
 The downstream WIP now imports the referral category bridge and category/location fields, exposes category-aware Explorer measures and includes referral/provider-offer location maps. The older note that no versioned model was changed applies only to the original 25 September ETL batch.

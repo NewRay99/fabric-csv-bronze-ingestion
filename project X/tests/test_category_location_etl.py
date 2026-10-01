@@ -182,7 +182,9 @@ def test_offer_sql_joins_without_fanout_and_with_explicit_distance_status():
         for n, review, default, lat in ((1, 0, 0, 0), (2, 1, 1, 0), (3, 0, 1, 0), (4, 0, 0, None)):
             insert("referral_location", referral_id=f"r{n}", location="Synthetic city",
                    location_requires_review=review, location_is_default=default,
-                   location_latitude=lat, location_longitude=0)
+                   location_latitude=lat, location_longitude=0,
+                   location_reference_source=("OS Open Names representative city/town point"
+                                              if n == 1 else "Approved city centroid"))
         rows = {row["offer_id"]: dict(row) for row in db.execute(query)}
     assert len(rows) == 5
     assert all(row["framework_category_id"] == 99 for row in rows.values())
@@ -190,6 +192,8 @@ def test_offer_sql_joins_without_fanout_and_with_explicit_distance_status():
     assert all(row["provider_home_framework_category_count"] == 2 for row in rows.values())
     assert rows["o1"]["referral_to_home_distance_km"] == pytest.approx(10007.5572, abs=0.001)
     assert rows["o1"]["referral_to_home_distance_status"] == "APPROXIMATE_PREFERENCE_CITY"
+    assert rows["o1"]["referral_to_home_distance_basis"] == "CITY_REPRESENTATIVE_POINT_TO_POSTCODE_STRAIGHT_LINE"
+    assert rows["o3"]["referral_to_home_distance_basis"] == "CITY_CENTROID_TO_POSTCODE_STRAIGHT_LINE"
     assert rows["o2"]["referral_to_home_distance_km"] is None
     assert rows["o2"]["referral_to_home_distance_status"] == "LOCATION_REQUIRES_REVIEW"
     assert rows["o3"]["referral_to_home_distance_status"] == "APPROXIMATE_DEFAULT_CITY"

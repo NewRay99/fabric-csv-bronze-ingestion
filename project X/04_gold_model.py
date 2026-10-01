@@ -606,7 +606,10 @@ SELECT {AS_OF_SQL} AS as_of_date,
     WHEN loc.location_is_default THEN 'APPROXIMATE_DEFAULT_CITY'
     ELSE 'APPROXIMATE_PREFERENCE_CITY'
   END AS referral_to_home_distance_status,
-  'CITY_CENTROID_TO_POSTCODE_STRAIGHT_LINE' AS referral_to_home_distance_basis,
+  CASE WHEN loc.location_reference_source LIKE 'OS Open Names representative%'
+    THEN 'CITY_REPRESENTATIVE_POINT_TO_POSTCODE_STRAIGHT_LINE'
+    ELSE 'CITY_CENTROID_TO_POSTCODE_STRAIGHT_LINE'
+  END AS referral_to_home_distance_basis,
   loc.location_reference_source, loc.location_reference_version,
   home.home_reference_source, home.home_reference_version,
   CAST(o.offer_date AS TIMESTAMP) AS offer_submitted_date,

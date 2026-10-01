@@ -4,6 +4,23 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-09-30 — Offline coordinate reference loader
+
+- Added `00c_load_location_coordinates.py` for local, uploaded OS Code-Point Open
+  and Open Names CSV data. It uses Silver provider-home postcodes, converts British
+  National Grid coordinates locally, and merges into `cfg_location_coordinate`.
+- Preview is default; network access for projection is disabled, missing packages
+  are not installed, and existing approved coordinates are preserved by default.
+  Ambiguous place names and unusable/sector-level postcode points are excluded.
+- Gold now distinguishes OS Open Names representative settlement points from its
+  existing centroid basis. The haversine formula and suppression rules are unchanged.
+- Verification: **122 tests and 158 subtests passed**; direct Ruff checks passed for
+  the new loader and tests. Actual pyproj conversion, Spark/Delta merge and Fabric
+  execution are still to be verified with approved files/environment. No reference
+  datasets were downloaded, customer data exported or deployed tables changed.
+- Upload and execution instructions: [offline reference runbook](../configuration/location-reference/README.md).
+  This is a deliberate maintenance notebook, not an automatic live/archive step.
+
 ## 2026-09-25 — Move monitoring reports to the end of both ETL pipelines
 
 - Added `06_reports` with the six `monitoring.rpt_*` materialized lake view

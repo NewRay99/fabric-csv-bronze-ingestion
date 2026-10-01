@@ -10,6 +10,14 @@ Deploy these files to the configured Fabric Lakehouse location, normally
 The notebooks do not read these files from the Git repository at runtime. The
 repository copy is the controlled source that must be published to Fabric.
 
+## Coordinate lookup hydration
+
+Use [the offline location-reference runbook](location-reference/README.md) and
+`00c_load_location_coordinates.py` to load approved OS Code-Point Open and OS Open
+Names CSV data uploaded to Lakehouse Files. This fills the lookup that setup only
+creates. No geocoding/API calls, address export or runtime package download occurs.
+The loader defaults to preview; it has not been run in the client Fabric workspace.
+
 ## Dashboard Legend — 30 September 2026 reassessment
 
 `Dashboard Legend.xlsx` is the reporting requirement/KPI catalogue, not an ETL
