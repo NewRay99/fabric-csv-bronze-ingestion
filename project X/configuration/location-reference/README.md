@@ -1,6 +1,6 @@
 # Offline location reference hydration in Fabric
 
-Prepared 30 September 2026. No geocoding API or external lookup is used. All
+Updated 1 October 2026: ZIP inputs supported. No geocoding API or external lookup is used. All
 matching and coordinate conversion runs inside the attached Fabric Lakehouse.
 The loader is prepared, not deployed/executed in the client workspace.
 
@@ -10,14 +10,28 @@ Obtain client-approved **CSV** editions of both products and retain the supplied
 licence/attribution, release metadata and original files:
 
 1. **OS Code-Point Open**: postcode representative points for Great Britain.
-   Extract its `Data/CSV` data files to
-   `Files/cfg_files/location_reference/code_point/Data/CSV`.
+   Upload `codepo_gb.zip` to
+   `Files/cfg_files/location_reference/codepo_gb.zip`.
 2. **OS Open Names**: city/town representative points for Great Britain.
-   Extract its data CSV tiles to
-   `Files/cfg_files/location_reference/open_names/Data` (subfolders are supported).
+   Upload `opname_csv_gb.zip` to
+   `Files/cfg_files/location_reference/opname_csv_gb.zip`.
 
-Do not upload just the ZIP or mix the documentation/header CSV into those data
-folders. The notebook accepts the official headerless data layouts. The source
+No manual unzipping is needed. The notebook selects only data CSV tiles from each
+ZIP (`Data/CSV` for Code-Point, `Data` for Open Names), excluding documentation and
+header CSVs. Wrapping delivery folders are supported. Each run extracts to a fresh
+folder under `Files/cfg_files/location_reference/_extracted/`, using the default
+Lakehouse mount; Spark then reads the Lakehouse-relative path, not a driver-only
+temporary directory. Original ZIPs are unchanged, including licences and metadata.
+Extracted files remain for lazy Spark reads and dataframe inspection. Preview mode
+therefore creates extracted files but does not change the coordinate lookup. Old
+run folders can be removed after their notebook session is no longer using them;
+the notebook never deletes previous runs or user files. Unsafe archive paths,
+symlinks, duplicate destinations and excessive CSV size/count are rejected.
+
+Existing extracted data folders are still supported through `CODE_POINT_CSV_PATH`
+and `OPEN_NAMES_CSV_PATH` (the parameter names are retained for compatibility).
+Do not mix documentation/header CSVs into manually extracted data folders.
+The notebook accepts the official headerless data layouts. The source
 paths can be changed, but must remain below `Files/cfg_files/location_reference/`
 in the default Lakehouse. No HTTP, external storage URI or local computer path
 is accepted. Use locally stored files, not shortcuts to unapproved external sources.
@@ -77,7 +91,8 @@ not contain them. No historic snapshots are automatically rebuilt.
 
 ## Verification and sources
 
-Local tests exercise path guards, preview defaults, parameter parsing, invalid
+Local tests exercise ZIP selection/extraction, unsafe/duplicate archive paths,
+source preservation, path guards, preview defaults, parameter parsing, invalid
 coordinates, axis ordering, offline projection selection and notebook syntax.
 They do not execute actual pyproj transformations, Spark/Delta merges or the
 client's uploaded files. Complete those checks in development Fabric before use.

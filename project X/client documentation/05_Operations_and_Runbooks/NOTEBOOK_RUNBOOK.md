@@ -1,11 +1,15 @@
 # Fabric notebook runbook
 
-## Offline coordinate reference maintenance — 30 September 2026
+## Offline coordinate reference maintenance — updated 1 October 2026
 
 For null offer distances caused by an empty coordinate lookup, use
 `00c_load_location_coordinates.py` and the
 [local-reference instructions](../../configuration/location-reference/README.md).
-Upload approved Code-Point Open/Open Names CSV data to Lakehouse Files; configure
+Upload approved CSV ZIP deliveries `codepo_gb.zip` and `opname_csv_gb.zip` to
+`Files/cfg_files/location_reference/`. The notebook extracts the data CSVs itself;
+manual unzipping is not required. Original ZIPs are preserved and each run's
+extracted files remain under `_extracted/` for Spark reads/inspection. Preview
+creates these files but does not write the lookup. Configure
 the source releases and an approved local pyproj environment. Preview first, then
 explicitly enable the merge. No public geocoding/API request or runtime package
 download is made. This notebook is not automatically invoked by the runners.

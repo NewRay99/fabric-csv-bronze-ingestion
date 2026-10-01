@@ -1,10 +1,13 @@
 # Category links and approximate location distances
 
-## Offline lookup hydration — 30 September 2026
+## Offline lookup hydration — updated 1 October 2026
 
 The missing loader is now prepared as `00c_load_location_coordinates.py`. It reads
-approved OS Code-Point Open and OS Open Names CSV files uploaded inside the default
-Lakehouse, converts grid coordinates locally and merges the coordinate lookup.
+approved OS Code-Point Open and OS Open Names CSV ZIP deliveries uploaded inside
+the default Lakehouse. The defaults are `Files/cfg_files/location_reference/codepo_gb.zip`
+and `Files/cfg_files/location_reference/opname_csv_gb.zip`. It extracts only data
+CSV tiles into a fresh Lakehouse folder, converts grid coordinates locally and
+merges the coordinate lookup. Previously extracted CSV directories remain supported.
 No external geocoding/API calls, referral-text export or package/grid downloads are
 used. Setup still only creates the table; the new loader is an explicit maintenance
 step after Silver formatting and before Silver business rules/Gold rebuild.
@@ -21,7 +24,7 @@ settlement points, not geometric centroids. Existing approved centroid reference
 keep their prior basis. Always display this as approximate preferred-city-to-postcode
 straight-line distance, never a child's actual address or driving distance.
 
-Local verification: 122 tests and 158 subtests passed; new-file lint passed.
+Local verification: 130 tests and 158 subtests passed; loader/test lint passed.
 No files have been uploaded to Fabric and no client lookup, Silver or Gold tables
 have been changed by this local implementation. Spark/Delta and actual projection
 verification remain deployment steps. Earlier implementation notes follow.

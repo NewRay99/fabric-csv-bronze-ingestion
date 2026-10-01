@@ -4,6 +4,21 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-01 — Uploaded coordinate ZIP support
+
+- `00c_load_location_coordinates.py` now defaults to uploaded `codepo_gb.zip` and
+  `opname_csv_gb.zip` in `Files/cfg_files/location_reference/`. Existing CSV folder
+  inputs remain supported. No access to local Windows Downloads is required.
+- Extracts only official data CSVs into a fresh Lakehouse folder per run, preserving
+  source ZIPs and excluding documentation/headers. Rejects unsafe paths, symbolic
+  links, duplicate destinations and excessive selected size/count. Extracted files
+  remain for lazy Spark reads; old runs are not automatically deleted.
+- Lookup preview/merge safeguards and offline projection are unchanged. Preview
+  extracts files but does not modify `cfg_location_coordinate`.
+- Verification: **130 tests and 158 subtests passed**, including real temporary ZIP
+  extraction tests. Loader/test Ruff checks passed. Fabric-mounted extraction,
+  actual source deliveries and Spark/Delta execution still require Fabric validation.
+
 ## 2026-09-30 — Offline coordinate reference loader
 
 - Added `00c_load_location_coordinates.py` for local, uploaded OS Code-Point Open

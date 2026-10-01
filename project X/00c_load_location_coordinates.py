@@ -16,15 +16,16 @@
 
 # MARKDOWN ********************
 # # Local coordinate reference loader — no external lookups
-# Upload extracted OS CSV data to the default Lakehouse first. Run setup and
+# Upload the two OS CSV ZIP deliveries to the default Lakehouse first. Run setup and
 # Silver formatting before this notebook, then Silver business rules and Gold.
 # Preview is the default. No API, package install, grid download or address export.
 # Requires an approved Fabric environment with pyproj already installed.
 # See configuration/location-reference/README.md for formats and coverage limits.
 
 # PARAMETERS CELL ********************
-CODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/code_point/Data/CSV"
-OPEN_NAMES_CSV_PATH = "Files/cfg_files/location_reference/open_names/Data"
+# These inputs accept ZIP deliveries or previously extracted data directories.
+CODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"
+OPEN_NAMES_CSV_PATH = "Files/cfg_files/location_reference/opname_csv_gb.zip"
 CODE_POINT_VERSION = ""  # Actual release on the uploaded Code-Point Open delivery.
 OPEN_NAMES_VERSION = ""  # Actual release on the uploaded OS Open Names delivery.
 APPLY_CHANGES = False
@@ -37,8 +38,12 @@ MAX_CONVERSION_ROWS = 100000  # Relevant postcodes + city/town references; bound
 # CELL ********************
 import math
 import os
-from pathlib import PurePosixPath
+from pathlib import Path, PurePosixPath
 import re
+import shutil
+import stat
+import tempfile
+import zipfile
 
 from delta.tables import DeltaTable
 from pyspark.sql import SparkSession
@@ -67,6 +72,73 @@ def parameter_bool(value):
         return values[str(value).strip().lower()]
     except KeyError as exc:
         raise ValueError("Boolean parameters must be true/false or 1/0") from exc
+
+
+def prepare_reference_input(value, dataset, mount_root="/lakehouse/default"):
+    """Extract only official Data CSV tiles into a fresh, Spark-readable Lakehouse folder."""
+    value = local_reference_path(value)
+    if not value.lower().endswith(".zip"):
+        return value
+    if dataset not in {"code_point", "open_names"}:
+        raise ValueError("Unknown reference dataset")
+    root = Path(mount_root).resolve()
+    reference_root = (root / "Files/cfg_files/location_reference").resolve()
+    archive_path = (root / value).resolve()
+    if not reference_root.is_relative_to(root) or not archive_path.is_relative_to(reference_root):
+        raise ValueError("ZIP input escapes the Lakehouse reference directory")
+    if not archive_path.is_file():
+        raise FileNotFoundError(f"Upload the reference ZIP to the attached Lakehouse: {value}")
+    with zipfile.ZipFile(archive_path) as archive:
+        selected = []
+        total_bytes = 0
+        for member in archive.infolist():
+            name = member.filename
+            parts = PurePosixPath(name).parts
+            if (
+                "\\" in name
+                or ":" in name
+                or ".." in parts
+                or PurePosixPath(name).is_absolute()
+                or stat.S_ISLNK(member.external_attr >> 16)
+            ):
+                raise ValueError("Unsafe path or symbolic link in reference ZIP")
+            lower_parts = [part.lower() for part in parts]
+            if member.is_dir() or not name.lower().endswith(".csv") or "data" not in lower_parts:
+                continue
+            data_index = lower_parts.index("data")
+            tile_parts = parts[data_index + 1 :]
+            if dataset == "code_point":
+                if not tile_parts or tile_parts[0].lower() != "csv":
+                    continue
+                tile_parts = tile_parts[1:]
+            if not tile_parts or "header" in tile_parts[-1].lower():
+                continue
+            total_bytes += member.file_size
+            selected.append((member, PurePosixPath(*tile_parts)))
+        if not selected:
+            raise ValueError(
+                f"No {dataset} data CSV tiles found in ZIP; use the official CSV edition"
+            )
+        if len(selected) > 10000 or total_bytes > 4 * 1024**3:
+            raise ValueError("Reference ZIP exceeds extraction limits (10,000 CSVs / 4 GiB)")
+        names = [str(relative).casefold() for _, relative in selected]
+        if len(set(names)) != len(names):
+            raise ValueError("Duplicate CSV destinations in reference ZIP")
+        extraction_parent = (reference_root / "_extracted").resolve()
+        if not extraction_parent.is_relative_to(reference_root):
+            raise ValueError("Extraction folder escapes the reference directory")
+        extraction_parent.mkdir(parents=True, exist_ok=True)
+        destination = Path(tempfile.mkdtemp(prefix=f"{dataset}_", dir=extraction_parent))
+        # Never extractall: documentation, header CSVs and archive paths are not inputs.
+        # Retain this run's files for Spark's lazy reads and subsequent dataframe inspection.
+        for member, relative in selected:
+            target = destination.joinpath(*relative.parts)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with archive.open(member) as source, target.open("xb") as output:
+                shutil.copyfileobj(source, output, length=1024 * 1024)
+    spark_path = destination.relative_to(root).as_posix()
+    print(f"Extracted {len(selected)} {dataset} data CSVs to {spark_path}; source ZIP retained")
+    return spark_path
 
 
 def postcode_key(value):
@@ -186,7 +258,7 @@ needed_postcodes = (
 )
 
 # Official Code-Point Open CSV: PC, PQ, EA, NO, CY, RH, LH, CC, DC, WC.
-postcode_raw = read_os_csv(CODE_POINT_CSV_PATH, 10)
+postcode_raw = read_os_csv(prepare_reference_input(CODE_POINT_CSV_PATH, "code_point"), 10)
 postcodes = postcode_raw.select(
     F.lit("POSTCODE").alias("location_type"),
     F.col("_c0").alias("location_key"),
@@ -201,7 +273,7 @@ postcodes = postcodes.withColumn("location_key", F.col("_key"))
 
 # OS Open Names: ID, NAMES_URI, NAME1, NAME1_LANG, NAME2, NAME2_LANG,
 # TYPE, LOCAL_TYPE, GEOMETRY_X, GEOMETRY_Y, ... . No address/free text is queried.
-names_raw = read_os_csv(OPEN_NAMES_CSV_PATH, 10)
+names_raw = read_os_csv(prepare_reference_input(OPEN_NAMES_CSV_PATH, "open_names"), 10)
 places = names_raw.where(F.col("_c7").isin("City", "Town")).select(
     F.lit("CITY").alias("location_type"),
     F.trim("_c2").alias("location_key"),
