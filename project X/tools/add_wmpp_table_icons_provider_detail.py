@@ -8,6 +8,7 @@ import json
 import re
 import shutil
 import xml.etree.ElementTree as ET
+from wmpp_status_icons import TARGET_COLUMNS, icon_format as status_icon_format, icons as status_icons
 
 from build_report_design_delivery import read, save, L, quoted, field, project, obj, fill, ident, measures, add_columns
 from rework_wmpp_wip_storyboard import PROJECT, REPORT, MODEL, DEFINITION
@@ -73,6 +74,7 @@ def icons():
         'category':('ink','<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>')}
     for key,(color,body) in simple.items():
         raw[key]=f'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="{PALETTE[color]}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{body}</svg>'
+    raw.update(status_icons())
     return raw
 
 
@@ -105,6 +107,8 @@ def rules(t,c,kind):
 
 
 def icon_format(t,c,kind,reference=None):
+    if kind == 'status' and c in TARGET_COLUMNS:
+        return status_icon_format(reference or field(t,c))
     choices,default=rules(t,c,kind)
     reference=reference or field(t,c)
     cases=[{'Condition':{'In':{'Expressions':[reference],'Values':[[{'Literal':{'Value':'null'}}]]}},'Value':{'Literal':{'Value':"'wmpp-category-unknown'"}}}]

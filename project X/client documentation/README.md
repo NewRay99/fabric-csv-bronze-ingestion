@@ -1,5 +1,11 @@
 # BCT WMPP client documentation
 
+## Report journey review 3 October 2026
+
+The newer project under `reports/WIP/SM WMPP v16 updated WIP` now has entity-first explorers, selection-aware KPI tables, provider scoring evidence and record-key drillthrough controls. Read the [critical report journey review and route maps](04_Data_and_Reporting/WMPP_REPORT_JOURNEY_REVIEW.md) for implemented changes, redundant visuals, remaining gaps and acceptance checks. An overall provider score is still not approved. Saved-file checks do not establish Desktop or production acceptance.
+
+The dated assessment below refers to the older client-deliverables baseline, not this newer WIP.
+
 ## Reporting reassessment 30 September 2026
 
 Start with [Current reporting status](04_Data_and_Reporting/WMPP_CURRENT_STATUS.md), [Requirement reassessment](04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md) and the revised `configuration/Dashboard Legend.xlsx`. The assessed project is **SM WMPP v16 updated WIP** under `reports/client-deliverables/WMPP v16`.

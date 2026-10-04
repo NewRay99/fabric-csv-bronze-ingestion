@@ -7,6 +7,12 @@ West Midlands placement reporting follows referrals, provider engagement, offers
 **Referral**:
 A request to find a suitable placement, with its own lifecycle and identifier. One referral can have multiple provider assignments and offers.
 
+**Referral source status**:
+The referral state recorded by the source system, distinct from the stage evidenced by its provider assignments, offers and agreements.
+
+**Referral journey stage**:
+The referral's furthest currently evidenced stage, from creation through provider search, offers, acceptance and an active signed agreement. A terminal source status takes precedence; insufficient or unrecognised evidence can require review.
+
 **Provider assignment**:
 The link between a referral and a provider approached about that referral. Assignment does not itself mean that the provider made an offer.
 

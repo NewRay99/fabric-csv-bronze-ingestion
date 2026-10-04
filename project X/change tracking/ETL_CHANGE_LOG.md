@@ -4,6 +4,24 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-04 — Gold referral journey status
+
+- `04_gold_model.py` now publishes the existing eight referral journey stages
+  as `fact_referral.current_status`, with `current_status_order` and an explicit
+  rule version. The original source value is retained as `referral_status`.
+- Offer/IPA evidence is aggregated before joining to retain one referral row.
+  Terminal overrides, same-active-IPA signatures and DAX stage precedence are
+  preserved. Source-status outcome rules remain separate from journey stages.
+- Retained snapshot/summary status semantics are preserved; new snapshot rows
+  have separate journey fields. No historic journey inference, semantic model,
+  report layout, report ZIP or deployed Lakehouse was changed.
+- Verification: **203 tests and 158 subtests passed**, including 54 new checks
+  executing the notebook SQL with a portable relational engine. Fabric/Delta
+  execution and the user's semantic-model migration remain to be verified.
+- Migration: [Gold referral journey status](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+
+Issue: [GLD-022](ETL_ISSUE_LOG.md#gld-022--materialise-referral-journey-status-in-gold).
+
 ## 2026-10-01 — Uploaded coordinate ZIP support
 
 - `00c_load_location_coordinates.py` now defaults to uploaded `codepo_gb.zip` and

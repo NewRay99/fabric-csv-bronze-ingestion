@@ -1,5 +1,13 @@
 # Provider engagement and value scoring implementation guide
 
+## Reporting update 3 October 2026
+
+The newer WIP under `reports/WIP/SM WMPP v16 updated WIP` displays a provider scoring evidence table on Provider Explorer and Provider Detail. It shows qualifying response rate, accepted offer share, placed-by-target share, median response hours, numerators, denominators and evidence limitations. An explicit assignment-month selector controls the scoring cohort; current activity KPIs retain their separately described context.
+
+The Gold offer component includes draft records, so its accepted share is not labelled submitted-offer conversion. Median response hours is recalculated from assignment-level durations for the selected assignment months. Missing denominators return insufficient evidence. Document compliance, feedback, reason handling and comparable cost remain unscored; the overall score remains not approved. No weights, score thresholds or ranking policy were introduced.
+
+See the [report journey review](WMPP_REPORT_JOURNEY_REVIEW.md) for implementation scope, remaining scoring and security-scope reconciliation risks, and acceptance checks. This is saved-file implementation, not refreshed-data or business acceptance.
+
 ## Reporting reassessment 30 September 2026
 
 Provider Explorer now has a distinct-provider journey, and Provider Detail (Drillthrough) exposes record evidence. These are exploration features, not a composite score. Available response-rate, average-response-hours, offer-conversion and target-placement components are added to the Legend with proposed requirement associations.

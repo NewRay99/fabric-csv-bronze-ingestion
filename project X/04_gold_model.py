@@ -28,6 +28,11 @@
 # `AS_OF_DATE` is supplied by the archive replay notebook, calculations and the
 # snapshot use that historical export date. With a blank parameter, the notebook
 # uses the current date for the live pipeline.
+#
+# `fact_referral.referral_status` retains the source value. `current_status`
+# and `current_status_order` materialise the referral journey previously
+# calculated in DAX. Snapshot `current_status` retains its legacy source-status
+# meaning; new journey evidence is stored separately as `journey_status`.
 
 # PARAMETERS CELL ********************
 
@@ -309,6 +314,7 @@ provider_assignment_response AS (
 ),
 provider_response AS (
   SELECT referral_id,
+    COUNT(*) AS journey_assignment_count,
     COUNT(DISTINCT provider_id) AS provider_assignment_count,
     SUM(CASE WHEN response_at IS NOT NULL
       AND (assigned_at IS NULL OR response_at >= assigned_at) THEN 1 ELSE 0 END)
@@ -317,6 +323,44 @@ provider_response AS (
       AND (assigned_at IS NULL OR response_at >= assigned_at) THEN response_at END)
       AS first_provider_response_date
   FROM provider_assignment_response
+  GROUP BY referral_id
+),
+-- GLD-022: aggregate evidence before joining the referral so multiple offers,
+-- assignments or IPAs never multiply fact_referral rows. Use Silver directly:
+-- the corresponding source-grain Gold facts are built later in this notebook.
+journey_offer_evidence AS (
+  SELECT rp.referral_id,
+    MAX(CASE WHEN LOWER(TRIM(COALESCE(o.offer_status, ''))) IN
+      ('accepted', 'approved', 'selected', 'offer_successful')
+      THEN 1 ELSE 0 END) AS has_accepted_offer,
+    MAX(CASE WHEN LOWER(TRIM(COALESCE(o.offer_status, ''))) IN
+      ('pending', 'submitted', 'offered', 'offer_made', 'offer_pending',
+       'under_review', 'under review', 'awaiting', 'awaiting_decision', 'awaiting decision')
+      THEN 1 ELSE 0 END) AS has_pending_offer,
+    MAX(CASE WHEN LOWER(TRIM(COALESCE(o.offer_status, ''))) NOT IN
+      ('accepted', 'approved', 'selected', 'offer_successful',
+       'pending', 'submitted', 'offered', 'offer_made', 'offer_pending',
+       'under_review', 'under review', 'awaiting', 'awaiting_decision', 'awaiting decision',
+       'declined', 'rejected', 'withdrawn', 'closed', 'cancelled', 'canceled',
+       'offer_unsuccessful', 'unsuccessful', 'draft')
+      THEN 1 ELSE 0 END) AS has_unknown_offer
+  FROM silver.offer o
+  INNER JOIN referral_provider_current rp
+    ON o.referral_provider_id = rp.referral_provider_id
+  WHERE o.offer_date IS NULL OR TO_DATE(o.offer_date) <= {AS_OF_SQL}
+  GROUP BY rp.referral_id
+),
+journey_ipa_evidence AS (
+  SELECT referral_id,
+    MAX(CASE WHEN NOT COALESCE(CAST(closed AS BOOLEAN), false)
+      THEN 1 ELSE 0 END) AS has_active_ipa,
+    -- Both signatures must belong to the same active IPA, not separate IPAs.
+    MAX(CASE WHEN NOT COALESCE(CAST(closed AS BOOLEAN), false)
+      AND COALESCE(CAST(signed_by_provider AS BOOLEAN), false)
+      AND COALESCE(CAST(signed_by_local_authority AS BOOLEAN), false)
+      THEN 1 ELSE 0 END) AS has_signed_active_ipa
+  FROM silver.ipa
+  WHERE created_datetime IS NULL OR TO_DATE(created_datetime) <= {AS_OF_SQL}
   GROUP BY referral_id
 ),
 base AS (
@@ -328,7 +372,13 @@ base AS (
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
-    r.referral_status AS current_status, r.placement_type AS placement_type_required,
+    r.referral_status AS referral_status, r.placement_type AS placement_type_required,
+    COALESCE(p.journey_assignment_count, 0) AS journey_assignment_count,
+    COALESCE(jo.has_accepted_offer, 0) AS has_accepted_offer,
+    COALESCE(jo.has_pending_offer, 0) AS has_pending_offer,
+    COALESCE(jo.has_unknown_offer, 0) AS has_unknown_offer,
+    COALESCE(ji.has_active_ipa, 0) AS has_active_ipa,
+    COALESCE(ji.has_signed_active_ipa, 0) AS has_signed_active_ipa,
     -- GLD-014: provider assignment is authoritative; Silver aggregates it
     -- at referral grain so this remains one Gold row per referral.
     COALESCE(x.is_spot, false) AS is_spot,
@@ -366,8 +416,28 @@ base AS (
   LEFT JOIN closure_reason closure ON r.referral_id = closure.referral_id
   LEFT JOIN referral_enrichment x ON r.referral_id = x.referral_id
   LEFT JOIN provider_response p ON r.referral_id = p.referral_id
+  LEFT JOIN journey_offer_evidence jo ON r.referral_id = jo.referral_id
+  LEFT JOIN journey_ipa_evidence ji ON r.referral_id = ji.referral_id
   LEFT JOIN referral_framework_category category ON r.referral_id = category.referral_id
   LEFT JOIN silver.referral_location loc ON r.referral_id = loc.referral_id
+),
+journey_classified AS (
+  SELECT base.*,
+    -- Preserve the existing Journey stage order DAX precedence, including
+    -- terminal overrides and review only after stronger current evidence.
+    CASE
+      WHEN LOWER(TRIM(COALESCE(referral_status, ''))) IN
+        ('closed', 'cancelled', 'canceled', 'withdrawn', 'completed') THEN 7
+      WHEN has_signed_active_ipa = 1 THEN 6
+      WHEN has_active_ipa = 1 THEN 5
+      WHEN has_accepted_offer = 1 THEN 4
+      WHEN has_pending_offer = 1 THEN 3
+      WHEN has_unknown_offer = 1 OR TRIM(COALESCE(referral_status, '')) = '' THEN 8
+      WHEN journey_assignment_count > 0 THEN 2
+      WHEN referral_created_date IS NOT NULL THEN 1
+      ELSE 8
+    END AS current_status_order
+  FROM base
 )
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, referral_created_date, required_placement_date,
@@ -375,7 +445,19 @@ SELECT {AS_OF_SQL} AS as_of_date,
   location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
-  referral_closure_reason, last_activity_date, current_status,
+  referral_closure_reason, last_activity_date, referral_status,
+  CASE current_status_order
+    WHEN 1 THEN 'Referral created'
+    WHEN 2 THEN 'Provider search'
+    WHEN 3 THEN 'Offers received'
+    WHEN 4 THEN 'Offer accepted'
+    WHEN 5 THEN 'IPA created'
+    WHEN 6 THEN 'IPA signed'
+    WHEN 7 THEN 'Closed / cancelled / withdrawn'
+    ELSE 'Needs review'
+  END AS current_status,
+  current_status_order,
+  'WMPP_REFERRAL_JOURNEY_V1' AS current_status_rule_version,
   placement_type_required,
   CAST(NULL AS STRING) AS region,
   placement_urgency_band AS priority,
@@ -419,15 +501,15 @@ SELECT {AS_OF_SQL} AS as_of_date,
     WHEN ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
       AND TO_DATE(ipa_issued_date) <= required_placement_date THEN 'Placed by target'
     WHEN ipa_issued_date IS NOT NULL THEN 'Placed after target'
-    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(COALESCE(current_status, '')) NOT IN
-      ('closed','cancelled','withdrawn','completed') THEN 'Open overdue'
-    WHEN LOWER(COALESCE(current_status, '')) NOT IN
-      ('closed','cancelled','withdrawn','completed') THEN 'Open on track'
+    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(TRIM(COALESCE(referral_status, ''))) NOT IN
+      ('closed','cancelled','canceled','withdrawn','completed') THEN 'Open overdue'
+    WHEN LOWER(TRIM(COALESCE(referral_status, ''))) NOT IN
+      ('closed','cancelled','canceled','withdrawn','completed') THEN 'Open on track'
     ELSE 'Closed without placement'
   END AS required_placement_date_outcome,
   planned_placement_start_date, estimated_weekly_cost,
   '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
-FROM base
+FROM journey_classified
 WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}
 """)
 
@@ -483,7 +565,13 @@ snapshot = spark.table("gold.fact_referral").select(
     "framework_category_id", "framework_category_count",
     "location", "location_match_status", "location_is_default", "location_requires_review",
     "first_action_date", "first_offer_date", "offer_accepted_date", "ipa_issued_date",
-    "referral_closed_date", "referral_closure_reason", "current_status",
+    "referral_closed_date", "referral_closure_reason",
+    # Keep the retained snapshot/summary source-status contract unchanged.
+    # New columns are NULL for older months, not inferred from live evidence.
+    F.col("referral_status").alias("current_status"), "referral_status",
+    F.col("current_status").alias("journey_status"),
+    F.col("current_status_order").alias("journey_status_order"),
+    F.col("current_status_rule_version").alias("journey_status_rule_version"),
     "last_activity_date", "placement_type_required", "region", "priority",
     "complexity_band", "placement_urgency_band", "cnt_offer_made",
     "first_provider_seen_date", "is_not_seen_by_providers",

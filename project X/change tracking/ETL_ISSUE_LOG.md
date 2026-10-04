@@ -11,16 +11,38 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
 | `LIVE-ETL` | Live ETL pipeline issues | 4 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
-| `GLD` | Gold-layer issues | 21 |
+| `GLD` | Gold-layer issues | 22 |
 | `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **82** |
+| **Total classified issues** | | **83** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
 Fabric replay remains a separate deployment verification unless stated.
+
+## GLD-022 — Materialise referral journey status in Gold
+
+- **Request (2026-10-04):** move the referral journey stages from DAX into
+  `gold.fact_referral.current_status` and preserve the source status under its
+  actual name, `referral_status`.
+- **Fix:** `04_gold_model.py` retains the raw source value and publishes the
+  journey label, `current_status_order` and `current_status_rule_version`.
+  Referral-grain offer/IPA aggregates preserve the existing DAX precedence and
+  avoid row multiplication. Both signatures must belong to the same active IPA;
+  terminal source states override milestones. Source-status outcome rules use
+  `referral_status`, not the new journey label.
+- **Compatibility:** retained snapshot/summary `current_status` keeps its raw
+  source-status meaning. New snapshots have separate journey fields; old months
+  are not relabelled using live evidence. The semantic model was not changed;
+  source-code filters and relationships need migration before refresh.
+- **Validation:** 54 executable SQL-fixture checks pass; the full local suite
+  passes 203 tests and 158 subtests. Spark date/timestamp syntax is adapted to
+  SQLite for portable relational execution; Fabric/Delta and report rendering
+  remain deployment checks.
+- **Status:** implemented in repository source, not deployed to Fabric.
+  See [field definitions and migration steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
 
 ## CFG-010 — Monitoring reporting views ran during configuration setup
 
