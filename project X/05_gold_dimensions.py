@@ -528,7 +528,115 @@ offer_statuses = (
     .option("overwriteSchema", "true").saveAsTable("gold.dim_offer_status"))
 print(f"gold.dim_offer_status: {offer_statuses.count():,} rows from silver.offer")
 
-print(f"Gold dimensions completed; AS_OF_DATE={AS_OF_DATE or 'latest'}; started={RUN_STARTED_AT.isoformat()}")
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# MARKDOWN ********************
+
+# ## Provider registry extract
+# GLD-023 consolidates the two identical legacy Fostering queries into one
+# current provider-level extract. No offer, referral, message or home is required.
+# Contacts stay in this separate extract, not the general provider dimension.
+# Multiple Fostering frameworks are retained as a sorted, distinct code list.
+# This is a current directory, not a historical/as-of provider registry.
+
+# CELL ********************
+
+
+def provider_registry_columns():
+    """Provider-source fields required by the legacy registry extract."""
+    return [
+        "provider_id", "holding_company_id", "provider_name", "provider_status",
+        "town_city", "county", "postcode", "country", "qa_flag",
+        "provider_email_address", "provider_phone_number",
+        "responsible_individual_name", "responsible_individual_contact_number",
+        "responsible_individual_email_address", "registrant_name", "registrant_role",
+        "registrant_email_address", "registrant_contact_number",
+    ]
+
+
+def provider_registry_sql(silver_schema, gold_schema, job_run_id):
+    """One current row per Fostering provider; contact values are never logged."""
+    for schema in (silver_schema, gold_schema):
+        if not schema.isascii() or not schema.isidentifier():
+            raise ValueError("Registry schema names must be simple SQL identifiers")
+    job_literal = str(job_run_id).replace("'", "''")
+    fields = provider_registry_columns()
+    # Exact timestamp ties must not choose an arbitrary contact record. All
+    # output provider fields participate; any remaining tie has identical output.
+    tie_breakers = ",\n        ".join(
+        f"CAST({name} AS STRING) DESC NULLS LAST"
+        for name in sorted(fields) if name != "provider_id"
+    )
+    provider_projection = ",\n  ".join(
+        f"CAST(p.{name} AS {'BOOLEAN' if name == 'qa_flag' else 'STRING'}) AS {name}"
+        for name in fields
+    )
+    return f"""
+WITH ranked_provider AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY provider_id
+    ORDER BY CAST(export_date AS TIMESTAMP) DESC NULLS LAST,
+      CAST(_silver_load_ts AS TIMESTAMP) DESC NULLS LAST,
+      {tie_breakers}
+  ) AS registry_provider_rank
+  FROM {silver_schema}.provider
+  WHERE provider_id IS NOT NULL AND TRIM(CAST(provider_id AS STRING)) <> ''
+), ranked_membership AS (
+  SELECT *, ROW_NUMBER() OVER (
+    PARTITION BY provider_framework_id
+    ORDER BY CAST(source_export_date AS TIMESTAMP) DESC NULLS LAST,
+      CAST(provider_id AS STRING) DESC NULLS LAST,
+      CAST(framework_code AS STRING) DESC NULLS LAST
+  ) AS registry_membership_rank
+  FROM {gold_schema}.bridge_provider_framework
+  WHERE provider_framework_id IS NOT NULL
+), fostering_membership AS (
+  SELECT DISTINCT CAST(b.provider_id AS STRING) AS provider_id,
+    CAST(b.framework_code AS STRING) AS framework_code
+  FROM ranked_membership b
+  INNER JOIN {gold_schema}.dim_framework f ON f.framework_code = b.framework_code
+  WHERE b.registry_membership_rank = 1
+    AND UPPER(TRIM(f.placement_type)) = 'FOSTERING'
+    AND b.provider_id IS NOT NULL
+), provider_frameworks AS (
+  SELECT provider_id,
+    CONCAT_WS('; ', SORT_ARRAY(COLLECT_SET(framework_code))) AS framework_code,
+    COUNT(DISTINCT framework_code) AS framework_count
+  FROM fostering_membership
+  GROUP BY provider_id
+)
+SELECT
+  {provider_projection},
+  f.framework_code, f.framework_count,
+  'Fostering' AS placement_type, 'N/A' AS home_name, 'Fostering' AS service_type,
+  CAST(p.export_date AS TIMESTAMP) AS source_export_date,
+  CAST(p.export_date AS TIMESTAMP) AS export_date,
+  '{job_literal}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
+FROM ranked_provider p
+INNER JOIN provider_frameworks f ON f.provider_id = CAST(p.provider_id AS STRING)
+WHERE p.registry_provider_rank = 1
+"""
+
+
+require_columns(f"{SILVER_SCHEMA}.provider",
+                provider_registry_columns() + ["export_date", "_silver_load_ts"])
+require_columns(f"{GOLD_SCHEMA}.bridge_provider_framework",
+                ["provider_framework_id", "provider_id", "framework_code", "source_export_date"])
+require_columns(f"{GOLD_SCHEMA}.dim_framework", ["framework_code", "placement_type"])
+provider_registry = spark.sql(provider_registry_sql(SILVER_SCHEMA, GOLD_SCHEMA, GOLD_JOB_RUN_ID))
+registry_target = f"{GOLD_SCHEMA}.rpt_provider_registry"
+if provider_registry.groupBy("provider_id").count().where("count > 1").limit(1).count():
+    raise ValueError("Provider registry must contain exactly one row per provider_id")
+(provider_registry.write.format("delta").mode("overwrite")
+    .option("overwriteSchema", "true").saveAsTable(registry_target))
+print(f"{registry_target}: {provider_registry.count():,} provider rows (Fostering only)")
+
+print(f"Gold dimensions and registry completed; AS_OF_DATE={AS_OF_DATE or 'latest'}; started={RUN_STARTED_AT.isoformat()}")
 
 # METADATA ********************
 

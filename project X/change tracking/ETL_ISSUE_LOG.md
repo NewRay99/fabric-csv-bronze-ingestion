@@ -11,12 +11,12 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
 | `LIVE-ETL` | Live ETL pipeline issues | 4 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
-| `GLD` | Gold-layer issues | 22 |
+| `GLD` | Gold-layer issues | 23 |
 | `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **83** |
+| **Total classified issues** | | **84** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -2191,7 +2191,7 @@ call them bridge_ followed by the original name
   distance values remain null until suitable local coordinates are supplied.
   See the [implementation guide](../client%20documentation/04_Data_and_Reporting/CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
 
-## gld-023 - GENERATE EXTRACTS FROM THE REPORT
+## GLD-023 - GENERATE EXTRACTS FROM THE REPORT
 i need to generate extracts from the power bi report.. here are the feidls that are needed. this is the old semantic model script used to generate the extracts
 
 script 1 - rpt_provider_registry
@@ -2244,3 +2244,33 @@ in
 ```
 combine them to generate a single extract from the notebook through to the semantic model
 
+### Resolution (2026-10-05)
+
+- **Cause:** both pasted queries are identical Fostering-only extracts. They
+  depend on old staging queries and choose one arbitrary framework when a
+  provider has multiple memberships after `Table.Distinct`.
+- **Fix:** `05_gold_dimensions.py` now builds one materialized
+  `gold.rpt_provider_registry` from current provider records and Gold framework
+  membership. It retains all nine contact fields, one row per Provider ID and
+  a sorted distinct list of Fostering framework codes. Providers do not need
+  offers. Phone numbers stay strings; missing contacts stay NULL. Other placement
+  types remain excluded to preserve the supplied legacy scope.
+- **Semantic/report integration:** the saved `reports/WIP/SM WMPP v16 updated WIP`
+  imports the table and has a hidden **Provider Registry Extract** page with all
+  16 named legacy fields plus Provider ID, Provider Status, County, Country and
+  Source Export Date. Existing page visuals, bookmarks, relationships and
+  navigation are unchanged. A reproducible installer/template and backup
+  preserve the local, Git-ignored report edits.
+- **Access:** the existing dynamic reader role explicitly denies rows on this
+  new contact table pending an approved audience. Other role rules are unchanged.
+  No service publication, permissions, role membership or export settings were
+  changed. Hidden-page status alone is not security; editors and direct SQL
+  access require separate controls.
+- **Validation:** 17 new synthetic ETL and safe-file-edit checks pass; the full
+  local suite passes **248 tests and 158 subtests**. Tool/test lint and the Gold
+  notebook contract validator pass. The backed-up report apply verifies that
+  every unlisted saved model/report file is unchanged (excluding `.pbi` cache).
+- **Status:** source and saved WIP definitions implemented, not deployed or
+  refreshed in Fabric/Desktop. Actual registry counts, contact reconciliation,
+  native rendering/export and the intended reader audience remain acceptance
+  checks. See [deployment and export instructions](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).

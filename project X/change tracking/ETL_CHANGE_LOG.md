@@ -4,6 +4,25 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-05 — Provider registry extract
+
+- Consolidated GLD-023's identical Fostering queries into
+  `gold.rpt_provider_registry` in `05_gold_dimensions.py`, with setup lineage.
+  One current row per provider, all nine contacts and every distinct qualifying
+  framework code; no offer/home requirement. No contacts were added to the
+  general provider dimension.
+- Added the direct import and hidden **Provider Registry Extract** table page
+  to `reports/WIP/SM WMPP v16 updated WIP`. The existing reader role denies rows
+  on the new contact table pending an audience decision. No service access,
+  publication, export settings or existing report layouts were changed.
+- Local verification: **248 tests and 158 subtests passed**, including 17 new
+  synthetic ETL/safe-edit checks; tool/test Ruff and Gold notebook validation
+  passed. Backed-up apply confirmed all unlisted report/model files unchanged.
+- Fabric execution, refreshed data, native export and audience approval remain
+  outstanding. [Deployment and export guide](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+
+Issue: [GLD-023](ETL_ISSUE_LOG.md#gld-023---generate-extracts-from-the-report).
+
 ## 2026-10-04 — Gold referral journey status
 
 - `04_gold_model.py` now publishes the existing eight referral journey stages

@@ -1,0 +1,165 @@
+table rpt_provider_registry
+
+	column 'Provider ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_id
+
+	column 'Holding Company ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: holding_company_id
+
+	column 'Provider Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_name
+
+	column 'Provider Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_status
+
+	column 'Town/City'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: town_city
+
+	column County
+		dataType: string
+		summarizeBy: none
+		sourceColumn: county
+
+	column Postcode
+		dataType: string
+		summarizeBy: none
+		sourceColumn: postcode
+
+	column Country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	column 'QA Flag'
+		dataType: boolean
+		isHidden
+		summarizeBy: none
+		sourceColumn: qa_flag
+
+	column 'Framework Code'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: framework_code
+
+	column 'Framework Count'
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: framework_count
+
+	column 'Placement Type'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: placement_type
+
+	column 'Home Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_name
+
+	column 'Service Type'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_type
+
+	column 'Provider Email'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_email_address
+
+	column 'Provider Phone'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_phone_number
+
+	column 'Responsible Individual Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: responsible_individual_name
+
+	column 'Responsible Individual Contact Number'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: responsible_individual_contact_number
+
+	column 'Responsible Individual Email Address'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: responsible_individual_email_address
+
+	column 'Registrant Name'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: registrant_name
+
+	column 'Registrant Role'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: registrant_role
+
+	column 'Registrant Email'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: registrant_email_address
+
+	column 'Registrant Contact Number'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: registrant_contact_number
+
+	column 'Source Export Date'
+		dataType: dateTime
+		formatString: dd MMM yyyy HH:mm
+		summarizeBy: none
+		sourceColumn: source_export_date
+
+	column 'Export Date'
+		dataType: dateTime
+		isHidden
+		formatString: dd MMM yyyy HH:mm
+		summarizeBy: none
+		sourceColumn: export_date
+
+	column 'Job Run ID'
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: job_run_id
+
+	column 'Gold Modelled At'
+		dataType: dateTime
+		isHidden
+		formatString: dd MMM yyyy HH:mm
+		summarizeBy: none
+		sourceColumn: gold_modelled_at
+
+	partition rpt_provider_registry = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("m7hju2pe2lguxmyd2k56fon36e-qo2p37tm2lmuxgspbra4y6dhoa.datawarehouse.fabric.microsoft.com", "LH_BCT_WMPP"),
+				    Registry = Source{[Schema="gold",Item="rpt_provider_registry"]}[Data],
+				    Selected = Table.SelectColumns(Registry, {
+				        "provider_id", "holding_company_id", "provider_name", "provider_status",
+				        "town_city", "county", "postcode", "country", "qa_flag",
+				        "framework_code", "framework_count", "placement_type", "home_name", "service_type",
+				        "provider_email_address", "provider_phone_number", "responsible_individual_name",
+				        "responsible_individual_contact_number", "responsible_individual_email_address",
+				        "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number",
+				        "source_export_date", "export_date", "job_run_id", "gold_modelled_at"
+				    })
+				in
+				    Selected
+
+	annotation PBI_ResultType = Table

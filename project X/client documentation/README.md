@@ -52,6 +52,7 @@ Issue and change tracking is separate from client design documentation. See
 4. [Provider engagement and value scoring implementation guide](04_Data_and_Reporting/PROVIDER_SCORING_IMPLEMENTATION_GUIDE.md)
 5. [RLS and partial aggregate access guide](04_Data_and_Reporting/RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md)
 6. [Dashboard icon implementation guide](../reports/templates/ICON_IMPLEMENTATION_GUIDE.md)
+7. [Provider registry extract deployment and export guide](04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md)
 
 Documents retained from earlier discovery phases may describe target-state
 features not yet implemented. The HLD, TFD, active notebooks, and current
