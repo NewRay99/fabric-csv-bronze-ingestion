@@ -2190,3 +2190,57 @@ call them bridge_ followed by the original name
   classification acceptance and client Fabric verification remain outstanding;
   distance values remain null until suitable local coordinates are supplied.
   See the [implementation guide](../client%20documentation/04_Data_and_Reporting/CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+
+## gld-023 - GENERATE EXTRACTS FROM THE REPORT
+i need to generate extracts from the power bi report.. here are the feidls that are needed. this is the old semantic model script used to generate the extracts
+
+script 1 - rpt_provider_registry
+```
+let
+    Source = dim_provider,
+    #"Merged Queries" = Table.NestedJoin(Source, {"provider_id"}, dim_provider_framework, {"provider_id"}, "dim_provider_framework", JoinKind.Inner),
+    #"Expanded dim_provider_framework" = Table.ExpandTableColumn(#"Merged Queries", "dim_provider_framework", {"framework_code"}, {"dim_provider_framework.framework_code"}),
+    #"Merged Queries1" = Table.NestedJoin(#"Expanded dim_provider_framework", {"dim_provider_framework.framework_code"}, dim_framework, {"framework_code"}, "dim_framework", JoinKind.LeftOuter),
+    #"Expanded dim_framework" = Table.ExpandTableColumn(#"Merged Queries1", "dim_framework", {"placement_type"}, {"placement_type"}),
+    #"Filtered Rows" = Table.SelectRows(#"Expanded dim_framework", each ([placement_type] = "Fostering")),
+    #"Renamed Columns" = Table.RenameColumns(#"Filtered Rows",{{"dim_provider_framework.framework_code", "framework_code"}}),
+    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "Home Name", each "N/A"),
+    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Service Type", each [placement_type]),
+    #"Merged Queries2" = Table.NestedJoin(#"Added Custom1", {"provider_id"}, dim_provider, {"provider_id"}, "dim_provider", JoinKind.LeftOuter),
+    #"Merged Queries3" = Table.NestedJoin(#"Merged Queries2", {"provider_id"}, stg_provider, {"provider_id"}, "stg_provider", JoinKind.LeftOuter),
+    #"Expanded stg_provider" = Table.ExpandTableColumn(#"Merged Queries3", "stg_provider", {"provider_email_address", "provider_phone_number", "responsible_individual_name", "responsible_individual_contact_number", "responsible_individual_email_address", "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number"}, {"stg_provider.provider_email_address", "stg_provider.provider_phone_number", "stg_provider.responsible_individual_name", "stg_provider.responsible_individual_contact_number", "stg_provider.responsible_individual_email_address", "stg_provider.registrant_name", "stg_provider.registrant_role", "stg_provider.registrant_email_address", "stg_provider.registrant_contact_number"}),
+    #"Removed Columns" = Table.RemoveColumns(#"Expanded stg_provider",{"dim_provider"}),
+    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"stg_provider.provider_email_address", "provider_email_address"}, {"stg_provider.provider_phone_number", "provider_phone_number"}, {"Home Name", "home_name"}, {"Service Type", "service_type"}, {"stg_provider.responsible_individual_name", "responsible_individual_name"}, {"stg_provider.responsible_individual_contact_number", "responsible_individual_contact_number"}, {"stg_provider.responsible_individual_email_address", "responsible_individual_email_address"}, {"stg_provider.registrant_name", "registrant_name"}, {"stg_provider.registrant_role", "registrant_role"}, {"stg_provider.registrant_email_address", "registrant_email_address"}, {"stg_provider.registrant_contact_number", "registrant_contact_number"}}),
+    #"Sorted Rows" = Table.Sort(#"Renamed Columns1",{{"export_date", Order.Descending}}),
+    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows", {"provider_id"}),
+    #"Renamed Columns2" = Table.RenameColumns(#"Removed Duplicates",{{"provider_name", "Provider Name"}, {"town_city", "Town/City"}, {"postcode", "Postcode"}, {"framework_code", "Framework Code"}, {"placement_type", "Placement Type"}, {"home_name", "Home Name"}, {"service_type", "Service Type"}, {"provider_email_address", "Provider Email"}, {"provider_phone_number", "Provider Phone"}, {"responsible_individual_name", "Responsible Individual Name"}, {"responsible_individual_contact_number", "Responsible Individual Contact Number"}, {"responsible_individual_email_address", "Responsible Individual Email Address"}, {"registrant_name", "Registrant Name"}, {"registrant_role", "Registrant Role"}, {"registrant_email_address", "Registrant Email"}, {"registrant_contact_number", "Registrant Contact Number"}})
+in
+    #"Renamed Columns2"
+```
+
+script 2 - rpt_provider_fostering
+
+```
+let
+    Source = dim_provider,
+    #"Merged Queries" = Table.NestedJoin(Source, {"provider_id"}, dim_provider_framework, {"provider_id"}, "dim_provider_framework", JoinKind.Inner),
+    #"Expanded dim_provider_framework" = Table.ExpandTableColumn(#"Merged Queries", "dim_provider_framework", {"framework_code"}, {"dim_provider_framework.framework_code"}),
+    #"Merged Queries1" = Table.NestedJoin(#"Expanded dim_provider_framework", {"dim_provider_framework.framework_code"}, dim_framework, {"framework_code"}, "dim_framework", JoinKind.LeftOuter),
+    #"Expanded dim_framework" = Table.ExpandTableColumn(#"Merged Queries1", "dim_framework", {"placement_type"}, {"placement_type"}),
+    #"Filtered Rows" = Table.SelectRows(#"Expanded dim_framework", each ([placement_type] = "Fostering")),
+    #"Renamed Columns" = Table.RenameColumns(#"Filtered Rows",{{"dim_provider_framework.framework_code", "framework_code"}}),
+    #"Added Custom" = Table.AddColumn(#"Renamed Columns", "Home Name", each "N/A"),
+    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Service Type", each [placement_type]),
+    #"Merged Queries2" = Table.NestedJoin(#"Added Custom1", {"provider_id"}, dim_provider, {"provider_id"}, "dim_provider", JoinKind.LeftOuter),
+    #"Merged Queries3" = Table.NestedJoin(#"Merged Queries2", {"provider_id"}, stg_provider, {"provider_id"}, "stg_provider", JoinKind.LeftOuter),
+    #"Expanded stg_provider" = Table.ExpandTableColumn(#"Merged Queries3", "stg_provider", {"provider_email_address", "provider_phone_number", "responsible_individual_name", "responsible_individual_contact_number", "responsible_individual_email_address", "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number"}, {"stg_provider.provider_email_address", "stg_provider.provider_phone_number", "stg_provider.responsible_individual_name", "stg_provider.responsible_individual_contact_number", "stg_provider.responsible_individual_email_address", "stg_provider.registrant_name", "stg_provider.registrant_role", "stg_provider.registrant_email_address", "stg_provider.registrant_contact_number"}),
+    #"Removed Columns" = Table.RemoveColumns(#"Expanded stg_provider",{"dim_provider"}),
+    #"Renamed Columns1" = Table.RenameColumns(#"Removed Columns",{{"stg_provider.provider_email_address", "provider_email_address"}, {"stg_provider.provider_phone_number", "provider_phone_number"}, {"Home Name", "home_name"}, {"Service Type", "service_type"}, {"stg_provider.responsible_individual_name", "responsible_individual_name"}, {"stg_provider.responsible_individual_contact_number", "responsible_individual_contact_number"}, {"stg_provider.responsible_individual_email_address", "responsible_individual_email_address"}, {"stg_provider.registrant_name", "registrant_name"}, {"stg_provider.registrant_role", "registrant_role"}, {"stg_provider.registrant_email_address", "registrant_email_address"}, {"stg_provider.registrant_contact_number", "registrant_contact_number"}}),
+    #"Sorted Rows" = Table.Sort(#"Renamed Columns1",{{"export_date", Order.Descending}}),
+    #"Removed Duplicates" = Table.Distinct(#"Sorted Rows", {"provider_id"}),
+    #"Renamed Columns2" = Table.RenameColumns(#"Removed Duplicates",{{"provider_name", "Provider Name"}, {"town_city", "Town/City"}, {"postcode", "Postcode"}, {"framework_code", "Framework Code"}, {"placement_type", "Placement Type"}, {"home_name", "Home Name"}, {"service_type", "Service Type"}, {"provider_email_address", "Provider Email"}, {"provider_phone_number", "Provider Phone"}, {"responsible_individual_name", "Responsible Individual Name"}, {"responsible_individual_contact_number", "Responsible Individual Contact Number"}, {"responsible_individual_email_address", "Responsible Individual Email Address"}, {"registrant_name", "Registrant Name"}, {"registrant_role", "Registrant Role"}, {"registrant_email_address", "Registrant Email"}, {"registrant_contact_number", "Registrant Contact Number"}})
+in
+    #"Renamed Columns2"
+```
+combine them to generate a single extract from the notebook through to the semantic model
+
