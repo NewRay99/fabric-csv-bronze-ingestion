@@ -191,6 +191,12 @@ def test_offer_sql_joins_without_fanout_and_with_explicit_distance_status():
     assert all(row["provider_home_framework_category_id"] is None for row in rows.values())
     assert all(row["provider_home_framework_category_count"] == 2 for row in rows.values())
     assert rows["o1"]["referral_to_home_distance_km"] == pytest.approx(10007.5572, abs=0.001)
+    assert (rows["o1"]["referral_latitude"], rows["o1"]["referral_longitude"]) == (0, 0)
+    assert (rows["o1"]["provider_home_latitude"], rows["o1"]["provider_home_longitude"]) == (0, 90)
+    assert rows["o2"]["referral_latitude"] is None
+    assert rows["o2"]["referral_longitude"] is None
+    assert rows["o4"]["referral_latitude"] is None
+    assert rows["o5"]["referral_latitude"] is None
     assert rows["o1"]["referral_to_home_distance_status"] == "APPROXIMATE_PREFERENCE_CITY"
     assert rows["o1"]["referral_to_home_distance_basis"] == "CITY_REPRESENTATIVE_POINT_TO_POSTCODE_STRAIGHT_LINE"
     assert rows["o3"]["referral_to_home_distance_basis"] == "CITY_CENTROID_TO_POSTCODE_STRAIGHT_LINE"

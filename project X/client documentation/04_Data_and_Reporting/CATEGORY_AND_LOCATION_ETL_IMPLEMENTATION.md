@@ -1,5 +1,63 @@
 # Category links and approximate location distances
 
+## Offer Locations connection map 5 October 2026
+
+The saved project at `reports/WIP/SM WMPP v16 updated WIP` now has an Azure Maps
+connection panel below the existing Offer Locations distance chart and offer
+register. The page is taller, not narrower; existing visuals and navigation retain
+their positions and sizes. Other pages and bookmarks are unchanged.
+
+Select one referral in the existing search dropdown, or select an offer row in
+the register, to show its city-to-home connections. Provider, offer status,
+framework, category and distance-band filters also apply. Hover over a marker or
+line for the referral, city, postcode, provider, home, offer status, distance and
+location quality. Map selection does not filter the register backwards; use the
+register or slicers to choose offers.
+
+Orange lines connect teal endpoint markers. They represent approximate
+straight-line connections between a city representative point and a postcode
+representative point, not driving routes or exact addresses. A default city is
+explicitly identified; locations requiring review, incomplete pairs and
+out-of-range coordinates do not produce paths. Offers with unavailable locations
+remain in the original register and distance chart.
+
+### Coordinate refresh
+
+`04_gold_model.py` now publishes four additional fields in `gold.fact_offer`:
+`referral_latitude`, `referral_longitude`, `provider_home_latitude` and
+`provider_home_longitude`. The first pair comes from
+`silver.referral_location`; the second comes from
+`silver.provider_home_location`. These use the approved offline OS lookup and
+perform no external geocoding in Fabric. Reviewed referral origins are withheld.
+
+The WIP offer import accepts these fields as nullable numbers. Missing fields in
+an older Gold deployment are filled with null, so the map can remain empty
+without an import column error. Real lines require the Gold coordinate fields to
+be populated and the Power BI model to be refreshed. Cached distances alone
+cannot reconstruct the missing coordinates.
+
+If Silver coordinates are already populated, deploy the revised Gold offer SQL
+cell, with the notebook's parameter and helper initialization and source checks.
+For a map-only deployment, do not run the entire Gold notebook: the earlier
+referral journey status change requires the coordinated
+[semantic model migration](GOLD_REFERRAL_JOURNEY_STATUS.md). This map addition does
+not perform that migration. If coordinates are not yet populated, first follow
+the offline lookup hydration steps below and rebuild the Silver location tables.
+
+After the source refresh, reopen the saved WIP and refresh the model. Select a
+referral with several geolocated offers, then verify two endpoints per offer and
+the displayed distinct-offer coverage. Check provider/status/category filters,
+missing/reviewed locations and the dynamic detail RLS role before release. The new
+`Offer Location Paths` table uses the active one-way relationship from the
+existing secured offer fact; no broader or bidirectional access rule is added.
+
+Azure Maps still uses an online map service and needs existing tenant approval;
+offline lookup data does not make the map offline. No tenant settings, Fabric
+tables or published reports were changed by this local update. Native rendering
+and live RLS/filter checks remain to verify in Desktop after source refresh.
+See [Microsoft's path layer guidance](https://learn.microsoft.com/en-us/azure/azure-maps/power-bi-visual-add-path-layer)
+and [Azure Maps access guidance](https://learn.microsoft.com/en-us/azure/azure-maps/power-bi-visual-manage-access).
+
 ## Offline lookup hydration — updated 1 October 2026
 
 The missing loader is now prepared as `00c_load_location_coordinates.py`. It reads

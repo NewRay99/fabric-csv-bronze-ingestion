@@ -684,6 +684,14 @@ SELECT {AS_OF_SQL} AS as_of_date,
   loc.location AS referral_location,
   loc.location_match_status, loc.location_is_default, loc.location_requires_review,
   home.postcode_normalized AS provider_home_postcode,
+  -- Publish offline-reference endpoints for the Offer Locations path map.
+  -- A location requiring review must not imply an approved referral origin.
+  CASE WHEN NOT COALESCE(loc.location_requires_review, true)
+    THEN CAST(loc.location_latitude AS DOUBLE) END AS referral_latitude,
+  CASE WHEN NOT COALESCE(loc.location_requires_review, true)
+    THEN CAST(loc.location_longitude AS DOUBLE) END AS referral_longitude,
+  CAST(home.home_latitude AS DOUBLE) AS provider_home_latitude,
+  CAST(home.home_longitude AS DOUBLE) AS provider_home_longitude,
   CASE WHEN loc.location_requires_review THEN NULL
     ELSE {OFFER_DISTANCE_KM_SQL} END AS referral_to_home_distance_km,
   CASE
