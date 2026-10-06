@@ -95,9 +95,8 @@ provider_response AS (
   FROM provider_assignment_response
   GROUP BY referral_id
 ),
--- GLD-022: aggregate evidence before joining the referral so multiple offers,
--- assignments or IPAs never multiply fact_referral rows. Use Silver directly:
--- the corresponding source-grain Gold facts are built later in this notebook.
+-- Aggregate journey evidence before joining so offers/IPAs cannot multiply
+-- referral rows. Source-grain Gold facts are built later, so read Silver.
 journey_offer_evidence AS (
   SELECT rp.referral_id,
     MAX(CASE WHEN LOWER(TRIM(COALESCE(o.offer_status, ''))) IN
@@ -124,7 +123,7 @@ journey_ipa_evidence AS (
   SELECT referral_id,
     MAX(CASE WHEN NOT COALESCE(CAST(closed AS BOOLEAN), false)
       THEN 1 ELSE 0 END) AS has_active_ipa,
-    -- Both signatures must belong to the same active IPA, not separate IPAs.
+    -- Both signatures must belong to the same active IPA.
     MAX(CASE WHEN NOT COALESCE(CAST(closed AS BOOLEAN), false)
       AND COALESCE(CAST(signed_by_provider AS BOOLEAN), false)
       AND COALESCE(CAST(signed_by_local_authority AS BOOLEAN), false)
@@ -142,7 +141,7 @@ base AS (
     r.required_start_date AS required_placement_date,
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
-    r.referral_status AS referral_status, r.placement_type AS placement_type_required,
+    r.referral_status AS current_status, r.placement_type AS placement_type_required,
     COALESCE(p.journey_assignment_count, 0) AS journey_assignment_count,
     COALESCE(jo.has_accepted_offer, 0) AS has_accepted_offer,
     COALESCE(jo.has_pending_offer, 0) AS has_pending_offer,
@@ -193,20 +192,20 @@ base AS (
 ),
 journey_classified AS (
   SELECT base.*,
-    -- Preserve the existing Journey stage order DAX precedence, including
-    -- terminal overrides and review only after stronger current evidence.
+    -- This is a current overall stage, not the latest event or an offer status.
+    -- Preserve the existing journey precedence; do not modify current_status.
     CASE
-      WHEN LOWER(TRIM(COALESCE(referral_status, ''))) IN
+      WHEN LOWER(TRIM(COALESCE(current_status, ''))) IN
         ('closed', 'cancelled', 'canceled', 'withdrawn', 'completed') THEN 7
       WHEN has_signed_active_ipa = 1 THEN 6
       WHEN has_active_ipa = 1 THEN 5
       WHEN has_accepted_offer = 1 THEN 4
       WHEN has_pending_offer = 1 THEN 3
-      WHEN has_unknown_offer = 1 OR TRIM(COALESCE(referral_status, '')) = '' THEN 8
+      WHEN has_unknown_offer = 1 OR TRIM(COALESCE(current_status, '')) = '' THEN 8
       WHEN journey_assignment_count > 0 THEN 2
       WHEN referral_created_date IS NOT NULL THEN 1
       ELSE 8
-    END AS current_status_order
+    END AS journey_stage_order
   FROM base
 )
 SELECT {AS_OF_SQL} AS as_of_date,
@@ -215,8 +214,8 @@ SELECT {AS_OF_SQL} AS as_of_date,
   location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,
   offer_accepted_date, ipa_issued_date, referral_closed_date,
-  referral_closure_reason, last_activity_date, referral_status,
-  CASE current_status_order
+  referral_closure_reason, last_activity_date, current_status,
+  CASE journey_stage_order
     WHEN 1 THEN 'Referral created'
     WHEN 2 THEN 'Provider search'
     WHEN 3 THEN 'Offers received'
@@ -225,9 +224,8 @@ SELECT {AS_OF_SQL} AS as_of_date,
     WHEN 6 THEN 'IPA signed'
     WHEN 7 THEN 'Closed / cancelled / withdrawn'
     ELSE 'Needs review'
-  END AS current_status,
-  current_status_order,
-  'WMPP_REFERRAL_JOURNEY_V1' AS current_status_rule_version,
+  END AS journey_stage,
+  journey_stage_order,
   placement_type_required,
   CAST(NULL AS STRING) AS region,
   placement_urgency_band AS priority,
@@ -271,10 +269,10 @@ SELECT {AS_OF_SQL} AS as_of_date,
     WHEN ipa_issued_date IS NOT NULL AND required_placement_date IS NOT NULL
       AND TO_DATE(ipa_issued_date) <= required_placement_date THEN 'Placed by target'
     WHEN ipa_issued_date IS NOT NULL THEN 'Placed after target'
-    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(TRIM(COALESCE(referral_status, ''))) NOT IN
-      ('closed','cancelled','canceled','withdrawn','completed') THEN 'Open overdue'
-    WHEN LOWER(TRIM(COALESCE(referral_status, ''))) NOT IN
-      ('closed','cancelled','canceled','withdrawn','completed') THEN 'Open on track'
+    WHEN required_placement_date < {AS_OF_SQL} AND LOWER(COALESCE(current_status, '')) NOT IN
+      ('closed','cancelled','withdrawn','completed') THEN 'Open overdue'
+    WHEN LOWER(COALESCE(current_status, '')) NOT IN
+      ('closed','cancelled','withdrawn','completed') THEN 'Open on track'
     ELSE 'Closed without placement'
   END AS required_placement_date_outcome,
   planned_placement_start_date, estimated_weekly_cost,

@@ -1,126 +1,128 @@
-# Gold referral journey status
+# Gold referral status and journey stages
 
-Updated 4 October 2026. Implemented in the active `project X/04_gold_model.py`
-notebook source; deployment and execution in Fabric remain to be verified.
-The semantic model and report files have not been modified for this change.
+Updated 6 October 2026. Keep the original referral source status and the overall
+journey stage as separate fields. Gold calculates the journey once per referral;
+Power BI imports the result instead of independently classifying the referral
+in DAX. This supersedes both the 4 October status replacement and the earlier
+6 October full journey rollback.
 
-## Fields on gold.fact_referral
+## Field definitions
 
-| Field | Meaning |
+| Object and field | Meaning |
 | --- | --- |
-| `referral_status` | Original `silver.referral.referral_status`, unchanged, including casing and NULLs. Replaces the former source-status meaning of `current_status`. |
-| `current_status` | Current referral journey label, materialised in Gold rather than calculated in DAX. |
-| `current_status_order` | Integer 1–8, for stage selectors and sorting. |
-| `current_status_rule_version` | `WMPP_REFERRAL_JOURNEY_V1`, identifying the classification rules. |
+| `gold.fact_referral.current_status` | Original `silver.referral.referral_status`, preserving casing, whitespace and NULLs. |
+| `gold.fact_referral.journey_stage` | Derived overall journey label at the Gold as-of date. |
+| `gold.fact_referral.journey_stage_order` | Integer 1–8 for sorting and journey filters, not an additive measure. |
+| `gold.fact_referral_snapshot` | Copies all three fields for the active reporting month. |
+| `gold.fact_referral_global_summary.current_status` | Source-status grouping, unchanged. |
 
-The grain remains one row per referral. Offer and IPA evidence is aggregated at
-referral grain before joining, so a referral with several offers, assignments
-or IPAs is not counted repeatedly.
+There is no additional Gold `referral_status`, `current_status_order` or
+`current_status_rule_version` output. Silver's source column is unchanged.
+Offer statuses and IPA signatures remain in their own detailed facts; the
+lifecycle-event table remains a timestamp-derived activity history, not a
+source-system audit log.
 
-## Stage values and precedence
+For example, a source status of `UNDER_OFFER` can coexist with journey stage
+`IPA signed`. Neither field replaces the other. One referral may have several
+offers with different statuses, but it has one overall journey stage.
 
-Evaluate rules from the highest precedence down, not in numeric order:
+## Journey rules
 
-| Sort order | current_status | Evidence |
-| ---: | --- | --- |
-| 7 | Closed / cancelled / withdrawn | Source status is closed, cancelled, canceled, withdrawn or completed. Overrides offer and IPA evidence. The label preserves the existing DAX grouping, including completed. |
-| 6 | IPA signed | At least one active IPA has both provider and local-authority signatures on that same IPA. |
-| 5 | IPA created | At least one active IPA exists, without qualifying for stage 6. |
-| 4 | Offer accepted | At least one accepted, approved, selected or offer_successful offer. |
-| 3 | Offers received | At least one pending, submitted, offered, offer_made, offer_pending, under_review, under review, awaiting, awaiting_decision or awaiting decision offer. |
-| 8 | Needs review | No stronger evidence above, and an unrecognised/missing offer status or a blank/missing referral source status. |
-| 2 | Provider search | At least one referral-provider assignment, without qualifying for the rules above. An assignment with a missing provider key still evidences search. |
-| 1 | Referral created | Creation date exists, without qualifying for the rules above. |
-| 8 | Needs review | Fallback if none of the conditions applies. |
+| Order | Label | Evidence |
+| --- | --- | --- |
+| 1 | Referral created | Creation date exists, with no higher-priority evidence. |
+| 2 | Provider search | Provider assignment exists; drafts and terminal offers alone do not advance this stage. |
+| 3 | Offers received | At least one pending or submitted offer. |
+| 4 | Offer accepted | At least one accepted, approved, selected or successful offer. |
+| 5 | IPA created | At least one active IPA, without both signatures on the same IPA. |
+| 6 | IPA signed | Both provider and local-authority signatures on the same active IPA. |
+| 7 | Closed / cancelled / withdrawn | Terminal source status: closed, cancelled, canceled, withdrawn or completed. This overrides milestones. |
+| 8 | Needs review | Missing source status or an unrecognised offer status, without stronger milestone evidence. |
 
-Status comparisons ignore casing and surrounding spaces; the raw
-`referral_status` does not change. This intentionally matches the existing
-referral Journey stage/order calculation, not the provider journey.
+Evaluation precedence is 7, 6, 5, 4, 3, 8, 2, 1. Journey comparisons normalise
+case and whitespace without changing the published source value. A closed IPA
+does not count as an active agreement. Signatures on separate IPAs cannot be
+combined. An IPA signed stage is not proof that admission occurred.
 
-An IPA with NULL `closed` is treated as active, matching the existing DAX.
-NULL signature flags are not signatures. A closed signed IPA does not imply a
-currently signed stage, and signatures on two different IPAs cannot be combined.
-Draft or declined/rejected/withdrawn/closed/cancelled/canceled/offer_unsuccessful/
-unsuccessful offers alone do not establish stage 3. Accepted or pending evidence
-takes precedence over an unrelated unknown offer, as in the existing DAX.
+Offer and IPA evidence is aggregated to referral grain before joining, so
+multiple offers, assignments or IPAs do not multiply referral rows. Referrals
+without offers remain in the population. Future-dated creations are excluded
+using the notebook's as-of date. Historical runs must use the corresponding
+Silver export; these checks do not reconstruct past status/signature changes
+from today's source records.
 
-These are current evidenced stages, not cumulative milestone counts or an audit
-of every step ever reached. Assignment alone does not prove browsing, and IPA
-creation/signature does not prove admission to a placement.
+The existing source-status required-placement-date outcome rules, provider
+response metrics, category links, coordinates, detailed facts and registry
+extracts are unchanged.
 
-## Historical snapshots
+## Saved WIP model
 
-`gold.fact_referral_snapshot.current_status` and
-`gold.fact_referral_global_summary.current_status` retain their existing **source
-status** meaning. This protects retained-month KPI counts and their existing
-OPEN/UNDER_OFFER/CLOSED filters from silently changing meaning.
+The updated project is `project X/reports/WIP/SM WMPP v16 updated WIP`.
 
-New snapshot writes additionally retain:
+| Semantic table | Existing field name | Gold source column |
+| --- | --- | --- |
+| `fact_referral` | `Journey stage` | `journey_stage` |
+| `fact_referral` | `Journey stage order` | `journey_stage_order` |
+| `fact_referral_snapshot` | `Journey stage` | `journey_stage` |
+| `fact_referral_snapshot` | `Journey stage order` | `journey_stage_order` |
 
-- `referral_status`: the raw source value.
-- `journey_status`: the current fact's `current_status`.
-- `journey_status_order`: the current fact's `current_status_order`.
-- `journey_status_rule_version`: the current fact's rule version.
+The current-referral fields retain their names, lineage identifiers and sort
+relationship. Existing journey measures, click-to-filter bookmarks and detail
+navigation continue to reference those same fields. Source-status filters and
+icons still use `current_status`. No report page, visual layout, relationship,
+role, icon asset or report ZIP is changed by this migration.
 
-Only the active calendar month is replaced. Existing older months receive NULLs
-for these new columns through additive Delta schema merging; their existing
-source-status `current_status` stays intact. They are not backfilled with live
-offer/IPA evidence. Historical journey reporting requires replaying the relevant
-archive month through Silver and this Gold notebook. Do not treat unavailable
-historic journey values as zero or "Referral created".
+The two previous semantic files are backed up under
+`reports/WIP/_review/source-journey-split-20261006-085714`.
 
-`AS_OF_DATE` excludes future-created referrals, assignments, offers and IPAs.
-It does not reconstruct older offer/signature states from today's Silver data:
-archive replay must load that month's Silver export first. The existing snapshot
-population/KPI rule version remains `WMPP_SNAPSHOT_V2`; the journey calculation
-has its own independent version column.
+## Deployment sequence
 
-## Semantic model migration
+1. Preserve any unsaved Power BI work separately. Do not save an older open
+   session over the edited project definitions.
+2. Import and run the revised `04_gold_model.py` in the development Fabric
+   workspace attached to `LH_BCT_WMPP`, with current Silver business-rule
+   outputs available. Do this before refreshing the updated model.
+3. Verify one row per referral and all three columns through the SQL endpoint.
+   Check a referral without offers, a pending offer, an accepted offer, an active
+   signed IPA, a closed referral, and missing/unrecognised evidence. Compare
+   `current_status` directly with the latest Silver source value.
+4. Once the endpoint exposes the new columns, open/reload the saved WIP and
+   refresh the model. Verify the Referral Explorer stage counts reconcile to
+   the matching referral population, stage clicks filter the directory, and
+   Referral Detail shows the selected referral's overall stage.
+5. Check source-status counts and snapshot trends separately. Models manually
+   migrated to the earlier GLD-022 raw `referral_status` alias must rebind to
+   `current_status`; their journey fields should import the new stage columns.
 
-Prepare these changes together before refreshing the model against the changed
-Gold table. The existing import reads the entire table, so a refresh will change
-the meaning of its current `current_status` binding even without a new query.
+Local file changes do not deploy a Lakehouse, refresh cached data or publish a
+report. Fabric/Delta execution and Power BI rendering remain deployment checks.
 
-1. Import `referral_status`, `current_status_order` and
-   `current_status_rule_version` from `gold.fact_referral`. Use `current_status`
-   for journey labels and sort it by `current_status_order`.
-2. Replace the existing DAX-calculated `Journey stage` and `Journey stage order`
-   with source-backed columns mapped to `current_status` and
-   `current_status_order`. Keeping the existing display names and lineage
-   preserves report/selector references. Do not leave the old derivation running
-   against the newly defined `current_status`.
-3. Change **source-code** comparisons on `fact_referral[current_status]` to
-   `fact_referral[referral_status]`. In the inspected WIP these occur in
-   `_Measures` (under-offer, emergency/planned, cost and closure measures) and
-   `_Explorer KPI Measures` (terminal-referral count). Journey-based displays and
-   selectors should instead use the new stage fields. Do not blindly replace all
-   status references, and leave snapshot source-status comparisons unchanged.
-4. Point any source-status relationship/filter to `referral_status`.
-   `gold.dim_referral_status` still contains source statuses, not journey labels;
-   it must not be joined to the new journey `current_status`. Use a separate stage
-   dimension if a journey relationship is needed.
-5. Update table icon rules and labels to recognise the new journey values.
-   Existing rules for UNDER_OFFER/OPEN/CLOSED do not recognise the new labels.
-   This Gold change does not itself repair the native Power BI icon formatting.
-6. For monthly journey visuals, import the separate snapshot `journey_status`
-   fields, with explicit handling for older unavailable months.
+## Retained snapshots
 
-Deploy the revised `04_gold_model.py` to Fabric and run it after the current
-Silver business rules. Existing source requirements already cover all fields
-needed; no new external lookup, package or source schema is required.
+Only the active month is replaced. New writes include source status and journey
+stage separately, while the existing snapshot rule stays `WMPP_SNAPSHOT_V2`.
+Older months are not relabelled from live evidence. Additive schema merging
+leaves their new stage fields NULL until the corresponding historical exports
+are replayed. NULL means unavailable history, not stage 1 or zero referrals.
 
-Before accepting the model migration, compare total referrals, open/under-offer
-source counts, all eight journey counts, signed-IPA examples, terminal referrals
-with offers/IPAs, explorer stage filtering and referral drillthrough. Check that
-the stage counts reconcile to the same referral cohort and that historical source
-KPI trends remain unchanged.
+If the earlier GLD-022 version ran in Fabric, extra physical snapshot columns
+may remain. The current projection does not use them; do not drop historic
+columns or copy old classifications into the new fields automatically.
 
 ## Verification
 
-The actual notebook referral SQL is executed against synthetic fixtures in
-`tests/test_gold_referral_journey_status.py`, with SQLite adapting only Spark
-date/timestamp syntax. Its 54 checks cover all stages, status aliases and raw
-preservation, precedence, missing values, same-IPA signatures, row grain,
-creation-date cutoffs and snapshot bindings. The full local suite passes
-203 tests and 158 subtests. These are data-layer checks, not proof of Fabric/Delta
-execution or Power BI rendering; those still require deployment validation.
+The portable SQL checks execute the actual notebook query with synthetic data.
+They cover raw status preservation, all eight journey stages, alias/precedence
+rules, same-IPA signatures, closed-IPAs, referral grain, as-of cutoffs and the
+monthly snapshot projection. SQLite adapts Spark date/timestamp syntax; it does
+not execute Fabric or the Power BI engine.
+
+Local validation passed 85 focused source-status/journey SQL checks and the full
+suite of 279 tests plus 158 subtests. Notebook syntax/schema and test lint checks
+passed. Model bindings and retained journey identifiers were checked; hashes
+confirmed all 2,536 report-definition files, 74 unrelated model files and the
+user's modified report ZIP were unchanged.
+
+Semantic definitions are Git-ignored in this repository. Retain the edited WIP
+folder and its backup with the delivery; a commit of the notebook alone does
+not carry these semantic changes.

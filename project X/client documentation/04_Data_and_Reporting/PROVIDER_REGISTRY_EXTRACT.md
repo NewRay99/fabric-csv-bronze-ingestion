@@ -76,9 +76,11 @@ The edited project is:
    count with the distinct provider IDs having Fostering framework memberships.
 4. Open/reload the updated saved WIP and refresh the registry import. If Desktop
    was already open, preserve any unsaved work separately before reloading; do
-   not save a stale session over the revised definitions. The earlier
-   `fact_referral.current_status` migration is separate and must be checked
-   before a full-model refresh against changed Gold facts.
+   not save a stale session over the revised definitions. The earlier Gold
+   journey-status replacement is superseded by separate source-status and
+   journey-stage fields, agreed on 6 October 2026. Follow the
+   [Gold status and journey deployment sequence](GOLD_REFERRAL_JOURNEY_STATUS.md)
+   before a full-model refresh. The provider registry implementation is unchanged.
 5. Inspect **Provider Registry Extract** in Desktop edit mode. Its three filters
    are Provider Name, Provider Status and Town/City. Scroll the table horizontally
    to inspect the remaining contacts. Filters on this isolated page control its

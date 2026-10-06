@@ -24,6 +24,10 @@ Fabric replay remains a separate deployment verification unless stated.
 
 ## GLD-022 — Materialise referral journey status in Gold
 
+- **Current status (2026-10-06):** revised at the user's request to separate
+  source status from Gold journey stage. The earlier delivery and rollback
+  below are historical; see the revised decision following them.
+
 - **Request (2026-10-04):** move the referral journey stages from DAX into
   `gold.fact_referral.current_status` and preserve the source status under its
   actual name, `referral_status`.
@@ -43,6 +47,51 @@ Fabric replay remains a separate deployment verification unless stated.
   remain deployment checks.
 - **Status:** implemented in repository source, not deployed to Fabric.
   See [field definitions and migration steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+
+### Reverted then superseded (2026-10-06)
+
+- **Request:** restore the field contract from before GLD-022.
+- **Change:** `gold.fact_referral.current_status` again copies the source
+  `silver.referral.referral_status` without relabeling. Removed the separate
+  Gold `referral_status`, stage-order/rule-version fields, journey classifier
+  and its extra evidence joins. Snapshot projection again uses `current_status`
+  directly, without new journey fields. Pre-change outcome rules are restored.
+- **Preserved:** existing DAX journey calculations, source Silver data, historic
+  snapshot rows, map coordinates, provider extracts, semantic/report files and
+  the user's modified report ZIP.
+- **Verification:** the SQL fixture matches the restored notebook; replacement
+  data-layer checks cover the raw source-status contract. Fabric deployment
+  and model refresh remain separate acceptance checks.
+- **Status:** reverted in repository source, not executed against a deployed
+  Lakehouse. Any extra physical columns in an already deployed snapshot table
+  are not automatically dropped. See [rollback and deployment instructions](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+
+### Revised decision (2026-10-06)
+
+- **Request:** keep the source status and overall journey stage separate,
+  with the classification in Gold rather than independently in DAX.
+- **Change:** `fact_referral.current_status` preserves the original Silver
+  value. Separate `journey_stage` and `journey_stage_order` fields summarise
+  offer/IPA evidence once per referral, preserving existing precedence and
+  same-active-IPA signature rules. No extra Gold `referral_status` alias.
+- **Snapshots:** new writes copy all three fields directly. Old months are not
+  relabelled using live evidence; their new journey columns remain NULL unless
+  the appropriate archive exports are replayed. Source-status summary/outcome
+  semantics and the existing monthly replacement policy are unchanged.
+- **Model:** the two saved WIP referral tables import Gold stages under the
+  existing `Journey stage` / `Journey stage order` names. Current-field lineage
+  identifiers, sort order and all report layouts/bookmarks are preserved.
+  Backup: `reports/WIP/_review/source-journey-split-20261006-085714`.
+- **Verification:** raw status and journey SQL checks execute the actual
+  notebook query against synthetic data; the simulation fixture is aligned.
+  All **279 tests and 158 subtests passed**, including 85 focused SQL checks.
+  Notebook validation and Ruff passed. Hashes confirm no report-definition,
+  unrelated semantic-file or ZIP changes; existing journey identifiers and
+  import bindings are preserved. Semantic definitions are Git-ignored and
+  must be retained with the saved WIP project, not only the notebook commit.
+- **Status:** implemented locally, not deployed to Fabric. Deploy Gold before
+  refreshing the updated saved WIP. The user's modified report ZIP is unchanged.
+  See [current fields and deployment steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
 
 ## CFG-010 — Monitoring reporting views ran during configuration setup
 

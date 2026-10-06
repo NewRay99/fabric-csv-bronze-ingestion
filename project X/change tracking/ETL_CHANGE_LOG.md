@@ -4,6 +4,52 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-06 — Separate referral source status and Gold journey stage
+
+- At the user's request, retain `fact_referral.current_status` as the original
+  Silver status and add separate `journey_stage` and `journey_stage_order` fields.
+  Aggregate offer/IPA evidence at referral grain with the existing journey
+  precedence; keep offer/IPA details in their own facts.
+- Copy the three fields into new monthly snapshots without relabelling older
+  months using current evidence. Source-status outcome rules and summary
+  semantics are unchanged.
+- Updated only the two referral semantic tables in the saved WIP to import
+  Gold stages under the existing journey field names and lineage identifiers.
+  Backups: `reports/WIP/_review/source-journey-split-20261006-085714`.
+  No report visual, page, bookmark, relationship, security role or ZIP changed.
+- Restored the journey SQL checks against the separated fields, retained raw
+  status checks and updated the SQL fixture and deployment instructions.
+- Verification: **279 tests and 158 subtests passed**, including 85 focused
+  source-status/journey SQL checks. Gold notebook validation, Ruff and diff
+  checks passed. Import bindings and current journey lineage were checked;
+  hashes confirm all 2,536 report-definition files, 74 unrelated model files
+  and the user's modified ZIP are unchanged.
+  The semantic files are Git-ignored, so retain the saved project and backup
+  alongside the notebook changes.
+- Deployment: run the revised Gold notebook before reopening/refreshing the updated WIP.
+  Fabric deployment, refresh and native interaction checks remain outstanding.
+
+Issue: [GLD-022 revised decision](ETL_ISSUE_LOG.md#gld-022--materialise-referral-journey-status-in-gold).
+See [field definitions and deployment steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+
+## 2026-10-06 — Revert Gold referral journey status
+
+Superseded by the separated fields above after the user reconsidered; retained
+as local change history. No Fabric deployment occurred between these decisions.
+
+- Reverted GLD-022 at the user's request. `fact_referral.current_status` again
+  contains the original Silver referral status. Removed the added Gold
+  `referral_status`, stage order/rule version, classifier and evidence joins.
+- Restored the original snapshot projection and required-placement-date outcome
+  rules. No historic snapshot rows, DAX journey calculations, map coordinates,
+  provider extracts, report/semantic files or report ZIP were changed.
+- Replaced obsolete Gold journey-classification tests with source-status
+  preservation checks and updated the SQL simulation fixture and deployment
+  guidance. Fabric execution and semantic refresh remain outstanding.
+
+Issue: [GLD-022 rollback](ETL_ISSUE_LOG.md#gld-022--materialise-referral-journey-status-in-gold).
+See [rollback instructions](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+
 ## 2026-10-05 — Provider registry extract
 
 - Consolidated GLD-023's identical Fostering queries into
@@ -24,6 +70,8 @@ each batch; confirm Fabric behaviour separately in a development Lakehouse.
 Issue: [GLD-023](ETL_ISSUE_LOG.md#gld-023---generate-extracts-from-the-report).
 
 ## 2026-10-04 — Gold referral journey status
+
+Superseded by the 6 October separated-field decision above; retained as delivery history.
 
 - `04_gold_model.py` now publishes the existing eight referral journey stages
   as `fact_referral.current_status`, with `current_status_order` and an explicit

@@ -12,6 +12,7 @@ The referral state recorded by the source system, distinct from the stage eviden
 
 **Referral journey stage**:
 The referral's furthest currently evidenced stage, from creation through provider search, offers, acceptance and an active signed agreement. A terminal source status takes precedence; insufficient or unrecognised evidence can require review.
+_Avoid_: Source status, latest event, offer status
 
 **Provider assignment**:
 The link between a referral and a provider approached about that referral. Assignment does not itself mean that the provider made an offer.

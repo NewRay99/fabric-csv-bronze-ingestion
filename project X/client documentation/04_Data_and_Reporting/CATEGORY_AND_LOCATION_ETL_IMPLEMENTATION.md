@@ -38,11 +38,12 @@ cannot reconstruct the missing coordinates.
 
 If Silver coordinates are already populated, deploy the revised Gold offer SQL
 cell, with the notebook's parameter and helper initialization and source checks.
-For a map-only deployment, do not run the entire Gold notebook: the earlier
-referral journey status change requires the coordinated
-[semantic model migration](GOLD_REFERRAL_JOURNEY_STATUS.md). This map addition does
-not perform that migration. If coordinates are not yet populated, first follow
-the offline lookup hydration steps below and rebuild the Silver location tables.
+The current notebook keeps source status and adds separate Gold journey-stage
+fields, as agreed on [6 October 2026](GOLD_REFERRAL_JOURNEY_STATUS.md). Deploy
+the updated Gold schema before refreshing the revised WIP semantic model.
+The coordinate/map additions remain unchanged. If coordinates
+are not yet populated, first follow the offline lookup hydration steps below
+and rebuild the Silver location tables.
 
 After the source refresh, reopen the saved WIP and refresh the model. Select a
 referral with several geolocated offers, then verify two endpoints per offer and

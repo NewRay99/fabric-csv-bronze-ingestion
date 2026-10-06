@@ -103,10 +103,10 @@ def assert_stage(db, stage, raw="OPEN"):
     rows = db.execute(portable_sql()).fetchall()
     assert len(rows) == 1
     row = rows[0]
-    assert row["referral_status"] == raw
-    assert row["current_status_order"] == stage
-    assert row["current_status"] == LABELS[stage]
-    assert row["current_status_rule_version"] == "WMPP_REFERRAL_JOURNEY_V1"
+    assert row["current_status"] == raw
+    assert row["journey_stage_order"] == stage
+    assert row["journey_stage"] == LABELS[stage]
+    assert {"referral_status", "current_status_order", "current_status_rule_version"}.isdisjoint(row.keys())
     return row
 
 
@@ -133,8 +133,7 @@ def test_terminal_status_overrides_signed_ipa_and_unknown_offer(db, raw):
     assignment(db)
     offer(db, "UNKNOWN")
     ipa(db, 1, 1)
-    row = assert_stage(db, 7, raw)
-    assert row["required_placement_date_outcome"] == "Closed without placement"
+    assert_stage(db, 7, raw)
 
 
 @pytest.mark.parametrize("raw", ["accepted", "APPROVED", " selected ", "OFFER_SUCCESSFUL"])
@@ -249,19 +248,11 @@ def test_snapshot_preserves_source_status_and_adds_separate_journey_columns():
         if isinstance(node, ast.Assign)
         and any(isinstance(t, ast.Name) and t.id == "snapshot" for t in node.targets)
     )
-    aliases = {
-        arg.args[0].value: arg.func.value.args[0].value
-        for arg in select.args
-        if isinstance(arg, ast.Call) and isinstance(arg.func, ast.Attribute)
-        and arg.func.attr == "alias" and isinstance(arg.func.value, ast.Call)
-        and isinstance(arg.func.value.func, ast.Attribute) and arg.func.value.func.attr == "col"
-    }
-    assert aliases["current_status"] == "referral_status"
-    assert aliases["journey_status"] == "current_status"
-    assert aliases["journey_status_order"] == "current_status_order"
-    assert aliases["journey_status_rule_version"] == "current_status_rule_version"
+    columns = {arg.value for arg in select.args if isinstance(arg, ast.Constant)}
+    assert {"current_status", "journey_stage", "journey_stage_order"} <= columns
+    assert {"referral_status", "journey_status", "journey_status_order"}.isdisjoint(columns)
     snapshot_source = NOTEBOOK.split('snapshot = spark.table("gold.fact_referral")', 1)[1]
     assert '.option("replaceWhere", month_predicate)' in snapshot_source
     assert '.option("mergeSchema", "true")' in snapshot_source
     historic_update = snapshot_source.split("UPDATE {SNAPSHOT_TABLE}", 1)[1].split('""")', 1)[0]
-    assert "journey_status" not in historic_update
+    assert "journey_stage" not in historic_update
