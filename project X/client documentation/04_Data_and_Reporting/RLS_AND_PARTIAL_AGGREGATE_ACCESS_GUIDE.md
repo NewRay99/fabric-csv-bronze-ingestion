@@ -38,6 +38,22 @@ bodies were added. Provider totals repeat across home rows and must not be
 summed down the extract. The roles and export restrictions were preserved.
 See [metric definitions and safe totals](PROVIDER_REGISTRY_EXTRACT.md#metric-definitions-and-safe-totals).
 
+### Complete directory population — 7 October 2026
+
+The registry now contains exactly the unfiltered `gold.dim_provider` LEFT JOIN
+`gold.dim_provider_home` population, not only providers with Fostering framework
+membership. Every provider status and placement type is included, as are
+providers without homes, memberships, offers, messages or contact evidence.
+Frameworks and performance metrics are optional enrichments, not eligibility
+rules. The pre-write check compares both the row count and provider/home key
+multiset against that dimension baseline.
+
+This expands the directory visible to the approved registry audience. Review
+that complete contact/aggregate population before publication. It does not
+grant referral-detail access or change group assignments, RLS predicates,
+export restrictions or report layout. The count guarantee applies to the
+unfiltered Gold table; explicit report filters and existing security still apply.
+
 ## Purpose
 
 This guide captures the partial-RLS design discussed in the ChatGPT Work

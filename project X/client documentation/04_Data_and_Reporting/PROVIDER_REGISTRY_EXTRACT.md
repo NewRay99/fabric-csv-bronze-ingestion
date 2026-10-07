@@ -375,3 +375,32 @@ An expansion preview is idempotent. These checks use synthetic data and saved
 definitions; Fabric SQL/Delta execution, native rendering and service exports
 still require the deployment checks above. No live data refresh or publication
 was performed.
+
+The complete-directory correction on **7 October 2026** passes **313 tests and
+158 subtests**, including 51 focused registry checks and both notebook/config
+validators. The actual generated SQL retains every row/key in a synthetic
+1,002-row dimension left join; the old filter returned only 3 rows. These are
+local checks, not observed production counts.
+
+The saved WIP now has 78 registry model columns and all 72 raw export fields.
+The expansion preview is idempotent. The source connection, existing lineage,
+visual positions/styles and security/export files are preserved; hashes confirm
+all 2,732 unlisted project files unchanged, excluding `.pbi`. Recovery backup:
+`reports/WIP/_review/registry-complete-baseline-20261007-a681f71c`.
+
+After deploying the updated notebooks, compare unfiltered SQL endpoint counts:
+
+```sql
+SELECT COUNT(*) AS expected_registry_rows
+FROM gold.dim_provider a
+LEFT OUTER JOIN gold.dim_provider_home b ON a.provider_id = b.provider_id;
+
+SELECT COUNT(*) AS actual_registry_rows
+FROM gold.rpt_provider_registry;
+```
+
+Both counts must be identical. The notebook additionally validates the complete
+provider/home key multiset, because equal counts alone could hide different rows.
+Then refresh the report's registry import; report filters and existing security
+can still legitimately reduce what a viewer sees. No live Fabric run or
+publication was performed as part of this correction.

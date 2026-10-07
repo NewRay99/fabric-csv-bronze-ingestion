@@ -4,7 +4,46 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-07 — Complete provider/home registry baseline
+
+- Corrected GLD-023's retained Fostering eligibility filter. The authoritative
+  population is exactly `gold.dim_provider LEFT JOIN gold.dim_provider_home`
+  on provider ID, with no membership, provider-status or activity requirement.
+  This supersedes the Fostering-only scope recorded on 6 October below.
+- Basic provider/home fields come from the Gold dimensions. Latest Silver
+  contacts, all framework memberships and independently aggregated facts are
+  LEFT enrichments; missing enrichment cannot remove a directory row. Unknown
+  framework lookups retain their codes and providers without membership remain.
+- A pre-write count and bidirectional key-multiset comparison catches missing,
+  added, multiplied and same-count substituted provider/home rows. Invalid
+  duplicate dimension keys stop for source review; they are not silently
+  deduplicated. The existing one-row-per-pair check does not mean one provider
+  row: a provider with three homes has three registry rows.
+- Retained provider/home offers, drafts, accepted/rejected offers, IPA counts,
+  signature flags, observed response minutes, message counts, straight-line
+  distances and estimated weekly/lifetime costs. Provider-wide values repeat
+  across homes; missing-cost and measurement denominators remain explicit.
+- Setup now records ten source dependencies, including both Gold dimensions.
+  Updated the scoped report expansion and deployment/security guidance.
+- Restored the saved WIP's missing home/metric columns: 78 model columns and
+  72 direct raw export fields. Changed only that import, its table projections
+  and known scope labels. Preserved the source connection, existing lineage,
+  all positions/styles, roles, export settings and other project files. Backup:
+  `reports/WIP/_review/registry-complete-baseline-20261007-a681f71c`.
+- Verification: **313 tests and 158 subtests**, including 51 focused registry
+  checks; Gold-dimensions/setup validators and idempotent WIP preview pass.
+  The regression reproduced 3 rows from a synthetic 1,002-row dimension
+  baseline before the fix; the corrected SQL returns all 1,002 matching keys.
+  Hashes confirm all 2,732 unlisted WIP files unchanged, excluding `.pbi`.
+- Local checks do not establish actual Lakehouse counts or native Fabric SQL,
+  Power BI rendering, service security or Excel exports. No live execution,
+  publication, permission change, reset or historical replay was performed.
+
+See [current registry baseline and deployment](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+
 ## 2026-10-06 — Provider registry home grain and raw metric expansion
+
+The Fostering-only scope in this entry is superseded by the 7 October correction above.
 
 - Supersedes GLD-023's earlier provider-only grain: current Fostering provider
   LEFT current provider_home, unique by provider/home ID. Includes homes without

@@ -2382,6 +2382,9 @@ Superseded by the group-based follow-up below; this records the earlier decision
 
 ### Provider/home and metric expansion (2026-10-06)
 
+The Fostering-only eligibility below is superseded by the complete-directory
+correction dated 7 October 2026; retained here as delivery history.
+
 - User requested provider LEFT provider_home, not one provider row. Current
   Fostering eligibility remains unchanged; one row per provider/home ID,
   including homes without offers and one blank-home row for a no-home provider.
@@ -2415,3 +2418,40 @@ Superseded by the group-based follow-up below; this records the earlier decision
   review that aggregate audience/small-cell disclosure before publication.
 - No live database execution, publication, permissions or exported file changed.
   Follow [updated definitions and deployment](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+
+### Complete directory baseline correction (2026-10-07)
+
+- **Cause:** the registry retained an INNER JOIN to Fostering framework
+  membership, which removed basic providers despite the provider/home LEFT
+  JOIN. The earlier grain change did not correct that eligibility restriction.
+- **Resolution:** the baseline is now exactly `gold.dim_provider a LEFT OUTER
+  JOIN gold.dim_provider_home b ON a.provider_id = b.provider_id`. No status,
+  membership, placement-type or activity filter is applied. A baseline of
+  1,002 rows must produce exactly 1,002 registry rows, with the same keys.
+  Providers without homes have a blank-home row; each existing home gets a row.
+- Basic directory attributes come from the two Gold dimensions; latest contacts,
+  all descriptive framework memberships and provider/home metric aggregates are
+  LEFT joined. Missing contacts, unknown frameworks and zero activity do not
+  remove providers. Provider/home IDs are not deduplicated to hide source faults.
+- Before overwrite, counts and the provider/home key multiset must match the
+  dimension baseline in both directions. Missing, extra, multiplied or
+  substituted pairs stop the registry write. Invalid duplicate pairs stop for
+  source-quality review rather than writing a smaller registry.
+- Retained the requested signatures, IPA/offer/draft/message/rejection counts,
+  response minutes, city-to-postcode distance and estimated active weekly and
+  lifetime-to-date costs. Provider-wide metrics repeat across homes and are
+  not additive down the file. Existing estimate/denominator warnings remain.
+- Setup lineage now has ten dependencies. The saved WIP import and raw table
+  regain the missing fields (78 model columns, 72 table columns); known scope
+  labels say all providers/homes. Connection, old lineage, coordinates/styles,
+  other pages, roles and export settings remain unchanged. Backup:
+  `reports/WIP/_review/registry-complete-baseline-20261007-a681f71c`.
+- **Validation:** 313 tests and 158 subtests, including 51 registry checks;
+  Gold-dimensions/setup validators and idempotent report preview pass. The
+  synthetic regression was 3 rows before the fix versus its 1,002-row dimension
+  baseline; the corrected generated SQL retains all 1,002 keys. All 2,732
+  unlisted WIP files are hash-identical, excluding `.pbi` cache.
+- Deploy updated setup and `05_gold_dimensions`, then refresh the registry
+  import. Native Fabric execution, actual counts, rendering and approved Viewer
+  exports remain acceptance checks. No live run/publication/permission change.
+  See [current deployment and acceptance](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
