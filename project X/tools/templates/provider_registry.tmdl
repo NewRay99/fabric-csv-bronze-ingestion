@@ -144,6 +144,270 @@ table rpt_provider_registry
 		summarizeBy: none
 		sourceColumn: gold_modelled_at
 
+	column 'Home ID'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: provider_home_id
+
+	column 'Home Status'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_status
+
+	column 'Home Address Line 1'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_address_line_1
+
+	column 'Home Address Line 2'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_address_line_2
+
+	column 'Home Town/City'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_town_city
+
+	column 'Home County'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_county
+
+	column 'Home Postcode'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_postcode
+
+	column 'Home Country'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_country
+
+	column 'Home Phone'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_contact_number
+
+	column 'Home Email'
+		dataType: string
+		summarizeBy: none
+		sourceColumn: home_email_address
+
+	column 'Home Registered Beds'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_registered_beds
+
+	column 'Home Spot'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: home_is_spot
+
+	column 'Home Source Export Date'
+		dataType: dateTime
+		formatString: dd MMM yyyy HH:mm
+		summarizeBy: none
+		sourceColumn: home_source_export_date
+
+	column 'Metrics As Of Date'
+		dataType: dateTime
+		formatString: dd MMM yyyy
+		summarizeBy: none
+		sourceColumn: metrics_as_of_date
+
+	column 'Provider Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_offer_count
+
+	column 'Provider Draft Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_draft_offer_count
+
+	column 'Provider Accepted Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_accepted_offer_count
+
+	column 'Provider Rejected Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_rejected_offer_count
+
+	column 'Provider Offers With Distance'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_offers_with_distance_count
+
+	column 'Provider Average Offer Distance km'
+		dataType: double
+		formatString: 0.0
+		summarizeBy: none
+		sourceColumn: provider_average_offer_distance_km
+
+	column 'Provider IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_ipa_count
+
+	column 'Provider Active IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_active_ipa_count
+
+	column 'Provider Provider Signed IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_provider_signed_ipa_count
+
+	column 'Provider Completed IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_completed_ipa_count
+
+	column 'Provider Signature Flag'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: provider_has_provider_signed_ipa
+
+	column 'Provider Both Signed Flag'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: provider_has_completed_ipa
+
+	column 'Provider Estimated Active Weekly Cost'
+		dataType: decimal
+		formatString: £#,##0.00
+		summarizeBy: none
+		sourceColumn: provider_estimated_active_weekly_cost
+
+	column 'Provider Active IPAs Missing Weekly Cost'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_active_ipas_missing_weekly_cost_count
+
+	column 'Provider Estimated Lifetime Cost To Date'
+		dataType: decimal
+		formatString: £#,##0.00
+		summarizeBy: none
+		sourceColumn: provider_estimated_lifetime_cost_to_date
+
+	column 'Provider IPAs Missing Lifetime Cost'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_ipas_missing_lifetime_cost_count
+
+	column 'Home Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_offer_count
+
+	column 'Home Draft Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_draft_offer_count
+
+	column 'Home Accepted Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_accepted_offer_count
+
+	column 'Home Rejected Offers'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_rejected_offer_count
+
+	column 'Home Offers With Distance'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_offers_with_distance_count
+
+	column 'Home Average Offer Distance km'
+		dataType: double
+		formatString: 0.0
+		summarizeBy: none
+		sourceColumn: home_average_offer_distance_km
+
+	column 'Home IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_ipa_count
+
+	column 'Home Active IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_active_ipa_count
+
+	column 'Home Provider Signed IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_provider_signed_ipa_count
+
+	column 'Home Completed IPAs'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_completed_ipa_count
+
+	column 'Home Signature Flag'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: home_has_provider_signed_ipa
+
+	column 'Home Both Signed Flag'
+		dataType: boolean
+		summarizeBy: none
+		sourceColumn: home_has_completed_ipa
+
+	column 'Home Estimated Active Weekly Cost'
+		dataType: decimal
+		formatString: £#,##0.00
+		summarizeBy: none
+		sourceColumn: home_estimated_active_weekly_cost
+
+	column 'Home Active IPAs Missing Weekly Cost'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_active_ipas_missing_weekly_cost_count
+
+	column 'Home Estimated Lifetime Cost To Date'
+		dataType: decimal
+		formatString: £#,##0.00
+		summarizeBy: none
+		sourceColumn: home_estimated_lifetime_cost_to_date
+
+	column 'Home IPAs Missing Lifetime Cost'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: home_ipas_missing_lifetime_cost_count
+
+	column 'Provider Assignments'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_assignment_count
+
+	column 'Provider Declined Assignments'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_declined_assignment_count
+
+	column 'Provider Timed Responses'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_timed_response_count
+
+	column 'Provider Average Response Minutes'
+		dataType: double
+		formatString: 0.0
+		summarizeBy: none
+		sourceColumn: provider_average_response_minutes
+
+	column 'Provider Messages'
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: provider_message_count
+
 	partition rpt_provider_registry = m
 		mode: import
 		source =
@@ -157,7 +421,24 @@ table rpt_provider_registry
 				        "provider_email_address", "provider_phone_number", "responsible_individual_name",
 				        "responsible_individual_contact_number", "responsible_individual_email_address",
 				        "registrant_name", "registrant_role", "registrant_email_address", "registrant_contact_number",
-				        "source_export_date", "export_date", "job_run_id", "gold_modelled_at"
+				        "source_export_date", "export_date", "job_run_id", "gold_modelled_at",
+				        "provider_home_id", "home_status", "home_address_line_1",
+				        "home_address_line_2", "home_town_city", "home_county",
+				        "home_postcode", "home_country", "home_contact_number",
+				        "home_email_address", "home_registered_beds", "home_is_spot",
+				        "home_source_export_date", "metrics_as_of_date", "provider_offer_count",
+				        "provider_draft_offer_count", "provider_accepted_offer_count", "provider_rejected_offer_count",
+				        "provider_offers_with_distance_count", "provider_average_offer_distance_km", "provider_ipa_count",
+				        "provider_active_ipa_count", "provider_provider_signed_ipa_count", "provider_completed_ipa_count",
+				        "provider_has_provider_signed_ipa", "provider_has_completed_ipa", "provider_estimated_active_weekly_cost",
+				        "provider_active_ipas_missing_weekly_cost_count", "provider_estimated_lifetime_cost_to_date", "provider_ipas_missing_lifetime_cost_count",
+				        "home_offer_count", "home_draft_offer_count", "home_accepted_offer_count",
+				        "home_rejected_offer_count", "home_offers_with_distance_count", "home_average_offer_distance_km",
+				        "home_ipa_count", "home_active_ipa_count", "home_provider_signed_ipa_count",
+				        "home_completed_ipa_count", "home_has_provider_signed_ipa", "home_has_completed_ipa",
+				        "home_estimated_active_weekly_cost", "home_active_ipas_missing_weekly_cost_count", "home_estimated_lifetime_cost_to_date",
+				        "home_ipas_missing_lifetime_cost_count", "provider_assignment_count", "provider_declined_assignment_count",
+				        "provider_timed_response_count", "provider_average_response_minutes", "provider_message_count"
 				    })
 				in
 				    Selected

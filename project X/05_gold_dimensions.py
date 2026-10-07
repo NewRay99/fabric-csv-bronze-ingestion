@@ -539,7 +539,7 @@ print(f"gold.dim_offer_status: {offer_statuses.count():,} rows from silver.offer
 
 # ## Provider registry extract
 # GLD-023 consolidates the two identical legacy Fostering queries into one
-# current provider-level extract. No offer, referral, message or home is required.
+# current provider/home extract. No offer, referral, message or home is required.
 # Contacts stay in this separate extract, not the general provider dimension.
 # Multiple Fostering frameworks are retained as a sorted, distinct code list.
 # This is a current directory, not a historical/as-of provider registry.
@@ -559,12 +559,45 @@ def provider_registry_columns():
     ]
 
 
-def provider_registry_sql(silver_schema, gold_schema, job_run_id):
-    """One current row per Fostering provider; contact values are never logged."""
+def provider_registry_sources(silver_schema, gold_schema):
+    """Explicit source contract; no message bodies or invented home attribution."""
+    return {
+        f"{silver_schema}.provider_home": [
+            "provider_home_id", "provider_id", "home_name", "service_type", "status",
+            "address_line_1", "address_line_2", "town_city", "county", "postcode", "country",
+            "home_contact_number", "home_email_address", "number_of_registered_beds", "is_spot",
+            "export_date", "_silver_load_ts",
+        ],
+        f"{gold_schema}.fact_offer": [
+            "offer_id", "provider_id", "provider_home_id", "offer_status",
+            "referral_to_home_distance_km", "as_of_date", "source_export_date",
+        ],
+        f"{gold_schema}.fact_ipa": [
+            "ipa_id", "accepted_offer_id", "signed_by_provider", "is_ipa_completed",
+            "is_placement_closed", "planned_placement_start_date", "placement_admission_date",
+            "placement_ended_date", "estimated_weekly_cost", "as_of_date", "source_export_date",
+        ],
+        f"{gold_schema}.fact_referral_provider": [
+            "referral_provider_id", "provider_id", "is_declined", "response_elapsed_minutes",
+            "as_of_date", "export_date",
+        ],
+        f"{silver_schema}.referral_provider_message": [
+            "message_id", "referral_provider_id", "created_timestamp", "export_date", "_silver_load_ts",
+        ],
+    }
+
+
+def provider_registry_sql(silver_schema, gold_schema, job_run_id, as_of_date=None):
+    """Current Fostering provider LEFT home, with separately aggregated metrics."""
+    from datetime import date
+
     for schema in (silver_schema, gold_schema):
         if not schema.isascii() or not schema.isidentifier():
             raise ValueError("Registry schema names must be simple SQL identifiers")
     job_literal = str(job_run_id).replace("'", "''")
+    metric_date = "CURRENT_DATE()"
+    if as_of_date is not None:
+        metric_date = f"CAST('{date.fromisoformat(str(as_of_date)).isoformat()}' AS DATE)"
     fields = provider_registry_columns()
     # Exact timestamp ties must not choose an arbitrary contact record. All
     # output provider fields participate; any remaining tie has identical output.
@@ -576,8 +609,75 @@ def provider_registry_sql(silver_schema, gold_schema, job_run_id):
         f"CAST(p.{name} AS {'BOOLEAN' if name == 'qa_flag' else 'STRING'}) AS {name}"
         for name in fields
     )
+    # Deduplicate each natural key before aggregation or joining. All used fields
+    # participate in ties; no fact-to-fact fan-out or averaging monthly averages.
+    current_ctes = []
+    for table, columns in provider_registry_sources(silver_schema, gold_schema).items():
+        entity = table.split(".")[-1]
+        natural_key = columns[0]
+        order = [name for name in ("source_export_date", "export_date", "_silver_load_ts") if name in columns]
+        order_sql = ", ".join(f"CAST({name} AS TIMESTAMP) DESC NULLS LAST" for name in order)
+        ties = ", ".join(f"CAST({name} AS STRING) DESC NULLS LAST"
+                         for name in sorted(columns) if name != natural_key and name not in order)
+        current_ctes.append(f"""ranked_{entity} AS (
+  SELECT {', '.join(columns)}, ROW_NUMBER() OVER (
+    PARTITION BY {natural_key} ORDER BY {order_sql}, {ties}
+  ) AS registry_rank FROM {table}
+  WHERE {natural_key} IS NOT NULL AND TRIM(CAST({natural_key} AS STRING)) <> ''
+), current_{entity} AS (
+  SELECT * FROM ranked_{entity} WHERE registry_rank = 1
+)""")
+    metrics_ctes = []
+    metrics_projection = []
+    for grain, keys in (("provider", "provider_id"), ("home", "provider_id, provider_home_id")):
+        metrics_ctes.append(f"""{grain}_offers AS (
+  SELECT {keys}, COUNT(*) AS offer_count,
+    SUM(CASE WHEN LOWER(TRIM(offer_status)) = 'draft' THEN 1 ELSE 0 END) AS draft_offer_count,
+    SUM(CASE WHEN LOWER(TRIM(offer_status)) IN ('offer_successful', 'accepted', 'approved', 'selected')
+      THEN 1 ELSE 0 END) AS accepted_offer_count,
+    SUM(CASE WHEN LOWER(TRIM(offer_status)) IN ('offer_unsuccessful', 'declined', 'rejected')
+      THEN 1 ELSE 0 END) AS rejected_offer_count,
+    COUNT(CASE WHEN referral_to_home_distance_km >= 0 THEN 1 END) AS offers_with_distance_count,
+    AVG(CASE WHEN referral_to_home_distance_km >= 0 THEN referral_to_home_distance_km END)
+      AS average_offer_distance_km
+  FROM current_fact_offer GROUP BY {keys}
+), {grain}_ipas AS (
+  SELECT {keys}, COUNT(*) AS ipa_count,
+    SUM(CASE WHEN NOT COALESCE(is_placement_closed, false) THEN 1 ELSE 0 END) AS active_ipa_count,
+    SUM(CASE WHEN signed_by_provider THEN 1 ELSE 0 END) AS provider_signed_ipa_count,
+    SUM(CASE WHEN is_ipa_completed THEN 1 ELSE 0 END) AS completed_ipa_count,
+    MAX(CASE WHEN signed_by_provider THEN 1 ELSE 0 END) = 1 AS has_provider_signed_ipa,
+    MAX(CASE WHEN is_ipa_completed THEN 1 ELSE 0 END) = 1 AS has_completed_ipa,
+    SUM(CASE WHEN NOT COALESCE(is_placement_closed, false) AND estimated_weekly_cost >= 0
+      THEN estimated_weekly_cost END) AS estimated_active_weekly_cost,
+    SUM(CASE WHEN NOT COALESCE(is_placement_closed, false)
+      AND (estimated_weekly_cost IS NULL OR estimated_weekly_cost < 0) THEN 1 ELSE 0 END)
+      AS active_ipas_missing_weekly_cost_count,
+    SUM(estimated_lifetime_cost_to_date) AS estimated_lifetime_cost_to_date,
+    SUM(CASE WHEN estimated_lifetime_cost_to_date IS NULL THEN 1 ELSE 0 END)
+      AS ipas_missing_lifetime_cost_count
+  FROM ipa_evidence GROUP BY {keys}
+)""")
+        for alias, columns in (("o", ["offer_count", "draft_offer_count", "accepted_offer_count",
+                                      "rejected_offer_count", "offers_with_distance_count"]),
+                               ("i", ["ipa_count", "active_ipa_count", "provider_signed_ipa_count",
+                                      "completed_ipa_count", "active_ipas_missing_weekly_cost_count",
+                                      "ipas_missing_lifetime_cost_count"])):
+            metrics_projection.extend(f"COALESCE({grain}_{alias}.{name}, 0) AS {grain}_{name}" for name in columns)
+        metrics_projection.extend([
+            f"{grain}_o.average_offer_distance_km AS {grain}_average_offer_distance_km",
+            f"COALESCE({grain}_i.has_provider_signed_ipa, false) AS {grain}_has_provider_signed_ipa",
+            f"COALESCE({grain}_i.has_completed_ipa, false) AS {grain}_has_completed_ipa",
+            # No IPAs (or no active IPAs) genuinely means zero. Present IPAs
+            # with wholly missing cost evidence must remain NULL, not zero.
+            f"CASE WHEN COALESCE({grain}_i.active_ipa_count, 0) = 0 THEN 0 "
+            f"ELSE {grain}_i.estimated_active_weekly_cost END AS {grain}_estimated_active_weekly_cost",
+            f"CASE WHEN COALESCE({grain}_i.ipa_count, 0) = 0 THEN 0 "
+            f"ELSE {grain}_i.estimated_lifetime_cost_to_date END AS {grain}_estimated_lifetime_cost_to_date",
+        ])
+    metrics_projection_sql = ",\n  ".join(metrics_projection)
     return f"""
-WITH ranked_provider AS (
+WITH {', '.join(current_ctes)}, ranked_provider AS (
   SELECT *, ROW_NUMBER() OVER (
     PARTITION BY provider_id
     ORDER BY CAST(export_date AS TIMESTAMP) DESC NULLS LAST,
@@ -609,16 +709,70 @@ WITH ranked_provider AS (
     COUNT(DISTINCT framework_code) AS framework_count
   FROM fostering_membership
   GROUP BY provider_id
+), ipa_dates AS (
+  SELECT i.*, o.provider_id, o.provider_home_id,
+    CAST(COALESCE(i.planned_placement_start_date, i.placement_admission_date) AS DATE) AS cost_start_date,
+    CASE WHEN CAST(i.placement_ended_date AS DATE) < {metric_date}
+      THEN CAST(i.placement_ended_date AS DATE) ELSE {metric_date} END AS cost_end_date
+  FROM current_fact_ipa i
+  INNER JOIN current_fact_offer o ON o.offer_id = i.accepted_offer_id
+), ipa_evidence AS (
+  SELECT *, CASE
+    WHEN cost_start_date IS NULL OR estimated_weekly_cost IS NULL OR estimated_weekly_cost < 0 THEN NULL
+    WHEN is_placement_closed AND placement_ended_date IS NULL THEN NULL
+    WHEN placement_ended_date IS NOT NULL AND CAST(placement_ended_date AS DATE) < cost_start_date THEN NULL
+    WHEN cost_start_date > {metric_date} THEN 0
+    ELSE estimated_weekly_cost * (DATEDIFF(cost_end_date, cost_start_date) + 1) / 7.0
+    END AS estimated_lifetime_cost_to_date
+  FROM ipa_dates
+), {', '.join(metrics_ctes)}, provider_assignments AS (
+  SELECT provider_id, COUNT(*) AS assignment_count,
+    SUM(CASE WHEN is_declined THEN 1 ELSE 0 END) AS declined_assignment_count,
+    COUNT(CASE WHEN response_elapsed_minutes >= 0 THEN 1 END) AS timed_response_count,
+    AVG(CASE WHEN response_elapsed_minutes >= 0 THEN response_elapsed_minutes END) AS average_response_minutes
+  FROM current_fact_referral_provider GROUP BY provider_id
+), provider_messages AS (
+  SELECT rp.provider_id, COUNT(DISTINCT m.message_id) AS message_count
+  FROM current_referral_provider_message m
+  INNER JOIN current_fact_referral_provider rp ON rp.referral_provider_id = m.referral_provider_id
+  WHERE m.created_timestamp IS NULL OR CAST(m.created_timestamp AS DATE) <= {metric_date}
+  GROUP BY rp.provider_id
 )
 SELECT
   {provider_projection},
   f.framework_code, f.framework_count,
-  'Fostering' AS placement_type, 'N/A' AS home_name, 'Fostering' AS service_type,
+  'Fostering' AS placement_type, CAST(h.home_name AS STRING) AS home_name,
+  CAST(h.service_type AS STRING) AS service_type,
+  CAST(h.provider_home_id AS STRING) AS provider_home_id,
+  CAST(h.status AS STRING) AS home_status,
+  CAST(h.address_line_1 AS STRING) AS home_address_line_1,
+  CAST(h.address_line_2 AS STRING) AS home_address_line_2,
+  CAST(h.town_city AS STRING) AS home_town_city, CAST(h.county AS STRING) AS home_county,
+  CAST(h.postcode AS STRING) AS home_postcode, CAST(h.country AS STRING) AS home_country,
+  CAST(h.home_contact_number AS STRING) AS home_contact_number,
+  CAST(h.home_email_address AS STRING) AS home_email_address,
+  CAST(h.number_of_registered_beds AS BIGINT) AS home_registered_beds,
+  CAST(h.is_spot AS BOOLEAN) AS home_is_spot,
+  CAST(h.export_date AS TIMESTAMP) AS home_source_export_date,
+  {metric_date} AS metrics_as_of_date,
+  {metrics_projection_sql},
+  COALESCE(a.assignment_count, 0) AS provider_assignment_count,
+  COALESCE(a.declined_assignment_count, 0) AS provider_declined_assignment_count,
+  COALESCE(a.timed_response_count, 0) AS provider_timed_response_count,
+  a.average_response_minutes AS provider_average_response_minutes,
+  COALESCE(m.message_count, 0) AS provider_message_count,
   CAST(p.export_date AS TIMESTAMP) AS source_export_date,
   CAST(p.export_date AS TIMESTAMP) AS export_date,
   '{job_literal}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
 FROM ranked_provider p
 INNER JOIN provider_frameworks f ON f.provider_id = CAST(p.provider_id AS STRING)
+LEFT JOIN current_provider_home h ON h.provider_id = p.provider_id
+LEFT JOIN provider_offers provider_o ON provider_o.provider_id = p.provider_id
+LEFT JOIN provider_ipas provider_i ON provider_i.provider_id = p.provider_id
+LEFT JOIN home_offers home_o ON home_o.provider_id = p.provider_id AND home_o.provider_home_id = h.provider_home_id
+LEFT JOIN home_ipas home_i ON home_i.provider_id = p.provider_id AND home_i.provider_home_id = h.provider_home_id
+LEFT JOIN provider_assignments a ON a.provider_id = p.provider_id
+LEFT JOIN provider_messages m ON m.provider_id = p.provider_id
 WHERE p.registry_provider_rank = 1
 """
 
@@ -628,13 +782,26 @@ require_columns(f"{SILVER_SCHEMA}.provider",
 require_columns(f"{GOLD_SCHEMA}.bridge_provider_framework",
                 ["provider_framework_id", "provider_id", "framework_code", "source_export_date"])
 require_columns(f"{GOLD_SCHEMA}.dim_framework", ["framework_code", "placement_type"])
-provider_registry = spark.sql(provider_registry_sql(SILVER_SCHEMA, GOLD_SCHEMA, GOLD_JOB_RUN_ID))
+for registry_source, registry_columns in provider_registry_sources(SILVER_SCHEMA, GOLD_SCHEMA).items():
+    require_columns(registry_source, registry_columns)
+# Use the fact refresh's date, not today's date against stale/archive facts.
+registry_fact_dates = set()
+for registry_fact in ("fact_offer", "fact_ipa", "fact_referral_provider"):
+    for registry_fact_date in spark.table(f"{GOLD_SCHEMA}.{registry_fact}").select("as_of_date").distinct().limit(2).collect():
+        if registry_fact_date[0] is None:
+            raise ValueError("Registry fact metrics require a known as-of date; refresh the Gold facts")
+        registry_fact_dates.add(str(registry_fact_date[0]))
+if len(registry_fact_dates) > 1 or (AS_OF_DATE and registry_fact_dates and AS_OF_DATE not in registry_fact_dates):
+    raise ValueError("Registry requires offer, IPA and assignment facts from the same as-of date")
+REGISTRY_METRICS_DATE = next(iter(registry_fact_dates), GOLD_EXPORT_DATE)
+provider_registry = spark.sql(provider_registry_sql(
+    SILVER_SCHEMA, GOLD_SCHEMA, GOLD_JOB_RUN_ID, REGISTRY_METRICS_DATE))
 registry_target = f"{GOLD_SCHEMA}.rpt_provider_registry"
-if provider_registry.groupBy("provider_id").count().where("count > 1").limit(1).count():
-    raise ValueError("Provider registry must contain exactly one row per provider_id")
+if provider_registry.groupBy("provider_id", "provider_home_id").count().where("count > 1").limit(1).count():
+    raise ValueError("Provider registry must contain one row per provider_id/provider_home_id")
 (provider_registry.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true").saveAsTable(registry_target))
-print(f"{registry_target}: {provider_registry.count():,} provider rows (Fostering only)")
+print(f"{registry_target}: {provider_registry.count():,} provider/home rows (Fostering only); metrics as of {REGISTRY_METRICS_DATE}")
 
 print(f"Gold dimensions and registry completed; AS_OF_DATE={AS_OF_DATE or 'latest'}; started={RUN_STARTED_AT.isoformat()}")
 

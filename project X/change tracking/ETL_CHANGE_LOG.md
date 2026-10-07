@@ -4,6 +4,95 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-06 — Provider registry home grain and raw metric expansion
+
+- Supersedes GLD-023's earlier provider-only grain: current Fostering provider
+  LEFT current provider_home, unique by provider/home ID. Includes homes without
+  offers and one blank-home row for providers without homes. Actual home name,
+  service type, status, address, contacts, spot flag and beds replace constants.
+- Deduplicate each entity before separate aggregates, avoiding offer/IPA/message
+  fan-out. Export provider/home offer, draft, accepted/rejected, IPA, signature,
+  completed/active and cost metrics. Messages, assignment declines and response
+  times stay provider-only because their source has no home key. Distance is
+  offer-weighted city-to-postcode straight-line kilometres, with a denominator.
+- Estimated lifetime cost uses inclusive prorated admission/planned days through
+  the earlier of recorded end and the common Gold fact as-of date. Known future
+  starts contribute zero, missing/invalid evidence is counted, closed costs stay
+  included. Current fees, not invoices/rate history: never label actual spend.
+  Active weekly liability retains the report's non-closed IPA definition.
+- Provider-wide values repeat across homes; label prefixes, `summarizeBy: none`,
+  no visual totals and an explicit warning prevent silent additive assumptions.
+  Home attribution requires the same provider/home and accepted-offer linkage.
+- Updated setup lineage (eight registry dependencies), template, scoped expansion
+  tool, synthetic regression checks and deployment/security handover. Facts must
+  precede dimensions; existing live/archive runner order already does this.
+- Saved WIP changed only registry import additions, raw table projections and
+  its grain description. Preserved user connection/lineage, layouts, all roles,
+  other pages, relationships/bookmarks and export mode None. Backup:
+  `reports/WIP/_review/registry-home-metrics-20261006-165955`.
+- Verification: **306 tests and 158 subtests**, including 44 focused registry
+  checks; Gold dimensions/config validators and idempotent expansion preview
+  pass. Native Fabric/Delta execution, refresh, rendering, service audience and
+  export remain deployment checks. Registry aggregates cross referral scopes
+  for the registry audience; review small-cell disclosure before publication.
+- No live database run/reset, publication, permission change or exported file.
+
+See [updated registry deployment and definitions](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+
+## 2026-10-06 — Group-based Provider Registry access
+
+- User named `wmpp_report_users` for ordinary report readers and
+  `wmpp_provider_registry_users` for registry viewers/exporters. Supersedes the
+  earlier hard-coded email exceptions; group membership becomes authoritative
+  after the corresponding service roles are assigned.
+- Restored `rpt_provider_registry = FALSE ()` in the ordinary dynamic role.
+  Added `WMPP Provider Registry RLS` with registry permission `TRUE ()` and
+  **identical predicates on every other table**, preserving referral, snapshot,
+  identity and scoped provider-KPI rules even under overlapping membership.
+- Registered the new role and added descriptive `WMPP_ServiceGroup` annotations.
+  These labels do not create groups or set membership. Consumers remain Viewers;
+  do not assign the ordinary group to the registry role.
+- Preserved every report page, visual, layout, bookmark, relationship, edited
+  import and cache. Backup: `reports/WIP/_review/registry-groups-20261006-162157`.
+  Installer group mode accepts only an approved transition from its deny/UPN
+  predicate and refuses unknown roles or scoped-role drift.
+- Verification: **296 tests and 158 subtests passed**, including 34 focused
+  registry ETL/safe-edit checks. All six other saved table predicates match
+  between roles, and the group-mode preview is idempotent. Hashes confirm all
+  2,733 unlisted project files unchanged (excluding `.pbi` cache). Native DAX,
+  real group identity, role membership and export checks remain outstanding.
+- No service publication, group creation, account assignments, tenant export
+  policy or exported contact file. Report export mode is still **None** until
+  IT reviews and enables Excel/CSV exports for the registry group; tenant-wide
+  impact and real Viewer acceptance remain deployment checks.
+
+See [group-to-role handover](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md#contact-access).
+
+## 2026-10-06 — Earlier two-account access change (superseded)
+
+- User approved `akhtar@bham.co.uk` and `hamanat@bham.co.uk` as the only
+  ordinary viewers of the Fostering contact registry. Replaced the registry's
+  deny-all expression within the existing `WMPP Dynamic Detail RLS` role with
+  an exact sign-in allowlist. Other table permissions and role membership are
+  unchanged; no additional model role or referral scope was granted.
+- Unhid only the registry page and updated its access note. Page layout,
+  dashboard visuals, sidebar, relationships, bookmarks, model imports and
+  `.pbi` cache were preserved. The existing edited registry import was not
+  overwritten. Backup: `reports/WIP/_review/registry-access-20261006-154319`.
+- Added explicit `--registry-user` approval and an `--access-only` mode to the
+  reproducible installer. Default setup still denies contacts. Access-only
+  mode preserves manually edited imports, visuals and page dimensions.
+- Verification: **288 tests and 158 subtests passed**, including 26 focused
+  synthetic ETL/safe-edit checks. The access-only
+  preview of the saved WIP plans no further changes. Live DAX evaluation,
+  service-resolved identities and Viewer/export acceptance are not asserted.
+- The saved report's export setting remains **None**. No publication, live
+  account/group membership or tenant export policy changed. Fabric handover
+  must restrict Excel/CSV exports before enabling summarized report exports;
+  review the tenant-wide impact or use a separately restricted extract report.
+
+See [approved audience and simple handover](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md#contact-access).
+
 ## 2026-10-06 — Separate referral source status and Gold journey stage
 
 - At the user's request, retain `fact_referral.current_status` as the original

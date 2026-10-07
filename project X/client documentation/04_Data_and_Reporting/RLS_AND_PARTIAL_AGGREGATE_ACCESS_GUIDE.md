@@ -9,6 +9,35 @@ No identity-based acceptance is asserted. Test new Referral Map Points, message/
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
 
+## Provider registry audience — 6 October 2026
+
+The user replaced the earlier two-email approval with named security groups.
+Assign `wmpp_report_users` to `WMPP Dynamic Detail RLS` (registry denied), and
+`wmpp_provider_registry_users` to the new `WMPP Provider Registry RLS`
+(registry permitted). The registry role copies every other table predicate from
+the ordinary role; both roles and their union retain the same referral/scoring
+scope. Keep these predicates synchronised in future; a registry-only role with
+no other table filters would be unsafe because roles are additive.
+
+The two named emails are no longer model exceptions: access requires approved
+group membership and service role assignment. The saved `WMPP_ServiceGroup`
+annotations are handover labels, not active membership rules. No Entra group
+or live role membership changed. The page is unhidden; page visibility is not
+security. Export mode remains **None** until the approved group-specific export
+policy is in place. Editors/direct database access are outside this reader
+restriction. See the
+[registry handover and Viewer checks](PROVIDER_REGISTRY_EXTRACT.md#contact-access).
+
+The same-day registry expansion changes its grain to provider LEFT home and
+adds precomputed provider/home performance and estimated cost columns. These
+registry aggregates cover the available current Gold population, not the
+viewer-specific referral scope; the registry group can see them without
+receiving referral-detail access. Review aggregate/small-cell disclosure for
+this approved audience before publishing. No referral/child IDs or message
+bodies were added. Provider totals repeat across home rows and must not be
+summed down the extract. The roles and export restrictions were preserved.
+See [metric definitions and safe totals](PROVIDER_REGISTRY_EXTRACT.md#metric-definitions-and-safe-totals).
+
 ## Purpose
 
 This guide captures the partial-RLS design discussed in the ChatGPT Work

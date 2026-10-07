@@ -6,6 +6,7 @@ deployment check. Report checks cover safe file edits, not Power BI rendering.
 """
 
 import ast
+from datetime import date
 import importlib.util
 import json
 from pathlib import Path
@@ -29,7 +30,7 @@ def notebook_code():
 
 def functions(**scope):
     definitions = [node for node in ast.parse(notebook_code()).body if isinstance(node, ast.FunctionDef)
-                   and node.name in {"provider_registry_columns", "provider_registry_sql", "require_columns"}]
+                   and node.name in {"provider_registry_columns", "provider_registry_sources", "provider_registry_sql", "require_columns"}]
     exec(compile(ast.Module(body=definitions, type_ignores=[]), str(NOTEBOOK), "exec"), scope)
     return scope
 
@@ -46,10 +47,12 @@ class CollectSet:
         return json.dumps(sorted(self.values))
 
 
-def fixture_rows(providers, memberships, frameworks, job="synthetic-registry-job"):
+def fixture_rows(providers, memberships, frameworks, job="synthetic-registry-job", *,
+                 homes=(), offers=(), ipas=(), assignments=(), messages=(), by_home=False):
     scope = functions()
     fields = scope["provider_registry_columns"]() + ["export_date", "_silver_load_ts"]
-    query = scope["provider_registry_sql"]("silver", "gold", job)
+    query = scope["provider_registry_sql"]("silver", "gold", job, "2026-10-01")
+    query = re.sub(r"CAST\((COALESCE\([^)]*\)|[^()]*) AS DATE\)", r"DATE(\1)", query)
     query = (query.replace(" AS TIMESTAMP)", " AS TEXT)").replace(" AS STRING)", " AS TEXT)")
              .replace("CURRENT_TIMESTAMP()", "CURRENT_TIMESTAMP"))
     with sqlite3.connect(":memory:") as db:
@@ -63,13 +66,25 @@ def fixture_rows(providers, memberships, frameworks, job="synthetic-registry-job
         db.create_aggregate("COLLECT_SET", 1, CollectSet)
         db.create_function("SORT_ARRAY", 1, lambda value: json.dumps(sorted(json.loads(value))))
         db.create_function("CONCAT_WS", 2, lambda separator, value: separator.join(json.loads(value)))
+        db.create_function("DATEDIFF", 2, lambda end, start: (date.fromisoformat(end[:10]) - date.fromisoformat(start[:10])).days)
+        defaults = {"export_date": "2026-10-01", "source_export_date": "2026-10-01",
+                    "_silver_load_ts": "2026-10-01 01:00:00", "as_of_date": "2026-10-01"}
+        for (source, columns), records in zip(scope["provider_registry_sources"]("silver", "gold").items(),
+                                               (homes, offers, ipas, assignments, messages), strict=True):
+            db.execute("CREATE TABLE " + source + " (" + ", ".join(columns) + ")")
+            for record in records:
+                values = {name: defaults[name] for name in columns if name in defaults}
+                values.update(record)
+                db.execute("INSERT INTO " + source + " (" + ", ".join(values) + ") VALUES (" +
+                           ", ".join("?" for _ in values) + ")", tuple(values.values()))
         for provider in providers:
             record = {"export_date": "2026-10-01 00:00:00", "_silver_load_ts": "2026-10-01 01:00:00", **provider}
             db.execute("INSERT INTO silver.provider (" + ", ".join(record) + ") VALUES (" +
                        ", ".join("?" for _ in record) + ")", tuple(record.values()))
         db.executemany("INSERT INTO gold.bridge_provider_framework VALUES (?, ?, ?, ?)", memberships)
         db.executemany("INSERT INTO gold.dim_framework VALUES (?, ?)", frameworks)
-        return {row["provider_id"]: dict(row) for row in db.execute(query)}
+        result = [dict(row) for row in db.execute(query)]
+        return result if by_home else {row["provider_id"]: row for row in result}
 
 
 def membership(provider, framework, key=None, date="2026-10-01"):
@@ -90,8 +105,8 @@ def test_registry_keeps_no_offer_providers_and_all_distinct_fostering_frameworks
     assert rows["without-offers"]["framework_code"] == "F1; F2"
     assert rows["without-offers"]["framework_count"] == 2
     assert rows["mixed"]["framework_code"] == "F1"
-    assert all(row["placement_type"] == row["service_type"] == "Fostering" for row in rows.values())
-    assert all(row["home_name"] == "N/A" for row in rows.values())
+    assert all(row["placement_type"] == "Fostering" for row in rows.values())
+    assert all(row["home_name"] is None and row["service_type"] is None for row in rows.values())
 
 
 def test_latest_contact_record_uses_export_date_then_load_timestamp():
@@ -178,6 +193,121 @@ def test_registry_import_contract_matches_sql_output_and_keeps_phone_columns_as_
     assert "rpt_provider_fostering" not in template
 
 
+def test_left_home_join_keeps_all_homes_no_offer_homes_and_no_home_provider():
+    rows = fixture_rows(
+        [{"provider_id": "p"}, {"provider_id": "no-home"}],
+        [membership("p", "F1"), membership("no-home", "F1")], [("F1", "Fostering")],
+        homes=[{"provider_home_id": "h1", "provider_id": "p", "home_name": "First", "postcode": "B1 1AA"},
+               {"provider_home_id": "h2", "provider_id": "p", "home_name": "Second", "service_type": "Residential"},
+               {"provider_home_id": "h1", "provider_id": "p", "home_name": "Old", "export_date": "2026-09-01"}],
+        by_home=True,
+    )
+    keyed = {(row["provider_id"], row["provider_home_id"]): row for row in rows}
+    assert len(rows) == len(keyed) == 3
+    assert keyed["p", "h1"]["home_name"] == "First"
+    assert keyed["p", "h1"]["home_postcode"] == "B1 1AA"
+    assert keyed["p", "h2"]["service_type"] == "Residential"
+    assert keyed["no-home", None]["provider_offer_count"] == 0
+    assert keyed["no-home", None]["home_ipa_count"] == 0
+    assert keyed["no-home", None]["provider_average_response_minutes"] is None
+    assert keyed["no-home", None]["provider_average_offer_distance_km"] is None
+    assert keyed["no-home", None]["provider_estimated_lifetime_cost_to_date"] == 0
+
+
+def test_provider_and_home_metrics_do_not_fan_out_or_attribute_messages_to_homes():
+    offers = [
+        {"offer_id": "o1", "provider_id": "p", "provider_home_id": "h1", "offer_status": "OFFER_SUCCESSFUL", "referral_to_home_distance_km": 10},
+        {"offer_id": "o2", "provider_id": "p", "provider_home_id": "h1", "offer_status": " draft ", "referral_to_home_distance_km": 30},
+        {"offer_id": "o3", "provider_id": "p", "provider_home_id": "h2", "offer_status": "OFFER_UNSUCCESSFUL"},
+        {"offer_id": "no-home", "provider_id": "p", "offer_status": "OFFER_MADE"},
+    ]
+    ipa = {"ipa_id": "i1", "accepted_offer_id": "o1", "signed_by_provider": 1, "is_ipa_completed": 1,
+           "is_placement_closed": 0, "placement_admission_date": "2026-09-25 12:00:00", "estimated_weekly_cost": 700}
+    assignments = [{"referral_provider_id": "a1", "provider_id": "p", "response_elapsed_minutes": 10},
+                   {"referral_provider_id": "a2", "provider_id": "p", "response_elapsed_minutes": 30, "is_declined": 1},
+                   {"referral_provider_id": "a3", "provider_id": "p", "response_elapsed_minutes": -5}]
+    messages = [{"message_id": "m1", "referral_provider_id": "a1"}, {"message_id": "m2", "referral_provider_id": "a1"},
+                {"message_id": "future", "referral_provider_id": "a1", "created_timestamp": "2026-10-02"}]
+    rows = fixture_rows(
+        [{"provider_id": "p"}], [membership("p", "F1")], [("F1", "Fostering")],
+        homes=[{"provider_home_id": "h1", "provider_id": "p"}, {"provider_home_id": "h2", "provider_id": "p"}],
+        offers=offers + [dict(offers[0]), {**offers[1], "offer_status": "OFFER_MADE", "source_export_date": "2026-09-01"}],
+        ipas=[ipa, dict(ipa)], assignments=assignments + [dict(assignments[0])], messages=messages + [dict(messages[0])],
+        by_home=True,
+    )
+    keyed = {row["provider_home_id"]: row for row in rows}
+    for row in rows:
+        assert row["provider_offer_count"] == 4  # includes drafts; not offers × IPAs × messages
+        assert row["provider_draft_offer_count"] == row["provider_rejected_offer_count"] == row["provider_accepted_offer_count"] == 1
+        assert row["provider_ipa_count"] == row["provider_completed_ipa_count"] == 1
+        assert row["provider_has_provider_signed_ipa"] == row["provider_has_completed_ipa"] == 1
+        assert row["provider_assignment_count"] == 3 and row["provider_declined_assignment_count"] == 1
+        assert row["provider_message_count"] == 2
+        assert row["provider_timed_response_count"] == 2 and row["provider_average_response_minutes"] == 20
+        assert row["provider_offers_with_distance_count"] == 2 and row["provider_average_offer_distance_km"] == 20
+        assert row["provider_estimated_active_weekly_cost"] == row["provider_estimated_lifetime_cost_to_date"] == 700
+        assert row["metrics_as_of_date"] == "2026-10-01"
+        assert "home_message_count" not in row  # source has no home key
+    assert keyed["h1"]["home_offer_count"] == 2 and keyed["h2"]["home_offer_count"] == 1
+    assert keyed["h1"]["home_estimated_lifetime_cost_to_date"] == 700
+    assert keyed["h2"]["home_estimated_lifetime_cost_to_date"] == 0
+
+
+def test_costs_are_estimated_inclusive_prorated_bounded_and_missing_evidence_is_visible():
+    def ipa(key, **values):
+        return {"ipa_id": key, "accepted_offer_id": "o", "is_placement_closed": 0,
+                "estimated_weekly_cost": 700, "placement_admission_date": "2026-09-25", **values}
+    base = dict(providers=[{"provider_id": "p"}], memberships=[membership("p", "F1")], frameworks=[("F1", "Fostering")],
+                offers=[{"offer_id": "o", "provider_id": "p"}])
+    row = fixture_rows(**base, ipas=[
+        ipa("active"), ipa("closed", is_placement_closed=1, placement_ended_date="2026-09-26"),
+        ipa("future", placement_admission_date="2026-10-02"),
+        ipa("future-end", is_placement_closed=1, placement_ended_date="2026-10-03"),
+        ipa("missing-fee", estimated_weekly_cost=None), ipa("missing-start", placement_admission_date=None),
+        ipa("missing-end", is_placement_closed=1),
+        ipa("reversed", is_placement_closed=1, placement_ended_date="2026-09-20"),
+        ipa("negative-fee", estimated_weekly_cost=-1),
+        {"ipa_id": "unlinked", "accepted_offer_id": "missing-offer", "estimated_weekly_cost": 999},
+    ])["p"]
+    assert row["provider_ipa_count"] == 9  # no provider ownership can be inferred for unlinked IPA
+    assert row["provider_active_ipa_count"] == 5
+    assert row["provider_estimated_active_weekly_cost"] == 2100  # non-closed, incl future/pending, as report defines it
+    assert row["provider_active_ipas_missing_weekly_cost_count"] == 2
+    assert row["provider_estimated_lifetime_cost_to_date"] == 1600  # 7 + 2 + 0 + 7 days at £100/day
+    assert row["provider_ipas_missing_lifetime_cost_count"] == 5
+    missing = fixture_rows(**base, ipas=[ipa("missing", estimated_weekly_cost=None)])["p"]
+    assert missing["provider_estimated_active_weekly_cost"] is None
+    assert missing["provider_estimated_lifetime_cost_to_date"] is None
+    assert missing["provider_active_ipas_missing_weekly_cost_count"] == 1
+
+
+def test_home_ownership_mismatch_never_credits_another_providers_home():
+    rows = fixture_rows(
+        [{"provider_id": "p"}, {"provider_id": "other"}], [membership("p", "F1"), membership("other", "F1")], [("F1", "Fostering")],
+        homes=[{"provider_home_id": "h", "provider_id": "other"}],
+        offers=[{"offer_id": "o", "provider_id": "p", "provider_home_id": "h"}], by_home=True,
+    )
+    keyed = {row["provider_id"]: row for row in rows}
+    assert keyed["p"]["provider_offer_count"] == 1 and keyed["p"]["home_offer_count"] == 0
+    assert keyed["other"]["provider_offer_count"] == keyed["other"]["home_offer_count"] == 0
+
+
+@pytest.mark.parametrize("as_of", ["2026-13-01", "2026-10-01' OR true", ""])
+def test_registry_rejects_invalid_metrics_dates(as_of):
+    with pytest.raises(ValueError):
+        functions()["provider_registry_sql"]("silver", "gold", "job", as_of)
+
+
+def test_new_metrics_and_home_keys_are_unaggregated_semantic_columns():
+    tool = load_report_tool()
+    template = (PROJECT / "tools/templates/provider_registry.tmdl").read_text(encoding="utf-8")
+    for name in tool.EXPORT_FIELDS:
+        block = re.search(r"(?ms)^\tcolumn '?" + re.escape(name) + r"'?\n.*?(?=^\tcolumn |^\tpartition )", template)
+        assert block, name
+        assert "summarizeBy: none" in block.group(0)
+    assert "dataType: boolean" in template.split("column 'Provider Signature Flag'", 1)[1].split("\tcolumn ", 1)[0]
+
+
 @pytest.mark.parametrize("schema", ["gold;DROP TABLE provider", "a.b", "gold'", ""])
 def test_registry_query_rejects_unsafe_schema_identifiers(schema):
     with pytest.raises(ValueError, match="SQL identifiers"):
@@ -257,6 +387,258 @@ def test_export_table_includes_the_requested_columns_and_unique_provider_key():
     tool = load_report_tool()
     projections = tool.registry_table()["visual"]["query"]["queryState"]["Values"]["projections"]
     assert tuple(item["nativeQueryRef"] for item in projections) == tool.EXPORT_FIELDS
-    assert len(tool.EXPORT_FIELDS) == len(set(tool.EXPORT_FIELDS)) == 21
-    assert tool.EXPORT_FIELDS[0] == "Provider ID"
+    assert len(tool.EXPORT_FIELDS) == len(set(tool.EXPORT_FIELDS)) == 72
+    assert tool.EXPORT_FIELDS[:2] == ("Provider ID", "Home ID")
     assert all(item["field"]["Column"]["Expression"]["SourceRef"]["Entity"] == tool.TABLE for item in projections)
+
+
+def older_registry_fixture(tmp_path):
+    tool, _ = report_fixture(tmp_path)
+    for path, contents in tool.plan_changes(tmp_path).items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    old_fields = ("Provider ID", "Provider Name", "Town/City", "Postcode", "Framework Code",
+                  "Placement Type", "Home Name", "Service Type", "Provider Email", "Provider Phone",
+                  "Responsible Individual Name", "Responsible Individual Contact Number", "Responsible Individual Email Address",
+                  "Registrant Name", "Registrant Role", "Registrant Email", "Registrant Contact Number", "Provider Status",
+                  "County", "Country", "Source Export Date", "Holding Company ID", "QA Flag", "Framework Count",
+                  "Export Date", "Job Run ID", "Gold Modelled At")
+    model = tmp_path / tool.MODEL / "tables/rpt_provider_registry.tmdl"
+    contents = model.read_text(encoding="utf-8")
+    for block in re.findall(r"(?ms)^\tcolumn [^\n]+\n.*?(?=^\tcolumn |^\tpartition |\Z)", contents):
+        if block.splitlines()[0].removeprefix("\tcolumn ").strip("'") not in old_fields:
+            contents = contents.replace(block, "")
+    sources = re.findall(r"sourceColumn: (\w+)", contents)
+    contents = re.sub(r"Selected = Table.SelectColumns\(Registry, \{.*?\}\)",
+                      "Selected = Table.SelectColumns(Registry, {" + ", ".join('"' + source + '"' for source in sources) + "})",
+                      contents, flags=re.S)
+    contents = contents.replace("LH_BCT_WMPP", "UserEditedConnection")
+    contents = contents.replace("\tcolumn 'Provider ID'\n", "\tcolumn 'Provider ID'\n\t\tlineageTag: existing-user-lineage\n")
+    model.write_text(contents, encoding="utf-8")
+    table_path = tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "visuals" / tool.visual_id("registry-export-table") / "visual.json"
+    table = json.loads(table_path.read_text(encoding="utf-8"))
+    table["position"]["z"] = 37
+    table["visual"]["objects"]["values"][0]["properties"]["fontSize"] = tool.literal("13D")
+    table["visual"]["query"]["queryState"]["Values"]["projections"] = [item for item in
+        table["visual"]["query"]["queryState"]["Values"]["projections"] if item["nativeQueryRef"] in old_fields]
+    table_path.write_text(tool.encode_json(table), encoding="utf-8")
+    subtitle = tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "visuals" / tool.visual_id("registry-subtitle") / "visual.json"
+    subtitle.write_text(subtitle.read_text(encoding="utf-8").replace(tool.REGISTRY_SUBTITLE,
+        "Fostering providers with framework membership, including providers without offers. One row per Provider ID."), encoding="utf-8")
+    return tool, model, table_path, subtitle
+
+
+def test_registry_expansion_preserves_user_import_lineage_layout_security_and_exports(tmp_path):
+    tool, model, table_path, subtitle = older_registry_fixture(tmp_path)
+    model_definition = tmp_path / tool.MODEL / "model.tmdl"
+    model_definition.write_text(model_definition.read_text(encoding="utf-8") + "ref role 'WMPP Dynamic Detail RLS'\n", encoding="utf-8")
+    report_path = tmp_path / tool.REPORT / "report.json"
+    report_path.write_text('{"settings":{"exportDataMode":"None"}}\n', encoding="utf-8")
+    for path, value in tool.plan_group_access(tmp_path, "wmpp_report_users", "wmpp_provider_registry_users").items():
+        path.write_text(value, encoding="utf-8")
+    before = {path: path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+    table = json.loads(table_path.read_text(encoding="utf-8"))
+    planned = tool.plan_registry_expansion(tmp_path)
+    assert set(planned) == {model, table_path, subtitle}
+    assert "UserEditedConnection" in planned[model] and "existing-user-lineage" in planned[model]
+    updated_table = json.loads(planned[table_path])
+    assert updated_table["position"] == table["position"]
+    assert updated_table["visual"]["objects"] == table["visual"]["objects"]
+    assert updated_table["visual"]["visualContainerObjects"] == table["visual"]["visualContainerObjects"]
+    assert updated_table["visual"]["query"]["sortDefinition"] == table["visual"]["query"]["sortDefinition"]
+    assert "Provider ID / Home ID" in planned[subtitle] and "do not sum" in planned[subtitle]
+    for path, value in planned.items():
+        path.write_text(value, encoding="utf-8")
+    assert not tool.plan_registry_expansion(tmp_path)
+    for path, value in before.items():
+        if path not in planned:
+            assert path.read_bytes() == value
+    assert json.loads(report_path.read_text(encoding="utf-8"))["settings"]["exportDataMode"] == "None"
+
+
+def test_registry_expansion_refuses_custom_import_selection_without_writing(tmp_path):
+    tool, model, _, _ = older_registry_fixture(tmp_path)
+    model.write_text(model.read_text(encoding="utf-8").replace("Selected = Table.SelectColumns", "CustomSelected = Table.RemoveColumns"), encoding="utf-8")
+    before = model.read_bytes()
+    with pytest.raises(RuntimeError, match="Unexpected registry column selection"):
+        tool.plan_registry_expansion(tmp_path)
+    assert model.read_bytes() == before
+
+
+def test_explicit_registry_audience_preserves_other_security_and_does_not_enable_exports(tmp_path):
+    tool, originals = report_fixture(tmp_path)
+    report_path = tmp_path / tool.REPORT / "report.json"
+    report_path.write_text('{"settings":{"exportDataMode":"None"}}\n', encoding="utf-8")
+    # Install the original deny-by-default extract, then approve two identities.
+    for path, contents in tool.plan_changes(tmp_path).items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    users = ["second@example.invalid", "first@example.invalid"]
+    planned = tool.plan_changes(tmp_path, users)
+    role_path = tmp_path / tool.MODEL / "roles/WMPP Dynamic Detail RLS.tmdl"
+    role = planned[role_path]
+    rule = tool.registry_permission(users)
+    assert role.replace(rule + "\n", "") == originals[tool.MODEL / "roles/WMPP Dynamic Detail RLS.tmdl"]
+    assert 'LOWER ( USERPRINCIPALNAME () ) IN { "first@example.invalid", "second@example.invalid" }' in role
+    expected_paths = {
+        role_path,
+        tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "page.json",
+        tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "visuals" / tool.visual_id("registry-access-note") / "visual.json",
+    }
+    assert set(planned) == expected_paths
+    assert "visibility" not in json.loads(planned[tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "page.json"])
+    assert report_path not in planned
+    for path, contents in planned.items():
+        path.write_text(contents, encoding="utf-8")
+    assert not tool.plan_changes(tmp_path, users)
+    assert json.loads(report_path.read_text(encoding="utf-8"))["settings"]["exportDataMode"] == "None"
+    with pytest.raises(RuntimeError, match="audience decision"):
+        tool.plan_changes(tmp_path)
+    with pytest.raises(RuntimeError, match="audience decision"):
+        tool.plan_changes(tmp_path, ["unapproved@example.invalid"])
+
+
+@pytest.mark.parametrize("users", [[], [""], ["*"], ["example.invalid"], ['a@example.invalid" } || TRUE ()']])
+def test_registry_audience_rejects_empty_wildcard_and_dax_inputs(users):
+    with pytest.raises(ValueError, match="valid approved sign-in UPN"):
+        load_report_tool().registry_permission(users)
+
+
+def test_registry_audience_normalizes_and_deduplicates_exact_identities():
+    tool = load_report_tool()
+    assert tool.registry_permission([" FIRST@EXAMPLE.INVALID ", "first@example.invalid"]) == (
+        '\ttablePermission rpt_provider_registry =\n'
+        '\t\t\tLOWER ( USERPRINCIPALNAME () ) IN { "first@example.invalid" }\n'
+    )
+    assert tool.registry_permission() == tool.DENY_RULE
+
+
+def test_registry_audience_preserves_user_edited_page_and_unknown_roles(tmp_path):
+    tool, _ = report_fixture(tmp_path)
+    for path, contents in tool.plan_changes(tmp_path).items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    page_path = tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "page.json"
+    page_path.write_text(page_path.read_text(encoding="utf-8").replace('"width": 1960', '"width": 2000'), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="user edits"):
+        tool.plan_changes(tmp_path, ["first@example.invalid"])
+    role_path = tmp_path / tool.MODEL / "roles/Other Role.tmdl"
+    role_path.write_text("role 'Other Role'\n", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="Unrecognised RLS roles"):
+        tool.plan_changes(tmp_path, ["first@example.invalid"])
+
+
+def test_access_only_preserves_edited_import_and_page_layout(tmp_path):
+    tool, _ = report_fixture(tmp_path)
+    for path, contents in tool.plan_changes(tmp_path).items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    table_path = tmp_path / tool.MODEL / "tables/rpt_provider_registry.tmdl"
+    edited_import = table_path.read_text(encoding="utf-8") + "\n\tannotation UserChange = preserve\n"
+    table_path.write_text(edited_import, encoding="utf-8")
+    page_path = tmp_path / tool.REPORT / "pages" / tool.PAGE_ID / "page.json"
+    page = json.loads(page_path.read_text(encoding="utf-8"))
+    page["width"] = 2200
+    page_path.write_text(tool.encode_json(page), encoding="utf-8")
+    users = ["first@example.invalid", "second@example.invalid"]
+    planned = tool.plan_changes(tmp_path, users, access_only=True)
+    assert table_path not in planned
+    assert json.loads(planned[page_path])["width"] == 2200
+    assert len(planned) == 3
+    for path, contents in planned.items():
+        path.write_text(contents, encoding="utf-8")
+    assert not tool.plan_changes(tmp_path, users, access_only=True)
+    assert table_path.read_text(encoding="utf-8") == edited_import
+    with pytest.raises(ValueError, match="explicitly approved"):
+        tool.plan_changes(tmp_path, access_only=True)
+
+
+def group_fixture(tmp_path):
+    tool, _ = report_fixture(tmp_path)
+    for path, contents in tool.plan_changes(tmp_path, ["first@example.invalid"]).items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(contents, encoding="utf-8")
+    model_path = tmp_path / tool.MODEL / "model.tmdl"
+    model_path.write_text(model_path.read_text(encoding="utf-8") + "\nref role 'WMPP Dynamic Detail RLS'\n", encoding="utf-8")
+    # Synthetic scoped detail predicates; these must exist in BOTH roles.
+    reader_path = tmp_path / tool.MODEL / "roles/WMPP Dynamic Detail RLS.tmdl"
+    reader = reader_path.read_text(encoding="utf-8").replace(
+        "\ttablePermission fact_referral = TRUE ()",
+        "\ttablePermission fact_referral = 'fact_referral'[scope] = USERPRINCIPALNAME ()\n"
+        "\ttablePermission fact_referral_snapshot = 'fact_referral_snapshot'[scope] = USERPRINCIPALNAME ()\n"
+        "\ttablePermission fact_provider_kpi_monthly = 'fact_provider_kpi_monthly'[scope] = USERPRINCIPALNAME ()",
+    )
+    reader_path.write_text(reader, encoding="utf-8")
+    return tool
+
+
+def table_predicates(role):
+    role = role.replace("\r\n", "\n")
+    return dict(re.findall(r"(?m)^\ttablePermission (\w+)\s*=([^\n]*(?:\n\t{2,}[^\n]*)*)", role))
+
+
+def test_registry_group_keeps_all_other_scoped_predicates_and_has_no_email_allowlist(tmp_path):
+    tool = group_fixture(tmp_path)
+    before = {path: path.read_bytes() for path in tmp_path.rglob("*") if path.is_file()}
+    planned = tool.plan_group_access(tmp_path, "wmpp_report_users", "wmpp_provider_registry_users")
+    reader_path = tmp_path / tool.MODEL / "roles" / (tool.READER_ROLE + ".tmdl")
+    registry_path = tmp_path / tool.MODEL / "roles" / (tool.REGISTRY_ROLE + ".tmdl")
+    assert set(planned) == {reader_path, registry_path, tmp_path / tool.MODEL / "model.tmdl"}
+    reader_filters = table_predicates(planned[reader_path])
+    registry_filters = table_predicates(planned[registry_path])
+    original_filters = table_predicates(before[reader_path].decode("utf-8"))
+    assert reader_filters.pop(tool.TABLE).strip() == "FALSE ()"
+    assert registry_filters.pop(tool.TABLE).strip() == "TRUE ()"
+    original_filters.pop(tool.TABLE)
+    assert reader_filters == registry_filters == original_filters
+    assert "first@example.invalid" not in planned[reader_path] + planned[registry_path]
+    assert "WMPP_ServiceGroup = wmpp_report_users" in planned[reader_path]
+    assert "WMPP_ServiceGroup = wmpp_provider_registry_users" in planned[registry_path]
+    # Overlapping membership unions identical detail filters, not an open role.
+    assert all(value.strip() != "TRUE ()" for value in registry_filters.values())
+    for path, contents in planned.items():
+        path.write_text(contents, encoding="utf-8")
+    assert not tool.plan_group_access(tmp_path, "wmpp_report_users", "wmpp_provider_registry_users")
+    registry_path.write_text(registry_path.read_text(encoding="utf-8").rstrip("\n") + "\n\n", encoding="utf-8")
+    assert not tool.plan_group_access(tmp_path, "wmpp_report_users", "wmpp_provider_registry_users")
+    for path, contents in before.items():
+        if path not in planned:
+            assert path.read_bytes() == contents
+
+
+@pytest.mark.parametrize("report_group,registry_group", [
+    ("", "registry"), ("report", "*"), ("report", "report"), ("report", "REPORT"),
+    ("report", 'registry\n\ttablePermission fact_referral = TRUE ()'),
+])
+def test_registry_groups_reject_invalid_or_shared_group_names(tmp_path, report_group, registry_group):
+    tool = load_report_tool()
+    with pytest.raises(ValueError):
+        tool.plan_group_access(tmp_path, report_group, registry_group)
+
+
+def test_registry_group_refuses_unknown_role_and_security_rule_drift(tmp_path):
+    tool = group_fixture(tmp_path)
+    unknown_path = tmp_path / tool.MODEL / "roles/Unexpected Role.tmdl"
+    unknown_path.write_text("role 'Unexpected Role'\n", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="Unrecognised RLS roles"):
+        tool.plan_group_access(tmp_path, "report", "registry")
+    unknown_path.unlink()
+    for path, contents in tool.plan_group_access(tmp_path, "report", "registry").items():
+        path.write_text(contents, encoding="utf-8")
+    registry_path = tmp_path / tool.MODEL / "roles" / (tool.REGISTRY_ROLE + ".tmdl")
+    registry_path.write_text(registry_path.read_text(encoding="utf-8").replace(
+        "'fact_referral'[scope] = USERPRINCIPALNAME ()", "TRUE ()"), encoding="utf-8")
+    with pytest.raises(RuntimeError, match="role drift"):
+        tool.plan_group_access(tmp_path, "report", "registry")
+
+
+def test_registry_group_refuses_unrecognised_current_contact_predicate(tmp_path):
+    tool = group_fixture(tmp_path)
+    reader_path = tmp_path / tool.MODEL / "roles" / (tool.READER_ROLE + ".tmdl")
+    role = reader_path.read_text(encoding="utf-8").replace(
+        tool.registry_permission(["first@example.invalid"]).rstrip("\n"),
+        "\ttablePermission rpt_provider_registry = TRUE ()",
+    )
+    reader_path.write_text(role, encoding="utf-8")
+    with pytest.raises(RuntimeError, match="Unknown registry reader predicate"):
+        tool.plan_group_access(tmp_path, "report", "registry")
