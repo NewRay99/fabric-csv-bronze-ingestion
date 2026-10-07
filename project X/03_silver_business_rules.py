@@ -96,11 +96,11 @@ log_step("Schema guard complete")
 # CELL ********************
 
 import re, uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pyspark.sql import functions as F
 
 RUN_ID = str(uuid.uuid4())
-STARTED_AT = datetime.utcnow()
+STARTED_AT = datetime.now(timezone.utc)
 JOB_RUN_ID = JOB_RUN_ID or RUN_ID
 # Pipeline status joins to the parent job; individual DQ results retain RUN_ID.
 PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
@@ -187,7 +187,7 @@ if RUN_ESSENTIAL_DQ:
 rule_fields = ["rule_id", "active", "severity", "rule_type", "source_schema", "table_name",
     "column_name", "referenced_schema", "referenced_table", "referenced_column",
     "operator", "rule_value", "description"]
-normalised_rule_rows = [tuple(rule.get(field) for field in rule_fields) + (datetime.utcnow(),) for rule in rules]
+normalised_rule_rows = [tuple(rule.get(field) for field in rule_fields) + (datetime.now(timezone.utc),) for rule in rules]
 spark.createDataFrame(normalised_rule_rows,
     "rule_id string,active string,severity string,rule_type string,source_schema string,table_name string,column_name string,referenced_schema string,referenced_table string,referenced_column string,operator string,rule_value string,description string,loaded_at timestamp") \
     .write.format("delta").mode("overwrite").option("overwriteSchema", "true") \
@@ -222,7 +222,7 @@ cached_frames = {}
 
 
 def log_rule(rule_id, status, detail, rule_started):
-    elapsed = (datetime.utcnow() - rule_started).total_seconds()
+    elapsed = (datetime.now(timezone.utc) - rule_started).total_seconds()
     print(f"  [{rule_id}] {status}: {detail} (+{elapsed:,.1f}s)")
 
 
@@ -232,8 +232,8 @@ for rule in validation_rules:
     severity = (rule.get("severity") or "ERROR").upper()
     source = silver_table(rule["table_name"])
     column_name = rule["column_name"]
-    checked_at = datetime.utcnow()
-    rule_started = datetime.utcnow()
+    checked_at = datetime.now(timezone.utc)
+    rule_started = datetime.now(timezone.utc)
     try:
         if not spark.catalog.tableExists(source):
             result_rows.append((RUN_ID, rule_id, severity, rule_type, source, column_name, "SKIPPED", 0, 0, 0.0, None, checked_at, "Missing Silver source table"))
@@ -766,7 +766,7 @@ for rule in derived_dq_rules:
     rule_type = rule["rule_type"].upper()
     severity = (rule.get("severity") or "ERROR").upper()
     column_name = rule["column_name"]
-    checked_at = datetime.utcnow()
+    checked_at = datetime.now(timezone.utc)
     frame = spark.table(f"{SILVER_SCHEMA}.referral_enrichment")
     try:
         missing = [name.strip() for name in column_name.split(',')

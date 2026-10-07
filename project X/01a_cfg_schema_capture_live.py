@@ -72,7 +72,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
@@ -82,7 +82,7 @@ from pyspark.sql.types import (
 )
 
 RUN_ID = str(uuid.uuid4())
-STARTED_AT = datetime.utcnow()
+STARTED_AT = datetime.now(timezone.utc)
 JOB_RUN_ID = JOB_RUN_ID or RUN_ID
 
 CONTRACT_COLUMNS = [
@@ -142,7 +142,7 @@ if spark.catalog.tableExists("monitoring.cfg_bronze_schema_live"):
         F.col(old_time).alias("captured_at"),
     )
 
-captured_at = datetime.utcnow()
+captured_at = datetime.now(timezone.utc)
 records = []
 excluded_live_tables = []
 for table in spark.catalog.listTables(BRONZE_SCHEMA):

@@ -85,12 +85,12 @@ else:
 # CELL ********************
 
 import re, uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pyspark.sql import functions as F
 from pyspark.sql.types import StructType, StructField, StringType
 
 RUN_ID = str(uuid.uuid4())
-STARTED_AT = datetime.utcnow()
+STARTED_AT = datetime.now(timezone.utc)
 
 
 

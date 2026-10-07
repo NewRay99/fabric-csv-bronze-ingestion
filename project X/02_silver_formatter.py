@@ -283,7 +283,7 @@ for physical_table in physical_tables:
             "SUCCESS", source_count, written, duplicate_count)
         append_rows("monitoring.cfg_table_load_metric", [(RUN_ID, "SILVER", source_kind,
             source_table, target_table, source_count, written, duplicate_count, None,
-            datetime.utcnow(), JOB_RUN_ID or None)], metric_schema)
+            datetime.now(timezone.utc), JOB_RUN_ID or None)], metric_schema)
         ok += 1; total_read += source_count; total_written += written
         print(f"OK {source_table} -> {target_table} @ {export_date}: {written:,} rows")
     except Exception as exc:

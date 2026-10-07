@@ -96,22 +96,22 @@ ARCHIVE_STEPS = [
 # CELL ********************
 
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 from notebookutils import mssparkutils
 
 PIPELINE_NAME = "90_run_archive_pipeline"
 JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
-started_at = datetime.utcnow()
+started_at = datetime.now(timezone.utc)
 results = []
 def record_step(step_sequence, notebook_name, status, step_started,
                 child_result=None, error_message=None):
     merge_monitor_row(
         "monitoring.cfg_job_step_run",
         (JOB_RUN_ID, step_sequence, notebook_name, step_started,
-         None if status == "RUNNING" else datetime.utcnow(), status,
+         None if status == "RUNNING" else datetime.now(timezone.utc), status,
          child_result[:4000] if child_result else None,
-         error_message[:4000] if error_message else None, datetime.utcnow()),
+         error_message[:4000] if error_message else None, datetime.now(timezone.utc)),
         "job_run_id string,step_sequence int,notebook_name string,started_at timestamp,ended_at timestamp,status string,child_result string,error_message string,last_updated_at timestamp",
         "target.job_run_id = source.job_run_id AND target.step_sequence = source.step_sequence",
     )
@@ -120,7 +120,7 @@ def record_step(step_sequence, notebook_name, status, step_started,
 # Setup is deliberately first: it creates or upgrades the two orchestration
 # monitor tables before this runner writes its first status record.
 setup_name, setup_parameters = ARCHIVE_STEPS[0]
-setup_started = datetime.utcnow()
+setup_started = datetime.now(timezone.utc)
 print(f"JOB_RUN_ID={JOB_RUN_ID}")
 print(f"=== START {setup_name} ===")
 try:
@@ -136,7 +136,7 @@ except Exception:
 merge_monitor_row(
     "monitoring.cfg_job_run",
     (JOB_RUN_ID, PIPELINE_NAME, started_at, None, "RUNNING", 1, 0, None,
-     datetime.utcnow()),
+     datetime.now(timezone.utc)),
     "job_run_id string,pipeline_name string,started_at timestamp,ended_at timestamp,status string,steps_succeeded int,steps_failed int,error_message string,last_updated_at timestamp",
     "target.job_run_id = source.job_run_id",
 )
@@ -146,7 +146,7 @@ print(f"=== SUCCESS {setup_name} ===")
 
 try:
     for step_sequence, (notebook_name, parameters) in enumerate(ARCHIVE_STEPS[1:], start=2):
-        step_started = datetime.utcnow()
+        step_started = datetime.now(timezone.utc)
         print(f"=== START {notebook_name}; JOB_RUN_ID={JOB_RUN_ID} ===")
         record_step(step_sequence, notebook_name, "RUNNING", step_started)
         try:
@@ -174,8 +174,8 @@ finally:
     error_message = f"Failed notebook(s): {failed}" if failed else None
     merge_monitor_row(
         "monitoring.cfg_job_run",
-        (JOB_RUN_ID, PIPELINE_NAME, started_at, datetime.utcnow(), status,
-         succeeded, len(failed), error_message, datetime.utcnow()),
+        (JOB_RUN_ID, PIPELINE_NAME, started_at, datetime.now(timezone.utc), status,
+         succeeded, len(failed), error_message, datetime.now(timezone.utc)),
         "job_run_id string,pipeline_name string,started_at timestamp,ended_at timestamp,status string,steps_succeeded int,steps_failed int,error_message string,last_updated_at timestamp",
         "target.job_run_id = source.job_run_id",
     )

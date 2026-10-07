@@ -61,7 +61,7 @@ import os
 import re
 import uuid
 import zipfile
-from datetime import datetime
+from datetime import datetime, timezone
 
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
@@ -284,10 +284,10 @@ if INCLUDE_ZIP_SCAN:
             file_count = sum(len(names) for _, _, names in os.walk(extract_posix))
             if file_count == 0:
                 continue
-            modified = datetime.utcfromtimestamp(os.path.getmtime(full_path))
+            modified = datetime.fromtimestamp(os.path.getmtime(full_path), timezone.utc)
             rows.append((relative_path, export_date, extract_relative, "SUCCESS", False,
                          1, file_count, RUN_ID, modified, modified, None, modified,
-                         datetime.utcnow()))
+                         datetime.now(timezone.utc)))
 
     if rows:
         schema = "zip_path string,export_date timestamp,extract_path string,status string,reload boolean,attempt_count int,file_count int,run_id string,started_at timestamp,ended_at timestamp,error_message string,first_loaded_at timestamp,last_updated_at timestamp"

@@ -9,14 +9,14 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | Prefix | Issue type | Number of issues |
 | --- | --- | ---: |
 | `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
-| `LIVE-ETL` | Live ETL pipeline issues | 4 |
+| `LIVE-ETL` | Live ETL pipeline issues | 5 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
 | `GLD` | Gold-layer issues | 23 |
 | `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **84** |
+| **Total classified issues** | | **85** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
@@ -1879,6 +1879,37 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
 - **Validation:** `validate_silver_required_columns.py` checks the root and
   deployed shared libraries for the policy. Re-run the live pipeline; the
   failed table's audit state lets the formatter retry it.
+
+## LIVE-ETL-005 — Deprecated naive UTC monitoring timestamps
+
+- **Symptom (2026-10-07):** pipeline execution emits a deprecation warning for
+  `datetime.datetime.utcnow()` requesting timezone-aware UTC objects.
+- **Cause:** the two runners and shared/child monitoring code used naive UTC
+  clock values. Python deprecated `utcnow()` and `utcfromtimestamp()` in 3.12.
+  A warning is not evidence that `cfg_job_run` is being rebuilt or a job failed.
+- **Fix:** all 43 `utcnow()` calls across the eleven root notebooks now use
+  `datetime.now(timezone.utc)`. The archive-rehydration helper uses
+  `datetime.fromtimestamp(file_mtime, timezone.utc)` for file metadata.
+  Imports and both sides of elapsed-time calculations are updated together.
+  No table/schema changes, history deletion, source-date parsing change,
+  monitoring-key/status changes or Spark timezone configuration changes.
+- **Affected notebooks:** `90_run_live_pipeline`, `90_run_archive_pipeline`,
+  `99_common_library`, `00_archive_load`, `00a_rehydrate_archive_cfg`,
+  `01a_cfg_schema_capture_live`, `01a_cfg_schema_capture_archive`,
+  `02_silver_formatter`, `02a_archive_silver`, `03_silver_business_rules`,
+  `05_gold_dimensions`.
+- **Validation:** the original clock expressions raise the exact deprecation
+  with warnings treated as errors; all sixteen new UTC/serialization/status/
+  elapsed-time checks pass after the replacement. The full local suite passes
+  329 tests and 158 subtests. Job-run lineage, live monitoring, core pipeline
+  and archive-runner validators pass. Spark's Python TimestampType serializer
+  preserves exact UTC epoch microseconds; no live Fabric/Delta run is asserted.
+- **Status:** local authoritative notebook sources fixed. Deploy the changed
+  notebooks (including the shared library), then rerun the relevant pipeline.
+  Existing exported copies in `reports/` were not changed; no live deployment,
+  database write or report change was performed.
+
+[Python UTC guidance](https://docs.python.org/3/library/datetime.html#datetime.datetime.utcnow).
 
 ## GLD-015 — Referral spot status used the wrong source
 

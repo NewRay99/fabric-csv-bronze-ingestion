@@ -42,7 +42,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 
 # CELL ********************
 
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 
 from pyspark.sql import functions as F
@@ -50,7 +50,7 @@ from pyspark.sql.window import Window
 
 # 90_run_live_pipeline executes 00_setup_cfg before this child notebook.
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {GOLD_SCHEMA}")
-RUN_STARTED_AT = datetime.utcnow()
+RUN_STARTED_AT = datetime.now(timezone.utc)
 GOLD_EXPORT_DATE = AS_OF_DATE or RUN_STARTED_AT.date().isoformat()
 GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
 

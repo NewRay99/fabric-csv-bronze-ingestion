@@ -4,6 +4,34 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-07 — Timezone-aware UTC monitoring clocks (LIVE-ETL-005)
+
+- Reproduced Python's `datetime.utcnow()` deprecation directly from the
+  notebook clock expressions with deprecation warnings treated as errors.
+- Replaced all 43 `utcnow()` calls in the eleven root pipeline/library/helper
+  notebooks with `datetime.now(timezone.utc)`, adding explicit timezone imports.
+  Silver receives those imports from its existing isolated shared-library
+  `%run`. Replaced the archive-rehydration helper's one deprecated
+  `utcfromtimestamp()` with `datetime.fromtimestamp(..., timezone.utc)` too.
+- Updated both sides of elapsed-time calculations together. UTC run dates,
+  job IDs, status transitions, table schemas and source/export-date parsing
+  are unchanged; this does not rebuild or clear `monitoring.cfg_job_run`.
+  No historical timestamp conversion or Spark session-timezone change.
+- Added 16 executable regression checks: real clock expressions warn-free and
+  aware UTC, PySpark TimestampType preserves the UTC epoch/microseconds,
+  RUNNING/SUCCESS/FAILED child records retain keys/schema, and shared/DQ elapsed
+  calculations use compatible objects. Synthetic file metadata only.
+- Verification: **329 tests and 158 subtests** pass, plus job-run lineage,
+  live monitoring, core pipeline and archive-runner validators. No live Fabric
+  execution, notebook deployment, table mutation or report/layout change.
+- Deploy the eleven updated root notebooks, including `99_common_library`,
+  before rerunning the relevant live/archive runner. Exported notebook copies
+  under `reports/` were not rewritten; native Fabric acceptance remains a
+  deployment check. Temporary test fixtures removed; no debug logs retained.
+
+See [Python's UTC datetime guidance](https://docs.python.org/3/library/datetime.html#datetime.datetime.utcnow)
+and [Spark TimestampType conversion](https://spark.apache.org/docs/3.5.6/api/python/_modules/pyspark/sql/types.html#TimestampType).
+
 ## 2026-10-07 — Complete provider/home registry baseline
 
 - Corrected GLD-023's retained Fostering eligibility filter. The authoritative

@@ -20,7 +20,7 @@ import re
 from bisect import bisect_right
 import uuid
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
@@ -53,7 +53,7 @@ AUDIT_TABLE = globals().get("AUDIT_TABLE", "monitoring.cfg_silver_export_load")
 contracts_by_table = globals().get("contracts_by_table", {})
 RUN_ID = globals().get("RUN_ID", str(uuid.uuid4()))
 JOB_RUN_ID = globals().get("JOB_RUN_ID", "")
-STARTED_AT = globals().get("STARTED_AT", datetime.utcnow())
+STARTED_AT = globals().get("STARTED_AT", datetime.now(timezone.utc))
 spark.conf.set("spark.sql.legacy.timeParserPolicy", TIME_PARSER_POLICY)
 # Fabric is a Spark 3+ runtime. Preserve historical source timestamps while
 # allowing Delta/Parquet writes for values before 1900 (LIVE-ETL-004).
@@ -104,7 +104,7 @@ def log_step(label):
     State lives in the shared %run namespace, so timings accumulate across
     the calling notebook's cells. Added for LIVE-ETL-003 observability.
     """
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     start = _LOG_STEP_STATE.setdefault("start", now)
     previous = _LOG_STEP_STATE.setdefault("previous", now)
     elapsed = (now - previous).total_seconds()
@@ -146,7 +146,7 @@ def drift_event_row(source_kind, source_table, target_table, drift_type,
                     column_name=None, expected_type=None, actual_type=None,
                     referenced_table=None, referenced_column=None):
     """Build a consistently keyed Silver schema-drift monitoring row."""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     identity = "||".join(str(value or "") for value in (
         source_kind, source_table, column_name, drift_type,
         referenced_table, referenced_column,
@@ -362,7 +362,7 @@ def should_skip(source_kind, source_schema, source_table, export_date):
 
 
 def audit_begin(source_kind, source_schema, source_table, target_table, export_date):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     existing = audit_record(source_kind, source_schema, source_table, export_date)
     attempt_count = int(existing["attempt_count"] or 0) + 1 if existing else 1
     row = [(source_kind, source_schema, source_table, target_table, export_date, "RUNNING",
@@ -386,7 +386,7 @@ def audit_begin(source_kind, source_schema, source_table, target_table, export_d
 
 def audit_finish(source_kind, source_schema, source_table, target_table, export_date,
                  status, rows_read=0, rows_written=0, duplicate_count=0, error_message=None):
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     existing = audit_record(source_kind, source_schema, source_table, export_date) or {}
     row = [(source_kind, source_schema, source_table, target_table, export_date, status,
             False if status == "SUCCESS" else bool(existing.get("reload", False)),

@@ -135,7 +135,7 @@ import re
 from bisect import bisect_right
 import uuid
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from delta.tables import DeltaTable
 from pyspark.sql import functions as F
 from pyspark.sql.types import (
@@ -144,7 +144,7 @@ from pyspark.sql.types import (
 from pyspark.sql.window import Window
 
 RUN_ID = str(uuid.uuid4())
-STARTED_AT = datetime.utcnow()
+STARTED_AT = datetime.now(timezone.utc)
 JOB_RUN_ID = JOB_RUN_ID or RUN_ID
 # Pipeline status joins to the parent job; per-table metrics retain RUN_ID.
 PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID
@@ -619,7 +619,7 @@ def month_end_record(snapshot_date):
 def update_month_end(snapshot_date, status, dq_result=None,
                      gold_result=None, error_message=None):
     """Upsert the DQ/Gold orchestration state for a snapshot."""
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     existing = month_end_record(snapshot_date) or {}
     attempt_count = int(existing.get("attempt_count") or 0) + (
         1 if status == "RUNNING" else 0
@@ -746,7 +746,7 @@ def materialise_table_month_end(table_info, snapshot_date):
         append_rows(
             "monitoring.cfg_table_load_metric",
             [(RUN_ID, "SILVER", SOURCE_KIND, source_table, target_table,
-              source_count, written, duplicate_count, None, datetime.utcnow(),
+              source_count, written, duplicate_count, None, datetime.now(timezone.utc),
               JOB_RUN_ID or None)],
             METRIC_SCHEMA,
         )
