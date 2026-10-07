@@ -6,6 +6,7 @@ deployment check. Report checks cover safe file edits, not Power BI rendering.
 """
 
 import ast
+from collections import Counter
 from datetime import date
 import importlib.util
 import json
@@ -30,7 +31,8 @@ def notebook_code():
 
 def functions(**scope):
     definitions = [node for node in ast.parse(notebook_code()).body if isinstance(node, ast.FunctionDef)
-                   and node.name in {"provider_registry_columns", "provider_registry_sources", "provider_registry_sql", "require_columns"}]
+                   and node.name in {"provider_registry_columns", "provider_registry_sources", "provider_registry_baseline_columns",
+                                     "provider_registry_sql", "validate_provider_registry_baseline", "require_columns"}]
     exec(compile(ast.Module(body=definitions, type_ignores=[]), str(NOTEBOOK), "exec"), scope)
     return scope
 
@@ -48,7 +50,8 @@ class CollectSet:
 
 
 def fixture_rows(providers, memberships, frameworks, job="synthetic-registry-job", *,
-                 homes=(), offers=(), ipas=(), assignments=(), messages=(), by_home=False):
+                 homes=(), offers=(), ipas=(), assignments=(), messages=(), by_home=False,
+                 dimension_providers=None, dimension_homes=None, with_baseline=False):
     scope = functions()
     fields = scope["provider_registry_columns"]() + ["export_date", "_silver_load_ts"]
     query = scope["provider_registry_sql"]("silver", "gold", job, "2026-10-01")
@@ -83,7 +86,33 @@ def fixture_rows(providers, memberships, frameworks, job="synthetic-registry-job
                        ", ".join("?" for _ in record) + ")", tuple(record.values()))
         db.executemany("INSERT INTO gold.bridge_provider_framework VALUES (?, ?, ?, ?)", memberships)
         db.executemany("INSERT INTO gold.dim_framework VALUES (?, ?)", frameworks)
+        # Independent fixture of the real dimension projection/latest-key rule.
+        # Registry contacts and metrics must never define its baseline population.
+        provider_fields = fields[:9] + ["export_date", "source_export_date"]
+        home_fields = ["provider_home_id", "provider_id", "home_name", "service_type", "town_city", "county", "postcode",
+                       "registered_beds", "is_spot", "home_contact_number", "export_date", "source_export_date"]
+        for table, columns, records in (("gold.dim_provider", provider_fields, dimension_providers),
+                                       ("gold.dim_provider_home", home_fields, dimension_homes)):
+            if records is None:
+                source = "silver.provider_home" if table.endswith("home") else "silver.provider"
+                projection = ", ".join("number_of_registered_beds AS registered_beds" if name == "registered_beds"
+                                       else "export_date AS source_export_date" if name == "source_export_date" else name
+                                       for name in columns)
+                db.execute(f"CREATE TABLE {table} AS SELECT {projection} FROM (SELECT *, ROW_NUMBER() OVER ("
+                           f"PARTITION BY {columns[0]} ORDER BY export_date DESC, _silver_load_ts DESC) AS fixture_rank "
+                           f"FROM {source}) WHERE fixture_rank = 1")
+            else:
+                db.execute("CREATE TABLE " + table + " (" + ", ".join(columns) + ")")
+                for record in records:
+                    values = {name: defaults[name] for name in columns if name in defaults}
+                    values.update(record)
+                    db.execute("INSERT INTO " + table + " (" + ", ".join(values) + ") VALUES (" +
+                               ", ".join("?" for _ in values) + ")", tuple(values.values()))
+        baseline = [dict(row) for row in db.execute("SELECT p.provider_id, h.provider_home_id FROM gold.dim_provider p "
+                                                   "LEFT JOIN gold.dim_provider_home h ON p.provider_id = h.provider_id")]
         result = [dict(row) for row in db.execute(query)]
+        if with_baseline:
+            return result, baseline
         return result if by_home else {row["provider_id"]: row for row in result}
 
 
@@ -91,7 +120,23 @@ def membership(provider, framework, key=None, date="2026-10-01"):
     return (key or provider + framework, provider, framework, date)
 
 
-def test_registry_keeps_no_offer_providers_and_all_distinct_fostering_frameworks():
+def test_registry_exactly_preserves_1002_dimension_left_join_rows_without_eligibility_filters():
+    providers = [{"provider_id": f"p{index}", "provider_name": f"Synthetic {index}",
+                  "provider_status": "CLOSED" if index % 2 else "ACTIVE"} for index in range(1000)]
+    rows, baseline = fixture_rows(
+        providers, [membership("p0", "F1"), membership("p1", "R1"), membership("p2", "unknown")],
+        [("F1", "Fostering"), ("R1", "Residential")],
+        homes=[{"provider_id": "p0", "provider_home_id": f"h{index}"} for index in range(3)],
+        with_baseline=True,
+    )
+    assert len(baseline) == 1002
+    assert len(rows) == len(baseline), "Registry dropped rows from dim_provider LEFT dim_provider_home"
+    assert {(row["provider_id"], row["provider_home_id"]) for row in rows} == {
+        (row["provider_id"], row["provider_home_id"]) for row in baseline
+    }
+
+
+def test_registry_keeps_all_providers_and_all_distinct_frameworks_without_eligibility_filters():
     rows = fixture_rows(
         [{"provider_id": "without-offers", "provider_name": "Synthetic Provider"},
          {"provider_id": "mixed", "provider_name": "Mixed Framework Provider"},
@@ -101,11 +146,14 @@ def test_registry_keeps_no_offer_providers_and_all_distinct_fostering_frameworks
          membership("mixed", "R1"), membership("mixed", "F1"), membership("non-fostering", "R1")],
         [("F2", "Fostering"), ("F1", " fostering "), ("R1", "Residential")],
     )
-    assert set(rows) == {"without-offers", "mixed"}
+    assert set(rows) == {"without-offers", "mixed", "non-fostering", "no-membership"}
     assert rows["without-offers"]["framework_code"] == "F1; F2"
     assert rows["without-offers"]["framework_count"] == 2
-    assert rows["mixed"]["framework_code"] == "F1"
-    assert all(row["placement_type"] == "Fostering" for row in rows.values())
+    assert rows["mixed"]["framework_code"] == "F1; R1"
+    assert {value.strip().lower() for value in rows["mixed"]["placement_type"].split(";")} == {"fostering", "residential"}
+    assert rows["non-fostering"]["placement_type"] == "Residential"
+    assert rows["no-membership"]["framework_count"] == 0
+    assert rows["no-membership"]["framework_code"] is None
     assert all(row["home_name"] is None and row["service_type"] is None for row in rows.values())
 
 
@@ -127,14 +175,17 @@ def test_exact_timestamp_ties_are_deterministic_in_both_input_orders():
     assert forward["p"]["provider_email_address"] == reverse["p"]["provider_email_address"] == "z@example.invalid"
 
 
-def test_current_membership_does_not_resurrect_superseded_fostering_link():
+def test_current_membership_does_not_resurrect_superseded_link_or_remove_unknown_framework_provider():
     rows = fixture_rows(
         [{"provider_id": "changed"}, {"provider_id": "unknown"}],
         [membership("changed", "F1", "link", "2026-09-01"), membership("changed", "R1", "link"),
          membership("unknown", "unrecognised-framework")],
         [("F1", "Fostering"), ("R1", "Residential")],
     )
-    assert rows == {}
+    assert set(rows) == {"changed", "unknown"}
+    assert rows["changed"]["framework_code"] == "R1"
+    assert rows["unknown"]["framework_code"] == "unrecognised-framework"
+    assert rows["unknown"]["placement_type"] is None
 
 
 def test_nullable_contacts_and_phone_leading_zeros_are_preserved():
@@ -164,10 +215,82 @@ def test_newest_missing_contact_is_not_filled_with_outdated_contact():
     assert rows["p"]["provider_email_address"] is None
 
 
-def test_null_or_blank_provider_ids_cannot_create_registry_rows():
+def test_registry_never_silently_drops_null_or_blank_ids_already_present_in_dimensions():
     rows = fixture_rows([{ "provider_id": None}, {"provider_id": ""}, {"provider_id": "   "}],
                         [membership("", "F1"), membership("   ", "F1")], [("F1", "Fostering")])
-    assert rows == {}
+    assert set(rows) == {None, "", "   "}
+
+
+def test_gold_dimensions_not_contacts_or_memberships_define_registry_population_and_basic_fields():
+    rows, baseline = fixture_rows(
+        [{"provider_id": "gold-only", "provider_name": "Stale Silver Name", "postcode": "WRONG",
+          "provider_email_address": "contact@example.invalid"}, {"provider_id": "silver-only"}], [], [],
+        homes=[{"provider_home_id": "h", "provider_id": "gold-only", "home_name": "Stale Silver Home", "postcode": "WRONG",
+                "status": "ACTIVE", "home_email_address": "home@example.invalid"},
+               {"provider_home_id": "silver-only-home", "provider_id": "gold-only"}],
+        dimension_providers=[{"provider_id": "gold-only", "provider_name": "Authoritative Gold Provider", "postcode": "B1 1AA"},
+                             {"provider_id": "no-contact", "provider_name": "No contact record", "provider_status": "SUSPENDED"}],
+        dimension_homes=[{"provider_id": "gold-only", "provider_home_id": "h", "home_name": "Authoritative Gold Home", "postcode": "B2 2BB", "registered_beds": 5},
+                         {"provider_id": "no-contact", "provider_home_id": "no-home-contact", "home_name": "Gold-only home"}],
+        with_baseline=True,
+    )
+    assert len(rows) == len(baseline) == 2
+    keyed = {row["provider_id"]: row for row in rows}
+    assert keyed["gold-only"]["provider_name"] == "Authoritative Gold Provider"
+    assert keyed["gold-only"]["postcode"] == "B1 1AA"
+    assert keyed["gold-only"]["home_name"] == "Authoritative Gold Home"
+    assert keyed["gold-only"]["home_postcode"] == "B2 2BB"
+    assert keyed["gold-only"]["home_registered_beds"] == 5
+    assert keyed["gold-only"]["provider_email_address"] == "contact@example.invalid"
+    assert keyed["gold-only"]["home_email_address"] == "home@example.invalid"
+    assert keyed["no-contact"]["provider_name"] == "No contact record"
+    assert keyed["no-contact"]["provider_status"] == "SUSPENDED"
+    assert keyed["no-contact"]["home_name"] == "Gold-only home"
+    assert keyed["no-contact"]["provider_email_address"] is None
+    assert keyed["no-contact"]["home_offer_count"] == 0
+
+
+class RegistryKeyFrame:
+    """Tiny multiset fixture of the baseline validator's public DataFrame seam."""
+    def __init__(self, keys):
+        self.keys = list(keys)
+
+    def select(self, *names):
+        assert names == ("provider_id", "provider_home_id")
+        return self
+
+    def count(self):
+        return len(self.keys)
+
+    def exceptAll(self, other):
+        remaining = Counter(self.keys) - Counter(other.keys)
+        return RegistryKeyFrame(remaining.elements())
+
+    def limit(self, size):
+        return RegistryKeyFrame(self.keys[:size])
+
+
+@pytest.mark.parametrize("actual", [
+    [("p", "h1")],  # missing home
+    [("p", "h1"), ("p", "h2"), ("p", "h2")],  # multiplied home
+    [("p", "h1"), ("different", "h2")],  # same count, wrong provider
+    [("p", "h1"), ("p", "h1")],  # same count, one pair duplicated and another lost
+])
+def test_registry_baseline_guard_rejects_missing_added_or_substituted_rows(actual):
+    baseline = RegistryKeyFrame([("p", "h1"), ("p", "h2")])
+    captured = []
+    scope = functions(spark=SimpleNamespace(sql=lambda query: captured.append(query) or baseline))
+    with pytest.raises(ValueError, match="(row count|rows must exactly match)"):
+        scope["validate_provider_registry_baseline"](RegistryKeyFrame(actual), "gold")
+    assert "FROM gold.dim_provider p" in captured[0]
+    assert "LEFT JOIN gold.dim_provider_home" in captured[0]
+    assert "framework" not in captured[0] and "WHERE" not in captured[0]
+
+
+def test_registry_baseline_guard_accepts_the_exact_multiset_including_no_home_rows():
+    keys = [("p", "h1"), ("p", "h2"), ("no-home", None), (None, None)]
+    scope = functions(spark=SimpleNamespace(sql=lambda query: RegistryKeyFrame(keys)))
+    assert scope["validate_provider_registry_baseline"](RegistryKeyFrame(list(reversed(keys))), "gold") == 4
 
 
 def test_registry_required_column_preflight_fails_for_missing_contact_column():

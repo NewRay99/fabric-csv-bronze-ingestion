@@ -538,10 +538,10 @@ print(f"gold.dim_offer_status: {offer_statuses.count():,} rows from silver.offer
 # MARKDOWN ********************
 
 # ## Provider registry extract
-# GLD-023 consolidates the two identical legacy Fostering queries into one
-# current provider/home extract. No offer, referral, message or home is required.
+# GLD-023 replaces the legacy Fostering-only queries with the COMPLETE
+# dim_provider LEFT dim_provider_home population. No membership or activity is required.
 # Contacts stay in this separate extract, not the general provider dimension.
-# Multiple Fostering frameworks are retained as a sorted, distinct code list.
+# All framework memberships are optional, sorted/distinct descriptive attributes.
 # This is a current directory, not a historical/as-of provider registry.
 
 # CELL ********************
@@ -587,8 +587,22 @@ def provider_registry_sources(silver_schema, gold_schema):
     }
 
 
+def provider_registry_baseline_columns(gold_schema):
+    """Authoritative directory population and basic fields, never eligibility."""
+    return {
+        f"{gold_schema}.dim_provider": [
+            "provider_id", "holding_company_id", "provider_name", "provider_status",
+            "town_city", "county", "postcode", "country", "qa_flag", "source_export_date", "export_date",
+        ],
+        f"{gold_schema}.dim_provider_home": [
+            "provider_home_id", "provider_id", "home_name", "service_type", "town_city", "county", "postcode",
+            "registered_beds", "is_spot", "home_contact_number", "source_export_date",
+        ],
+    }
+
+
 def provider_registry_sql(silver_schema, gold_schema, job_run_id, as_of_date=None):
-    """Current Fostering provider LEFT home, with separately aggregated metrics."""
+    """Exactly dim_provider LEFT dim_provider_home, plus optional enrichment."""
     from datetime import date
 
     for schema in (silver_schema, gold_schema):
@@ -605,9 +619,10 @@ def provider_registry_sql(silver_schema, gold_schema, job_run_id, as_of_date=Non
         f"CAST({name} AS STRING) DESC NULLS LAST"
         for name in sorted(fields) if name != "provider_id"
     )
+    core_fields = provider_registry_baseline_columns(gold_schema)[f"{gold_schema}.dim_provider"]
     provider_projection = ",\n  ".join(
-        f"CAST(p.{name} AS {'BOOLEAN' if name == 'qa_flag' else 'STRING'}) AS {name}"
-        for name in fields
+        f"CAST({'p' if name in core_fields else 'pc'}.{name} AS "
+        f"{'BOOLEAN' if name == 'qa_flag' else 'STRING'}) AS {name}" for name in fields
     )
     # Deduplicate each natural key before aggregation or joining. All used fields
     # participate in ties; no fact-to-fact fan-out or averaging monthly averages.
@@ -695,19 +710,19 @@ WITH {', '.join(current_ctes)}, ranked_provider AS (
   ) AS registry_membership_rank
   FROM {gold_schema}.bridge_provider_framework
   WHERE provider_framework_id IS NOT NULL
-), fostering_membership AS (
+), membership_detail AS (
   SELECT DISTINCT CAST(b.provider_id AS STRING) AS provider_id,
-    CAST(b.framework_code AS STRING) AS framework_code
+    CAST(b.framework_code AS STRING) AS framework_code,
+    CAST(f.placement_type AS STRING) AS placement_type
   FROM ranked_membership b
-  INNER JOIN {gold_schema}.dim_framework f ON f.framework_code = b.framework_code
+  LEFT JOIN {gold_schema}.dim_framework f ON f.framework_code = b.framework_code
   WHERE b.registry_membership_rank = 1
-    AND UPPER(TRIM(f.placement_type)) = 'FOSTERING'
-    AND b.provider_id IS NOT NULL
 ), provider_frameworks AS (
   SELECT provider_id,
     CONCAT_WS('; ', SORT_ARRAY(COLLECT_SET(framework_code))) AS framework_code,
+    NULLIF(CONCAT_WS('; ', SORT_ARRAY(COLLECT_SET(placement_type))), '') AS placement_type,
     COUNT(DISTINCT framework_code) AS framework_count
-  FROM fostering_membership
+  FROM membership_detail
   GROUP BY provider_id
 ), ipa_dates AS (
   SELECT i.*, o.provider_id, o.provider_home_id,
@@ -740,20 +755,20 @@ WITH {', '.join(current_ctes)}, ranked_provider AS (
 )
 SELECT
   {provider_projection},
-  f.framework_code, f.framework_count,
-  'Fostering' AS placement_type, CAST(h.home_name AS STRING) AS home_name,
+  f.framework_code, COALESCE(f.framework_count, 0) AS framework_count,
+  f.placement_type, CAST(h.home_name AS STRING) AS home_name,
   CAST(h.service_type AS STRING) AS service_type,
   CAST(h.provider_home_id AS STRING) AS provider_home_id,
-  CAST(h.status AS STRING) AS home_status,
-  CAST(h.address_line_1 AS STRING) AS home_address_line_1,
-  CAST(h.address_line_2 AS STRING) AS home_address_line_2,
+  CAST(hc.status AS STRING) AS home_status,
+  CAST(hc.address_line_1 AS STRING) AS home_address_line_1,
+  CAST(hc.address_line_2 AS STRING) AS home_address_line_2,
   CAST(h.town_city AS STRING) AS home_town_city, CAST(h.county AS STRING) AS home_county,
-  CAST(h.postcode AS STRING) AS home_postcode, CAST(h.country AS STRING) AS home_country,
+  CAST(h.postcode AS STRING) AS home_postcode, CAST(hc.country AS STRING) AS home_country,
   CAST(h.home_contact_number AS STRING) AS home_contact_number,
-  CAST(h.home_email_address AS STRING) AS home_email_address,
-  CAST(h.number_of_registered_beds AS BIGINT) AS home_registered_beds,
+  CAST(hc.home_email_address AS STRING) AS home_email_address,
+  CAST(h.registered_beds AS BIGINT) AS home_registered_beds,
   CAST(h.is_spot AS BOOLEAN) AS home_is_spot,
-  CAST(h.export_date AS TIMESTAMP) AS home_source_export_date,
+  CAST(h.source_export_date AS TIMESTAMP) AS home_source_export_date,
   {metric_date} AS metrics_as_of_date,
   {metrics_projection_sql},
   COALESCE(a.assignment_count, 0) AS provider_assignment_count,
@@ -761,20 +776,36 @@ SELECT
   COALESCE(a.timed_response_count, 0) AS provider_timed_response_count,
   a.average_response_minutes AS provider_average_response_minutes,
   COALESCE(m.message_count, 0) AS provider_message_count,
-  CAST(p.export_date AS TIMESTAMP) AS source_export_date,
+  CAST(p.source_export_date AS TIMESTAMP) AS source_export_date,
   CAST(p.export_date AS TIMESTAMP) AS export_date,
   '{job_literal}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
-FROM ranked_provider p
-INNER JOIN provider_frameworks f ON f.provider_id = CAST(p.provider_id AS STRING)
-LEFT JOIN current_provider_home h ON h.provider_id = p.provider_id
+FROM {gold_schema}.dim_provider p
+LEFT JOIN {gold_schema}.dim_provider_home h ON h.provider_id = p.provider_id
+LEFT JOIN ranked_provider pc ON pc.provider_id = p.provider_id AND pc.registry_provider_rank = 1
+LEFT JOIN current_provider_home hc ON hc.provider_home_id = h.provider_home_id AND hc.provider_id = h.provider_id
+LEFT JOIN provider_frameworks f ON f.provider_id = p.provider_id
 LEFT JOIN provider_offers provider_o ON provider_o.provider_id = p.provider_id
 LEFT JOIN provider_ipas provider_i ON provider_i.provider_id = p.provider_id
 LEFT JOIN home_offers home_o ON home_o.provider_id = p.provider_id AND home_o.provider_home_id = h.provider_home_id
 LEFT JOIN home_ipas home_i ON home_i.provider_id = p.provider_id AND home_i.provider_home_id = h.provider_home_id
 LEFT JOIN provider_assignments a ON a.provider_id = p.provider_id
 LEFT JOIN provider_messages m ON m.provider_id = p.provider_id
-WHERE p.registry_provider_rank = 1
 """
+
+
+def validate_provider_registry_baseline(registry, gold_schema):
+    """Fail before overwrite if ANY baseline row is lost, added or multiplied."""
+    baseline = spark.sql(f"""SELECT CAST(p.provider_id AS STRING) AS provider_id,
+      CAST(h.provider_home_id AS STRING) AS provider_home_id
+      FROM {gold_schema}.dim_provider p
+      LEFT JOIN {gold_schema}.dim_provider_home h ON p.provider_id = h.provider_id""")
+    actual = registry.select("provider_id", "provider_home_id")
+    baseline_count = baseline.count()
+    if actual.count() != baseline_count:
+        raise ValueError("Registry row count must exactly equal dim_provider LEFT dim_provider_home")
+    if baseline.exceptAll(actual).limit(1).count() or actual.exceptAll(baseline).limit(1).count():
+        raise ValueError("Registry provider/home rows must exactly match the dimension LEFT JOIN baseline")
+    return baseline_count
 
 
 require_columns(f"{SILVER_SCHEMA}.provider",
@@ -783,6 +814,8 @@ require_columns(f"{GOLD_SCHEMA}.bridge_provider_framework",
                 ["provider_framework_id", "provider_id", "framework_code", "source_export_date"])
 require_columns(f"{GOLD_SCHEMA}.dim_framework", ["framework_code", "placement_type"])
 for registry_source, registry_columns in provider_registry_sources(SILVER_SCHEMA, GOLD_SCHEMA).items():
+    require_columns(registry_source, registry_columns)
+for registry_source, registry_columns in provider_registry_baseline_columns(GOLD_SCHEMA).items():
     require_columns(registry_source, registry_columns)
 # Use the fact refresh's date, not today's date against stale/archive facts.
 registry_fact_dates = set()
@@ -797,11 +830,12 @@ REGISTRY_METRICS_DATE = next(iter(registry_fact_dates), GOLD_EXPORT_DATE)
 provider_registry = spark.sql(provider_registry_sql(
     SILVER_SCHEMA, GOLD_SCHEMA, GOLD_JOB_RUN_ID, REGISTRY_METRICS_DATE))
 registry_target = f"{GOLD_SCHEMA}.rpt_provider_registry"
+REGISTRY_BASELINE_COUNT = validate_provider_registry_baseline(provider_registry, GOLD_SCHEMA)
 if provider_registry.groupBy("provider_id", "provider_home_id").count().where("count > 1").limit(1).count():
-    raise ValueError("Provider registry must contain one row per provider_id/provider_home_id")
+    raise ValueError("Registry contains duplicate provider/home pairs; do not silently deduplicate them")
 (provider_registry.write.format("delta").mode("overwrite")
     .option("overwriteSchema", "true").saveAsTable(registry_target))
-print(f"{registry_target}: {provider_registry.count():,} provider/home rows (Fostering only); metrics as of {REGISTRY_METRICS_DATE}")
+print(f"{registry_target}: {REGISTRY_BASELINE_COUNT:,} provider/home rows; exact dimension LEFT JOIN baseline; metrics as of {REGISTRY_METRICS_DATE}")
 
 print(f"Gold dimensions and registry completed; AS_OF_DATE={AS_OF_DATE or 'latest'}; started={RUN_STARTED_AT.isoformat()}")
 

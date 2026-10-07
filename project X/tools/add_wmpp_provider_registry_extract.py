@@ -59,8 +59,17 @@ EXPORT_FIELDS = (
     "Provider Average Response Minutes", "Provider Messages",
 )
 REGISTRY_SUBTITLE = (
-    "Fostering providers left-joined to homes; providers without homes retained. "
+    "All providers left-joined to homes; no membership or activity requirement. "
     "One row per Provider ID / Home ID. Provider-wide totals repeat across homes: do not sum them."
+)
+REGISTRY_TABLE_TITLE = "Provider registry — All providers and homes"
+REGISTRY_ALT_TEXT = (
+    "Complete provider/home registry with contact and metric columns. Use the horizontal scrollbar "
+    "for remaining fields. Export summarized data from this table only when authorized."
+)
+REGISTRY_EXPORT_HELP = (
+    "Filter this page, then use the table menu (…) → Export data → Summarized data. "
+    "Scroll sideways to view all fields. Framework Code retains every distinct membership."
 )
 DENY_RULE = "\ttablePermission rpt_provider_registry = FALSE ()\n"
 READER_ROLE = "WMPP Dynamic Detail RLS"
@@ -170,13 +179,13 @@ def registry_table():
         "total": [{"properties": {"totals": literal("false")}}],
     }
     result["visual"]["visualContainerObjects"].update({
-        "title": [{"properties": {"show": literal("true"), "text": literal("'Provider registry — Fostering'"),
+        "title": [{"properties": {"show": literal("true"), "text": literal("'" + REGISTRY_TABLE_TITLE + "'"),
                                    "fontSize": literal("14D"), "bold": literal("false")}}],
         "background": [{"properties": {"show": literal("true"), "color": color("#FFFFFF"), "transparency": literal("0D")}}],
         "border": [{"properties": {"show": literal("true"), "color": color("#FFFFFF"), "radius": literal("12D")}}],
         "visualHeader": [{"properties": {"show": literal("true")}}],
         "general": [{"properties": {"altText": literal(
-            "'Fostering provider registry with all contact columns. Use the horizontal scrollbar for remaining fields. Export summarized data from this table only when authorized.'"
+            "'" + REGISTRY_ALT_TEXT + "'"
         )}}],
     })
     return result
@@ -197,7 +206,7 @@ def page_definitions(approved=False):
         slicer("registry-status-filter", "Provider Status", 984, 450),
         slicer("registry-town-filter", "Town/City", 1454, 470),
         registry_table(),
-        textbox("registry-export-help", "Filter this page, then use the table menu (…) → Export data → Summarized data. Scroll sideways to view all fields. Framework Code retains every distinct Fostering membership.", 968, 30, 14),
+        textbox("registry-export-help", REGISTRY_EXPORT_HELP, 968, 30, 14),
     ]
     table_id = visual_id("registry-export-table")
     page = {
@@ -380,7 +389,7 @@ def plan_group_access(project, report_group, registry_group):
 
 
 def plan_registry_expansion(project):
-    """Only add registry fields; preserve connection, lineage, layout and access."""
+    """Add fields/update known scope labels; preserve connection, layout and access."""
     template = (Path(__file__).parent / "templates/provider_registry.tmdl").read_text(encoding="utf-8")
     model_path = project / MODEL / "tables/rpt_provider_registry.tmdl"
     contents = model_path.read_text(encoding="utf-8-sig")
@@ -443,11 +452,22 @@ def plan_registry_expansion(project):
     subtitle_path = project / REPORT / "pages" / PAGE_ID / "visuals" / visual_id("registry-subtitle") / "visual.json"
     subtitle = subtitle_path.read_text(encoding="utf-8-sig")
     old = "Fostering providers with framework membership, including providers without offers. One row per Provider ID."
-    subtitle = subtitle.replace(old, REGISTRY_SUBTITLE)
-    # Only query projections and the known subtitle change. No role, report
+    for previous in (old,
+                     "Fostering providers left-joined to homes; providers without homes retained. "
+                     "One row per Provider ID / Home ID. Provider-wide totals repeat across homes: do not sum them."):
+        subtitle = subtitle.replace(previous, REGISTRY_SUBTITLE)
+    # Scope labels are narrowly replaced: preserve user-custom wording/styles.
+    table_text = encode_json(table).replace("'Provider registry — Fostering'", "'" + REGISTRY_TABLE_TITLE + "'")
+    table_text = table_text.replace(
+        "'Fostering provider registry with all contact columns. Use the horizontal scrollbar for remaining fields. Export summarized data from this table only when authorized.'",
+        "'" + REGISTRY_ALT_TEXT + "'")
+    help_path = project / REPORT / "pages" / PAGE_ID / "visuals" / visual_id("registry-export-help") / "visual.json"
+    help_text = help_path.read_text(encoding="utf-8-sig").replace(
+        "Framework Code retains every distinct Fostering membership.", "Framework Code retains every distinct membership.")
+    # Only query projections and known scope descriptions change. No role, report
     # setting, page coordinate, table style or user connection is replaced.
     return {path: value for path, value in (
-        (model_path, contents), (table_path, encode_json(table)), (subtitle_path, subtitle),
+        (model_path, contents), (table_path, table_text), (subtitle_path, subtitle), (help_path, help_text),
     ) if path.read_text(encoding="utf-8-sig") != value}
 
 

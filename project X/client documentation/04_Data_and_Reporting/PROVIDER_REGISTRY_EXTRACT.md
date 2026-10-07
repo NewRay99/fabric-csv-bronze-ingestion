@@ -1,6 +1,6 @@
 # Provider registry extract
 
-Updated 6 October 2026. GLD-023 now has one Fostering provider/home registry from
+Updated 7 October 2026. GLD-023 now has a COMPLETE provider/home registry from
 the Gold notebook through to the saved WIP semantic model and an export table.
 The source implementation is ready; Fabric execution, data refresh and Desktop
 rendering still require deployment verification. No live contact file has been
@@ -8,38 +8,54 @@ generated or published.
 
 ## Extract scope
 
-Both supplied legacy queries are identical and select Fostering providers. Their
-replacement is `gold.rpt_provider_registry`, with one current row per
-`provider_id` / `provider_home_id`. This supersedes the earlier provider-only
-grain. A provider needs a Fostering framework membership, but does not
-need an offer, referral assignment, message or registered home. Other placement
-types and providers without a qualifying framework are outside this extract.
+The source population is exactly:
 
-`05_gold_dimensions.py` reads current provider fields and contacts from
-`silver.provider`, left-joins the latest `silver.provider_home` by provider ID,
-then joins current memberships from
-`gold.bridge_provider_framework` to `gold.dim_framework`. Duplicate links do
-not multiply provider/home rows. Every current home is retained, even without
-offers. A provider without homes has one row with blank home fields. Where one membership ID appears in several exports,
-the latest version wins. Framework placement types are compared without casing
-or surrounding-space differences.
+```sql
+FROM gold.dim_provider p
+LEFT JOIN gold.dim_provider_home h ON p.provider_id = h.provider_id
+```
 
-Provider records are ordered by source `export_date`, then `_silver_load_ts`.
-Equal timestamps use a stable ordering of all output provider fields, rather
+Every dimension provider and its dimension homes are retained, across ALL
+placement types, statuses and framework memberships. A provider with no home
+has one blank-home row. No membership, offer, IPA, assignment or message is
+required. If that unfiltered dimension left join contains 1,002 rows, the Gold
+registry must also contain exactly 1,002 rows, with the same provider/home pairs.
+The former Fostering-only eligibility and membership INNER JOIN are removed.
+This supersedes both earlier provider-only and Fostering-only scopes.
+
+`05_gold_dimensions.py` uses the Gold dimensions for provider/home keys and
+basic directory fields. Latest `silver.provider` and `silver.provider_home`
+records LEFT enrich contacts, extra home address/status fields and email. A
+missing Silver contact row must not hide its Gold dimension provider/home;
+a Silver record outside the dimension population must not create a new row.
+
+Frameworks and each separately aggregated metric are LEFT joined. Multiple
+frameworks are rolled up first, so they cannot multiply rows. All memberships,
+including codes missing a framework lookup, are retained as descriptive data.
+A provider without membership has a blank Framework Code/Placement Type and
+Framework Count zero. Latest membership ID versions supersede older exports.
+
+Contact enrichment records are ordered by source `export_date`, then `_silver_load_ts`.
+Equal timestamps use a stable ordering of all source provider fields, rather
 than selecting an arbitrary contact record. NULL contacts remain NULL; an older
 email is not substituted for a missing current email. Missing required columns
 fail the registry build before its existing table is overwritten.
 
-`Framework Code` contains all distinct qualifying codes, sorted and separated
+`Framework Code` contains all distinct membership codes, sorted and separated
 by `; `. This deliberately replaces the old arbitrary choice of one framework
 after sorting and deduplication. Power Query does not guarantee which duplicate
 `Table.Distinct` retains. [Microsoft Table.Distinct documentation](https://learn.microsoft.com/en-us/powerquery-m/table-distinct)
 
-`Placement Type` describes the Fostering membership. `Home Name`, `Service Type`,
-address, status and contact fields now come from the actual home, not a constant
+`Placement Type` lists all available framework placement types, sorted and
+distinct; it is not a Fostering constant or an eligibility test. `Home Name`, `Service Type`,
+address, status and contact fields come from the actual home, not a constant
 or an inferred value. Providers with mixed services retain their home service
 types. Provider Town/City and Postcode remain separate from Home Town/City and
-Home Postcode. It is a current
+Home Postcode. Before overwrite, the notebook checks BOTH the baseline row count
+and provider/home key multiset in both directions; it fails if rows are missing,
+extra, substituted or multiplied. It does not silently filter/deduplicate the
+baseline. Duplicate natural-key pairs also fail for source-quality review.
+It is a current
 directory, not a historical/as-of registry. `AS_OF_DATE` does not reconstruct
 historical provider contacts or memberships.
 
@@ -70,7 +86,7 @@ hiding a field is not an access-control mechanism.
 ## Metric definitions and safe totals
 
 - **Provider** metrics cover that provider's entire available current Gold
-  population, not just one home or Fostering offers. They repeat on every home
+  population, not just one home or one placement type. They repeat on every home
   row. **Do not sum provider-prefixed metrics down the extract.** Take one row
   per Provider ID for provider totals. The model declares all extract fields
   `summarizeBy: none`; no totals row is added to the visual.
@@ -79,8 +95,10 @@ hiding a field is not an access-control mechanism.
   these cannot be credited to an existing home. Therefore home totals need not
   equal provider totals. A no-home provider row has zero home activity metrics;
   it is not a synthetic home for unattributed offers.
-- Offers, IPAs, assignments, messages and homes are deduplicated by natural key
+- Offer, IPA, assignment, message and contact enrichments are deduplicated by natural key
   before joins/aggregation, using latest export metadata and deterministic ties.
+  The two Gold dimensions are used as-is for the registry baseline, with no
+  additional registry eligibility or natural-key filters.
   **Offers includes drafts**. Draft Offers is a subset. Accepted Offers uses
   `OFFER_SUCCESSFUL`, `ACCEPTED`, `APPROVED`, `SELECTED`; Rejected Offers uses
   `OFFER_UNSUCCESSFUL`, `DECLINED`, `REJECTED` (trim/case insensitive). Withdrawn
@@ -130,21 +148,21 @@ The edited project is:
 
 1. Import the updated `00_setup_cfg.py` and `05_gold_dimensions.py` into the
    development Fabric workspace attached to `LH_BCT_WMPP`. Setup registers
-   eight registry lineage entries; no new pipeline child notebook is needed.
+   ten registry lineage entries; no new pipeline child notebook is needed.
 2. Run setup, the current Silver build, `04_gold_model`, then Gold dimensions.
    The registry cell is at the end of `05_gold_dimensions`. For a registry-only
    development run, initialise its schema/run variables and `require_columns`,
-   then execute that cell after the Gold framework dimension/bridge, offer,
+   then execute that cell after Gold provider/home and framework dimensions/bridge, offer,
    IPA and assignment facts are current and have the same as-of date. Home and
    message Silver tables are now required too. The existing live pipeline already
    runs Gold facts before Gold dimensions. No archive replay or database reset
    is required for this expansion.
 3. Check that `gold.rpt_provider_registry` is visible in the Lakehouse SQL
-   endpoint before refreshing its semantic-model import. Reconcile the provider
-   distinct provider count with the provider IDs having Fostering memberships.
-   Check uniqueness of Provider ID / Home ID, not Provider ID alone. Row count
-   should equal the sum of each eligible provider's home count, with one row for
-   providers with zero homes. Reconcile provider/home offer and IPA totals with
+   endpoint before refreshing its semantic-model import. Compare the full row
+   count and provider/home key pairs with the unfiltered dimension LEFT JOIN
+   shown above, not with framework membership. The notebook performs this check
+   automatically before overwrite. Check uniqueness of Provider ID / Home ID,
+   not Provider ID alone. Reconcile provider/home offer and IPA totals with
    the separate facts, including unattributed records and missing cost evidence.
 4. Open/reload the updated saved WIP and refresh the registry import. If Desktop
    was already open, preserve any unsaved work separately before reloading; do
@@ -160,7 +178,7 @@ The edited project is:
    extract; Explorer offer/journey filters do not implicitly restrict it.
 
 The model imports the new Gold table directly through the existing SQL endpoint.
-There are no staging-query dependencies, duplicate fostering query, offer-driven
+There are no staging-query dependencies, duplicate legacy extract, offer-driven
 relationships or new bidirectional filters. Existing dashboard visuals, sidebar navigation,
 bookmarks, relationships and reader-role rules for other tables are unchanged.
 
@@ -209,7 +227,7 @@ Entra/Fabric; this local change does not create groups or change their members.
 | Existing security group | Assign to this model role | Registry data |
 | --- | --- | --- |
 | `wmpp_report_users` | `WMPP Dynamic Detail RLS` | No registry rows (`FALSE ()`) |
-| `wmpp_provider_registry_users` | `WMPP Provider Registry RLS` | Fostering registry rows (`TRUE ()`) |
+| `wmpp_provider_registry_users` | `WMPP Provider Registry RLS` | Complete provider/home registry rows (`TRUE ()`) |
 
 The registry role copies **every other table predicate** from the ordinary
 reader role. Referral, snapshot, identity-scope and provider-scoring rules are
@@ -310,11 +328,13 @@ The local WIP remains Git-ignored; preserve it and its backup separately.
 
 ## Acceptance checks
 
-- No duplicate Provider ID / Home ID combinations; distinct provider count
-  matches the qualifying membership population, and row count matches homes
-  plus one row for each no-home provider.
-- A qualifying provider with no offers is present; a Residential-only provider
-  and a provider without Fostering membership are absent.
+- Registry row count and key multiset exactly match unfiltered `dim_provider`
+  LEFT `dim_provider_home`; no missing or extra rows. No duplicate Provider ID /
+  Home ID combinations unless the baseline itself contains an invalid duplicate,
+  which stops the build for source-quality review rather than dropping a row.
+- Providers without offers, homes, framework membership or contact evidence
+  remain present. Residential-only, inactive/closed and unknown-framework
+  providers remain present when they occur in `dim_provider`.
 - Multiple framework codes are retained once each in stable order.
 - Current contacts match Silver; missing contacts remain blank; phone numbers
   keep leading zeros.
