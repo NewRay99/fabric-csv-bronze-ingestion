@@ -11,16 +11,52 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
 | `LIVE-ETL` | Live ETL pipeline issues | 5 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
-| `GLD` | Gold-layer issues | 23 |
+| `GLD` | Gold-layer issues | 24 |
 | `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **85** |
+| **Total classified issues** | | **86** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
 where applicable. `Status` records whether the source change is complete; a
 Fabric replay remains a separate deployment verification unless stated.
+
+## GLD-024 — Source person reference and multiple-referral review flags
+
+- **Request (2026-10-07):** use the source person reference as the report's
+  visible identifier instead of referral UUID; identify references associated
+  with multiple referrals and order those referrals by creation date.
+- **Cause:** `source_reference_id` exists on `silver.referral_person`, but was
+  missing from `gold.dim_person` and the referral fact. A person reference is
+  not a unique referral key, so replacing UUID-only table grouping/drillthrough
+  with that reference alone could merge or select several referrals.
+- **Fix:** publish a text reference in `dim_person` and `fact_referral`; add
+  `has_multiple_referrals`, `source_reference_referral_count` and `order_dupe`
+  in Gold. Deduplicate source-person histories before joining, preserving the
+  existing lowest-person-ID choice for multi-person referrals. Profile eligible
+  as-of referrals only; sequence creation date ascending, UUID ascending for
+  ties. Ignore surrounding spaces/case when matching, retain leading zeros.
+- **Boundary:** blank references are not duplicates (count zero, flag false).
+  Their separate creation-order sequence permits individual navigation. Closed
+  referrals are included; the flag is for review, not deletion or proof of bad
+  data. Global as-of annotations do not recompute with report/RLS selections.
+- **Snapshots:** new snapshots copy all four fields. Retained months remain
+  NULL until replay from the corresponding historical export, never backfilled
+  from today's person or referral records.
+- **Report:** changed 13 referral-bearing tables and six search controls in the
+  saved `reports/WIP/SM WMPP v16 updated WIP`; detail drillthrough uses the
+  canonical fact reference plus sequence. Actual relationships, counts, source
+  status, security, layout positions, styles and bookmarks remain unchanged.
+- **Validation:** 358 tests and 158 subtests pass, including 29 new portable
+  reference/migration checks. Gold-schema and dimension validators pass. All
+  2,704 unlisted WIP files are hash-identical (excluding `.pbi`); every changed
+  visual retains its position and size. Narrow migration preview is idempotent.
+- **Status:** implemented in root notebooks and saved WIP, not deployed to
+  Fabric. Deploy/run 04 and 05, then reopen/refresh WIP and verify duplicate,
+  blank-reference and ordinary single-referral drillthrough in Power BI.
+  Backup: `reports/WIP/_review/source-reference-identifiers-20261007-734c16`.
+  See [reference rules and deployment](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
 
 ## GLD-022 — Materialise referral journey status in Gold
 

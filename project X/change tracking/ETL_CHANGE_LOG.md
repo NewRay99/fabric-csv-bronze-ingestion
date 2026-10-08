@@ -4,6 +4,58 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-08 — Nightly raw archive mode and explicit historical replay
+
+- `90_run_archive_pipeline.py` defaults to `ARCHIVE_RUN_MODE="ARCHIVE_ONLY"`:
+  setup, archive load, archived-schema capture, then monitoring reports.
+  `REPLAY` retains the complete six-step historical Silver/DQ/Gold sequence.
+  Neither mode automatically drops raw archive tables or forces a reset.
+- Exposed run-mode, job and guarded replay controls in the Fabric parameter
+  cell. Validate mode, boolean controls, month and reset confirmation before
+  child execution; reject replay controls in archive-only mode.
+- Corrected archive capture's source from Bronze to `archived` and designated
+  its parameter cell. Derived parent-run checks in archive load/capture and
+  full-reset guards in archive Silver now evaluate after Fabric parameter
+  overrides instead of using uninjected defaults.
+- Verification: 383 tests and 158 subtests pass, including 25 synthetic-child
+  checks for routes, forwarding, confirmations, failures and injection ordering.
+  Ruff passes for both changed test/validator files. No Spark execution or deletion.
+- Updated runbooks with daily scheduling, dated export prerequisites, separate
+  full-reset instructions and post-replay live recovery. Existing ZIP/file
+  reload protection remains; no copy from `latest/` and no audit-default change.
+- Local source changes only. Deploy the four changed notebooks and configure
+  the Fabric schedule before nightly retention becomes operational.
+
+## 2026-10-07 — Source-reference identifiers and duplicate review (GLD-024)
+
+- Added `dim_person.source_reference_id` from the existing source field,
+  retaining text/leading zeros. `fact_referral` carries the selected person's
+  reference plus `has_multiple_referrals`, `source_reference_referral_count`
+  and `order_dupe`; no referral is removed and UUID keys remain authoritative.
+- Deduplicate person export versions before selection/joining. Preserve the
+  existing lowest-person-ID choice on multi-person referrals. Count eligible
+  as-of referrals sharing a trimmed, case-insensitive nonblank reference,
+  including closed referrals. Sequence oldest creation first, UUID for ties.
+  Blank references have flag false/count zero and their own navigation sequence.
+- Copy the new fields into newly written snapshots only; old retained months
+  remain NULL until historical replay. Annotations are refresh/as-of facts,
+  not current-filter or RLS-cohort counts and not automatic deletion rules.
+- Updated nine direct import fields, 13 table projections, six identifier
+  searches, navigation prose/selection label and compound reference/sequence detail binding
+  in the saved WIP. No DAX classifier, relationship rekey, KPI count change,
+  security relaxation, visual repositioning or report ZIP rewrite.
+- Verification: **358 tests and 158 subtests** pass; 29 new reference/migration
+  checks, Gold-schema/dimension validators and idempotent patch preview pass.
+  All 27 changed visuals retain positions/sizes; 2,704 unlisted WIP files remain
+  hash-identical excluding `.pbi`. Backup contains all 32 touched WIP files:
+  `reports/WIP/_review/source-reference-identifiers-20261007-734c16`.
+- Root notebook and local definition changes only. Deploy/run `04_gold_model`
+  and `05_gold_dimensions` before refreshing/reopening WIP. Native Spark/Delta,
+  model refresh and duplicate/blank-reference drillthrough remain acceptance
+  checks. No live Fabric execution, permission change or publication.
+
+See [reference semantics and deployment](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
+
 ## 2026-10-07 — Timezone-aware UTC monitoring clocks (LIVE-ETL-005)
 
 - Reproduced Python's `datetime.utcnow()` deprecation directly from the

@@ -24,12 +24,22 @@
 
 # # 90 — Archive pipeline runner
 #
-# Run the archive-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
+# Archive dated exports nightly without changing Silver/Gold, or explicitly
+# replay the archive-to-Gold sequence. Each child remains independently runnable.
 
 
 # PARAMETERS CELL ********************
 
 DEFAULT_LOCATION_CITY = "Birmingham"
+ARCHIVE_RUN_MODE = "ARCHIVE_ONLY"  # ARCHIVE_ONLY | REPLAY
+JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
+STOP_ON_ERROR = True
+
+# Only used in REPLAY mode. Full reset still requires the existing confirmation.
+PROCESS_ONLY = ""  # YYYY-MM; blank processes the normal archive range.
+RESET_MONTH_MONITORING = False
+CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
+CONFIRM_PROCESS_ONLY_RESET = ""  # RESET YYYY-MM, or RESET ALL with PROCESS_ONLY blank.
 
 # METADATA ********************
 
@@ -47,32 +57,68 @@ print(
     f"Child notebook timeout: {NOTEBOOK_TIMEOUT_SECONDS:,} seconds "
     f"({NOTEBOOK_TIMEOUT_SECONDS / 60:.0f} minutes)"
 )
-STOP_ON_ERROR = True
-JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
+ARCHIVE_RUN_MODE = str(ARCHIVE_RUN_MODE).strip().upper()
+if ARCHIVE_RUN_MODE not in {"ARCHIVE_ONLY", "REPLAY"}:
+    raise ValueError("ARCHIVE_RUN_MODE must be ARCHIVE_ONLY or REPLAY.")
 
-# Optional guarded single-month rebuild controls forwarded to Archive Silver.
-PROCESS_ONLY = ""  # YYYY-MM; blank processes the normal archive range.
-RESET_MONTH_MONITORING = False
-CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
-CONFIRM_PROCESS_ONLY_RESET = ""  # Must be RESET YYYY-MM, or RESET ALL when PROCESS_ONLY is blank.
+
+def archive_runner_bool(value, parameter_name):
+    text = str(value).strip().lower()
+    if text not in {"true", "false", "1", "0", "yes", "no", "y", "n"}:
+        raise ValueError(f"{parameter_name} must be a boolean.")
+    return text in {"true", "1", "yes", "y"}
+
+
+STOP_ON_ERROR = archive_runner_bool(STOP_ON_ERROR, "STOP_ON_ERROR")
+RESET_MONTH_MONITORING = archive_runner_bool(RESET_MONTH_MONITORING, "RESET_MONTH_MONITORING")
+CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = archive_runner_bool(
+    CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY, "CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY"
+)
+PROCESS_ONLY = str(PROCESS_ONLY).strip()
+CONFIRM_PROCESS_ONLY_RESET = str(CONFIRM_PROCESS_ONLY_RESET).strip()
+if ARCHIVE_RUN_MODE == "ARCHIVE_ONLY" and (
+    PROCESS_ONLY or RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY
+    or CONFIRM_PROCESS_ONLY_RESET
+):
+    raise ValueError("Archive rebuild controls require ARCHIVE_RUN_MODE = REPLAY.")
+if ARCHIVE_RUN_MODE == "REPLAY":
+    if PROCESS_ONLY:
+        from datetime import datetime
+
+        if datetime.strptime(PROCESS_ONLY, "%Y-%m").strftime("%Y-%m") != PROCESS_ONLY:
+            raise ValueError("PROCESS_ONLY must be YYYY-MM.")
+    expected_confirmation = f"RESET {PROCESS_ONLY}" if PROCESS_ONLY else "RESET ALL"
+    if RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY:
+        if CONFIRM_PROCESS_ONLY_RESET != expected_confirmation:
+            raise ValueError(f"Archive reset requires {expected_confirmation!r} confirmation.")
+    if CONFIRM_PROCESS_ONLY_RESET == "RESET ALL" and (
+        PROCESS_ONLY or not RESET_MONTH_MONITORING
+    ):
+        raise ValueError("RESET ALL requires PROCESS_ONLY blank and RESET_MONTH_MONITORING = True.")
+    if CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY and not PROCESS_ONLY and not RESET_MONTH_MONITORING:
+        raise ValueError("Clearing Silver without PROCESS_ONLY requires a confirmed full reset.")
 
 ARCHIVE_STEPS = [
     ("00_setup_cfg", {}),
     ("00_archive_load", {}),
-    ("01a_cfg_schema_capture_archive", {}),
+    ("01a_cfg_schema_capture_archive", {"COMPARED_SCHEMA": "archived"}),
+]
+if ARCHIVE_RUN_MODE == "REPLAY":
     # Archive Silver runs its DQ and Gold-fact child steps. Dimensions are
     # deliberately deferred to the final explicit step below.
-    ("02a_archive_silver", {
-        "DEFAULT_LOCATION_CITY": DEFAULT_LOCATION_CITY,
-        "RUN_GOLD_DIMENSIONS_AT_MONTH_END": False,
-        "PROCESS_ONLY": PROCESS_ONLY,
-        "RESET_MONTH_MONITORING": RESET_MONTH_MONITORING,
-        "CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY": CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY,
-        "CONFIRM_PROCESS_ONLY_RESET": CONFIRM_PROCESS_ONLY_RESET,
-    }),
-    ("05_gold_dimensions", {}),
-    ("06_reports", {}),
-]
+    ARCHIVE_STEPS.extend([
+        ("02a_archive_silver", {
+            "DEFAULT_LOCATION_CITY": DEFAULT_LOCATION_CITY,
+            "RUN_GOLD_DIMENSIONS_AT_MONTH_END": False,
+            "PROCESS_ONLY": PROCESS_ONLY,
+            "RESET_MONTH_MONITORING": RESET_MONTH_MONITORING,
+            "CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY": CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY,
+            "CONFIRM_PROCESS_ONLY_RESET": CONFIRM_PROCESS_ONLY_RESET,
+        }),
+        ("05_gold_dimensions", {}),
+    ])
+ARCHIVE_STEPS.append(("06_reports", {}))
+print(f"ARCHIVE_RUN_MODE={ARCHIVE_RUN_MODE}; steps={[name for name, _ in ARCHIVE_STEPS]}")
 
 
 # METADATA ********************

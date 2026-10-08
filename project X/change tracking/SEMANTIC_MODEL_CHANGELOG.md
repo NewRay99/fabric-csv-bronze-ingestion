@@ -1,5 +1,26 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 7 October 2026 — Separate saved-WIP identifier update (GLD-024)
+
+This additive change applies to `reports/WIP/SM WMPP v16 updated WIP`, not the
+immutable v00/v01 ZIP comparison below. Nine new direct Gold import columns:
+`dim_person.source_reference_id`, and reference/count/multiple-referral flag/
+sequence on both `fact_referral` and `fact_referral_snapshot`. Existing source
+connections, lineage tags and UUID-key relationships remain unchanged.
+
+Thirteen tables now display Source reference, Referral sequence and Multiple
+referrals instead of referral UUID. Six identifier searches and the person
+search/selection labels use the source reference. Referral Detail uses matching canonical
+`fact_referral.source_reference_id` and `fact_referral.order_dupe` fields as
+compound drillthrough filters; UUID still supplies the actual internal key.
+No business measure was added/rekeyed, and no RLS/export/layout/bookmark change.
+
+Root ETL and saved files are implemented; run Gold 04/05 before model refresh.
+Native Power BI row-selection/drillthrough/rendering checks remain pending.
+All 32 touched files are backed up under
+`reports/WIP/_review/source-reference-identifiers-20261007-734c16`.
+See [field semantics and acceptance steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
+
 ## WMPP Power BI Baseline Reconciliation
 
 | Field | Value |

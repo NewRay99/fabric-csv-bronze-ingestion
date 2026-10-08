@@ -449,7 +449,8 @@ WHERE COALESCE(is_active, false)
 require_columns(
     "silver.referral_person",
     ["person_id", "initials", "age_value", "age_date_unit", "has_restrictions",
-     "gender", "ethnicity", "religion", "preferred_language", "export_date"],
+     "gender", "ethnicity", "religion", "preferred_language", "export_date",
+     "source_reference_id"],
 )
 person_current = (
     spark.table("silver.referral_person")
@@ -459,6 +460,7 @@ person_current = (
             Window.partitionBy("person_id").orderBy(
                 F.col("export_date").cast("timestamp").desc_nulls_last(),
                 F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(),
+                F.col("source_reference_id").asc_nulls_last(),
             )
         ),
     )
@@ -466,6 +468,10 @@ person_current = (
 )
 dim_person = person_current.select(
     F.col("person_id").alias("person_id"),
+    # A source person reference, not a unique referral key. Preserve leading zeros.
+    F.when(F.trim(F.col("source_reference_id")) != "",
+           F.trim(F.col("source_reference_id").cast("string")))
+    .alias("source_reference_id"),
     F.col("initials").alias("initials"),
     F.col("age_value").alias("age_value"),
     F.col("age_date_unit").alias("age_date_unit"),

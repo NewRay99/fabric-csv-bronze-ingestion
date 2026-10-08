@@ -93,7 +93,11 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
 | `referral_id` | STRING (PK) | `silver.referral` | Total Referrals, all referral-count measures |
-| `person_id` | STRING | `silver.referral_person` (first recorded person per referral) | Gender referral measures via `dim_person` (GLD-006/007) |
+| `person_id` | STRING | `silver.referral_person` (lowest person ID per referral, preserving existing selection) | Gender referral measures via `dim_person` (GLD-006/007) |
+| `source_reference_id` | STRING | Selected source person's latest eligible reference; also published on `dim_person` (GLD-024) | Visible person reference, not a referral relationship/count key |
+| `has_multiple_referrals` | BOOLEAN | Gold as-of reference profile, including closed referrals (GLD-024) | Multiple-referral review flag; false for missing references |
+| `source_reference_referral_count` | LONG | Gold as-of count for trimmed case-insensitive nonblank reference | Diagnostic count; zero for missing references, not filter-cohort count |
+| `order_dupe` | INT | Gold row number within reference, created ascending then UUID ascending | Referral sequence for table grouping/compound drillthrough; separate sequence for missing references |
 | `is_open` | BOOLEAN | `silver.referral_enrichment` (GLD-009 business rule: status OPEN/UNDER_OFFER with a live provider referral, under-offer status, or inside the response-required window) | Open Referrals, Closed Referrals, Open Overdue, Stalled |
 | `is_awaiting_offer` | BOOLEAN | `silver.referral_enrichment` (GLD-011: OPEN referral with an engaged provider referral or inside the response-required window) | Active Referrals Awaiting Offers |
 | `is_spot` | BOOLEAN | `silver.referral` (GLD-010) | Spot vs Framework split |
@@ -127,6 +131,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 |---|---|---|---|
 | `snapshot_date` | DATE | Derived (canonical month date) | All snapshot measures |
 | `referral_id` | STRING | `silver.referral` | Snapshot Referrals |
+| `source_reference_id`, `has_multiple_referrals`, `source_reference_referral_count`, `order_dupe` | As above | Gold referral as-of annotations (GLD-024) | New snapshots only; retained months NULL until historical replay |
 | `is_open` | BOOLEAN | Derived | Open/Closed at Snapshot |
 | `is_open_overdue` | BOOLEAN | Derived (GLD-013) | Open Overdue at Snapshot |
 | `is_emergency_placement` | BOOLEAN | Derived (GLD-013) | Emergency split at Snapshot |

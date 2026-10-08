@@ -17,10 +17,29 @@ referral_created AS (
 referral_enrichment AS (
   SELECT * FROM silver.referral_enrichment
 ),
-referral_child AS (
-  SELECT referral_id, MIN(CAST(person_id AS STRING)) AS person_id
+referral_person_history AS (
+  SELECT referral_id, CAST(person_id AS STRING) AS person_id,
+    NULLIF(TRIM(CAST(source_reference_id AS STRING)), '') AS source_reference_id,
+    ROW_NUMBER() OVER (
+      PARTITION BY referral_id, person_id
+      ORDER BY export_date DESC NULLS LAST, _silver_load_ts DESC NULLS LAST,
+               source_reference_id ASC NULLS LAST, child_index ASC NULLS LAST
+    ) AS person_version
   FROM silver.referral_person
-  GROUP BY referral_id
+  WHERE person_id IS NOT NULL
+    AND (export_date IS NULL OR TO_DATE(export_date) <= {AS_OF_SQL})
+),
+referral_person_selected AS (
+  -- Preserve the existing MIN(person_id) selection for multi-person referrals.
+  -- Rank source versions first so historical exports cannot multiply fact rows.
+  SELECT referral_id, person_id, source_reference_id,
+    ROW_NUMBER() OVER (PARTITION BY referral_id ORDER BY person_id ASC) AS person_selection
+  FROM referral_person_history
+  WHERE person_version = 1
+),
+referral_child AS (
+  SELECT referral_id, person_id, source_reference_id
+  FROM referral_person_selected WHERE person_selection = 1
 ),
 referral_framework_category AS (
   SELECT referral_id,
@@ -133,7 +152,8 @@ journey_ipa_evidence AS (
   GROUP BY referral_id
 ),
 base AS (
-  SELECT r.referral_id AS referral_id, child.person_id, c.referral_created_date,
+  SELECT r.referral_id AS referral_id, child.person_id, child.source_reference_id,
+    c.referral_created_date,
     category.framework_category_id,
     COALESCE(category.framework_category_count, 0) AS framework_category_count,
     loc.location, loc.location_match_status, loc.location_is_default, loc.location_requires_review,
@@ -207,9 +227,30 @@ journey_classified AS (
       ELSE 8
     END AS journey_stage_order
   FROM base
+),
+eligible_referrals AS (
+  SELECT journey_classified.*,
+    LOWER(source_reference_id) AS source_reference_match_key
+  FROM journey_classified
+  WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}
+),
+reference_profile AS (
+  SELECT eligible_referrals.*,
+    CASE WHEN source_reference_match_key IS NULL THEN 0
+      ELSE COUNT(*) OVER (PARTITION BY source_reference_match_key)
+    END AS source_reference_referral_count,
+    -- A stable sequence also distinguishes missing-reference rows in report
+    -- drillthrough. Missing references are never flagged as duplicate people.
+    ROW_NUMBER() OVER (
+      PARTITION BY source_reference_match_key
+      ORDER BY referral_created_date ASC, referral_id ASC
+    ) AS order_dupe
+  FROM eligible_referrals
 )
 SELECT {AS_OF_SQL} AS as_of_date,
-  export_date, referral_id, person_id, referral_created_date, required_placement_date,
+  export_date, referral_id, person_id, source_reference_id,
+  source_reference_referral_count, source_reference_referral_count > 1 AS has_multiple_referrals,
+  order_dupe, referral_created_date, required_placement_date,
   framework_category_id, framework_category_count,
   location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,
@@ -277,5 +318,4 @@ SELECT {AS_OF_SQL} AS as_of_date,
   END AS required_placement_date_outcome,
   planned_placement_start_date, estimated_weekly_cost,
   '{GOLD_JOB_RUN_ID}' AS job_run_id, CURRENT_TIMESTAMP() AS gold_modelled_at
-FROM journey_classified
-WHERE TO_DATE(referral_created_date) <= {AS_OF_SQL}
+FROM reference_profile

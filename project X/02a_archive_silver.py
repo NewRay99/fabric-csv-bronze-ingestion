@@ -61,21 +61,6 @@ RESET_MONTH_MONITORING = False
 CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = False
 CONFIRM_PROCESS_ONLY_RESET = ""  # RESET YYYY-MM for one month, or RESET ALL for every archive month.
 
-RESET_ALL_ARCHIVE_PROCESSING = (
-    RESET_MONTH_MONITORING
-    and not PROCESS_ONLY
-    and CONFIRM_PROCESS_ONLY_RESET == "RESET ALL"
-)
-if CONFIRM_PROCESS_ONLY_RESET == "RESET ALL" and not RESET_ALL_ARCHIVE_PROCESSING:
-    raise ValueError(
-        "RESET ALL requires PROCESS_ONLY to be blank and RESET_MONTH_MONITORING = True."
-    )
-if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY and not RESET_ALL_ARCHIVE_PROCESSING:
-    raise ValueError(
-        "PROCESS_ONLY must be set to YYYY-MM when clearing one month. For a full archive rebuild, "
-        "leave PROCESS_ONLY blank and set RESET_MONTH_MONITORING = True with CONFIRM_PROCESS_ONLY_RESET = 'RESET ALL'."
-    )
-
 RUN_GOLD_AT_MONTH_END = True
 RUN_GOLD_DIMENSIONS_AT_MONTH_END = True
 DQ_NOTEBOOK_NAME = "03_silver_business_rules"
@@ -95,7 +80,6 @@ DIAGNOSTIC_KEY_SAMPLE_SIZE = 5
 DATE_FORMATS = ["yyyy-MM-dd", "dd/MM/yyyy", "yyyy-MM-dd'T'HH:mm:ss"]
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
-IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 TIMESTAMP_FORMATS = [
     "yyyy-MM-dd",
     "yyyy-MM-dd HH:mm:ss.SSSSSS",
@@ -110,6 +94,32 @@ TIMESTAMP_FORMATS = [
     "yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX",
     "yyyy-MM-dd'T'HH-mm-ssX",
 ]
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+# Derived controls must be evaluated after Fabric injects parameter overrides.
+IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
+RESET_ALL_ARCHIVE_PROCESSING = (
+    RESET_MONTH_MONITORING
+    and not PROCESS_ONLY
+    and CONFIRM_PROCESS_ONLY_RESET == "RESET ALL"
+)
+if CONFIRM_PROCESS_ONLY_RESET == "RESET ALL" and not RESET_ALL_ARCHIVE_PROCESSING:
+    raise ValueError(
+        "RESET ALL requires PROCESS_ONLY to be blank and RESET_MONTH_MONITORING = True."
+    )
+if (RESET_MONTH_MONITORING or CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY) and not PROCESS_ONLY and not RESET_ALL_ARCHIVE_PROCESSING:
+    raise ValueError(
+        "PROCESS_ONLY must be set to YYYY-MM when clearing one month. For a full archive rebuild, "
+        "leave PROCESS_ONLY blank and set RESET_MONTH_MONITORING = True with CONFIRM_PROCESS_ONLY_RESET = 'RESET ALL'."
+    )
 
 # METADATA ********************
 

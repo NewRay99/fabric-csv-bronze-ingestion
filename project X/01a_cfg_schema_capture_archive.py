@@ -28,9 +28,9 @@
 #
 # This will help the downstream silver layer as the silver layer requires that the data has references keys.
 
-# CELL ********************
+# PARAMETERS CELL ********************
 
-COMPARED_SCHEMA = "Bronze"
+COMPARED_SCHEMA = "archived"
 FAIL_ON_CRITICAL = True
 
 # Shared configuration setup
@@ -38,7 +38,6 @@ CFG_NOTEBOOK_NAME = "00_setup_cfg"
 AUDIT_TABLE = "monitoring.cfg_silver_export_load"
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
-IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 NOTEBOOK_TIMEOUT_SECONDS = 1800
 
 
@@ -64,6 +63,7 @@ NOTEBOOK_TIMEOUT_SECONDS = 1800
 
 from notebookutils import mssparkutils
 
+IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 if not IS_ORCHESTRATED_RUN:
     cfg_result = mssparkutils.notebook.run(
         CFG_NOTEBOOK_NAME,

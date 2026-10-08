@@ -99,7 +99,7 @@ for guard in [
     check(guard in dq_source, f"03_silver_business_rules lost SKIPPED guard: {guard}")
 
 archive_source = notebook_source("01a_cfg_schema_capture_archive.py")
-check('COMPARED_SCHEMA = "Bronze"' in archive_source, "archive capture was not restored")
+check('COMPARED_SCHEMA = "archived"' in archive_source, "archive capture must inspect archived tables")
 check("ARCHIVE_TABLE_PREFIX" not in archive_source, "archive capture still has the unwanted rewrite")
 check('StructField("schema_name"' not in archive_source, "archive capture still stores schema_name")
 

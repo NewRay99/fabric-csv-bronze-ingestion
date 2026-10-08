@@ -68,8 +68,6 @@ CFG_NOTEBOOK_NAME = "00_setup_cfg"
 AUDIT_TABLE = "monitoring.cfg_silver_export_load"
 TIME_PARSER_POLICY = "CORRECTED"
 JOB_RUN_ID = ""  # Parent orchestration correlation ID.
-# Capture this before local RUN_ID is created: parent runners always pass it.
-IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 NOTEBOOK_TIMEOUT_SECONDS = 1800
 
 # METADATA ********************
@@ -94,6 +92,8 @@ NOTEBOOK_TIMEOUT_SECONDS = 1800
 
 from notebookutils import mssparkutils
 
+# Evaluate after Fabric injects parameter overrides, before local RUN_ID exists.
+IS_ORCHESTRATED_RUN = bool(JOB_RUN_ID)
 if not IS_ORCHESTRATED_RUN:
     cfg_result = mssparkutils.notebook.run(
         CFG_NOTEBOOK_NAME,

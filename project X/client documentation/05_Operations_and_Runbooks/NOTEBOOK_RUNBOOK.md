@@ -58,8 +58,14 @@ monthly Silver/Gold states.
 
 ### 2.1 Standard initial archive load
 
-Use `90_run_archive_pipeline` for the standard archive route. It creates one
-`JOB_RUN_ID` and runs the following order:
+Use `90_run_archive_pipeline.py` for the standard archive route. Its new default,
+`ARCHIVE_RUN_MODE="ARCHIVE_ONLY"`, runs setup, archive load, archived-schema
+capture and monitoring reports only. Schedule this mode after dated exports
+arrive for nightly raw retention without rebuilding Silver/Gold. It reads the
+archive input folders, not the live `latest/` folder.
+
+For historical Silver/Gold processing, set `ARCHIVE_RUN_MODE="REPLAY"`.
+It creates one `JOB_RUN_ID` and runs the following order:
 
 1. `00_setup_cfg`
 2. `00_archive_load`
@@ -314,8 +320,11 @@ intentional contract/rule refresh, then return it to `False`.
 
 Use `90_run_live_pipeline` for the standard live sequence: setup, Bronze latest,
 live schema capture, Silver formatter, Silver business rules, Gold facts, Gold
-dimensions, then `06_reports`. Use `90_run_archive_pipeline` for the standard
-archive sequence. The detailed archive procedure is in
+dimensions, then `06_reports`. Use `90_run_archive_pipeline` with
+`ARCHIVE_RUN_MODE="ARCHIVE_ONLY"` for raw retention or `"REPLAY"` for the full
+historical sequence. Full reset remains separately confirmed; after replay,
+run the live pipeline to restore current Silver/Gold reporting state.
+The detailed archive and nightly scheduling procedure is in
 `ARCHIVE_PIPELINE_RUNBOOK.md`.
 
 The runner prints one `JOB_RUN_ID` and passes it to every child notebook. Use

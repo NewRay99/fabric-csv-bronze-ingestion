@@ -1,5 +1,22 @@
 # WMPP reporting status as at 30 September 2026
 
+## 7 October 2026 addendum — Source-reference identifiers
+
+The saved working project is now `reports/WIP/SM WMPP v16 updated WIP`.
+Gold publishes the source person reference in `dim_person` and `fact_referral`,
+with a multiple-referral review flag, reference referral count and oldest-first
+sequence on the fact. New snapshots retain those as-of values; older retained
+months are not backfilled from today's data.
+
+Thirteen referral-bearing tables and six identifier search controls display/
+search source references instead of referral UUIDs. Referral Detail drillthrough
+uses reference plus sequence, since a person reference is not unique. True UUID
+joins/counts, source status, RLS, bookmarks and visual positions/sizes are
+unchanged. This is a saved-file implementation, not a refreshed-model sign-off.
+Deploy/run Gold 04/05, then reopen/refresh WIP and check duplicate/blank-reference
+drillthrough. See [field rules and acceptance](GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
+The 30 September baseline assessment below remains dated historical evidence.
+
 ## Delivery position
 
 The local WIP now supports the reporting journey from overall performance to referral and provider exploration, then record-level drillthrough. The saved model contains **58 tables and 366 measures**. All **109 existing Dashboard Legend measures** resolve by name in that model. The revised Legend adds **35 existing business measures** that were missing from its catalogue, giving **144 catalogue entries**. The remaining model measures include compatibility measures, display logic, selectors, filter gates and other calculations; they are not 222 additional business KPIs.
