@@ -2528,6 +2528,44 @@ correction dated 7 October 2026; retained here as delivery history.
 i have added this to the model but the filter isnt returning any rows
 
 ```
+Linked Provider Referrals = 
+ VAR providerPairs = 
+ DISTINCT (
+    UNION(
+        SELECTCOLUMNS('fact_referral_provider',
+            "referral_id", 'fact_referral_provider'[referral_id],
+            "provider_id", 'fact_referral_provider'[provider_id]
+        ),
+        SELECTCOLUMNS(
+            'fact_offer',
+            "referral_id", 'fact_offer'[referral_id],
+            "provider_id", 'fact_offer'[provider_id]
+        )
+    )
+ )
+ RETURN
+    ADDCOLUMNS(
+        FILTER(
+            providerPairs,
+            NOT ISBLANK([referral_id])
+                && NOT ISBLANK([provider_id])
+        ),
+        "provider_name",
+            VAR linkedProviderId = [provider_id]
+            RETURN
+            COALESCE(
+                LOOKUPVALUE(
+                    'dim_provider'[provider_name],
+                    'dim_provider'[provider_id],
+                    linkedProviderId
+                ),
+                "Unknown provider"
+            )
+    )
+
+```
+
+```
 Linked provider row visible = 
 VAR hasProviderSearch = 
     ISFILTERED('dim_provider'[provider_name])
