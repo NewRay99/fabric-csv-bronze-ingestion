@@ -2522,3 +2522,60 @@ correction dated 7 October 2026; retained here as delivery history.
   import. Native Fabric execution, actual counts, rendering and approved Viewer
   exports remain acceptance checks. No live run/publication/permission change.
   See [current deployment and acceptance](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+
+## SEM-002 - Adding a linked referral table in the semantic model
+
+i have added this to the model but the filter isnt returning any rows
+
+```
+Linked provider row visible = 
+VAR hasProviderSearch = 
+    ISFILTERED('dim_provider'[provider_name])
+        || ISFILTERED('dim_provider'[provider_id])
+VAR searchedProviderIds = VALUES('dim_provider'[provider_id])
+VAR assignedReferralIds = 
+    CALCULATETABLE(
+        VALUES('fact_referral_provider'[referral_id]),
+        KEEPFILTERS(
+            TREATAS(
+                searchedProviderIds,
+                'dim_provider'[provider_id]
+            )
+        )
+    )
+VAR offeredReferralIds =
+    CALCULATETABLE(
+        VALUES( 'fact_offer'[referral_id]),
+        KEEPFILTERS(
+            TREATAS(
+                searchedProviderIds,
+                'dim_provider'[provider_id]
+            )
+        )
+    )
+VAR searchedReferralIds = 
+    DISTINCT(
+        UNION(
+            assignedReferralIds,
+            offeredReferralIds
+        )
+    )
+VAR linkedReferralId =
+    SELECTEDVALUE('Linked Provider Referrals'[referral_id])
+
+VAR linkedProviderId =
+    SELECTEDVALUE('Linked Provider Referrals'[provider_id])
+
+RETURN
+    IF(
+        hasProviderSearch
+            && NOT ISBLANK(linkedReferralId)
+            && NOT ISBLANK(linkedProviderId)
+            && linkedReferralId IN searchedReferralIds
+            && NOT (linkedProviderId IN searchedProviderIds),
+            1,
+            BLANK()
+    )
+
+```
+
