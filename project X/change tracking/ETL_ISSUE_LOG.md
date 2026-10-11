@@ -2662,7 +2662,7 @@ RETURN
         & " | Other pairs: "
         & FORMAT ( COALESCE ( COUNTROWS ( otherPairs ), 0 ), "0" )
         ```
-
+WITH LINKED FILTER
 `// DAX Query
 DEFINE
 	VAR __DS0FilterTable = 
@@ -2695,6 +2695,47 @@ DEFINE
 			),
 			__DS0FilterTable,
 			__ValueFilterDM1,
+			"Linked_debug", 'Linked Provider Referrals'[Linked debug]
+		)
+
+	VAR __DS0PrimaryWindowed = 
+		TOPN(
+			502,
+			__DS0Core,
+			[IsGrandTotalRowTotal],
+			0,
+			'Linked Provider Referrals'[provider_id],
+			1,
+			'Linked Provider Referrals'[provider_name],
+			1
+		)
+
+EVALUATE
+	__DS0PrimaryWindowed
+
+ORDER BY
+	[IsGrandTotalRowTotal] DESC,
+	'Linked Provider Referrals'[provider_id],
+	'Linked Provider Referrals'[provider_name]
+`
+WITOUT LINKED FILTER
+`// DAX Query
+DEFINE
+	VAR __DS0FilterTable = 
+		FILTER(
+			KEEPFILTERS(VALUES('dim_provider'[provider_name])),
+			SEARCH("Hayshousing", 'dim_provider'[provider_name], 1, 0) >= 1
+		)
+
+	VAR __DS0Core = 
+		SUMMARIZECOLUMNS(
+			ROLLUPADDISSUBTOTAL(
+				ROLLUPGROUP(
+					'Linked Provider Referrals'[provider_id],
+					'Linked Provider Referrals'[provider_name]
+				), "IsGrandTotalRowTotal"
+			),
+			__DS0FilterTable,
 			"Linked_debug", 'Linked Provider Referrals'[Linked debug]
 		)
 
