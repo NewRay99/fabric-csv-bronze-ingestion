@@ -2665,13 +2665,13 @@ RETURN
 WITH LINKED FILTER
 `// DAX Query
 DEFINE
-	VAR __DS0FilterTable = 
+	VAR __DS0FilterTable =
 		FILTER(
 			KEEPFILTERS(VALUES('dim_provider'[provider_name])),
 			SEARCH("Hayshousing", 'dim_provider'[provider_name], 1, 0) >= 1
 		)
 
-	VAR __ValueFilterDM1 = 
+	VAR __ValueFilterDM1 =
 		FILTER(
 			KEEPFILTERS(
 				SUMMARIZECOLUMNS(
@@ -2685,7 +2685,7 @@ DEFINE
 			[Linked_provider_row_visible] = 1
 		)
 
-	VAR __DS0Core = 
+	VAR __DS0Core =
 		SUMMARIZECOLUMNS(
 			ROLLUPADDISSUBTOTAL(
 				ROLLUPGROUP(
@@ -2698,7 +2698,7 @@ DEFINE
 			"Linked_debug", 'Linked Provider Referrals'[Linked debug]
 		)
 
-	VAR __DS0PrimaryWindowed = 
+	VAR __DS0PrimaryWindowed =
 		TOPN(
 			502,
 			__DS0Core,
@@ -2721,13 +2721,13 @@ ORDER BY
 WITOUT LINKED FILTER
 `// DAX Query
 DEFINE
-	VAR __DS0FilterTable = 
+	VAR __DS0FilterTable =
 		FILTER(
 			KEEPFILTERS(VALUES('dim_provider'[provider_name])),
 			SEARCH("Hayshousing", 'dim_provider'[provider_name], 1, 0) >= 1
 		)
 
-	VAR __DS0Core = 
+	VAR __DS0Core =
 		SUMMARIZECOLUMNS(
 			ROLLUPADDISSUBTOTAL(
 				ROLLUPGROUP(
@@ -2739,7 +2739,7 @@ DEFINE
 			"Linked_debug", 'Linked Provider Referrals'[Linked debug]
 		)
 
-	VAR __DS0PrimaryWindowed = 
+	VAR __DS0PrimaryWindowed =
 		TOPN(
 			502,
 			__DS0Core,
