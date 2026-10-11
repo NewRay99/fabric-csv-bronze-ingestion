@@ -2528,8 +2528,8 @@ correction dated 7 October 2026; retained here as delivery history.
 i have added this to the model but the filter isnt returning any rows
 
 ```
-Linked Provider Referrals = 
- VAR providerPairs = 
+Linked Provider Referrals =
+ VAR providerPairs =
  DISTINCT (
     UNION(
         SELECTCOLUMNS('fact_referral_provider',
@@ -2566,12 +2566,12 @@ Linked Provider Referrals =
 ```
 
 ```
-Linked provider row visible = 
-VAR hasProviderSearch = 
+Linked provider row visible =
+VAR hasProviderSearch =
     ISFILTERED('dim_provider'[provider_name])
         || ISFILTERED('dim_provider'[provider_id])
 VAR searchedProviderIds = VALUES('dim_provider'[provider_id])
-VAR assignedReferralIds = 
+VAR assignedReferralIds =
     CALCULATETABLE(
         VALUES('fact_referral_provider'[referral_id]),
         KEEPFILTERS(
@@ -2591,7 +2591,7 @@ VAR offeredReferralIds =
             )
         )
     )
-VAR searchedReferralIds = 
+VAR searchedReferralIds =
     DISTINCT(
         UNION(
             assignedReferralIds,
@@ -2617,3 +2617,48 @@ RETURN
 
 ```
 
+```
+Linked debug =
+VAR searchDetected =
+    ISFILTERED ( 'dim_provider'[provider_name] )
+        || ISFILTERED ( 'dim_provider'[provider_id] )
+
+VAR searchedProviders =
+    VALUES ( 'dim_provider'[provider_id] )
+
+VAR searchedReferrals =
+    FILTER (
+        DISTINCT (
+            UNION (
+                VALUES ( 'fact_referral_provider'[referral_id] ),
+                VALUES ( 'fact_offer'[referral_id] )
+            )
+        ),
+        NOT ISBLANK ( [referral_id] )
+    )
+
+VAR candidatePairs =
+    CALCULATETABLE (
+        'Linked Provider Referrals',
+        REMOVEFILTERS ( 'dim_provider' )
+    )
+
+VAR otherPairs =
+    FILTER (
+        candidatePairs,
+        'Linked Provider Referrals'[referral_id] IN searchedReferrals
+            && NOT (
+                'Linked Provider Referrals'[provider_id]
+                    IN searchedProviders
+            )
+    )
+
+RETURN
+    "Search: " & IF ( searchDetected, "Yes", "No" )
+        & " | Providers: "
+        & FORMAT ( COALESCE ( COUNTROWS ( searchedProviders ), 0 ), "0" )
+        & " | Referrals: "
+        & FORMAT ( COALESCE ( COUNTROWS ( searchedReferrals ), 0 ), "0" )
+        & " | Other pairs: "
+        & FORMAT ( COALESCE ( COUNTROWS ( otherPairs ), 0 ), "0" )
+        ```
