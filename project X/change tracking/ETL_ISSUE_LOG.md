@@ -2718,6 +2718,7 @@ ORDER BY
 	'Linked Provider Referrals'[provider_id],
 	'Linked Provider Referrals'[provider_name]
 `
+
 WITOUT LINKED FILTER
 `// DAX Query
 DEFINE
@@ -2759,3 +2760,223 @@ ORDER BY
 	'Linked Provider Referrals'[provider_id],
 	'Linked Provider Referrals'[provider_name]
 `
+
+### Resolution — 11 October 2026
+
+Implemented in `reports/WIP/SM WMPP v16 updated WIP` only. The earlier
+provider-only captured query omitted `referral_id`, so `SELECTEDVALUE(referral_id)`
+was blank for providers with multiple referrals and the visibility filter hid
+their rows. Removing that filter exposed the full provider list. The latest
+saved pair-grain visual already restricted its rows correctly, but could still
+look broad because assignment-only links intentionally count.
+
+- Visibility now tests for at least one shared referral at provider grouping,
+  and the exact referral at referral/provider grouping. It excludes searched
+  providers and stays blank without a name/ID search.
+- Selected canonical provider IDs are applied directly to both assignment and
+  offer fact keys. No disconnected provider-search table was introduced.
+- The linked table retains its pair keys and `Linked provider row visible = 1`
+  filter. Its debugging flag column is replaced with distinct assignments,
+  offers (including drafts) and messages, all scoped to visible shared pairs.
+  Messages are attributed through `referral_provider_id`, in either direction.
+- No visual positions/sizes, page layout, relationships, bookmarks, RLS roles,
+  source connections, client-deliverables files or ZIP archives were changed.
+
+Validation: saved expressions executed as read-only query-local overrides in
+the loaded native Power BI model; pair/provider membership and all three counts
+reconciled against independent fact-key filters. The cleared-search visibility
+check passed. The entire saved definition passed Power BI's native TMDL parser,
+and the report's visibility filter and all visual positions were checked.
+`linked-provider-acceptance.dax` in the WIP root provides a native recheck after
+opening the updated PBIP; it is not a Python approximation or pytest assertion.
+
+Status: saved-file repair implemented. Desktop closed before additional
+multi-provider/unmatched-search checks; those checks, visual rendering and
+Viewer/RLS acceptance remain to be confirmed after reopening. No live model
+write, refresh, publication or permission change was performed.
+
+### Approved scope follow-up — 11 October 2026
+
+The user approved excluding assignment-only links and requested a KPI card for
+all linked providers. This is an explicit narrowing of the earlier broad rule,
+not a provider-dimension replacement. Both the searched provider and the other
+provider must have an offer or recorded message on the same referral. Offers
+include drafts; messages in either direction qualify. All searched providers
+are excluded from the supplementary results.
+
+Implemented in the saved WIP only:
+
+- `Linked provider row visible` derives the searched referral set from offers
+  and message-bearing assignments, then checks the other provider's activity
+  on those exact shared referrals. It still supports provider-only grouping.
+- Added `Linked providers in selection` and a **Linked providers** card. A
+  provider is counted once across referrals; no search/unmatched search shows
+  zero. The search filters the card, while a clicked linked-table row does not.
+- Existing linked offer/assignment/message counts retain exact pair filtering
+  and now follow the narrower visibility rule. The table title explains that
+  both sides require offers or messages.
+- All 123 existing visuals retain their exact positions, sizes and stacking
+  order. Page dimensions are unchanged. The added card is within the canvas
+  with zero bounding-box overlaps, including hidden popup visuals.
+
+Acceptance: the independent native DAX query went from FAIL before the change
+to PASS with the saved expressions. Hayshousing reconciles to 700 shared pairs,
+103 distinct linked providers, 560 offers, 700 assignments and 1,114 messages.
+Two searched providers reconcile to 56 pairs / 42 distinct linked providers;
+unmatched and cleared searches return no visible pairs and a zero card. There
+are no extra or missing expected pairs in these checks. The complete saved model
+passes the native TMDL parser. Updated report JSON passes the published page
+2.1.0 and visual 2.12.0 compatibility schemas; only the validation copy's schema
+label was substituted because Desktop's saved 2.13.0 schema is not published.
+The actual source declarations remain unchanged.
+
+Status: approved saved-file changes and native formula checks completed.
+Reopen `SM_WMPP_v16.pbip` to load the saved changes. Visual rendering and
+Viewer/RLS acceptance still require a reopened report; no running-model write,
+refresh, publication, permissions, ETL, client-deliverable or ZIP changes.
+
+### Requested linked-table columns — 11 October 2026
+
+User supplied the earlier offer/status/response/message instructions and asked
+to add any missing columns. Offer and message counts already existed. Added
+distinct offer statuses, distinct recorded provider-response statuses, and a
+latest-message timestamp plus 150-character preview. All use exact visible
+referral/provider keys; messages are attributed through referral-provider
+assignment IDs in either direction. The preview is blank for multi-pair totals
+and uses message ID descending to resolve equal latest timestamps.
+
+The saved WIP Provider Explorer table now shows these columns alongside its
+existing UUID keys, provider name and assignment/offer/message counts. Totals
+and value wrapping are off; new text-column widths are limited without moving
+or resizing any of the 124 visuals. Existing linkage/search/card behaviour,
+filters, relationships, roles and source connections are unchanged. No other
+page, ETL, client-deliverable, ZIP, publication or permissions change.
+
+Validation: native query-local execution of the saved measures reconciled all
+700 Hayshousing pairs and all 56 pairs for two searched providers against
+independent fact-key lookups, with zero mismatched offer statuses, response
+statuses or latest-message previews. Empty/cleared searches produce no text
+payload and aggregate previews are blank. Existing counts/card checks still
+pass; Hayshousing retains 103 distinct linked providers. The full saved model
+passes the native TMDL parser; report JSON passes published 2.12.0 compatibility
+validation, retaining Desktop's 2.13.0 declaration in the actual file. Native
+recheck: `linked-provider-details-acceptance.dax` in the WIP root (no message
+contents output). Reopen the PBIP for rendering and Viewer/RLS checks. No write
+to the running Desktop model or refresh was performed.
+
+### Exclude cancelled links — 11 October 2026
+
+User identified the remaining broad linked results as including cancelled
+referrals and requested exclusion when `current_status` is `CANCELLED` or a
+provider's `provider_response_status` is `Cancelled`.
+
+The read-only native before-check reproduced the exact issue: Hayshousing had
+700 visible pairs but only 128 eligible pairs under this rule; 572 visible pairs
+had cancelled referral/response statuses. The cause is a missing cancellation
+condition in the activity-only scope, not a layout or provider-dimension issue.
+No broader hypothesis/bisection was needed after the explicit rule and native
+reconciliation confirmed it.
+
+Updated the saved WIP's shared visibility measure only. Cancelled referrals
+are excluded globally; cancelled response pairs are excluded on both searched
+and comparison sides. An offer cannot bring a cancelled pair back into scope.
+Comparisons ignore case/surrounding spaces; blank statuses are retained. A
+response cancellation applies to that provider/referral pair, not every other
+provider on the referral. The existing linked card, counts, statuses and message
+preview inherit the exclusion without individual rewrites. No visual changes;
+all 124 visual positions/sizes/stacking orders are identical.
+
+After-check: native PASS with 128 exact pairs, 56 linked providers, 102 offers,
+128 assignments and 244 messages for Hayshousing; zero extra/missing pairs or
+visible cancelled referral/response pairs. Multiple searched providers return
+9 pairs / 9 providers; unmatched/cleared searches remain empty. Status and
+latest-message checks still pass, and the entire saved model parses natively.
+The current data has no mixed cancelled/non-cancelled response pairs or cancelled
+activity pairs on non-cancelled referrals; isolated examples of those cases are
+not available in this snapshot. The native acceptance query now checks both
+requested status exclusions, preventing recurrence in later data.
+
+Status: saved-file change implemented and native checks completed. Reopen the
+PBIP to load it; rendering and Viewer/RLS checks remain pending. No running-model
+write, refresh, publication, permissions, relationship, ETL, source connection,
+other-page, client-deliverable or ZIP changes.
+
+### Source Reference ID on linked table — 11 October 2026
+
+User requested `dim_person[Source Reference ID]` in the calculated linked table
+and its visual. Added a string display column through the exact mapping
+`referral_id -> fact_referral.person_id -> dim_person[Source Reference ID]`.
+The source field's renamed model name was checked before editing. Existing UUID
+pair keys and relationships remain unchanged, so repeated person references do
+not merge referrals. Missing values stay blank and do not remove rows.
+
+Provider Explorer now displays Source Reference ID first, retaining the current
+user-edited projection list and layout (124 visuals unchanged). No change to
+cancellation/activity eligibility, linked counts/statuses/preview/KPI, other
+pages, permissions, ETL, connections, client deliverables or ZIPs.
+
+Native verification of the exact saved partition expression preserves all
+106,267 pairs, with zero extra/missing pairs or reference mismatches against
+the active referral/person relationship; all current pairs have a reference.
+The native TMDL parser confirms four calculated-table columns with string type
+for the new reference. Existing acceptance checks still pass, including 128
+Hayshousing pairs / 56 linked providers. Report JSON passes the published
+2.12.0 compatibility schema without changing its actual 2.13.0 declaration.
+
+Status: saved files implemented and the expression validated read-only.
+Reopen and refresh the WIP PBIP to recalculate/populate this new column. No
+running-model write or refresh was performed; persisted-column rendering and
+Viewer/RLS checks remain pending.
+
+## PERF-002 — WMPP WIP report query performance
+
+Reported 11 October 2026: user requested Performance Analyzer and runtime
+improvements for `SM WMPP v16 updated WIP`, then confirmed all pages are in scope.
+
+Desktop screen capture failed with a FrameArrived timeout and returned no
+accessibility controls. No Performance Analyzer recording was obtained. Used
+read-only native DAX workloads reconstructed from saved projections and supported
+filters instead; these are not captured visual queries or end-to-end page timings.
+All 36 pages were inventoried: 310 data workloads attempted, 283 measured, 27
+field-parameter/unsupported-shape/timeout gaps. Guide-only pages have no data query.
+The loaded import snapshot has 926 referrals, 2,572 offers and 106,267 linked pairs.
+
+Cause confirmed by A/B timing: provider eligibility recalculated row visibility
+for every provider repeatedly within KPI cells. Saved a fast path in 34 measures
+across `_Explorer KPI Measures` (26) and `_Report Journey Measures` (8). When offer
+status is unrestricted and the stage selector resolves to -1, use nonblank current
+provider IDs and, if homes are directly filtered, their visible provider IDs.
+Otherwise the original eligibility expression is retained. Fact calculations,
+KEEPFILTERS, lineage tags, relationships and business rules are unchanged.
+
+Consistent query-local A/B workloads include all 56 affected/dependent measure
+definitions: leaf overrides alone do not rebind stored parent measures in the
+observed Desktop engine. Warm medians, same snapshot and identical result digests:
+
+| Projection workload | Before | After | Reduction |
+|---|---:|---:|---:|
+| Provider Explorer directory | 2,134.84 ms | 83.94 ms | 96.07% |
+| Provider Explorer KPI list | 567.45 ms | 342.30 ms | 39.68% |
+| Provider Detail KPI list | 578.66 ms | 271.18 ms | 53.14% |
+| Page 2 provider-home offer table | 5,431.31 ms | 1,727.20 ms | 68.20% |
+
+The exact saved expressions match the still-loaded original measures for all 34
+measures across 17 scenarios, including all provider rows and aggregate totals:
+zero mismatches. Scenarios cover search/no match/multiple providers, home IDs,
+service types, home-provider filters, offer/no-offer/multiple statuses, stages,
+scoring month, referral and combined filters. Native TMDL parsing passes with
+71 tables, 484 measures and 54 relationships. The SHA256 over every report
+definition JSON is identical before/after: no layout, theme, visual, bookmark,
+filter or navigation changes. Linked-pruning and narrow fact-filter alternatives
+were rejected after measurements showed no benefit or worse runtime.
+
+Durable read-only profiler: `project X/tools/profile_wmpp_wip.ps1` (requires the
+loaded Desktop engine port). Results and per-page coverage are in the WIP root's
+`PERFORMANCE_REVIEW.json`; no identifiers or message payloads are exported.
+
+Status: saved-file optimisation implemented and native verification passed.
+Reopen the saved PBIP to load it, reconciling unsaved Desktop edits before saving
+over the updated files. Actual Performance Analyzer capture, rendering/Other
+timings, generated queries for the 27 gaps, drillthrough contexts and published
+Viewer/RLS verification remain pending. No running-model write, data refresh,
+publication, permissions, ETL, client-deliverable or ZIP changes.
