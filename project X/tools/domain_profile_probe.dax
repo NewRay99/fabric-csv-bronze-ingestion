@@ -1,0 +1,16 @@
+EVALUATE
+ROW(
+    "Rows",COUNTROWS(cfg_data_domain),
+    "Tables",COUNTROWS(SUMMARIZE(cfg_data_domain,cfg_data_domain[source_schema],cfg_data_domain[source_table])),
+    "Columns",COUNTROWS(SUMMARIZE(cfg_data_domain,cfg_data_domain[source_schema],cfg_data_domain[source_table],cfg_data_domain[column_name])),
+    "DiscoveryRuns",DISTINCTCOUNT(cfg_data_domain[run_id]),
+    "JobRuns",DISTINCTCOUNT(cfg_data_domain[job_run_id]),
+    "FirstProfile",MIN(cfg_data_domain[profiled_at]),
+    "LastProfile",MAX(cfg_data_domain[profiled_at]),
+    "MissingJobRows",COUNTROWS(FILTER(cfg_data_domain,ISBLANK(cfg_data_domain[job_run_id]) || cfg_data_domain[job_run_id]="")),
+    "MissingProfileRows",COUNTROWS(FILTER(cfg_data_domain,ISBLANK(cfg_data_domain[profiled_at]))),
+    "MissingDomainRows",COUNTROWS(FILTER(cfg_data_domain,ISBLANK(cfg_data_domain[data_domain]) || cfg_data_domain[data_domain]="")),
+    "MinDistinct",MIN(cfg_data_domain[distinct_value_count]),
+    "MaxDistinct",MAX(cfg_data_domain[distinct_value_count]),
+    "UnmatchedJobIds",COUNTROWS(EXCEPT(FILTER(VALUES(cfg_data_domain[job_run_id]),NOT ISBLANK(cfg_data_domain[job_run_id]) && cfg_data_domain[job_run_id]<>""),VALUES(rpt_job_run_summary[job_run_id])))
+)

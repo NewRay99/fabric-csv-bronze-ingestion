@@ -51,7 +51,7 @@ $taskCases = @(
     @{ Name='Two jobs'; Dates='DATE(2026,10,6)'; ExpectedSingle=$true },
     @{ Name='One job'; Dates='DATE(2026,10,7)'; ExpectedSingle=$true },
     @{ Name='No loads'; Dates='DATE(2026,10,8)'; ExpectedSingle=$true },
-    @{ Name='No selection'; Dates=$null; ExpectedSingle=$false },
+    @{ Name='Latest default'; Dates=$null; ExpectedSingle=$false; ExpectedLatest=$true },
     @{ Name='Multiple days'; Dates='DATE(2026,10,6),DATE(2026,10,7)'; ExpectedSingle=$false }
 )
 $taskFailures = @()
@@ -85,8 +85,8 @@ EVALUATE ROW("Dates",COUNTROWS('Load Calendar'),"First",MIN('Load Calendar'[Date
             if ($taskDateFilter) { $taskArguments += $taskDateFilter }
             $taskArguments += $taskMeasures
             $taskPredicate = if ($taskGate) { '[Day Explorer Job Visible] = 1' } elseif ($taskIsGantt) { '[Single calendar day] = 1' } else { 'TRUE()' }
-            $taskExpected = if (-not $taskCase.ExpectedSingle) { '0' } else { "COALESCE(CALCULATE(COUNTROWS(rpt_job_run_summary),$taskDateFilter),0)" }
-            $taskWrong = if ($taskCase.Dates) { "NOT(INT(rpt_job_run_summary[started_at]) IN {" + $taskCase.Dates + '})' } else { 'TRUE()' }
+            $taskExpected = if ($taskCase.ExpectedLatest) { 'COALESCE(COUNTROWS(TOPN(1,FILTER(rpt_job_run_summary,NOT ISBLANK(rpt_job_run_summary[started_at])),rpt_job_run_summary[started_at],DESC,rpt_job_run_summary[job_run_id],DESC)),0)' } elseif (-not $taskCase.ExpectedSingle) { '0' } else { "COALESCE(CALCULATE(COUNTROWS(rpt_job_run_summary),$taskDateFilter),0)" }
+            $taskWrong = if ($taskCase.Dates) { "NOT(INT(rpt_job_run_summary[started_at]) IN {" + $taskCase.Dates + '})' } elseif ($taskCase.ExpectedLatest) { 'NOT(rpt_job_run_summary[job_run_id] IN SELECTCOLUMNS(TOPN(1,FILTER(ALL(rpt_job_run_summary),NOT ISBLANK(rpt_job_run_summary[started_at])),rpt_job_run_summary[started_at],DESC,rpt_job_run_summary[job_run_id],DESC),"Id",rpt_job_run_summary[job_run_id]))' } else { 'TRUE()' }
             $taskDax = $taskDefinition + @"
 EVALUATE
 VAR JobRows=SUMMARIZECOLUMNS($($taskArguments -join ','))
@@ -102,5 +102,5 @@ RETURN ROW("VisibleJobs",COALESCE(COUNTROWS(VisibleRows),0),"ExpectedJobs",$task
     if ($taskFailures.Count) {
         Write-Output "FAIL: $($taskFailures -join '; ')"
         if ($Assert) { throw 'Day explorer includes jobs outside its selected day, or omits matching jobs.' }
-    } else { Write-Output 'PASS: both Day explorer views show only the selected day, including empty/no/multiple-date selections.' }
+    } else { Write-Output 'PASS: latest default and historical filtering in both Day explorer views, including empty and multiple-date selections.' }
 } finally { $taskConnection.Close() }

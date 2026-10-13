@@ -1,5 +1,104 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 12 October 2026 — Native phone layouts and mobile drawer (MOB-001)
+
+Added separate native Power BI phone layouts in the saved WIP for 31 report,
+drillthrough, extract and guide pages. Five tooltip/superseded/scratch pages are
+unchanged. Existing desktop visuals and page definitions are preserved byte for
+byte; no semantic-model file, measure, relationship, role or connection changed.
+The prior performance tuning and provider-home five-provider limit are preserved.
+
+Phone layouts use a 323-point canvas, full-width charts/maps/tables, readable
+mobile-only font settings, 44-point-or-larger action targets, vertical explorer
+and detail milestones, and compact KPI arrangements. Wide tables retain their
+columns and horizontal panning; this is not a table-grain or query rewrite.
+Long selection messages wrap at a smaller font; milestone dates are not styled
+as large numeric KPIs. Existing chart/table, drillthrough, back and guide actions
+remain available. Native filter drawers reuse existing fields and groups with
+separate mobile-only close controls and display-only open/close bookmarks.
+
+Added a hamburger-style opener and a display-only navigation drawer on each
+phone page. Default/selected rows stay neutral; orange is used on hover, with
+the existing charcoal/warm-white/orange palette. Twelve report destinations are
+available; the restricted registry extract is not added to the menu and its
+existing hidden-page setting is unchanged. Seventy-four navigation bookmarks
+and 18 filter-panel bookmarks are scoped and display-only, without resetting
+data filters. Power BI uses
+show/hide bookmarks, not a smooth sliding animation. New mobile chrome is parked
+outside the desktop canvas, rather than over existing desktop visuals.
+
+Validation: all mobile/new-visual/bookmark files pass their exact public schemas;
+the saved layout checker finds no default-visible overlaps and confirms all
+original report/model hashes. Menu links and touch sizes are checked. Native
+Power BI/phone rendering and published Viewer/RLS acceptance remain pending.
+No refresh or publication was performed. Reopen the WIP PBIP and inspect
+View > Mobile layout before publishing; portrait phone layouts are consumed
+in the Power BI mobile app, not the ordinary report browser view.
+
+Delivery manifest and verification report are in the WIP root. Reusable builder
+and checker: `project X/tools/plan_wmpp_mobile_layout.py`. Report-definition backup:
+`project X/reports/_review/mobile-before-20261012/definition` (excluded from Git).
+
+## 12 October 2026 — Provider Explorer home-table selection cap (PERF-003)
+
+Limited only Provider Explorer's `Provider homes — including homes with no offers`
+table to one through five matching providers. Six new measures count the whole
+page selection with `ALLSELECTED()`, preserve the existing provider-eligibility
+rules, and guard the row-visibility filter plus all three projected offer measures.
+With more than five providers, the table returns no rows and its existing title
+shows the user-requested `Please select 1 or fewer providers`. The cap remains
+five even though the requested warning recommends one. No-match selections are
+empty with the normal title. No overlay visual was added.
+
+Native checks of the exact saved expressions pass for one, five, six, unrestricted
+and unmatched selections: visible home counts are respectively 7, 18, 0, 0 and 0.
+Full-projection comparisons for one and five providers have zero extra/missing
+rows and unchanged values. Six-provider and unrestricted full queries return
+zero rows in approximately 79 and 125 ms; these are reconstructed native query
+workloads, not Performance Analyzer rendering or page-load timings. Durable
+read-only regression query: `provider-homes-cap-acceptance.dax` in the WIP root.
+
+Native TMDL parsing passes (71 tables, 490 measures, 54 relationships); the edited
+visual passes its exact published 2.7.0 schema. All existing measure expressions,
+including the prior 34 performance improvements, are preserved. All other
+report/model definition files have unchanged hashes. Table geometry, columns,
+display labels, formatting and other visuals are unchanged; only its measure
+bindings, visibility filter and title expression changed.
+
+Reopen the saved WIP PBIP to load the changes, reconciling any unsaved Desktop
+edits first. No running-model write, refresh, publication, permission, relationship,
+connection, ETL, client-deliverable, ZIP or alternate-project change. Desktop
+rendering and Viewer/RLS acceptance remain pending.
+
+## 12 October 2026 — Reapplied tuning to replacement WIP (PERF-002)
+
+Reapplied the verified provider-eligibility optimisation to the user-corrected
+`project X/reports/WIP/SM WMPP v16 updated WIP` project: 26 measures in
+`_Explorer KPI Measures`, eight in `_Report Journey Measures`. All 34 original
+expressions were present and the saved definitions matched the open model.
+Only the eligibility block was changed; no old report or entire model was copied.
+Offer-status/stage restrictions continue to use the original visibility check;
+home filtering and all downstream fact calculations are preserved.
+
+Native before/after projection-workload medians: provider directory 2,156.70 to
+84.76 ms; provider KPI list 569.26 to 348.47 ms; detail KPI list 567.77 to 269.23 ms;
+Page 2 home table 5,472.28 to 1,710.72 ms. Returned-row digests are identical. All
+34 base measures match originals for every provider row and totals in 17 filter
+scenarios. Saved-file verification confirms exactly the intended 34 expression
+changes, unchanged measure metadata and successful TMDL parsing (71 tables,
+484 measures, 54 relationships).
+
+Hashes of all report files and other model definitions are identical before/after.
+No layout, theme, bookmark, relationship, role, connection, partition, linked-list,
+ETL, client-deliverable, ZIP or alternate-project change. The initially supplied
+`SM WMPP v16 updated` project was inspected read-only before the path correction.
+
+Reopen the saved PBIP to activate the tuning, preserving any unsaved Desktop edits
+before saving over the updated files. No live model write or refresh was performed.
+Timings are native reconstructed query workloads, not Performance Analyzer visual
+rendering/page-load timings. This run rechecked four hotspots, not the previous
+full report inventory; details are in the corrected WIP `PERFORMANCE_REVIEW.json`.
+
 ## 11 October 2026 — Native query performance optimisation (PERF-002)
 
 Optimised provider eligibility in 34 saved-WIP measures: 26 in

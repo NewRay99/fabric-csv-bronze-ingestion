@@ -18,11 +18,14 @@ $taskConnection.Open()
 $taskRoot = Join-Path (Split-Path $PSScriptRoot -Parent) 'reports/WIP/SM WMPP Mission Control v16/SM WMPP Mission Control.Report/definition/pages'
 $taskPage = Join-Path $taskRoot 'ed27e90d06816c7c1eee'
 $taskBinding = (Get-Content -LiteralPath (Join-Path $taskPage 'page.json') -Raw | ConvertFrom-Json).pageBinding
-if ($taskBinding.type -ne 'Drillthrough' -or $taskBinding.acceptsFilterContext -ne 'Default' -or
+# Desktop omits default values when saving. Microsoft's page schema defaults
+# an absent acceptsFilterContext to Default (flow the current filters).
+$taskAcceptsContext = if ($taskBinding.acceptsFilterContext) {$taskBinding.acceptsFilterContext} else {'Default'}
+if ($taskBinding.type -ne 'Drillthrough' -or $taskAcceptsContext -ne 'Default' -or
     $taskBinding.parameters[0].fieldExpr.Column.Expression.SourceRef.Entity -ne 'Load Calendar' -or
     $taskBinding.parameters[0].fieldExpr.Column.Property -ne 'Date') { throw 'Drillthrough does not pass calendar Date and current filters.' }
 $taskCases = @(
-    @{ Name='Default overview'; Filters=@("TREATAS({`"Last 14 days`"},rpt_job_run_summary[job_run_window])"); Context=@() },
+    @{ Name='Default latest load'; Filters=@(); Latest=$true },
     @{ Name='Older day outside 14 days'; Filters=@("TREATAS({DATE(2026,8,24)},'Load Calendar'[Date])") },
     @{ Name='Recent day'; Filters=@("TREATAS({DATE(2026,10,1)},'Load Calendar'[Date])") },
     @{ Name='No loads'; Filters=@("TREATAS({DATE(2026,10,8)},'Load Calendar'[Date])") },
@@ -48,9 +51,15 @@ try {
         foreach ($taskCase in $taskCases) {
             $taskContext = if ($taskCase.ContainsKey('Context')) {$taskCase.Context} else {$taskCase.Filters}
             $taskArgs = @($taskColumns) + @($taskContext) + @($taskMeasures)
+            $taskExpectedFilters = @($taskCase.Filters)
+            if ($taskCase.Latest) {
+                $taskExpectedFilters += 'TREATAS(SELECTCOLUMNS(LatestJob,"JobKey",rpt_job_run_summary[job_run_id]),rpt_job_run_summary[job_run_id])'
+            }
+            $taskExpectedArguments = @("FILTER($taskTable,NOT ISBLANK($taskTable[started_at]))") + $taskExpectedFilters
             $taskDax = @"
 EVALUATE
-VAR ExpectedRows=CALCULATETABLE(FILTER($taskTable,NOT ISBLANK($taskTable[started_at])),$($taskCase.Filters -join ','))
+VAR LatestJob=TOPN(1,FILTER(ALL(rpt_job_run_summary),NOT ISBLANK(rpt_job_run_summary[started_at])),rpt_job_run_summary[started_at],DESC,rpt_job_run_summary[job_run_id],DESC)
+VAR ExpectedRows=CALCULATETABLE($($taskExpectedArguments -join ','))
 VAR ExpectedIds=SELECTCOLUMNS(ExpectedRows,"JobKey",$taskTable[job_run_id])
 VAR VisualRows=SUMMARIZECOLUMNS($($taskArgs -join ','))
 VAR VisibleRows=FILTER(VisualRows,[$taskGate]=1 && NOT ISBLANK($taskTable[started_at]))
@@ -70,5 +79,5 @@ RETURN ROW("Visible",COALESCE(COUNTROWS(VisibleRows),0),"Expected",COALESCE(COUN
     }
     $taskChecks | ConvertTo-Json -Depth 4
     if (@($taskChecks | Where-Object {-not $_.Pass}).Count) { throw 'Drillthrough date/pipeline context produced missing or unrelated rows.' }
-    Write-Output "PASS: $($taskChecks.Count) live-model checks, including dates outside the default 14-day window."
+    Write-Output "PASS: $($taskChecks.Count) live-model checks, including the latest load default and historical date/pipeline drillthrough."
 } finally { $taskConnection.Close() }
