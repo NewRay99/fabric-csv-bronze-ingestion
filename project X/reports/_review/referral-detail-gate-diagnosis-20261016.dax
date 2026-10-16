@@ -1,0 +1,29 @@
+DEFINE
+    MEASURE '_Story Measures'[__probe_row_aware_guard] =
+        IF(
+            COUNTROWS(ALLSELECTED('fact_referral')) = 1
+                && COUNTROWS('fact_referral') > 0,
+            1, BLANK())
+    VAR __Referral = TREATAS(
+        {"0ec9b6ee-e2fc-4310-b041-fa1fc99c9c5c"}, 'fact_referral'[referral_id])
+    VAR __WithoutGate = CALCULATETABLE(
+        SUMMARIZE('fact_referral', 'dim_person'[Source Reference ID], 'fact_referral'[referral_id]),
+        __Referral)
+    VAR __WithGate = SUMMARIZECOLUMNS(
+        'dim_person'[Source Reference ID], 'fact_referral'[referral_id], __Referral,
+        "__gate", '_Story Measures'[Detail referral selected])
+    VAR __WithRowAwareGate = SUMMARIZECOLUMNS(
+        'dim_person'[Source Reference ID], 'fact_referral'[referral_id], __Referral,
+        "__gate", '_Story Measures'[__probe_row_aware_guard])
+EVALUATE
+    ROW(
+        "without_gate_rows", COUNTROWS(__WithoutGate),
+        "matched_reference", MAXX(__WithoutGate, 'dim_person'[Source Reference ID]),
+        "without_gate_blank_references", COUNTROWS(FILTER(__WithoutGate, ISBLANK('dim_person'[Source Reference ID]))),
+        "with_gate_rows", COUNTROWS(__WithGate),
+        "with_gate_blank_references", COUNTROWS(FILTER(__WithGate, ISBLANK('dim_person'[Source Reference ID]))),
+        "with_gate_populated_references", COUNTROWS(FILTER(__WithGate, NOT ISBLANK('dim_person'[Source Reference ID]))),
+        "row_aware_gate_rows", COUNTROWS(__WithRowAwareGate),
+        "row_aware_gate_blank_references", COUNTROWS(FILTER(__WithRowAwareGate, ISBLANK('dim_person'[Source Reference ID]))),
+        "selected_referral_count", CALCULATE(COUNTROWS('fact_referral'), __Referral)
+    )

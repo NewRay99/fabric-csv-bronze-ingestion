@@ -170,6 +170,23 @@ finally:
         "target.job_run_id = source.job_run_id",
     )
 
+    # 06_reports only creates missing views; publish all six after closing the job.
+    try:
+        for view in (
+            "rpt_job_step_timing",
+            "rpt_job_step_summary",
+            "rpt_job_run_summary",
+            "rpt_job_schema_drift",
+            "rpt_job_data_quality",
+            "rpt_job_layer_lineage",
+        ):
+            spark.sql(
+                f"REFRESH MATERIALIZED LAKE VIEW monitoring.{view} FULL"
+            )
+    except Exception as refresh_error:
+        # A reporting refresh failure must not mask the original ETL outcome.
+        print(f"WARNING: Monitoring refresh failed: {refresh_error}")
+
 failed = [name for name, status, _ in results if status == "FAILED"]
 print(
     f"Live pipeline {status}; JOB_RUN_ID={JOB_RUN_ID}; "

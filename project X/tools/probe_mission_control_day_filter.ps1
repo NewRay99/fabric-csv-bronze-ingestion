@@ -1,4 +1,4 @@
-param([int]$Port = 54939, [switch]$Assert, [switch]$UseLoadedModel)
+param([int]$Port = 54939, [switch]$Assert, [switch]$UseLoadedModel, [string]$ProjectRoot)
 $ErrorActionPreference = 'Stop'
 $taskSdk = Join-Path $env:TEMP 'mission-control-tmdl-sdk'
 Add-Type -Path (Join-Path $taskSdk 'sdk/lib/net8.0/Microsoft.AnalysisServices.Core.dll')
@@ -39,7 +39,7 @@ function Query($Name, $Dax) {
     [pscustomobject]@{ Name = $Name; Rows = $taskRows } | ConvertTo-Json -Depth 6 | Write-Host
     return $taskRows
 }
-$taskRoot = Join-Path (Split-Path $PSScriptRoot -Parent) 'reports/WIP/SM WMPP Mission Control v16'
+$taskRoot = if ($ProjectRoot) {$ProjectRoot} else {Join-Path (Split-Path $PSScriptRoot -Parent) 'reports/WIP/SM WMPP Mission Control v16'}
 $taskPage = Join-Path $taskRoot 'SM WMPP Mission Control.Report/definition/pages/803165f7d2f5aaccd8ac'
 $taskSource = Get-Content -LiteralPath (Join-Path $taskRoot 'SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl') -Raw
 $taskDefinition = ''

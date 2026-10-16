@@ -1,0 +1,24 @@
+EVALUATE
+VAR LatestJob = TOPN(1, ALL('Discovery Job Runs'), 'Discovery Job Runs'[started_at], DESC, 'Discovery Job Runs'[job_run_id], DESC)
+VAR LatestId = MAXX(LatestJob, 'Discovery Job Runs'[job_run_id])
+VAR LatestTime = MAXX(LatestJob, 'Discovery Job Runs'[started_at])
+VAR QualityProblems = FILTER(ALL(rpt_job_data_quality),
+    COALESCE(rpt_job_data_quality[failed_row_count], 0) > 0 ||
+    COALESCE(rpt_job_data_quality[rejected_key_count], 0) > 0 ||
+    COALESCE(rpt_job_data_quality[referential_exception_count], 0) > 0 ||
+    UPPER(COALESCE(rpt_job_data_quality[status], "")) IN {"FAIL", "FAILED", "FAILURE", "ERROR"})
+RETURN UNION(
+    ROW("Metric", "Latest job", "Value", LatestId),
+    ROW("Metric", "Latest job time", "Value", FORMAT(LatestTime, "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Latest job status", "Value", MAXX(LatestJob, 'Discovery Job Runs'[status])),
+    ROW("Metric", "Last job end", "Value", FORMAT(MAXX(LatestJob, 'Discovery Job Runs'[ended_at]), "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Drift problems latest job", "Value", FORMAT(COUNTROWS(FILTER(ALL(cfg_schema_drift_event), cfg_schema_drift_event[job_run_id] = LatestId)), "#,0")),
+    ROW("Metric", "Drift latest time", "Value", FORMAT(MAXX(ALL(cfg_schema_drift_event), COALESCE(cfg_schema_drift_event[last_detected_at], cfg_schema_drift_event[detected_at])), "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Drift missing job links", "Value", FORMAT(COUNTROWS(FILTER(ALL(cfg_schema_drift_event), ISBLANK(cfg_schema_drift_event[job_run_id]))), "#,0")),
+    ROW("Metric", "Quality problems latest job", "Value", FORMAT(COUNTROWS(FILTER(QualityProblems, rpt_job_data_quality[job_run_id] = LatestId)), "#,0")),
+    ROW("Metric", "Quality problem last time", "Value", FORMAT(MAXX(QualityProblems, rpt_job_data_quality[checked_at]), "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Rejected latest job", "Value", FORMAT(COUNTROWS(FILTER(ALL(cfg_rejected_row), cfg_rejected_row[job_run_id] = LatestId)), "#,0")),
+    ROW("Metric", "Rejected last time", "Value", FORMAT(MAX(cfg_rejected_row[rejected_at]), "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Referential latest job", "Value", FORMAT(COUNTROWS(FILTER(ALL(cfg_referential_exception), cfg_referential_exception[job_run_id] = LatestId)), "#,0")),
+    ROW("Metric", "Referential last time", "Value", FORMAT(MAX(cfg_referential_exception[detected_at]), "dd MMM yyyy HH:mm"))
+)

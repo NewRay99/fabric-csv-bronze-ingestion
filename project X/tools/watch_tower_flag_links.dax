@@ -1,0 +1,12 @@
+EVALUATE
+VAR LatestId = MAXX(TOPN(1, ALL('Discovery Job Runs'), 'Discovery Job Runs'[started_at], DESC, 'Discovery Job Runs'[job_run_id], DESC), 'Discovery Job Runs'[job_run_id])
+VAR DriftRun = [Discovery cfg_schema_drift_event Latest key]
+RETURN ROW(
+    "LatestJob", LatestId,
+    "DriftLatestRun", [Discovery cfg_schema_drift_event Latest key],
+    "DriftLatestJobs", CONCATENATEX(CALCULATETABLE(VALUES(cfg_schema_drift_event[job_run_id]), cfg_schema_drift_event[run_id] = DriftRun), cfg_schema_drift_event[job_run_id], ", "),
+    "MappedDriftLatestJobCount", COUNTROWS(FILTER(ALL(rpt_job_schema_drift), rpt_job_schema_drift[job_run_id] = LatestId)),
+    "MappedDriftJobIds", CONCATENATEX(TOPN(5, VALUES(rpt_job_schema_drift[job_run_id]), rpt_job_schema_drift[job_run_id], ASC), rpt_job_schema_drift[job_run_id], ", "),
+    "QualityLatestRun", [Discovery rpt_job_data_quality Latest key],
+    "DomainLatestRun", [Discovery cfg_data_domain Latest key]
+)

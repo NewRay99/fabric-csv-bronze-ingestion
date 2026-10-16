@@ -1,6 +1,6 @@
 # Read-only regression checks against the loaded Desktop model. Libraries come
 # from Microsoft's public AnalysisServices and AdomdClient NuGet packages.
-param([int]$Port = 54939)
+param([int]$Port = 54939, [string]$ProjectRoot)
 $ErrorActionPreference = 'Stop'
 $taskSdk = Join-Path $env:TEMP 'mission-control-tmdl-sdk'
 Add-Type -Path (Join-Path $taskSdk 'sdk/lib/net8.0/Microsoft.AnalysisServices.Core.dll')
@@ -15,7 +15,8 @@ Add-Type -Path (Join-Path $taskAdomd 'Microsoft.AnalysisServices.Runtime.Windows
 Add-Type -Path (Join-Path $taskAdomd 'Microsoft.AnalysisServices.AdomdClient.dll')
 $taskConnection = [Microsoft.AnalysisServices.AdomdClient.AdomdConnection]::new("Data Source=localhost:$Port;Initial Catalog=$taskCatalog")
 $taskConnection.Open()
-$taskRoot = Join-Path (Split-Path $PSScriptRoot -Parent) 'reports/WIP/SM WMPP Mission Control v16/SM WMPP Mission Control.Report/definition/pages'
+$taskProjectRoot = if ($ProjectRoot) {$ProjectRoot} else {Join-Path (Split-Path $PSScriptRoot -Parent) 'reports/WIP/SM WMPP Mission Control v16'}
+$taskRoot = Join-Path $taskProjectRoot 'SM WMPP Mission Control.Report/definition/pages'
 $taskPage = Join-Path $taskRoot 'ed27e90d06816c7c1eee'
 $taskBinding = (Get-Content -LiteralPath (Join-Path $taskPage 'page.json') -Raw | ConvertFrom-Json).pageBinding
 # Desktop omits default values when saving. Microsoft's page schema defaults

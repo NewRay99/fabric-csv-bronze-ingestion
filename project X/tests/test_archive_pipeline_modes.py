@@ -47,6 +47,7 @@ def run_runner(monkeypatch, overrides=None, fail_at=None):
     ))
     scope = execute_parameters("90_run_archive_pipeline", overrides)
     scope["merge_monitor_row"] = lambda *args: records.append(args)
+    scope["spark"] = SimpleNamespace(sql=lambda query: None)
 
     def execute():
         for cell in code_cells("90_run_archive_pipeline"):
@@ -200,5 +201,5 @@ def test_pipeline_controls_are_discoverable_in_fabric_parameter_cell():
         if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "sql":
             assert isinstance(node.args[0], ast.Constant)
             sql = node.args[0].value
-            assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring." in sql
+            assert "CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring." in sql
             assert "FROM gold." not in sql

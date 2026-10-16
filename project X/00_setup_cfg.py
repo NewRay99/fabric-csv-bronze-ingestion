@@ -227,6 +227,8 @@ CONFIG_TABLE_DEFINITIONS = {
         "contract_data_type STRING", "data_domain STRING",
         "distinct_value_count BIGINT", "profiled_at TIMESTAMP",
         "run_id STRING", "job_run_id STRING",
+        "previous_run_id STRING", "previous_profiled_at TIMESTAMP",
+        "change_type STRING", "is_present BOOLEAN", "profile_status STRING",
     ],
     "monitoring.cfg_data_quality_rule": [
         "rule_id STRING", "active STRING", "severity STRING",

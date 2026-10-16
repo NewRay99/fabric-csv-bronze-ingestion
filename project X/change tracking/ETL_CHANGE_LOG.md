@@ -4,6 +4,300 @@ Delivery batches and their verification. Add new issues and dated resolution not
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
 
+## 2026-10-16 — Include sibling placement fields in referral facts (GLD-025)
+
+- `04_gold_model.py` now carries `is_sibling_placement` and `sibling_count`
+  from the current Silver referral into the referral fact and its snapshots,
+  retaining source types and NULLs. Source validation includes both columns.
+- Existing retained months gain nullable fields through snapshot schema
+  evolution; historical values require the corresponding archive replay.
+- Portable SQL checks cover source values, NULLs and latest-record selection;
+  the snapshot checks and extracted simulation SQL are aligned. All 422 tests
+  and 158 subtests passed. Fabric execution and consuming-model refresh remain
+  deployment checks.
+
+## 2026-10-15 — Retained domain versions and load-count trends (CFG-002)
+
+- `99_data_domain` appends complete run snapshots instead of clearing/replacing
+  domains. Preserves old values and marks additions/removals; skipped scans never
+  masquerade as removals. Adds standalone job lineage and comparison metadata.
+- The current Mission Control WIP supports all retained domain versions and value
+  changes, plus previous-load count/percentage differences and 12-load sparklines
+  for both read and written counts. Existing report/cache and original ZIPs stay
+  separate from the prepared source package; source definitions were backed up.
+- 416 tests / 158 subtests passed. Read-only cached checks verify 50 load deltas,
+  100 SVG trends and legacy-baseline semantics. Deploy setup/library/profiler and
+  refresh the updated model before native visual acceptance; no cloud publication.
+
+## 2026-10-15 — Consistent mobile logo and size-9 page titles (MOB-009)
+
+- Copied the user's saved Target & Urgency Performance phone header to the
+  other 30 existing mobile pages, including guides, extracts and drill-through
+  pages. The logo is 111 × 25 at (0, 9); each page keeps its own title, now
+  size 9 in the neighbouring 203 × 25 box at (120, 9).
+- Reused existing logo visuals on 15 other pages. Added 15 off-desktop-canvas
+  image sources where no matching logo existed; all reference the same embedded
+  asset. No image duplication, model/cache change, desktop-visible layout edit,
+  content reflow, custom menu restoration, refresh or publication.
+- All 75 changed/added definitions pass published compatible schema checks,
+  retaining saved schema references. The previously failing saved-header check
+  now passes on all 31 pages; 50 portable tests pass. Full non-target byte hashes
+  and cache bytes/timestamp are unchanged from the user's latest saved baseline.
+  No new overlaps. Native appearance remains a post-reopen acceptance check.
+- Recovery: `reports/_review/mobile-logo-headers-before-20261015`.
+  Delivery: `MOBILE_LOGO_HEADERS_DELIVERY.json` in the WIP project root.
+
+## 2026-10-15 — Lossless report-folder size reduction (RPT-003)
+
+- Reduced the saved WIP folder from 83,542,375 bytes (79.7 MiB) to 47,717,099
+  bytes (45.5 MiB), including the new delivery record: approximately 43% smaller.
+  The report's 4,054 JSON definitions shrink from 53,866,491 to 18,039,421 bytes.
+  Only insignificant JSON whitespace/escaping changed; all parsed values are
+  identical. No visual, field, measure, bookmark or page was removed.
+- Preserved the 21,649,003-byte `SM_WMPP_v16.SemanticModel/.pbi/cache.abf`
+  byte-for-byte, including its modification timestamp. All semantic-model files,
+  local settings, resources/images, project notes and other non-target files
+  are byte-identical. The existing ZIP was not rebuilt or overwritten.
+- Recovery copies of the original report JSON and updated provenance records
+  are outside WIP under `reports/_review/report-json-format-before-20261015`.
+  Compact-layout/native-navigation byte fingerprints record the authorised
+  formatting-only update; no report logic or navigation state changed.
+- Verification: the actual formatting check fails before and passes after;
+  all 46 portable checks pass, as do saved navigation, desktop homepage and
+  shared-version checks. Full original/compacted JSON value comparison and
+  cache/model/media preservation checks pass. No temporary formatting files
+  remain. Native reopening is not yet observed; no refresh/publication occurred.
+  This reduces on-disk project size, not model memory. Desktop may re-expand
+  JSON formatting on a later save.
+
+## 2026-10-15 — Use native Power BI mobile navigation (MOB-008)
+
+- Removed the custom Menu opener and full drawer from all 31 existing phone
+  layouts: 558 navigation-only placement files (18 per page). Keep page headings,
+  widening their phone width from 243 to 323 points without moving or restyling
+  them. No data content was moved or resized.
+- Preserve all 48 remaining filter visuals, filter open/close controls, four
+  homepage shortcuts, two Back buttons and two drill-through buttons. Desktop
+  navigation/layout, all source visual definitions, queries, bookmarks, model,
+  version parameter, hidden-page settings and assets remain unchanged. Dormant
+  off-canvas source controls/bookmarks are retained, not placed on phone canvases.
+- Every removed placement and replaced heading is recoverable under
+  `reports/_review/native-mobile-navigation-before-20261015`. The compact delivery
+  inventory now records native navigation and current saved-source provenance;
+  existing source edits were preserved rather than reverted to older fingerprints.
+- Verification: 40 portable checks and 31 published compatible mobile contracts
+  pass. No new geometric collisions across the 31 pages; existing warnings on
+  five pages remain unchanged and are recorded separately, not declared fixed.
+  Full byte-preservation checks cover non-target mobile objects, desktop/model/
+  bookmark definitions and assets. The version checker now tolerates Desktop's
+  trailing blank line without ignoring real query/measure changes. Native app
+  rendering remains a post-reopen/publish check. No refresh/publication performed.
+
+## 2026-10-15 — Match the desktop Provider Explorer shortcut (RPT-002)
+
+- Corrected the homepage Provider Explorer shortcut, which had inherited the
+  compact sidebar pill rather than the desktop hero-button style. It now uses
+  the neighbouring shortcut's exact size and per-state icon/label/background
+  design, with the existing white building glyph and correct Provider Explorer
+  caption in every state. The navigation bookmark remains unchanged.
+- Aligned the four desktop shortcuts in one evenly spaced row, with matching
+  descriptive columns and a third neutral divider. Existing descriptions retain
+  their words and fonts; the new provider description uses the same styling.
+  Page size, footer tiles, sidebar and other report pages stay unchanged.
+- All phone placement files and effective Provider Explorer phone styling are
+  unchanged. Model, report-version parameter, bookmarks and assets are preserved.
+  Nine original definitions are recoverable under
+  `reports/_review/home-desktop-provider-style-before-20261015`; two desktop-only
+  visuals were added (description/divider). No refresh or publication performed.
+- Verification: the actual saved-style comparison failed before and passes
+  after; all 34 portable desktop/mobile/version tests and 11 published compatible
+  visual contracts pass. Existing homepage/mobile badge/link/version checks pass.
+  Four-column alignment, all-state styling, icon/label spacing, and separation
+  from descriptions/footer tiles are verified statically. Native appearance
+  remains a post-reopen check, not established by schema or geometry checks.
+
+## 2026-10-15 — One shared report version parameter (RPT-001)
+
+- Replaced the 14 existing hardcoded `Version: 0.16` footer values in the saved
+  WIP with dynamic text-box values bound to one `Report Version Label` measure.
+  All original control IDs, geometry, styles and alignment remain unchanged.
+- Added the Power Query text parameter `ReportVersion`, initially `0.16`, and
+  a local one-row `Report Settings` import table to expose it to DAX. It has no
+  relationships or external data source. Version formatting stays text, so
+  values such as `0.20` retain their trailing zero. Blank values fail validation.
+- Update in Desktop: Home > Transform data > Manage Parameters > ReportVersion;
+  edit Current Value, then Close & Apply. The settings row must refresh before
+  labels change. Republish the updated report/model for online consumers.
+- Verification: 29 portable version/mobile tests, 14 published compatible
+  visual-schema checks and native TMDL parsing pass (72 tables, 491 measures,
+  two expressions, unchanged 54 relationships and two roles). All unrelated
+  definitions, phone placements and assets are byte-preserved. Backup:
+  `reports/_review/report-version-parameter-before-20261015`.
+- The previous broad Offer Locations mobile overlap check now flags five
+  existing collisions; reconstruction from the version backup yields the same
+  five before and after. Those unrelated placements were not changed. Referral
+  Explorer filter-panel and homepage-shortcut checks still pass. Parameter
+  refresh and native text rendering remain post-reopen acceptance checks;
+  no running-model update, data refresh or publication was performed.
+
+## 2026-10-14 — Three additional mobile filter panels (MOB-007)
+
+- Reused the Referral Explorer / Offers Overview Filters and Close design on
+  Offer Locations (four slicers), Provider Explorer (three) and Provider Registry
+  Extract (three). Keep person search, provider search, and both registry
+  Provider Name / Home Name searches above the collapsed panel. Existing theme,
+  fonts, table columns and desktop geometry stay unchanged.
+- Paired phone copies retain exact query, formatting and saved selection
+  configuration. Preserve original desktop slicers, adding sync metadata only.
+  Copy 25 explicit interaction rules to the new filters so maps and tables keep
+  their original filtering behaviour. Open/Close/navigation bookmarks change
+  display only; the navigation drawer remains above the filters panel.
+- Replaced ten old inline phone placements with grouped copies and moved only
+  phone content vertically to close the vacated space. Original desktop visual
+  definitions remain. All modified files and removed placements are recoverable
+  under `reports/_review/mobile-filter-panels-three-pages-before-20261014`.
+- Verification: 23 portable tests and 132 published compatible schema checks
+  pass, preserving actual newer saved schema references. Saved-file checks find
+  no default-layout or panel-content collisions on the three pages; previous
+  Referral Explorer panel and homepage shortcut checks pass. Byte comparisons
+  confirm unrelated report pages, model and assets are unchanged. Native
+  expanded rendering, selection synchronization and navigation require a
+  post-reopen acceptance check; no refresh or publication performed.
+
+## 2026-10-14 — Referral Explorer mobile filter box (MOB-006)
+
+- Added an Offers-style collapsible Filters panel beneath Search / select person.
+  All 11 visible user slicers are included; person search stays outside and is
+  byte-for-byte unchanged. Hidden journey/metric helper slicers remain untouched.
+- Desktop filters retain their exact geometry, queries, formatting and selection
+  definitions. Off-canvas phone copies use paired, page-specific sync groups;
+  only the originals' sync metadata changes. Opening/closing the panel changes
+  display only, not data state. Navigation opening closes the filter panel.
+- Replaced 10 old inline phone placement files with grouped phone copies and
+  moved the existing journey/data content upward to remove the old filter stack
+  and gap. All original filters remain available; only obsolete phone placements
+  were removed, with recoverable backup under
+  `reports/_review/referral-mobile-filters-before-20261014`.
+- Verification: 18 portable tests; field/query/sync pairing; person-search
+  exclusion; zero closed-layout and panel-content collisions; and 85 published
+  compatible schema checks pass. Actual native rendering and selection-sync
+  behaviour remain post-reopen acceptance checks. Model, assets, other report
+  pages and existing data/interaction bookmarks are unchanged.
+
+## 2026-10-14 — Homepage Provider Explorer shortcut (MOB-005)
+
+- Added a visible Provider Explorer button beneath Referral Explorer in the
+  homepage content, in both Desktop and mobile layouts. Reuse the existing
+  orange building badge and the data-preserving Go to Provider Explorer bookmark.
+  Existing sidebar/drawer navigation, assets, bookmark definitions and model stay
+  unchanged.
+- Fit the Desktop button below the unchanged referral paragraph by reducing its
+  empty text-box height to 72 points; text/font remain unchanged. Move only the
+  two mobile footer cards down 60 points to accommodate the new 52-point button.
+  Backup: `reports/_review/home-provider-shortcut-before-20261014`.
+- Verification: destination/link checks, 16 portable tests, all four homepage
+  badge/spacing checks and 34 homepage bookmark-state checks pass. Five planned
+  documents pass published compatible contracts (2.7 visual / 2.4 mobile), while
+  preserving Desktop's saved 2.13 / 2.8 schema references, whose public URLs
+  returned 404. Native click/render verification remains pending reopening.
+- Reconciled validation inventory with four mobile objects already absent from
+  the latest saved report; none were restored or changed. A pre-existing
+  Referral Detail one-pixel overflow prevents a whole-report mobile pass and is
+  recorded in QA without changing that page. No refresh/publication/model changes.
+
+## 2026-10-13 — Homepage mobile image/title spacing (MOB-004)
+
+- Follow-up correction after native feedback exposed detached white symbols:
+  the orange circles were separate button-fill images, not part of those icons.
+  The same three phone buttons now use the existing combined orange/white
+  sidebar SVGs at 32 points, with the independent centred fill-image layer off.
+  Title fonts/colours/labels and all row geometry/actions stay unchanged. Backup:
+  `reports/_review/mobile-home-badges-20261013`.
+- Combined-badge checks fail before and pass after; 15 portable tests and three
+  mobile schemas pass. Existing assets/resource registrations, 1,341 other phone
+  files and 3,301 non-mobile definitions remain unchanged. Native appearance
+  after reopening remains an acceptance check, not established by static checks.
+
+- Changed only the three existing homepage phone buttons to image-left/title-right
+  content: 24-point images, 12-point image inset and 52-point title inset in every
+  native button state. Keep existing image resources, compact font sizes/colours,
+  row geometry, actions, descriptions and navigation unchanged. Backup:
+  `reports/_review/mobile-home-button-spacing-20261013`.
+- The internal content-area check fails before and passes after; 14 portable
+  tests and three mobile schemas pass. All 1,341 other mobile files and 3,301
+  protected non-mobile definitions are unchanged. The previous drawer checks
+  and all 823 bookmark/page overlap checks still pass.
+- Updated the compact formatter to preserve separated homepage content in future.
+  Native rendering after reopening the saved WIP report remains unverified.
+  No semantic model, ETL, permissions, refresh or publication changes.
+
+## 2026-10-13 — Mobile drawer native-state text repair (MOB-003)
+
+- The full selected-button screenshot identifies WMPP Homepage and shows an
+  empty Default-state Text field. The earlier cropped screenshot did not
+  establish that the Target & Urgency pilot was being tested.
+- Restored complete text/show settings for Default, Hover, Selected and Disabled
+  on all 452 named new mobile controls across 31 pages, without changing compact
+  fonts, margins, geometry, colours, actions or main content. Backup:
+  `reports/_review/mobile-drawer-text-states-20261013-all`.
+- Saved Default-state checks fail before and pass after; 13 portable regression
+  tests and 452 mobile schemas pass. All 3,301 non-mobile definitions are
+  unchanged. The 823 bookmark/page states still have zero table/tile collisions.
+- Updated the original generator and compact formatter to preserve state-specific
+  labels in future. Native rendering after reopening the PBIP remains an
+  acceptance check; no model, ETL, permissions, refresh or publication changes.
+
+## 2026-10-13 — Earlier mobile drawer label pilot (MOB-003)
+
+- Saved explicit original text/show/family/colour settings alongside the compact
+  font/margins for 16 phone buttons on Target & Urgency Performance only.
+  Source positions, mobile sizes, layer order, bookmarks and page content stay
+  unchanged. Backup: `reports/_review/mobile-drawer-labels-20261013-6ae319c8916a5d63a4ff`.
+- Label-contract check fails before and passes after; 16 schemas and all ten
+  formatter tests pass. All 3,301 non-mobile definitions are preserved.
+- Native Desktop capture failed, so the blank-menu root cause is not confirmed.
+  Wider rollout is pending a rendered pilot check. No refresh or publication.
+
+## 2026-10-13 — Compact mobile report layout (MOB-002)
+
+- Compacted all 31 current phone layouts, updating 1,344 mobile state files only.
+  Vertical sizes/spacing are approximately 20% smaller; buttons are at least
+  36 points high, with up-to-10pt labels. Body/table text is mostly 8-9pt,
+  headings up to 14pt and numeric KPI values up to 20pt. Dense tables retain
+  all fields and horizontal panning, with 3-point row padding.
+- Preserved Desktop/model/bookmark definitions, theme colours, field bindings,
+  dynamic titles and current field order. Phone-only filter rows have explicit
+  positions; main content has separated rows rather than table/card overlays.
+- Verification: nine portable formatter/preservation tests pass; all 1,344
+  mobile documents pass Microsoft's published schemas. Zero visible default
+  overlaps and zero table/tile collisions in 823 bookmark/page states. Native
+  Power BI/phone rendering is not claimed and remains an acceptance check.
+- Current pre-change phone files are backed up in the Git-excluded directory
+  `reports/_review/mobile-compact-before-20261013`. Reusable tool:
+  `tools/compact_wmpp_mobile_layout.py`; delivery and QA manifests are
+  `MOBILE_COMPACT_LAYOUT_DELIVERY.json` and `MOBILE_COMPACT_LAYOUT_QA.json`.
+  No live model writes, refresh, publication, ETL or security changes.
+
+## 2026-10-13 — Provider Registry Extract column activation (GLD-023)
+
+- Reactivated the 17 inactive fields in the saved WIP registry table. All 21
+  configured fields are active; no fields were added, removed or reordered.
+- Preserved the table's position, size, styles, filters, mobile layout and
+  semantic model. All 4,640 other report/model definition files are unchanged.
+- Verification: inactive-field check fails before the repair and passes after
+  it. A read-only query against the open Power BI model returns all 21 fields
+  with data rows. Actual visual rendering remains a post-reopen acceptance check.
+- Original visual backed up under
+  `reports/_review/registry-columns-before-20261013-9f1a17c0`, excluded from Git.
+  No refresh, publication, permissions or ETL changes were performed.
+- Same-day recurrence: the file saved at 18:49:43 contained 13 inactive fields,
+  a new field order and six custom column widths. Restored those 13 flags while
+  preserving the user's newer order/widths. All 21 fields resolve in the native
+  cached model; 4,644 other definitions are unchanged. Second backup:
+  `reports/_review/registry-columns-repeat-20261013-736c913f`. Reopen acceptance
+  and persistence through a Desktop save remain unverified; no bookmark contains
+  this table's state, and the exact reason for the recurrence is not established.
+
 ## 2026-10-08 — Nightly raw archive mode and explicit historical replay
 
 - `90_run_archive_pipeline.py` defaults to `ARCHIVE_RUN_MODE="ARCHIVE_ONLY"`:

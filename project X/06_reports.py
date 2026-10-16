@@ -23,10 +23,11 @@
 # MARKDOWN ********************
 
 # # 06 — Monitoring reports
-# Define the monitoring materialized lake views after the Silver and Gold steps.
-# `00_setup_cfg` creates their configuration and control sources. Schedule the
-# materialized lake view refresh in the Lakehouse after the parent pipeline job
-# completes so the final job and 06_reports step statuses are included.
+# Create missing monitoring materialized lake views after the Silver and Gold steps.
+# `00_setup_cfg` creates their configuration and control sources. Existing views
+# are retained without rebuilding them here. Both parent runners refresh all six
+# views after writing the final job and 06_reports step statuses.
+# Changes to an existing view definition require an explicit replacement deployment.
 
 # PARAMETERS CELL ********************
 
@@ -42,7 +43,7 @@ JOB_RUN_ID = ""  # Parent orchestration correlation ID.
 # CELL ********************
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_timing AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_step_timing AS
 WITH ordered_steps AS (
   SELECT
     job_run_id, step_sequence, notebook_name, started_at, ended_at, status,
@@ -71,7 +72,7 @@ FROM ordered_steps
 
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_summary AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_step_summary AS
 WITH pipeline AS (
   SELECT job_run_id, pipeline_name, status, rows_read, rows_written,
          tables_succeeded, tables_failed, error_message
@@ -138,7 +139,7 @@ LEFT JOIN drift d ON d.job_run_id = s.job_run_id
 
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_run_summary AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_run_summary AS
 WITH metric AS (
   SELECT job_run_id, COUNT(DISTINCT target_object) AS silver_targets,
          SUM(rows_read) AS rows_read, SUM(rows_written) AS rows_written,
@@ -174,7 +175,7 @@ LEFT JOIN drift ON drift.job_run_id = j.job_run_id
 
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_schema_drift AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_schema_drift AS
 SELECT e.job_run_id, e.run_id, e.source_kind, e.source_table, e.target_table,
   e.drift_type, e.column_name, e.expected_type, e.actual_type,
   e.referenced_table, e.referenced_column, e.status, e.occurrence_count,
@@ -199,7 +200,7 @@ LEFT JOIN monitoring.cfg_schema_drift_definition d
 
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_data_quality AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_data_quality AS
 WITH rejected AS (
   SELECT job_run_id, run_id, rule_id, COUNT(*) AS rejected_key_count
   FROM monitoring.cfg_rejected_row WHERE job_run_id IS NOT NULL
@@ -232,7 +233,7 @@ WHERE r.job_run_id IS NOT NULL
 
 
 spark.sql("""
-CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_layer_lineage AS
+CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_layer_lineage AS
 SELECT a.job_run_id,
   CASE WHEN a.source_kind = 'LATEST' THEN 'BRONZE' ELSE 'ARCHIVE' END AS source_layer,
   a.source_table AS source_object, 'SILVER' AS target_layer, a.target_table AS target_object,
@@ -254,7 +255,7 @@ INNER JOIN monitoring.cfg_gold_lineage_mapping m
 WHERE s.notebook_name IN ('04_gold_model', '05_gold_dimensions', '04_gold_model.ipynb', '05_gold_dimensions.ipynb')
 """)
 
-print("Monitoring reporting objects created: materialised rpt_* tables")
+print("Monitoring reporting objects ensured: existing materialized lake views retained")
 
 # METADATA ********************
 

@@ -1,0 +1,36 @@
+EVALUATE
+VAR QualityKey = [Discovery rpt_job_data_quality Latest key]
+VAR QualityTime = [Discovery rpt_job_data_quality Latest time]
+VAR QualityBatch = FILTER(ALL(rpt_job_data_quality),
+    IF(ISBLANK(QualityKey), rpt_job_data_quality[checked_at] = QualityTime,
+       rpt_job_data_quality[run_id] = QualityKey))
+VAR DriftKey = [Discovery cfg_schema_drift_event Latest key]
+VAR DriftTime = [Discovery cfg_schema_drift_event Latest time]
+VAR DriftBatch = FILTER(ALL(cfg_schema_drift_event),
+    IF(ISBLANK(DriftKey), cfg_schema_drift_event[detected_at] = DriftTime,
+       cfg_schema_drift_event[run_id] = DriftKey))
+RETURN UNION(
+    ROW("Metric", "Domain columns", "Value", FORMAT([Discovery cfg_data_domain Scope count], "#,0")),
+    ROW("Metric", "Domain tables", "Value", FORMAT([Discovery cfg_data_domain Distinct objects], "#,0")),
+    ROW("Metric", "Domain time", "Value", FORMAT([Discovery cfg_data_domain Latest time], "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Coordinates", "Value", FORMAT(COUNTROWS(cfg_location_coordinate), "#,0")),
+    ROW("Metric", "Drift keys", "Value", FORMAT([Discovery cfg_schema_drift_event Scope count], "#,0")),
+    ROW("Metric", "Drift tables", "Value", FORMAT([Discovery cfg_schema_drift_event Distinct objects], "#,0")),
+    ROW("Metric", "Drift time", "Value", FORMAT(DriftTime, "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Drift statuses", "Value", CONCATENATEX(SUMMARIZE(DriftBatch, cfg_schema_drift_event[status]), cfg_schema_drift_event[status], ", ")),
+    ROW("Metric", "Bronze columns", "Value", FORMAT([Discovery cfg_bronze_schema_live Scope count], "#,0")),
+    ROW("Metric", "Bronze tables", "Value", FORMAT([Discovery cfg_bronze_schema_live Distinct objects], "#,0")),
+    ROW("Metric", "Bronze time", "Value", FORMAT([Discovery cfg_bronze_schema_live Latest time], "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Contract columns", "Value", FORMAT([Discovery cfg_schema_contract_column Rows], "#,0")),
+    ROW("Metric", "Contract time", "Value", FORMAT([Discovery cfg_schema_contract_column Latest time], "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Quality rules", "Value", FORMAT([Discovery rpt_job_data_quality Scope count], "#,0")),
+    ROW("Metric", "Quality tables", "Value", FORMAT([Discovery rpt_job_data_quality Distinct objects], "#,0")),
+    ROW("Metric", "Quality checks", "Value", FORMAT(COUNTROWS(QualityBatch), "#,0")),
+    ROW("Metric", "Failed checks", "Value", FORMAT(COUNTROWS(FILTER(QualityBatch, rpt_job_data_quality[failed_row_count] > 0 || UPPER(rpt_job_data_quality[status]) IN {"FAIL", "FAILED", "ERROR"})), "#,0")),
+    ROW("Metric", "Quality time", "Value", FORMAT(QualityTime, "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Quality statuses", "Value", CONCATENATEX(SUMMARIZE(QualityBatch, rpt_job_data_quality[status]), rpt_job_data_quality[status], ", ")),
+    ROW("Metric", "Rejected latest", "Value", FORMAT([Discovery cfg_rejected_row Rows], "#,0")),
+    ROW("Metric", "Rejected time", "Value", FORMAT([Discovery cfg_rejected_row Latest time], "dd MMM yyyy HH:mm")),
+    ROW("Metric", "Referential latest", "Value", FORMAT([Discovery cfg_referential_exception Rows], "#,0")),
+    ROW("Metric", "Referential time", "Value", FORMAT([Discovery cfg_referential_exception Latest time], "dd MMM yyyy HH:mm"))
+)

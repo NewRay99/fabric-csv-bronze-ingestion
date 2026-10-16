@@ -58,6 +58,7 @@ def add_referral(created, required_start, status="open", is_spot=False):
     rid = str(uuid.uuid4())
     referrals.append(dict(
         referral_id=rid, placement_type="FOSTER", is_spot=is_spot,
+        is_sibling_placement=False, sibling_count=0,
         required_start_date=required_start, response_required_by_date=required_start - timedelta(days=2),
         referral_created_date=ts(created), referral_modified_date=ts(created),
         referral_created_by=str(uuid.uuid4()), referral_updated_by=str(uuid.uuid4()), referral_status=status,
@@ -124,6 +125,7 @@ r9 = add_referral(date(2025,2,20), date(2025,2,22))  # critical, closed without 
 # in-month update: close r3 (created Jan) -> new flattened version in Feb
 referrals.append(dict(
     referral_id=r3, placement_type="FOSTER", is_spot=False,
+    is_sibling_placement=False, sibling_count=0,
     required_start_date=date(2025,2,10),
     response_required_by_date=date(2025,2,8), referral_created_date=ts(date(2025,1,15)),
     referral_modified_date=ts(date(2025,2,15), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
@@ -141,6 +143,7 @@ o5 = add_offer(r5, date(2025,3,3), "accepted"); add_ipa(r5, o5, date(2025,3,3), 
 # r9 closed without placement in Mar
 referrals.append(dict(
     referral_id=r9, placement_type="FOSTER", is_spot=False,
+    is_sibling_placement=False, sibling_count=0,
     required_start_date=date(2025,2,22),
     response_required_by_date=date(2025,2,20), referral_created_date=ts(date(2025,2,20)),
     referral_modified_date=ts(date(2025,3,10), 14), referral_created_by=uuid.uuid4(), referral_updated_by=uuid.uuid4(),
@@ -277,6 +280,7 @@ def run_gold(as_of):
     snapshot = spark.table("gold.fact_referral").select(
         F.lit(as_of).cast("date").alias("snapshot_date"),
         "referral_id", "current_status", "placement_urgency_band", "required_placement_date",
+        "is_sibling_placement", "sibling_count",
         "is_open", "is_awaiting_offer", "is_spot", "has_offer", "offer_count", "days_open",
         "provider_assignment_count", "provider_responded_count", "has_provider_response",
         "first_provider_response_date", "is_emergency_placement", "is_open_overdue",

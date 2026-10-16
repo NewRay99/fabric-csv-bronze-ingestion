@@ -1,5 +1,35 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 15 October 2026 — Shared report version parameter (RPT-001)
+
+Added a required Power Query text parameter `ReportVersion`, initially `0.16`.
+A local one-row import table, `Report Settings`, reads the trimmed parameter;
+its hidden string column feeds the visible `Report Version Label` measure.
+The measure ignores filters on this disconnected settings table and returns
+`Version: ` plus the parameter value. No duplicate hardcoded version fallback
+is stored in DAX. Blank parameters raise a refresh error rather than silently
+publishing a missing or stale version. Existing data sources, measures,
+relationships and roles are unchanged.
+
+All 14 existing version footers retain their text-box type, IDs, geometry,
+alignment and theme. Only their static run payload changes to the native
+dynamic-value reference and matching shared-measure expression. No new footers
+or phone placements are added; existing mobile layouts remain unchanged.
+
+To update: reopen saved WIP, Home > Transform data > Manage Parameters,
+select ReportVersion, edit Current Value, then Close & Apply. Refresh the local
+Report Settings query if prompted. Publish the updated report/model for online
+users. This is a query parameter, not an interactive report slicer.
+
+Validation: six new portable version tests plus 23 mobile tests pass; all 14
+visuals pass the published compatible visual contract while retaining their
+actual saved schema references. Native TMDL parsing passes: 72 tables, 491
+measures, two expressions, unchanged 54 relationships and two roles. All
+unlisted report/model/assets and all phone files are byte-preserved. Native
+refresh, label rendering and published Viewer acceptance remain unverified.
+No live-model write, refresh, publication, ZIP or alternate-project changes.
+Backup: `reports/_review/report-version-parameter-before-20261015`.
+
 ## 12 October 2026 — Native phone layouts and mobile drawer (MOB-001)
 
 Added separate native Power BI phone layouts in the saved WIP for 31 report,

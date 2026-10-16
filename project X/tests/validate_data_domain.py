@@ -43,14 +43,25 @@ assert 'BRONZE_SCHEMA = "bronze"' in source
 assert 'CONTRACT_TABLE = "monitoring.cfg_schema_contract_column"' in source
 assert 'DOMAIN_TABLE = "monitoring.cfg_data_domain"' in source
 assert "MAX_DISTINCT_VALUES = 40" in source
-assert "CLEAR_TARGET_TABLE =" in source
+assert "CLEAR_TARGET_TABLE" not in source
 assert "%run ./99_common_library" in source
 assert "collect_low_cardinality_domain_values" in source
-assert "data_domain_exclusion_reason(source_column, contract_data_type)" in source
+assert "data_domain_exclusion_reason(column_name, contract_data_type)" in source
 assert "skipped_unsuitable" in source
 assert "if values is None" in source
-assert "remove_data_domain(DOMAIN_TABLE" in source
-assert "clear_data_domain_table(DOMAIN_TABLE)" in source
+assert "remove_data_domain(DOMAIN_TABLE" not in source
+assert "clear_data_domain_table(DOMAIN_TABLE)" not in source
+assert "replace_data_domain(" not in source
+assert "append_data_domain_snapshots(DOMAIN_TABLE, snapshots)" in source
+assert "latest_data_domain_profiles(DOMAIN_TABLE)" in source
+assert "JOB_RUN_ID = JOB_RUN_ID or RUN_ID" in source
+assert "def record_domain_job" in source
+for field in ("previous_run_id STRING", "previous_profiled_at TIMESTAMP",
+              "change_type STRING", "is_present BOOLEAN", "profile_status STRING"):
+    assert field in setup_source
+assert "def build_data_domain_snapshot" in common_source
+assert "def append_data_domain_snapshots" in common_source
+assert 'mode("append").saveAsTable(domain_table)' in common_source
 assert "def is_contract_string" not in source
 assert "mssparkutils.notebook.run" in source
 assert "CFG_NOTEBOOK_NAME = \"00_setup_cfg\"" in source

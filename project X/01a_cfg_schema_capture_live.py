@@ -27,6 +27,7 @@
 # Run this to capture the live schema so we can compare it against what was provided by NEC, we will compare the live schema against the loaded schema contract table;
 #
 # This will help the downstream silver layer as the silver layer reuires that the data has references keys.
+# Columns starting with `_` are generated ETL metadata and are excluded from source schema capture and drift checks.
 
 # CELL ********************
 
@@ -155,6 +156,8 @@ for table in spark.catalog.listTables(BRONZE_SCHEMA):
     for position, column in enumerate(
         spark.catalog.listColumns(f"{BRONZE_SCHEMA}.{table.name}"), start=1
     ):
+        if column.name.startswith("_"):
+            continue
         records.append((
             logical_table, position, column.name, column.dataType,
             bool(column.nullable), captured_at, RUN_ID, JOB_RUN_ID or None,
@@ -188,12 +191,15 @@ WITH definition AS (
   SELECT lower(table_name) table_name, lower(column_name) column_name,
          data_type, referenced_table, referenced_column
   FROM _schema_definition
+  WHERE substring(column_name, 1, 1) <> '_'
 ), live AS (
   SELECT lower(table_name) table_name, lower(column_name) column_name, live_data_type
   FROM _schema_live_current
+  WHERE substring(column_name, 1, 1) <> '_'
 ), previous AS (
   SELECT lower(table_name) table_name, lower(column_name) column_name, live_data_type
   FROM _schema_live_previous
+  WHERE substring(column_name, 1, 1) <> '_'
 ), definition_tables AS (SELECT DISTINCT table_name FROM definition),
 live_tables AS (SELECT DISTINCT table_name FROM live),
 drifts AS (

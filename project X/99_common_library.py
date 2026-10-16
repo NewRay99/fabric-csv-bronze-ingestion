@@ -471,6 +471,83 @@ DATA_DOMAIN_SCHEMA = StructType([
     StructField("job_run_id", StringType(), True),
 ])
 
+DATA_DOMAIN_HISTORY_SCHEMA = StructType([
+    StructField(field.name, field.dataType, True) for field in DATA_DOMAIN_SCHEMA.fields
+] + [
+    StructField("previous_run_id", StringType(), True),
+    StructField("previous_profiled_at", TimestampType(), True),
+    StructField("change_type", StringType(), True),
+    StructField("is_present", BooleanType(), True),
+    StructField("profile_status", StringType(), True),
+])
+
+
+def build_data_domain_snapshot(source_schema, source_table, column_name,
+                               contract_data_type, values, profiled_at, run_id,
+                               job_run_id, previous=None, profile_status="PROFILED"):
+    """Build one immutable column version; skipped scans never imply removals."""
+    comparable = profile_status in {"PROFILED", "EMPTY"}
+    current_values = set(values or []) if comparable else set()
+    previous_values = set(previous["values"]) if previous is not None else set()
+    if comparable:
+        profile_status = "PROFILED" if current_values else "EMPTY"
+    metadata = {
+        "source_schema": source_schema, "source_table": source_table,
+        "column_name": column_name, "contract_data_type": contract_data_type,
+        "distinct_value_count": len(current_values) if comparable else None,
+        "profiled_at": profiled_at, "run_id": run_id, "job_run_id": job_run_id or run_id,
+        "previous_run_id": previous["run_id"] if previous is not None else None,
+        "previous_profiled_at": previous["profiled_at"] if previous is not None else None,
+        "profile_status": profile_status,
+    }
+    rows = []
+    for value in sorted(current_values | previous_values) if comparable else []:
+        present = value in current_values
+        change = ("BASELINE" if previous is None else "REMOVED" if not present
+                  else "UNCHANGED" if value in previous_values else "ADDED")
+        rows.append({**metadata, "data_domain": value, "change_type": change,
+                     "is_present": present})
+    # Empty and skipped profiles need a retained row even when there are no values.
+    return rows or [{**metadata, "data_domain": None, "change_type": None,
+                     "is_present": False}]
+
+
+def latest_data_domain_profiles(domain_table):
+    """Read the last comparable version per column, including legacy snapshots."""
+    identifier = ".".join(qident(part) for part in domain_table.split("."))
+    rows = spark.sql(f"""
+        WITH batches AS (
+          SELECT source_schema, source_table, column_name, run_id, MAX(profiled_at) profiled_at
+          FROM {identifier}
+          WHERE coalesce(profile_status, 'PROFILED') IN ('PROFILED', 'EMPTY')
+          GROUP BY source_schema, source_table, column_name, run_id
+        ), ranked AS (
+          SELECT *, ROW_NUMBER() OVER (
+            PARTITION BY source_schema, source_table, column_name
+            ORDER BY profiled_at DESC, run_id DESC
+          ) version_order FROM batches
+        )
+        SELECT d.* FROM {identifier} d JOIN ranked r
+          ON d.source_schema = r.source_schema AND d.source_table = r.source_table
+         AND d.column_name = r.column_name AND d.run_id <=> r.run_id
+        WHERE r.version_order = 1
+    """).collect()
+    profiles = {}
+    for row in rows:
+        key = (row.source_schema, row.source_table, row.column_name)
+        profile = profiles.setdefault(key, {"run_id": row.run_id,
+                                          "profiled_at": row.profiled_at, "values": set()})
+        if row.data_domain is not None and row.is_present is not False:
+            profile["values"].add(row.data_domain)
+    return profiles
+
+
+def append_data_domain_snapshots(domain_table, rows):
+    """Commit the entire discovery batch in one append; prior versions stay intact."""
+    if rows:
+        (spark.createDataFrame(rows, DATA_DOMAIN_HISTORY_SCHEMA)
+            .write.format("delta").mode("append").saveAsTable(domain_table))
+
 
 def sql_literal(value):
     return "'" + str(value).replace("'", "''") + "'"
@@ -494,6 +571,8 @@ so unsuitable columns are skipped before their Bronze values are scanned.
     name_tokens = set(re.findall(r"[a-z0-9]+", raw_name))
     type_name = (data_type or "").strip().lower()
 
+    if raw_name.startswith("_"):
+        return "system_generated"
     if any(marker in type_name for marker in ("uuid", "guid", "uniqueidentifier")):
         return "identifier_type"
     if compact_name in {"id", "uid", "uuid", "guid"} or raw_name.endswith(("_id", "_uid", "_uuid", "_guid")):

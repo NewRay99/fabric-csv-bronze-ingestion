@@ -61,7 +61,7 @@ def test_monitoring_step_summary_uses_object_created_by_reporting_notebook():
     setup = source("00_setup_cfg")
     reports = source("06_reports")
     assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW" not in setup
-    assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW monitoring.rpt_job_step_timing AS" in reports
+    assert "CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS monitoring.rpt_job_step_timing AS" in reports
     assert "FROM monitoring.rpt_job_step_timing s" in reports
     assert "FROM monitoring.vw_job_step_timing" not in reports
 

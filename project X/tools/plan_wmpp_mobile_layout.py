@@ -173,7 +173,7 @@ def new_button(pid, key, words, desktop, bookmark, hidden=False, background="#FF
                       bold=literal("false"), fontColor=color("#2B2427"),
                       horizontalAlignment=literal("'left'"), verticalAlignment=literal("'middle'"),
                       leftMargin=literal("12D"), rightMargin=literal("8D"))
-    fills = []
+    fills, texts = [], []
     for state in (None, "default", "hover", "selected", "disabled"):
         item = {"properties": dict(show=literal("true"),
                 fillColor=color("#FCA356" if words and state == "hover" else background),
@@ -181,13 +181,15 @@ def new_button(pid, key, words, desktop, bookmark, hidden=False, background="#FF
         if state:
             item["selector"] = {"id": state}
         fills.append(item)
+        texts.append({"properties": deepcopy(text_props),
+                      **({"selector": {"id": state}} if state else {})})
     value = {
         "$schema": BASE + "visualContainer/2.7.0/schema.json",
         "name": ident(pid + ":" + key), "position": desktop,
         "visual": {
             "visualType": "actionButton",
             "objects": {"shape": obj(tileShape=literal("'rectangle'"), roundEdge=literal("8D")),
-                        "text": obj(**text_props), "fill": fills,
+                        "text": texts, "fill": fills,
                         "outline": obj(show=literal("false")), "icon": obj(show=literal("false"))},
             "visualContainerObjects": {
                 "title": obj(show=literal("false")),
@@ -245,6 +247,10 @@ def formatting(v, caption=None, compact=False, context=False):
         out.setdefault("values", obj(fontSize=literal("11D")))
     if kind == "actionButton":
         for entry in out.get("text", []):
+            source_entry = next((e for e in source.get("text", [])
+                                 if e.get("selector") == entry.get("selector")), {})
+            entry["properties"] = {**deepcopy(source_entry.get("properties", {})),
+                                   **entry["properties"]}
             entry["properties"].update(topMargin=literal("0D"), bottomMargin=literal("0D"),
                                        leftMargin=literal("12D"), rightMargin=literal("12D"),
                                        verticalAlignment=literal("'middle'"))

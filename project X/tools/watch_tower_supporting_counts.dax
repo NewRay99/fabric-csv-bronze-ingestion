@@ -1,0 +1,5 @@
+EVALUATE ROW(
+    "Definitions", [Discovery cfg_schema_drift_definition Rows],
+    "Candidates", [Discovery cfg_schema_definition_candidate Rows],
+    "Definition time", FORMAT([Discovery cfg_schema_drift_definition Latest time], "dd MMM yyyy HH:mm")
+)

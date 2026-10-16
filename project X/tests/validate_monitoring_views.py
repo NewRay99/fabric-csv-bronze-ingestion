@@ -28,9 +28,13 @@ for expected in (
     "monitoring.rpt_job_data_quality",
     "monitoring.rpt_job_layer_lineage",
 ):
-    assert reports.count(f"CREATE OR REPLACE MATERIALIZED LAKE VIEW {expected} AS") == 1, (
+    assert reports.count(f"CREATE MATERIALIZED LAKE VIEW IF NOT EXISTS {expected} AS") == 1, (
         f"06_reports is missing or duplicates {expected}"
     )
+
+assert "CREATE OR REPLACE MATERIALIZED LAKE VIEW" not in reports, (
+    "06_reports must leave existing materialized lake views for the final refresh"
+)
 
 assert "monitoring.cfg_gold_lineage_mapping" in setup
 assert "cfg_schema_drift_event" in setup

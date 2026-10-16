@@ -107,6 +107,7 @@ GOLD_SOURCE_REQUIREMENTS = {
         "referral_id", "required_start_date", "response_required_by_date",
         "placement_type", "referral_created_date", "referral_modified_date",
         "referral_status", "export_date",
+        "is_sibling_placement", "sibling_count",
     },
     "silver.offer": {
         "offer_id", "referral_provider_id", "offer_status", "provider_home_id",
@@ -393,6 +394,7 @@ base AS (
     r.response_required_by_date AS response_required_date,
     r.referral_modified_date AS referral_modified_timestamp,
     r.referral_status AS current_status, r.placement_type AS placement_type_required,
+    r.is_sibling_placement, r.sibling_count,
     COALESCE(p.journey_assignment_count, 0) AS journey_assignment_count,
     COALESCE(jo.has_accepted_offer, 0) AS has_accepted_offer,
     COALESCE(jo.has_pending_offer, 0) AS has_pending_offer,
@@ -499,6 +501,7 @@ SELECT {AS_OF_SQL} AS as_of_date,
   END AS journey_stage,
   journey_stage_order,
   placement_type_required,
+  is_sibling_placement, sibling_count,
   CAST(NULL AS STRING) AS region,
   placement_urgency_band AS priority,
   CAST(NULL AS STRING) AS complexity_band,
@@ -608,6 +611,7 @@ snapshot = spark.table("gold.fact_referral").select(
     "referral_closed_date", "referral_closure_reason", "current_status",
     "journey_stage", "journey_stage_order",
     "last_activity_date", "placement_type_required", "region", "priority",
+    "is_sibling_placement", "sibling_count",
     "complexity_band", "placement_urgency_band", "cnt_offer_made",
     "first_provider_seen_date", "is_not_seen_by_providers",
     "ipa_placement_admission_date", "ipa_2_signatures",
@@ -643,6 +647,7 @@ else:
 # today's offer/IPA evidence must never relabel an older referral snapshot.
 # Reference/duplicate annotations also remain NULL in retained months until
 # archive replay: today's reference history must not overwrite an older month.
+# Sibling placement fields also remain NULL in retained months until replay.
 spark.sql(f"""
 UPDATE {SNAPSHOT_TABLE}
 SET snapshot_month_start = TRUNC(snapshot_date, 'month'),

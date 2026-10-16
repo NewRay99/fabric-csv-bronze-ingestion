@@ -126,6 +126,26 @@ def test_latest_referral_record_supplies_current_status(db):
     assert_source_status(db, "UNDER_OFFER")
 
 
+@pytest.mark.parametrize("is_sibling_placement,sibling_count", [
+    (True, 3), (False, 0), (None, None), (True, None), (None, 2),
+])
+def test_sibling_fields_preserve_source_values_and_nulls(db, is_sibling_placement, sibling_count):
+    referral(db, is_sibling_placement=is_sibling_placement, sibling_count=sibling_count)
+    row = assert_source_status(db, "OPEN")
+    assert row["is_sibling_placement"] == is_sibling_placement
+    assert row["sibling_count"] == sibling_count
+
+
+def test_sibling_fields_follow_latest_referral_record(db):
+    referral(db, is_sibling_placement=False, sibling_count=0)
+    insert(db, "referral", referral_id="ref-1", referral_status="OPEN",
+           referral_created_date=CREATED, referral_modified_date="2026-09-20 00:00:00",
+           export_date="2026-09-20 00:00:00", is_sibling_placement=True, sibling_count=4)
+    row = assert_source_status(db, "OPEN")
+    assert row["is_sibling_placement"] == 1
+    assert row["sibling_count"] == 4
+
+
 def test_multiple_assignments_offers_and_ipas_keep_one_referral_row(db):
     referral(db)
     for ordinal in range(3):
@@ -151,6 +171,7 @@ def test_snapshot_selects_source_status_and_separate_journey_fields():
     direct_columns = {arg.value for arg in select.args if isinstance(arg, ast.Constant)}
     assert "current_status" in direct_columns
     assert {"journey_stage", "journey_stage_order"} <= direct_columns
+    assert {"is_sibling_placement", "sibling_count"} <= direct_columns
     assert REMOVED_FIELDS.isdisjoint(direct_columns)
     assert not any("journey_status" in ast.unparse(arg) for arg in select.args)
     snapshot_source = NOTEBOOK.split('snapshot = spark.table("gold.fact_referral")', 1)[1]
@@ -158,6 +179,7 @@ def test_snapshot_selects_source_status_and_separate_journey_fields():
     assert '.option("mergeSchema", "true")' in snapshot_source
     historic_update = snapshot_source.split("UPDATE {SNAPSHOT_TABLE}", 1)[1].split('""")', 1)[0]
     assert "current_status" not in historic_update and "journey_stage" not in historic_update
+    assert "is_sibling_placement" not in historic_update and "sibling_count" not in historic_update
 
 
 def test_separate_gold_journey_classifier_and_fixture_matches_production():

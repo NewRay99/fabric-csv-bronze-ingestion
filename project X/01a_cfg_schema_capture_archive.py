@@ -27,6 +27,7 @@
 # Run this to capture the Archive schema so we can compare it against what was provided by NEC, we will compare the live schema against the loaded schema contract table;
 #
 # This will help the downstream silver layer as the silver layer requires that the data has references keys.
+# Columns starting with `_` are generated ETL metadata and are excluded from source schema capture and drift checks.
 
 # PARAMETERS CELL ********************
 
@@ -123,6 +124,8 @@ if excluded_tables:
 for tbl in tables:
     columns= spark.catalog.listColumns(f"{COMPARED_SCHEMA}.{tbl.name}")
     for idx,col in enumerate(columns, start=1):
+        if col.name.startswith("_"):
+            continue
         schema_records.append((tbl.name, str(idx), col.name, col.dataType, "true" if col.nullable else "false"))
 
 schema_df=spark.createDataFrame(schema_records, schema=schema_def)
@@ -160,9 +163,11 @@ schema_df.withColumn("contract_loaded_at", F.current_timestamp()) \
 # MAGIC FULL OUTER JOIN monitoring.cfg_archived_schema_live l
 # MAGIC     ON c.table_name = l.table_name
 # MAGIC    AND c.column_name = l.column_name
-# MAGIC WHERE c.column_name IS NULL
+# MAGIC -- Also exclude generated columns already present in stored capture history.
+# MAGIC WHERE substring(COALESCE(c.column_name, l.column_name), 1, 1) <> '_'
+# MAGIC   AND (c.column_name IS NULL
 # MAGIC    OR l.column_name IS NULL
-# MAGIC    OR c.data_type <> l.data_type;
+# MAGIC    OR c.data_type <> l.data_type);
 # MAGIC
 
 
