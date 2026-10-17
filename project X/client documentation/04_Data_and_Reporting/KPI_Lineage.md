@@ -1,5 +1,23 @@
 # KPI lineage — active Gold semantic model
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+All current DAX definitions, transitive measure dependencies and 21 calculated-table partitions are retained in the current calculation snapshot. Physical sources resolve from saved partitions; 45 notebook producer/reference spans are quoted without executing them. Local calculated objects are not mislabelled as physical Gold tables.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. New rows reuse the existing Gold catalogue source locators and full DAX/Python calculation trace; source lineage and model relationships are unchanged.
+
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The new [calculation trace](KPI_CALCULATION_TRACEABILITY.md) resolves physical sources from saved M partitions, then identifies producer calls/cells in active `.py` notebooks. DAX dependencies are traced transitively. Notebook code is quoted with original parameter placeholders and pinned line references; it was not executed. Local calculated tables are identified separately from physical Gold. Approved `schema_definition.csv` and `dq_rule_definition.csv` remain unchanged; relationships and KPI scope are not inferred from column names.
+
 ## Reporting reassessment 30 September 2026
 
 The maintained current index is the revised Dashboard Legend: 109 prior entries plus 35 newly catalogued WIP business measures. All 144 resolve by exact measure name. The detailed 366-measure inventory includes helpers and compatibility calculations. Older “109 publishable / 108 Ready” and closed-gap claims below are historical, not current acceptance.

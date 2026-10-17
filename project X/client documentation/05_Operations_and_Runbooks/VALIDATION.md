@@ -1,5 +1,37 @@
 # Version 01 validation
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
+
+Changed KPI views and coverage sections were rendered for visual review. Workbook checks are read-only release checks; routine notebook pytest scope is unchanged.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+
+Verification: all 7,280 previously populated cells retain their values/formulas and formatting; the original 117 rows and v1 hash are unchanged. All 35 exact measure names resolve in the saved business model. All appended calculation strings match the existing Gold catalogue evidence, dates are native Excel dates displayed as `dd mmm yyyy`, and representative new rows were rendered and visually reviewed. The extended release validator passes; the preceding 117-row workbook is correctly rejected for missing additions. Python syntax and whitespace checks pass. Fabric execution, Power BI synchronisation/refresh, DAX-engine tests and client UAT remain unperformed.
+
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`).
+
+The workbook contract/date check passed for all 117 rows. An independent comparison against the preceding PR workbook confirms every pre-existing cell value/formula and original sheet order is preserved. The date column was rendered and visually reviewed. These checks do not certify Power BI refresh or client acceptance.
+
+## 17 October 2026 — Legend v1 compatibility checks (LEGEND-001)
+
+The explicit release command `python "project X/tools/validate_dashboard_legend.py"` passed. It preserves the exact original headers, original three-sheet order, 80 RID identities, 117 legacy KPI identities, RID formulas, requirement wording/notes and KPI Section values. No formula-error cells were found in the original import sheets. The untouched v1 reference SHA-256 is `c8d98a31ca5baa336355ec78180d3849d34d1d58f1173fde2452fedb8273ee83`.
+
+An independent negative check correctly rejected the pre-repair expanded workbook. The source audit resolved all 144 catalogue measure names, verified 34 exact notebook producer spans, checked 170 business and 276 operational DAX definitions and their logic links, and confirmed every original calculation string is retained. The workbook's four sheets were rendered and visually reviewed; the v1 white/yellow header convention is preserved and the new coverage sheet is separate.
+
+These are workbook/static-source checks. No notebook or semantic model behaviour was modified. No Fabric execution, source population, Power BI refresh, DAX-engine result, identity/RLS test, browser/device rendering, client UAT or publication is certified. The embedded model reference tables remain a separate controlled update. This workbook validator is an explicit release check, not part of routine notebook pytest and not a new dependency on client report versions.
+
+See [release procedure](DASHBOARD_LEGEND_RUNBOOK.md) and [exact calculation trace](../04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md).
+
 ## Reporting reassessment 30 September 2026
 
 Use the current WIP acceptance checklist in the current status document. Static inventory confirms 58 tables, 366 named measures, 34 pages and 158 bookmarks; all existing 109 Legend measures and 35 added entries resolve by name. The journey repair originally recorded 10 passing tests and schema validation of 138 changed documents with five unavailable existing schemas skipped.

@@ -1,5 +1,27 @@
 # BCT WMPP client documentation
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. Date provenance, calculation examples and release checks are maintained in the KPI Reference Guide and Dashboard Legend release runbook. Original client requirements and acceptance status are unchanged.
+
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+Start with [the requirement assessment](04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md), [calculation trace](04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md) and [workbook release runbook](05_Operations_and_Runbooks/DASHBOARD_LEGEND_RUNBOOK.md).
+
 ## Report journey review 3 October 2026
 
 The newer project under `reports/WIP/SM WMPP v16 updated WIP` now has entity-first explorers, selection-aware KPI tables, provider scoring evidence and record-key drillthrough controls. Read the [critical report journey review and route maps](04_Data_and_Reporting/WMPP_REPORT_JOURNEY_REVIEW.md) for implemented changes, redundant visuals, remaining gaps and acceptance checks. An overall provider score is still not approved. Saved-file checks do not establish Desktop or production acceptance.

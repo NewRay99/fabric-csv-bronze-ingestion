@@ -1,5 +1,27 @@
 # WMPP data platform — Birmingham Children's Trust
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+[Current DAX, Python/Spark SQL and source evidence](client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. Original columns and dates are retained; the 35 additions are dated 30 September 2026. See the KPI Reference Guide and workbook release runbook for provenance and model synchronisation.
+
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`).
+
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+`configuration/Dashboard Legend.xlsx` now follows the exact three-sheet import contract in `Dashboard Legend v1.xlsx`: same first three sheet names/order, exact row-1 headers (including `Oiriginal ID`), original RID formulas/IDs/wording/dated notes and original 117 KPI IDs/order/descriptions/Section values. RID column J remains an empty spacer. The v1 file is unchanged. Gold Source Coverage is the only additional sheet; it holds source coverage, the 80-requirement assessment, the separate 144-entry catalogue, current Mission Control calculations and model inventory. The `Calculation` field retains the original specification and adds verified DAX plus notebook evidence. Long expressions have explicitly labelled excerpts linked to the full traceability document.
+
+See [current requirement assessment](client%20documentation/04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md), [exact calculations](client%20documentation/04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md) and [workbook release procedure](client%20documentation/05_Operations_and_Runbooks/DASHBOARD_LEGEND_RUNBOOK.md).
+
 This folder is the active BCT implementation. The numbered `.py` files are the
 primary notebooks, stored in Microsoft Fabric source format as of 11 September
 2026. Edit these files for future changes. The adjacent `.ipynb` files are retained

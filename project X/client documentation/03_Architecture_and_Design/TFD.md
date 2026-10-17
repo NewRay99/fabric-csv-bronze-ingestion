@@ -1,5 +1,41 @@
 # Technical/Functional Design (TFD)
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+Date Added means first catalogue registration. Original dates and evidenced dates of older Gold catalogue IDs remain intact; 366 newly registered current definitions are dated 17 October 2026. The 49 older Gold IDs newly surfaced in this sheet retain 26 August dates. No implementation/approval date is invented from file timestamps.
+
+Complete DAX, calculated-table partitions and 45 verified Python/Spark producer/reference spans are maintained in the current calculation snapshot. Native reference-data synchronisation is a separate action.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+
+The 35 rows carry **30 September 2026** as `Date Added`, their first evidenced appearance anywhere in the version-controlled Dashboard Legend, commit [`70b71eb`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/70b71eb95648eaea487830bdcd8f9931b527a05e). The four earlier workbook revisions contain no `GOLD-KPI-110`–`GOLD-KPI-144`. This date predates their move into KPI Definition on 17 October. The original 117 dates remain 26 August 2026. This field records catalogue provenance, not business creation, model implementation or approval.
+
+Each appended row includes the exact saved measure name/DAX, existing source-table and Python/Spark SQL locators, full calculation-trace reference, existing Section classification and proposed requirement links. Requirement descriptions explicitly retain owner approval pending; implementation status remains Built; UAT pending. The original rows, headers, v1 reference and all other workbook cells are unchanged. Embedded Power BI reference tables still need separate synchronisation and refreshed-model/UAT checks.
+
+## 17 October 2026 — KPI Date Added metadata
+
+The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
+
+`Date Added` means **first recorded in the version-controlled Dashboard Legend**, not the KPI's original business creation, approval, implementation, deployment or latest modification date. Values are typed Excel dates displayed as `dd mmm yyyy`. Future additions must use evidenced first-appearance dates; do not infer them from a last-modified timestamp. Existing model import fields remain unchanged; the embedded model reference tables were not modified.
+
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+`configuration/Dashboard Legend.xlsx` now follows the exact three-sheet import contract in `Dashboard Legend v1.xlsx`: same first three sheet names/order, exact row-1 headers (including `Oiriginal ID`), original RID formulas/IDs/wording/dated notes and original 117 KPI IDs/order/descriptions/Section values. RID column J remains an empty spacer. The v1 file is unchanged. Gold Source Coverage is the only additional sheet; it holds source coverage, the 80-requirement assessment, the separate 144-entry catalogue, current Mission Control calculations and model inventory. The `Calculation` field retains the original specification and adds verified DAX plus notebook evidence. Long expressions have explicitly labelled excerpts linked to the full traceability document.
+
+This restores a workbook contract, not a refreshed semantic model. The saved `ref_RID`, `ref_KPI` and `ref_KPI_RID_Linkage` remain embedded M data; their values, relationships and stable model column names have not been rewritten. Owner approval and refreshed-model reconciliation remain required.
+
+The complete [calculation trace](../04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md) links each legacy KPI to exact saved DAX, measure dependencies, physical source partitions and verbatim notebook/PySpark/Spark SQL producers. Missing producers, missing named measures and population/grain differences remain explicit. No notebook, schema contract, model partition, relationship or measure was changed by this repair.
+
 ## Reporting reassessment 30 September 2026
 
 Use the saved WIP TMDL/PBIR definitions for the current report implementation: 58 tables, 366 measures, 34 pages and 158 bookmarks. `fact_ipa` is the active IPA table; `provider_home_id` is the offer home key. Local selectors, map points and measure containers must not be documented as new physical Gold tables.

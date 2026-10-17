@@ -1,5 +1,13 @@
 # WMPP semantic model measure catalogue
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+The [calculation trace](KPI_CALCULATION_TRACEABILITY.md) contains the exact relevant business DAX and all 276 operational measure expressions. The 117 legacy rows and 144 catalogue entries have different meanings; neither is the model measure count. All 144 catalogue names resolve in the inspected business model. Embedded reference data remains unsynchronised pending controlled model work.
+
 Inventory reviewed 30 September 2026 from the saved **SM WMPP v16 updated WIP** model. There are 58 model tables and 366 measures across seven measure containers. This includes formatting, interaction and compatibility helpers. The Dashboard Legend contains 144 curated business entries, including 35 additions to its previous 109-entry catalogue. Presence is not evidence of successful refresh or UAT.
 
 See [current status and limits](WMPP_CURRENT_STATUS.md) and [requirement reassessment](WMPP_REQUIREMENT_REASSESSMENT.md). Names below are exact model names so users can locate their definitions.
