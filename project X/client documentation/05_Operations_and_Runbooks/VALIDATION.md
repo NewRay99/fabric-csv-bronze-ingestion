@@ -1,5 +1,11 @@
 # Version 01 validation
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+
+Verification: all 7,280 previously populated cells retain their values/formulas and formatting; the original 117 rows and v1 hash are unchanged. All 35 exact measure names resolve in the saved business model. All appended calculation strings match the existing Gold catalogue evidence, dates are native Excel dates displayed as `dd mmm yyyy`, and representative new rows were rendered and visually reviewed. The extended release validator passes; the preceding 117-row workbook is correctly rejected for missing additions. Python syntax and whitespace checks pass. Fabric execution, Power BI synchronisation/refresh, DAX-engine tests and client UAT remain unperformed.
+
 ## 17 October 2026 — KPI Date Added metadata
 
 Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`).

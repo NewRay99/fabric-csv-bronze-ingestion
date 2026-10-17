@@ -1,5 +1,9 @@
 # WMPP requirement reassessment
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. This updates catalogue visibility only. None of the 80 requirement dispositions, proposed Mission Control contributions or acceptance decisions has changed.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 Reviewed 17 October 2026 against commit `0a65e962ff3ab9681ed87d9a0a54df610774b736`. All 80 original requirement IDs and wording remain fixed. The original As-Is assessment is retained as historical evidence; this table records current saved implementation and outstanding decisions. Operational associations are proposed, not accepted scope changes.

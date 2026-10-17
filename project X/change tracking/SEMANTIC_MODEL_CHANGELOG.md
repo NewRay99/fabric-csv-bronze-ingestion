@@ -1,5 +1,9 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. All additions are dated 30 September 2026 based on first catalogue appearance (`70b71eb`). This extends LEGEND-001; no TMDL/PBIR, model measure, relationship or embedded reference table changed. Model synchronisation remains a separate controlled action.
+
 ## 17 October 2026 — KPI Date Added metadata
 
 Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`). This is a workbook-only metadata extension to LEGEND-001; no semantic-model table, partition, relationship, measure or reference data changed.

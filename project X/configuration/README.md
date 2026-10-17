@@ -1,5 +1,13 @@
 # Fabric configuration files
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+
+The 35 rows carry **30 September 2026** as `Date Added`, their first evidenced appearance anywhere in the version-controlled Dashboard Legend, commit [`70b71eb`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/70b71eb95648eaea487830bdcd8f9931b527a05e). The four earlier workbook revisions contain no `GOLD-KPI-110`–`GOLD-KPI-144`. This date predates their move into KPI Definition on 17 October. The original 117 dates remain 26 August 2026. This field records catalogue provenance, not business creation, model implementation or approval.
+
+Each appended row includes the exact saved measure name/DAX, existing source-table and Python/Spark SQL locators, full calculation-trace reference, existing Section classification and proposed requirement links. Requirement descriptions explicitly retain owner approval pending; implementation status remains Built; UAT pending. The original rows, headers, v1 reference and all other workbook cells are unchanged. Embedded Power BI reference tables still need separate synchronisation and refreshed-model/UAT checks.
+
 ## 17 October 2026 — KPI Date Added metadata
 
 The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.

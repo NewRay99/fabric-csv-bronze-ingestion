@@ -1,5 +1,9 @@
 # KPI lineage — active Gold semantic model
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. New rows reuse the existing Gold catalogue source locators and full DAX/Python calculation trace; source lineage and model relationships are unchanged.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 The new [calculation trace](KPI_CALCULATION_TRACEABILITY.md) resolves physical sources from saved M partitions, then identifies producer calls/cells in active `.py` notebooks. DAX dependencies are traced transitively. Notebook code is quoted with original parameter placeholders and pinned line references; it was not executed. Local calculated tables are identified separately from physical Gold. Approved `schema_definition.csv` and `dq_rule_definition.csv` remain unchanged; relationships and KPI scope are not inferred from column names.

@@ -1,5 +1,9 @@
 # AM Functional Specification
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. The 80 original requirement identifiers and wording remain unchanged. Links from the 35 later records remain proposed pending owner approval; no portal workflow or requirement is signed off by this catalogue update.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 The 80 R-identifiers, business wording and contractual scope are unchanged. Saved implementation and proposed Mission Control contributions are documented in [the current requirement register](../04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md). Operational triage partly supports resilience, performance, migration and integrity requirements; it does not satisfy portal actions, SLA/DR/security acceptance or notification delivery. Workbook field names remain the v1 import contract.

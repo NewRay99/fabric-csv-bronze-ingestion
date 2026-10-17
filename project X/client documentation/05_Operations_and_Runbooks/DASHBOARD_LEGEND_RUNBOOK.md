@@ -1,12 +1,22 @@
 # Dashboard Legend release runbook
 
+## 17 October 2026 — New catalogue entries in KPI Definition
+
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+
+The 35 rows carry **30 September 2026** as `Date Added`, their first evidenced appearance anywhere in the version-controlled Dashboard Legend, commit [`70b71eb`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/70b71eb95648eaea487830bdcd8f9931b527a05e). The four earlier workbook revisions contain no `GOLD-KPI-110`–`GOLD-KPI-144`. This date predates their move into KPI Definition on 17 October. The original 117 dates remain 26 August 2026. This field records catalogue provenance, not business creation, model implementation or approval.
+
+Each appended row includes the exact saved measure name/DAX, existing source-table and Python/Spark SQL locators, full calculation-trace reference, existing Section classification and proposed requirement links. Requirement descriptions explicitly retain owner approval pending; implementation status remains Built; UAT pending. The original rows, headers, v1 reference and all other workbook cells are unchanged. Embedded Power BI reference tables still need separate synchronisation and refreshed-model/UAT checks.
+
+The release validator requires all 35 appended IDs in order, exact catalogue measure/source/calculation matches, proposed requirement status, existing Section values and typed dates. Preserve rows 2–118 and their original identifiers; include rows 119–153 when importing KPI Definition. Do not generate replacement KPI-118-style identifiers or add these same records a second time from Gold Source Coverage.
+
 ## 17 October 2026 — KPI Date Added metadata
 
 The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
 
 `Date Added` means **first recorded in the version-controlled Dashboard Legend**, not the KPI's original business creation, approval, implementation, deployment or latest modification date. Values are typed Excel dates displayed as `dd mmm yyyy`. Future additions must use evidenced first-appearance dates; do not infer them from a last-modified timestamp. Existing model import fields remain unchanged; the embedded model reference tables were not modified.
 
-The explicit release validator permits only this approved column-I extension, verifies all 117 numeric date values and still protects every original import header/identity/formula. Consumers should select named A:H fields unless they deliberately import the new date metadata.
+The explicit release validator permits only this approved column-I extension, verifies the original 117 numeric date values (the later appended 35 are checked separately) and still protects every original import header/identity/formula. Consumers should select named A:H fields unless they deliberately import the new date metadata.
 
 Reviewed 17 October 2026; inspected source commit `0a65e962ff3ab9681ed87d9a0a54df610774b736`.
 
@@ -20,7 +30,7 @@ This restores a workbook contract, not a refreshed semantic model. The saved `re
 |---|---:|---|---|
 | RID | 1 | A:K; J empty | 80 original Req ID values, original order and column-A formulas |
 | Table Definition | 1 | A:D | Original 17 table rows retained; unsupported historical targets explicitly labelled |
-| KPI Definition | 1 | A:I; A:H original, I approved metadata | 117 original KPI IDs, original order and descriptions/Section values |
+| KPI Definition | 1 | A:I; A:H original, I approved metadata | 117 original KPI IDs/rows retained; 35 existing Gold catalogue IDs appended in rows 119–153 |
 | Gold Source Coverage | Separate section headers | A:I | Additional source, requirement, catalogue and monitoring evidence |
 
 Exact headers are verified against the untouched v1 workbook, not a handwritten approximation. `KPI(s)` remains the workbook field; the saved model's `KPI_s_` is a separate model column. Neither is silently renamed. Original `Oiriginal ID` spelling is intentional compatibility.
@@ -28,7 +38,7 @@ Exact headers are verified against the untouched v1 workbook, not a handwritten 
 ## Static release checks
 
 1. Run `python "project X/tools/validate_dashboard_legend.py"` from the repository root.
-2. Confirm v1 file SHA-256 is unchanged, original header text/order/blank spacer match, all 80 RIDs and 117 KPI IDs remain in order, original formulas/requirement text/notes/Section fields are retained, and no original sheet has extra columns.
+2. Confirm v1 file SHA-256 is unchanged, original header text/order/blank spacer match, all 80 RIDs and original 117 KPI IDs remain in order, all 35 appended Gold IDs match the catalogue, original formulas/requirement text/notes/Section fields are retained, and no original sheet has extra columns.
 3. Inspect the first rows and representative long calculation/requirement cells in Excel. The original white/yellow header convention remains; text wrapping/row height accommodates calculation detail. New evidence sections are separate from import ranges.
 4. Verify every named measure and source locator against the inspected archives/notebooks; retain gaps explicitly. Do not interpret a reference-table label as proof that a measure currently exists.
 
