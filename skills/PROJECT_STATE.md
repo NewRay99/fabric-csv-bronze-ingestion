@@ -1,5 +1,9 @@
 # Project State
 
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`). Verification: date/type and original-cell preservation checks passed. The existing draft PR remains the review route; refreshed-model/UAT and embedded-reference synchronisation remain outstanding.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 **State update: 17 October 2026.** Inspected default `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. LEGEND-001 restores the original workbook import contract while preserving v1 and the source requirement baseline. Business saved inventory: 71 tables/490 measures/35 pages; current Mission Control Im: 33 tables/276 measures/17 pages, including helper definitions. Accepted KPI scope remains an owner decision. Documentation now separates 117 original KPI rows, 144 catalogue entries and operational measures. Verification: workbook contract, formula-error scan, negative regression control, original calculation retention, 144 measure-name resolution and 34 notebook producer spans passed. Next: controlled embedded-reference synchronisation and refreshed-model/role/UAT acceptance. Notebook/code behaviour is unchanged.

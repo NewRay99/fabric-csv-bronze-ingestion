@@ -1,5 +1,11 @@
 # KPI Reference Guide — Active Gold semantic model
 
+## 17 October 2026 — KPI Date Added metadata
+
+The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
+
+`Date Added` means **first recorded in the version-controlled Dashboard Legend**, not the KPI's original business creation, approval, implementation, deployment or latest modification date. Values are typed Excel dates displayed as `dd mmm yyyy`. Future additions must use evidenced first-appearance dates; do not infer them from a last-modified timestamp. Existing model import fields remain unchanged; the embedded model reference tables were not modified.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 `configuration/Dashboard Legend.xlsx` now follows the exact three-sheet import contract in `Dashboard Legend v1.xlsx`: same first three sheet names/order, exact row-1 headers (including `Oiriginal ID`), original RID formulas/IDs/wording/dated notes and original 117 KPI IDs/order/descriptions/Section values. RID column J remains an empty spacer. The v1 file is unchanged. Gold Source Coverage is the only additional sheet; it holds source coverage, the 80-requirement assessment, the separate 144-entry catalogue, current Mission Control calculations and model inventory. The `Calculation` field retains the original specification and adds verified DAX plus notebook evidence. Long expressions have explicitly labelled excerpts linked to the full traceability document.

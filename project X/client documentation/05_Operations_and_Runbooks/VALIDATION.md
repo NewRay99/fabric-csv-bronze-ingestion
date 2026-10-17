@@ -1,5 +1,11 @@
 # Version 01 validation
 
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`).
+
+The workbook contract/date check passed for all 117 rows. An independent comparison against the preceding PR workbook confirms every pre-existing cell value/formula and original sheet order is preserved. The date column was rendered and visually reviewed. These checks do not certify Power BI refresh or client acceptance.
+
 ## 17 October 2026 — Legend v1 compatibility checks (LEGEND-001)
 
 The explicit release command `python "project X/tools/validate_dashboard_legend.py"` passed. It preserves the exact original headers, original three-sheet order, 80 RID identities, 117 legacy KPI identities, RID formulas, requirement wording/notes and KPI Section values. No formula-error cells were found in the original import sheets. The untouched v1 reference SHA-256 is `c8d98a31ca5baa336355ec78180d3849d34d1d58f1173fde2452fedb8273ee83`.

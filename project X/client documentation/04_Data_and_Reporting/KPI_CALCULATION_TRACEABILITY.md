@@ -1,5 +1,11 @@
 # KPI calculation traceability
 
+## 17 October 2026 — KPI Date Added metadata
+
+The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
+
+`Date Added` means **first recorded in the version-controlled Dashboard Legend**, not the KPI's original business creation, approval, implementation, deployment or latest modification date. Values are typed Excel dates displayed as `dd mmm yyyy`. Future additions must use evidenced first-appearance dates; do not infer them from a last-modified timestamp. Existing model import fields remain unchanged; the embedded model reference tables were not modified.
+
 Reviewed 17 October 2026; source default branch `master`, commit `0a65e962ff3ab9681ed87d9a0a54df610774b736`. This is a static source assessment, not a Fabric execution, DAX-engine reconciliation, deployment or signed client acceptance.
 
 The workbook keeps the original 117 `KPI-xx` records. The separate 144-entry `GOLD-KPI-xxx` catalogue is retained without converting either list into an accepted KPI total. Mission Control has 276 saved measures, including selectors, state/display helpers and benchmarks; they are not 276 new business KPIs.

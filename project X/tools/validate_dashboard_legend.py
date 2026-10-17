@@ -6,6 +6,7 @@ pytest suite and not a Power BI refresh or DAX-engine validation.
 from __future__ import annotations
 
 import argparse
+import datetime
 import hashlib
 import json
 import zipfile
@@ -74,13 +75,14 @@ def validate(reference: Path, workbook: Path) -> dict:
     check(hashlib.sha256(reference.read_bytes()).hexdigest() == V1_SHA256, "The immutable v1 reference file has changed")
 
     check(names == original_names + ["Gold Source Coverage"], "Sheet names/order must be v1 plus Gold Source Coverage only")
-    extents = {"RID": 11, "Table Definition": 4, "KPI Definition": 8}
+    extents = {"RID": 11, "Table Definition": 4, "KPI Definition": 9}
     counts = {"RID": 81, "Table Definition": 18, "KPI Definition": 118}
     for name, width in extents.items():
         if name not in actual:
             errors.append(f"Missing original sheet: {name}")
             continue
-        for column in range(width):
+        original_width = 8 if name == "KPI Definition" else width
+        for column in range(original_width):
             address = chr(65 + column) + "1"
             check(field(actual[name], address) == field(original[name], address), f"Changed header: {name}!{address}")
         for address, cell in actual[name].items():
@@ -91,6 +93,17 @@ def validate(reference: Path, workbook: Path) -> dict:
                 check(len(letters) == 1 and ord(letters) - 64 <= width, f"Extra import column: {name}!{address}")
                 check(row <= counts[name], f"Extra import row: {name}!{address}")
             check(cell["type"] != "e", f"Excel formula error: {name}!{address} = {cell['value']}")
+    # User-approved append-only extension. The original A:H contract remains fixed.
+    check(field(actual.get("KPI Definition", {}), "I1") == "Date Added", "Column I must be Date Added")
+    first_recorded = (datetime.date(2026, 8, 26) - datetime.date(1899, 12, 30)).days
+    for row in range(2, 119):
+        cell = actual.get("KPI Definition", {}).get(f"I{row}", {})
+        try:
+            date_matches = float(cell.get("value")) == first_recorded
+        except (ValueError, TypeError):
+            date_matches = False
+        check(date_matches and cell.get("type") not in ("s", "str", "inlineStr")
+              and cell.get("formula") is None, f"Missing/incorrect typed first-recorded date: KPI Definition!I{row}")
     immutable = {"RID": "ABCDEFJK", "KPI Definition": "ABCDH", "Table Definition": "A"}
     for name, columns in immutable.items():
         if name not in actual:
@@ -117,6 +130,7 @@ def validate(reference: Path, workbook: Path) -> dict:
               "reference_sha256": hashlib.sha256(reference.read_bytes()).hexdigest(),
               "workbook_sha256": hashlib.sha256(workbook.read_bytes()).hexdigest(),
               "requirements": 80, "legacy_kpi_rows": 117, "catalogue_entries": 144,
+              "date_added": "2026-08-26; first recorded in repository, not business creation date",
               "scope": "Static workbook contract and formula-error check; no Fabric/Power BI runtime validation"}
     return result
 

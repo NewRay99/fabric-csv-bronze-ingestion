@@ -1,5 +1,13 @@
 # Dashboard Legend release runbook
 
+## 17 October 2026 — KPI Date Added metadata
+
+The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
+
+`Date Added` means **first recorded in the version-controlled Dashboard Legend**, not the KPI's original business creation, approval, implementation, deployment or latest modification date. Values are typed Excel dates displayed as `dd mmm yyyy`. Future additions must use evidenced first-appearance dates; do not infer them from a last-modified timestamp. Existing model import fields remain unchanged; the embedded model reference tables were not modified.
+
+The explicit release validator permits only this approved column-I extension, verifies all 117 numeric date values and still protects every original import header/identity/formula. Consumers should select named A:H fields unless they deliberately import the new date metadata.
+
 Reviewed 17 October 2026; inspected source commit `0a65e962ff3ab9681ed87d9a0a54df610774b736`.
 
 ## Fixed workbook contract
@@ -12,7 +20,7 @@ This restores a workbook contract, not a refreshed semantic model. The saved `re
 |---|---:|---|---|
 | RID | 1 | A:K; J empty | 80 original Req ID values, original order and column-A formulas |
 | Table Definition | 1 | A:D | Original 17 table rows retained; unsupported historical targets explicitly labelled |
-| KPI Definition | 1 | A:H | 117 original KPI IDs, original order and descriptions/Section values |
+| KPI Definition | 1 | A:I; A:H original, I approved metadata | 117 original KPI IDs, original order and descriptions/Section values |
 | Gold Source Coverage | Separate section headers | A:I | Additional source, requirement, catalogue and monitoring evidence |
 
 Exact headers are verified against the untouched v1 workbook, not a handwritten approximation. `KPI(s)` remains the workbook field; the saved model's `KPI_s_` is a separate model column. Neither is silently renamed. Original `Oiriginal ID` spelling is intentional compatibility.

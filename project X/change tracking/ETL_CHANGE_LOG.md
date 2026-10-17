@@ -1,5 +1,9 @@
 # ETL change log
 
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`). No notebook, ETL contract, job control or runtime behaviour changed.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 **LEGEND-001 — reference workbook/documentation only.** Preserved `Dashboard Legend v1.xlsx`, rebuilt the canonical Legend with its exact three original import schemas, and kept expanded evidence on Gold Source Coverage. Active notebooks, schema/DQ contracts, job ordering and monitoring refresh behaviour are unchanged. Static source evidence and workbook compatibility checks do not certify a Fabric run. See [release runbook](../client%20documentation/05_Operations_and_Runbooks/DASHBOARD_LEGEND_RUNBOOK.md).

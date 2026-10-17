@@ -1,5 +1,9 @@
 # Client document review register
 
+## 17 October 2026 — KPI Date Added metadata
+
+Appended the user-requested `Date Added` field as KPI Definition column I. All 117 original KPI rows first appear in the repository on 26 August 2026 (`b372181`); this is a first-recorded date, not business creation or approval. Original A:H column names/order, KPI values and v1 remain unchanged. Dates are native Excel dates (`dd mmm yyyy`). The definition, first-upload provenance, permitted contract extension and validation record were updated in the configuration/project entry points, TFD, KPI reference/calculation guides and release runbook. No requirement disposition changed.
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 This work item reviewed and updated the workbook/configuration/project entry points; As-Is and functional requirements; HLD/TFD; requirement reassessment; current status; KPI reference/lineage/semantic inventory; Mission Control overview/build guide; notebook/control-tower runbooks; ETL issue/change log; semantic changelog; and project state. Added calculation traceability and the workbook release runbook. Original requirements, v1 and dated historical assessments are preserved. Current source inventory is static; deployment, query refresh, runtime correctness and client acceptance remain unverified. LEGEND-001 owner decisions: semantic alternatives, operational requirement mapping, embedded-model reference synchronisation and release acceptance.
