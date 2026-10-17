@@ -9,7 +9,6 @@ import argparse
 import datetime
 import hashlib
 import json
-import re
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -65,6 +64,7 @@ def field(cells: dict, address: str):
 
 
 def validate(reference: Path, workbook: Path) -> dict:
+    release = json.loads((reference.parent / "KPI_DEFINITION_RELEASE.json").read_text(encoding="utf-8"))
     original_names, original, _ = read_workbook(reference)
     names, actual, tables = read_workbook(workbook)
     errors = []
@@ -78,7 +78,7 @@ def validate(reference: Path, workbook: Path) -> dict:
     check(names == original_names + ["Gold Source Coverage"], "Sheet names/order must be v1 plus Gold Source Coverage only")
     extents = {"RID": 11, "Table Definition": 4, "KPI Definition": 9}
     original_counts = {"RID": 81, "Table Definition": 18, "KPI Definition": 118}
-    counts = {**original_counts, "KPI Definition": 153}
+    counts = {**original_counts, "KPI Definition": release["kpi_definition_records"] + 1}
     for name, width in extents.items():
         if name not in actual:
             errors.append(f"Missing original sheet: {name}")
@@ -106,38 +106,33 @@ def validate(reference: Path, workbook: Path) -> dict:
             date_matches = False
         check(date_matches and cell.get("type") not in ("s", "str", "inlineStr")
               and cell.get("formula") is None, f"Missing/incorrect typed first-recorded date: KPI Definition!I{row}")
-    # Later catalogue records retain their existing IDs and remain append-only.
+    # Exact release snapshot protects current calculations as well as stable IDs.
     kpis = actual.get("KPI Definition", {})
-    coverage = actual.get("Gold Source Coverage", {})
-    added_date = (datetime.date(2026, 9, 30) - datetime.date(1899, 12, 30)).days
-    valid_sections = {field(original["KPI Definition"], f"H{row}") for row in range(2, 119)}
-    for row, number in enumerate(range(110, 145), start=119):
-        source_row = number + 109
-        identifier = f"GOLD-KPI-{number:03}"
-        check(field(kpis, f"A{row}") == identifier, f"Missing/reordered added KPI: {identifier}")
-        check(field(coverage, f"A{source_row}") == identifier, f"Missing catalogue evidence: {identifier}")
-        measure = field(coverage, f"C{source_row}")
-        for column in "CG":
-            check(field(kpis, f"{column}{row}") == measure, f"Added measure mismatch: {identifier}/{column}")
-        reqs = re.findall(r"\bR\d+\b", field(coverage, f"E{source_row}") or "")
-        check(field(kpis, f"B{row}") == "[" + ",".join(reqs) + "]", f"Added requirement-link mismatch: {identifier}")
-        check((field(kpis, f"D{row}") or "").startswith("Proposed requirement association; owner approval pending."),
-              f"Added requirement approval status missing: {identifier}")
-        check(field(kpis, f"E{row}") == field(coverage, f"F{source_row}"), f"Added source mismatch: {identifier}")
-        logic = field(coverage, f"I{source_row}")
-        calculation = field(kpis, f"F{row}") or ""
-        check(bool(logic) and logic in calculation and "Built; UAT pending" in calculation,
-              f"Added calculation/evidence missing: {identifier}")
-        check(field(kpis, f"H{row}") in valid_sections, f"Unknown added KPI Section: {identifier}")
+    for record in release["records"]:
+        row, identifier = record["row"], record["id"]
+        check(field(kpis, f"A{row}") == identifier, f"Missing/reordered KPI record: {identifier}")
         cell = kpis.get(f"I{row}", {})
         try:
-            date_matches = float(cell.get("value")) == added_date
+            date_value = int(float(cell.get("value")))
+            date_matches = float(cell.get("value")) == record["date_serial"]
         except (ValueError, TypeError):
+            date_value = None
             date_matches = False
         check(date_matches and cell.get("type") not in ("s", "str", "inlineStr")
               and cell.get("formula") is None, f"Missing/incorrect typed added-KPI date: {identifier}")
-    all_ids = [field(kpis, f"A{row}") for row in range(2, 154)]
-    check(len(set(all_ids)) == 152 and None not in all_ids, "Missing/duplicate IDs across the 152 KPI records")
+        values = [field(kpis, f"{column}{row}") for column in "ABCDEFGH"] + [date_value]
+        values = [value if value not in ("", None) else None for value in values]
+        digest = hashlib.sha256(json.dumps(values, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
+        check(digest == record["record_sha256"], f"Stale/altered KPI definition: {identifier}")
+    all_ids = [field(kpis, f"A{row}") for row in range(2, counts["KPI Definition"] + 1)]
+    check(len(set(all_ids)) == release["kpi_definition_records"] and None not in all_ids,
+          "Missing/duplicate IDs across the current KPI records")
+    for row, number in enumerate(range(110, 145), start=119):
+        check(field(kpis, f"A{row}") == f"GOLD-KPI-{number:03}", "Original 35 appended Gold IDs changed")
+    for item in release["measure_inventory"]:
+        if item["classification"] in ("Business metric", "Operational metric"):
+            check(bool(item["kpi_ids"]) and all(identifier in all_ids for identifier in item["kpi_ids"]),
+                  f"Current reporting metric absent from KPI Definition: {item['model']}/{item['measure']}")
     immutable = {"RID": "ABCDEFJK", "KPI Definition": "ABCDH", "Table Definition": "A"}
     for name, columns in immutable.items():
         if name not in actual:
@@ -149,9 +144,12 @@ def validate(reference: Path, workbook: Path) -> dict:
     for name, column, expected in [("RID", "B", 80), ("KPI Definition", "A", 117)]:
         identifiers = [field(actual.get(name, {}), f"{column}{r}") for r in range(2, original_counts[name] + 1)]
         check(len(set(identifiers)) == expected and None not in identifiers, f"Missing/duplicate IDs in {name}")
-    expected_tables = {"LegendSourceCoverage": (16, 9), "LegendRequirements": (80, 9),
-                       "LegendGoldCatalogue": (144, 9), "LegendMissionControl": (276, 9),
-                       "LegendModelInventory": (71, 9), "LegendPriorGaps": (10, 7)}
+    models = release["source_models"]
+    expected_tables = {"LegendSourceCoverage": (3, 9), "LegendRequirements": (80, 9),
+                       "LegendGoldCatalogue": (144, 9), "LegendMissionControl": (models["mission"]["measures"], 9),
+                       "LegendBusinessMeasures": (models["business"]["measures"], 9),
+                       "LegendModelInventory": (sum(model["tables"] for model in models.values()), 9),
+                       "LegendPriorGaps": (10, 9)}
     for name, (rows, columns) in expected_tables.items():
         table = tables.get(name)
         check(table is not None, f"Missing coverage table: {name}")
@@ -164,8 +162,10 @@ def validate(reference: Path, workbook: Path) -> dict:
               "reference_sha256": hashlib.sha256(reference.read_bytes()).hexdigest(),
               "workbook_sha256": hashlib.sha256(workbook.read_bytes()).hexdigest(),
               "requirements": 80, "legacy_kpi_rows": 117, "appended_kpi_rows": 35,
-              "kpi_definition_rows": 152, "catalogue_entries": 144,
-              "date_added": "117 legacy: 2026-08-26; 35 additions: 2026-09-30; first catalogue appearance, not business creation",
+              "kpi_definition_rows": release["kpi_definition_records"], "catalogue_entries": 144,
+              "new_current_records": len(release["new_records"]),
+              "current_definitions_including_helpers": len(release["measure_inventory"]),
+              "date_added": release["date_meaning"],
               "scope": "Static workbook contract and formula-error check; no Fabric/Power BI runtime validation"}
     return result
 

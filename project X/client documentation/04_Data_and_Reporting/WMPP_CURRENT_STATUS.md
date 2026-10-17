@@ -1,5 +1,17 @@
 # WMPP reporting status as at 30 September 2026
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+Examples now recorded include Linked providers in selection, Linked assignment/message/offer counts, Provider unanswered assignments, Provider response timing coverage, Referral accepted without IPA, assignment-cohort response/target components, Domain values Added/Removed and Load Rows Read/Written Delta %. The linked-provider calculated candidate table requires OFFER_MADE, OFFER_SUCCESSFUL or OFFER_UNSUCCESSFUL and retains cancellation exclusions. A qualifying pair can still include other underlying offer statuses in its unchanged detail counts. No overall provider score is approved. Detail location matches offer and Report Version Label are filter/display helpers, not newly counted business KPIs.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — New catalogue entries in KPI Definition
 
 Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. All 35 additions have first-catalogued dates of 30 September 2026. Built/UAT-pending status and proposed requirement associations are retained; embedded-model synchronisation and refresh are outstanding.

@@ -1,5 +1,15 @@
 # High-Level Design (HLD)
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The workbook remains a controlled reporting dictionary; it is not an ETL feed or a deployed-model guarantee. Current source provenance supersedes older archive counts below.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 The workbook is a controlled reference/requirements artefact, not an ETL configuration feed. The first three sheets retain the v1 schema; expanded evidence lives on Gold Source Coverage. Business and operational monitoring are separate Import semantic models in the inspected source archives. The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.

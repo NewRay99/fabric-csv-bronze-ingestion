@@ -1,5 +1,15 @@
 # As-Is Assessment Report
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+The original 80 requirements and historical 90-existing/27-proposed inventory below remain historical business evidence. Later saved measures do not silently change contractual scope or close workflow/security gaps.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — New catalogue entries in KPI Definition
 
 Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline. The historical 90-existing/27-proposed split below remains the original assessment. Appending later WIP catalogue records does not approve new contractual requirements. Their requirement associations remain proposed and UAT pending.

@@ -1,5 +1,15 @@
 # ETL issue log
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+LEGEND-001 follow-up. Cause: the previous workbook update used the version-controlled ZIP/September catalogue and only updated the review branch, while the local workbook remained on its expanded September layout. Resolution: reconcile the latest saved local WIP definitions, refresh current calculation fields, include missing reporting metrics and install the validated workbook at the actual local configuration path. Preserve v1 and all unrelated local changes.
+
+Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 **LEGEND-001 — dashboard reference workbook schema drift.** The expanded workbook had renamed headers, moved headers from row 1 to row 4 and split the KPI region. That was incompatible with the original import contract. The canonical workbook now restores v1 headers/order/IDs and retains the reassessment separately. Static workbook validation is required before release; external query behaviour, embedded model synchronisation, source refresh and UAT remain open. No ETL runtime defect is claimed or pipeline changed.

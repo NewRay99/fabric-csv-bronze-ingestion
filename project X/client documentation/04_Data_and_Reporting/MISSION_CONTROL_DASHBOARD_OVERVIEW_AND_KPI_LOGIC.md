@@ -1,5 +1,15 @@
 # Mission Control dashboard overview and KPI logic
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The active operational source for this reconciliation is `reports/WIP/SM WMPP Mission Control`, not the older Im/v16 ZIP. Its 184 fixed numeric/date operational metrics are registered as MC-KPI records; all 351 definitions, including flags, text, SVG and selection helpers, remain separately classified in Gold Source Coverage. Retained domain changes, previous-load row comparisons and Watch Tower/calendar context are included.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — Legend v1 compatibility and verified coverage
 
 The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.

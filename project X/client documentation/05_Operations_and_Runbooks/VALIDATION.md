@@ -1,5 +1,15 @@
 # Version 01 validation
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
+
+Changed KPI views and coverage sections were rendered for visual review. Workbook checks are read-only release checks; routine notebook pytest scope is unchanged.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## 17 October 2026 — New catalogue entries in KPI Definition
 
 Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
