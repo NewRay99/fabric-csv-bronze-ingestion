@@ -1,5 +1,9 @@
 # Project State
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+**State update: 17 October 2026.** Inspected default `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. LEGEND-001 restores the original workbook import contract while preserving v1 and the source requirement baseline. Business saved inventory: 71 tables/490 measures/35 pages; current Mission Control Im: 33 tables/276 measures/17 pages, including helper definitions. Accepted KPI scope remains an owner decision. Documentation now separates 117 original KPI rows, 144 catalogue entries and operational measures. Verification: workbook contract, formula-error scan, negative regression control, original calculation retention, 144 measure-name resolution and 34 notebook producer spans passed. Next: controlled embedded-reference synchronisation and refreshed-model/role/UAT acceptance. Notebook/code behaviour is unchanged.
+
 **Project:** BCT WMPP Fabric and Power BI platform
 **State date:** 18 August 2026
 **Purpose:** Concise handover and continuity record for the ChatGPT Project.

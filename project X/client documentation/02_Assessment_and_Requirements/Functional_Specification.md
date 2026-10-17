@@ -1,5 +1,9 @@
 # AM Functional Specification
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The 80 R-identifiers, business wording and contractual scope are unchanged. Saved implementation and proposed Mission Control contributions are documented in [the current requirement register](../04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md). Operational triage partly supports resilience, performance, migration and integrity requirements; it does not satisfy portal actions, SLA/DR/security acceptance or notification delivery. Workbook field names remain the v1 import contract.
+
 ## Reporting reassessment 30 September 2026
 
 The R-identifiers and requirement wording below remain the functional baseline. The new 80-row requirement reassessment records the WIP reporting evidence and remaining actions separately. Read-only explorers, measures and journey visuals do not fulfil write workflows such as accepting an offer, signing an IPA, sending notifications or uploading documents.

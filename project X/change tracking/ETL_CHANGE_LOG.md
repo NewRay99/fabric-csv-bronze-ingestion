@@ -1,5 +1,9 @@
 # ETL change log
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+**LEGEND-001 — reference workbook/documentation only.** Preserved `Dashboard Legend v1.xlsx`, rebuilt the canonical Legend with its exact three original import schemas, and kept expanded evidence on Gold Source Coverage. Active notebooks, schema/DQ contracts, job ordering and monitoring refresh behaviour are unchanged. Static source evidence and workbook compatibility checks do not certify a Fabric run. See [release runbook](../client%20documentation/05_Operations_and_Runbooks/DASHBOARD_LEGEND_RUNBOOK.md).
+
 Delivery batches and their verification. Add new issues and dated resolution notes
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.

@@ -1,5 +1,9 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+**LEGEND-001 — workbook compatibility repaired; model update pending.** Restored exact v1 workbook schemas and retained 80 RIDs/117 legacy KPI rows. Added separate evidence for 144 catalogue entries, current Python/Spark SQL and exact DAX, and proposed Mission Control requirement contributions. Verified source baseline `0a65e962ff3ab9681ed87d9a0a54df610774b736`; no TMDL, PBIR, relationship, role or measure modification. Embedded ref tables still require separate controlled synchronisation and refresh/UAT. See [calculation evidence](../client%20documentation/04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md).
+
 ## 15 October 2026 — Shared report version parameter (RPT-001)
 
 Added a required Power Query text parameter `ReportVersion`, initially `0.16`.

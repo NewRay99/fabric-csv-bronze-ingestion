@@ -1,5 +1,9 @@
 # Mission Control semantic model DAX build guide
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+Use [the current Mission Control calculation inventory](KPI_CALCULATION_TRACEABILITY.md#mission-control-operational-coverage) for the Im archive at the inspected commit. It includes 276 saved expressions with exact source-member locators, producer evidence and direct visible-page bindings. Earlier 87-measure/six-page instructions below are a historical package, not the current Im archive. Refresh-time status/history context, DQ denominators, sample-key/error permissions and first live refresh still require validation.
+
 ## Reporting reassessment 30 September 2026
 
 This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.

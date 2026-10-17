@@ -1,5 +1,9 @@
 # ETL issue log
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+**LEGEND-001 — dashboard reference workbook schema drift.** The expanded workbook had renamed headers, moved headers from row 1 to row 4 and split the KPI region. That was incompatible with the original import contract. The canonical workbook now restores v1 headers/order/IDs and retains the reassessment separately. Static workbook validation is required before release; external query behaviour, embedded model synchronisation, source refresh and UAT remain open. No ETL runtime defect is claimed or pipeline changed.
+
 Add new issues here with a unique ID and the observed behaviour. Append dated
 cause, fix, validation and status notes to the same issue when it is addressed.
 Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).

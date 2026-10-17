@@ -1,5 +1,13 @@
 # ETL Operations Control Tower
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+No monitoring source, refresh order or notebook behaviour changed in the Legend repair. Existing `06_reports.py` materialized lake views are created only if missing; replacing a definition still needs an explicit deployment. See [workbook/model reference release steps](DASHBOARD_LEGEND_RUNBOOK.md).
+
 ## Reporting reassessment 30 September 2026
 
 The reporting layer has changed to the current WIP explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WIP, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.

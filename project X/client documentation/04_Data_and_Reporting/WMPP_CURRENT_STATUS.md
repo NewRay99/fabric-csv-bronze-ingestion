@@ -1,5 +1,17 @@
 # WMPP reporting status as at 30 September 2026
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+`configuration/Dashboard Legend.xlsx` now follows the exact three-sheet import contract in `Dashboard Legend v1.xlsx`: same first three sheet names/order, exact row-1 headers (including `Oiriginal ID`), original RID formulas/IDs/wording/dated notes and original 117 KPI IDs/order/descriptions/Section values. RID column J remains an empty spacer. The v1 file is unchanged. Gold Source Coverage is the only additional sheet; it holds source coverage, the 80-requirement assessment, the separate 144-entry catalogue, current Mission Control calculations and model inventory. The `Calculation` field retains the original specification and adds verified DAX plus notebook evidence. Long expressions have explicitly labelled excerpts linked to the full traceability document.
+
+This restores a workbook contract, not a refreshed semantic model. The saved `ref_RID`, `ref_KPI` and `ref_KPI_RID_Linkage` remain embedded M data; their values, relationships and stable model column names have not been rewritten. Owner approval and refreshed-model reconciliation remain required.
+
+The 80-row [current requirement assessment](WMPP_REQUIREMENT_REASSESSMENT.md) and [calculation trace](KPI_CALCULATION_TRACEABILITY.md) are the current documentation view for this baseline. Older dated inventory and acceptance statements remain historical.
+
 ## 7 October 2026 addendum — Source-reference identifiers
 
 The saved working project is now `reports/WIP/SM WMPP v16 updated WIP`.

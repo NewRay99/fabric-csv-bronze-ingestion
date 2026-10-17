@@ -1,5 +1,13 @@
 # As-Is Assessment Report
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+All 80 source requirement IDs and the original matrices below remain historical evidence. Accomplishments are now recorded in [the current row-level reassessment](../04_Data_and_Reporting/WMPP_REQUIREMENT_REASSESSMENT.md): referral/provider explorers and detail, offers/IPAs/signatures, categories, geographic evidence, provider registry, snapshot reporting and separate operational monitoring. No portal write workflow, geographic classification, payment lifecycle, notification SLA or formal acceptance is inferred from a reporting measure. The refreshed workbook preserves the v1 import columns instead of replacing them with reassessment headings.
+
 ## Reporting reassessment 30 September 2026
 
 This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.

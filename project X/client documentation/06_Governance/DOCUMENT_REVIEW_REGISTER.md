@@ -1,5 +1,9 @@
 # Client document review register
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+This work item reviewed and updated the workbook/configuration/project entry points; As-Is and functional requirements; HLD/TFD; requirement reassessment; current status; KPI reference/lineage/semantic inventory; Mission Control overview/build guide; notebook/control-tower runbooks; ETL issue/change log; semantic changelog; and project state. Added calculation traceability and the workbook release runbook. Original requirements, v1 and dated historical assessments are preserved. Current source inventory is static; deployment, query refresh, runtime correctness and client acceptance remain unverified. LEGEND-001 owner decisions: semantic alternatives, operational requirement mapping, embedded-model reference synchronisation and release acceptance.
+
 Reviewed 30 September 2026. The current WIP status, requirement reassessment and Dashboard Legend govern reporting readiness. Existing source requirements, historical Word/slide packs and operational evidence are not retroactively rewritten or signed off.
 
 | Document | Disposition |

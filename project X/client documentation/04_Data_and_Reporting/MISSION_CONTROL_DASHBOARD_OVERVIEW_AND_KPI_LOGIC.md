@@ -1,5 +1,13 @@
 # Mission Control dashboard overview and KPI logic
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The inspected source baseline is `master` at `0a65e962ff3ab9681ed87d9a0a54df610774b736`. The saved business archive has **71 tables, 490 measure definitions and 35 pages**. The current Mission Control Im archive has **33 tables, 276 measure definitions and 17 pages (10 visible)**. These counts include local tables, display helpers, selectors and benchmarks; they are not approved business KPI totals. The September 58/366 and 87-measure Mission Control statements below describe earlier baselines.
+
+Mission Control now supplies saved reporting evidence for contracts/schema/drift, domains/reference, DQ/RI/rejected keys, lineage, load metrics, pipeline/job/step timing and archive/replay. It partially supports R53, R69, R75, R82, R83, R84, R85, R87 and R88; R20 receives operational context only, not a business audit trail. A mapped measure/page is not proof of uptime, DR, alert delivery, SLA compliance, export/security policy or client acceptance. See the 80-row reassessment and exact calculation trace.
+
+The active inspection source for this update is `reports/current/SM WMPP Mission Control Im.zip`. The WIP `SM WMPP Mission Control (LM).zip` is a different, smaller baseline (33 tables, 67 measures, four pages). Do not combine its pages or counts with the Im archive. Current visible pages: Contracts & Schema, Domains & Reference, Lineage & Step Summary, Archive & Replay, Load Calendar, Quality & Exceptions, Load Metrics & Control, Quality & Schema, Job & Step Timelines, Schema & Drift. Exactly 102 saved measures have direct bindings on those visible pages; remaining definitions are dependencies/helpers or have no direct visible binding. [Exact DAX, Python and requirement boundaries](KPI_CALCULATION_TRACEABILITY.md#mission-control-operational-coverage).
+
 ## Reporting reassessment 30 September 2026
 
 This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.

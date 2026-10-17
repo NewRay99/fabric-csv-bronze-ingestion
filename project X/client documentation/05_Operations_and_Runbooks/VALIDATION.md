@@ -1,5 +1,15 @@
 # Version 01 validation
 
+## 17 October 2026 — Legend v1 compatibility checks (LEGEND-001)
+
+The explicit release command `python "project X/tools/validate_dashboard_legend.py"` passed. It preserves the exact original headers, original three-sheet order, 80 RID identities, 117 legacy KPI identities, RID formulas, requirement wording/notes and KPI Section values. No formula-error cells were found in the original import sheets. The untouched v1 reference SHA-256 is `c8d98a31ca5baa336355ec78180d3849d34d1d58f1173fde2452fedb8273ee83`.
+
+An independent negative check correctly rejected the pre-repair expanded workbook. The source audit resolved all 144 catalogue measure names, verified 34 exact notebook producer spans, checked 170 business and 276 operational DAX definitions and their logic links, and confirmed every original calculation string is retained. The workbook's four sheets were rendered and visually reviewed; the v1 white/yellow header convention is preserved and the new coverage sheet is separate.
+
+These are workbook/static-source checks. No notebook or semantic model behaviour was modified. No Fabric execution, source population, Power BI refresh, DAX-engine result, identity/RLS test, browser/device rendering, client UAT or publication is certified. The embedded model reference tables remain a separate controlled update. This workbook validator is an explicit release check, not part of routine notebook pytest and not a new dependency on client report versions.
+
+See [release procedure](DASHBOARD_LEGEND_RUNBOOK.md) and [exact calculation trace](../04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md).
+
 ## Reporting reassessment 30 September 2026
 
 Use the current WIP acceptance checklist in the current status document. Static inventory confirms 58 tables, 366 named measures, 34 pages and 158 bookmarks; all existing 109 Legend measures and 35 added entries resolve by name. The journey repair originally recorded 10 passing tests and schema validation of 138 changed documents with five unavailable existing schemas skipped.

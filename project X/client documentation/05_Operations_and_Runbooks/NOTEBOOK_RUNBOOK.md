@@ -1,5 +1,9 @@
 # Fabric notebook runbook
 
+## 17 October 2026 — Legend v1 compatibility and verified coverage
+
+The Legend repair is a workbook/documentation change; notebook order, writes, retries and orchestration are unchanged. [The workbook release procedure](DASHBOARD_LEGEND_RUNBOOK.md) covers exact v1 schema checks and the separate embedded-reference model update. Source lineage and calculation evidence is in [the calculation trace](../04_Data_and_Reporting/KPI_CALCULATION_TRACEABILITY.md).
+
 ## Offline coordinate reference maintenance — updated 1 October 2026
 
 For null offer distances caused by an empty coordinate lookup, use
