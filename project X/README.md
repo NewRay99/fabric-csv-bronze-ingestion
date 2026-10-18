@@ -1,5 +1,13 @@
 # WMPP data platform — Birmingham Children's Trust
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+[Current DAX, Python/Spark SQL and source evidence](client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 This folder is the active BCT implementation. The numbered `.py` files are the
 primary notebooks, stored in Microsoft Fabric source format as of 11 September
 2026. Edit these files for future changes. The adjacent `.ipynb` files are retained

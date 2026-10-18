@@ -1,5 +1,15 @@
 # AM Functional Specification
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+Examples now recorded include Linked providers in selection, Linked assignment/message/offer counts, Provider unanswered assignments, Provider response timing coverage, Referral accepted without IPA, assignment-cohort response/target components, Domain values Added/Removed and Load Rows Read/Written Delta %. The linked-provider calculated candidate table requires OFFER_MADE, OFFER_SUCCESSFUL or OFFER_UNSUCCESSFUL and retains cancellation exclusions. A qualifying pair can still include other underlying offer statuses in its unchanged detail counts. No overall provider score is approved. Detail location matches offer and Report Version Label are filter/display helpers, not newly counted business KPIs.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
 The R-identifiers and requirement wording below remain the functional baseline. The new 80-row requirement reassessment records the WIP reporting evidence and remaining actions separately. Read-only explorers, measures and journey visuals do not fulfil write workflows such as accepting an offer, signing an IPA, sending notifications or uploading documents.

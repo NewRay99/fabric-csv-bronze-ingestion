@@ -1,5 +1,15 @@
 # High-Level Design (HLD)
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The workbook remains a controlled reporting dictionary; it is not an ETL feed or a deployed-model guarantee. Current source provenance supersedes older archive counts below.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
 The report experience is now Overall Performance → Referrals → Referral Explorer → Referral Detail, with Provider Explorer → Provider Detail in parallel. The local WIP has 58 semantic tables including local helpers, and uses Import partitions. Do not describe this saved model as a deployed Direct Lake solution.

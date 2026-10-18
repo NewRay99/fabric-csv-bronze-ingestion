@@ -1,5 +1,13 @@
 # Fabric notebook runbook
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+The KPI dictionary now references the current saved-WIP calculations and 45 static notebook producer/reference spans. No notebook sequence, parameter, contract, replay or runtime behaviour changed. Deploy sources and refresh/reconcile the consuming models separately.
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## Offline coordinate reference maintenance — updated 1 October 2026
 
 For null offer distances caused by an empty coordinate lookup, use

@@ -1,5 +1,15 @@
 # Project State
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+Current fixed-metric coverage: 338 business definitions and 184 operational definitions; the 843-measure inventory also includes technical helpers. Original scope/approval decisions remain separate. Next: controlled embedded-reference synchronisation and runtime/role/UAT checks. No source model or ETL mutation.
+
+[Current DAX, Python/Spark SQL and source evidence](../project%20X/client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 **Project:** BCT WMPP Fabric and Power BI platform
 **State date:** 18 August 2026
 **Purpose:** Concise handover and continuity record for the ChatGPT Project.

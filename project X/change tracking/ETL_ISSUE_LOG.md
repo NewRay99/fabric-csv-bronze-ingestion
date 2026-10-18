@@ -1,5 +1,15 @@
 # ETL issue log
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+LEGEND-001 follow-up. Cause: the previous workbook update used the version-controlled ZIP/September catalogue and only updated the review branch, while the local workbook remained on its expanded September layout. Resolution: reconcile the latest saved local WIP definitions, refresh current calculation fields, include missing reporting metrics and install the validated workbook at the actual local configuration path. Preserve v1 and all unrelated local changes.
+
+Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 Add new issues here with a unique ID and the observed behaviour. Append dated
 cause, fix, validation and status notes to the same issue when it is addressed.
 Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
@@ -2970,6 +2980,35 @@ Reopen and refresh the WIP PBIP to recalculate/populate this new column. No
 running-model write or refresh was performed; persisted-column rendering and
 Viewer/RLS checks remain pending.
 
+### Qualifying-offer pair restriction — 17 October 2026
+
+User approved restricting the calculated linked table to providers with an
+`OFFER_MADE`, `OFFER_SUCCESSFUL` or `OFFER_UNSUCCESSFUL` offer. These values belong
+to `fact_offer.offer_status`, not `fact_referral_provider.provider_response_status`
+(whose cached values are Assigned, Declined, Cancelled, Closed and Excluded).
+
+Replaced only the `providerPairs` assignment/offer union with distinct filtered
+offer pairs; updated its explanatory comment. Existing measure formulas,
+columns/lineage tags, UUID keys, provider-name and Source Reference ID lookups,
+cancelled-referral/response exclusions, counts/status/message measures and
+relationships remain unchanged. Assignment/message-only and draft/withdrawn-only
+pairs are excluded. This narrows candidate pairs on both sides; it does not
+filter the underlying detail measures to hide every draft/withdrawn record when
+the same pair also has a qualifying offer.
+
+Validation: new saved-definition guard fails before and passes after (three
+tests). Native TMDL parses 72 tables, 54 relationships, two roles and four linked
+columns. Read-only execution of the exact saved calculated expression against
+cached data reduces 106,267 pairs to 1,702 with zero extra/missing/duplicate or
+blank-key pairs; all 1,702 retain a Source Reference ID. All 4,324 other WIP files
+retain their hashes. Cached database bytes, SHA-256 and timestamp are unchanged.
+Recovery: `reports/_review/linked-offer-status-before-20261017`.
+
+Status: saved-model update complete. Reopen WIP and recalculate/refresh the
+calculated table before checking the visual. No live-model write, refresh,
+publication, report/mobile layout, performance-filter, permission, connection,
+ETL, alternate-project or ZIP change performed.
+
 ## PERF-002 — WMPP WIP report query performance
 
 Reported 11 October 2026: user requested Performance Analyzer and runtime
@@ -3739,3 +3778,34 @@ scrolling and navigation layering require a post-reopen acceptance check.
   saving an older open session to view the change. Native rendering remains
   unverified for this update. No live-model write, refresh, ZIP update,
   publication or permission change was performed.
+
+## SEM-003 — Filter the Referral Detail location directory from selected offers
+
+- **Request (2026-10-17):** selecting a row in Offers and proposed provider
+  homes should filter the circled Provider / offer location directory. User
+  approved the offer-home-only behaviour: assigned-provider address rows are
+  hidden during selection, restored when selection is cleared.
+- **Cause:** the directory uses `Referral Map Points`, related to referrals
+  but not directly to offer IDs; a visual interaction alone cannot match them.
+- **Change:** added `Detail location matches offer` under `_Story Measures`,
+  an equals-1 directory visual filter, and an explicit DataFilter interaction
+  from source visual `79a53defabe24e19d2e1` to `df60c76f07c5702701ed` on page
+  `4cad3706fca6451c66b8`. Match by offer UUID with `TREATAS`/`KEEPFILTERS`.
+  Preserve existing single-referral scope and require actual map rows in the
+  cleared branch, rather than retaining unrelated combinations with a constant 1.
+- **Validation:** three saved-contract tests, two compatible JSON schemas and
+  native TMDL parsing pass. The clearing test initially exposed unrelated rows
+  and passes after the new row-presence check. Exact saved measure executed
+  read-only against cached Import data: one/two selected offers return 1/2
+  locations, clearing restores the test referral's 131 locations; zero unrelated
+  or assigned-provider rows during selection, zero no-match/no-referral rows.
+- **Preservation/recovery:** only the measure table, target visual definition
+  and page interaction definition changed. All other WIP files retain their
+  hashes; cache bytes, hash and timestamp are unchanged. No other measures,
+  existing visual projections/styles/geometry, mobile placements, linked-provider
+  definition, roles, relationships, source connections, permissions or ETL edits.
+  Recovery/acceptance: `reports/_review/detail-offer-location-filter-before-20261017`.
+- **Status:** saved implementation and data-query checks complete. Reopen WIP
+  without saving the older open session to load it. Native visual clicking and
+  rendering remain a post-reopen check. No live-model write, refresh, ZIP update
+  or publication was performed.

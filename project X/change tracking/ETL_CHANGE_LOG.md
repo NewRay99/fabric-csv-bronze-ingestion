@@ -1,8 +1,48 @@
 # ETL change log
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+LEGEND-001 follow-up: reconciled KPI Definition to current local saved-WIP business/operational sources and restored the actual local workbook import contract. The preceding September-only catalogue was incomplete for current reporting.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+No ETL/notebook/control/configuration behaviour changed. Current source hashes, helper classification and complete DAX/Python evidence accompany the release.
+
+[Current DAX, Python/Spark SQL and source evidence](../client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 Delivery batches and their verification. Add new issues and dated resolution notes
 to the [ETL issue log](ETL_ISSUE_LOG.md). Run relevant portable validators for
 each batch; confirm Fabric behaviour separately in a development Lakehouse.
+
+## 2026-10-17 — Referral Detail offers filter the location directory (SEM-003)
+
+- Added one measure and an equals-1 visual filter, plus the explicit interaction
+  from Offers and proposed provider homes to Provider / offer location directory.
+  Offer UUID matching shows selected proposed-home rows; clearing restores all
+  current-referral locations. Keep the single-referral and actual-row safeguards.
+- Three saved-contract tests, two compatible JSON schemas and native TMDL pass.
+  Cached read-only DAX checks pass for one/two selections, cleared selection,
+  no match and no referral: 1/2 selected locations and 131 restored locations,
+  with zero unrelated or assigned-provider rows during selection.
+- Only three WIP files changed. Existing geometry, mobile placements, other
+  interactions, linked-provider status changes, roles, relationships, data
+  sources and cached database bytes/timestamp are preserved. Recovery/acceptance:
+  `reports/_review/detail-offer-location-filter-before-20261017`.
+  Reopen WIP to load it. No live write, refresh, ZIP update or publication.
+
+## 2026-10-17 — Linked-provider candidates require qualifying offers (SEM-002)
+
+- Restricted the saved WIP `Linked Provider Referrals` partition to distinct
+  pairs from offers with status `OFFER_MADE`, `OFFER_SUCCESSFUL` or
+  `OFFER_UNSUCCESSFUL`. Removed the assignment union; retained existing
+  provider/reference enrichment, keys, measures and cancellation exclusions.
+- Exact saved DAX, run read-only against the cached model, returns 1,702 pairs
+  instead of 106,267: no missing/extra/duplicate/blank-key pairs; every reference
+  is populated. Three saved-definition tests and native TMDL parsing pass.
+- All 4,324 non-target WIP files and the cached database bytes/timestamp are
+  unchanged. Backup: `reports/_review/linked-offer-status-before-20261017`.
+  Reopen/recalculate the saved model to populate the revised table. No live
+  write, refresh, publication, layout, security or ETL change performed.
 
 ## 2026-10-16 — Include sibling placement fields in referral facts (GLD-025)
 

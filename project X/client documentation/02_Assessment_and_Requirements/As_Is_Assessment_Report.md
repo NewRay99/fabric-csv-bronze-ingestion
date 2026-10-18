@@ -1,5 +1,15 @@
 # As-Is Assessment Report
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+The original 80 requirements and historical 90-existing/27-proposed inventory below remain historical business evidence. Later saved measures do not silently change contractual scope or close workflow/security gaps.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
 This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.

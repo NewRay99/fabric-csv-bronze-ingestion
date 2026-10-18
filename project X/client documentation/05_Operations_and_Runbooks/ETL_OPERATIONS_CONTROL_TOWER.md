@@ -1,5 +1,15 @@
 # ETL Operations Control Tower
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+Current operational domain-history, previous-load deltas and change-calendar evidence is reflected in KPI Definition and the latest calculation snapshot. This source reconciliation does not establish alert delivery, SLA/DR compliance or live dashboard freshness.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
 The reporting layer has changed to the current WIP explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WIP, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.

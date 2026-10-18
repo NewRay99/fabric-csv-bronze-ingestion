@@ -1,5 +1,67 @@
 # Semantic-Model Changelog — report v00 to v01
 
+## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+
+KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+
+The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
+
+Examples now recorded include Linked providers in selection, Linked assignment/message/offer counts, Provider unanswered assignments, Provider response timing coverage, Referral accepted without IPA, assignment-cohort response/target components, Domain values Added/Removed and Load Rows Read/Written Delta %. The linked-provider calculated candidate table requires OFFER_MADE, OFFER_SUCCESSFUL or OFFER_UNSUCCESSFUL and retains cancellation exclusions. A qualifying pair can still include other underlying offer statuses in its unchanged detail counts. No overall provider score is approved. Detail location matches offer and Report Version Label are filter/display helpers, not newly counted business KPIs.
+
+No model definitions or embedded reference data were edited by this dictionary work; local source changes are documented snapshots, not promoted model commits.
+
+[Current DAX, Python/Spark SQL and source evidence](../client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## 17 October 2026 — Offer selection filters the detail location directory (SEM-003)
+
+Added `_Story Measures[Detail location matches offer]`, used only as an equals-1
+visual filter on Referral Detail's location directory. It transfers selected
+`fact_offer.offer_id` values to `Referral Map Points.Offer` with `TREATAS` and
+`KEEPFILTERS`; no relationship changes or provider-name matching. An explicit
+offers-to-directory DataFilter interaction enables row selection to reach it.
+
+Offer selection shows the selected proposed-home rows, excluding assigned-provider
+address rows until selection is cleared. The existing single-referral guard is
+retained. The cleared branch checks actual map rows in context rather than
+returning an unconditional 1, preventing unrelated referrals from being retained
+by Power BI's cross-table grouping/nonempty behaviour. Other measures are intact.
+
+Validation: three saved wiring tests, two compatible JSON contracts and native
+TMDL parsing pass. Read-only native DAX returns one/two locations for one/two
+selected offers and restores all 131 test-referral locations when cleared;
+no assigned/unrelated locations during selection, no unmatched-offer results,
+and no locations without one referral. No live-model write or refresh.
+All non-target WIP files and cache bytes/timestamp are unchanged. Recovery and
+acceptance: `reports/_review/detail-offer-location-filter-before-20261017`.
+Reopen WIP to load the update; native visual clicking/rendering remains pending.
+
+## 17 October 2026 — Restrict linked pairs to qualifying offers (SEM-002)
+
+The WIP `Linked Provider Referrals` calculated partition now builds distinct
+referral/provider pairs only from `fact_offer` rows whose `offer_status` is
+`OFFER_MADE`, `OFFER_SUCCESSFUL` or `OFFER_UNSUCCESSFUL`. Removed the unfiltered
+assignment union, which otherwise reintroduced unwanted pairs. Assignment-only,
+message-only and draft/withdrawn-only pairs no longer enter the candidate table.
+Both searched and linked candidates use this table. Existing visible-row
+cancellation exclusions, counts/status/message measures, UUID keys, lineage tags,
+four columns and provider/person-reference lookups remain unchanged.
+
+This filters candidate pairs, not every underlying offer counted or listed by
+the existing detail measures. A pair with at least one qualifying offer can
+still have other offer statuses in its unchanged detail measures.
+
+Read-only execution of the exact saved expression against cached data reduces
+106,267 candidate pairs to 1,702. Zero extra, missing, duplicate or blank-key
+pairs; all 1,702 retain a Source Reference ID. Three saved-definition tests pass.
+Native TMDL parsing confirms 72 tables, 54 relationships, two roles and four
+linked columns. All 4,324 other WIP files retain their hashes; cache bytes and
+timestamp are unchanged. Recovery is under
+`reports/_review/linked-offer-status-before-20261017`.
+
+Saved-file change only: reopen WIP and recalculate/refresh the calculated table.
+No running-model write, source refresh, publication, ZIP, report layout,
+performance-filter, ETL, security, relationship or connection change performed.
+
 ## 15 October 2026 — Shared report version parameter (RPT-001)
 
 Added a required Power Query text parameter `ReportVersion`, initially `0.16`.
