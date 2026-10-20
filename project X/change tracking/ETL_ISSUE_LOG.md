@@ -3811,6 +3811,799 @@ scrolling and navigation layering require a post-reopen acceptance check.
   or publication was performed.
 
 ## TEST-001 - running pytest
+tests\test_location_reference_loader.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_________________________________ test_bad_grid_points_rejected[coords2] __________________________________
+
+coords = (nan, 100)
+
+    @pytest.mark.parametrize(
+        "coords", [(None, 100), (0, 0), (float("nan"), 100), (400000, float("inf")), (800000, 100000)]
+    )
+    def test_bad_grid_points_rejected(coords):
+>       assert helpers()["valid_grid_point"](*coords) is False
+               ^^^^^^^^^
+
+tests\test_location_reference_loader.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_________________________________ test_bad_grid_points_rejected[coords3] __________________________________
+
+coords = (400000, inf)
+
+    @pytest.mark.parametrize(
+        "coords", [(None, 100), (0, 0), (float("nan"), 100), (400000, float("inf")), (800000, 100000)]
+    )
+    def test_bad_grid_points_rejected(coords):
+>       assert helpers()["valid_grid_point"](*coords) is False
+               ^^^^^^^^^
+
+tests\test_location_reference_loader.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_________________________________ test_bad_grid_points_rejected[coords4] __________________________________
+
+coords = (800000, 100000)
+
+    @pytest.mark.parametrize(
+        "coords", [(None, 100), (0, 0), (float("nan"), 100), (400000, float("inf")), (800000, 100000)]
+    )
+    def test_bad_grid_points_rejected(coords):
+>       assert helpers()["valid_grid_point"](*coords) is False
+               ^^^^^^^^^
+
+tests\test_location_reference_loader.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_______________________________ test_conversion_axis_order_and_range_guards _______________________________
+
+    def test_conversion_axis_order_and_range_guards():
+        transformer = Mock()
+        transformer.transform.return_value = (-1.9, 52.5)
+>       assert helpers()["convert_grid_point"](transformer, 407000, 287000) == (52.5, -1.9)
+               ^^^^^^^^^
+
+tests\test_location_reference_loader.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+________________________ test_projection_network_disabled_and_no_ballpark_fallback ________________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002703A991EF0>
+
+    def test_projection_network_disabled_and_no_ballpark_fallback(monkeypatch):
+        monkeypatch.setenv("PROJ_NETWORK", "ON")
+        transform = SimpleNamespace(
+            accuracy=2, description="local transform", definition="local pipeline"
+        )
+        group = Mock(return_value=SimpleNamespace(transformers=[transform]))
+        network = SimpleNamespace(set_network_enabled=Mock())
+        module = SimpleNamespace(network=network, __version__="test", proj_version_str="test")
+        with patch.dict(
+            "sys.modules",
+            {
+                "pyproj": module,
+                "pyproj.transformer": SimpleNamespace(TransformerGroup=group),
+            },
+        ):
+>           chosen, provenance = helpers()["offline_transformer"]()
+                                 ^^^^^^^^^
+
+tests\test_location_reference_loader.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_________________________________ test_preview_merge_and_source_contract __________________________________
+
+    def test_preview_merge_and_source_contract():
+>       tree = ast.parse(SOURCE)
+               ^^^^^^^^^^^^^^^^^
+
+tests\test_location_reference_loader.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+___ test_zip_extracts_only_data_and_preserves_source[code_point-codepo_gb.zip-delivery/Data/CSV/b.csv] ____
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_zip_extracts_only_data_an0')
+dataset = 'code_point', filename = 'codepo_gb.zip', tile = 'delivery/Data/CSV/b.csv'
+
+    @pytest.mark.parametrize(
+        ("dataset", "filename", "tile"),
+        [
+            ("code_point", "codepo_gb.zip", "delivery/Data/CSV/b.csv"),
+            ("open_names", "opname_csv_gb.zip", "Data/SP00.csv"),
+        ],
+    )
+    def test_zip_extracts_only_data_and_preserves_source(tmp_path, dataset, filename, tile):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        archive_path = reference / filename
+        with zipfile.ZipFile(archive_path, "w") as archive:
+            archive.writestr(tile, "sample,10,400000,300000\n")
+            archive.writestr("Doc/OS_Headers.csv", "not,data\n")
+            archive.writestr("Data/headers.csv", "not,data\n")
+            archive.writestr("Readme.txt", "licence retained in source")
+        original = archive_path.read_bytes()
+>       prepare = helpers()["prepare_reference_input"]
+                  ^^^^^^^^^
+
+tests\test_location_reference_loader.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+______ test_zip_extracts_only_data_and_preserves_source[open_names-opname_csv_gb.zip-Data/SP00.csv] _______
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_zip_extracts_only_data_an1')
+dataset = 'open_names', filename = 'opname_csv_gb.zip', tile = 'Data/SP00.csv'
+
+    @pytest.mark.parametrize(
+        ("dataset", "filename", "tile"),
+        [
+            ("code_point", "codepo_gb.zip", "delivery/Data/CSV/b.csv"),
+            ("open_names", "opname_csv_gb.zip", "Data/SP00.csv"),
+        ],
+    )
+    def test_zip_extracts_only_data_and_preserves_source(tmp_path, dataset, filename, tile):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        archive_path = reference / filename
+        with zipfile.ZipFile(archive_path, "w") as archive:
+            archive.writestr(tile, "sample,10,400000,300000\n")
+            archive.writestr("Doc/OS_Headers.csv", "not,data\n")
+            archive.writestr("Data/headers.csv", "not,data\n")
+            archive.writestr("Readme.txt", "licence retained in source")
+        original = archive_path.read_bytes()
+>       prepare = helpers()["prepare_reference_input"]
+                  ^^^^^^^^^
+
+tests\test_location_reference_loader.py:166: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_____________________________ test_unsafe_zip_members_rejected[../escape.csv] _____________________________
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_unsafe_zip_members_reject0')
+bad_member = '../escape.csv'
+
+    @pytest.mark.parametrize(
+        "bad_member", ["../escape.csv", "/escape.csv", "Data/../bad.csv", "C:/bad.csv"]
+    )
+    def test_unsafe_zip_members_rejected(tmp_path, bad_member):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        with zipfile.ZipFile(reference / "bad.zip", "w") as archive:
+            archive.writestr("Data/CSV/b.csv", "data")
+            archive.writestr(bad_member, "data")
+        with pytest.raises(ValueError, match="Unsafe"):
+>           helpers()["prepare_reference_input"](
+            ^^^^^^^^^
+                "Files/cfg_files/location_reference/bad.zip", "code_point", tmp_path
+            )
+
+tests\test_location_reference_loader.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+______________________________ test_unsafe_zip_members_rejected[/escape.csv] ______________________________
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_unsafe_zip_members_reject1')
+bad_member = '/escape.csv'
+
+    @pytest.mark.parametrize(
+        "bad_member", ["../escape.csv", "/escape.csv", "Data/../bad.csv", "C:/bad.csv"]
+    )
+    def test_unsafe_zip_members_rejected(tmp_path, bad_member):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        with zipfile.ZipFile(reference / "bad.zip", "w") as archive:
+            archive.writestr("Data/CSV/b.csv", "data")
+            archive.writestr(bad_member, "data")
+        with pytest.raises(ValueError, match="Unsafe"):
+>           helpers()["prepare_reference_input"](
+            ^^^^^^^^^
+                "Files/cfg_files/location_reference/bad.zip", "code_point", tmp_path
+            )
+
+tests\test_location_reference_loader.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+____________________________ test_unsafe_zip_members_rejected[Data/../bad.csv] ____________________________
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_unsafe_zip_members_reject2')
+bad_member = 'Data/../bad.csv'
+
+    @pytest.mark.parametrize(
+        "bad_member", ["../escape.csv", "/escape.csv", "Data/../bad.csv", "C:/bad.csv"]
+    )
+    def test_unsafe_zip_members_rejected(tmp_path, bad_member):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        with zipfile.ZipFile(reference / "bad.zip", "w") as archive:
+            archive.writestr("Data/CSV/b.csv", "data")
+            archive.writestr(bad_member, "data")
+        with pytest.raises(ValueError, match="Unsafe"):
+>           helpers()["prepare_reference_input"](
+            ^^^^^^^^^
+                "Files/cfg_files/location_reference/bad.zip", "code_point", tmp_path
+            )
+
+tests\test_location_reference_loader.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+______________________________ test_unsafe_zip_members_rejected[C:/bad.csv] _______________________________
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_unsafe_zip_members_reject3')
+bad_member = 'C:/bad.csv'
+
+    @pytest.mark.parametrize(
+        "bad_member", ["../escape.csv", "/escape.csv", "Data/../bad.csv", "C:/bad.csv"]
+    )
+    def test_unsafe_zip_members_rejected(tmp_path, bad_member):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+        with zipfile.ZipFile(reference / "bad.zip", "w") as archive:
+            archive.writestr("Data/CSV/b.csv", "data")
+            archive.writestr(bad_member, "data")
+        with pytest.raises(ValueError, match="Unsafe"):
+>           helpers()["prepare_reference_input"](
+            ^^^^^^^^^
+                "Files/cfg_files/location_reference/bad.zip", "code_point", tmp_path
+            )
+
+tests\test_location_reference_loader.py:188: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+___________________________ test_zip_missing_data_and_duplicate_tiles_rejected ____________________________
+
+tmp_path = WindowsPath('C:/Users/tmpaarmh/AppData/Local/Temp/pytest-of-TMPAARMH/pytest-8/test_zip_missing_data_and_dupl0')
+
+    def test_zip_missing_data_and_duplicate_tiles_rejected(tmp_path):
+        reference = tmp_path / "Files/cfg_files/location_reference"
+        reference.mkdir(parents=True)
+>       prepare = helpers()["prepare_reference_input"]
+                  ^^^^^^^^^
+
+tests\test_location_reference_loader.py:197: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+____________________________ test_existing_extracted_directory_still_supported ____________________________
+
+    def test_existing_extracted_directory_still_supported():
+        value = "Files/cfg_files/location_reference/code_point/Data/CSV"
+>       assert helpers()["prepare_reference_input"](value, "code_point") == value
+               ^^^^^^^^^
+
+tests\test_location_reference_loader.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_location_reference_loader.py:26: in helpers
+    functions = [n for n in ast.parse(SOURCE).body if isinstance(n, ast.FunctionDef)]
+                            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = '%pip install pyproj\n\nCODE_POINT_CSV_PATH = "Files/cfg_files/location_reference/codepo_gb.zip"\nOPEN_NAMES_CSV_PATH ...review only: lookup unchanged. Review counts, versions and ambiguous keys before setting APPLY_CHANGES=True."\n    )\n'
+filename = '<unknown>', mode = 'exec', type_comments = False, feature_version = -1, optimize = -1
+
+    def parse(source, filename='<unknown>', mode='exec', *,
+              type_comments=False, feature_version=None, optimize=-1):
+        """
+        Parse the source into an AST node.
+        Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
+        Pass type_comments=True to get back type comments where the syntax allows.
+        """
+        flags = PyCF_ONLY_AST
+        if optimize > 0:
+            flags |= PyCF_OPTIMIZED_AST
+        if type_comments:
+            flags |= PyCF_TYPE_COMMENTS
+        if feature_version is None:
+            feature_version = -1
+        elif isinstance(feature_version, tuple):
+            major, minor = feature_version  # Should be a 2-tuple.
+            if major != 3:
+                raise ValueError(f"Unsupported major version: {major}")
+            feature_version = minor
+        # Else it should be an int giving the minor version for 3.x.
+>       return compile(source, filename, mode, flags,
+                       _feature_version=feature_version, optimize=optimize)
+E         File "<unknown>", line 1
+E           %pip install pyproj
+E           ^
+E       SyntaxError: invalid syntax
+
+C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\ast.py:46: SyntaxError
+_______________ test_notebook_clocks_are_warning_free_and_explicit_utc[00_archive_load.py] ________________
+
+name = '00_archive_load.py'
+
+    @pytest.mark.parametrize("name", CLOCK_NOTEBOOKS)
+    def test_notebook_clocks_are_warning_free_and_explicit_utc(name):
+>       for value in clock_values(name):
+                     ^^^^^^^^^^^^^^^^^^
+
+tests\test_pipeline_utc_timestamps.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 tests\test_pipeline_utc_timestamps.py:56: in clock_values
     return [eval(compile(ast.Expression(call), name, "eval"), scope) for call in calls]
             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3820,54 +4613,6 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 E   DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
 
 00_archive_load.py:21: DeprecationWarning
-___________________________ test_validator[validate_archive_framework_fallback] ___________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_archive_framework_fallback.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_archive_framework_fallback.py failed:
-E         STDOUT:
-E         PASS Fabric notebook cells and Python syntax
-E         PASS fallback reader validates input and stamps monthly provenance
-E         PASS archived framework wins and fallback-only mode covers physical absence
-E         PASS fallback enters normal Silver conformance without inventing archive data
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_archive_framework_fallback.py", line 119, in <module>
-E             ).read_text(encoding="utf-8", errors="replace")
-E               ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_archive_framework_fallback.py
 ________________________ test_validator[validate_archive_snapshot_and_enrichment] _________________________
 
 validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_archive_snapshot_and_enrichment.py')
@@ -3899,555 +4644,26 @@ E         PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are pr
 E         PASS GLD-009/011/012/014 open, awaiting-offer, provider-derived spot and is_engaged logic is present
 E         PASS GLD-013 provider-count, emergency, overdue, draft-age and IPA flags are present
 E         PASS full fact_referral shape, snapshot promotion and Offer/IPA facts are present
+E         PASS enrichment DQ rules and bidirectional date-order support are configured
 E         
 E         STDERR:
 E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_archive_snapshot_and_enrichment.py", line 219, in <module>
-E             with DQ_CONFIG.open(encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\repo\WMPP\WMPP\tests\validate_archive_snapshot_and_enrichment.py", line 240, in <module>
+E             text = document.read_text(encoding="utf-8")
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
 E             return io.open(self, mode, buffering, encoding, errors, newline)
 E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\dq_rule_definition.csv'
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\client documentation\\03_Architecture_and_Design\\Proposed_Solution_Architecture.md'
 E         
 E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\dq_rule_definition.csv\'\n').returncode
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...\\repo\\\\WMPP\\\\WMPP\\\\client documentation\\\\03_Architecture_and_Design\\\\Proposed_Solution_Architecture.md\'\n').returncode
 
-tests\test_validation_scripts.py:60: AssertionError
+tests\test_validation_scripts.py:59: AssertionError
 ------------------------------------------ Captured stdout call -------------------------------------------
 FAIL: validate_archive_snapshot_and_enrichment.py
-__________________________ test_validator[validate_cfg005_contract_source_rows] ___________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_cfg005_contract_source_rows.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_cfg005_contract_source_rows.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_cfg005_contract_source_rows.py", line 14, in <module>
-E             with CONTRACT_CSV.open(encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_cfg005_contract_source_rows.py
-___________________________________ test_validator[validate_cfg_setup] ____________________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_cfg_setup.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_cfg_setup.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_cfg_setup.py", line 171, in <module>
-E             issue_log = (PROJECT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8")
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_cfg_setup.py
-_________________________________ test_validator[validate_core_pipeline] __________________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_core_pipeline.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_core_pipeline.py failed:
-E         STDOUT:
-E         PASS notebook JSON/Python: 00_archive_load.py
-E         PASS notebook JSON/Python: 00a_rehydrate_archive_cfg.py
-E         PASS notebook JSON/Python: 01_bronze_get_latest.py
-E         PASS notebook JSON/Python: 02_silver_formatter.py
-E         PASS notebook JSON/Python: 02a_archive_silver.py
-E         PASS notebook JSON/Python: 03_silver_business_rules.py
-E         PASS notebook JSON/Python: 04_gold_model.py
-E         PASS fractional timestamp regression: 02_silver_formatter.py
-E         PASS fractional timestamp regression: 02a_archive_silver.py
-E         PASS archive strategy: month-end-only batches, PK deduplication, date gate, diagnostics, and Goldhand-off
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_core_pipeline.py", line 105, in <module>
-E             with (ROOT / "configuration" / "schema_definition.csv").open(encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_core_pipeline.py
-_________________________ test_validator[validate_gld015_reject_reason_dimension] _________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gld015_reject_reason_dimension.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_gld015_reject_reason_dimension.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_gld015_reject_reason_dimension.py", line 60, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_gld015_reject_reason_dimension.py
-_________________________ test_validator[validate_gld016_provider_kpi_offer_keys] _________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gld016_provider_kpi_offer_keys.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_gld016_provider_kpi_offer_keys.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_gld016_provider_kpi_offer_keys.py", line 47, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_gld016_provider_kpi_offer_keys.py
-______________________________ test_validator[validate_gold_referral_schema] ______________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gold_referral_schema.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_gold_referral_schema.py failed:
-E         STDOUT:
-E         PASS Fabric notebook cells and Python syntax
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_gold_referral_schema.py", line 30, in <module>
-E             with SCHEMA.open("r", encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_gold_referral_schema.py
-________________________________ test_validator[validate_job_run_lineage] _________________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_job_run_lineage.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_job_run_lineage.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_job_run_lineage.py", line 83, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_job_run_lineage.py
-____________________________ test_validator[validate_live_pipeline_monitoring] ____________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_live_pipeline_monitoring.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_live_pipeline_monitoring.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_live_pipeline_monitoring.py", line 48, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8", errors="replace"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_live_pipeline_monitoring.py
-______________________________ test_validator[validate_notebook_integration] ______________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_notebook_integration.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_notebook_integration.py failed:
-E         STDOUT:
-E         PASS Fabric notebook cells and Python syntax
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_notebook_integration.py", line 48, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_notebook_integration.py
-_________________________________ test_validator[validate_ref_exclusions] _________________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_ref_exclusions.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_ref_exclusions.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_ref_exclusions.py", line 69, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8", errors="replace")
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_ref_exclusions.py
-____________________________ test_validator[validate_referral_provider_rollup] ____________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_referral_provider_rollup.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_referral_provider_rollup.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_referral_provider_rollup.py", line 40, in <module>
-E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
-E                 encoding="utf-8"
-E             )
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
-E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
-E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_referral_provider_rollup.py
-__________________________________ test_validator[validate_schema_drift] __________________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_schema_drift.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_schema_drift.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_schema_drift.py", line 20, in <module>
-E             with (ROOT / "configuration" / "schema_definition.csv").open(encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_schema_drift.py
 ____________________________ test_validator[validate_schema_drift_dimensions] _____________________________
 
 validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_schema_drift_dimensions.py')
@@ -4475,156 +4691,19 @@ E         STDOUT:
 E         
 E         STDERR:
 E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_schema_drift_dimensions.py", line 54, in <module>
-E             with (PROJECT / "configuration" / "schema_definition.csv").open(
-E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-E                 newline="", encoding="utf-8-sig"
-E                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E             ) as handle:
-E             ^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E           File "C:\repo\WMPP\WMPP\tests\validate_schema_drift_dimensions.py", line 124, in <module>
+E             assert archive_runbook.exists(), "Archive runbook is missing"
+E                    ~~~~~~~~~~~~~~~~~~~~~~^^
+E         AssertionError: Archive runbook is missing
 E         
 E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ts(), "Archive runbook is missing"\n           ~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError: Archive runbook is missing\n').returncode
 
-tests\test_validation_scripts.py:60: AssertionError
+tests\test_validation_scripts.py:59: AssertionError
 ------------------------------------------ Captured stdout call -------------------------------------------
 FAIL: validate_schema_drift_dimensions.py
-_____________________________ test_validator[validate_si007_materialisations] _____________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_si007_materialisations.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_si007_materialisations.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_si007_materialisations.py", line 12, in <module>
-E             with SCHEMA.open(encoding="utf-8-sig", newline="") as handle:
-E                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_si007_materialisations.py
-__________________________ test_validator[validate_si022_source_schema_contract] __________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_si022_source_schema_contract.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_si022_source_schema_contract.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_si022_source_schema_contract.py", line 36, in <module>
-E             contract_rows = read_csv(CONTRACT)
-E           File "C:\repo\WMPP\WMPP\tests\validate_si022_source_schema_contract.py", line 31, in read_csv
-E             raise FileNotFoundError(
-E                 f"Missing {path}; provide the extracted CSV or {EXTRACT_ZIP.name}"
-E             )
-E         FileNotFoundError: Missing C:\repo\WMPP\WMPP\configuration\schema_definition.csv; provide the extracted CSV or cfg_extracts.zip
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...: Missing C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv; provide the extracted CSV or cfg_extracts.zip\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_si022_source_schema_contract.py
-____________________________ test_validator[validate_silver_required_columns] _____________________________
-
-validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_silver_required_columns.py')
-
-    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
-    def test_validator(validator):
-        """Each opted-in Python validator must pass from the repository root."""
-        result = subprocess.run(
-            [sys.executable, str(validator)],
-            cwd=REPOSITORY_ROOT,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0:
-            print(f"PASS: {validator.name}")
-            return
-    
-        print(f"FAIL: {validator.name}")
->       assert result.returncode == 0, (
-            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
-        )
-E       AssertionError: validate_silver_required_columns.py failed:
-E         STDOUT:
-E         
-E         STDERR:
-E         Traceback (most recent call last):
-E           File "C:\repo\WMPP\WMPP\tests\validate_silver_required_columns.py", line 92, in <module>
-E             main()
-E             ~~~~^^
-E           File "C:\repo\WMPP\WMPP\tests\validate_silver_required_columns.py", line 33, in main
-E             with CONTRACT.open(newline="", encoding="utf-8-sig") as handle:
-E                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
-E             return io.open(self, mode, buffering, encoding, errors, newline)
-E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
-E         
-E       assert 1 == 0
-E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
-
-tests\test_validation_scripts.py:60: AssertionError
------------------------------------------- Captured stdout call -------------------------------------------
-FAIL: validate_silver_required_columns.py
 ========================================= short test summary info =========================================
-FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_gld015_reject_reason_dimension.py-05_gold_dimensions.py] - FileNotFoundError: [WinError 3] The system cannot find the path specified
-FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_gold_referral_schema.py-04_gold_model.py] - FileNotFoundError: [WinError 3] The system cannot find the path specified
-FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_job_run_lineage.py-90_run_live_pipeline.py] - FileNotFoundError: [WinError 3] The system cannot findthe path specified
-FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_silver_required_columns.py-99_common_library.py] - FileNotFoundError: [WinError 3] The system cannotfind the path specified
-FAILED tests/test_archive_pipeline_modes.py::test_archive_children_do_not_repeat_setup_with_injected_parent[00_archive_load] - assert 'IS_ORCHESTRATED_RUN' not in {'__builtins__': {'__name__': 'builtins', '__doc__':"Built-in func...
+FAILED tests/test_archive_pipeline_modes.py::test_archive_children_do_not_repeat_setup_with_injected_parent[00_archive_load] - assert 'IS_ORCHESTRATED_RUN' not in {'__builtins__': {'__name__': 'builtins', '__doc__': "Built-in func...
 FAILED tests/test_category_location_etl.py::test_referral_etl_simulation_sql_matches_current_notebook - AssertionError: assert 'CREATE OR RE...rence_profile' == 'CREATE OR RE...rence_profile'
 FAILED tests/test_gold_ipa_signature_contract.py::test_gold_ipa_signature_and_closed_state[1-1-0-1-0] - assert (1, 1, 0, 1) == (1, 1, 1, 0)
 FAILED tests/test_gold_ipa_signature_contract.py::test_gold_ipa_signature_and_closed_state[1-0-1-0-0] - assert (1, 0, 1, 0) == (1, 0, 0, 0)
@@ -4652,7 +4731,7 @@ FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[co
 FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords3] -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords4] -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_conversion_axis_order_and_range_guards -   File "<unknown>", line 1
-FAILED tests/test_location_reference_loader.py::test_projection_network_disabled_and_no_ballpark_fallback -  File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_projection_network_disabled_and_no_ballpark_fallback -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_preview_merge_and_source_contract -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_zip_extracts_only_data_and_preserves_source[code_point-codepo_gb.zip-delivery/Data/CSV/b.csv] -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_zip_extracts_only_data_and_preserves_source[open_names-opname_csv_gb.zip-Data/SP00.csv] -   File "<unknown>", line 1
@@ -4660,26 +4739,10 @@ FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected
 FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[/escape.csv] -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[Data/../bad.csv] -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[C:/bad.csv] -   File "<unknown>", line 1
-FAILED tests/test_location_reference_loader.py::test_zip_missing_data_and_duplicate_tiles_rejected -   File"<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_zip_missing_data_and_duplicate_tiles_rejected -   File "<unknown>", line 1
 FAILED tests/test_location_reference_loader.py::test_existing_extracted_directory_still_supported -   File "<unknown>", line 1
 FAILED tests/test_pipeline_utc_timestamps.py::test_notebook_clocks_are_warning_free_and_explicit_utc[00_archive_load.py] - DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future vers...
-FAILED tests/test_validation_scripts.py::test_validator[validate_archive_framework_fallback] - AssertionError: validate_archive_framework_fallback.py failed:
 FAILED tests/test_validation_scripts.py::test_validator[validate_archive_snapshot_and_enrichment] - AssertionError: validate_archive_snapshot_and_enrichment.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_cfg005_contract_source_rows] - AssertionError: validate_cfg005_contract_source_rows.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_cfg_setup] - AssertionError: validate_cfg_setup.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_core_pipeline] - AssertionError: validate_core_pipeline.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_gld015_reject_reason_dimension] - AssertionError: validate_gld015_reject_reason_dimension.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_gld016_provider_kpi_offer_keys] - AssertionError: validate_gld016_provider_kpi_offer_keys.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_gold_referral_schema] - AssertionError: validate_gold_referral_schema.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_job_run_lineage] - AssertionError: validate_job_run_lineage.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_live_pipeline_monitoring] - AssertionError: validate_live_pipeline_monitoring.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_notebook_integration] - AssertionError: validate_notebook_integration.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_ref_exclusions] - AssertionError: validate_ref_exclusions.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_referral_provider_rollup] - AssertionError: validate_referral_provider_rollup.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_schema_drift] - AssertionError: validate_schema_drift.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_schema_drift_dimensions] - AssertionError:validate_schema_drift_dimensions.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_si007_materialisations] - AssertionError: validate_si007_materialisations.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_si022_source_schema_contract] - AssertionError: validate_si022_source_schema_contract.py failed:
-FAILED tests/test_validation_scripts.py::test_validator[validate_silver_required_columns] - AssertionError:validate_silver_required_columns.py failed:
-=============================== 61 failed, 291 passed, 1 skipped in 12.80s ================================
+FAILED tests/test_validation_scripts.py::test_validator[validate_schema_drift_dimensions] - AssertionError: validate_schema_drift_dimensions.py failed:
+=============================== 41 failed, 310 passed, 1 skipped in 13.33s ================================
 PS C:\repo\WMPP\wmpp> 
