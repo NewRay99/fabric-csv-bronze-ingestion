@@ -1,0 +1,62 @@
+table 'Provider Explorer KPI'
+	lineageTag: 4d422f41-ff03-5846-a156-70f4d94f8be8
+
+	column Group
+		dataType: string
+		lineageTag: e9d037a6-28f5-5147-98c1-6a4e59dad1dd
+		summarizeBy: none
+		sourceColumn: [Group]
+
+	column Metric
+		dataType: string
+		lineageTag: db0d1135-7464-5b5a-95d1-918764b0820e
+		summarizeBy: none
+		sourceColumn: [Metric]
+		sortByColumn: Ordinal
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		lineageTag: 5a7fa7ed-ca39-5e5a-b2ef-bdedd3261f4c
+		summarizeBy: none
+		sourceColumn: [Ordinal]
+
+	column Definition
+		dataType: string
+		lineageTag: b53a31c8-583d-535e-ae24-e4d40a92f8a5
+		summarizeBy: none
+		sourceColumn: [Definition]
+
+	partition 'Provider Explorer KPI' = calculated
+		mode: import
+		source =
+				DATATABLE("Group",STRING,"Metric",STRING,"Ordinal",INTEGER,"Definition",STRING,{
+				{"Directory","Providers without any offers",0,"No offer record, including no draft records"},
+				{"Directory","Providers in selection",1,"Distinct provider IDs, including providers without offers"},
+				{"Directory","Provider homes",2,"All matching registered homes; no offer required"},
+				{"Directory","Registered beds",3,"Recorded capacity, not vacancies; missing values remain unknown"},
+				{"Activity","Distinct offer records",4,"Distinct offer IDs, including drafts"},
+				{"Activity","Distinct offers made",5,"Non-draft records with a recorded status"},
+				{"Activity","Draft offers",6,"Distinct draft offer IDs"},
+				{"Activity","Accepted offers",7,"Distinct accepted/approved/selected/successful offers"},
+				{"Activity","Pending offers",8,"Distinct awaiting-decision offer IDs"},
+				{"Activity","Offer acceptance rate",9,"Accepted offers / non-draft offers made"},
+				{"Engagement","Assigned referrals",10,"Distinct referrals assigned to matching providers"},
+				{"Engagement","Referral assignments",11,"Distinct referral-provider assignment IDs"},
+				{"Engagement","Recorded messages",12,"Messages in either direction; browsing is not captured"},
+				{"Engagement","Qualifying responses",13,"Offer/reason response evidence, not every message"},
+				{"Engagement","Qualifying response rate",14,"Qualifying response assignments / assignments"},
+				{"Engagement","Average response minutes",15,"From assignment-level observations; excludes missing durations"},
+				{"Engagement","Median response minutes",16,"Recomputed from assignment-level observations"},
+				{"Placement","IPAs linked to offers",17,"Linked by accepted offer ID, not all IPAs on a shared referral"},
+				{"Placement","Provider-signed IPAs",18,"Provider signature evidence only"},
+				{"Placement","Completed IPAs",19,"Recorded completion flag"},
+				{"Action","Assignments without qualifying response",20,"Recorded no-response assignments with a start time; not an SLA failure count"},
+				{"Evidence","Response timing coverage",21,"Qualifying responses with an elapsed duration / qualifying responses"},
+				{"Directory","QA flagged homes",22,"Current home QA flag only; not a quality-of-care score"},
+				{"Directory","Providers without recorded activity",23,"No assignment, offer or message records in the current context"},
+				{"Documents","Recorded documents",24,"Latest document IDs for eligible homes; home attribution awaits owner validation"},
+				{"Documents","Expired documents",25,"Expiry before today; unknown dates excluded; not compliance"},
+				{"Documents","Documents expiring in 30 days",26,"Expiry from today through today + 30 inclusive"},
+				{"Documents","Homes with expired documents",27,"Distinct recorded home IDs with a past expiry; not blocked providers"}
+				})

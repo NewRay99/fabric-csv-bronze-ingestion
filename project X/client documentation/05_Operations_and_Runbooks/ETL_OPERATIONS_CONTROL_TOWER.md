@@ -1,8 +1,8 @@
 # ETL Operations Control Tower
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 Current operational domain-history, previous-load deltas and change-calendar evidence is reflected in KPI Definition and the latest calculation snapshot. This source reconciliation does not establish alert delivery, SLA/DR compliance or live dashboard freshness.
 
@@ -12,15 +12,11 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-The reporting layer has changed to the current WIP explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WIP, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.
+The reporting layer has changed to the WMPP_v16 explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WMPP_v16, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-This guide defines the metadata available for an **ETL Operations Control
-Tower** report: a run-operations report for Fabric pipelines, batches,
-tables, data quality and schema drift. It is deliberately more descriptive
-than “Mission Control”, while still being suitable as the report title.
+This guide defines the metadata available for an **ETL Operations Control Tower** report: a run-operations report for Fabric pipelines, batches, tables, data quality and schema drift. It is deliberately more descriptive than “Mission Control”, while still being suitable as the report title.
 
 ## What this report can answer today
 
@@ -34,9 +30,7 @@ than “Mission Control”, while still being suitable as the report title.
 | Did a source or contract column drift? | `monitoring.rpt_job_schema_drift` | source/target table, `drift_type`, `column_name`, expected/actual type, first/last detected, status |
 | What DQ checks failed? | `monitoring.rpt_job_data_quality` | rule, source table/column, severity, failure count and percentage, sample/rejection counts |
 
-All runner and child activity is correlated by `job_run_id`. Use it as the
-primary relationship in the semantic model; `run_id` identifies an individual
-notebook execution within that job.
+All runner and child activity is correlated by `job_run_id`. Use it as the primary relationship in the semantic model; `run_id` identifies an individual notebook execution within that job.
 
 ## Where tables and columns are created or changed
 
@@ -50,39 +44,17 @@ notebook execution within that job.
 | Gold dimensions/bridges | `05_gold_dimensions` creates/replaces `gold.dim_*` and `gold.bridge_*` | Gold notebook projection and required-column checks | job/step monitoring and `rpt_job_layer_lineage` |
 | Monitoring reports | `06_reports` defines the six `monitoring.rpt_*` materialized lake views | `00_setup_cfg` creates their configuration and control sources | Refresh the views after the parent job completes to include final statuses |
 
-`monitoring.cfg_schema_contract_column` is the active runtime contract. A
-change in the repository CSV does not change a populated runtime contract
-until `00_setup_cfg` is run with `LOAD_FILE_CONFIG=True`. `AR-GL-01` exposed
-why this distinction matters: the archive source had `framework_name`, while
-the runtime framework contract did not, so Silver wrote an incomplete target.
-Archive Silver now supplements the mandatory framework schema, logs
-`MISSING_REQUIRED_CONTRACT_COLUMN` in `cfg_schema_drift_event`, and refreshes
-the target on its next snapshot replay.
+`monitoring.cfg_schema_contract_column` is the active runtime contract. A change in the repository CSV does not change a populated runtime contract until `00_setup_cfg` is run with `LOAD_FILE_CONFIG=True`. `AR-GL-01` exposed why this distinction matters: the archive source had `framework_name`, while the runtime framework contract did not, so Silver wrote an incomplete target. Archive Silver now supplements the mandatory framework schema, logs `MISSING_REQUIRED_CONTRACT_COLUMN` in `cfg_schema_drift_event`, and refreshes the target on its next snapshot replay.
 
 ## Important current limits
 
-The current monitoring model does **not** record a durable DDL event for
-“table created”, “column added”, “column removed”, or “column type changed”.
-It records source/contract observations and run outcomes instead. Do not infer
-an exact physical table creation time from a successful load; that only proves
-the table existed or was written at that time.
+The current monitoring model does **not** record a durable DDL event for “table created”, “column added”, “column removed”, or “column type changed”. It records source/contract observations and run outcomes instead. Do not infer an exact physical table creation time from a successful load; that only proves the table existed or was written at that time.
 
-Likewise, the pipeline uses snapshot replacement for many archive/Silver
-writes. `rows_written` is the resulting write count, not a SQL `INSERT`
-count. There is currently no authoritative monitoring field for per-table
-`inserted_rows`, `updated_rows`, or `deleted_rows`; Gold writes are also not
-emitted to `cfg_table_load_metric`. The Operations Control Tower should label
-these as **not captured** rather than deriving misleading DML figures.
+Likewise, the pipeline uses snapshot replacement for many archive/Silver writes. `rows_written` is the resulting write count, not a SQL `INSERT` count. There is currently no authoritative monitoring field for per-table `inserted_rows`, `updated_rows`, or `deleted_rows`; Gold writes are also not emitted to `cfg_table_load_metric`. The Operations Control Tower should label these as **not captured** rather than deriving misleading DML figures.
 
-For a future enhancement, introduce `monitoring.cfg_table_lifecycle_event`
-with `event_type` (`CREATED`, `COLUMN_ADDED`, `COLUMN_REMOVED`,
-`COLUMN_TYPE_CHANGED`), layer, table, column, before/after type, `run_id`,
-`job_run_id` and event timestamp. Add a Delta-change-data-feed or merge
-metric where true insert/update/delete counts are required.
+For a future enhancement, introduce `monitoring.cfg_table_lifecycle_event` with `event_type` (`CREATED`, `COLUMN_ADDED`, `COLUMN_REMOVED`, `COLUMN_TYPE_CHANGED`), layer, table, column, before/after type, `run_id`, `job_run_id` and event timestamp. Add a Delta-change-data-feed or merge metric where true insert/update/delete counts are required.
 
-For Gold reporting semantics and the DAX measures enabled by the referral
-enrichment fields, use
-[Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md).
+For Gold reporting semantics and the DAX measures enabled by the referral enrichment fields, use [Measures Comparison Checklist](../Supplementary/Measures_Comparison_Checklist.md).
 
 ## Starter report queries
 
@@ -117,13 +89,8 @@ ORDER BY last_detected_at DESC;
 
 ## Recommended report pages
 
-1. **Run health** — latest jobs, pass/fail, duration, tables succeeded/failed,
-   rows read/written, and direct links to the failed notebook error.
-2. **Batch and table throughput** — archive ZIP/file date, source-to-target
-   lineage, target count, row counts, duplicates and null-key counts.
-3. **Schema and contract watch** — active drift by table/column, contract
-   reload date, unresolved issues and first/last detection date.
-4. **Data quality** — failures by severity, source table, rule and rejected
-   key count.
-5. **Coverage and limitations** — display unavailable DDL/DML metrics as
-   explicit gaps until lifecycle and change-count instrumentation is added.
+1. **Run health** - latest jobs, pass/fail, duration, tables succeeded/failed, rows read/written, and direct links to the failed notebook error.
+2. **Batch and table throughput** - archive ZIP/file date, source-to-target lineage, target count, row counts, duplicates and null-key counts.
+3. **Schema and contract watch** - active drift by table/column, contract reload date, unresolved issues and first/last detection date.
+4. **Data quality** - failures by severity, source table, rule and rejected key count.
+5. **Coverage and limitations** - display unavailable DDL/DML metrics as explicit gaps until lifecycle and change-count instrumentation is added.

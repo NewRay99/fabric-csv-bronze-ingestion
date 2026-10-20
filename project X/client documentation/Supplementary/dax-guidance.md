@@ -2,10 +2,9 @@
 
 ## Reporting reassessment 30 September 2026
 
-Use current WIP TMDL for exact expressions. Snapshot month, current referral creation cohort and closure flow are separate filter roles. Use category-aware distinct-referral measures and explicit offer/referral or provider/IPA transfer instead of adding bidirectional paths. Journey selectors clear only their own selection. Neither REMOVEFILTERS nor ALLSELECTED should be treated as a bypass of RLS.
+Use WMPP_v16 TMDL for exact expressions. Snapshot month, current referral creation cohort and closure flow are separate filter roles. Use category-aware distinct-referral measures and explicit offer/referral or provider/IPA transfer instead of adding bidirectional paths. Journey selectors clear only their own selection. Neither REMOVEFILTERS nor ALLSELECTED should be treated as a bypass of RLS.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
-
 
 Assume a `DimDate` table is related to `FactReferral[ReferralCreatedDate]` and inactive date relationships are used for other lifecycle dates.
 
@@ -39,9 +38,6 @@ DIVIDE (
 )
 ```
 
-Use the notebook-created `Fact Referral` fields directly for target reporting:
-`PlacedByRequiredDate` and `RequiredPlacementDateOutcome`. `Fact Placement`
-does not contain `RequiredPlacementDate`. The complete v02 measure set is in
-[Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+Use the notebook-created `Fact Referral` fields directly for target reporting: `PlacedByRequiredDate` and `RequiredPlacementDateOutcome`. `Fact Placement` does not contain `RequiredPlacementDate`. The complete v02 measure set is in [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
 
 For open referrals as at a previous date, use status history or snapshots where possible. A simple created/closed interval calculation is only safe when referrals cannot reopen and closure dates are immutable.

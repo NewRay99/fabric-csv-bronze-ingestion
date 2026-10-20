@@ -1,44 +1,36 @@
 # Gold report implementation and requirements
 
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence.
+
+[Implementation, exact calculations, gaps and acceptance](REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
-The current delivery candidate is **SM WMPP v16 updated WIP**, not the older client package discussed below. Its current counts and requirement positions are recorded in the current status and requirement reassessment. Historical 117-KPI rows and past test results below retain their original scope and are not a 30 September acceptance certificate.
+The current delivery candidate is **WMPP_v16**, not the older client package discussed below. Its current counts and requirement positions are recorded in the current status and requirement reassessment. Historical 117-KPI rows and past test results below retain their original scope and are not a 30 September acceptance certificate.
 
 Material corrections: IPA-grain signing, person demographics, detailed provider messages, current assignment decline/cancellation reasons and current referral/category links exist. R54 is now partial because complete reason history/attribution remain unproven; it is no longer accurate to say no reason detail exists. R14 still lacks approved response/unread-priority semantics. R22, R48 and R58 remain open data gaps, and finance estimates do not resolve invoice/payment requirements.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
 Implementation date: 15 September 2026.
 
-## Current client-site status — 20 September 2026
+## Current client-site status - 20 September 2026
 
-The current client-site baseline is now
-`reports/current/MWPP Repo 20092026.zip` (`SM_WMPP_v16`), not the v15 project
-described below. The v16 model differs materially: it has 117 tables, 274
-measures, two DirectQuery tables, four bidirectional business relationships,
-an active current-referral-to-snapshot fact relationship, no RLS roles and 73
-broken report field-reference occurrences across nine missing fields.
+The current client-site baseline is now `reports/current/MWPP Repo 20092026.zip` (`WMPP_v16`), not the v15 project described below. The v16 model differs materially: it has 117 tables, 274 measures, two DirectQuery tables, four bidirectional business relationships, an active current-referral-to-snapshot fact relationship, no RLS roles and 73 broken report field-reference occurrences across nine missing fields.
 
-Use the [v16 reconciliation and required model updates](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md)
-as the current action list. In particular, implement snapshot-based historical
-state KPIs, repair report bindings, restore the single-direction star and add
-the documented RLS/security data before acceptance. The remainder of this
-document records the 15 September v15 migration and should not be read as a
-current v16 deployment sign-off.
+Use the [v16 reconciliation and required model updates](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md) as the current action list. In particular, implement snapshot-based historical state KPIs, repair report bindings, restore the single-direction star and add the documented RLS/security data before acceptance. The remainder of this document records the 15 September v15 migration and should not be read as a current v16 deployment sign-off.
 
-A repository implementation candidate is now available at
-`reports/current/SM WMPP v16 updated`. It completes those structural changes
-and is generated repeatably by `tools/reconcile_semantic_model_v16.py` from the
-immutable ZIP baseline. The supporting Gold contracts are in the current
-`00_setup_cfg.py`, `04_gold_model.py` and `05_gold_dimensions.py`. Static
-validation passes, but Fabric refresh, Power BI Desktop open/save, DAX result
-reconciliation, populated security mappings and identity-based RLS UAT remain
-deployment prerequisites.
+A repository implementation candidate is now available at v15 or earlier. It completes those structural changes and is generated repeatably by `tools/reconcile_semantic_model_v16.py` from the immutable ZIP baseline. The supporting Gold contracts are in the current `00_setup_cfg.py`, `04_gold_model.py` and `05_gold_dimensions.py`. Static validation passes, but Fabric refresh, Power BI Desktop open/save, DAX result reconciliation, populated security mappings and identity-based RLS UAT remain deployment prerequisites.
 
 ## Delivered model
 
-`reports/client-deliverables/SM WMPP v15/SM_WMPP.pbip` now contains 281 measures across 67 tables (including automatic date tables and local report metadata). `reports/current/_Measures.tmdl` contains 283 measures, retaining its extra source-only measure. All 195 concrete WIP definitions are present. This is the business report, separate from Mission Control.
+`reports/client-deliverables/SM WMPP v15/SM_WMPP.pbip` now contains 281 measures across 67 tables (including automatic date tables and local report metadata). `reports/current/_Measures.tmdl` contains 283 measures, retaining its extra source-only measure. All 195 concrete WMPP_v16 definitions are present. This is the business report, separate from Mission Control.
 
 **Deployment prerequisite:** publish and execute the changed `04_gold_model.py` against the intended Lakehouse before refreshing Power BI. It adds four real fields to `gold.fact_ipa`: `signed_by_provider`, `signed_by_local_authority`, `is_ipa_completed`, `is_ipa_pending`. Run `05_gold_dimensions.py` if the latest Gold dimensions are not already deployed. The report retains the existing Lakehouse SQL endpoint and uses Import mode for a consistent snapshot.
 
@@ -76,7 +68,7 @@ Natural keys on the one side must be unique. Static graph checks cannot prove th
 
 ## Deliberate differences and boundary rules
 
-- The original KPI-65 and KPI-71 use inclusive 15–30 days. Those measures are retained with that exact boundary. The WIP 15–29 measure remains for a mutually exclusive dashboard. Day 30 belongs to both original 15–30 and original 30+; do not add those two original cards to reconcile the total.
+- The original KPI-65 and KPI-71 use inclusive 15–30 days. Those measures are retained with that exact boundary. The WMPP_v16 15–29 measure remains for a mutually exclusive dashboard. Day 30 belongs to both original 15–30 and original 30+; do not add those two original cards to reconcile the total.
 - All pending bands use `offer_age_days`, not time since last edit. Blank/future submission dates are excluded from the four bands and counted separately. Refresh Gold to advance the clock; report queries do not mix TODAY with stored ages.
 - Draft No Activity 7+ Days and Drafts No Activity 14+ Days follow the original assessment’s age predicates (all drafts beyond the age). Draft Offers Stalled 7+/14+ Days measure time since activity. The names in the historic document are imperfect; tooltips should explain the distinction.
 - The original IPA conversion and successful-offer completion ratios divide an IPA count by an offer count. Multiple IPAs per offer can produce a value over 100%; the complement can be negative. They are retained to match the assessment. Use Accepted Offers Linked to IPA % for a bounded offer conversion KPI. Do not treat either as interchangeable with the IPA completion rate.
@@ -150,10 +142,10 @@ Repository validation checks every table/column/measure visual binding, Gold-onl
 | KPI-33 | [R24] | Referrals With One or More Offers | `fact_referral` + `fact_offer` | Referrals With an Offer | 🔁 Alias |
 | KPI-34 | [R54] | Closed Referrals (by Reason) | fact_referral | Closed Referrals (by Reason) with referral_closure_reason; does not supply provider decline history | Partial |
 | KPI-35 | [R25-R29] | Total Offers Made (Active Referrals Under Offer) | `fact_offer` | Offers on Referrals Under Offer | ✅ Covered |
-| KPI-36 | [R25-R29] | Offer IDs (Under Offer Referrals) | — | Retired — internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary | 🗄 Retired |
+| KPI-36 | [R25-R29] | Offer IDs (Under Offer Referrals) | - | Retired - internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary | 🗄 Retired |
 | KPI-37 | [R26] | Offers per Provider (Under Offer Referrals) | `fact_offer` | Offers per Provider (Under Offer Referrals) | ✅ Covered |
 | KPI-38 | [R67,R68] | Framework Offers (Under Offer Referrals) | `fact_offer` (framework flag) | Framework Offers (Under Offer Referrals) | ✅ Covered |
-| KPI-39 | [R28,R35] | Accepted Offers (Scoped Table) | — | Retired — internal scoped-table helper (see KPI-36) | 🗄 Retired |
+| KPI-39 | [R28,R35] | Accepted Offers (Scoped Table) | - | Retired - internal scoped-table helper (see KPI-36) | 🗄 Retired |
 | KPI-40 | [R91,R93] | Provider Homes Registered | `dim_provider_home` | Provider Homes Registered | ✅ Covered |
 | KPI-41 | [R91,R93] | Providers Registered | `dim_provider` | Providers Registered | ✅ Covered |
 | KPI-42 | [R95] | Providers - Fostering | `dim_provider` + `dim_provider_home` | Providers - Fostering | ✅ Covered |
@@ -162,11 +154,11 @@ Repository validation checks every table/column/measure visual binding, Gold-onl
 | KPI-45 | [R67] | Framework Providers | `dim_provider` + `bridge_provider_framework` + `dim_framework` | Framework Providers | ✅ Covered |
 | KPI-46 | [R46] | NON Framework Providers | `dim_provider` + `bridge_provider_framework` | Non-Framework Providers | ✅ Covered |
 | KPI-47 | [R46] | Is Non Framework Provider | `dim_provider` + `bridge_provider_framework` | Is Non Framework Provider (row helper) | ✅ Covered |
-| KPI-48 | [R93] | Directory Summary Count | — | Retired — depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed | 🗄 Retired |
+| KPI-48 | [R93] | Directory Summary Count | - | Retired - depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed | 🗄 Retired |
 | KPI-49 | [R96] | Residential Homes | `dim_provider_home` | Residential Homes | ✅ Covered |
 | KPI-50 | [R91] | Supported Accommodation Homes | `dim_provider_home` | Supported Accommodation Homes | ✅ Covered |
 | KPI-51 | [R95] | Fostering Providers | `dim_provider` + `dim_provider_home` | Providers - Fostering | 🔁 Alias |
-| KPI-52 | [R95] | Fostering Chart Count | — | Retired — depended on `rpt_provider_fostering` report-view table (see KPI-48) | 🗄 Retired |
+| KPI-52 | [R95] | Fostering Chart Count | - | Retired - depended on `rpt_provider_fostering` report-view table (see KPI-48) | 🗄 Retired |
 | KPI-53 | [R24] | Draft No Activity Since Creation | `fact_offer` | Draft Offers With No Activity Since Creation | ✅ Covered |
 | KPI-54 | [R24] | Draft Offers With Activity Since Creation | `fact_offer` | Draft Offers With Activity Since Creation | ✅ Covered |
 | KPI-55 | [R24] | Draft Offers Missing Dates | `fact_offer` | Draft Offers Missing Dates | ✅ Covered |
@@ -178,7 +170,7 @@ Repository validation checks every table/column/measure visual binding, Gold-onl
 | KPI-61 | [R24] | Draft Offer Count | `fact_offer` | Offers in Draft | 🔁 Alias |
 | KPI-62 | [R24] | Draft With No Activity Since Creation (%) | `fact_offer` | Draft Offers With No Activity % | ✅ Covered |
 | KPI-63 | [R24] | Drafts With No Activity 14+ Days | fact_offer[offer_age_days] | Drafts With No Activity 14+ Days; count, not percentage | Alias |
-| KPI-64 | [R24] | Pending Offers by Age Bucket | — | Retired — disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands | 🗄 Retired |
+| KPI-64 | [R24] | Pending Offers by Age Bucket | - | Retired - disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands | 🗄 Retired |
 | KPI-65 | [R24] | Pending Offers 15–30 Days | fact_offer[offer_age_days] | Pending Offers 15–30 Days; original inclusive range. Use Pending Offers 15-29 Days for non-overlapping bands | Covered |
 | KPI-66 | [R24] | Pending Offers 30+ Days | `fact_offer` | Pending Offers 30+ Days | ✅ Covered |
 | KPI-67 | [R24] | Pending Offers 0–7 Days | `fact_offer` | Pending Offers 0-7 Days | ✅ Covered |
@@ -189,7 +181,7 @@ Repository validation checks every table/column/measure visual binding, Gold-onl
 | KPI-72 | [R24] | Critical Offers (30+ Days) | `fact_offer` | Pending Offers 30+ Days | 🔁 Alias |
 | KPI-73 | [R35] | IPA Exists | `fact_ipa` | IPA Exists (row helper) | ✅ Covered |
 | KPI-74 | [R28] | Is In Accepted KPI | fact_offer[offer_status] | Is In Accepted KPI; accepted-status row helper | Covered |
-| KPI-75 | [R28,R35] | Accepted Offers Base | — | Retired — internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it | 🗄 Retired |
+| KPI-75 | [R28,R35] | Accepted Offers Base | - | Retired - internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it | 🗄 Retired |
 | KPI-76 | [R35] | IPA Created | fact_ipa[ipa_id] | IPA Created / IPAs Created; individual IPA count | Covered |
 | KPI-77 | [R35] | IPA Completed | fact_ipa[is_ipa_completed] | IPA Completed; both signatures present | Covered |
 | KPI-78 | [R35] | IPAs Pending Completion | fact_ipa[is_ipa_pending] | IPAs Pending Completion; unsigned and not closed | Covered |
@@ -203,32 +195,32 @@ Repository validation checks every table/column/measure visual binding, Gold-onl
 | KPI-86 | [R35] | Successful Offers to IPA Completed % | fact_ipa + fact_offer | Successful Offers to IPA Completed %; completed IPAs / accepted offers | Covered |
 | KPI-87 | [R82] | Dashboard Last Refreshed | `fact_referral[gold_modelled_at]` | Gold Model Last Refreshed | 🔁 Alias |
 | KPI-88 | [R53] | Latest Export per Offer | `fact_offer[source_export_date]` | Latest Offer Source Export | 🔁 Alias |
-| KPI-89 | [R24] | Latest Offer Status Count | — | Retired — Gold `fact_offer` is already deduplicated to the latest state per offer | 🗄 Retired |
+| KPI-89 | [R24] | Latest Offer Status Count | - | Retired - Gold `fact_offer` is already deduplicated to the latest state per offer | 🗄 Retired |
 | KPI-90 | [R22] | Overlap Referrals | fact_referral | Overlap Referrals; diagnostic intersection of active awaiting/under-offer cohorts. Does not satisfy R22 geography | Diagnostic |
 | KPI-91 | [R18,R57] | Emergency Referrals | fact_referral | Emergency Referrals; OPEN/UNDER_OFFER status and Gold same-day flag | Covered |
 | KPI-92 | [R18,R57] | Emergency Placement Rate | `fact_referral` | Emergency Placement Rate | ✅ Covered |
 | KPI-93 | [R57] | Planned Referrals | fact_referral | Planned Referrals; OPEN/UNDER_OFFER status, both dates present and not same-day | Covered |
 | KPI-94 | [R18,R57] | Emergency vs Planned Split | `fact_referral` | Visual split using [Emergency Referrals] and [Planned Referrals]; no separate measure | ✅ Covered |
-| KPI-95 | [R22] | Out-of-Region Referrals | — | Blocked — `fact_referral[region]` is null until a reliable source supplies it | ❌ Blocked |
-| KPI-96 | [R22] | Out-of-Region Placement Rate | — | Blocked — as KPI-95 | ❌ Blocked |
+| KPI-95 | [R22] | Out-of-Region Referrals | - | Blocked - `fact_referral[region]` is null until a reliable source supplies it | ❌ Blocked |
+| KPI-96 | [R22] | Out-of-Region Placement Rate | - | Blocked - as KPI-95 | ❌ Blocked |
 | KPI-97 | [R41] | Providers with QA Flags | `dim_provider` QA flag columns | Providers With QA Flags | ✅ Covered |
-| KPI-98 | [R41] | QA Flag Type Breakdown | — | Blocked — no QA flag-type dimension to unpivot in Gold | ❌ Blocked |
+| KPI-98 | [R41] | QA Flag Type Breakdown | - | Blocked - no QA flag-type dimension to unpivot in Gold | ❌ Blocked |
 | KPI-99 | [R41] | QA Flagged Providers by Home | dim_provider + dim_provider_home | QA Flagged Homes; home flag OR parent-provider flag | Covered |
 | KPI-100 | [R47] | Documents Expiring (30 Days) | `dim_provider_submission_document` | Documents Expiring Next 30 Days | ✅ Covered |
 | KPI-101 | [R47,R48] | Documents Expired | `dim_provider_submission_document` | Documents Expired | ✅ Covered |
-| KPI-102 | [R48] | Providers Blocked (Incomplete Docs) | — | Blocked — no expected-document set in Gold to test completeness against | ❌ Blocked |
-| KPI-103 | [R48] | Document Compliance Rate | — | Blocked — as KPI-102 | ❌ Blocked |
+| KPI-102 | [R48] | Providers Blocked (Incomplete Docs) | - | Blocked - no expected-document set in Gold to test completeness against | ❌ Blocked |
+| KPI-103 | [R48] | Document Compliance Rate | - | Blocked - as KPI-102 | ❌ Blocked |
 | KPI-104 | [R49] | Provider Due Diligence Status | `dim_provider[provider_status]` | Providers Pending Onboarding / Providers Approved (provider_status split) | ✅ Covered |
-| KPI-105 | [R54] | Decline Reasons (Referral Level) | — | Blocked — no decline-reason history in active Gold | ❌ Blocked |
-| KPI-106 | [R58] | Framework Changes During Active Referrals | — | Blocked — no framework-change history in active Gold | ❌ Blocked |
-| KPI-107 | [R62] | Total Weekly Fee Liability | `fact_ipa[estimated_weekly_cost]` | Estimated Active Weekly Cost — estimate, not signed-only actuals | ⚠️ Proxy |
-| KPI-108 | [R62] | Payment Method Breakdown | — | Blocked — no payment method / payment facts in Gold | ❌ Blocked |
-| KPI-109 | [R62] | IPA Payment Status | — | Blocked — no payment lifecycle facts in Gold | ❌ Blocked |
-| KPI-110 | [R14] | Messages Sent | `fact_referral_lifecycle_event` | Provider Messages Sent — lifecycle-event proxy for volume only; no response-time or unread analysis | ⚠️ Proxy |
-| KPI-111 | [R14] | Avg Message Response Time (Hours) | — | Blocked — no message response-time facts in Gold | ❌ Blocked |
-| KPI-112 | [R14] | Priority Messages Unread | — | Blocked — no message-status facts in Gold | ❌ Blocked |
-| KPI-113 | [R20] | Audit Events by Type | `fact_referral_lifecycle_event` | Referral Lifecycle Events — derived roll-up, not the source audit log | ⚠️ Proxy |
+| KPI-105 | [R54] | Decline Reasons (Referral Level) | - | Blocked - no decline-reason history in active Gold | ❌ Blocked |
+| KPI-106 | [R58] | Framework Changes During Active Referrals | - | Blocked - no framework-change history in active Gold | ❌ Blocked |
+| KPI-107 | [R62] | Total Weekly Fee Liability | `fact_ipa[estimated_weekly_cost]` | Estimated Active Weekly Cost - estimate, not signed-only actuals | ⚠️ Proxy |
+| KPI-108 | [R62] | Payment Method Breakdown | - | Blocked - no payment method / payment facts in Gold | ❌ Blocked |
+| KPI-109 | [R62] | IPA Payment Status | - | Blocked - no payment lifecycle facts in Gold | ❌ Blocked |
+| KPI-110 | [R14] | Messages Sent | `fact_referral_lifecycle_event` | Provider Messages Sent - lifecycle-event proxy for volume only; no response-time or unread analysis | ⚠️ Proxy |
+| KPI-111 | [R14] | Avg Message Response Time (Hours) | - | Blocked - no message response-time facts in Gold | ❌ Blocked |
+| KPI-112 | [R14] | Priority Messages Unread | - | Blocked - no message-status facts in Gold | ❌ Blocked |
+| KPI-113 | [R20] | Audit Events by Type | `fact_referral_lifecycle_event` | Referral Lifecycle Events - derived roll-up, not the source audit log | ⚠️ Proxy |
 | KPI-114 | [R20,R35] | IPA Signature Completion Rate | fact_ipa signature fields | IPAs Signed by Provider; IPAs Signed by Local Authority; IPA Completed; IPA Signature Completion Rate | Covered |
-| KPI-115 | [R19] | Referral Updates per Day | — | Blocked — no durable referral update timestamp; lifecycle events provide the supported activity measure | ❌ Blocked |
+| KPI-115 | [R19] | Referral Updates per Day | - | Blocked - no durable referral update timestamp; lifecycle events provide the supported activity measure | ❌ Blocked |
 | KPI-116 | [R59] | Provider Onboarding Pipeline | `dim_provider[provider_status]` | Providers Pending Onboarding | ✅ Covered |
 | KPI-117 | [R59] | Bulk Onboarding Success Rate | dim_provider[provider_status] | Provider Onboarding Success Rate; current approval-state proportion, not bulk-operation outcome | Proxy |

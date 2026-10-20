@@ -12,8 +12,7 @@ See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reas
 
 ## Dashboard Overview and KPI Logic Document
 
-**Prepared by:** Hamant K Jakhu, Senior ICT Manager
-**Date:** 23 June 2026
+**Prepared by:** Hamant K Jakhu, Senior ICT Manager **Date:** 23 June 2026
 
 *Final pack prepared to support shared understanding and consistent interpretation across the 14 Local Authorities.*
 

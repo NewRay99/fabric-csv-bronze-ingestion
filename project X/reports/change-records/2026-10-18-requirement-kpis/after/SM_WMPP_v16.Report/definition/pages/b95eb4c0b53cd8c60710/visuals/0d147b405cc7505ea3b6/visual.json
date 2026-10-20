@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "0d147b405cc7505ea3b6",
+  "position": {
+    "x": 316,
+    "y": 1550,
+    "width": 1608,
+    "height": 76,
+    "z": 180000,
+    "tabOrder": 180000
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Additional reporting KPIs • existing calculations now visible. Select a requirement above. — means unavailable in the current context. Definitions and acceptance remain subject to owner review.",
+                    "textStyle": {
+                      "fontFamily": "Segoe UI",
+                      "fontSize": "12pt",
+                      "color": "#17365D"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

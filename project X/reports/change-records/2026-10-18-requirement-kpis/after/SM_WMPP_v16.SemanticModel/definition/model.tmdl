@@ -1,0 +1,94 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["ref_RID","ref_KPI","ref_KPI_RID_Linkage","dim_provider","dim_provider_home","dim_person","dim_framework","dim_category","dim_offer_status","_Measures","bridge_provider_sic_code","bridge_provider_framework","fact_ipa","fact_offer","fact_referral_snapshot","fact_referral_lifecycle_event","fact_referral","fact_referral_provider","dim_date","dim_framework_category","dim_placement_type","dim_provider_submission_document","stg_referral_person_support_needs","dim_referral_provider_message","dim_referral_provider_reject_reason","gold referral_journey_flow","gold rpt_kpi_referral_board_summary","dim_snapshot_month","bridge_provider_home_framework_category","fact_provider_kpi_monthly","fact_referral_global_summary","dim_security_scope","sec_user_scope_access","bridge_referral_scope","_Design Measures","bridge_referral_framework_category","_Explore Measures","_Story Measures","_Provider Detail Measures","_Journey Measures","Journey Provider Selection","Journey Detail Selection","_Journey Interaction","dim_provider_home (offer)","dim_provider (offer)","rpt_provider_registry","_Explorer KPI Measures","_Report Journey Measures","ReportVersion","Report Settings"]
+
+annotation PBI_ProTooling = ["DevMode","DaxQueryView_Desktop"]
+
+ref table dim_provider
+ref table dim_provider_home
+ref table dim_person
+ref table dim_framework
+ref table dim_category
+ref table dim_offer_status
+ref table fact_offer
+ref table _Measures
+ref table fact_ipa
+ref table bridge_provider_framework
+ref table 'Directory Summary Axis'
+ref table 'Fostering Axis'
+ref table fact_referral_lifecycle_event
+ref table 'Draft Age Band Table'
+ref table ref_RID
+ref table ref_KPI
+ref table ref_KPI_RID_Linkage
+ref table fact_referral_snapshot
+ref table fact_referral
+ref table dim_date
+ref table bridge_provider_sic_code
+ref table dim_framework_category
+ref table dim_placement_type
+ref table dim_provider_submission_document
+ref table fact_referral_provider
+ref table dim_referral_provider_message
+ref table dim_referral_provider_reject_reason
+ref table 'gold referral_journey_flow'
+ref table 'gold rpt_kpi_referral_board_summary'
+ref table dim_snapshot_month
+ref table bridge_provider_home_framework_category
+ref table fact_provider_kpi_monthly
+ref table fact_referral_global_summary
+ref table dim_security_scope
+ref table sec_user_scope_access
+ref table bridge_referral_scope
+ref table 'KPI Selector'
+ref table 'Dashboard Metric Selector'
+ref table 'Snapshot Window'
+ref table 'Target Status'
+ref table 'Days to Target'
+ref table 'Open Referral Age'
+ref table 'Placement Window'
+ref table 'Offer Journey Stage'
+ref table '_Design Measures'
+ref table bridge_referral_framework_category
+ref table 'Referral Category'
+ref table 'Offer Category'
+ref table '_Explore Measures'
+ref table 'Referral Breakdown'
+ref table 'Referral Metric'
+ref table 'Referral Map Points'
+ref table '_Story Measures'
+ref table '_Provider Detail Measures'
+ref table '_Journey Measures'
+ref table 'Journey Provider Selection'
+ref table 'Journey Detail Selection'
+ref table '_Journey Interaction'
+ref table 'dim_provider_home (offer)'
+ref table 'dim_provider (offer)'
+ref table '_Explorer KPI Measures'
+ref table 'Provider Explorer KPI'
+ref table 'Referral Explorer KPI'
+ref table 'Explorer Offer Status'
+ref table 'Explorer Offer Activity'
+ref table '_Report Journey Measures'
+ref table 'Provider Scoring Evidence'
+ref table 'Provider Offer Status'
+ref table 'Offer Location Paths'
+ref table rpt_provider_registry
+ref table 'Linked Provider Referrals'
+ref table 'Report Settings'
+
+ref role 'WMPP Dynamic Detail RLS'
+ref role 'WMPP Temporary Full Access'
+
+ref cultureInfo en-GB
+
+
+ref table 'Requirement KPI Monitor'

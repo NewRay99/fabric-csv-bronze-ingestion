@@ -1,14 +1,14 @@
 # WMPP report journeys and improvement review
 
-Reviewed 3 October 2026 against the saved project under `reports/WIP/SM WMPP v16 updated WIP`. This review covers all 34 page definitions, their saved fields, action destinations, drillthrough bindings, bookmark definitions and the relevant model and Gold calculations. It is a structural and semantic review, not a completed walkthrough of the rendered report or a reconciliation of live values.
+Reviewed 3 October 2026 against the saved project under `WMPP_v16`. This review covers all 34 page definitions, their saved fields, action destinations, drillthrough bindings, bookmark definitions and the relevant model and Gold calculations. It is a structural and semantic review, not a completed walkthrough of the rendered report or a reconciliation of live values.
 
 The report has a useful overview to explorer to detail structure, but it is not ready for release acceptance. The largest remaining problems are unclear time populations, repeated presentations, weak transitions from aggregate exceptions to case lists, and scoring evidence that could be mistaken for an approved rating. The changes below improve the explorer paths without inventing missing source events or scoring policy.
 
 ## Project and verification boundary
 
-The edited project is `C:\repos\BCT\fabric-csv-bronze-ingestion\project X\reports\WIP\SM WMPP v16 updated WIP\SM_WMPP_v16.pbip`. The older client-deliverables copy and ZIP are separate baselines and were not edited. The saved model now contains 67 tables and 459 measures; many are display, selection and compatibility calculations, not additional business KPIs.
+The edited project is `WMPP_v16\SM_WMPP_v16.pbip`. The older client-deliverables copy and ZIP are separate baselines and were not edited. The saved model now contains 67 tables and 459 measures; many are display, selection and compatibility calculations, not additional business KPIs.
 
-Saved-reference checks found no missing visual fields or nonexistent action destinations. Runtime DAX, rendered layout, filter propagation with real records, refresh and identity-based security remain unverified. The Desktop-control connection timed out. Nothing was published, and source queries, caches and security roles were not changed. The WIP manifests record the touched files and recoverable backups.
+Saved-reference checks found no missing visual fields or nonexistent action destinations. Runtime DAX, rendered layout, filter propagation with real records, refresh and identity-based security remain unverified. The Desktop-control connection timed out. Nothing was published, and source queries, caches and security roles were not changed. The WMPP_v16 manifests record the touched files and recoverable backups.
 
 ## Journeys through the report
 
@@ -48,7 +48,7 @@ The referral rail is a refresh-time classification of current evidence: created 
 
 The provider rail describes a provider's furthest evidenced stage in the current context: message activity → offers made → offer accepted → provider signed. A provider may have many simultaneous referrals at different stages. Message activity includes either sender, browsing is unavailable, and separate provider confirmation is not captured. Assigned or draft-only providers and providers with no activity sit outside the main rail and need explicit counts, not a fabricated stage. Both parties signed is a subset, not an additional mutually exclusive provider stage.
 
-## Changes implemented in this WIP
+## Changes implemented in this WMPP_v16
 
 - Retained entity-first referral and provider directories. An offer is not required to appear in either explorer.
 - Moved the result lists ahead of secondary analysis and raw activity. Added current-selection captions, empty-result guidance and visible selected-record drillthrough controls.
@@ -87,7 +87,7 @@ Document compliance, moderated officer feedback, governed decline handling, comp
 
 | Priority | Gap and evidence | Recommended improvement |
 | --- | --- | --- |
-| Release blocker | The open Desktop report has not been verified against these saved changes | Safeguard unsaved work, reload the correct WIP and complete the acceptance checks below. Do not save a stale session over updated files. |
+| Release blocker | The open Desktop report has not been verified against these saved changes | Safeguard unsaved work, reload the correct WMPP_v16 and complete the acceptance checks below. Do not save a stale session over updated files. |
 | High | Aggregate exception charts and navigational bookmarks do not by themselves carry a case cohort into an explorer | Add explicit filtered drillthrough paths or controlled cohort selectors for overdue, no-offer and accepted-without-IPA lists. Label simple navigation as navigation, not a filtered handover. |
 | High | Current state, creation-date cohorts, assignment-month cohorts, closure flow and month-end snapshots coexist | Place the time basis beside each section. Keep the existing closure-date flow separate from snapshot closed state. Do not compare an incomplete month with a complete month without marking it. |
 | High | Provider monthly Gold rows include security scope as well as provider and month | Reconcile multi-scope assignments and numerator duplication under actual RLS before using pooled values for comparison. A saved field-reference check cannot establish this. |

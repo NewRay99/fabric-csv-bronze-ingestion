@@ -1,19 +1,14 @@
-# KPI Reference Guide — Tables, Calculations, and Functional Requirements
+# KPI Reference Guide - Tables, Calculations, and Functional Requirements
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
+**Project:** WMPP (West Midlands Placement Portal) **Date:** 10 July 2026
 
-**Project:** WMPP (West Midlands Placement Portal)
-**Date:** 10 July 2026
-
-This document records the legacy v01 KPI catalogue: the existing measures
-translated from the historical Power BI semantic model and proposed measures
-for functional gaps. It is not a physical-schema declaration for the active
-notebook-created Gold v02 model.
+This document records the legacy v01 KPI catalogue: the existing measures translated from the historical Power BI semantic model and proposed measures for functional gaps. It is not a physical-schema declaration for the active notebook-created Gold v02 model.
 
 > **Scope correction:** this is the legacy v01 semantic-model catalogue. Its
 > `fact_referral_offer` and `fact_ipa` references are not active Gold objects.
@@ -26,7 +21,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Legacy v01 table mapping — not the active Gold v02 physical model
+## Legacy v01 table mapping - not the active Gold v02 physical model
 
 | Gold Table | Silver Source | Schema Definition Table | Functional Area |
 |-----------|--------------|----------------------|-----------------|
@@ -50,7 +45,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 1 — Referral Volume KPIs (10 existing)
+## Section 1 - Referral Volume KPIs (10 existing)
 
 ### KPI-01: Total Referrals `[R24, R51]`
 - **Functional ref:** R24 (dashboard referral status overview), R51 (robust data model)
@@ -107,14 +102,14 @@ notebook-created Gold v02 model.
 - **PBI measure:** `Referrals With Offers (Created in Period)`
 
 ### KPI-10: Total Referrals That Received Offers `[R51]`
-- **Functional ref:** R51 (value analysis — referral offer rate)
+- **Functional ref:** R51 (value analysis - referral offer rate)
 - **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT r.referral_id) WHERE EXISTS (SELECT 1 FROM fact_referral_offer rpo WHERE rpo.referral_id = r.referral_id AND rpo.is_excluded = false AND rpo.is_declined = false)`
 - **PBI measure:** `Total Referrals That Recieved Offers`
 
 ---
 
-## Section 2 — Provider Activity KPIs (12 existing)
+## Section 2 - Provider Activity KPIs (12 existing)
 
 ### KPI-11: No. Providers Who Made Offers `[R25, R26]`
 - **Functional ref:** R25 (review placement requests), R26 (prioritise requests)
@@ -190,7 +185,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 3 — Timebased KPIs (2 existing)
+## Section 3 - Timebased KPIs (2 existing)
 
 ### KPI-23: Referrals This Month `[R24, R52]`
 - **Functional ref:** R24 (dashboard), R52 (accurate reporting)
@@ -206,12 +201,12 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 4 — Spot vs Framework (3 existing)
+## Section 4 - Spot vs Framework (3 existing)
 
 ### KPI-25: (NEW) Total Offers Made `[R67, R68]`
 - **Functional ref:** R67 (add new frameworks), R68 (configure frameworks)
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_referral_offer`
-- **Calculation:** `COUNT(DISTINCT offer_id) WHERE offer_status NOT IN ('DRAFT')` — used as denominator for spot vs framework split
+- **Calculation:** `COUNT(DISTINCT offer_id) WHERE offer_status NOT IN ('DRAFT')` - used as denominator for spot vs framework split
 - **PBI measure:** `(NEW)Total Offers Made`
 
 ### KPI-26: Placement Type Totals (Visual) `[R13]`
@@ -221,18 +216,18 @@ notebook-created Gold v02 model.
 - **PBI measure:** `Placement Type Totals (Visual)`
 
 ### KPI-27: Spot Offers (Under Offer Referrals) `[R18]`
-- **Functional ref:** R18 (emergency placements — partial, spot ≠ emergency)
+- **Functional ref:** R18 (emergency placements - partial, spot ≠ emergency)
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_referral_offer`
 - **Calculation:** `COUNT(DISTINCT offer_id) WHERE rpo.is_spot = true AND offer_status NOT IN ('DRAFT')`
 - **PBI measure:** `Spot Offers (Under Offer Referrals)`
 
 ---
 
-## Section 5 — Referral Offers (12 existing)
+## Section 5 - Referral Offers (12 existing)
 
 ### KPI-28: Offer Count `[R25-R29]`
 - **Tables:** `gold.fact_offer`
-- **Calculation:** `COUNT(DISTINCT offer_id)` — base offer count
+- **Calculation:** `COUNT(DISTINCT offer_id)` - base offer count
 
 ### KPI-29: Referrals Currently Active `[R24]`
 - **Tables:** `gold.fact_referral`
@@ -265,11 +260,11 @@ notebook-created Gold v02 model.
 
 ### KPI-36: Offer IDs (Under Offer Referrals) `[R25-R29]`
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_referral_offer`
-- **Calculation:** Distinct offer_id listing — used for DISTINCTCOUNT of offers
+- **Calculation:** Distinct offer_id listing - used for DISTINCTCOUNT of offers
 
 ### KPI-37: Offers per Provider (Under Offer Referrals) `[R26]`
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_referral_offer`
-- **Calculation:** `COUNT(DISTINCT offer_id) GROUP BY provider_id` — provider ranking
+- **Calculation:** `COUNT(DISTINCT offer_id) GROUP BY provider_id` - provider ranking
 
 ### KPI-38: Framework Offers (Under Offer Referrals) `[R67, R68]`
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_referral_offer`
@@ -278,11 +273,11 @@ notebook-created Gold v02 model.
 ### KPI-39: Accepted Offers (Scoped Table) `[R28, R35]`
 - **Functional ref:** R28 (accept), R35 (digitised IPA)
 - **Tables:** `gold.fact_offer`
-- **Calculation:** `COUNT(DISTINCT offer_id) WHERE offer_status = 'ACCEPTED'` — base for IPA funnel
+- **Calculation:** `COUNT(DISTINCT offer_id) WHERE offer_status = 'ACCEPTED'` - base for IPA funnel
 
 ---
 
-## Section 6 — Provider Registry (13 existing)
+## Section 6 - Provider Registry (13 existing)
 
 ### KPI-40: Provider Homes Registered `[R91, R93]`
 - **Functional ref:** R91 (provider registration), R93 (provider directory)
@@ -318,7 +313,7 @@ notebook-created Gold v02 model.
 
 ### KPI-47: Is Non Framework Provider `[R46]`
 - **Tables:** `gold.dim_provider_framework`
-- **Calculation:** Boolean flag per provider — `qa_flag = false`
+- **Calculation:** Boolean flag per provider - `qa_flag = false`
 
 ### KPI-48: Directory Summary Count `[R93]`
 - **Tables:** `gold.dim_provider` ⟕ `gold.dim_provider_home`
@@ -342,7 +337,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 7 — Draft/Pending Offers (20 existing)
+## Section 7 - Draft/Pending Offers (20 existing)
 
 ### KPI-53: Draft No Activity Since Creation `[R24]`
 - **Tables:** `gold.fact_offer`
@@ -426,7 +421,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 8 — IPA Measures (14 existing)
+## Section 8 - IPA Measures (14 existing)
 
 ### KPI-73: IPA Exists `[R35]`
 - **Functional ref:** R35 (digitised IPA)
@@ -435,7 +430,7 @@ notebook-created Gold v02 model.
 
 ### KPI-74: Is In Accepted KPI `[R28]`
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_ipa`
-- **Calculation:** `offer_status = 'ACCEPTED'` flag — base for IPA funnel
+- **Calculation:** `offer_status = 'ACCEPTED'` flag - base for IPA funnel
 
 ### KPI-75: Accepted Offers Base `[R28, R35]`
 - **Tables:** `gold.fact_offer`
@@ -459,15 +454,15 @@ notebook-created Gold v02 model.
 
 ### KPI-80: Is IPA Pending `[R35]`
 - **Tables:** `gold.fact_ipa`
-- **Calculation:** Boolean flag — IPA exists but not signed
+- **Calculation:** Boolean flag - IPA exists but not signed
 
 ### KPI-81: Is Awaiting IPA Creation `[R35]**
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_ipa`
-- **Calculation:** Boolean flag — accepted offer with no IPA
+- **Calculation:** Boolean flag - accepted offer with no IPA
 
 ### KPI-82: Is IPA Completed `[R35]`
 - **Tables:** `gold.fact_ipa`
-- **Calculation:** Boolean flag — both signatures present
+- **Calculation:** Boolean flag - both signatures present
 
 ### KPI-83: Accepted Offer to IPA Conversion % `[R35]`
 - **Tables:** `gold.fact_offer` ⟕ `gold.fact_ipa`
@@ -487,7 +482,7 @@ notebook-created Gold v02 model.
 
 ---
 
-## Section 9 — Other Measures (4 existing)
+## Section 9 - Other Measures (4 existing)
 
 ### KPI-87: Dashboard Last Refreshed `[R82]`
 - **Tables:** N/A (system timestamp)
@@ -502,16 +497,16 @@ notebook-created Gold v02 model.
 - **Calculation:** `COUNT(DISTINCT offer_id) GROUP BY offer_status ORDER BY count DESC`
 
 ### KPI-90: Overlap Referrals `[R22]`
-- **Functional ref:** R22 (out-of-region placements — partial)
+- **Functional ref:** R22 (out-of-region placements - partial)
 - **Tables:** `gold.fact_referral` ⟕ `gold.fact_referral_offer`
 - **Calculation:** Referrals appearing in multiple provider referral-provider mappings
 
 ---
 
-## Section 10 — NEW Outstanding Measures (17 measures for functional gaps)
+## Section 10 - NEW Outstanding Measures (17 measures for functional gaps)
 
 ### KPI-91: Emergency Referrals `[R18, R57]` ⭐ HIGH PRIORITY
-- **Functional ref:** R18 (emergency placements — distinct identification, separate reporting), R57 (emergency vs planned separately reportable)
+- **Functional ref:** R18 (emergency placements - distinct identification, separate reporting), R57 (emergency vs planned separately reportable)
 - **Tables:** `gold.fact_referral`
 - **Calculation:** `COUNT(DISTINCT referral_id) WHERE status IN ('OPEN', 'UNDER_OFFER') AND created_timestamp::date = required_start_date`
 - **Logic:** A referral is "emergency" when `created_timestamp` date equals `required_start_date` (same-day placement required). This distinguishes from planned placements where there's lead time.
@@ -596,7 +591,7 @@ notebook-created Gold v02 model.
 - **Calculation:** `COUNT(DISTINCT r.referral_id) WHERE r.status IN ('OPEN', 'UNDER_OFFER') AND r.referral_id IN (SELECT referral_id FROM fact_referral_category)` AND the referral_category has been modified (check `modified_timestamp` vs `created_timestamp` on referral)
 
 ### KPI-107: Total Weekly Fee Liability `[R62]` ⭐ HIGH PRIORITY
-- **Functional ref:** R62 (finance officer — view completed placements, extract payment info)
+- **Functional ref:** R62 (finance officer - view completed placements, extract payment info)
 - **Tables:** `gold.fact_ipa`
 - **Calculation:** `SUM(costs_total_weekly_fee) WHERE signed_by_local_authority = true AND signed_by_provider = true AND closed = false`
 

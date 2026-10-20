@@ -1,11 +1,10 @@
-# Semantic-Model Changelog — report v00 to v01
+# Semantic-Model Changelog - report v00 to v01
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
-
 
 > **Historical scope:** this changelog records the extracted v00/v01 Power BI
 > models. It must not be used as the active Gold physical-schema reference.
@@ -82,8 +81,8 @@ The v00 archive does not contain the remote measures' executable DAX; it contain
 | Names retained from v00 | 90 | 90 | 0 lost |
 | Local DAX definitions | 0 | 95 | +95 |
 | `EXTERNALMEASURE(...)` references | 90 | 0 | -90 |
-| Removed measures | — | 0 | 0 |
-| Renamed measures | — | 0 | 0 |
+| Removed measures | - | 0 | 0 |
+| Renamed measures | - | 0 | 0 |
 
 All 90 v00 names are present in v01. Each moves from a thin external-measure declaration to a local DAX definition. This is a materialisation/change-of-ownership change; it is not, by itself, evidence that all 90 business calculations changed.
 
@@ -93,9 +92,9 @@ All five additions are stored in `_Measures.tmdl` under the `Referral Offers` di
 
 | Added measure | Archived v01 DAX | Provisional requirements alignment | Validation status |
 |---|---|---|---|
-| `Open Referral` | `CALCULATE(DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[referral_status] IN {"OPEN", "UNDER_OFFER"})` | R24 — referral-status overview | Technically verified; business mapping to confirm |
-| `Open Referral Previous Month` | `CALCULATE([Open Referral], DATEADD(dim_date[Date], -1, MONTH))` | R24 and R52 — status and period comparison | Technically verified; business mapping to confirm |
-| `Open Referrals MoM %` | `DIVIDE([Open Referral] - [Open Referral Previous Month], [Open Referral Previous Month])` | R24 and R52 — month-on-month status trend | Technically verified; business mapping to confirm |
+| `Open Referral` | `CALCULATE(DISTINCTCOUNT(fact_referral[referral_id]), fact_referral[referral_status] IN {"OPEN", "UNDER_OFFER"})` | R24 - referral-status overview | Technically verified; business mapping to confirm |
+| `Open Referral Previous Month` | `CALCULATE([Open Referral], DATEADD(dim_date[Date], -1, MONTH))` | R24 and R52 - status and period comparison | Technically verified; business mapping to confirm |
+| `Open Referrals MoM %` | `DIVIDE([Open Referral] - [Open Referral Previous Month], [Open Referral Previous Month])` | R24 and R52 - month-on-month status trend | Technically verified; business mapping to confirm |
 | `Closed Referral Previous Month` | `CALCULATE([Closed Referrals (by Reason)], DATEADD(dim_date[Date], -1, MONTH))` | Extends the existing R24/R54 closure measure with period comparison | Technically verified; does not by itself close the R54 decline-reason gap |
 | `Closed Referrals MoM %` | `DIVIDE([Closed Referrals (by Reason)] - [Closed Referral Previous Month], [Closed Referral Previous Month])` | R24, R52 and the existing R54 closure analysis | Technically verified; does not by itself close the R54 decline-reason gap |
 
@@ -211,9 +210,9 @@ The following 19 retained relationships change from the omitted/default `dateAnd
 
 | Option | Migrated baseline | Remaining/new gap measures | Target total | Consequence |
 |---|---:|---:|---:|---|
-| A — five v01 additions are part of the agreed 27 | 95 | 22 net additions | 117 | Requires an approved mapping showing which five of the 27 are already delivered; current category descriptions do not establish that overlap |
-| B — five v01 additions are additional to the agreed 27 | 95 | 27 | 122 | Preserves v01 parity and the complete gap backlog; requires count, effort, deliverable and acceptance updates |
-| C — retain the v00 contractual baseline | 90 | 27 | 117 | Excludes five measures already present in v01; requires an explicit approved exclusion and creates a parity risk |
+| A - five v01 additions are part of the agreed 27 | 95 | 22 net additions | 117 | Requires an approved mapping showing which five of the 27 are already delivered; current category descriptions do not establish that overlap |
+| B - five v01 additions are additional to the agreed 27 | 95 | 27 | 122 | Preserves v01 parity and the complete gap backlog; requires count, effort, deliverable and acceptance updates |
+| C - retain the v00 contractual baseline | 90 | 27 | 117 | Excludes five measures already present in v01; requires an explicit approved exclusion and creates a parity risk |
 
 Until the client chooses an option, the Statement of Work retains its draft commercial figures and this changelog records the technical discrepancy.
 
@@ -237,20 +236,20 @@ Until the client chooses an option, the Statement of Work retains its draft comm
 | Check | Result |
 |---|---|
 | Source archive hashes captured | Pass |
-| Measure declaration counts independently verified | Pass — 90 in v00; 95 in v01 |
+| Measure declaration counts independently verified | Pass - 90 in v00; 95 in v01 |
 | Unique measure names equal declaration counts | Pass |
-| Retained/added/removed measure names reconciled | Pass — 90 retained; 5 added; 0 removed |
-| External-to-local measure transition verified | Pass — 90 external references in v00; 0 in v01 |
-| Relationship declaration counts verified | Pass — 54 in v00; 48 in v01 |
+| Retained/added/removed measure names reconciled | Pass - 90 retained; 5 added; 0 removed |
+| External-to-local measure transition verified | Pass - 90 external references in v00; 0 in v01 |
+| Relationship declaration counts verified | Pass - 54 in v00; 48 in v01 |
 | Relationship removals, reversals and property changes reconciled to totals | Pass |
 | Statement of Work count conflict identified without silently changing commercial scope | Pass |
-| Checklist row classifications reconciled | Pass — 85 implemented + 2 partial + 3 extra = 90 legacy rows |
-| Checklist duplicate analysis reconciled | Pass — 5 exact-DAX groups contain 11 measures (6 redundant definitions); non-exclusive of row classifications |
+| Checklist row classifications reconciled | Pass - 85 implemented + 2 partial + 3 extra = 90 legacy rows |
+| Checklist duplicate analysis reconciled | Pass - 5 exact-DAX groups contain 11 measures (6 redundant definitions); non-exclusive of row classifications |
 | Checklist's legacy 90-row analysis separated from the v01 95-measure source count | Pass |
 
 ---
 
-## 8. Addendum — report v02 to report v03
+## 8. Addendum - report v02 to report v03
 
 ### 8.1 Scope and source controls
 
@@ -269,11 +268,11 @@ The semantic-model root directory was renamed from `SM test` to `SM Test v2`;
 |---|---:|---:|---:|
 | Table TMDL files | 80 | 80 | 0 |
 | Tables added / removed | 0 / 0 | 0 / 0 | 0 |
-| Table TMDL files changed | — | 1 (`_Measures`) | 1 |
+| Table TMDL files changed | - | 1 (`_Measures`) | 1 |
 | Measure declarations | 98 | 139 | +41 |
-| Measures removed | — | 0 | 0 |
+| Measures removed | - | 0 | 0 |
 | Relationships | 49 | 49 | 0 net |
-| Relationship additions / removals / property changes | — | 1 / 1 / 1 | See §8.4 |
+| Relationship additions / removals / property changes | - | 1 / 1 / 1 | See §8.4 |
 
 `model.tmdl` and `database.tmdl` are byte-equivalent between the two archives. No table is added or removed; the only changed table definition is `_Measures.tmdl`.
 
@@ -302,7 +301,7 @@ The total relationship count remains **49**, but the offer-to-referral filter pa
 | Change | v02 | v03 | Consequence / test focus |
 |---|---|---|---|
 | Removed | `fact_offer.referral_id` → `fact_referral.referral_id`, bidirectional | Removed | Direct offer-to-referral propagation is no longer available through this relationship. |
-| Added | — | `fact_offer.referral_provider_id` → `fact_referral_offer.referral_provider_id`, bidirectional, many-to-many | Validate ambiguity and propagation between offers, provider/referral offers, providers, and referrals. |
+| Added | - | `fact_offer.referral_provider_id` → `fact_referral_offer.referral_provider_id`, bidirectional, many-to-many | Validate ambiguity and propagation between offers, provider/referral offers, providers, and referrals. |
 | Modified | `fact_referral_offer.referral_id` → `fact_referral.referral_id`, default single direction | Same endpoints, **bidirectional** | Referral filters can now propagate from `fact_referral_offer` back to `fact_referral`; test totals and cross-filter interactions. |
 
 **Required v03 regression tests:**
@@ -320,12 +319,10 @@ The primary dashboard report was identified as `report v14/WMPP DASHBOARD.Report
 |---|---:|---:|---:|
 | Pages | 10 | 10 | 0 |
 | Visual containers | 204 | 240 | +36 net |
-| Visual IDs added | — | 47 | +47 |
-| Visual IDs removed | — | 11 | -11 |
-| Added visual IDs on `REFERRALS` page | — | 47 | +47 |
+| Visual IDs added | - | 47 | +47 |
+| Visual IDs removed | - | 11 | -11 |
+| Added visual IDs on `REFERRALS` page | - | 47 | +47 |
 
 The 47 additions on `REFERRALS` comprise **18 shapes, 13 cards, 7 visual containers without a declared visual type, 6 action buttons, 2 KPIs, and 1 image**. The 11 removals comprise **6 untyped visual containers, 2 shapes, 2 images, and 1 KPI**. No report page is added or removed. Because visual display names and titles are not consistently declared in the PBIR members, this is a structural inventory; functional UAT must verify the intended user-facing KPI labels, navigation, and data interactions.
-
-
 
 *This document is Commercial in Confidence and should not be distributed outside the authorised stakeholder group without written approval.*

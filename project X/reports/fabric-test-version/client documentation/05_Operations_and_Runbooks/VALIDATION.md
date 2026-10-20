@@ -1,0 +1,67 @@
+# Version 01 validation
+
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence. Reopen the WMPP_v16 PBIP and refresh calculated metadata. DAX boundary/cohort checks, visual/mobile review and authorised-user role tests are required before publication; use the linked acceptance checklist and read-only DAX query.
+
+[Implementation, exact calculations, gaps and acceptance](../04_Data_and_Reporting/REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
+
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
+
+Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
+
+Changed KPI views and coverage sections were rendered for visual review. Workbook checks are read-only release checks; routine notebook pytest scope is unchanged.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## Reporting reassessment 30 September 2026
+
+Use the WMPP_v16 acceptance checklist in the current status document. Static inventory confirms 58 tables, 366 named measures, 34 pages and 158 bookmarks; all existing 109 Legend measures and 35 added entries resolve by name. The journey repair originally recorded 10 passing tests and schema validation of 138 changed documents with five unavailable existing schemas skipped.
+
+Following owner approval on 30 September 2026, journey checks were simplified to seven script/business-rule/reference checks. Removed: byte-for-byte comparisons to historical backups, file-size limits, frozen panel dimensions, icon alignment and decoration assertions. Retained: model references, registered bookmark targets, stage-selector isolation, action links and the unavailable provider-confirmation guard. Omitted false bookmark defaults are accepted. Report appearance and rendered behaviour are Desktop UAT checks, not Python unit tests.
+
+Verification: **107 tests passed, with 158 subtests passed**, using `python -B -m pytest -o addopts= -p no:cacheprovider -q --tb=short --basetemp <fresh-temporary-directory>`. The first full run encountered a permissions error in the existing `.pytest_tmp`; the fresh temporary directory resolved it. Data-pipeline tests were not changed. Report/model files were not changed by this test cleanup.
+
+These checks do not execute Fabric, validate all DAX results or certify Desktop rendering. The limited previous live check covered three provider-stage gates only. Required next checks are full refresh/reconciliation, stage selector isolation and clear/reset, drillthrough/Back, snapshot and closure semantics, category/offer intersections, map privacy, identity RLS and release sign-off. The August validation results below remain historical and must not be restamped as newly run.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+Validated locally on 4 August 2026:
+
+- All seven `.ipynb` files parse as valid Notebook 4 JSON.
+- All Python code cells compile successfully after excluding Fabric `%%sql` cells.
+- The schema contract contains 57 tables and exactly one `export_date` column per table.
+- Every `export_date` contract column is nullable `timestamp without time zone`.
+- Gold-layer Silver references resolve to the `silver.<table>` naming convention.
+- Resumable-load static checks confirm export auditing, reload control, failed-month retry, canonical month-end materialisation, and the `AS_OF_DATE` hand-off are present.
+- Archive-ingestion static checks confirm global table/export, ZIP, and file controls; row-level `export_date`; source-file replacement where file lineage exists; export-date-only rehydration for older tables; and exclusion of the non-contract `audit` table.
+- Date-only `2026-07-26` and fractional timestamp values `2026-05-19 08:51:41.0` and `2026-06-05 09:28:43.959135` are covered by the corrected Spark parser configuration in both Silver notebooks.
+- Archive replay statically confirms one canonical batch per calendar month, exact selected-export filtering, primary-key `row_number()` deduplication, verbose identifier/date diagnostics, and a hard null-`export_date` gate before Gold.
+- `framework_category` and `ipa_child_support_needs` now have complete contracts, and duplicate ordinal rows were removed from `provider_document` and `submission_documents`.
+- No retired secondary-Silver-schema or pre-rename notebook references remain in version 01.
+- The DQ rule catalogue contains five rules, and every referenced table and column exists in the schema contract.
+
+The notebooks were not executed end-to-end locally because they require a Microsoft Fabric Spark session, Lakehouse tables, Delta Lake, `notebookutils`, and the configured `Files/cfg_files` path. End-to-end execution should be run in Fabric in this order:
+
+1. `01_bronze_get_latest.ipynb`
+2. `02_silver_formatter.ipynb`
+3. `03_silver_business_rules.ipynb`
+4. `04_gold_model.ipynb`
+5. `05_gold_dimensions.ipynb`
+6. `06_reports.ipynb`
+
+Historical replay should be tested separately with `02a_archive_silver.ipynb` after running `00_archive_load.ipynb` and confirming the archive tables contain valid row-level `export_date` values. `_archive_source_path` is optional for Silver/Gold replay. For an existing deployment, run `00a_rehydrate_archive_cfg.ipynb` first; only tables reported as genuinely missing `export_date` require correction before replay.
+
+The first Fabric run should confirm that the latest Bronze source contains the expected contract tables and that `export_date` is populated from the source or, when absent, stamped at Bronze load time.
+
+Run the portable static regression locally with:
+
+```text
+python validate_core_pipeline.py
+```

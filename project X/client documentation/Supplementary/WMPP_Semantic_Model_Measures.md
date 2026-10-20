@@ -1,14 +1,12 @@
-# WMPP v01 Semantic Model — Measure Catalogue
+# WMPP v01 Semantic Model - Measure Catalogue
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Source project:** `project X/report v01 extracted/semantic_model __/SM_WMPP.pbip`
-**Source file:** `SM_WMPP.SemanticModel/definition/tables/_Measures.tmdl`
+**Source project:** `WMPP/templates/report v01 extracted/semantic_model __/SM_WMPP.pbip` **Source file:** `SM_WMPP.SemanticModel/definition/tables/_Measures.tmdl`
 
 ## Current inventory
 
@@ -23,11 +21,7 @@ This catalogue is generated from the committed v01 TMDL and replaces the older V
 
 ## Active Gold v02 boundary
 
-This is an inventory of the extracted **v01** Power BI model, not a declaration
-of the active notebook-created Gold schema. In particular,
-`fact_referral_offer` and `fact_ipa` are v01 names. The active objects are
-`gold.fact_referral_provider` and `gold.fact_placement`. New v02 measures are
-documented in [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
+This is an inventory of the extracted **v01** Power BI model, not a declaration of the active notebook-created Gold schema. In particular, `fact_referral_offer` and `fact_ipa` are v01 names. The active objects are `gold.fact_referral_provider` and `gold.fact_placement`. New v02 measures are documented in [Measures Comparison Checklist](Measures_Comparison_Checklist.md).
 
 ## `Closed_Date` derivation
 

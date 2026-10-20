@@ -1,0 +1,131 @@
+{
+  "change_id": "SEM-004",
+  "date": "2026-10-18",
+  "base_branch": "master",
+  "base_commit": "0563ff09a052b540e7b33b258de7d3a150b47e0b",
+  "target_project": "project X/reports/WIP/SM WMPP v16 updated WIP",
+  "baseline": "latest local saved WIP; not reconstructible from the older repository ZIP alone",
+  "files": [
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/page.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/page.json",
+      "before_sha256": "e1fbb72fdfa58c89d4fe33d5bc293093af6ad933c44268efd31d5e5f698bd0d4",
+      "after_sha256": "419f1e9027a7f9e5d825055c41160f4a7d092c502f012ec96e4aa78db6f089f5"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/00f3e25c040ca7c4c358/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/00f3e25c040ca7c4c358/visual.json",
+      "before_sha256": "48c3cfc1d1c3074edfbf127c10a822ded1c9f3632cfce97293ebcef834c29ca3",
+      "after_sha256": "358ec0cc0a0212c6c5cc6fb7befec3c8f8acd50561fa180b5f944af264105b83"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/252dfe03e93fe044b74b/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/252dfe03e93fe044b74b/visual.json",
+      "before_sha256": "f24b4058c882a5eb52afa9e7f32e6563811498f85d5bab7a3059bc2332858162",
+      "after_sha256": "695c84e21e3e527cf2965303fae63e10de67f3d1b89ee5f14102e12da0c4b7ef"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/2b0650a84c3da66c301b/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/2b0650a84c3da66c301b/visual.json",
+      "before_sha256": "e1810879b8e5c2a4dc733e088a1626f81efeec5e1f397c10fe34f81a133a39eb",
+      "after_sha256": "122331fed8714392c25eeb90e8d51179665045e03c83fc2b6c6a18cdb3bc6e4b"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/a5ae705870f650f0a974/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/08ef33dc6a87d1b14392/visuals/a5ae705870f650f0a974/visual.json",
+      "before_sha256": null,
+      "after_sha256": "64a3b3c00f964ed36bd6e62179a7432bb8464a2576a59f6c18515d11c008d67c"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/page.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/page.json",
+      "before_sha256": "7c43f7c6cbc91da15f89cf72e38aca64633bf6011f1e58ad5519f2cb6b554322",
+      "after_sha256": "2d21c501d569f12ae554c92e9cd15e9dcf9b0529ccadc2b3cbea4d4db3cca6f8"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/visuals/7ed67316498f5f438ac5/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/visuals/7ed67316498f5f438ac5/visual.json",
+      "before_sha256": null,
+      "after_sha256": "167dd1f6bd795e7c9678b3632bd99058c5e66251d49a580c50067881e408e692"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/visuals/f6ded96237a3b78a895c/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b8f53cbc2c75ffd952be/visuals/f6ded96237a3b78a895c/visual.json",
+      "before_sha256": "30ba24a45d3519192d8ba62070a834de789582c9939940c7532dfedbea2ead87",
+      "after_sha256": "6b28b15d99809de0141f362586987197642862e37f0e9600f162d301a3710acd"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/page.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/page.json",
+      "before_sha256": "aca63668c63b82c3ef7fe678da0cb0477faade32925f7c017e74a282af25f41e",
+      "after_sha256": "1ba39e91d8ed7ccf5105b403bea93a41f5e126ffcb4a35409d2980d374fda72d"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/0d147b405cc7505ea3b6/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/0d147b405cc7505ea3b6/visual.json",
+      "before_sha256": null,
+      "after_sha256": "6dcf7540498785a53edc64cf6717f6858d3b2dbd934c5dc1abd4197bb03ba8aa"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/164c05749bf05b00a68b/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/164c05749bf05b00a68b/visual.json",
+      "before_sha256": null,
+      "after_sha256": "112560fbfae1fea385c5c6c88ce800ec6c666fe999c6384035a4f9b0fedd92ad"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/48ca7f523a931444c7af/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/48ca7f523a931444c7af/visual.json",
+      "before_sha256": "001bc8bcd4992e8aca63e3485dd8e2d0afa423c67bf7269f5b2071efe17086fc",
+      "after_sha256": "775346098fa5b0693f502003e466cd8c29199ff43f1875f227cc22cb161a7b6b"
+    },
+    {
+      "target": "SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/615c3cc22e9cb2074a51/visual.json",
+      "payload": "after/SM_WMPP_v16.Report/definition/pages/b95eb4c0b53cd8c60710/visuals/615c3cc22e9cb2074a51/visual.json",
+      "before_sha256": "6de1ff83cfd19a05c6272ff5d7b44700a6e22bf57ba8a7aa79193d929f563e90",
+      "after_sha256": "ad055f1e1c76b23d53ceb8e432b7e6c43e559c14c9e6f8a95fbc94267376805f"
+    },
+    {
+      "target": "SM_WMPP_v16.SemanticModel/definition/model.tmdl",
+      "payload": "after/SM_WMPP_v16.SemanticModel/definition/model.tmdl",
+      "before_sha256": "3f053025050f64793be223990525b07adb694053bbaf7548622a2f2ed79000e5",
+      "after_sha256": "05094c3587ee5cf3b0748c6eca910b834a9b767b3b08a555b704727d1ab1bd1c"
+    },
+    {
+      "target": "SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "payload": "after/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "before_sha256": "673cb656275d2243bb9d7119ec5df374f7368d23e25860db9d1bbb09ed08d2a3",
+      "after_sha256": "8bb768f500d0912f75ccfaefd122c297decfb229b455d15b247c91deafbbe599"
+    },
+    {
+      "target": "SM_WMPP_v16.SemanticModel/definition/tables/Provider Explorer KPI.tmdl",
+      "payload": "after/SM_WMPP_v16.SemanticModel/definition/tables/Provider Explorer KPI.tmdl",
+      "before_sha256": "aad0cb0329ebdd1c72ca14d03ed0089cf1721edce5a3ac7a958420633105c170",
+      "after_sha256": "635991b9c230ca20f49dc9d9019703245bccaa25a786beb325e694950f866df3"
+    },
+    {
+      "target": "SM_WMPP_v16.SemanticModel/definition/tables/Requirement KPI Monitor.tmdl",
+      "payload": "after/SM_WMPP_v16.SemanticModel/definition/tables/Requirement KPI Monitor.tmdl",
+      "before_sha256": null,
+      "after_sha256": "feba51c8364d6388070b126fe0e7f823ec99d7313e6f2fa58069e83c9356a277"
+    }
+  ],
+  "expected": {
+    "tables": 73,
+    "measures": 501,
+    "relationships": 54,
+    "roles": 2,
+    "pages": 35,
+    "new_monitor_metrics": 33
+  },
+  "validation": {
+    "status": "PASS",
+    "checks": 214,
+    "schema_files": 13,
+    "schema_scope": "page 2.1; compatible visualContainer 2.13 (saved 2.14 URL returns 404)",
+    "new_measures": 9,
+    "original_other_measures_unchanged": 490,
+    "native_dax_values": "NOT RUN",
+    "native_visual_rendering": "NOT RUN"
+  },
+  "runtime": "Refresh/DAX/rendering/RLS/UAT pending"
+}

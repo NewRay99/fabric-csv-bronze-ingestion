@@ -1,0 +1,5 @@
+EVALUATE
+VAR ProfileDate=INT(CALCULATE(MAX(cfg_data_domain[profiled_at]),REMOVEFILTERS()))
+VAR Expected=COUNTROWS(FILTER(ALL(cfg_data_domain),NOT ISBLANK(cfg_data_domain[profiled_at]) && INT(cfg_data_domain[profiled_at])=ProfileDate))
+VAR Actual=CALCULATE([Discovery cfg_data_domain Rows],TREATAS({ProfileDate},'Load Calendar'[Date]))
+RETURN ROW("Actual",COALESCE(Actual,0),"Expected",COALESCE(Expected,0),"Pass",COALESCE(Actual,0)=COALESCE(Expected,0))

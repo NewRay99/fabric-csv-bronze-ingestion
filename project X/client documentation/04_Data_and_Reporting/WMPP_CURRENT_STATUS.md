@@ -1,8 +1,22 @@
 # WMPP reporting status as at 30 September 2026
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 19 October 2026 — WMPP_v16 linked referral status
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+Provider Explorer now shows Referral current status immediately after Offer statuses in the linked-provider results. The value uses referral UUIDs from the visible linked pairs and the current referral status; source reference IDs remain display labels. The current WMPP_v16 model contains 73 tables, 502 measure definitions and 35 report pages. This adds a display helper, not an additional business KPI. Refresh and visual acceptance remain pending.
+
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence.
+
+[Implementation, exact calculations, gaps and acceptance](REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
+
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
 
@@ -12,34 +26,17 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 [Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
 
-## 7 October 2026 addendum — Source-reference identifiers
+## 7 October 2026 addendum - Source-reference identifiers
 
-The saved working project is now `reports/WIP/SM WMPP v16 updated WIP`.
-Gold publishes the source person reference in `dim_person` and `fact_referral`,
-with a multiple-referral review flag, reference referral count and oldest-first
-sequence on the fact. New snapshots retain those as-of values; older retained
-months are not backfilled from today's data.
+The saved working project is now `WMPP_v16`. Gold publishes the source person reference in `dim_person` and `fact_referral`, with a multiple-referral review flag, reference referral count and oldest-first sequence on the fact. New snapshots retain those as-of values; older retained months are not backfilled from today's data.
 
-Thirteen referral-bearing tables and six identifier search controls display/
-search source references instead of referral UUIDs. Referral Detail drillthrough
-uses reference plus sequence, since a person reference is not unique. True UUID
-joins/counts, source status, RLS, bookmarks and visual positions/sizes are
-unchanged. This is a saved-file implementation, not a refreshed-model sign-off.
-Deploy/run Gold 04/05, then reopen/refresh WIP and check duplicate/blank-reference
-drillthrough. See [field rules and acceptance](GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
-The 30 September baseline assessment below remains dated historical evidence.
+Thirteen referral-bearing tables and six identifier search controls display/ search source references instead of referral UUIDs. Referral Detail drillthrough uses reference plus sequence, since a person reference is not unique. True UUID joins/counts, source status, RLS, bookmarks and visual positions/sizes are unchanged. This is a saved-file implementation, not a refreshed-model sign-off. Deploy/run Gold 04/05, then reopen/refresh WMPP_v16 and check duplicate/blank-reference drillthrough. See [field rules and acceptance](GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026). The 30 September baseline assessment below remains dated historical evidence.
 
 ## Delivery position
 
-The local WIP now supports the reporting journey from overall performance to referral and provider exploration, then record-level drillthrough. The saved model contains **58 tables and 366 measures**. All **109 existing Dashboard Legend measures** resolve by name in that model. The revised Legend adds **35 existing business measures** that were missing from its catalogue, giving **144 catalogue entries**. The remaining model measures include compatibility measures, display logic, selectors, filter gates and other calculations; they are not 222 additional business KPIs.
+WMPP_v16 is the current reporting model. The saved project contains 73 tables, 502 measure definitions and 35 report pages, with 54 relationships and two security roles. The report supports overall performance, referral and provider exploration, record-level drillthrough, home document expiry and the additional requirement-linked results. The KPI dictionary contains 571 records, including historical entries; these are not an approved KPI scope total.
 
-This is a repository implementation assessment, not production acceptance. The latest journey-strip layout and click actions still require Desktop visual and interaction checks. A full refreshed-model reconciliation, identity-based RLS acceptance and client release approval are not recorded by this assessment. No Fabric deployment, data refresh, publication or report/model modification was performed for this documentation update.
-
-The assessed project is:
-
-`project X/reports/client-deliverables/WMPP v16/SM WMPP v16 updated WIP/SM_WMPP_v16.pbip`
-
-The non-WIP delivery, older `reports/current` copies and ZIP exports are different baselines. Counts and test results from those copies must not be presented as current-WIP acceptance evidence.
+Mission Control remains the operational dashboard, with 34 tables, 351 measure definitions and 17 pages. Refresh, visual/mobile review, authorised-user access tests and client acceptance remain to be completed. References to earlier deliveries are labelled v15 or earlier and do not establish the status of WMPP_v16.
 
 ## Requirement reassessment
 
@@ -61,7 +58,7 @@ See [the row-level assessment](WMPP_REQUIREMENT_REASSESSMENT.md) and the `RID` s
 
 ## What has materially changed
 
-| Area | Current WIP evidence | Remaining boundary |
+| Area | WMPP_v16 evidence | Remaining boundary |
 | --- | --- | --- |
 | Referral exploration | Referral Explorer, persistent category/priority/status/open/overdue and offer filters, category-aware distinct counts | Priority and urgency band are both retained pending an owner decision. Categories are many-to-many and not additive. |
 | Referral detail | Referral-key drillthrough, offers, provider messages, ordered lifecycle rows, provider/offer location directory and map | Current source records and derived events do not establish a complete immutable audit trail. |
@@ -73,7 +70,7 @@ See [the row-level assessment](WMPP_REQUIREMENT_REASSESSMENT.md) and the `RID` s
 | IPA signatures | `fact_ipa` contains both signing flags, `is_ipa_completed` and `is_ipa_pending`; IPA-grain measures exist | Signing workflow and exact signature event history are separate requirements. |
 | Demographics | `dim_person` contains gender and other attributes; gender measures exist | Person linkage, unknowns, privacy and role access require validation. Search uses initials and ID, not an invented full name. |
 | Messages and reasons | `dim_referral_provider_message` and `dim_referral_provider_reject_reason` exist in Gold code and model imports | Author role, paired responses, priority/unread semantics, complete reason history and attribution remain open. |
-| Categories and location | Current referral/home category bridges; preferred-city location/distance fields; category-aware measures | Current bridges do not prove historic category membership. Support-needs reporting is not in the WIP model. |
+| Categories and location | Current referral/home category bridges; preferred-city location/distance fields; category-aware measures | Current bridges do not prove historic category membership. Support-needs reporting is not in the WMPP_v16 model. |
 | Navigation and presentation | Reordered main navigation, expandable menus/filter drawers, regular small labels, shared styles and category icon labels | Saved-file design changes are not accessibility, browser or mobile acceptance. Hidden legacy pages retain their historical dimensions. |
 
 ## Current report route and page inventory
@@ -115,7 +112,7 @@ Providers are classified by their highest evidenced stage in the current cohort.
 
 ## Remaining release decisions
 
-1. Refresh the WIP model and populate its new calculated/helper objects. Reconcile all journey stages including closed/review exceptions and provider assignment/draft/unclear cases.
+1. Refresh the WMPP_v16 model and populate its new calculated/helper objects. Reconcile all journey stages including closed/review exceptions and provider assignment/draft/unclear cases.
 2. Visually inspect all three journey strips, test step clicks and Clear stage, and confirm other slicers and navigation/filter drawers remain unchanged. In Desktop edit mode, action icons normally require Ctrl+click.
 3. Exercise referral and provider drillthrough, Back, one-record selection guards, messages, reasons, homes and maps with known records.
 4. Reconcile two consecutive snapshot months and a known closure. Test missing prior periods, multiple IPAs per offer, closed unsigned IPAs and same-IPA signature rules.
@@ -126,7 +123,7 @@ Providers are classified by their highest evidenced stage in the current cohort.
 
 ## Evidence and limits
 
-Evidence inspected: WIP PBIR pages/visuals/bookmarks; TMDL tables, measures, columns, relationships and role; the storyboard, category-icon, bookmark-cleanup and journey manifests; active `04_gold_model.py` / `05_gold_dimensions.py`; the existing Legend and controlled client documents.
+Evidence inspected: WMPP_v16 PBIR pages/visuals/bookmarks; TMDL tables, measures, columns, relationships and role; the storyboard, category-icon, bookmark-cleanup and journey manifests; active `04_gold_model.py` / `05_gold_dimensions.py`; the existing Legend and controlled client documents.
 
 The journey repair originally recorded 10 passing regression checks and schema validation of 138 changed documents, with five existing visuals skipped because their 2.13 schema was unavailable. Subsequent Desktop saves exposed brittle byte-comparison/default-property assumptions, not evidence of a rendering failure. Following owner approval, the checks were simplified to seven business-rule, reference and action-safety checks: no historical file equality, byte-size limits or frozen appearance/layout assertions. Single-selector scoping, target existence and action links remain checked; omitted false defaults are accepted.
 

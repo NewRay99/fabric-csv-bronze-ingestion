@@ -8,14 +8,9 @@ Field presence alone does not certify semantics or populated data. `region` and 
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
+> September 15 implementation update: the migrated v15 report now uses per-IPA signature fields and corrected requirement cohorts. This document preserves the earlier design/audit revision. Use [current report implementation and acceptance](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) and the [updated WMPP_v16 expressions](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md) for the implemented report.
 
-> September 15 implementation update: the migrated v15 report now uses per-IPA signature fields and corrected requirement cohorts. This document preserves the earlier design/audit revision. Use [current report implementation and acceptance](GOLD_REPORT_IMPLEMENTATION_AND_REQUIREMENTS.md) and the [updated WIP expressions](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for the implemented report.
-
-**Project:** WMPP Fabric data platform
-**Date:** 13 September 2026 (rev 4 — GLD-013 offer-grain IPA-signature and aging push-downs)
-**Auditor:** Kimi Agent
-**Scope:** Verify that every DAX measure in the `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` can be resolved to an active Gold table/column, and that every measure in the legacy `SM WMPP v15.zip` semantic model has a Gold disposition.
-**Baseline:** Gold notebooks `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` (promoted version 02 04, plus GLD-005–008 additions); legacy `_Measures.tmdl` extraction (153 measures).
+**Project:** WMPP Fabric data platform **Date:** 13 September 2026 (rev 4 - GLD-013 offer-grain IPA-signature and aging push-downs) **Auditor:** Kimi Agent **Scope:** Verify that every DAX measure in the `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` can be resolved to an active Gold table/column, and that every measure in the legacy `SM WMPP v15.zip` semantic model has a Gold disposition. **Baseline:** Gold notebooks `04_gold_model.ipynb` and `05_gold_dimensions.ipynb` (promoted version 02 04, plus GLD-005–008 additions); legacy `_Measures.tmdl` extraction (153 measures).
 
 ---
 
@@ -101,7 +96,7 @@ See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reas
 | 21 | IPAs Created | `fact_ipa` | `ipa_id` | ✅ | |
 | 22 | Active IPAs | `fact_ipa` | `ipa_id`, `is_placement_closed` | ✅ | |
 | 23 | Estimated Active Weekly Cost | `fact_ipa` | `estimated_weekly_cost`, `is_placement_closed` | ✅ | |
-| 24 | Average Estimated Weekly Cost — Confirmed Referrals | `fact_referral` | `estimated_weekly_cost`, `ipa_issued_date` | ✅ | |
+| 24 | Average Estimated Weekly Cost - Confirmed Referrals | `fact_referral` | `estimated_weekly_cost`, `ipa_issued_date` | ✅ | |
 | 25 | Provider Assignments | `fact_referral_provider` | `referral_provider_id` | ✅ | |
 | 26 | Provider Declines | `fact_referral_provider` | `referral_provider_id`, `is_declined` | ✅ | |
 | 27 | Provider Decline Rate | `fact_referral_provider` | `is_declined` | ✅ | |
@@ -215,12 +210,11 @@ See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reas
 
 ### 2.8 Legacy v15 full-library port (added in rev 2)
 
-All 76 measures added by the legacy v15 full-library port resolve to Gold
-columns already verified in Sections 2.1–2.7. No new Gold field is required.
+All 76 measures added by the legacy v15 full-library port resolve to Gold columns already verified in Sections 2.1–2.7. No new Gold field is required.
 
 | # | Measure family | Measures | Gold table | Gold column(s) | Status |
 |---|----------------|---:|------------|----------------|--------|
-| 110 | MoM card stacks — 11 KPI cards × (Previous Month, Variance, MoM %, Variance Indicator, Variance Indicator Color) | 55 | `fact_referral` / `fact_offer` + `dim_date` | base-measure columns + `referral_created_date` → `dim_date[date]` | ✅ | Active date relationship; no USERELATIONSHIP needed |
+| 110 | MoM card stacks - 11 KPI cards × (Previous Month, Variance, MoM %, Variance Indicator, Variance Indicator Color) | 55 | `fact_referral` / `fact_offer` + `dim_date` | base-measure columns + `referral_created_date` → `dim_date[date]` | ✅ | Active date relationship; no USERELATIONSHIP needed |
 | 111 | Referrals Not Yet Closed (Created in Period) | 1 | `fact_referral` | `referral_id`, `is_open` | ✅ | |
 | 112 | Referrals With Offers (Created in Period) | 1 | `fact_referral` | `referral_id`, `has_offer` | ✅ | |
 | 113 | Offer Receipt Rate (Created in Period) | 1 | `fact_referral` | derived from #111–112 | ✅ | Ports legacy ratio misnamed `Total Referrals That Received Offers` |
@@ -247,24 +241,15 @@ columns already verified in Sections 2.1–2.7. No new Gold field is required.
 | 194 | Is IPA Completed | `fact_offer` | `is_ipa_completed` | ✅ | Rev 4, GLD-013 row-level helper |
 | 195 | Is IPA Pending | `fact_offer` | `is_ipa_pending` | ✅ | Rev 4, GLD-013 row-level helper |
 
-**Not ported — blocked by missing Gold source fields (7 measures):**
+**Not ported - blocked by missing Gold source fields (7 measures):**
 
 | Legacy measure(s) | Missing field | Status |
 |---|---|---|
-| Provider Contact Referral family (6) | `contact_made` provider-contact flag | ❌ Blocked — no Gold or Silver field; `is_not_seen_by_providers` is not a safe substitute |
-| Is In Accepted KPI (1) | Legacy accepted-KPI visual state | ❌ Blocked — use the offer-grain helpers (#194–195) and `Accepted Offers` instead |
-| KPI Tooltip Style 1 (1) | `ref_KPI` functional-spec metadata table (not a Gold object) | ❌ Blocked — re-import as static table if tooltip page is rebuilt |
+| Provider Contact Referral family (6) | `contact_made` provider-contact flag | ❌ Blocked - no Gold or Silver field; `is_not_seen_by_providers` is not a safe substitute |
+| Is In Accepted KPI (1) | Legacy accepted-KPI visual state | ❌ Blocked - use the offer-grain helpers (#194–195) and `Accepted Offers` instead |
+| KPI Tooltip Style 1 (1) | `ref_KPI` functional-spec metadata table (not a Gold object) | ❌ Blocked - re-import as static table if tooltip page is rebuilt |
 
-**Retired report-construct helpers (15 measures):** `Accepted Offers Base`,
-`Accepted Offers (Scoped Table)`, `Offer IDs (Under Offer Referrals)`,
-`Directory Summary Count`, `Fostering Chart Count`, `Pending Offers by Age
-Bucket`, `Latest Export per Offer`, `Latest Offer Status Count`,
-`Dashboard Last Refreshed:`, `(NEW)Total Offers Made`,
-`Total Offers Made Historically`, `Offer Count`, `Placement Type Totals
-(Visual)`, plus duplicates `Draft Offer Count (Under Offer Referrals)` and
-`Offers per Provider (Under Offer Referrals)`. Rationale per measure is in
-the build guide's retired-helpers table; Gold's deduplicated latest-state
-facts and relationship graph make all of them unnecessary.
+**Retired report-construct helpers (15 measures):** `Accepted Offers Base`, `Accepted Offers (Scoped Table)`, `Offer IDs (Under Offer Referrals)`, `Directory Summary Count`, `Fostering Chart Count`, `Pending Offers by Age Bucket`, `Latest Export per Offer`, `Latest Offer Status Count`, `Dashboard Last Refreshed:`, `(NEW)Total Offers Made`, `Total Offers Made Historically`, `Offer Count`, `Placement Type Totals (Visual)`, plus duplicates `Draft Offer Count (Under Offer Referrals)` and `Offers per Provider (Under Offer Referrals)`. Rationale per measure is in the build guide's retired-helpers table; Gold's deduplicated latest-state facts and relationship graph make all of them unnecessary.
 
 ---
 
@@ -288,7 +273,7 @@ The following legacy v15 visual breakdowns are supported by direct column use in
 
 ---
 
-## 4. Unsupported legacy KPIs — blocked by source gaps
+## 4. Unsupported legacy KPIs - blocked by source gaps
 
 These KPI groups are **correctly documented as unsupported** in the build guide. Do not create DAX workarounds pointing at Bronze, Silver, or retired tables.
 
@@ -310,7 +295,7 @@ These KPI groups are **correctly documented as unsupported** in the build guide.
 
 1. **Gold notebook changes applied (rev 3).** `05_gold_dimensions.ipynb` now publishes `dim_provider_home` with `home_contact_number` / `registered_manager_contact_number`, plus new `dim_person` and `dim_offer_status`; `04_gold_model.ipynb` adds `person_id` to `fact_referral`. Deploy both notebooks and rerun Gold before rebuilding the semantic model.
 2. **Semantic model build priority:** Proceed with importing the active Gold tables and creating the DAX measures in Sections 2.1–2.9 above, including the two new relationships `dim_person[person_id]` → `fact_referral[person_id]` and `dim_offer_status[offer_status]` → `fact_offer[offer_status]`.
-3. **Do not import retired tables.** `fact_placement` is retired; use `fact_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects. (`dim_offer_status` is no longer retired — it is an active Gold dimension per GLD-008.)
+3. **Do not import retired tables.** `fact_placement` is retired; use `fact_ipa`. `fact_referral_offer` is a v01 proposal name; the active object is `fact_referral_provider`. Legacy `dim_referral`, `dim_referral_gender`, `LocalDateTable_*`, `KPI Selector`, `ref_KPI` and `Draft Age Band Table` are likewise not Gold objects. (`dim_offer_status` is no longer retired - it is an active Gold dimension per GLD-008.)
 4. **For blocked KPIs:** Track source-field delivery in the enhancement backlog. When a source field becomes available, add it to `schema_definition.csv`, rerun the Silver formatter, then extend the Gold model before creating the corresponding DAX.
 5. **Reconciliation:** Before rebuilding visual pages, reconcile `DISTINCTCOUNT` totals for `referral_id`, `offer_id`, `ipa_id`, and `referral_provider_id` against the legacy v15 report, reconcile each MoM card stack against the corresponding v15 card, and reconcile the four gender measures against the legacy `dim_referral[Gender Clean]` card totals (referral-grain, `Unknown` handling included).
 6. **Dangling-reference fix:** `IPA Signature Completion Rate` previously referenced an undefined `Referrals with IPA` measure; `Referrals With IPA` is now defined in the build guide (Section 2.8, row 115).

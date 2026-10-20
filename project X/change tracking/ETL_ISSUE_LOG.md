@@ -1,8 +1,18 @@
 # ETL issue log
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
 
-LEGEND-001 follow-up. Cause: the previous workbook update used the version-controlled ZIP/September catalogue and only updated the review branch, while the local workbook remained on its expanded September layout. Resolution: reconcile the latest saved local WIP definitions, refresh current calculation fields, include missing reporting metrics and install the validated workbook at the actual local configuration path. Preserve v1 and all unrelated local changes.
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence. ETL code is unchanged. Open data-owner decision: document home_id is NO_JOIN in the schema contract but joined in the existing semantic model; required-document compliance, reminders and blocking remain unresolved.
+
+[Implementation, exact calculations, gaps and acceptance](../client%20documentation/04_Data_and_Reporting/REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 — KPI Definition reconciled to latest saved WMPP_v16
+
+LEGEND-001 follow-up. Cause: the previous workbook update used the version-controlled ZIP/September catalogue and only updated the review branch, while the local workbook remained on its expanded September layout. Resolution: reconcile the latest saved local WMPP_v16 definitions, refresh current calculation fields, include missing reporting metrics and install the validated workbook at the actual local configuration path. Preserve v1 and all unrelated local changes.
 
 Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
 
@@ -10,9 +20,7 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 [Current DAX, Python/Spark SQL and source evidence](../client%20documentation/04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
 
-Add new issues here with a unique ID and the observed behaviour. Append dated
-cause, fix, validation and status notes to the same issue when it is addressed.
-Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
+Add new issues here with a unique ID and the observed behaviour. Append dated cause, fix, validation and status notes to the same issue when it is addressed. Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 
 ## Issue identifier legend
 
@@ -28,283 +36,134 @@ Record delivered batches in the [ETL change log](ETL_CHANGE_LOG.md).
 | `SEM` | Semantic-model issues | 1 |
 | **Total classified issues** | | **87** |
 
-Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation**
-where applicable. `Status` records whether the source change is complete; a
-Fabric replay remains a separate deployment verification unless stated.
+Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation** where applicable. `Status` records whether the source change is complete; a Fabric replay remains a separate deployment verification unless stated.
 
 ## GLD-025 — Sibling placement fields missing from referral facts
 
-- **Request (2026-10-16):** include `is_sibling_placement` and `sibling_count`
-  in the referral fact tables.
-- **Cause:** the fields already belong to the Silver referral contract but
-  were omitted from the explicit Gold fact and snapshot projections.
-- **Fix:** `04_gold_model.py` validates both source columns and copies them
-  from the selected current Silver referral into `gold.fact_referral` and
-  `gold.fact_referral_snapshot`, preserving Boolean/integer types and NULLs.
-- **History:** the existing monthly snapshot replacement and schema evolution
-  add the fields on the next write. Other retained months remain NULL until
-  replay from their corresponding archive; no live-value backfill.
-- **Validation:** portable production-SQL checks cover true/false values,
-  counts, NULLs and selection of the latest referral record. Snapshot checks
-  verify both fields are copied without rewriting historical values.
-  Full local suite: 422 tests and 158 subtests passed.
-- **Status:** implemented in the usual repository notebook, not deployed to
-  Fabric. Deploy and rerun `04_gold_model`, then refresh the consuming model.
+- **Request (2026-10-16):** include `is_sibling_placement` and `sibling_count` in the referral fact tables.
+- **Cause:** the fields already belong to the Silver referral contract but were omitted from the explicit Gold fact and snapshot projections.
+- **Fix:** `04_gold_model.py` validates both source columns and copies them from the selected current Silver referral into `gold.fact_referral` and `gold.fact_referral_snapshot`, preserving Boolean/integer types and NULLs.
+- **History:** the existing monthly snapshot replacement and schema evolution add the fields on the next write. Other retained months remain NULL until replay from their corresponding archive; no live-value backfill.
+- **Validation:** portable production-SQL checks cover true/false values, counts, NULLs and selection of the latest referral record. Snapshot checks verify both fields are copied without rewriting historical values. Full local suite: 422 tests and 158 subtests passed.
+- **Status:** implemented in the usual repository notebook, not deployed to Fabric. Deploy and rerun `04_gold_model`, then refresh the consuming model.
 
 ## GLD-024 — Source person reference and multiple-referral review flags
 
-- **Request (2026-10-07):** use the source person reference as the report's
-  visible identifier instead of referral UUID; identify references associated
-  with multiple referrals and order those referrals by creation date.
-- **Cause:** `source_reference_id` exists on `silver.referral_person`, but was
-  missing from `gold.dim_person` and the referral fact. A person reference is
-  not a unique referral key, so replacing UUID-only table grouping/drillthrough
-  with that reference alone could merge or select several referrals.
-- **Fix:** publish a text reference in `dim_person` and `fact_referral`; add
-  `has_multiple_referrals`, `source_reference_referral_count` and `order_dupe`
-  in Gold. Deduplicate source-person histories before joining, preserving the
-  existing lowest-person-ID choice for multi-person referrals. Profile eligible
-  as-of referrals only; sequence creation date ascending, UUID ascending for
-  ties. Ignore surrounding spaces/case when matching, retain leading zeros.
-- **Boundary:** blank references are not duplicates (count zero, flag false).
-  Their separate creation-order sequence permits individual navigation. Closed
-  referrals are included; the flag is for review, not deletion or proof of bad
-  data. Global as-of annotations do not recompute with report/RLS selections.
-- **Snapshots:** new snapshots copy all four fields. Retained months remain
-  NULL until replay from the corresponding historical export, never backfilled
-  from today's person or referral records.
-- **Report:** changed 13 referral-bearing tables and six search controls in the
-  saved `reports/WIP/SM WMPP v16 updated WIP`; detail drillthrough uses the
-  canonical fact reference plus sequence. Actual relationships, counts, source
-  status, security, layout positions, styles and bookmarks remain unchanged.
-- **Validation:** 358 tests and 158 subtests pass, including 29 new portable
-  reference/migration checks. Gold-schema and dimension validators pass. All
-  2,704 unlisted WIP files are hash-identical (excluding `.pbi`); every changed
-  visual retains its position and size. Narrow migration preview is idempotent.
-- **Status:** implemented in root notebooks and saved WIP, not deployed to
-  Fabric. Deploy/run 04 and 05, then reopen/refresh WIP and verify duplicate,
-  blank-reference and ordinary single-referral drillthrough in Power BI.
-  Backup: `reports/WIP/_review/source-reference-identifiers-20261007-734c16`.
-  See [reference rules and deployment](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
+- **Request (2026-10-07):** use the source person reference as the report's visible identifier instead of referral UUID; identify references associated with multiple referrals and order those referrals by creation date.
+- **Cause:** `source_reference_id` exists on `silver.referral_person`, but was missing from `gold.dim_person` and the referral fact. A person reference is not a unique referral key, so replacing UUID-only table grouping/drillthrough with that reference alone could merge or select several referrals.
+- **Fix:** publish a text reference in `dim_person` and `fact_referral`; add `has_multiple_referrals`, `source_reference_referral_count` and `order_dupe` in Gold. Deduplicate source-person histories before joining, preserving the existing lowest-person-ID choice for multi-person referrals. Profile eligible as-of referrals only; sequence creation date ascending, UUID ascending for ties. Ignore surrounding spaces/case when matching, retain leading zeros.
+- **Boundary:** blank references are not duplicates (count zero, flag false). Their separate creation-order sequence permits individual navigation. Closed referrals are included; the flag is for review, not deletion or proof of bad data. Global as-of annotations do not recompute with report/RLS selections.
+- **Snapshots:** new snapshots copy all four fields. Retained months remain NULL until replay from the corresponding historical export, never backfilled from today's person or referral records.
+- **Report:** changed 13 referral-bearing tables and six search controls in the saved `WMPP_v16`; detail drillthrough uses the canonical fact reference plus sequence. Actual relationships, counts, source status, security, layout positions, styles and bookmarks remain unchanged.
+- **Validation:** 358 tests and 158 subtests pass, including 29 new portable reference/migration checks. Gold-schema and dimension validators pass. All 2,704 unlisted WMPP_v16 files are hash-identical (excluding `.pbi`); every changed visual retains its position and size. Narrow migration preview is idempotent.
+- **Status:** implemented in root notebooks and saved WMPP_v16, not deployed to Fabric. Deploy/run 04 and 05, then reopen/refresh WMPP_v16 and verify duplicate, blank-reference and ordinary single-referral drillthrough in Power BI. Backup: `reports/WMPP_v16/_review/source-reference-identifiers-20261007-734c16`. See [reference rules and deployment](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md#source-person-reference-and-multiple-referrals-7-october-2026).
 
 ## GLD-022 — Materialise referral journey status in Gold
 
-- **Current status (2026-10-06):** revised at the user's request to separate
-  source status from Gold journey stage. The earlier delivery and rollback
-  below are historical; see the revised decision following them.
+- **Current status (2026-10-06):** revised at the user's request to separate source status from Gold journey stage. The earlier delivery and rollback below are historical; see the revised decision following them.
 
-- **Request (2026-10-04):** move the referral journey stages from DAX into
-  `gold.fact_referral.current_status` and preserve the source status under its
-  actual name, `referral_status`.
-- **Fix:** `04_gold_model.py` retains the raw source value and publishes the
-  journey label, `current_status_order` and `current_status_rule_version`.
-  Referral-grain offer/IPA aggregates preserve the existing DAX precedence and
-  avoid row multiplication. Both signatures must belong to the same active IPA;
-  terminal source states override milestones. Source-status outcome rules use
-  `referral_status`, not the new journey label.
-- **Compatibility:** retained snapshot/summary `current_status` keeps its raw
-  source-status meaning. New snapshots have separate journey fields; old months
-  are not relabelled using live evidence. The semantic model was not changed;
-  source-code filters and relationships need migration before refresh.
-- **Validation:** 54 executable SQL-fixture checks pass; the full local suite
-  passes 203 tests and 158 subtests. Spark date/timestamp syntax is adapted to
-  SQLite for portable relational execution; Fabric/Delta and report rendering
-  remain deployment checks.
-- **Status:** implemented in repository source, not deployed to Fabric.
-  See [field definitions and migration steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+- **Request (2026-10-04):** move the referral journey stages from DAX into `gold.fact_referral.current_status` and preserve the source status under its actual name, `referral_status`.
+- **Fix:** `04_gold_model.py` retains the raw source value and publishes the journey label, `current_status_order` and `current_status_rule_version`. Referral-grain offer/IPA aggregates preserve the existing DAX precedence and avoid row multiplication. Both signatures must belong to the same active IPA; terminal source states override milestones. Source-status outcome rules use `referral_status`, not the new journey label.
+- **Compatibility:** retained snapshot/summary `current_status` keeps its raw source-status meaning. New snapshots have separate journey fields; old months are not relabelled using live evidence. The semantic model was not changed; source-code filters and relationships need migration before refresh.
+- **Validation:** 54 executable SQL-fixture checks pass; the full local suite passes 203 tests and 158 subtests. Spark date/timestamp syntax is adapted to SQLite for portable relational execution; Fabric/Delta and report rendering remain deployment checks.
+- **Status:** implemented in repository source, not deployed to Fabric. See [field definitions and migration steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
 
 ### Reverted then superseded (2026-10-06)
 
 - **Request:** restore the field contract from before GLD-022.
-- **Change:** `gold.fact_referral.current_status` again copies the source
-  `silver.referral.referral_status` without relabeling. Removed the separate
-  Gold `referral_status`, stage-order/rule-version fields, journey classifier
-  and its extra evidence joins. Snapshot projection again uses `current_status`
-  directly, without new journey fields. Pre-change outcome rules are restored.
-- **Preserved:** existing DAX journey calculations, source Silver data, historic
-  snapshot rows, map coordinates, provider extracts, semantic/report files and
-  the user's modified report ZIP.
-- **Verification:** the SQL fixture matches the restored notebook; replacement
-  data-layer checks cover the raw source-status contract. Fabric deployment
-  and model refresh remain separate acceptance checks.
-- **Status:** reverted in repository source, not executed against a deployed
-  Lakehouse. Any extra physical columns in an already deployed snapshot table
-  are not automatically dropped. See [rollback and deployment instructions](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+- **Change:** `gold.fact_referral.current_status` again copies the source `silver.referral.referral_status` without relabeling. Removed the separate Gold `referral_status`, stage-order/rule-version fields, journey classifier and its extra evidence joins. Snapshot projection again uses `current_status` directly, without new journey fields. Pre-change outcome rules are restored.
+- **Preserved:** existing DAX journey calculations, source Silver data, historic snapshot rows, map coordinates, provider extracts, semantic/report files and the user's modified report ZIP.
+- **Verification:** the SQL fixture matches the restored notebook; replacement data-layer checks cover the raw source-status contract. Fabric deployment and model refresh remain separate acceptance checks.
+- **Status:** reverted in repository source, not executed against a deployed Lakehouse. Any extra physical columns in an already deployed snapshot table are not automatically dropped. See [rollback and deployment instructions](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
 
 ### Revised decision (2026-10-06)
 
-- **Request:** keep the source status and overall journey stage separate,
-  with the classification in Gold rather than independently in DAX.
-- **Change:** `fact_referral.current_status` preserves the original Silver
-  value. Separate `journey_stage` and `journey_stage_order` fields summarise
-  offer/IPA evidence once per referral, preserving existing precedence and
-  same-active-IPA signature rules. No extra Gold `referral_status` alias.
-- **Snapshots:** new writes copy all three fields directly. Old months are not
-  relabelled using live evidence; their new journey columns remain NULL unless
-  the appropriate archive exports are replayed. Source-status summary/outcome
-  semantics and the existing monthly replacement policy are unchanged.
-- **Model:** the two saved WIP referral tables import Gold stages under the
-  existing `Journey stage` / `Journey stage order` names. Current-field lineage
-  identifiers, sort order and all report layouts/bookmarks are preserved.
-  Backup: `reports/WIP/_review/source-journey-split-20261006-085714`.
-- **Verification:** raw status and journey SQL checks execute the actual
-  notebook query against synthetic data; the simulation fixture is aligned.
-  All **279 tests and 158 subtests passed**, including 85 focused SQL checks.
-  Notebook validation and Ruff passed. Hashes confirm no report-definition,
-  unrelated semantic-file or ZIP changes; existing journey identifiers and
-  import bindings are preserved. Semantic definitions are Git-ignored and
-  must be retained with the saved WIP project, not only the notebook commit.
-- **Status:** implemented locally, not deployed to Fabric. Deploy Gold before
-  refreshing the updated saved WIP. The user's modified report ZIP is unchanged.
-  See [current fields and deployment steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
+- **Request:** keep the source status and overall journey stage separate, with the classification in Gold rather than independently in DAX.
+- **Change:** `fact_referral.current_status` preserves the original Silver value. Separate `journey_stage` and `journey_stage_order` fields summarise offer/IPA evidence once per referral, preserving existing precedence and same-active-IPA signature rules. No extra Gold `referral_status` alias.
+- **Snapshots:** new writes copy all three fields directly. Old months are not relabelled using live evidence; their new journey columns remain NULL unless the appropriate archive exports are replayed. Source-status summary/outcome semantics and the existing monthly replacement policy are unchanged.
+- **Model:** the two saved WMPP_v16 referral tables import Gold stages under the existing `Journey stage` / `Journey stage order` names. Current-field lineage identifiers, sort order and all report layouts/bookmarks are preserved. Backup: `reports/WMPP_v16/_review/source-journey-split-20261006-085714`.
+- **Verification:** raw status and journey SQL checks execute the actual notebook query against synthetic data; the simulation fixture is aligned. All **279 tests and 158 subtests passed**, including 85 focused SQL checks. Notebook validation and Ruff passed. Hashes confirm no report-definition, unrelated semantic-file or ZIP changes; existing journey identifiers and import bindings are preserved. Semantic definitions are Git-ignored and must be retained with the saved WMPP_v16 project, not only the notebook commit.
+- **Status:** implemented locally, not deployed to Fabric. Deploy Gold before refreshing the updated saved WMPP_v16. The user's modified report ZIP is unchanged. See [current fields and deployment steps](../client%20documentation/04_Data_and_Reporting/GOLD_REFERRAL_JOURNEY_STATUS.md).
 
 ## CFG-010 — Monitoring reporting views ran during configuration setup
 
-- **Symptom (2026-09-25):** `00_setup_cfg` defined all six
-  `monitoring.rpt_*` materialized lake views at the start of both pipelines,
-  before Silver, Gold and the parent job had completed.
-- **Cause:** reporting definitions were placed in the setup notebook alongside
-  the Gold lineage configuration mapping.
-- **Fix:** `00_setup_cfg` retains configuration table creation and the lineage
-  mapping. New `06_reports` defines the six reporting views after
-  `05_gold_dimensions`. Both live and archive runners include it as their last
-  child step; the archive runner still builds Gold facts for each month and
-  dimensions once before reporting.
-- **Validation:** ETL regressions check all six definitions appear once in
-  `06_reports`, none remain in setup, and the runners call it after dimensions.
-  The Python/ETL suite passes 100 tests and direct Ruff checks pass.
-- **Status:** implemented in repository source. Import `06_reports` with the
-  revised runners, verify Fabric execution, and configure a Lakehouse
-  materialized lake view refresh after the parent pipeline completes so the
-  final job and `06_reports` step statuses are included.
+- **Symptom (2026-09-25):** `00_setup_cfg` defined all six `monitoring.rpt_*` materialized lake views at the start of both pipelines, before Silver, Gold and the parent job had completed.
+- **Cause:** reporting definitions were placed in the setup notebook alongside the Gold lineage configuration mapping.
+- **Fix:** `00_setup_cfg` retains configuration table creation and the lineage mapping. New `06_reports` defines the six reporting views after `05_gold_dimensions`. Both live and archive runners include it as their last child step; the archive runner still builds Gold facts for each month and dimensions once before reporting.
+- **Validation:** ETL regressions check all six definitions appear once in `06_reports`, none remain in setup, and the runners call it after dimensions. The Python/ETL suite passes 100 tests and direct Ruff checks pass.
+- **Status:** implemented in repository source. Import `06_reports` with the revised runners, verify Fabric execution, and configure a Lakehouse materialized lake view refresh after the parent pipeline completes so the final job and `06_reports` step statuses are included.
 
 ## DQ-004 — Essential versus thorough Silver DQ runs
 
-- **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking
-  `CRITICAL` rules in `03_silver_business_rules` on weekdays, or all active
-  DQ rules when set to `false` for a thorough run.
-- **Implementation:** the live runner passes the parameter only to the Silver
-  DQ child. The notebook filters both source-table and derived-referral rules
-  by configured severity in essential mode, while always rebuilding derived
-  Silver reporting tables. The run mode is recorded in `cfg_pipeline_run`.
+- **Feature:** `RUN_ESSENTIAL_DQ` lets `90_run_live_pipeline` run the blocking `CRITICAL` rules in `03_silver_business_rules` on weekdays, or all active DQ rules when set to `false` for a thorough run.
+- **Implementation:** the live runner passes the parameter only to the Silver DQ child. The notebook filters both source-table and derived-referral rules by configured severity in essential mode, while always rebuilding derived Silver reporting tables. The run mode is recorded in `cfg_pipeline_run`.
 
 ## LIN-002 — Silver and Gold job-run lineage
 
-- **Feature:** every Silver and Gold materialisation now includes a
-  `job_run_id` column for end-to-end correlation with the parent live-pipeline
-  run.
-- **Implementation:** `99_common_library` writes the parent ID to contract
-  Silver tables and `03_silver_business_rules` adds it to derived Silver
-  tables. `04_gold_model` and `05_gold_dimensions` add the same ID to every
-  fact, snapshot, dimension and bridge. Standalone Gold runs generate an ID
-  when a parent ID is not supplied.
-- **Validation:** the root and deployed WMPP notebook regression checks assert
-  that the field remains present. Rerun affected Gold notebooks after
-  deployment to update their Delta schemas.
+- **Feature:** every Silver and Gold materialisation now includes a `job_run_id` column for end-to-end correlation with the parent live-pipeline run.
+- **Implementation:** `99_common_library` writes the parent ID to contract Silver tables and `03_silver_business_rules` adds it to derived Silver tables. `04_gold_model` and `05_gold_dimensions` add the same ID to every fact, snapshot, dimension and bridge. Standalone Gold runs generate an ID when a parent ID is not supplied.
+- **Validation:** the root and deployed WMPP notebook regression checks assert that the field remains present. Rerun affected Gold notebooks after deployment to update their Delta schemas.
 
 ## GLD-014 — Gold export-date lineage
 
-- **Feature:** every materialised Gold fact, snapshot, dimension and bridge now
-  publishes an `export_date` timestamp. Source-backed tables retain their
-  selected Silver row's export timestamp; generated dimensions use the active
-  Gold as-of date. Existing `source_export_date` fields remain for compatibility.
-- **Implementation:** `04_gold_model` adds the field to referral, offer, IPA,
-  referral-provider and lifecycle facts plus the referral snapshot.
-  `05_gold_dimensions` adds it to source-backed dimensions and bridges, and to
-  the generated date, placement-type, referral-status and offer-status dimensions.
-- **Validation:** regression checks require the root and deployed WMPP Gold
-  notebooks to retain the field; rerun `04_gold_model` and
-  `05_gold_dimensions` after deployment to rebuild the Delta schemas.
-
+- **Feature:** every materialised Gold fact, snapshot, dimension and bridge now publishes an `export_date` timestamp. Source-backed tables retain their selected Silver row's export timestamp; generated dimensions use the active Gold as-of date. Existing `source_export_date` fields remain for compatibility.
+- **Implementation:** `04_gold_model` adds the field to referral, offer, IPA, referral-provider and lifecycle facts plus the referral snapshot. `05_gold_dimensions` adds it to source-backed dimensions and bridges, and to the generated date, placement-type, referral-status and offer-status dimensions.
+- **Validation:** regression checks require the root and deployed WMPP Gold notebooks to retain the field; rerun `04_gold_model` and `05_gold_dimensions` after deployment to rebuild the Delta schemas.
 
 ## AR-001 — Only one archive batch processed
 
 - **Symptom:** later dated ZIP/file batches were not attempted after a failure.
 - **Cause:** processing could stop at the first batch error.
-- **Fix:** `STOP_ON_FIRST_ERROR = False` is the default; failures are collected
-  and raised after remaining selected batches are attempted.
+- **Fix:** `STOP_ON_FIRST_ERROR = False` is the default; failures are collected and raised after remaining selected batches are attempted.
 - **Regression guard:** validator checks both ZIP and file error paths continue.
 
 ## AR-002 — Archive loading coupled to ZIP extraction
 
-- **Symptom:** a file copied directly into the archive folder was absent from
-  the load queue when no corresponding ZIP was processed in that run.
+- **Symptom:** a file copied directly into the archive folder was absent from the load queue when no corresponding ZIP was processed in that run.
 - **Cause:** the file queue was derived from the current ZIP batch list.
-- **Fix:** ZIP extraction and archive inventory are independent. Every run scans
-  `ARCHIVE_FILE_ROOT` and builds a new archive inventory dataframe.
-- **Regression guard:** validator rejects any file loop derived from
-  `zip_batches`.
+- **Fix:** ZIP extraction and archive inventory are independent. Every run scans `ARCHIVE_FILE_ROOT` and builds a new archive inventory dataframe.
+- **Regression guard:** validator rejects any file loop derived from `zip_batches`.
 
 ## AR-003 — One audit query executed per archive file
 
 - **Symptom:** archive preparation was slow and generated many small Spark jobs.
 - **Cause:** `monitoring.cfg_archive_file_load` was queried inside the file loop.
-- **Fix:** the complete inventory is filtered with one dataframe `left_anti`
-  join against the latest audit state.
-- **Regression guard:** validator requires `filter_pending_archive_files()` and
-  prohibits `audit_record()` in the archive file loop.
+- **Fix:** the complete inventory is filtered with one dataframe `left_anti` join against the latest audit state.
+- **Regression guard:** validator requires `filter_pending_archive_files()` and prohibits `audit_record()` in the archive file loop.
 
 ## AR-004 — Export date source was ambiguous
 
-- **Symptom:** manually added files or date-named audit files could receive the
-  wrong snapshot date.
+- **Symptom:** manually added files or date-named audit files could receive the wrong snapshot date.
 - **Cause:** filename/ZIP parsing was mixed with folder-date parsing.
-- **Fix:** the containing `YYYY-MM-DD` archive folder is authoritative for
-  `export_date`. A date-named audit CSV separately receives `audit_file_date`
-  from its filename.
-- **Regression guard:** validator requires folder-derived export dates and both
-  audit date fields.
+- **Fix:** the containing `YYYY-MM-DD` archive folder is authoritative for `export_date`. A date-named audit CSV separately receives `audit_file_date` from its filename.
+- **Regression guard:** validator requires folder-derived export dates and both audit date fields.
 
 ## AR-005 — Archive file reruns could duplicate target rows
 
 - **Symptom:** replaying a file could append a second copy of its full export.
 - **Cause:** prior target rows were not always removed before append.
-- **Fix:** a pending file first deletes rows by `_archive_source_path`; legacy
-  targets fall back to deleting the matching `export_date`. All file rows are
-  then appended without deduplication or ordering requirements.
-- **Regression guard:** validator checks both replacement predicates and the
-  full-file append path.
+- **Fix:** a pending file first deletes rows by `_archive_source_path`; legacy targets fall back to deleting the matching `export_date`. All file rows are then appended without deduplication or ordering requirements.
+- **Regression guard:** validator checks both replacement predicates and the full-file append path.
 
 ## AR-006 — Legacy archived_audit rejected for missing lineage
 
-- **Symptom:** audit files failed with `archived.audit has neither
-  export_date nor source-file lineage`.
-- **Cause:** the existing audit table pre-dated loader-managed metadata, while
-  delete-before-append required that metadata before the incoming frame could
-  add it.
-- **Fix:** before replacement, the loader adds any missing nullable columns:
-  `audit_file_date`, `export_date`, `_archive_source_path`,
-  `_archive_source_zip`, `_archive_run_id`, and `_archive_load_ts`. Historical
-  rows remain unchanged with null metadata. New audit rows receive folder and
-  filename dates plus source lineage, making subsequent reruns safe.
-- **Regression guard:** validator requires the legacy audit schema upgrade to
-  execute before Delta replacement logic.
+- **Symptom:** audit files failed with `archived.audit has neither export_date nor source-file lineage`.
+- **Cause:** the existing audit table pre-dated loader-managed metadata, while delete-before-append required that metadata before the incoming frame could add it.
+- **Fix:** before replacement, the loader adds any missing nullable columns: `audit_file_date`, `export_date`, `_archive_source_path`, `_archive_source_zip`, `_archive_run_id`, and `_archive_load_ts`. Historical rows remain unchanged with null metadata. New audit rows receive folder and filename dates plus source lineage, making subsequent reruns safe.
+- **Regression guard:** validator requires the legacy audit schema upgrade to execute before Delta replacement logic.
 
 ## AR-007 — Archive metric schema mismatch marked loaded files failed
 
-- **Symptom:** after archive rows were written, Delta reported that
-  `monitoring.cfg_table_load_metric` contained `null_primary_key_count` while
-  the archive writer supplied `rejected_row_count`. The file was then recorded
-  as `FAILED` even though its archive rows had already been committed.
-- **Cause:** the archive notebook used a private metric schema that differed
-  from the shared setup/silver monitoring contract, and metric logging was
-  inside the file-load failure boundary.
-- **Fix:** archive metrics now use canonical `null_primary_key_count` and supply
-  `None` because archive ingestion does not calculate that measure. Metric
-  writes have dedicated error handling; failures are retained as pipeline
-  warnings without changing a successfully loaded file audit to `FAILED`.
-- **Regression guard:** validator prohibits `rejected_row_count`, requires the
-  canonical metric schema, and requires non-fatal metric exception handling.
+- **Symptom:** after archive rows were written, Delta reported that `monitoring.cfg_table_load_metric` contained `null_primary_key_count` while the archive writer supplied `rejected_row_count`. The file was then recorded as `FAILED` even though its archive rows had already been committed.
+- **Cause:** the archive notebook used a private metric schema that differed from the shared setup/silver monitoring contract, and metric logging was inside the file-load failure boundary.
+- **Fix:** archive metrics now use canonical `null_primary_key_count` and supply `None` because archive ingestion does not calculate that measure. Metric writes have dedicated error handling; failures are retained as pipeline warnings without changing a successfully loaded file audit to `FAILED`.
+- **Regression guard:** validator prohibits `rejected_row_count`, requires the canonical metric schema, and requires non-fatal metric exception handling.
 
 ### CFG table inspection and migration script
 
-For the reported AR-007 error, the live CFG table already contained the correct
-`null_primary_key_count` field. Only the archive notebook writer was wrong, so
-the CFG table did not require alteration.
+For the reported AR-007 error, the live CFG table already contained the correct `null_primary_key_count` field. Only the archive notebook writer was wrong, so the CFG table did not require alteration.
 
-Run this Fabric/PySpark cell when deploying to another environment. It reports
-the current position and adds the canonical field only when it is genuinely
-missing and no conflicting legacy field exists:
+Run this Fabric/PySpark cell when deploying to another environment. It reports the current position and adds the canonical field only when it is genuinely missing and no conflicting legacy field exists:
 
 ```python
 METRIC_TABLE = "monitoring.cfg_table_load_metric"
@@ -333,9 +192,7 @@ else:
     )
 ```
 
-If an older environment contains `rejected_row_count`, use this controlled
-rebuild. It first creates a timestamped backup, then recreates the original
-table with the canonical schema. Review the backup before deleting it:
+If an older environment contains `rejected_row_count`, use this controlled rebuild. It first creates a timestamped backup, then recreates the original table with the canonical schema. Review the backup before deleting it:
 
 ```python
 from datetime import datetime
@@ -395,499 +252,240 @@ else:
     )
 ```
 
-Do not solve AR-007 by enabling automatic schema merging. That would preserve
-both metric columns and reintroduce inconsistent writers.
+Do not solve AR-007 by enabling automatic schema merging. That would preserve both metric columns and reintroduce inconsistent writers.
 
 ## AR-008 — Archive audit files made general archive runs too slow
 
-- **Symptom:** the large number of date-named audit CSV files made the archive
-  notebook take too long when the immediate requirement was to load business
-  archive tables.
-- **Cause:** audit files entered the same monitoring join and full
-  read/count/delete/write path as every other archive file.
-- **Fix:** the top-level `LOAD_ARCHIVE_AUDIT` control defaults to `False`.
-  Archive inventory rows targeting `archived.audit` are removed at the
-  inventory seam before CFG filtering or file processing. Set the control to
-  `True` for a dedicated audit catch-up run.
-- **Audit behaviour:** skipped audit files are not recorded as successful and
-  their existing `monitoring.cfg_archive_file_load` state is not changed.
-- **Regression guard:** validator checks filename classification, the default
-  toggle value, and that filtering happens before the archive audit-state join.
+- **Symptom:** the large number of date-named audit CSV files made the archive notebook take too long when the immediate requirement was to load business archive tables.
+- **Cause:** audit files entered the same monitoring join and full read/count/delete/write path as every other archive file.
+- **Fix:** the top-level `LOAD_ARCHIVE_AUDIT` control defaults to `False`. Archive inventory rows targeting `archived.audit` are removed at the inventory seam before CFG filtering or file processing. Set the control to `True` for a dedicated audit catch-up run.
+- **Audit behaviour:** skipped audit files are not recorded as successful and their existing `monitoring.cfg_archive_file_load` state is not changed.
+- **Regression guard:** validator checks filename classification, the default toggle value, and that filtering happens before the archive audit-state join.
 
 ## AR-009 — Delta could not merge legacy export_date types
 
-- **Symptom:** archive files failed with `[DELTA_FAILED_TO_MERGE_FIELDS] Failed
-  to merge fields 'export_date' and 'export_date'` after the legacy target slice
-  had already been deleted.
-- **Cause:** incoming rows correctly used folder-derived Spark `TIMESTAMP`, but
-  some existing `archived.*` Delta tables stored the same column as `STRING`,
-  `DATE`, or `TIMESTAMP_NTZ`. Delta `mergeSchema` cannot change an existing
-  column's datatype.
-- **Fix:** before any source-path or export-date deletion, the loader inspects
-  the existing target. A noncanonical `export_date` is converted to `TIMESTAMP`
-  in a staging Delta table. Conversion values, row count and staged datatype are
-  validated before the original target is atomically overwritten. A failed
-  migration retains its staging table for investigation and leaves file-level
-  replacement unstarted.
-- **Contract decision:** folder-derived `export_date` is the sole archive
-  contract field. Any CSV field with the same name is overwritten and no
-  `_source_export_date` field is retained.
-- **Recovery:** affected CFG file rows remain `FAILED` and are selected on the
-  next run. The loader migrates their targets, removes any prior source/date
-  slice, and reloads the complete source files.
-- **Regression guard:** validator requires migration to run before Delta delete,
-  requires `TIMESTAMP` staging and invalid-value checks, and prohibits
-  `_source_export_date`.
+- **Symptom:** archive files failed with `[DELTA_FAILED_TO_MERGE_FIELDS] Failed to merge fields 'export_date' and 'export_date'` after the legacy target slice had already been deleted.
+- **Cause:** incoming rows correctly used folder-derived Spark `TIMESTAMP`, but some existing `archived.*` Delta tables stored the same column as `STRING`, `DATE`, or `TIMESTAMP_NTZ`. Delta `mergeSchema` cannot change an existing column's datatype.
+- **Fix:** before any source-path or export-date deletion, the loader inspects the existing target. A noncanonical `export_date` is converted to `TIMESTAMP` in a staging Delta table. Conversion values, row count and staged datatype are validated before the original target is atomically overwritten. A failed migration retains its staging table for investigation and leaves file-level replacement unstarted.
+- **Contract decision:** folder-derived `export_date` is the sole archive contract field. Any CSV field with the same name is overwritten and no `_source_export_date` field is retained.
+- **Recovery:** affected CFG file rows remain `FAILED` and are selected on the next run. The loader migrates their targets, removes any prior source/date slice, and reloads the complete source files.
+- **Regression guard:** validator requires migration to run before Delta delete, requires `TIMESTAMP` staging and invalid-value checks, and prohibits `_source_export_date`.
 
 ## AR-010 — Migrated target and incoming timestamp variants could still differ
 
-- **Symptom:** `DELTA_FAILED_TO_MERGE_FIELDS` could still be raised after target
-  migration, and only after the existing source/date slice had been deleted.
-- **Cause:** the target migration validated the target table in isolation but
-  did not re-read its exact Spark datatype and align the incoming dataframe to
-  it. `TIMESTAMP` and `TIMESTAMP_NTZ`, or duplicate case-insensitive field names,
-  can still fail Delta schema merging even when displayed date values match.
-- **Fix:** after migration, `align_frame_export_date_to_target()` requires one
-  case-insensitive `export_date`, casts it to the target field's exact Spark
-  datatype, verifies equality, and returns the aligned dataframe. This safety
-  gate runs before `DeltaTable.delete()`.
-- **Regression guard:** validator requires alignment and type verification to
-  occur before the first file-level Delta deletion.
+- **Symptom:** `DELTA_FAILED_TO_MERGE_FIELDS` could still be raised after target migration, and only after the existing source/date slice had been deleted.
+- **Cause:** the target migration validated the target table in isolation but did not re-read its exact Spark datatype and align the incoming dataframe to it. `TIMESTAMP` and `TIMESTAMP_NTZ`, or duplicate case-insensitive field names, can still fail Delta schema merging even when displayed date values match.
+- **Fix:** after migration, `align_frame_export_date_to_target()` requires one case-insensitive `export_date`, casts it to the target field's exact Spark datatype, verifies equality, and returns the aligned dataframe. This safety gate runs before `DeltaTable.delete()`.
+- **Regression guard:** validator requires alignment and type verification to occur before the first file-level Delta deletion.
 
 ## AR-011 — Clearing a single archive-month ver rebuild left it marked complete
 
-- **Symptom:** after ver and Gold tables were cleared for a selected archive
-  month, `02a_archive_ver.ipynb` could skip that month because
-  `monitoring.cfg_month_end_gold_run` still recorded `SUCCESS`. Existing
-  `monitoring.cfg_ver_export_load` rows also continued to imply that the
-  prior export had completed without a requested reload.
-- **Cause:** `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` dropped physical ver
-  targets only. Monitoring state was deleted only when the separate
-  `RESET_MONTH_MONITORING` option was enabled.
-- **Fix:** when `PROCESS_ONLY` and
-  `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` are confirmed, the archive replay now
-  marks the selected snapshot and its `ARCHIVE_MONTH_END` ver audit rows
-  with `reload = true` before dropping ver targets. The next loop therefore
-  rebuilds ver, DQ and Gold, and its normal completion path resets the flag.
-  `RESET_MONTH_MONITORING` still performs the explicit destructive deletion of
-  monitoring state when that behaviour is required. The parent
-  `90_run_archive_pipeline.ipynb` now exposes and forwards the guarded
-  single-month options to Archive ver.
-- **Scope:** Bronze/archive-file audit history is not reset, because clearing
-  ver and Gold does not require Bronze files to be ingested again.
-- **Regression guard:** `validate_si013_si016.py` requires the clear option to
-  flag both month-end and ver-export monitoring records for reload.
-- **Status:** resolved in source; deploy the updated archive Silver notebook
-  before running the guarded single-month reload.
+- **Symptom:** after ver and Gold tables were cleared for a selected archive month, `02a_archive_ver.ipynb` could skip that month because `monitoring.cfg_month_end_gold_run` still recorded `SUCCESS`. Existing `monitoring.cfg_ver_export_load` rows also continued to imply that the prior export had completed without a requested reload.
+- **Cause:** `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` dropped physical ver targets only. Monitoring state was deleted only when the separate `RESET_MONTH_MONITORING` option was enabled.
+- **Fix:** when `PROCESS_ONLY` and `CLEAR_VER_TABLES_FOR_PROCESS_ONLY` are confirmed, the archive replay now marks the selected snapshot and its `ARCHIVE_MONTH_END` ver audit rows with `reload = true` before dropping ver targets. The next loop therefore rebuilds ver, DQ and Gold, and its normal completion path resets the flag. `RESET_MONTH_MONITORING` still performs the explicit destructive deletion of monitoring state when that behaviour is required. The parent `90_run_archive_pipeline.ipynb` now exposes and forwards the guarded single-month options to Archive ver.
+- **Scope:** Bronze/archive-file audit history is not reset, because clearing ver and Gold does not require Bronze files to be ingested again.
+- **Regression guard:** `validate_si013_si016.py` requires the clear option to flag both month-end and ver-export monitoring records for reload.
+- **Status:** resolved in source; deploy the updated archive Silver notebook before running the guarded single-month reload.
 
 ### Bronze-to-Silver decision
 
-`02_silver_formatter.ipynb` does not require archive-style target
-migration. It casts all fields from `schema_definition.csv` and performs an
-atomic full overwrite with `overwriteSchema = true`, rather than deleting a
-slice and appending. It now calls `validate_silver_export_date()` before the
-overwrite to require exactly one non-null `TIMESTAMP` export field. Missing
-table contracts continue to be logged and skipped.
+`02_silver_formatter.ipynb` does not require archive-style target migration. It casts all fields from `schema_definition.csv` and performs an atomic full overwrite with `overwriteSchema = true`, rather than deleting a slice and appending. It now calls `validate_silver_export_date()` before the overwrite to require exactly one non-null `TIMESTAMP` export field. Missing table contracts continue to be logged and skipped.
 
 ## Operational reminders
 
 - New files under `ARCHIVE_FILE_ROOT/YYYY-MM-DD/...` are automatically pending.
 - A file already recorded as `SUCCESS` is skipped unless `reload = true`.
-- Overwriting a file at the same path therefore requires setting its audit row's
-  reload flag.
-- Keep `PROCESS_EXPORT_DATE` blank to discover every archive date, or set it to
-  the exact folder date being replayed.
-- Keep `LOAD_ARCHIVE_AUDIT = False` for normal business archive runs. Set it to
-  `True` only when `archived.audit` should be loaded or caught up.
+- Overwriting a file at the same path therefore requires setting its audit row's reload flag.
+- Keep `PROCESS_EXPORT_DATE` blank to discover every archive date, or set it to the exact folder date being replayed.
+- Keep `LOAD_ARCHIVE_AUDIT = False` for normal business archive runs. Set it to `True` only when `archived.audit` should be loaded or caught up.
 
 ## SI-001 — Internal `ref_*` tables failed latest-to-Silver formatting
 
-- **Symptom:** `02_silver_formatter.ipynb` failed on
-  `bronze.ref_KPI_Definition`, `bronze.ref_KPI_RID_linkage`,
-  `bronze.ref_RID`, and `bronze.ref_Table_Lineage` because they do not contain
-  `export_date`.
-- **Cause:** table discovery treated every physical Bronze table as a dated
-  source extract before checking whether it was an internal/reference table.
-- **Fix:** `common_util.ipynb` now owns the explicit exclusions and the `ref_`
-  prefix rule. Latest ingestion, archive ingestion, live/archive schema capture,
-  latest Silver, and archive Silver apply the shared predicate at their table or
-  file discovery boundaries.
-- **Behaviour:** excluded tables are reported once and are not audited as failed,
-  loaded to Silver, or reported as source-schema drift.
+- **Symptom:** `02_silver_formatter.ipynb` failed on `bronze.ref_KPI_Definition`, `bronze.ref_KPI_RID_linkage`, `bronze.ref_RID`, and `bronze.ref_Table_Lineage` because they do not contain `export_date`.
+- **Cause:** table discovery treated every physical Bronze table as a dated source extract before checking whether it was an internal/reference table.
+- **Fix:** `common_util.ipynb` now owns the explicit exclusions and the `ref_` prefix rule. Latest ingestion, archive ingestion, live/archive schema capture, latest Silver, and archive Silver apply the shared predicate at their table or file discovery boundaries.
+- **Behaviour:** excluded tables are reported once and are not audited as failed, loaded to Silver, or reported as source-schema drift.
 - **Regression guard:** run `python validate_ref_exclusions.py`.
-
-
 
 ## SI-002 — Configuration setup was distributed across parent ETL notebooks
 
-- **Symptom:** ETL notebooks could fail when a required `monitoring.cfg_*`
-  table had not already been created, and table definitions were duplicated
-  between setup, archive ingestion, schema capture, data quality, and Gold.
-- **Cause:** `00_setup_cfg.ipynb` created only part of the configuration
-  catalogue; several parent notebooks still owned their own config DDL.
-- **Fix:** `00_setup_cfg.ipynb` now owns an idempotent registry of all 18
-  configuration tables, adds missing columns to older deployments, and seeds
-  `gold.cfg_placement_urgency_rule`. Every ETL/control notebook invokes setup
-  before its first configuration operation; duplicate child DDL was removed.
-- **Validation:** `validate_cfg_setup.py` checks ownership, setup-call
-  order, required table coverage, and notebook Python syntax.
-
+- **Symptom:** ETL notebooks could fail when a required `monitoring.cfg_*` table had not already been created, and table definitions were duplicated between setup, archive ingestion, schema capture, data quality, and Gold.
+- **Cause:** `00_setup_cfg.ipynb` created only part of the configuration catalogue; several parent notebooks still owned their own config DDL.
+- **Fix:** `00_setup_cfg.ipynb` now owns an idempotent registry of all 18 configuration tables, adds missing columns to older deployments, and seeds `gold.cfg_placement_urgency_rule`. Every ETL/control notebook invokes setup before its first configuration operation; duplicate child DDL was removed.
+- **Validation:** `validate_cfg_setup.py` checks ownership, setup-call order, required table coverage, and notebook Python syntax.
 
 ## SI-003 — Archive Silver baseline omitted the shared `ref_*` exclusion
 
-- **Symptom:** after promoting the current version 02 04 baseline, archive
-  Silver did not import `common_util` and could treat `archived_ref_*` tables as
-  dated business extracts.
-- **Cause:** the promoted archive notebook imported the shared formatting
-  library but not the separate internal-table exclusion utility.
-- **Fix:** `02a_archive_silver.ipynb` now imports both shared notebooks,
-  filters `ref_*` tables before export-date processing, and reports exclusions.
-- **Validation:** the relocated `validate_ref_exclusions.py` checks all
-  latest/archive consumers and passes from `project X/tests`.
-
+- **Symptom:** after promoting the current version 02 04 baseline, archive Silver did not import `common_util` and could treat `archived_ref_*` tables as dated business extracts.
+- **Cause:** the promoted archive notebook imported the shared formatting library but not the separate internal-table exclusion utility.
+- **Fix:** `02a_archive_silver.ipynb` now imports both shared notebooks, filters `ref_*` tables before export-date processing, and reports exclusions.
+- **Validation:** the relocated `validate_ref_exclusions.py` checks all latest/archive consumers and passes from `project X/tests`.
 
 ## RG-001 — Repository structure consolidated around one active baseline
 
-- **Change:** version 02 04 was promoted to `project X` root; prior notebook
-  trees, legacy repository documentation, generated simulation outputs, and
-  superseded report artefacts were moved to the dated repository archive.
-- **Documentation:** client material was organised by lifecycle; HLD, TFD, and
-  a two-stream notebook runbook were added; ETL tracking was renamed and moved
-  to the separate `change tracking` folder.
-- **Recovery:** `archive/2026-08-16-reorganisation/MOVE_MANIFEST.tsv` records
-  every move and promoted copy.
-
+- **Change:** version 02 04 was promoted to `project X` root; prior notebook trees, legacy repository documentation, generated simulation outputs, and superseded report artefacts were moved to the dated repository archive.
+- **Documentation:** client material was organised by lifecycle; HLD, TFD, and a two-stream notebook runbook were added; ETL tracking was renamed and moved to the separate `change tracking` folder.
+- **Recovery:** `archive/2026-08-16-reorganisation/MOVE_MANIFEST.tsv` records every move and promoted copy.
 
 ## SI-004 — Promoted source copy contained the earlier partial config setup
 
-- **Symptom:** post-promotion validation found that the current source folder's
-  setup notebook lacked nine configuration tables, live schema capture did not
-  call setup, and Gold still owned local configuration DDL.
-- **Cause:** the source folder contained an earlier notebook baseline even
-  though its change log and validators described the later centralised design.
-- **Fix:** the active repository baseline now restores the 18-table idempotent
-  config registry, the missing live setup call, and central Gold-rule seeding.
-- **Validation:** `validate_cfg_setup.py` verifies ownership, required
-  table coverage, setup-call order, and absence of child config DDL.
+- **Symptom:** post-promotion validation found that the current source folder's setup notebook lacked nine configuration tables, live schema capture did not call setup, and Gold still owned local configuration DDL.
+- **Cause:** the source folder contained an earlier notebook baseline even though its change log and validators described the later centralised design.
+- **Fix:** the active repository baseline now restores the 18-table idempotent config registry, the missing live setup call, and central Gold-rule seeding.
+- **Validation:** `validate_cfg_setup.py` verifies ownership, required table coverage, setup-call order, and absence of child config DDL.
 
 ## SI-005 — Archive replay had no framework source when the table was absent
 
-- **Symptom:** historical Silver replay could not materialise
-  `silver.slv_framework` when archive deliveries did not contain a logical
-  `framework` table. Downstream `provider_framework.framework_code`
-  referential checks therefore had no parent object.
-- **Cause:** `02a_archive_silver.ipynb` discovered only physical archive
-  tables. The controlled legacy framework CSV was not registered as an
-  archive-replay source.
-- **Fix:** archive Silver now uses the archived framework's latest eligible
-  snapshot when available. When no framework snapshot exists on or before a
-  canonical month—including complete physical-table absence—it reads
-  `Files/deprecated_wmpp_files/framework.csv`, validates
-  the required columns and non-empty content, stamps each canonical monthly
-  snapshot date into `export_date`, and routes the frame through normal PK
-  deduplication, conformance, auditing, metrics, and FK dependency ordering.
-- **Provenance:** the Silver result records `_archive_fallback = true` and
-  `_source_file`. No synthetic `archived.framework` table is created.
-- **Contract note:** `framework` is currently absent from
-  `schema_definition.csv`, although `provider_framework` references
-  `framework.framework_code`. The notebook uses a narrow evidence-based local
-  contract for both archived and fallback framework data until the central
-  schema contract is formally approved. The missing contract remains visible
-  as schema drift rather than being silently approved.
-- **Failure behaviour:** a missing file, empty file, or missing required column
-  fails the affected canonical month and is retained in the existing audit and
-  month-end error controls.
-- **Validation:** run
-  `python validate_archive_framework_fallback.py`; the full portable
-  validator set must also pass.
+- **Symptom:** historical Silver replay could not materialise `silver.slv_framework` when archive deliveries did not contain a logical `framework` table. Downstream `provider_framework.framework_code` referential checks therefore had no parent object.
+- **Cause:** `02a_archive_silver.ipynb` discovered only physical archive tables. The controlled legacy framework CSV was not registered as an archive-replay source.
+- **Fix:** archive Silver now uses the archived framework's latest eligible snapshot when available. When no framework snapshot exists on or before a canonical month—including complete physical-table absence—it reads `Files/deprecated_wmpp_files/framework.csv`, validates the required columns and non-empty content, stamps each canonical monthly snapshot date into `export_date`, and routes the frame through normal PK deduplication, conformance, auditing, metrics, and FK dependency ordering.
+- **Provenance:** the Silver result records `_archive_fallback = true` and `_source_file`. No synthetic `archived.framework` table is created.
+- **Contract note:** `framework` is currently absent from `schema_definition.csv`, although `provider_framework` references `framework.framework_code`. The notebook uses a narrow evidence-based local contract for both archived and fallback framework data until the central schema contract is formally approved. The missing contract remains visible as schema drift rather than being silently approved.
+- **Failure behaviour:** a missing file, empty file, or missing required column fails the affected canonical month and is retained in the existing audit and month-end error controls.
+- **Validation:** run `python validate_archive_framework_fallback.py`; the full portable validator set must also pass.
 ## SI-006 — Gold referral model used obsolete referral column names
 
 - **Status:** Fixed in the project source; Fabric deployment and April replay are required.
-- **Symptom:** archive replay reached `04_gold_model` for 2026-04-30,
-  then failed while creating `gold.fact_referral` because
-  `modified_timestamp` could not be resolved in `silver.slv_referral`.
-- **Cause:** the current flattened referral extract uses `placement_type`,
-  `referral_created_date`, `referral_modified_date`, and `referral_status`.
-  These fields were visible as `UNCONTRACTED_COLUMN_ADDED` in both schema-drift
-  sheets, so Silver removed them. Gold still referred to the older audit-style
-  names `placement_type_code`, `created_timestamp`, `modified_timestamp`,
-  `status`, and `rev`.
-- **Fix:** the referral section of `schema_definition.csv` now includes all six
-  captured flattened-extract fields with their observed ordinals. The two date
-  fields are conformed to timestamps. `04_gold_model` now uses the
-  flattened referral names and orders duplicate candidates by referral modified
-  date, referral created date, then export date.
-- **Preflight:** Gold now checks all required Silver tables and columns before
-  creating views. If a deployment or Silver rerun is missing, it raises one
-  actionable `Gold source validation failed` message instead of a sequence of
-  unresolved-column errors.
-- **Recovery:** deploy the updated notebook and copy the updated contract to
-  `Files/cfg_files/schema_definition.csv`; then set the affected month to reload
-  and rerun `02a_archive_silver` from 2026-04-30.
-- **Validation:** run `python validate_gold_referral_schema.py`; the full
-  portable validator set must also pass. The Spark simulation fixture now mirrors
-  the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors
-  the flattened referral schema; execute it in a PySpark/Delta-capable environment.
+- **Symptom:** archive replay reached `04_gold_model` for 2026-04-30, then failed while creating `gold.fact_referral` because `modified_timestamp` could not be resolved in `silver.slv_referral`.
+- **Cause:** the current flattened referral extract uses `placement_type`, `referral_created_date`, `referral_modified_date`, and `referral_status`. These fields were visible as `UNCONTRACTED_COLUMN_ADDED` in both schema-drift sheets, so Silver removed them. Gold still referred to the older audit-style names `placement_type_code`, `created_timestamp`, `modified_timestamp`, `status`, and `rev`.
+- **Fix:** the referral section of `schema_definition.csv` now includes all six captured flattened-extract fields with their observed ordinals. The two date fields are conformed to timestamps. `04_gold_model` now uses the flattened referral names and orders duplicate candidates by referral modified date, referral created date, then export date.
+- **Preflight:** Gold now checks all required Silver tables and columns before creating views. If a deployment or Silver rerun is missing, it raises one actionable `Gold source validation failed` message instead of a sequence of unresolved-column errors.
+- **Recovery:** deploy the updated notebook and copy the updated contract to `Files/cfg_files/schema_definition.csv`; then set the affected month to reload and rerun `02a_archive_silver` from 2026-04-30.
+- **Validation:** run `python validate_gold_referral_schema.py`; the full portable validator set must also pass. The Spark simulation fixture now mirrors the flattened referral schema; execute it in a PySpark/Delta-capable environment. The Spark simulation fixture now mirrors the flattened referral schema; execute it in a PySpark/Delta-capable environment.
 
 ## SI-007 — Reconcile the schema contract with observed source fields
 
-- **Symptom:** The 2026-04-30 replay exposed a stale `silver.slv_referral`
-  shape and joins to parents that were not present in the active definition.
-- **Evidence:** Both drift sheets recorded 389 matching fields and 247
-  contracted fields missing from the observed source. The replay output also
-  confirmed the available month-end Silver parents: framework,
-  framework_category, holding_company, provider, provider_framework,
-  provider_home, provider education provision, and provider-home dimensions.
-- **Fix:** `configuration/schema_definition.csv` was rebuilt from available
-  observed fields, with the six SI-006 referral fields retained. Definitions
-  that were explicitly missing were removed. The `join_class` and
-  `join_evidence` columns now distinguish `CONTRACT_FK`, `TRIAL_JOIN`,
-  `INVALID_JOIN`, and `NO_JOIN`.
-- **Join decision:** Retained source FKs point only to available parent keys.
-  High-confidence name/key mappings are marked `TRIAL_JOIN` pending Fabric
-  reconciliation; local-authority mappings remain `INVALID_JOIN` because the
-  parent definition was not delivered.
-- **Validation:** Contract uniqueness, table/column coverage, FK target
-  availability, and portable notebook validators must pass before deployment.
+- **Symptom:** The 2026-04-30 replay exposed a stale `silver.slv_referral` shape and joins to parents that were not present in the active definition.
+- **Evidence:** Both drift sheets recorded 389 matching fields and 247 contracted fields missing from the observed source. The replay output also confirmed the available month-end Silver parents: framework, framework_category, holding_company, provider, provider_framework, provider_home, provider education provision, and provider-home dimensions.
+- **Fix:** `configuration/schema_definition.csv` was rebuilt from available observed fields, with the six SI-006 referral fields retained. Definitions that were explicitly missing were removed. The `join_class` and `join_evidence` columns now distinguish `CONTRACT_FK`, `TRIAL_JOIN`, `INVALID_JOIN`, and `NO_JOIN`.
+- **Join decision:** Retained source FKs point only to available parent keys. High-confidence name/key mappings are marked `TRIAL_JOIN` pending Fabric reconciliation; local-authority mappings remain `INVALID_JOIN` because the parent definition was not delivered.
+- **Validation:** Contract uniqueness, table/column coverage, FK target availability, and portable notebook validators must pass before deployment.
 
 ## GLD-001 — Gold referral model consumed a stale/untrusted Silver contract
 
-- **Symptom:** Gold failed with unresolved referral fields because the
-  deployed contract had removed `placement_type`, `referral_created_date`,
-  `referral_modified_date`, and `referral_status` from Silver.
-- **Cause:** Gold was run against a Silver snapshot produced from the old
-  contract. The previously assumed source event-log table is not delivered.
-- **Fix:** Gold now uses the available flattened Silver tables and current
-  referral field names. Mandatory sources are preflighted; lifecycle timing
-  comes from the explicit derived `silver.slv_referral_lifecycle_event`
-  stream rather than a fabricated empty event-log relation.
-- **Recovery:** Deploy the rebuilt contract and Gold notebook, mark the
-  affected month for reload, rerun archive Silver, then run DQ and Gold.
+- **Symptom:** Gold failed with unresolved referral fields because the deployed contract had removed `placement_type`, `referral_created_date`, `referral_modified_date`, and `referral_status` from Silver.
+- **Cause:** Gold was run against a Silver snapshot produced from the old contract. The previously assumed source event-log table is not delivered.
+- **Fix:** Gold now uses the available flattened Silver tables and current referral field names. Mandatory sources are preflighted; lifecycle timing comes from the explicit derived `silver.slv_referral_lifecycle_event` stream rather than a fabricated empty event-log relation.
+- **Recovery:** Deploy the rebuilt contract and Gold notebook, mark the affected month for reload, rerun archive Silver, then run DQ and Gold.
 
 ## SI-008 — Materialise the age-band axis in Silver
 
-The former report-only calculated table is now rebuilt as
-`silver.slv_age_band` with `age_band` and `sort_order`.
+The former report-only calculated table is now rebuilt as `silver.slv_age_band` with `age_band` and `sort_order`.
 
 ## SI-009 — Materialise the directory summary axis in Silver
 
-The disconnected reporting axis is now rebuilt as
-`silver.slv_directory_summary_axis` with `display_type`.
+The disconnected reporting axis is now rebuilt as `silver.slv_directory_summary_axis` with `display_type`.
 
 ## SI-010 — Materialise the fostering axis in Silver
 
-The fostering-only disconnected axis is now rebuilt as
-`silver.slv_fostering_axis` with `display_type`.
+The fostering-only disconnected axis is now rebuilt as `silver.slv_fostering_axis` with `display_type`.
 
 ## SI-011 — Materialise referral closure-reason summary in Silver
 
-The former DAX summary is now rebuilt as
-`silver.slv_referral_closure_reason_summary`, using the available referral
-provider and offer Silver tables and producing one bucket per referral.
+The former DAX summary is now rebuilt as `silver.slv_referral_closure_reason_summary`, using the available referral provider and offer Silver tables and producing one bucket per referral.
 
 ## SI-012 — Materialise the date dimension in Silver
 
-The date table is now rebuilt as `silver.slv_dim_date`, covering the observed
-date range from referral, offer, and IPA Silver data with year, month, quarter,
-and day-name attributes.
+The date table is now rebuilt as `silver.slv_dim_date`, covering the observed date range from referral, offer, and IPA Silver data with year, month, quarter, and day-name attributes.
 
 ## SIL-001 — Successful Silver audit could preserve an incomplete target schema
 
-- **Symptom:** `bronze.referral` was reported as already successful, so the
-  formatter skipped rebuilding `silver.slv_referral` even though the target
-  lacked contract columns such as `placement_type`.
-- **Cause:** the skip decision trusted the audit status without checking the
-  existing Silver target schema. The configuration Delta table can also retain
-  an older populated contract until setup is deliberately reloaded.
-- **Fix:** latest and archive Silver now verify target columns before skipping;
-  missing contract columns force an idempotent overwrite. Added
-  `validate_silver_required_columns.py` to lock down the referral
-  contract and both refresh guards.
-- **Recovery:** run setup once with `LOAD_FILE_CONFIG = True` after deploying a
-  changed contract CSV, then rerun the affected Silver formatter or archive
-  month. Return the flag to `False` afterward.
+- **Symptom:** `bronze.referral` was reported as already successful, so the formatter skipped rebuilding `silver.slv_referral` even though the target lacked contract columns such as `placement_type`.
+- **Cause:** the skip decision trusted the audit status without checking the existing Silver target schema. The configuration Delta table can also retain an older populated contract until setup is deliberately reloaded.
+- **Fix:** latest and archive Silver now verify target columns before skipping; missing contract columns force an idempotent overwrite. Added `validate_silver_required_columns.py` to lock down the referral contract and both refresh guards.
+- **Recovery:** run setup once with `LOAD_FILE_CONFIG = True` after deploying a changed contract CSV, then rerun the affected Silver formatter or archive month. Return the flag to `False` afterward.
 
 ## Deployment status for SI-007 onwards
 
 - **Source changes:** complete in the repository.
-- **Portable validation:** required validators pass locally after the final
-  contract and notebook changes.
-- **Fabric validation still required:** deploy the contract and notebooks,
-  reload 2026-04-30, confirm the Silver materialisations and Gold snapshot,
-  then reconcile `TRIAL_JOIN` results before promoting them to contract FKs.
+- **Portable validation:** required validators pass locally after the final contract and notebook changes.
+- **Fabric validation still required:** deploy the contract and notebooks, reload 2026-04-30, confirm the Silver materialisations and Gold snapshot, then reconcile `TRIAL_JOIN` results before promoting them to contract FKs.
 
 ## CFG-001 — Child notebooks reread configuration CSVs
 
-- **Symptom:** schema and DQ consumers each depended on direct CSV paths,
-  allowing configuration to drift between notebook runs.
-- **Fix:** setup now performs the one-off CSV-to-Delta bootstrap into
-  `monitoring.cfg_schema_contract_column` and
-  `monitoring.cfg_data_quality_rule`. Consumers use those tables only.
-- **Operation:** leave `LOAD_FILE_CONFIG = False` for normal runs; set it to
-  `True` for an intentional reload of either CSV-backed configuration table.
+- **Symptom:** schema and DQ consumers each depended on direct CSV paths, allowing configuration to drift between notebook runs.
+- **Fix:** setup now performs the one-off CSV-to-Delta bootstrap into `monitoring.cfg_schema_contract_column` and `monitoring.cfg_data_quality_rule`. Consumers use those tables only.
+- **Operation:** leave `LOAD_FILE_CONFIG = False` for normal runs; set it to `True` for an intentional reload of either CSV-backed configuration table.
 - **Validation:** the consumer scan reports no direct schema/DQ CSV readers.
 
 ## SI-013 — Referral event-log Silver table was absent
 
-- **Decision:** no `referral_event_log` source table is delivered, so setup
-  must not fabricate an empty source-shaped Silver table.
-- **Fix:** `03_silver_business_rules` materialises
-  `silver.slv_referral_lifecycle_event` from real Referral, Offer, and IPA
-  timestamps. Gold consumes that explicitly derived lifecycle stream.
-- **Scope:** this is not a full source-system audit trail. The referral
-  snapshot remains one row per referral/snapshot date and is not an event
-  history.
+- **Decision:** no `referral_event_log` source table is delivered, so setup must not fabricate an empty source-shaped Silver table.
+- **Fix:** `03_silver_business_rules` materialises `silver.slv_referral_lifecycle_event` from real Referral, Offer, and IPA timestamps. Gold consumes that explicitly derived lifecycle stream.
+- **Scope:** this is not a full source-system audit trail. The referral snapshot remains one row per referral/snapshot date and is not an event history.
 
 ## SI-014 — Archive replay needed a traceable single-month mode
 
-- **Fix:** `02a_archive_silver` accepts `PROCESS_ONLY = "YYYY-MM"`,
-  resolves it to the canonical final export in that month, and processes only
-  that snapshot.
-- **Safe reset:** `RESET_MONTH_MONITORING` and
-  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` are optional. Either requires
-  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"`; monitoring deletion is
-  limited to that canonical snapshot.
+- **Fix:** `02a_archive_silver` accepts `PROCESS_ONLY = "YYYY-MM"`, resolves it to the canonical final export in that month, and processes only that snapshot.
+- **Safe reset:** `RESET_MONTH_MONITORING` and `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY` are optional. Either requires `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"`; monitoring deletion is limited to that canonical snapshot.
 
 ## SI-015 — Latest Silver duplicated common conformance helpers
 
-- **Fix:** `02_silver_formatter` now imports the shared library for
-  conformance, casting, audit, and target-schema refresh helpers. Its local
-  duplicate implementations were removed.
+- **Fix:** `02_silver_formatter` now imports the shared library for conformance, casting, audit, and target-schema refresh helpers. Its local duplicate implementations were removed.
 
 ## SI-016 — Consolidate common helpers into one notebook
 
-- **Fix:** `99_common_library` was repaired as a valid notebook and now
-  owns the former `common_util` exclusion policy together with shared Silver
-  helpers. Project notebooks no longer import `common_util.ipynb`.
-- **Validation:** `validate_si013_si016.py` verifies the library JSON,
-  the migration, the archive controls, and the event-log shell.
+- **Fix:** `99_common_library` was repaired as a valid notebook and now owns the former `common_util` exclusion policy together with shared Silver helpers. Project notebooks no longer import `common_util.ipynb`.
+- **Validation:** `validate_si013_si016.py` verifies the library JSON, the migration, the archive controls, and the event-log shell.
 
 ## SI-017 — Bronze drift tables and Gold dimensions were omitted from the active flow
 
-- **Symptom:** Bronze tables such as `provider_submission_docs` existed in the
-  drift output but had no `schema_definition.csv` rows, so Silver logged and
-  skipped them. The legacy Gold translator also described dimensions based on
-  stale source names.
-- **Fix:** Added evidence-backed contracts for all eight uncontracted Bronze
-  tables, including provider documents, SIC codes, referral-person support
-  needs and reference metadata. Added `05_gold_dimensions.ipynb` to create
-  Gold dimensions and bridges from real Silver sources, with source/column
-  preflight checks.
-- **Archive naming:** `00_archive_load.ipynb` now preserves source table names
-  in `archived` (for example `archived.referral` and
-  `archived.provider_submission_docs`); `archived_` is no longer applied.
-  The prior notebook is retained in the version 02 03 archive.
-- **Operations:** `90_run_live_pipeline.ipynb` links the standard live
-  sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence
-  and safe single-month recovery controls.
+- **Symptom:** Bronze tables such as `provider_submission_docs` existed in the drift output but had no `schema_definition.csv` rows, so Silver logged and skipped them. The legacy Gold translator also described dimensions based on stale source names.
+- **Fix:** Added evidence-backed contracts for all eight uncontracted Bronze tables, including provider documents, SIC codes, referral-person support needs and reference metadata. Added `05_gold_dimensions.ipynb` to create Gold dimensions and bridges from real Silver sources, with source/column preflight checks.
+- **Archive naming:** `00_archive_load.ipynb` now preserves source table names in `archived` (for example `archived.referral` and `archived.provider_submission_docs`); `archived_` is no longer applied. The prior notebook is retained in the version 02 03 archive.
+- **Operations:** `90_run_live_pipeline.ipynb` links the standard live sequence, and `ARCHIVE_PIPELINE_RUNBOOK.md` records the archive sequence and safe single-month recovery controls.
 
 ## ARCH-ETL-001 — Archive Silver child timed out
 
-- **Symptom:** `90_run_archive_pipeline` timed out while running
-  `02a_archive_silver` after its 1,800-second allowance. Monitoring correctly
-  captured the child notebook failure in `monitoring.vw_job_step_summary`.
-- **Cause:** archive Silver can include replay, DQ, and Gold child processing,
-  which can exceed the original 30-minute child and Fabric session allowance.
-- **Fix:** `90_run_archive_pipeline` and `02a_archive_silver` now allow
-  7,200 seconds (two hours) per child notebook. The runner's Spark session
-  metadata was removed in `f479698`; the validator now checks the timeout
-  passed to setup and pipeline child calls. This covers the archive Silver replay plus
-  its DQ/Gold child calls while retaining monitoring of the actual failure.
-- **Validation:** `validate_archive_snapshot_and_enrichment.py` checks the
-  two-hour child timeout; confirm runtime duration during the next replay.
+- **Symptom:** `90_run_archive_pipeline` timed out while running `02a_archive_silver` after its 1,800-second allowance. Monitoring correctly captured the child notebook failure in `monitoring.vw_job_step_summary`.
+- **Cause:** archive Silver can include replay, DQ, and Gold child processing, which can exceed the original 30-minute child and Fabric session allowance.
+- **Fix:** `90_run_archive_pipeline` and `02a_archive_silver` now allow 7,200 seconds (two hours) per child notebook. The runner's Spark session metadata was removed in `f479698`; the validator now checks the timeout passed to setup and pipeline child calls. This covers the archive Silver replay plus its DQ/Gold child calls while retaining monitoring of the actual failure.
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` checks the two-hour child timeout; confirm runtime duration during the next replay.
 - **Status:** Resolved in the repository.
 
 ## ARCH-ETL-002 — Archive runs accumulated active-month snapshots
 
-- **Symptom:** a daily archive run could leave multiple snapshot dates for the
-  active calendar month, rather than replacing the current-month position with
-  the latest archive extract.
-- **Cause:** snapshot writes were additive rather than scoped to the active
-  calendar-month slice.
-- **Fix:** `04_gold_model` now atomically replaces the complete active
-  calendar-month slice of `gold.fact_referral_snapshot` using Delta
-  `replaceWhere`. An archive export on 2026-08-20 therefore replaces all
-  2026-08 snapshot rows, including an earlier 2026-08-19 export, while
-  completed prior months remain intact.
-- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the
-  active-month replacement predicate.
+- **Symptom:** a daily archive run could leave multiple snapshot dates for the active calendar month, rather than replacing the current-month position with the latest archive extract.
+- **Cause:** snapshot writes were additive rather than scoped to the active calendar-month slice.
+- **Fix:** `04_gold_model` now atomically replaces the complete active calendar-month slice of `gold.fact_referral_snapshot` using Delta `replaceWhere`. An archive export on 2026-08-20 therefore replaces all 2026-08 snapshot rows, including an earlier 2026-08-19 export, while completed prior months remain intact.
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the active-month replacement predicate.
 - **Status:** Resolved in the repository.
 
 ## LIVE-ETL-001 — Live runs accumulated active-month snapshots
 
-- **Symptom:** the live pipeline could have retained more than one snapshot
-  date for the current calendar month.
-- **Cause:** live and archive processing shared Gold snapshot behaviour but the
-  requirement had only been recorded for archive replay.
-- **Fix:** the live runner uses the same Gold notebook with today's as-of
-  date, so the same active-month atomic replacement applies to every live
-  execution without a separate branch.
-- **Validation:** the shared snapshot validator covers both archive and live
-  use of `04_gold_model`.
+- **Symptom:** the live pipeline could have retained more than one snapshot date for the current calendar month.
+- **Cause:** live and archive processing shared Gold snapshot behaviour but the requirement had only been recorded for archive replay.
+- **Fix:** the live runner uses the same Gold notebook with today's as-of date, so the same active-month atomic replacement applies to every live execution without a separate branch.
+- **Validation:** the shared snapshot validator covers both archive and live use of `04_gold_model`.
 - **Status:** Resolved in the repository.
 
 ## SI-023 — Gold fact views were not visible to the Lakehouse semantic model
 
-- **Symptom:** the `gold.fact_*` objects created by `04_gold_model.ipynb` were
-  present in the OneLake Lakehouse as views but were not available to select in
-  the Power BI semantic model.
-- **Cause:** the Gold facts were published with `CREATE OR REPLACE VIEW`.
-  The Lakehouse semantic-model integration requires materialised Lakehouse
-  tables for reliable fact-table discovery. `05_gold_dimensions.ipynb` was
-  already compliant: its date dimension uses `CREATE OR REPLACE TABLE` and its
-  helper writes all other dimensions with `saveAsTable`.
-- **Fix:** `04_gold_model.ipynb` now publishes `fact_referral`,
-  `fact_referral_lifecycle_event`, `fact_offer`, `fact_placement`, and
-  `fact_referral_provider` with `CREATE OR REPLACE TABLE`. During deployment,
-  it drops only an existing legacy view with the same name before recreating
-  the managed Delta table. The `gold.vw_*` reporting views deliberately remain
-  views because this issue is limited to the facts used by the semantic model.
-- **Recovery:** deploy and run `04_gold_model.ipynb`, then refresh the
-  Lakehouse semantic model in Power BI. Confirm the five `fact_*` tables are
-  available before configuring relationships and measures.
-- **Validation:** `validate_gold_referral_schema.py` rejects any Gold fact
-  published as a view and confirms all five use `CREATE OR REPLACE TABLE`.
-- **Status:** Resolved in the repository; Fabric deployment and semantic-model
-  refresh remain required.
-
+- **Symptom:** the `gold.fact_*` objects created by `04_gold_model.ipynb` were present in the OneLake Lakehouse as views but were not available to select in the Power BI semantic model.
+- **Cause:** the Gold facts were published with `CREATE OR REPLACE VIEW`. The Lakehouse semantic-model integration requires materialised Lakehouse tables for reliable fact-table discovery. `05_gold_dimensions.ipynb` was already compliant: its date dimension uses `CREATE OR REPLACE TABLE` and its helper writes all other dimensions with `saveAsTable`.
+- **Fix:** `04_gold_model.ipynb` now publishes `fact_referral`, `fact_referral_lifecycle_event`, `fact_offer`, `fact_placement`, and `fact_referral_provider` with `CREATE OR REPLACE TABLE`. During deployment, it drops only an existing legacy view with the same name before recreating the managed Delta table. The `gold.vw_*` reporting views deliberately remain views because this issue is limited to the facts used by the semantic model.
+- **Recovery:** deploy and run `04_gold_model.ipynb`, then refresh the Lakehouse semantic model in Power BI. Confirm the five `fact_*` tables are available before configuring relationships and measures.
+- **Validation:** `validate_gold_referral_schema.py` rejects any Gold fact published as a view and confirms all five use `CREATE OR REPLACE TABLE`.
+- **Status:** Resolved in the repository; Fabric deployment and semantic-model refresh remain required.
 
 ## SI-018 — Referral enrichment fields were absent from the analytical model
 
-- **Symptom:** the enhancement backlog required cross-table referral, offer,
-  provider, and IPA metrics that were not materialised consistently for Gold
-  reporting or the referral snapshot.
-- **Cause:** the raw source-conformed Silver tables had no reusable,
-  referral-grain relation for cross-table derived fields.
-- **Fix:** cross-table calculations are materialised in the new
-  one-row-per-referral `silver.referral_enrichment` relation, not appended to
-  the raw source-conformed `silver.referral` contract. Gold and the referral
-  snapshot expose the derived fields. This preserves replayable source
-  contracts and makes the derivations reusable and testable.
-- **Fields:** offer count/first offer, first observed provider assignment,
-  no-provider-assignment flag, IPA admission, IPA signed status, latest IPA
-  signature, and earliest eligible post-admission due-diligence review date.
-  The delivered source has no provider UI-view event, so
-  `first_provider_seen_date` explicitly means first observed
-  `referral_provider` extract row.
-- **Quality:** configuration-driven DQ checks enforce the enrichment key,
-  non-negative offer count, populated flag, and applicable date ordering.
-- **Documentation:** the architecture and the Assessment and Requirements
-  KPI enhancement document describe the model, snapshot policy and caveat.
-- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the
-  Silver enrichment, Gold promotion, and configured DQ controls.
+- **Symptom:** the enhancement backlog required cross-table referral, offer, provider, and IPA metrics that were not materialised consistently for Gold reporting or the referral snapshot.
+- **Cause:** the raw source-conformed Silver tables had no reusable, referral-grain relation for cross-table derived fields.
+- **Fix:** cross-table calculations are materialised in the new one-row-per-referral `silver.referral_enrichment` relation, not appended to the raw source-conformed `silver.referral` contract. Gold and the referral snapshot expose the derived fields. This preserves replayable source contracts and makes the derivations reusable and testable.
+- **Fields:** offer count/first offer, first observed provider assignment, no-provider-assignment flag, IPA admission, IPA signed status, latest IPA signature, and earliest eligible post-admission due-diligence review date. The delivered source has no provider UI-view event, so `first_provider_seen_date` explicitly means first observed `referral_provider` extract row.
+- **Quality:** configuration-driven DQ checks enforce the enrichment key, non-negative offer count, populated flag, and applicable date ordering.
+- **Documentation:** the architecture and the Assessment and Requirements KPI enhancement document describe the model, snapshot policy and caveat.
+- **Validation:** `validate_archive_snapshot_and_enrichment.py` verifies the Silver enrichment, Gold promotion, and configured DQ controls.
 - **Status:** Resolved in the repository.
 
 ## SI-019 — Additional referral KPI fields were not available in Gold
 
-- **Symptom:** reporting required additional referral KPIs, including offer
-  responsiveness, provider engagement, IPA admission/signature, and document
-  review measures, that were not exposed by `gold.fact_referral`.
-- **Cause:** the Silver enrichment and Gold referral projection pre-dated the
-  detailed KPI definitions.
+- **Symptom:** reporting required additional referral KPIs, including offer responsiveness, provider engagement, IPA admission/signature, and document review measures, that were not exposed by `gold.fact_referral`.
+- **Cause:** the Silver enrichment and Gold referral projection pre-dated the detailed KPI definitions.
 - **Evidence and requested derivations:**
 
-The following source queries were retained as the evidence for the requested
-business definitions and source relationships.
+The following source queries were retained as the evidence for the requested business definitions and source relationships.
 
  - referral.cnt_offer_made (aggregate_fact of offers made for referral)
 ```select  o.offer_status , count(*)
@@ -896,12 +494,7 @@ business definitions and source relationships.
       inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
       group by all
 ```
-  - - result
-        OFFER_UNSUCCESSFUL,18
-        DRAFT,414
-        OFFER_SUCCESSFUL,6
-        OFFER_MADE,1095
-        OFFER_WITHDRAWN,78
+  - - result OFFER_UNSUCCESSFUL,18 DRAFT,414 OFFER_SUCCESSFUL,6 OFFER_MADE,1095 OFFER_WITHDRAWN,78
   - referral.first_offer_date:this might be useful in the snapshot tabel to see how responsive the providers are to making an offer
 ```select  a.referral_id,min(o.offer_date) as first_offer_date
       from bronze.referral a
@@ -955,12 +548,7 @@ inner join bronze.offer o on b.referral_provider_id =o.referral_provider_id
 left join bronze.provider_home ph on o.provider_home_id =ph.provider_home_id
 inner join bronze.ipa c on a.referral_id=c.referral_id
 ```
-various status are
-SIGNED
-READY_FOR_SIGNATURE
-DRAFT
-SIGNED_BY_PROVIDER
-SIGNED_BY_LA
+various status are SIGNED READY_FOR_SIGNATURE DRAFT SIGNED_BY_PROVIDER SIGNED_BY_LA
 
 where 'SIGNED' means its signed by at least to bodies
 
@@ -989,221 +577,91 @@ where a.referral_id = '5236db3f-cc23-4109-9c0b-eacfb4a277bb'
 ```
 note that these dates must be greater than the ipa_placement_admission_date and not null as this implies that the provider hasnt got the right paperwork inplace
 
-- **Fix:** `CntOfferMade`, `FirstOfferDate`, `FirstProviderSeenDate`,
-  `IsNotSeenByProviders`, `IPAPlacementAdmissionDate`, `IPA2Signatures`,
-  `IPALastSignatureDate`, and `IPADueDiligenceMinReviewDate` are promoted to
-  `gold.fact_referral`; the snapshot includes the referral-level fields.
-  `IPADueDiligenceMinReviewDate` is deliberately null where no delivered
-  document has a non-null review date later than admission. DQ checks the
-  eligible date ordering; operational reporting can treat null as missing or
-  incomplete paperwork rather than fabricating a date.
-- **Validation:** run `python validate_archive_snapshot_and_enrichment.py`
-  with the existing portable validator suite. Fabric deployment and a replay
-  remain required to verify runtime behaviour against the Lakehouse.
+- **Fix:** `CntOfferMade`, `FirstOfferDate`, `FirstProviderSeenDate`, `IsNotSeenByProviders`, `IPAPlacementAdmissionDate`, `IPA2Signatures`, `IPALastSignatureDate`, and `IPADueDiligenceMinReviewDate` are promoted to `gold.fact_referral`; the snapshot includes the referral-level fields. `IPADueDiligenceMinReviewDate` is deliberately null where no delivered document has a non-null review date later than admission. DQ checks the eligible date ordering; operational reporting can treat null as missing or incomplete paperwork rather than fabricating a date.
+- **Validation:** run `python validate_archive_snapshot_and_enrichment.py` with the existing portable validator suite. Fabric deployment and a replay remain required to verify runtime behaviour against the Lakehouse.
 - **Status:** Resolved in the repository.
 
 ## SI-020 — Referral lifecycle dates were not explicitly derived in Silver
 
-- **Symptom:** it was unclear whether lifecycle dates shown in Gold had a
-  durable, reusable Silver derivation, and first action could be interpreted
-  as referral creation.
-- **Cause:** lifecycle calculations were either absent or embedded in Gold
-  projection logic, leaving no durable Silver-level business definition.
-- **Fix:** `03_silver_business_rules.ipynb` now materialises
-  `first_action_date`, `offer_accepted_date`, `ipa_issued_date`,
-  `referral_closed_date`, and `last_activity_date` in
-  `silver.referral_enrichment`. First action excludes the creation event;
-  accepted-offer detection includes `OFFER_SUCCESSFUL`.
-- **Gold behaviour:** `04_gold_model.ipynb` promotes these named Silver fields
-  directly to `gold.fact_referral` and `gold.fact_referral_snapshot`.
-- **Validation:** date-order DQ rules enforce that each applicable derived
-  date is not earlier than referral creation.
+- **Symptom:** it was unclear whether lifecycle dates shown in Gold had a durable, reusable Silver derivation, and first action could be interpreted as referral creation.
+- **Cause:** lifecycle calculations were either absent or embedded in Gold projection logic, leaving no durable Silver-level business definition.
+- **Fix:** `03_silver_business_rules.ipynb` now materialises `first_action_date`, `offer_accepted_date`, `ipa_issued_date`, `referral_closed_date`, and `last_activity_date` in `silver.referral_enrichment`. First action excludes the creation event; accepted-offer detection includes `OFFER_SUCCESSFUL`.
+- **Gold behaviour:** `04_gold_model.ipynb` promotes these named Silver fields directly to `gold.fact_referral` and `gold.fact_referral_snapshot`.
+- **Validation:** date-order DQ rules enforce that each applicable derived date is not earlier than referral creation.
 - **Status:** Resolved in the repository.
 
 ## SI-021 — Live child notebooks repeated configuration setup
 
-- **Symptom:** after `90_run_live_pipeline` had successfully executed
-  `00_setup_cfg`, each live child invoked the same setup notebook again.
-  This added avoidable child notebook startup and configuration work.
-- **Cause:** each child was independently bootstrapped before the pipeline
-  runner took ownership of the mandatory configuration prerequisite.
-- **Fix:** `01a_cfg_schema_capture_live`, `02_silver_formatter`,
-  `03_silver_business_rules`, `04_gold_model`, and `05_gold_dimensions` now
-  rely on the runner-owned setup step. The runner keeps `00_setup_cfg` as its
-  mandatory first activity; each child records that prerequisite in its source.
-- **Operational note:** run the live pipeline, rather than an individual listed
-  child, when bootstrapping a new Lakehouse environment.
-- **Validation:** `validate_cfg_setup.py` verifies both the setup-first runner
-  order and the absence of setup invocations in runner-managed children.
+- **Symptom:** after `90_run_live_pipeline` had successfully executed `00_setup_cfg`, each live child invoked the same setup notebook again. This added avoidable child notebook startup and configuration work.
+- **Cause:** each child was independently bootstrapped before the pipeline runner took ownership of the mandatory configuration prerequisite.
+- **Fix:** `01a_cfg_schema_capture_live`, `02_silver_formatter`, `03_silver_business_rules`, `04_gold_model`, and `05_gold_dimensions` now rely on the runner-owned setup step. The runner keeps `00_setup_cfg` as its mandatory first activity; each child records that prerequisite in its source.
+- **Operational note:** run the live pipeline, rather than an individual listed child, when bootstrapping a new Lakehouse environment.
+- **Validation:** `validate_cfg_setup.py` verifies both the setup-first runner order and the absence of setup invocations in runner-managed children.
 - **Status:** Resolved in the repository.
 
 ## CFG-002 — Low-cardinality Bronze data domains were not recorded
 
-- **Symptom:** configuration contained no reusable record of approved
-  low-cardinality Bronze values for reporting, validation, or lookup review.
-- **Cause:** no notebook profiled contract-matched string columns into a
-  centrally managed data-domain table.
-- **Fix:** `99_data_domain.ipynb` profiles every Bronze column that has an
-  unambiguous string-compatible type in
-  `monitoring.cfg_schema_contract_column`. It writes the source schema, table,
-  column, contract type, and distinct value to `monitoring.cfg_data_domain`.
-- **Limit and refresh behaviour:** only non-null (and, by default, non-empty)
-  domains with at most 40 values are stored. The notebook reads at most 41
-  distinct values before deciding; a larger or empty domain removes any stale
-  stored values. Eligible columns are replaced atomically per source table and
-  column, so domains reflect the latest successful profile.
-- **Validation:** `validate_data_domain.py` checks the contract-driven filter,
-  40-value cap, replace semantics, and centrally owned configuration schema.
+- **Symptom:** configuration contained no reusable record of approved low-cardinality Bronze values for reporting, validation, or lookup review.
+- **Cause:** no notebook profiled contract-matched string columns into a centrally managed data-domain table.
+- **Fix:** `99_data_domain.ipynb` profiles every Bronze column that has an unambiguous string-compatible type in `monitoring.cfg_schema_contract_column`. It writes the source schema, table, column, contract type, and distinct value to `monitoring.cfg_data_domain`.
+- **Limit and refresh behaviour:** only non-null (and, by default, non-empty) domains with at most 40 values are stored. The notebook reads at most 41 distinct values before deciding; a larger or empty domain removes any stale stored values. Eligible columns are replaced atomically per source table and column, so domains reflect the latest successful profile.
+- **Validation:** `validate_data_domain.py` checks the contract-driven filter, 40-value cap, replace semantics, and centrally owned configuration schema.
 - **Status:** Resolved in the repository.
 
 ### CFG-002 history extension — 2026-10-15
 
-- Replaced startup clearing and per-column replacement in `99_data_domain`
-  with one append of a complete discovery batch. Setup adds comparison/run fields
-  without deleting retained rows. Values are BASELINE, ADDED, UNCHANGED or REMOVED;
-  removals keep the old value with `is_present=false` in the new version.
-- Empty profiles retain an empty version; high-cardinality, missing and excluded
-  scans retain a status marker and never imply value removals. The comparison
-  uses the last comparable profile, including legacy retained rows. The 40-value
-  cap and unsuitable-column policy remain; overwritten older versions cannot
-  be reconstructed.
-- Standalone profiles now record their job/step and propagate the generated job
-  ID to every snapshot. Parent jobs retain ownership of their monitoring rows.
-  Removed an unrelated archived-table debug query from the notebook footer.
-- Current `reports/WIP/SM WMPP Mission Control` adds an all-versions selector,
-  value-change filter and added/removed counts. Its job picker reads cfg_job_run.
-  Load metrics include signed count/percentage deltas and two 12-load SVG trends,
-  partitioned by layer/source kind/source/target, with historical cutoffs.
-- Validation: 416 tests plus 158 subtests pass; cached model checks independently
-  verify 50 comparisons and 100 sparklines over 6,443 retained metrics. Query-scoped
-  domain fields validate the 611-row legacy baseline. Source deployment and native
-  reopened rendering remain separate acceptance steps; no Fabric refresh/publish.
+- Replaced startup clearing and per-column replacement in `99_data_domain` with one append of a complete discovery batch. Setup adds comparison/run fields without deleting retained rows. Values are BASELINE, ADDED, UNCHANGED or REMOVED; removals keep the old value with `is_present=false` in the new version.
+- Empty profiles retain an empty version; high-cardinality, missing and excluded scans retain a status marker and never imply value removals. The comparison uses the last comparable profile, including legacy retained rows. The 40-value cap and unsuitable-column policy remain; overwritten older versions cannot be reconstructed.
+- Standalone profiles now record their job/step and propagate the generated job ID to every snapshot. Parent jobs retain ownership of their monitoring rows. Removed an unrelated archived-table debug query from the notebook footer.
+- Current `reports/WMPP_v16/SM WMPP Mission Control` adds an all-versions selector, value-change filter and added/removed counts. Its job picker reads cfg_job_run. Load metrics include signed count/percentage deltas and two 12-load SVG trends, partitioned by layer/source kind/source/target, with historical cutoffs.
+- Validation: 416 tests plus 158 subtests pass; cached model checks independently verify 50 comparisons and 100 sparklines over 6,443 retained metrics. Query-scoped domain fields validate the 611-row legacy baseline. Source deployment and native reopened rendering remain separate acceptance steps; no Fabric refresh/publish.
 
 ## CFG-003 — High-cardinality values could be retained as data domains
 
-- **Symptom:** the data-domain implementation needed an explicit safeguard to
-  ensure identifier and description-like columns with more than 40 distinct
-  values are never inserted into `monitoring.cfg_data_domain`.
-- **Cause:** the threshold, clear, stale-delete, and write behaviour were not
-  centralised in the shared library, making the intended guard difficult to
-  verify and reuse.
-- **Fix:** the 40-value decision now occurs inside
-  `collect_low_cardinality_domain_values` in `99_common_library.ipynb`. It
-  returns `None` after observing a 41st distinct value, and
-  `99_data_domain.ipynb` removes any stale domain rather than writing that
-  column.
-- **Operational control:** set `CLEAR_TARGET_TABLE` to `True` only when a full
-  rebuild of `monitoring.cfg_data_domain` is intended; reset it to `False` for
-  routine profiling. The table is cleared before profiling begins.
-- **Reuse:** `99_data_domain.ipynb` loads `99_common_library` with `%run`; the
-  contract type, threshold, clear, delete, and atomic-replace helpers are now
-  maintained in one place.
-- **Validation:** `validate_data_domain.py` verifies the 41st-value guard,
-  shared-library use, optional full clear, and atomic eligible-domain replace.
+- **Symptom:** the data-domain implementation needed an explicit safeguard to ensure identifier and description-like columns with more than 40 distinct values are never inserted into `monitoring.cfg_data_domain`.
+- **Cause:** the threshold, clear, stale-delete, and write behaviour were not centralised in the shared library, making the intended guard difficult to verify and reuse.
+- **Fix:** the 40-value decision now occurs inside `collect_low_cardinality_domain_values` in `99_common_library.ipynb`. It returns `None` after observing a 41st distinct value, and `99_data_domain.ipynb` removes any stale domain rather than writing that column.
+- **Operational control:** set `CLEAR_TARGET_TABLE` to `True` only when a full rebuild of `monitoring.cfg_data_domain` is intended; reset it to `False` for routine profiling. The table is cleared before profiling begins.
+- **Reuse:** `99_data_domain.ipynb` loads `99_common_library` with `%run`; the contract type, threshold, clear, delete, and atomic-replace helpers are now maintained in one place.
+- **Validation:** `validate_data_domain.py` verifies the 41st-value guard, shared-library use, optional full clear, and atomic eligible-domain replace.
 - **Status:** Resolved in the repository.
 
 ## CFG-004 — Unsuitable string columns could be considered for data domains
 
-- **Symptom:** the profiler could consider identifier, audit-user, contact,
-  personal-name, address, and free-text columns before the cardinality limit
-  excluded most of them. These are not lookup-like business domains.
-- **Cause:** candidate selection was based only on the contract's string type;
-  it did not apply a data-suitability policy to column names or GUID/UUID types.
-- **Fix:** `99_common_library.ipynb` now applies a shared exclusion policy for
-  UUID/GUID/UID and identifier fields, `created_by`/`updated_by`-style audit
-  fields, usernames and names, email/contact/address fields, and descriptive
-  or message text. `99_data_domain.ipynb` applies this policy before collecting
-  a column's values and removes any stale domain that is no longer suitable.
-- **Validation:** `validate_data_domain.py` verifies the shared suitability
-  helper and the profiler's unsuitable-column branch.
+- **Symptom:** the profiler could consider identifier, audit-user, contact, personal-name, address, and free-text columns before the cardinality limit excluded most of them. These are not lookup-like business domains.
+- **Cause:** candidate selection was based only on the contract's string type; it did not apply a data-suitability policy to column names or GUID/UUID types.
+- **Fix:** `99_common_library.ipynb` now applies a shared exclusion policy for UUID/GUID/UID and identifier fields, `created_by`/`updated_by`-style audit fields, usernames and names, email/contact/address fields, and descriptive or message text. `99_data_domain.ipynb` applies this policy before collecting a column's values and removes any stale domain that is no longer suitable.
+- **Validation:** `validate_data_domain.py` verifies the shared suitability helper and the profiler's unsuitable-column branch.
 - **Status:** Resolved in the repository.
 
 ## SI-022 — Source fields were dropped before Silver and Gold dimensions failed
 
-- **Symptom:** the supplied source-schema extracts in
-  `configuration/cfg_tables` showed Bronze fields absent from
-  `schema_definition.csv`. Silver omitted those fields, which left Gold
-  dimension creation without the required `framework` attributes and made the
-  Gold pipeline fail after source conformance.
-- **Cause:** the schema contract had not been reconciled with
-  `cfg_schema_definition_candidate` after the latest source-schema capture.
-- **Fix:** the canonical contract now includes the observed fields:
-  `framework_name`, `start_date`, `end_date`, and `placement_type` on
-  `framework`; `withdraw_reason_other` on `offer`; `updated_by` on
-  `provider_education_provision`; `status` on `provider_home`;
-  `created_date` and `modified_date` on `referral_provider`;
-  `message_read_by` and `message_read_timestamp` on
-  `referral_provider_message`; and `spot_category` on
-  `referral_spot_category`. Contract ordinals were aligned where the supplied
-  extract established source ordering.
-- **Deployment:** copy the revised `schema_definition.csv` to
-  `Files/cfg_files/schema_definition.csv`, run `00_setup_cfg` once with
-  `LOAD_FILE_CONFIG = True`, return the flag to `False`, then rerun Silver
-  before `04_gold_model` and `05_gold_dimensions`.
-- **Validation:** `validate_si022_source_schema_contract.py` requires every
-  field in the supplied candidate extract to be present in the canonical
-  contract and checks the affected tables for duplicate ordinals.
+- **Symptom:** the supplied source-schema extracts in `configuration/cfg_tables` showed Bronze fields absent from `schema_definition.csv`. Silver omitted those fields, which left Gold dimension creation without the required `framework` attributes and made the Gold pipeline fail after source conformance.
+- **Cause:** the schema contract had not been reconciled with `cfg_schema_definition_candidate` after the latest source-schema capture.
+- **Fix:** the canonical contract now includes the observed fields: `framework_name`, `start_date`, `end_date`, and `placement_type` on `framework`; `withdraw_reason_other` on `offer`; `updated_by` on `provider_education_provision`; `status` on `provider_home`; `created_date` and `modified_date` on `referral_provider`; `message_read_by` and `message_read_timestamp` on `referral_provider_message`; and `spot_category` on `referral_spot_category`. Contract ordinals were aligned where the supplied extract established source ordering.
+- **Deployment:** copy the revised `schema_definition.csv` to `Files/cfg_files/schema_definition.csv`, run `00_setup_cfg` once with `LOAD_FILE_CONFIG = True`, return the flag to `False`, then rerun Silver before `04_gold_model` and `05_gold_dimensions`.
+- **Validation:** `validate_si022_source_schema_contract.py` requires every field in the supplied candidate extract to be present in the canonical contract and checks the affected tables for duplicate ordinals.
 - **Status:** Resolved in the repository; Fabric replay remains required.
 
 ## AR-SL-01 — Archive Silver stopped while checking a missing provider-document target
 
-- **Symptom:** `90_run_archive_pipeline` failed in `02a_archive_silver` before
-  the missing `silver.provider_submission_docs` target could be materialised.
-- **Runtime evidence:** the failure occurred in the archive month-end
-  `stale_targets` preflight and reported that the provider-document Delta
-  target did not exist.
-- **Expected behaviour:** `target_requires_refresh` treats an absent Silver
-  target as stale so the subsequent replay creates it. If the deployed
-  notebook instead raises at the preflight, verify that the current
-  `99_common_library` and `02a_archive_silver` versions are deployed together.
-- **Operational dependency:** the source must have a complete deployed schema
-  contract and the archive replay must finish its table materialisation before
-  Gold dimensions run.
-- **Status:** Runtime deployment/state investigation required; retained as a
-  separate issue from `AR-GL-01`.
+- **Symptom:** `90_run_archive_pipeline` failed in `02a_archive_silver` before the missing `silver.provider_submission_docs` target could be materialised.
+- **Runtime evidence:** the failure occurred in the archive month-end `stale_targets` preflight and reported that the provider-document Delta target did not exist.
+- **Expected behaviour:** `target_requires_refresh` treats an absent Silver target as stale so the subsequent replay creates it. If the deployed notebook instead raises at the preflight, verify that the current `99_common_library` and `02a_archive_silver` versions are deployed together.
+- **Operational dependency:** the source must have a complete deployed schema contract and the archive replay must finish its table materialisation before Gold dimensions run.
+- **Status:** Runtime deployment/state investigation required; retained as a separate issue from `AR-GL-01`.
 
-**Original runtime evidence:**
-Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
-0
-02a_archive_silver
-Failed
-92%
-9 min 41 sec 546 ms
--
-[DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist. ---------------------------------------------------------------------------AnalysisException Traceback (most recent call last)Cell In[15], line 189 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) --> 189 stale_targets = [ 190 info["target_table"] for info in
-
+**Original runtime evidence:** Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception 0 02a_archive_silver Failed 92% 9 min 41 sec 546 ms - [DELTA_TABLE_NOT_FOUND] Delta table `chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0in6qbcepin4`.`provider_submission_docs` doesn't exist. ---------------------------------------------------------------------------AnalysisException Traceback (most recent call last)Cell In[15], line 189 187 for snapshot_date in month_end_dates: 188 existing = month_end_record(snapshot_date) --> 189 stale_targets = [ 190 info["target_table"] for info in
 
 ## AR-GL-01 — Archive framework contract omitted a Gold-required column
 
-- **Symptom:** `90_run_archive_pipeline` reached `05_gold_dimensions`, which
-  rejected `silver.framework` because `framework_name` was missing.
-- **Evidence:** the supplied runtime extracts show that
-  `archived.framework` contained `framework_name`, but the active
-  `monitoring.cfg_schema_contract_column` framework contract did not. Archive
-  Silver therefore wrote a successfully completed but incomplete target.
-- **Fix:** Archive Silver now supplements a missing mandatory framework
-  contract field from its controlled framework schema, records one
-  `MISSING_REQUIRED_CONTRACT_COLUMN` event per missing field in
-  `monitoring.cfg_schema_drift_event`, and includes the field in the target
-  schema refresh decision. The configuration CSV must still be deployed and
-  reloaded through `00_setup_cfg` to correct the central contract.
-- **Validation:** `validate_archive_framework_fallback.py` and
-  `validate_silver_required_columns.py` cover the protection.
-- **Status:** Resolved in the repository; deploy `02a_archive_silver`, reload
-  the schema contract, then rerun the archive pipeline.
+- **Symptom:** `90_run_archive_pipeline` reached `05_gold_dimensions`, which rejected `silver.framework` because `framework_name` was missing.
+- **Evidence:** the supplied runtime extracts show that `archived.framework` contained `framework_name`, but the active `monitoring.cfg_schema_contract_column` framework contract did not. Archive Silver therefore wrote a successfully completed but incomplete target.
+- **Fix:** Archive Silver now supplements a missing mandatory framework contract field from its controlled framework schema, records one `MISSING_REQUIRED_CONTRACT_COLUMN` event per missing field in `monitoring.cfg_schema_drift_event`, and includes the field in the target schema refresh decision. The configuration CSV must still be deployed and reloaded through `00_setup_cfg` to correct the central contract.
+- **Validation:** `validate_archive_framework_fallback.py` and `validate_silver_required_columns.py` cover the protection.
+- **Status:** Resolved in the repository; deploy `02a_archive_silver`, reload the schema contract, then rerun the archive pipeline.
 
-**Original runtime evidence:**
-Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception
-0
-05_gold_dimensions
-Failed
-71%
-38 sec 160 ms
--
-silver.framework is missing required columns: ['framework_name'] ---------------------------------------------------------------------------ValueError Traceback (most recent call last)Cell In[7], line 42 26 latest_dimension( 27 "silver.provider", "gold.dim_provider", ["provider_id"], 28 [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"), (...) 32 ("export_date", "SourceExportDate")], 33 ) 34 latest_dimension( 35 "silver.provider_home", "gold.dim_provider_home", ["provider_home_id"], 36 [("provider_home_id", "ProviderHomeID"), ("provider_id", "ProviderID"), (...) 40 ("qa_flag", "QAFlag"), ("export_date", "SourceExportDate")], 41 ) ---> 42 latest_dimension( 43 "silver.framework", "gold.dim_framework", ["framework_code"], 44 [("framework_code", "FrameworkCode"), ("framework_name", "FrameworkName"), 45 ("placement_type", "PlacementType"), ("start_date", "StartDate"), 46 ("end_date", "EndDate"), ("export_date", "SourceExportDate")], 47 ) 48 latest_dimension( 49 "silver.framework_category", "gold.dim_framework_category", ["framework_category_id"], 50 [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"), 51 ("category_name", "CategoryName"), ("export_date", "SourceExportDate")], 52 ) Cell In[6], line 12, in latest_dimension(source_table, target_table, key_columns, select_columns) 10 def latest_dimension(source_table, target_table, key_columns, select_columns): 11 """Write one current row per natural key from an available Silver source.""" ---> 12 require_columns(source_table, key_columns + [source for source, _ in select_columns]) 13 frame = spark.table(source_table) 14 order_columns = [ 15 F.col("export_date").cast("timestamp").desc_nulls_last(), 16 F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(), 17 ] Cell In[6], line 7, in require_columns(source_table, required_columns) 5 missing = sorted(set(required_columns) - actual) 6 if missing: ----> 7 raise ValueError(f"{source_table} is missing required columns: {missing}") ValueError: silver.framework is missing required columns: ['framework_name']You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 .
-=== FAILED 05_gold_dimensions: An error occurred while calling o7006.throwExceptionIfHave.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: silver.framework is missing required columns: ['framework_name']
----------------------------------------------------------------------------ValueError                                Traceback (most recent call last)Cell In[7], line 42
+**Original runtime evidence:** Activity name	Snapshot	Status	Progress	Duration	Exit value	Exception 0 05_gold_dimensions Failed 71% 38 sec 160 ms - silver.framework is missing required columns: ['framework_name'] ---------------------------------------------------------------------------ValueError Traceback (most recent call last)Cell In[7], line 42 26 latest_dimension( 27 "silver.provider", "gold.dim_provider", ["provider_id"], 28 [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"), (...) 32 ("export_date", "SourceExportDate")], 33 ) 34 latest_dimension( 35 "silver.provider_home", "gold.dim_provider_home", ["provider_home_id"], 36 [("provider_home_id", "ProviderHomeID"), ("provider_id", "ProviderID"), (...) 40 ("qa_flag", "QAFlag"), ("export_date", "SourceExportDate")], 41 ) ---> 42 latest_dimension( 43 "silver.framework", "gold.dim_framework", ["framework_code"], 44 [("framework_code", "FrameworkCode"), ("framework_name", "FrameworkName"), 45 ("placement_type", "PlacementType"), ("start_date", "StartDate"), 46 ("end_date", "EndDate"), ("export_date", "SourceExportDate")], 47 ) 48 latest_dimension( 49 "silver.framework_category", "gold.dim_framework_category", ["framework_category_id"], 50 [("framework_category_id", "FrameworkCategoryID"), ("framework_code", "FrameworkCode"), 51 ("category_name", "CategoryName"), ("export_date", "SourceExportDate")], 52 ) Cell In[6], line 12, in latest_dimension(source_table, target_table, key_columns, select_columns) 10 def latest_dimension(source_table, target_table, key_columns, select_columns): 11 """Write one current row per natural key from an available Silver source.""" ---> 12 require_columns(source_table, key_columns + [source for source, _ in select_columns]) 13 frame = spark.table(source_table) 14 order_columns = [ 15 F.col("export_date").cast("timestamp").desc_nulls_last(), 16 F.col("_silver_load_ts").cast("timestamp").desc_nulls_last(), 17 ] Cell In[6], line 7, in require_columns(source_table, required_columns) 5 missing = sorted(set(required_columns) - actual) 6 if missing: ----> 7 raise ValueError(f"{source_table} is missing required columns: {missing}") ValueError: silver.framework is missing required columns: ['framework_name']You can check driver log or snapshot for detailed error info! See how to check logs: https://go.microsoft.com/fwlink/?linkid=2157243 . === FAILED 05_gold_dimensions: An error occurred while calling o7006.throwExceptionIfHave. : com.microsoft.spark.notebook.msutils.NotebookExecutionException: silver.framework is missing required columns: ['framework_name'] ---------------------------------------------------------------------------ValueError                                Traceback (most recent call last)Cell In[7], line 42
      26 latest_dimension(
      27     "silver.provider", "gold.dim_provider", ["provider_id"],
      28     [("provider_id", "ProviderID"), ("holding_company_id", "HoldingCompanyID"),
@@ -1229,23 +687,11 @@ silver.framework is missing required columns: ['framework_name'] ---------------
      52 )
 
 ## CFG-005
-- **Symptom:** Fabric's displayed `Files/cfg_files/schema_definition.csv`
-  frame appeared to omit the `framework_name` contract row before any Delta
-  write occurred.
-- **Cause:** `schema_definition.csv` contains quoted multiline descriptions
-  and mixed CRLF/LF line endings. Spark's `multiLine=true` default line
-  separator absorbed the LF-delimited `framework_name` record into the prior
-  `framework_code` record's final field.
-- **Fix:** setup now pins Spark CSV `lineSep` to LF while retaining multiline
-  support. Added `validate_cfg005_contract_source_rows.py`; it verifies CSV
-  record shape, the required framework rows (including ordinal 2
-  `framework_name`), unique table/column keys, and that setup writes the
-  complete unfiltered CSV frame with Delta overwrite semantics.
-- **Validation:** upload the current CSV to Lakehouse Files, display the
-  framework rows from that location, then run the one-off overwrite command
-  before archive replay.
-- **Status:** Source regression covered; Fabric file deployment must be
-  verified operationally.
+- **Symptom:** Fabric's displayed `Files/cfg_files/schema_definition.csv` frame appeared to omit the `framework_name` contract row before any Delta write occurred.
+- **Cause:** `schema_definition.csv` contains quoted multiline descriptions and mixed CRLF/LF line endings. Spark's `multiLine=true` default line separator absorbed the LF-delimited `framework_name` record into the prior `framework_code` record's final field.
+- **Fix:** setup now pins Spark CSV `lineSep` to LF while retaining multiline support. Added `validate_cfg005_contract_source_rows.py`; it verifies CSV record shape, the required framework rows (including ordinal 2 `framework_name`), unique table/column keys, and that setup writes the complete unfiltered CSV frame with Delta overwrite semantics.
+- **Validation:** upload the current CSV to Lakehouse Files, display the framework rows from that location, then run the one-off overwrite command before archive replay.
+- **Status:** Source regression covered; Fabric file deployment must be verified operationally.
 - **Evidence:**
 ```
 %%pyspark
@@ -1260,107 +706,47 @@ display(frame.where("lower(table_name) = 'framework'"))
 ```
 ## CFG-006 — Archive replay reset controls silently did nothing without a month
 
-- **Symptom:** an archive pipeline run was started with
-  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and
-  `RESET_MONTH_MONITORING = true`, but no archived Silver, DQ, or Gold data
-  was rebuilt. The archive ZIP state updated, while notebook results did not.
-- **Evidence:** the submitted parameters had `PROCESS_ONLY` and
-  `CONFIRM_PROCESS_ONLY_RESET` blank. The reset controls apply to one canonical
-  archive month only; without a month there was no monitoring state or target
-  table selection to change.
-- **Cause:** `02a_archive_silver.ipynb` guarded its reset work with
-  `if PROCESS_ONLY and (...)`. A blank `PROCESS_ONLY` therefore made the reset
-  request a silent no-op, after which existing successful month-end monitoring
-  state continued to skip processing.
-- **Fix:** Archive Silver now fails immediately when either reset control is
-  true and `PROCESS_ONLY` is blank. The error states that `PROCESS_ONLY` must
-  be an explicit `YYYY-MM` value. The existing confirmation check then requires
-  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` before any state is changed.
-- **Usage:** for example, set `PROCESS_ONLY = "2026-05"`,
-  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true`, and
-  `CONFIRM_PROCESS_ONLY_RESET = "RESET 2026-05"`. Leave
-  `RESET_MONTH_MONITORING = false` to retain history and flag it for reload;
-  set it to true only when intentionally deleting the selected month's
-  monitoring records.
-- **Regression guard:** `validate_si013_si016.py` requires the explicit blank
-  `PROCESS_ONLY` rejection.
+- **Symptom:** an archive pipeline run was started with `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and `RESET_MONTH_MONITORING = true`, but no archived Silver, DQ, or Gold data was rebuilt. The archive ZIP state updated, while notebook results did not.
+- **Evidence:** the submitted parameters had `PROCESS_ONLY` and `CONFIRM_PROCESS_ONLY_RESET` blank. The reset controls apply to one canonical archive month only; without a month there was no monitoring state or target table selection to change.
+- **Cause:** `02a_archive_silver.ipynb` guarded its reset work with `if PROCESS_ONLY and (...)`. A blank `PROCESS_ONLY` therefore made the reset request a silent no-op, after which existing successful month-end monitoring state continued to skip processing.
+- **Fix:** Archive Silver now fails immediately when either reset control is true and `PROCESS_ONLY` is blank. The error states that `PROCESS_ONLY` must be an explicit `YYYY-MM` value. The existing confirmation check then requires `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` before any state is changed.
+- **Usage:** for example, set `PROCESS_ONLY = "2026-05"`, `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true`, and `CONFIRM_PROCESS_ONLY_RESET = "RESET 2026-05"`. Leave `RESET_MONTH_MONITORING = false` to retain history and flag it for reload; set it to true only when intentionally deleting the selected month's monitoring records.
+- **Regression guard:** `validate_si013_si016.py` requires the explicit blank `PROCESS_ONLY` rejection.
 - **Status:** resolved in source; deploy both archive notebooks before rerun.
 
 ## CFG-007 — Parent archive runner discarded the requested process month
 
-- **Symptom:** a `90_run_archive_pipeline.ipynb` job was submitted with the
-  clear/reset controls enabled, but Archive Silver received a blank
-  `PROCESS_ONLY` value and started the normal archive range. The unintended
-  work was interrupted, producing a Py4J `KeyboardInterrupt` and Spark
-  cancelled-job error while processing `archived.framework_category`.
-- **Evidence:** the child notebook parameter record showed
-  `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and
-  `RESET_MONTH_MONITORING = true`, but both `PROCESS_ONLY` and
-  `CONFIRM_PROCESS_ONLY_RESET` were blank.
-- **Cause:** the parent runner exposed the month as `ARCHIVE_PROCESS_ONLY` but
-  forwarded it as the child's `PROCESS_ONLY`. A Fabric job supplied the natural
-  public name `PROCESS_ONLY`, which was not the parent variable used for the
-  forwarding call, so the child received the blank default.
-- **Fix:** the parent runner now uses and forwards `PROCESS_ONLY` under the
-  same name as `02a_archive_silver.ipynb`. The child guard from CFG-006 rejects
-  blank-month clear/reset requests, and the confirmation guard rejects a blank
-  or mismatched confirmation before archive processing begins.
-- **Usage:** submit `PROCESS_ONLY = "YYYY-MM"` and
-  `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` with the selected clear or
-  reset control. For example, use `2026-07` and `RESET 2026-07`.
-- **Regression guard:** `validate_si013_si016.py` rejects the obsolete parent
-  parameter name and requires the exact `PROCESS_ONLY` forwarding mapping.
-- **Status:** resolved in source; deploy the parent and Archive Silver
-  notebooks before rerun.
+- **Symptom:** a `90_run_archive_pipeline.ipynb` job was submitted with the clear/reset controls enabled, but Archive Silver received a blank `PROCESS_ONLY` value and started the normal archive range. The unintended work was interrupted, producing a Py4J `KeyboardInterrupt` and Spark cancelled-job error while processing `archived.framework_category`.
+- **Evidence:** the child notebook parameter record showed `CLEAR_SILVER_TABLES_FOR_PROCESS_ONLY = true` and `RESET_MONTH_MONITORING = true`, but both `PROCESS_ONLY` and `CONFIRM_PROCESS_ONLY_RESET` were blank.
+- **Cause:** the parent runner exposed the month as `ARCHIVE_PROCESS_ONLY` but forwarded it as the child's `PROCESS_ONLY`. A Fabric job supplied the natural public name `PROCESS_ONLY`, which was not the parent variable used for the forwarding call, so the child received the blank default.
+- **Fix:** the parent runner now uses and forwards `PROCESS_ONLY` under the same name as `02a_archive_silver.ipynb`. The child guard from CFG-006 rejects blank-month clear/reset requests, and the confirmation guard rejects a blank or mismatched confirmation before archive processing begins.
+- **Usage:** submit `PROCESS_ONLY = "YYYY-MM"` and `CONFIRM_PROCESS_ONLY_RESET = "RESET YYYY-MM"` with the selected clear or reset control. For example, use `2026-07` and `RESET 2026-07`.
+- **Regression guard:** `validate_si013_si016.py` rejects the obsolete parent parameter name and requires the exact `PROCESS_ONLY` forwarding mapping.
+- **Status:** resolved in source; deploy the parent and Archive Silver notebooks before rerun.
 
 ## CFG-008 — Child pipeline records did not consistently use the parent job ID
 
-- **Symptom:** live and archive parent runners created a `JOB_RUN_ID`, but
-  child entries in `monitoring.cfg_pipeline_run` used their local `RUN_ID` as
-  the record key. This made a parent job and its child pipeline status rows
-  harder to query as one execution.
-- **Cause:** child notebooks retained `RUN_ID` for both detailed telemetry and
-  the pipeline-level status record, despite already receiving `JOB_RUN_ID` from
-  the parent runner.
-- **Fix:** `00_archive_load`, `02_silver_formatter`,
-  `02a_archive_silver`, and `03_silver_business_rules` now define
-  `PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID`. Their
-  `monitoring.cfg_pipeline_run` insert and completion updates use that value,
-  with `pipeline_name` included in update predicates. Local `RUN_ID` remains
-  the identifier for file, table, schema-drift, and DQ detail telemetry; those
-  rows continue to carry `job_run_id` for correlation.
-- **Stand-alone behaviour:** when a child notebook is run directly,
-  `PIPELINE_RUN_ID` falls back to its generated `RUN_ID`.
-- **Regression guard:** `validate_job_run_lineage.py` scans every active
-  notebook that writes `cfg_pipeline_run` and requires job-first pipeline IDs
-  and job-safe completion predicates.
-- **Status:** resolved in source; deploy the affected child notebooks before
-  relying on the updated monitoring lineage.
+- **Symptom:** live and archive parent runners created a `JOB_RUN_ID`, but child entries in `monitoring.cfg_pipeline_run` used their local `RUN_ID` as the record key. This made a parent job and its child pipeline status rows harder to query as one execution.
+- **Cause:** child notebooks retained `RUN_ID` for both detailed telemetry and the pipeline-level status record, despite already receiving `JOB_RUN_ID` from the parent runner.
+- **Fix:** `00_archive_load`, `02_silver_formatter`, `02a_archive_silver`, and `03_silver_business_rules` now define `PIPELINE_RUN_ID = JOB_RUN_ID or RUN_ID`. Their `monitoring.cfg_pipeline_run` insert and completion updates use that value, with `pipeline_name` included in update predicates. Local `RUN_ID` remains the identifier for file, table, schema-drift, and DQ detail telemetry; those rows continue to carry `job_run_id` for correlation.
+- **Stand-alone behaviour:** when a child notebook is run directly, `PIPELINE_RUN_ID` falls back to its generated `RUN_ID`.
+- **Regression guard:** `validate_job_run_lineage.py` scans every active notebook that writes `cfg_pipeline_run` and requires job-first pipeline IDs and job-safe completion predicates.
+- **Status:** resolved in source; deploy the affected child notebooks before relying on the updated monitoring lineage.
 ## CFG-009 - cfg_archive_schema inserting and not upserting
 
 - **Symptom:** running the 01a_cfg_schema_capture_archive.ipynb notebook seems to be inserting new rows and never updating to the
 LH_BCT_WMPP.monitoring.cfg_archived_schema_live table i noticed that the schema_name is null... should this be coded to archived? also possibly having the same issue with the 01a_cfg_schema_capture_live.ipynb.. on another note i believe the audit table can be consolidated to a single table so roll up LH_BCT_WMPP.monitoring.cfg_archived_schema_live and LH_BCT_WMPP.monitoring.cfg_bronze_schema_live to LH_BCT_WMPP.monitoring.cfg_schema_live and keep the schema_name fields to identify whether the capture was from Archived or Bronze database/schema
 ## SI-024 — Fabric preprocessor rejected the latest Silver formatter
 
-- **Symptom:** `90_run_live_pipeline` failed before `02_silver_formatter`
-  began execution. Fabric returned HTTP 400 with `%run cannot run with other
-  code or magic commands` while preprocessing the child notebook.
-- **Cause:** the formatter combined `%run ./99_common_library` with Python
-  assignments in one notebook cell. Fabric requires a `%run` magic command to
-  be the only command in its cell.
-- **Fix:** the common-library `%run` now occupies its own cell. The inherited
-  `RUN_ID`/`JOB_RUN_ID` and `PIPELINE_RUN_ID` assignments are in the following
-  normal Python cell, preserving the original runner lineage behaviour.
-- **Validation:** `validate_notebook_integration.py` requires the formatter's
-  `%run` cell to contain only the magic command; `python -m pytest` validates
-  the complete portable suite.
-- **Status:** Resolved in the repository; deploy
-  `02_silver_formatter.ipynb` before rerunning the live pipeline.
+- **Symptom:** `90_run_live_pipeline` failed before `02_silver_formatter` began execution. Fabric returned HTTP 400 with `%run cannot run with other code or magic commands` while preprocessing the child notebook.
+- **Cause:** the formatter combined `%run ./99_common_library` with Python assignments in one notebook cell. Fabric requires a `%run` magic command to be the only command in its cell.
+- **Fix:** the common-library `%run` now occupies its own cell. The inherited `RUN_ID`/`JOB_RUN_ID` and `PIPELINE_RUN_ID` assignments are in the following normal Python cell, preserving the original runner lineage behaviour.
+- **Validation:** `validate_notebook_integration.py` requires the formatter's `%run` cell to contain only the magic command; `python -m pytest` validates the complete portable suite.
+- **Status:** Resolved in the repository; deploy `02_silver_formatter.ipynb` before rerunning the live pipeline.
 
 **Original runtime evidence:**
 
-=== FAILED 02_silver_formatter: An error occurred while calling z:notebookutils.notebook.run.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: Fetch notebook content for '02_silver_formatter' failed with exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebook: , x-ms-nbs-activity-spanId: 75d999ae532a2640, x-ms-nbs-activity-traceId: 413b0ea4513f3a39bbc807d23cff4937, x-ms-nbs-environment: Trident prod-uksouth, x-ms-gateway-request-id: f7b0c967-90b4-4fd0-b976-726dd3090d76 | client-request-id : e9a80552-b847-436d-93ff-08e60609b946, x-ms-workspace-name: fefdb483-d26c-4bd9-9a4f-0c41cc786770, x-ms-activity-id: f7b0c967-90b4-4fd0-b976-726dd3090d76, x-ms-client-request-id: e9a80552-b847-436d-93ff-08e60609b946).
+=== FAILED 02_silver_formatter: An error occurred while calling z:notebookutils.notebook.run. : com.microsoft.spark.notebook.msutils.NotebookExecutionException: Fetch notebook content for '02_silver_formatter' failed with exception: Request to https://tokenservice1.uksouth.trident.azuresynapse.net/api/v1/proxy/preprocessorApi/versions/2019-01-01/productTypes/trident/capacities/ACBC8AE4-2F2B-4E03-8CBC-9CA50AF32149/workspaces/fefdb483-d26c-4bd9-9a4f-0c41cc786770/preprocess?api-version=1 failed with status code: 400, response:%run cannot run with other code or magic commands., response headers: Array(Content-Type: text/plain; charset=utf-8, Date: Wed, 26 Aug 2026 08:24:53 GMT, Server: Kestrel, Transfer-Encoding: chunked, Request-Context: appId=, x-ms-nbs-controller-Preprocessor: , x-ms-nbs-action-GetPreprocessedNotebook: , x-ms-nbs-activity-spanId: 75d999ae532a2640, x-ms-nbs-activity-traceId: 413b0ea4513f3a39bbc807d23cff4937, x-ms-nbs-environment: Trident prod-uksouth, x-ms-gateway-request-id: f7b0c967-90b4-4fd0-b976-726dd3090d76 | client-request-id : e9a80552-b847-436d-93ff-08e60609b946, x-ms-workspace-name: fefdb483-d26c-4bd9-9a4f-0c41cc786770, x-ms-activity-id: f7b0c967-90b4-4fd0-b976-726dd3090d76, x-ms-client-request-id: e9a80552-b847-436d-93ff-08e60609b946).
 	at com.microsoft.spark.notebook.msutils.impl.notebook.IMSNotebookProvider.get(IMSNotebookProvider.scala:56)
 	at com.microsoft.spark.notebook.msutils.impl.notebook.IMSNotebookProvider.get$(IMSNotebookProvider.scala:23)
 	at com.microsoft.spark.notebook.msutils.impl.notebook.TridentNotebookProvider.get(TridentNotebookProvider.scala:13)
@@ -1405,205 +791,76 @@ Caused by: java.lang.Exception: Request to https://tokenservice1.uksouth.trident
 
 ## GLD-003 - Legacy v15 measure-library reconciliation and DAX port to Gold
 
-- **Symptom:** the Gold semantic model build guide did not reconcile against the
-  full legacy measure library. All 153 measures in `reports/client-deliverables/
-  SM WMPP v15.zip` (`_Measures.tmdl`) were at risk of being missed in the Gold
-  rebuild: only about a third matched an existing Gold measure by name. The
-  build guide also contained a dangling dependency - `IPA Signature Completion
-  Rate` referenced a `Referrals with IPA` measure that was never defined.
-- **Cause:** the build guide was reconciled against KPI groups rather than the
-  extracted v15 measure list, so the card variance/indicator stacks
-  (Previous Month / Variance / MoM % / Indicator / Indicator Color), the
-  created-in-period measures, the under-offer scoped offer portfolio, the IPA
-  signature funnel proxies, the snapshot target pair, and the row-level visual
-  helpers had no Gold port or documented disposition.
+- **Symptom:** the Gold semantic model build guide did not reconcile against the full legacy measure library. All 153 measures in `reports/client-deliverables/ SM WMPP v15.zip` (`_Measures.tmdl`) were at risk of being missed in the Gold rebuild: only about a third matched an existing Gold measure by name. The build guide also contained a dangling dependency - `IPA Signature Completion Rate` referenced a `Referrals with IPA` measure that was never defined.
+- **Cause:** the build guide was reconciled against KPI groups rather than the extracted v15 measure list, so the card variance/indicator stacks (Previous Month / Variance / MoM % / Indicator / Indicator Color), the created-in-period measures, the under-offer scoped offer portfolio, the IPA signature funnel proxies, the snapshot target pair, and the row-level visual helpers had no Gold port or documented disposition.
 - **Fix:** documentation-only change; no notebook code modified.
-  1. Extracted all 153 legacy measures from `SM WMPP v15.zip` and diffed them
-     against the build guide.
-  2. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`: added the "Legacy v15
-     full-library port" section with 76 new copy-ready Gold DAX definitions
-     (11 MoM card stacks completed to a consistent five-measure pattern,
-     created-in-period measures, 10 under-offer scoped offer measures,
-     `Referrals With IPA` plus signature-pending proxies, snapshot target
-     measures, 3 row-level visual helpers), a legacy-to-Gold alias map, a
-     retired-helpers table (15 measures), and additional blocked rows
-     (17 measures: gender, provider-contact family, IPA-grain signature
-     helpers, KPI tooltip).
-  3. `GOLD_DAX_FIELD_COVERAGE_AUDIT.md`: rev 2 - 185 measures audited
-     (109 + 76), new Section 2.8 mapping every ported measure to Gold columns,
-     blocked table extended with the provider-contact family and gender/flag
-     legacy measures, dangling-dependency fix recorded.
-  4. `Gold_DAX_Schema_Contract.md`: `fact_referral[contact_made]` added to
-     blocked fields; verification checklist updated to 185 measures, explicit
-     legacy disposition check, and retired legacy table names.
-  5. `skills/SKILLS.md`: new platform navigation index; `PROJECT_NAVIGATION.md`
-     updated to reference it.
+  1. Extracted all 153 legacy measures from `SM WMPP v15.zip` and diffed them against the build guide.
+  2. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`: added the "Legacy v15 full-library port" section with 76 new copy-ready Gold DAX definitions (11 MoM card stacks completed to a consistent five-measure pattern, created-in-period measures, 10 under-offer scoped offer measures, `Referrals With IPA` plus signature-pending proxies, snapshot target measures, 3 row-level visual helpers), a legacy-to-Gold alias map, a retired-helpers table (15 measures), and additional blocked rows (17 measures: gender, provider-contact family, IPA-grain signature helpers, KPI tooltip).
+  3. `GOLD_DAX_FIELD_COVERAGE_AUDIT.md`: rev 2 - 185 measures audited (109 + 76), new Section 2.8 mapping every ported measure to Gold columns, blocked table extended with the provider-contact family and gender/flag legacy measures, dangling-dependency fix recorded.
+  4. `Gold_DAX_Schema_Contract.md`: `fact_referral[contact_made]` added to blocked fields; verification checklist updated to 185 measures, explicit legacy disposition check, and retired legacy table names.
+  5. `skills/SKILLS.md`: new platform navigation index; `PROJECT_NAVIGATION.md` updated to reference it.
 - **Validation:**
-  - Disposition arithmetic reconciles: 153 legacy = 59 covered/alias +
-    62 ported + 15 retired + 17 blocked.
-  - Every ported measure references only active Gold columns already verified
-    in the coverage audit; `fact_referral_snapshot` carries
-    `placed_by_required_date` (confirmed in `04_gold_model.ipynb`).
-  - `contact_made` confirmed absent from both Gold notebooks, so the Provider
-    Contact Referral family is blocked, not proxied.
-- **Status:** Resolved in documentation. Fabric replay not required; rebuild
-  the Power BI semantic model from the updated build guide and reconcile
-  totals per the deployment checklist.
+  - Disposition arithmetic reconciles: 153 legacy = 59 covered/alias + 62 ported + 15 retired + 17 blocked.
+  - Every ported measure references only active Gold columns already verified in the coverage audit; `fact_referral_snapshot` carries `placed_by_required_date` (confirmed in `04_gold_model.ipynb`).
+  - `contact_made` confirmed absent from both Gold notebooks, so the Provider Contact Referral family is blocked, not proxied.
+- **Status:** Resolved in documentation. Fabric replay not required; rebuild the Power BI semantic model from the updated build guide and reconcile totals per the deployment checklist.
 
 ## GLD-004 - SM WMPP v15 semantic model repointed from Bronze to Gold
 
-- **Symptom:** the extracted `SM WMPP v15` Power BI semantic model
-  (`reports/client-deliverables/SM WMPP v15/`) still queried the Bronze
-  schema and carried 84 non-Gold tables, while the Gold KPI measure library
-  (185 measures) existed only in the build guide, not in the model.
-- **Cause:** the model was packaged before the Gold layer existed; its
-  partitions pointed at `bronze.*` via DirectQuery and its `_Measures` table
-  held the legacy measure set against retired tables (`dim_referral`,
-  `fact_referral_offer`, `fact_ipa`, `Fact Referral Snapshot`, etc.).
+- **Symptom:** the extracted `SM WMPP v15` Power BI semantic model (`reports/client-deliverables/SM WMPP v15/`) still queried the Bronze schema and carried 84 non-Gold tables, while the Gold KPI measure library (185 measures) existed only in the build guide, not in the model.
+- **Cause:** the model was packaged before the Gold layer existed; its partitions pointed at `bronze.*` via DirectQuery and its `_Measures` table held the legacy measure set against retired tables (`dim_referral`, `fact_referral_offer`, `fact_ipa`, `Fact Referral Snapshot`, etc.).
 - **Fix:**
-  1. Replaced the table set with the 16 active Gold tables from
-     `04_gold_model.ipynb` / `05_gold_dimensions.ipynb`
-     (6 facts, 8 dimensions, 2 bridges), each partitioned DirectQuery to
-     `Sql.Database(..., "LH_BCT_WMPP")` with `Source{[Schema="gold",Item=...]}`,
-     columns and types taken from the notebook DDL.
-  2. Removed the 84 non-Gold table definitions (all `bronze *`,
-     `LocalDateTable_*`, `DateTableTemplate_*`, staging `stg_*` shared
-     expressions, `prep_stg_*`, `ref_*`, `KPI Selector`, axis/summary helper
-     tables, and retired dims/facts listed in the schema contract Section 7).
-  3. Rebuilt `relationships.tmdl` per `Gold_DAX_Schema_Contract.md`
-     Section 4 (14 relationships; `fact_ipa[ipa_issued_date]`,
-     `fact_referral[required_placement_date]` and
-     `fact_referral[referral_closed_date]` to `dim_date[date]` inactive;
-     no `fact_offer` -> `fact_ipa` route).
-  4. Rebuilt `_Measures.tmdl` with all 185 measures from
-     `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (109 original + 76 legacy
-     ports), format strings applied by type (counts `0`, costs `0.00`,
-     rates `0.0%`).
-  5. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`: fixed a casing mismatch in
-     `IPA Signature Completion Rate` (`[Referrals with IPA]` ->
-     `[Referrals With IPA]`).
-  6. Dropped the stale `diagramLayout.json` (regenerated by Power BI on
-     open) and emptied `expressions.tmdl` (staging shared expressions
-     referenced deleted Bronze tables).
+  1. Replaced the table set with the 16 active Gold tables from `04_gold_model.ipynb` / `05_gold_dimensions.ipynb` (6 facts, 8 dimensions, 2 bridges), each partitioned DirectQuery to `Sql.Database(..., "LH_BCT_WMPP")` with `Source{[Schema="gold",Item=...]}`, columns and types taken from the notebook DDL.
+  2. Removed the 84 non-Gold table definitions (all `bronze *`, `LocalDateTable_*`, `DateTableTemplate_*`, staging `stg_*` shared expressions, `prep_stg_*`, `ref_*`, `KPI Selector`, axis/summary helper tables, and retired dims/facts listed in the schema contract Section 7).
+  3. Rebuilt `relationships.tmdl` per `Gold_DAX_Schema_Contract.md` Section 4 (14 relationships; `fact_ipa[ipa_issued_date]`, `fact_referral[required_placement_date]` and `fact_referral[referral_closed_date]` to `dim_date[date]` inactive; no `fact_offer` -> `fact_ipa` route).
+  4. Rebuilt `_Measures.tmdl` with all 185 measures from `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (109 original + 76 legacy ports), format strings applied by type (counts `0`, costs `0.00`, rates `0.0%`).
+  5. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`: fixed a casing mismatch in `IPA Signature Completion Rate` (`[Referrals with IPA]` -> `[Referrals With IPA]`).
+  6. Dropped the stale `diagramLayout.json` (regenerated by Power BI on open) and emptied `expressions.tmdl` (staging shared expressions referenced deleted Bronze tables).
 - **Validation:**
-  - 17 model tables (16 Gold + `_Measures`); `model.tmdl` refs match the
-    file set exactly.
+  - 17 model tables (16 Gold + `_Measures`); `model.tmdl` refs match the file set exactly.
   - 185 measures, all names unique, all expression fences balanced.
-  - Every table and column referenced in DAX exists in the model; every
-    measure-to-measure reference resolves; all 14 relationship endpoints
-    verified against table definitions.
-  - DAX references only `gold`-backed tables - no `bronze.*`, `silver.*`,
-    or retired table names remain.
-  - Post-fix for "model is corrupt" on open: deleted the stale
-    `.pbi/cache.abf` (9 MB cache of the 100-table Bronze model) and
-    replaced the 47k-line `cultures/en-GB.tmdl` Q&A linguistic metadata
-    (which still enumerated the deleted legacy tables) with a minimal
-    culture stub. Both are regenerated by Power BI.
-- **Status:** Resolved in the model source. Open `SM_WMPP.pbip` in Power BI
-  Desktop with Fabric credentials and refresh to materialise; the bundled
-  v15 report visuals reference removed tables and must be rebuilt against
-  the new measure set.
-
+  - Every table and column referenced in DAX exists in the model; every measure-to-measure reference resolves; all 14 relationship endpoints verified against table definitions.
+  - DAX references only `gold`-backed tables - no `bronze.*`, `silver.*`, or retired table names remain.
+  - Post-fix for "model is corrupt" on open: deleted the stale `.pbi/cache.abf` (9 MB cache of the 100-table Bronze model) and replaced the 47k-line `cultures/en-GB.tmdl` Q&A linguistic metadata (which still enumerated the deleted legacy tables) with a minimal culture stub. Both are regenerated by Power BI.
+- **Status:** Resolved in the model source. Open `SM_WMPP.pbip` in Power BI Desktop with Fabric credentials and refresh to materialise; the bundled v15 report visuals reference removed tables and must be rebuilt against the new measure set.
 
 ## GLD-005 - SM WMPP v15 required fields - Gold layer missing table or fields
 
-- **Symptom:** `gold.dim_provider_home` did not publish
-  `home_contact_number` or `registered_manager_contact_number`, which the
-  legacy v15 provider-home visuals display.
-- **Cause:** the `05_gold_dimensions.ipynb` `dim_provider_home` select list
-  omitted both columns even though `silver.provider_home` carries them
-  (`schema_definition.csv` rows 318 and 321).
-- **Fix:** both columns were added to the `latest_dimension` select list for
-  `silver.provider_home` -> `gold.dim_provider_home`, so the existing
-  latest-row-per-home logic now carries them.
-- **Validation:** `require_columns` fails the notebook before any write if
-  either column disappears from Silver. Notebook Python syntax validated.
-- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
-  and refresh the semantic model.
+- **Symptom:** `gold.dim_provider_home` did not publish `home_contact_number` or `registered_manager_contact_number`, which the legacy v15 provider-home visuals display.
+- **Cause:** the `05_gold_dimensions.ipynb` `dim_provider_home` select list omitted both columns even though `silver.provider_home` carries them (`schema_definition.csv` rows 318 and 321).
+- **Fix:** both columns were added to the `latest_dimension` select list for `silver.provider_home` -> `gold.dim_provider_home`, so the existing latest-row-per-home logic now carries them.
+- **Validation:** `require_columns` fails the notebook before any write if either column disappears from Silver. Notebook Python syntax validated.
+- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric and refresh the semantic model.
 
 ## GLD-006 - SM WMPP v15 required fields - Gold layer missing table or fields
 
-- **Symptom:** no person dimension existed in Gold, and `fact_referral` had
-  no `person_id`, so the referral-grain gender breakdown (KPI-04-07) could
-  not be rebuilt against Gold. `referral_person` is still needed to identify
-  the person's gender.
-- **Cause:** `silver.referral_person` was only used to derive the former
-  `fact_referral[child_id]` convenience field; no Gold person dimension was
-  published.
-- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_person` (one
-  current row per `person_id` from `silver.referral_person`, latest
-  `export_date` wins) with `initials`, `age_value`, `age_date_unit`,
-  `has_restrictions`, `gender`, `gender_clean`, `ethnicity`, `religion`,
-  `preferred_language` and `source_export_date`. `04_gold_model.ipynb`
-  publishes `person_id` on `fact_referral` (first recorded person per
-  referral) as the single person link — the interim `child_id` alias was
-  removed, and the snapshot migration renames legacy `ChildID`/`child_id`
-  to `person_id`, so `fact_referral_snapshot` carries the same field. This
-  enables the `dim_person[person_id]` -> `fact_referral[person_id]`
-  relationship.
-- **Validation:** notebook Python syntax validated; `require_columns` guards
-  every consumed Silver column.
-- **Status:** resolved in source; rerun `04_gold_model.ipynb` then
-  `05_gold_dimensions.ipynb` in Fabric, then create the new relationship in
-  the semantic model.
-
+- **Symptom:** no person dimension existed in Gold, and `fact_referral` had no `person_id`, so the referral-grain gender breakdown (KPI-04-07) could not be rebuilt against Gold. `referral_person` is still needed to identify the person's gender.
+- **Cause:** `silver.referral_person` was only used to derive the former `fact_referral[child_id]` convenience field; no Gold person dimension was published.
+- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_person` (one current row per `person_id` from `silver.referral_person`, latest `export_date` wins) with `initials`, `age_value`, `age_date_unit`, `has_restrictions`, `gender`, `gender_clean`, `ethnicity`, `religion`, `preferred_language` and `source_export_date`. `04_gold_model.ipynb` publishes `person_id` on `fact_referral` (first recorded person per referral) as the single person link — the interim `child_id` alias was removed, and the snapshot migration renames legacy `ChildID`/`child_id` to `person_id`, so `fact_referral_snapshot` carries the same field. This enables the `dim_person[person_id]` -> `fact_referral[person_id]` relationship.
+- **Validation:** notebook Python syntax validated; `require_columns` guards every consumed Silver column.
+- **Status:** resolved in source; rerun `04_gold_model.ipynb` then `05_gold_dimensions.ipynb` in Fabric, then create the new relationship in the semantic model.
 
 ## GLD-007 - SM WMPP v15 required fields - Gold layer missing table or fields
 
-- **Symptom:** gender was missing from Gold. The legacy model produced a
-  per-referral `Gender Clean` column via `dim_person`, grouped to referral
-  grain with nulls replaced by `Unknown` (legacy Power Query recorded in
-  `reports/client-deliverables/SM WMPP v15 (2).zip`).
+- **Symptom:** gender was missing from Gold. The legacy model produced a per-referral `Gender Clean` column via `dim_person`, grouped to referral grain with nulls replaced by `Unknown` (legacy Power Query recorded in `reports/client-deliverables/SM WMPP v15 (2).zip`).
 - **Cause:** no Gold table exposed a cleaned gender value.
-- **Fix:** `gold.dim_person[gender_clean]` reproduces the legacy mapping
-  exactly (`Male` -> `Male`, `Female` -> `Female`, `Another Gender`/`Other`
-  -> `Other`, anything else or null -> `Unknown`). The legacy per-referral
-  grouping is superseded by the `dim_person` -> `fact_referral[person_id]`
-  relationship; no separate referral-gender table is created, and
-  `dim_referral_gender` remains retired. Copy-ready DAX for Female / Male /
-  Other / Total Gendered Referrals was added to
-  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (Gender referral measures,
-  KPI-04-07) and the coverage audit rev 3.
-- **Validation:** legacy `dim_person` partition M code transcribed verbatim
-  into the Spark mapping; notebook Python syntax validated.
-- **Status:** resolved in source; reconcile the four gender measures against
-  the legacy v15 card totals after the Fabric rerun.
-
-
+- **Fix:** `gold.dim_person[gender_clean]` reproduces the legacy mapping exactly (`Male` -> `Male`, `Female` -> `Female`, `Another Gender`/`Other` -> `Other`, anything else or null -> `Unknown`). The legacy per-referral grouping is superseded by the `dim_person` -> `fact_referral[person_id]` relationship; no separate referral-gender table is created, and `dim_referral_gender` remains retired. Copy-ready DAX for Female / Male / Other / Total Gendered Referrals was added to `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` (Gender referral measures, KPI-04-07) and the coverage audit rev 3.
+- **Validation:** legacy `dim_person` partition M code transcribed verbatim into the Spark mapping; notebook Python syntax validated.
+- **Status:** resolved in source; reconcile the four gender measures against the legacy v15 card totals after the Fabric rerun.
 
 ## GLD-008 - SM WMPP v15 required fields - Gold layer missing table or fields
 
-- **Symptom:** `dim_offer_status` was missing. The legacy model carried an
-  offer-status dimension with labels (`Accepted`, `Draft`, `Pending`,
-  `Unsuccessful`, `Withdrawn`) and `is_active_offer` / `is_accepted` /
-  `is_terminal` flags (legacy Power Query recorded in
-  `reports/client-deliverables/SM WMPP v15 (2).zip`).
-- **Cause:** `dim_offer_status` had been listed as a retired legacy table,
-  but the v15 report still needs it as a slicer/label dimension.
-- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_offer_status`
-  from the distinct non-blank `silver.offer[offer_status]` codes with the
-  legacy label mapping, the three boolean flags, and an `offer_status_sk`
-  row-number surrogate key. Unrecognised future codes are retained with a
-  null label, matching the legacy conditional-column behaviour. It is built
-  from Silver (not `gold.fact_offer`) so the notebook keeps its Silver-only
-  source contract. The schema contract and build guide now list
-  `dim_offer_status` as an active Gold table with a
-  `dim_offer_status[offer_status]` -> `fact_offer[offer_status]`
-  relationship.
-- **Validation:** legacy partition M code transcribed into the Spark build;
-  notebook Python syntax validated.
-- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric
-  and add the new relationship when rebuilding the semantic model.
+- **Symptom:** `dim_offer_status` was missing. The legacy model carried an offer-status dimension with labels (`Accepted`, `Draft`, `Pending`, `Unsuccessful`, `Withdrawn`) and `is_active_offer` / `is_accepted` / `is_terminal` flags (legacy Power Query recorded in `reports/client-deliverables/SM WMPP v15 (2).zip`).
+- **Cause:** `dim_offer_status` had been listed as a retired legacy table, but the v15 report still needs it as a slicer/label dimension.
+- **Fix:** `05_gold_dimensions.ipynb` now builds `gold.dim_offer_status` from the distinct non-blank `silver.offer[offer_status]` codes with the legacy label mapping, the three boolean flags, and an `offer_status_sk` row-number surrogate key. Unrecognised future codes are retained with a null label, matching the legacy conditional-column behaviour. It is built from Silver (not `gold.fact_offer`) so the notebook keeps its Silver-only source contract. The schema contract and build guide now list `dim_offer_status` as an active Gold table with a `dim_offer_status[offer_status]` -> `fact_offer[offer_status]` relationship.
+- **Validation:** legacy partition M code transcribed into the Spark build; notebook Python syntax validated.
+- **Status:** resolved in source; rerun `05_gold_dimensions.ipynb` in Fabric and add the new relationship when rebuilding the semantic model.
 
 ## LIVE-ETL-002 - Job hangs on 90_run_live_pipeline
 
-- **Symptoms** job hangs when running the `90_run_live_pipeline` at `03_silver_business_rules` stage
-  error message is
+- **Symptoms** job hangs when running the `90_run_live_pipeline` at `03_silver_business_rules` stage error message is
 
-  2026-09-11 17:03:19,513 ERROR UserContextCatalogResolver [OneLakeUtil-pool-14]: OneSecurity exception while resolving schema name
-org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog.
-If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
-To tolerate the error on drop use DROP SCHEMA IF EXISTS.
+  2026-09-11 17:03:19,513 ERROR UserContextCatalogResolver [OneLakeUtil-pool-14]: OneSecurity exception while resolving schema name org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog. If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog. To tolerate the error on drop use DROP SCHEMA IF EXISTS.
 	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.requireDbExists(SessionCatalog.scala:297)
 	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.$anonfun$getTableRawMetadata$3(SessionCatalog.scala:648)
 	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
@@ -1639,10 +896,7 @@ To tolerate the error on drop use DROP SCHEMA IF EXISTS.
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
 	at java.base/java.lang.Thread.run(Thread.java:829)
-2026-09-11 17:03:21,107 ERROR UserContextCatalogResolver [OneLakeUtil-pool-11]: OneSecurity exception while resolving schema name
-org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog.
-If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog.
-To tolerate the error on drop use DROP SCHEMA IF EXISTS.
+2026-09-11 17:03:21,107 ERROR UserContextCatalogResolver [OneLakeUtil-pool-11]: OneSecurity exception while resolving schema name org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException: [SCHEMA_NOT_FOUND] The schema `default.WS_BCT_WMPP.silver.dbo` cannot be found. Verify the spelling and correctness of the schema and catalog. If you did not qualify the name with a catalog, verify the current_schema() output, or qualify the name with the correct catalog. To tolerate the error on drop use DROP SCHEMA IF EXISTS.
 	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.requireDbExists(SessionCatalog.scala:297)
 	at org.apache.spark.sql.catalyst.catalog.SessionCatalog.$anonfun$getTableRawMetadata$3(SessionCatalog.scala:648)
 	at org.apache.spark.microsoft.onesecurity.OneSecurityTelemetry$.executeAndLogMetricMsImpl(OneSecurityTelemetry.scala:582)
@@ -1679,62 +933,28 @@ To tolerate the error on drop use DROP SCHEMA IF EXISTS.
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
 	at java.base/java.lang.Thread.run(Thread.java:829)
 
-- **Cause (confirmed 2026-09-11):** the unresolved name
-  `default.WS_BCT_WMPP.silver.dbo` shows Spark's OneSecurity resolver treating
-  `silver` as a lakehouse/warehouse **artifact** (with default schema `dbo`)
-  instead of a schema inside `LH_BCT_WMPP`. That fallback happens when the
-  `silver` schema cannot be resolved in the default lakehouse — either the
-  notebook's default-lakehouse attachment is broken in the live workspace, or
-  the schema does not exist yet when `03_silver_business_rules` starts. Every
-  `silver.*` / `monitoring.*` lookup then slow-fails through this path, and
-  hundreds of rule evaluations × slow failed lookups presents as a "hang".
-- **Fix (2026-09-11):** new guard cell at the top of
-  `03_silver_business_rules` (immediately after `%run ./99_common_library`):
-  - probes `SHOW SCHEMAS` and raises a clear `RuntimeError` naming
-    LIVE-ETL-002 and the attachment check, instead of hanging;
-  - runs `CREATE SCHEMA IF NOT EXISTS` for `silver` and `monitoring`, so
-    two-part names always resolve inside the default lakehouse.
-- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the
-  guard is present.
-- **Status:** source change complete. If the guard raises on the next live
-  run, re-attach `LH_BCT_WMPP` as the notebook's default lakehouse in the
-  live workspace — that confirms the attachment (not the schema) was the
-  root cause.
+- **Cause (confirmed 2026-09-11):** the unresolved name `default.WS_BCT_WMPP.silver.dbo` shows Spark's OneSecurity resolver treating `silver` as a lakehouse/warehouse **artifact** (with default schema `dbo`) instead of a schema inside `LH_BCT_WMPP`. That fallback happens when the `silver` schema cannot be resolved in the default lakehouse — either the notebook's default-lakehouse attachment is broken in the live workspace, or the schema does not exist yet when `03_silver_business_rules` starts. Every `silver.*` / `monitoring.*` lookup then slow-fails through this path, and hundreds of rule evaluations × slow failed lookups presents as a "hang".
+- **Fix (2026-09-11):** new guard cell at the top of `03_silver_business_rules` (immediately after `%run ./99_common_library`):
+  - probes `SHOW SCHEMAS` and raises a clear `RuntimeError` naming LIVE-ETL-002 and the attachment check, instead of hanging;
+  - runs `CREATE SCHEMA IF NOT EXISTS` for `silver` and `monitoring`, so two-part names always resolve inside the default lakehouse.
+- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the guard is present.
+- **Status:** source change complete. If the guard raises on the next live run, re-attach `LH_BCT_WMPP` as the notebook's default lakehouse in the live workspace — that confirms the attachment (not the schema) was the root cause.
 
 ## LIVE-ETL-003 - Job takes a very long time to process on 90_run_live_pipeline
 
-i have extended the time in the notebook with
-NOTEBOOK_TIMEOUT_SECONDS = 22200
-and usually happens at `03_silver_business_rules` step. is this because of prior error or are there performance upgrade i can do to the queries inside the step.. can you apply logging steps in-between the cells to monitor each cell too?
+i have extended the time in the notebook with NOTEBOOK_TIMEOUT_SECONDS = 22200 and usually happens at `03_silver_business_rules` step. is this because of prior error or are there performance upgrade i can do to the queries inside the step.. can you apply logging steps in-between the cells to monitor each cell too?
 
-- **Cause (confirmed 2026-09-11):** partly the LIVE-ETL-002 resolver loop above —
-  every failed schema lookup burns seconds before the rule is even evaluated.
-  In addition, the DQ loop scanned each Silver table once **per rule**: a full
-  `count()` for `checked_row_count` plus a second scan for the failure count,
-  for every rule, with no caching.
+- **Cause (confirmed 2026-09-11):** partly the LIVE-ETL-002 resolver loop above — every failed schema lookup burns seconds before the rule is even evaluated. In addition, the DQ loop scanned each Silver table once **per rule**: a full `count()` for `checked_row_count` plus a second scan for the failure count, for every rule, with no caching.
 - **Fix (2026-09-11):**
-  - Rules are now grouped by source table; `checked_row_count` is computed
-    once per table and reused (`checked_counts`).
-  - Tables checked by more than one rule are cached for the duration of
-    their checks and unpersisted afterwards (`cached_frames`).
-  - Added `log_step()` to `99_common_library` — prints timestamp, per-step
-    and cumulative elapsed time. `03_silver_business_rules` now calls it
-    between every cell (schema guard, run registration, rule preparation,
-    main DQ pass, each materialisation, derived DQ, lifecycle events,
-    dim_date), and the DQ loop prints one timing line per rule via
-    `log_rule()`. Slow cells/rules are now visible directly in the job log.
-- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the
-  guard, the logging calls, and the single-scan loop.
-- **Status:** source change complete; confirm duration improvement on the
-  next live run in Fabric.
+  - Rules are now grouped by source table; `checked_row_count` is computed once per table and reused (`checked_counts`).
+  - Tables checked by more than one rule are cached for the duration of their checks and unpersisted afterwards (`cached_frames`).
+  - Added `log_step()` to `99_common_library` — prints timestamp, per-step and cumulative elapsed time. `03_silver_business_rules` now calls it between every cell (schema guard, run registration, rule preparation, main DQ pass, each materialisation, derived DQ, lifecycle events, dim_date), and the DQ loop prints one timing line per rule via `log_rule()`. Slow cells/rules are now visible directly in the job log.
+- **Regression guard:** `validate_live_pipeline_monitoring.py` checks the guard, the logging calls, and the single-scan loop.
+- **Status:** source change complete; confirm duration improvement on the next live run in Fabric.
 
 ## GLD-009 — is_open flag did not match the original business rule
 
-- **Symptom (reported 2026-09-11, verbatim):** "the is_open flag in the
-  gold.fact_referral table is not the same logic as the original business
-  rule... this field should be added to the silver.referral_enrichment table
-  and then propagate to the gold.fact_referral table. the correct logic
-  should be like the below"
+- **Symptom (reported 2026-09-11, verbatim):** "the is_open flag in the gold.fact_referral table is not the same logic as the original business rule... this field should be added to the silver.referral_enrichment table and then propagate to the gold.fact_referral table. the correct logic should be like the below"
 
   ```sql
   with cte as
@@ -1771,333 +991,125 @@ and usually happens at `03_silver_business_rules` step. is this because of prior
    inner join gold.fact_referral b on a.referral_id=b.referral_id
    and current_status IN ( "OPEN", "UNDER_OFFER" )
   ```
-- **Cause:** `is_open` was derived inline in `04_gold_model` as a simple
-  status check (`current_status` not in closed/cancelled/withdrawn/
-  completed). It ignored provider-referral state and the response-required
-  window, so referrals that the business rule treats as open were flagged
-  differently.
-- **Fix (2026-09-12):** `is_open` is now computed in
-  `silver.referral_enrichment` (`03_silver_business_rules`) and propagated to
-  `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral is open
-  when its status is `OPEN` or `UNDER_OFFER` **and** at least one of:
-  - it has a live provider referral (not closed, not declined, not excluded,
-    not cancelled) — the `cte` branch;
+- **Cause:** `is_open` was derived inline in `04_gold_model` as a simple status check (`current_status` not in closed/cancelled/withdrawn/ completed). It ignored provider-referral state and the response-required window, so referrals that the business rule treats as open were flagged differently.
+- **Fix (2026-09-12):** `is_open` is now computed in `silver.referral_enrichment` (`03_silver_business_rules`) and propagated to `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral is open when its status is `OPEN` or `UNDER_OFFER` **and** at least one of:
+  - it has a live provider referral (not closed, not declined, not excluded, not cancelled) — the `cte` branch;
   - its status is `UNDER_OFFER` — the `cte2` branch;
-  - its status is `OPEN` and `response_required_by_date` is on or after the
-    latest `export_date` in `silver.referral` — the `cte3` branch, with the
-    hard-coded date replaced by the latest export date (matching the
-    `LatestExportDate` pattern used by the semantic model).
-- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
-  the `latest_export` / `live_provider` CTEs and the Gold propagation;
-  `validate_gold_referral_schema.py` requires the published fields; new DQ
-  rule `REFERRAL_ENRICHMENT_IS_OPEN_PRESENT`.
-- **Status:** source change complete. `required_placement_date_outcome`
-  intentionally retains its existing status-based definition; only the
-  `is_open` flag was in scope. Confirm open-referral counts against the
-  client extract on the next Fabric run.
-
+  - its status is `OPEN` and `response_required_by_date` is on or after the latest `export_date` in `silver.referral` — the `cte3` branch, with the hard-coded date replaced by the latest export date (matching the `LatestExportDate` pattern used by the semantic model).
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks the `latest_export` / `live_provider` CTEs and the Gold propagation; `validate_gold_referral_schema.py` requires the published fields; new DQ rule `REFERRAL_ENRICHMENT_IS_OPEN_PRESENT`.
+- **Status:** source change complete. `required_placement_date_outcome` intentionally retains its existing status-based definition; only the `is_open` flag was in scope. Confirm open-referral counts against the client extract on the next Fabric run.
 
 ## GLD-010 — is_spot missing from gold.fact_referral
 
-- **Symptom (reported 2026-09-11, verbatim):** "is_spot is missing from the
-  gold.fact_referral table, this needs adding back in"
-- **Cause:** the Gold referral fact never promoted `silver.referral.is_spot`
-  (schema contract ordinal 15), so the spot/framework split was unavailable
-  at referral grain.
-- **Fix (2026-09-12):** `gold.fact_referral` now selects
-  `CAST(r.is_spot AS BOOLEAN) AS is_spot` from the current Silver referral
-  row. The column is part of the Gold source preflight
-  (`GOLD_SOURCE_REQUIREMENTS`) and is carried into
-  `gold.fact_referral_snapshot`.
-- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
-  the cast and snapshot promotion; `validate_gold_referral_schema.py`
-  requires the published field.
+- **Symptom (reported 2026-09-11, verbatim):** "is_spot is missing from the gold.fact_referral table, this needs adding back in"
+- **Cause:** the Gold referral fact never promoted `silver.referral.is_spot` (schema contract ordinal 15), so the spot/framework split was unavailable at referral grain.
+- **Fix (2026-09-12):** `gold.fact_referral` now selects `CAST(r.is_spot AS BOOLEAN) AS is_spot` from the current Silver referral row. The column is part of the Gold source preflight (`GOLD_SOURCE_REQUIREMENTS`) and is carried into `gold.fact_referral_snapshot`.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks the cast and snapshot promotion; `validate_gold_referral_schema.py` requires the published field.
 - **Status:** source change complete.
 
 ## GLD-011 — Active Referrals Awaiting Offers moved from DAX into the pipeline
 
-- **Symptom (reported 2026-09-11, verbatim):** "instead of calculating the
-  'Active Referrals Awaiting Offers' in the DAX add this field into the
-  silver.referral_enrichment table and then propagate to the
-  gold.fact_referral table." The supplied DAX counted OPEN referrals that
-  either have a live provider referral (not cancelled, not closed, not
-  excluded) or whose response-required date is on or after the latest
-  export date.
-- **Cause:** the KPI existed only as a DAX calculation, so the logic was not
-  reusable by other measures, snapshots or SQL consumers.
-- **Fix (2026-09-12):** new `is_awaiting_offer` boolean in
-  `silver.referral_enrichment` (`03_silver_business_rules`), propagated to
-  `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral counts
-  when its status is `OPEN` **and** at least one of:
-  - it has an engaged provider referral (not cancelled, not closed, not
-    excluded) — the `LiveProviderReferralIDs` branch;
-  - its `response_required_by_date` is on or after the latest `export_date`
-    in `silver.referral` — the `OpenWithinResponseWindowIDs` branch.
-  `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` now defines
-  `Referrals Awaiting Offer` (the Gold successor of the legacy
-  `Active Referrals Awaiting Offers` card) as a single filter on
-  `fact_referral[is_awaiting_offer]`.
-- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
-  the `engaged_provider` CTE and the Gold propagation; new DQ rule
-  `REFERRAL_ENRICHMENT_AWAITING_OFFER_PRESENT`.
+- **Symptom (reported 2026-09-11, verbatim):** "instead of calculating the 'Active Referrals Awaiting Offers' in the DAX add this field into the silver.referral_enrichment table and then propagate to the gold.fact_referral table." The supplied DAX counted OPEN referrals that either have a live provider referral (not cancelled, not closed, not excluded) or whose response-required date is on or after the latest export date.
+- **Cause:** the KPI existed only as a DAX calculation, so the logic was not reusable by other measures, snapshots or SQL consumers.
+- **Fix (2026-09-12):** new `is_awaiting_offer` boolean in `silver.referral_enrichment` (`03_silver_business_rules`), propagated to `gold.fact_referral` and `gold.fact_referral_snapshot`. A referral counts when its status is `OPEN` **and** at least one of:
+  - it has an engaged provider referral (not cancelled, not closed, not excluded) — the `LiveProviderReferralIDs` branch;
+  - its `response_required_by_date` is on or after the latest `export_date` in `silver.referral` — the `OpenWithinResponseWindowIDs` branch. `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md` now defines `Referrals Awaiting Offer` (the Gold successor of the legacy `Active Referrals Awaiting Offers` card) as a single filter on `fact_referral[is_awaiting_offer]`.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks the `engaged_provider` CTE and the Gold propagation; new DQ rule `REFERRAL_ENRICHMENT_AWAITING_OFFER_PRESENT`.
 - **Status:** source change complete.
 
-
 ## GLD-012 — is_engaged added to gold.fact_referral_provider
-- **Symptom (reported 2026-09-11, verbatim):** "create and is_engaged field
-  in the gold.fact_referral_provider table. calculation should be" — engaged
-  means `is_cancelled = FALSE`, `is_closed = FALSE` and
-  `is_excluded = FALSE` on the provider referral.
-- **Cause:** engagement was only derivable through multi-table DAX; the
-  provider-grain fact had no row-level engagement flag.
-- **Fix (2026-09-12):** `gold.fact_referral_provider` now publishes
-  `is_engaged`, computed null-safely per row:
-  `NOT COALESCE(is_cancelled, false) AND NOT COALESCE(is_closed, false)
-  AND NOT COALESCE(is_excluded, false)`. Unlike the GLD-009 live-provider
-  rule, engagement does not exclude declined referrals, matching the
-  supplied calculation.
-- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks
-  the `is_engaged` expression in the `gold.fact_referral_provider` cell.
+- **Symptom (reported 2026-09-11, verbatim):** "create and is_engaged field in the gold.fact_referral_provider table. calculation should be" — engaged means `is_cancelled = FALSE`, `is_closed = FALSE` and `is_excluded = FALSE` on the provider referral.
+- **Cause:** engagement was only derivable through multi-table DAX; the provider-grain fact had no row-level engagement flag.
+- **Fix (2026-09-12):** `gold.fact_referral_provider` now publishes `is_engaged`, computed null-safely per row: `NOT COALESCE(is_cancelled, false) AND NOT COALESCE(is_closed, false) AND NOT COALESCE(is_excluded, false)`. Unlike the GLD-009 live-provider rule, engagement does not exclude declined referrals, matching the supplied calculation.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` checks the `is_engaged` expression in the `gold.fact_referral_provider` cell.
 - **Status:** source change complete.
 
 ## SI-025 — export_date missing from all Silver tables
 
-- **Symptom (reported 2026-09-13, verbatim):** "looks like the export_date in
-  all the silver tables are missing the bronze table and even the archived
-  tables such as bronze.referral table have export_date populated but the
-  silver table doesnt.. could the silver tables export table get loaded via
-  the notebook"
-- **Cause:** `format_frame` in `99_common_library` selects only the columns
-  listed in the deployed `monitoring.cfg_schema_contract` rows for the
-  contract. A stale deployed contract (bootstrap skips already-populated
-  config tables unless `LOAD_FILE_CONFIG` is set) lacked the `export_date`
-  contract rows, so the column was silently dropped at Silver even though
-  Bronze and the archive tables carry it — and the contract would never
-  self-heal on later runs.
-- **Fix (2026-09-13):** `99_common_library` now defines
-  `EXPORT_DATE_CONTRACT_COLUMN` and `ensure_export_date_contract(schema_cols)`,
-  which appends the `export_date` contract column when a deployed contract is
-  missing it. `02_silver_formatter` and `02a_archive_silver` both call the
-  guard before formatting, so every Silver table gains `export_date` from the
-  Bronze frame. The fix is self-healing: `target_requires_refresh` rebuilds
-  any existing Silver table that is missing the column. Rerunning
-  `00_setup_cfg` with `LOAD_FILE_CONFIG=true` is still recommended to refresh
-  the deployed contract rows.
-- **Regression guard:** `validate_silver_required_columns.py` asserts the
-  guard exists and is called by both notebooks; new DQ rules
-  `SILVER_REFERRAL_EXPORT_DATE_PRESENT`, `SILVER_OFFER_EXPORT_DATE_PRESENT`,
-  `SILVER_REFERRAL_PROVIDER_EXPORT_DATE_PRESENT` and
-  `SILVER_IPA_EXPORT_DATE_PRESENT` (NOT_NULL / ERROR).
+- **Symptom (reported 2026-09-13, verbatim):** "looks like the export_date in all the silver tables are missing the bronze table and even the archived tables such as bronze.referral table have export_date populated but the silver table doesnt.. could the silver tables export table get loaded via the notebook"
+- **Cause:** `format_frame` in `99_common_library` selects only the columns listed in the deployed `monitoring.cfg_schema_contract` rows for the contract. A stale deployed contract (bootstrap skips already-populated config tables unless `LOAD_FILE_CONFIG` is set) lacked the `export_date` contract rows, so the column was silently dropped at Silver even though Bronze and the archive tables carry it — and the contract would never self-heal on later runs.
+- **Fix (2026-09-13):** `99_common_library` now defines `EXPORT_DATE_CONTRACT_COLUMN` and `ensure_export_date_contract(schema_cols)`, which appends the `export_date` contract column when a deployed contract is missing it. `02_silver_formatter` and `02a_archive_silver` both call the guard before formatting, so every Silver table gains `export_date` from the Bronze frame. The fix is self-healing: `target_requires_refresh` rebuilds any existing Silver table that is missing the column. Rerunning `00_setup_cfg` with `LOAD_FILE_CONFIG=true` is still recommended to refresh the deployed contract rows.
+- **Regression guard:** `validate_silver_required_columns.py` asserts the guard exists and is called by both notebooks; new DQ rules `SILVER_REFERRAL_EXPORT_DATE_PRESENT`, `SILVER_OFFER_EXPORT_DATE_PRESENT`, `SILVER_REFERRAL_PROVIDER_EXPORT_DATE_PRESENT` and `SILVER_IPA_EXPORT_DATE_PRESENT` (NOT_NULL / ERROR).
 - **Status:** source change complete.
 
 ## GLD-013 — semantic-model measures pushed down into the Gold layer
 
-- **Symptom (reported 2026-09-13, verbatim):** "check the semantic model in
-  project X\reports\current\WMPP\SM WMPP v15 (3).zip. see if there are any
-  other DAX measures we can bring into the Gold layer the same way we did
-  GLD-011 and GLD-012 … please update the project X\client
-  documentation\04_Data_and_Reporting\GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE
-  WIP.md and all other md files"
-- **Cause:** several legacy v15 measures still recomputed business rules in
-  DAX (TODAY()-relative ageing, draft-activity comparisons, IPA-signature
-  funnel via TREATAS/EXCEPT, provider-overlap via DISTINCTCOUNT), so the logic
-  was not reusable by snapshots or SQL consumers, and six IPA-signature
-  measures were blocked for want of a Gold field.
-- **Fix (2026-09-13):** extracted and inventoried all 268 measures from
-  `SM WMPP v15 (3).zip` (`reports/current/SM WMPP v15 (3).zip`,
-  `definition/tables/_Measures.tmdl`) and pushed every rule that Silver/Gold
-  data can support into the pipeline:
-  - `03_silver_business_rules`: `silver.referral_enrichment` gained
-    `provider_assignment_count` (`COUNT(DISTINCT provider_id)` per referral).
-  - `04_gold_model` `fact_referral`: propagated `provider_assignment_count`
-    and added `is_emergency_placement` (required placement date equals
-    referral created date) and `is_open_overdue` (open and required placement
-    date before the as-of date); all three are carried into
-    `gold.fact_referral_snapshot`.
-  - `04_gold_model` `fact_offer`: added an offer-grain rollup over
-    `silver.ipa` (`ipa_count`, `has_completed_ipa` from
-    `signed_by_provider`/`signed_by_local_authority`) and seven published
-    columns: `offer_age_days`, `days_since_offer_activity`,
-    `is_draft_missing_dates`, `is_draft_no_activity`,
-    `is_awaiting_ipa_creation`, `is_ipa_pending`, `is_ipa_completed`.
-  - Documentation: `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`, the WIP guide,
-    `Gold_DAX_Schema_Contract.md`, `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (rev 4)
-    and `KPI_Reference_Guide.md` updated — 18 measures rewritten as flag
-    filters (Open Overdue, Emergency/Planned, Multiple Provider Assignments,
-    draft activity/ageing, pending-age bands, IPA funnel, snapshot overdue),
-    the IPA-signature funnel rebuilt at offer grain (`IPA Completed`,
-    `IPAs Pending Completion`, `IPA Created to Completion %`,
-    `Successful Offers to IPA Completed %`, `Is IPA Completed`,
-    `Is IPA Pending`), and KPI-77–78, 80–82, 85–86 moved from blocked/proxy
-    to covered. The Provider Contact card family and true per-IPA-grain
-    signature rows remain blocked (no source fields); TODAY()-relative
-    document-expiry measures stay in DAX because they report off the live
-    calendar, not the extract as-of date.
-- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` asserts
-  the enrichment `COUNT(DISTINCT provider_id)`, the Gold propagation and all
-  seven offer flags; `validate_gold_referral_schema.py` requires the three
-  new referral fields; new DQ rules
-  `REFERRAL_ENRICHMENT_PROVIDER_COUNT_PRESENT` and
-  `REFERRAL_ENRICHMENT_PROVIDER_COUNT_NON_NEGATIVE`; `tests/_gold_sim_test.py`
-  covers the new flags (runs in Fabric); a 15-case DuckDB smoke test verified
-  the new Gold SQL semantics locally.
+- **Symptom (reported 2026-09-13, verbatim):** "check the semantic model in project X\reports\current\WMPP\SM WMPP v15 (3).zip. see if there are any other DAX measures we can bring into the Gold layer the same way we did GLD-011 and GLD-012 … please update the project X\client documentation\04_Data_and_Reporting\GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE WMPP_v16.md and all other md files"
+- **Cause:** several legacy v15 measures still recomputed business rules in DAX (TODAY()-relative ageing, draft-activity comparisons, IPA-signature funnel via TREATAS/EXCEPT, provider-overlap via DISTINCTCOUNT), so the logic was not reusable by snapshots or SQL consumers, and six IPA-signature measures were blocked for want of a Gold field.
+- **Fix (2026-09-13):** extracted and inventoried all 268 measures from `SM WMPP v15 (3).zip` (`reports/current/SM WMPP v15 (3).zip`, `definition/tables/_Measures.tmdl`) and pushed every rule that Silver/Gold data can support into the pipeline:
+  - `03_silver_business_rules`: `silver.referral_enrichment` gained `provider_assignment_count` (`COUNT(DISTINCT provider_id)` per referral).
+  - `04_gold_model` `fact_referral`: propagated `provider_assignment_count` and added `is_emergency_placement` (required placement date equals referral created date) and `is_open_overdue` (open and required placement date before the as-of date); all three are carried into `gold.fact_referral_snapshot`.
+  - `04_gold_model` `fact_offer`: added an offer-grain rollup over `silver.ipa` (`ipa_count`, `has_completed_ipa` from `signed_by_provider`/`signed_by_local_authority`) and seven published columns: `offer_age_days`, `days_since_offer_activity`, `is_draft_missing_dates`, `is_draft_no_activity`, `is_awaiting_ipa_creation`, `is_ipa_pending`, `is_ipa_completed`.
+  - Documentation: `GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md`, the WMPP_v16 guide, `Gold_DAX_Schema_Contract.md`, `GOLD_DAX_FIELD_COVERAGE_AUDIT.md` (rev 4) and `KPI_Reference_Guide.md` updated — 18 measures rewritten as flag filters (Open Overdue, Emergency/Planned, Multiple Provider Assignments, draft activity/ageing, pending-age bands, IPA funnel, snapshot overdue), the IPA-signature funnel rebuilt at offer grain (`IPA Completed`, `IPAs Pending Completion`, `IPA Created to Completion %`, `Successful Offers to IPA Completed %`, `Is IPA Completed`, `Is IPA Pending`), and KPI-77–78, 80–82, 85–86 moved from blocked/proxy to covered. The Provider Contact card family and true per-IPA-grain signature rows remain blocked (no source fields); TODAY()-relative document-expiry measures stay in DAX because they report off the live calendar, not the extract as-of date.
+- **Regression guard:** `validate_archive_snapshot_and_enrichment.py` asserts the enrichment `COUNT(DISTINCT provider_id)`, the Gold propagation and all seven offer flags; `validate_gold_referral_schema.py` requires the three new referral fields; new DQ rules `REFERRAL_ENRICHMENT_PROVIDER_COUNT_PRESENT` and `REFERRAL_ENRICHMENT_PROVIDER_COUNT_NON_NEGATIVE`; `tests/_gold_sim_test.py` covers the new flags (runs in Fabric); a 15-case DuckDB smoke test verified the new Gold SQL semantics locally.
 - **Status:** source change complete.
 
 ## LIVE-ETL-004 — 02_silver_formatter ancient-datetime write failure
 
-- **Job:** `afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e`; `FORCE_RERUN=True`;
-  `RUN_ESSENTIAL_DQ=True`.
-- **Completed:** `00_setup_cfg`, `01_bronze_get_latest`, and
-  `01a_cfg_schema_capture_live`.
-- **Failed:** `02_silver_formatter` after 18 minutes while writing
-  `bronze.provider_submission_docs` to `silver.provider_submission_docs`.
-- **Error:** Spark `[INCONSISTENT_BEHAVIOR_CROSS_VERSION.WRITE_ANCIENT_DATETIME]`:
-  a source timestamp before 1900 requires an explicit Parquet write calendar policy.
+- **Job:** `afdcb91b-8b56-4b99-b23f-4ebaf6c4aa1e`; `FORCE_RERUN=True`; `RUN_ESSENTIAL_DQ=True`.
+- **Completed:** `00_setup_cfg`, `01_bronze_get_latest`, and `01a_cfg_schema_capture_live`.
+- **Failed:** `02_silver_formatter` after 18 minutes while writing `bronze.provider_submission_docs` to `silver.provider_submission_docs`.
+- **Error:** Spark `[INCONSISTENT_BEHAVIOR_CROSS_VERSION.WRITE_ANCIENT_DATETIME]`: a source timestamp before 1900 requires an explicit Parquet write calendar policy.
 
 ### Resolution (2026-09-14)
 
-- **Cause:** `bronze.provider_submission_docs` contains at least one timestamp
-  before 1900. Spark 3 blocks the Delta/Parquet write unless its calendar
-  rebase policy is explicit.
-- **Fix:** `99_common_library` now sets
-  `spark.sql.parquet.datetimeRebaseModeInWrite` to `CORRECTED` before the
-  formatter writes Silver tables. This preserves the timestamp under Spark
-  3's Proleptic Gregorian calendar. The deployed WMPP library has the same
-  setting.
-- **Validation:** `validate_silver_required_columns.py` checks the root and
-  deployed shared libraries for the policy. Re-run the live pipeline; the
-  failed table's audit state lets the formatter retry it.
+- **Cause:** `bronze.provider_submission_docs` contains at least one timestamp before 1900. Spark 3 blocks the Delta/Parquet write unless its calendar rebase policy is explicit.
+- **Fix:** `99_common_library` now sets `spark.sql.parquet.datetimeRebaseModeInWrite` to `CORRECTED` before the formatter writes Silver tables. This preserves the timestamp under Spark 3's Proleptic Gregorian calendar. The deployed WMPP library has the same setting.
+- **Validation:** `validate_silver_required_columns.py` checks the root and deployed shared libraries for the policy. Re-run the live pipeline; the failed table's audit state lets the formatter retry it.
 
 ## LIVE-ETL-005 — Deprecated naive UTC monitoring timestamps
 
-- **Symptom (2026-10-07):** pipeline execution emits a deprecation warning for
-  `datetime.datetime.utcnow()` requesting timezone-aware UTC objects.
-- **Cause:** the two runners and shared/child monitoring code used naive UTC
-  clock values. Python deprecated `utcnow()` and `utcfromtimestamp()` in 3.12.
-  A warning is not evidence that `cfg_job_run` is being rebuilt or a job failed.
-- **Fix:** all 43 `utcnow()` calls across the eleven root notebooks now use
-  `datetime.now(timezone.utc)`. The archive-rehydration helper uses
-  `datetime.fromtimestamp(file_mtime, timezone.utc)` for file metadata.
-  Imports and both sides of elapsed-time calculations are updated together.
-  No table/schema changes, history deletion, source-date parsing change,
-  monitoring-key/status changes or Spark timezone configuration changes.
-- **Affected notebooks:** `90_run_live_pipeline`, `90_run_archive_pipeline`,
-  `99_common_library`, `00_archive_load`, `00a_rehydrate_archive_cfg`,
-  `01a_cfg_schema_capture_live`, `01a_cfg_schema_capture_archive`,
-  `02_silver_formatter`, `02a_archive_silver`, `03_silver_business_rules`,
-  `05_gold_dimensions`.
-- **Validation:** the original clock expressions raise the exact deprecation
-  with warnings treated as errors; all sixteen new UTC/serialization/status/
-  elapsed-time checks pass after the replacement. The full local suite passes
-  329 tests and 158 subtests. Job-run lineage, live monitoring, core pipeline
-  and archive-runner validators pass. Spark's Python TimestampType serializer
-  preserves exact UTC epoch microseconds; no live Fabric/Delta run is asserted.
-- **Status:** local authoritative notebook sources fixed. Deploy the changed
-  notebooks (including the shared library), then rerun the relevant pipeline.
-  Existing exported copies in `reports/` were not changed; no live deployment,
-  database write or report change was performed.
+- **Symptom (2026-10-07):** pipeline execution emits a deprecation warning for `datetime.datetime.utcnow()` requesting timezone-aware UTC objects.
+- **Cause:** the two runners and shared/child monitoring code used naive UTC clock values. Python deprecated `utcnow()` and `utcfromtimestamp()` in 3.12. A warning is not evidence that `cfg_job_run` is being rebuilt or a job failed.
+- **Fix:** all 43 `utcnow()` calls across the eleven root notebooks now use `datetime.now(timezone.utc)`. The archive-rehydration helper uses `datetime.fromtimestamp(file_mtime, timezone.utc)` for file metadata. Imports and both sides of elapsed-time calculations are updated together. No table/schema changes, history deletion, source-date parsing change, monitoring-key/status changes or Spark timezone configuration changes.
+- **Affected notebooks:** `90_run_live_pipeline`, `90_run_archive_pipeline`, `99_common_library`, `00_archive_load`, `00a_rehydrate_archive_cfg`, `01a_cfg_schema_capture_live`, `01a_cfg_schema_capture_archive`, `02_silver_formatter`, `02a_archive_silver`, `03_silver_business_rules`, `05_gold_dimensions`.
+- **Validation:** the original clock expressions raise the exact deprecation with warnings treated as errors; all sixteen new UTC/serialization/status/ elapsed-time checks pass after the replacement. The full local suite passes 329 tests and 158 subtests. Job-run lineage, live monitoring, core pipeline and archive-runner validators pass. Spark's Python TimestampType serializer preserves exact UTC epoch microseconds; no live Fabric/Delta run is asserted.
+- **Status:** local authoritative notebook sources fixed. Deploy the changed notebooks (including the shared library), then rerun the relevant pipeline. Existing exported copies in `reports/` were not changed; no live deployment, database write or report change was performed.
 
 [Python UTC guidance](https://docs.python.org/3/library/datetime.html#datetime.datetime.utcnow).
 
 ## GLD-015 — Referral spot status used the wrong source
 
-- **Symptom (reported 2026-09-15):** `gold.fact_referral.is_spot` was taken
-  from `silver.referral.is_spot`, which can disagree with the provider
-  assignment value.
-- **Cause:** the Gold referral fact has one row per referral, but it directly
-  read a referral-level source field instead of deriving the value from the
-  authoritative `silver.referral_provider` rows.
-- **Fix (2026-09-15):** `03_silver_business_rules` now materialises
-  `silver.referral_enrichment.is_spot`. It is `true` when any linked provider
-  assignment has `is_spot = true`; no source-conformed columns were changed.
-  `04_gold_model` reads that enrichment value into `gold.fact_referral`, and
-  the existing snapshot selection carries it into
-  `gold.fact_referral_snapshot`.
-- **Validation:** the regression test creates a referral where the referral
-  field is false and its provider assignment is true. Static checks verify the
-  Silver aggregation, Gold promotion, snapshot field and deployed WMPP copies.
-- **Status:** source and deployed notebook definitions updated. Run
-  `03_silver_business_rules` before `04_gold_model` so the revised enrichment
-  schema and data are present.
-
+- **Symptom (reported 2026-09-15):** `gold.fact_referral.is_spot` was taken from `silver.referral.is_spot`, which can disagree with the provider assignment value.
+- **Cause:** the Gold referral fact has one row per referral, but it directly read a referral-level source field instead of deriving the value from the authoritative `silver.referral_provider` rows.
+- **Fix (2026-09-15):** `03_silver_business_rules` now materialises `silver.referral_enrichment.is_spot`. It is `true` when any linked provider assignment has `is_spot = true`; no source-conformed columns were changed. `04_gold_model` reads that enrichment value into `gold.fact_referral`, and the existing snapshot selection carries it into `gold.fact_referral_snapshot`.
+- **Validation:** the regression test creates a referral where the referral field is false and its provider assignment is true. Static checks verify the Silver aggregation, Gold promotion, snapshot field and deployed WMPP copies.
+- **Status:** source and deployed notebook definitions updated. Run `03_silver_business_rules` before `04_gold_model` so the revised enrichment schema and data are present.
 
 ## SEM-02 semantic model - SM WMPP Mission Control project fails to open
 
 - **Error (concise):** Power BI Desktop reports `DataModelLoadFailed` while opening `SM WMPP Mission Control`. The model contains unresolved automatic date-hierarchy references (`DefaultHierarchy` / `ToColumn`) to `LocalDateTable_*` objects.
 
-- **Cause (corrected 2026-09-15):** the compatibility-level-only repair did
-  not fix the client error. The March 2026 Desktop deserializer cannot resolve
-  the 22 automatic `LocalDateTable_*` objects saved with the August-authored
-  project. Each source-column variation and generated relationship therefore
-  points to a date hierarchy or `Date` column that the client never creates.
-- **Fix (2026-09-15):** created the separate
-  `SM WMPP Mission Control - SEM-02 repaired` project, disabled automatic time
-  intelligence, removed its generated date-table template, 22 local date
-  tables, 22 generated relationships and source-column variations, and changed
-  the five affected report visuals to use the underlying date columns. All 67
-  Mission Control measures remain registered.
-- **Validation:** `validate_mission_control_model.py` rejects the exact
-  `DefaultHierarchy`/`ToColumn` reference pattern from the client error. The
-  repaired project passes the repository validators and opens far enough in
-  local Power BI Desktop to create its Analysis Services database without a
-  model-resolution error.
-- **Status:** repaired client package prepared; final acceptance remains to
-  open that package in the client's March 2026 Desktop build.
+- **Cause (corrected 2026-09-15):** the compatibility-level-only repair did not fix the client error. The March 2026 Desktop deserializer cannot resolve the 22 automatic `LocalDateTable_*` objects saved with the August-authored project. Each source-column variation and generated relationship therefore points to a date hierarchy or `Date` column that the client never creates.
+- **Fix (2026-09-15):** created the separate `SM WMPP Mission Control - SEM-02 repaired` project, disabled automatic time intelligence, removed its generated date-table template, 22 local date tables, 22 generated relationships and source-column variations, and changed the five affected report visuals to use the underlying date columns. All 67 Mission Control measures remain registered.
+- **Validation:** `validate_mission_control_model.py` rejects the exact `DefaultHierarchy`/`ToColumn` reference pattern from the client error. The repaired project passes the repository validators and opens far enough in local Power BI Desktop to create its Analysis Services database without a model-resolution error.
+- **Status:** repaired client package prepared; final acceptance remains to open that package in the client's March 2026 Desktop build.
 
 ## GLD-016 — Missing referral-provider details from Gold
 
 following tables are missing in the GOLD Layer
 
-bronze.referral_provider_message -> gold.dim_referral_provider_message
-bronze.referral_provider_cancel_reason -> gold.dim_referral_provider_reject_reason as field/s in it reject_type='cancel', reason, reason_other, create_date (**use the correct naming conventions for the columns)
-bronze.referral_provider_decline_reason ->  gold.dim_referral_provider_reject_reason as field/s in it reject_type='decline', reason, reason_other, create_date (**use the correct naming conventions for the columns)
+bronze.referral_provider_message -> gold.dim_referral_provider_message bronze.referral_provider_cancel_reason -> gold.dim_referral_provider_reject_reason as field/s in it reject_type='cancel', reason, reason_other, create_date (**use the correct naming conventions for the columns) bronze.referral_provider_decline_reason ->  gold.dim_referral_provider_reject_reason as field/s in it reject_type='decline', reason, reason_other, create_date (**use the correct naming conventions for the columns)
 
 these need to be added in
 
-- **Cause (2026-09-18):** the Gold dimensions notebook did not materialise
-  `silver.referral_provider_message` or either provider rejection-reason
-  source, leaving the semantic model without these referral-provider details.
-- **Fix (2026-09-18):** added `gold.dim_referral_provider_message` with one
-  current row per `message_id`, and
-  `gold.dim_referral_provider_reject_reason`, which unions cancellation and
-  decline records. The latter publishes canonical `reject_type`, `reason`,
-  `reason_other`, and `created_date` fields, with a source-prefixed
-  `reject_reason_id` to prevent collisions between the two source ID series.
-  The deployed WMPP Gold-dimensions notebook has the same update.
-- **Validation:** `validate_gold_referral_schema.py` now verifies both target
-  dimensions, the cancellation/decline labels, canonical aliases, collision-
-  safe keys, and the deployed-notebook mapping.
-- **Status:** resolved; run the Gold dimensions notebook after Silver has
-  refreshed the three source tables.
+- **Cause (2026-09-18):** the Gold dimensions notebook did not materialise `silver.referral_provider_message` or either provider rejection-reason source, leaving the semantic model without these referral-provider details.
+- **Fix (2026-09-18):** added `gold.dim_referral_provider_message` with one current row per `message_id`, and `gold.dim_referral_provider_reject_reason`, which unions cancellation and decline records. The latter publishes canonical `reject_type`, `reason`, `reason_other`, and `created_date` fields, with a source-prefixed `reject_reason_id` to prevent collisions between the two source ID series. The deployed WMPP Gold-dimensions notebook has the same update.
+- **Validation:** `validate_gold_referral_schema.py` now verifies both target dimensions, the cancellation/decline labels, canonical aliases, collision- safe keys, and the deployed-notebook mapping.
+- **Status:** resolved; run the Gold dimensions notebook after Silver has refreshed the three source tables.
 
 ## PERF-001 - repeated provider scans in referral enrichment
 
-- **Symptom (2026-09-18):** `03_silver_business_rules` derived
-  `referral_enrichment` through separate provider/offer, provider-seen, live-
-  provider, and engaged-provider CTEs. The same provider assignment data was
-  therefore read repeatedly in one Silver business-rules run.
-- **Cause:** related referral-grain aggregates and flags were defined at their
-  individual consumer sites rather than behind one reusable materialisation.
-- **Fix:** added `silver.referral_provider_rollup`, written once per run from
-  the provider-to-offer join. It supplies offer counts, distinct provider and
-  home counts, first offer and provider-seen timestamps, accepted-offer date,
-  and live/engaged provider flags to `silver.referral_enrichment`. The latter
-  remains the single materialised referral-grain output consumed by Gold.
-- **Performance expectation:** this replaces the previous independent scans
-  for the offer rollup, provider-seen date, and two engagement flags with one
-  scan plus a reusable Delta read. Confirm the net runtime and stage I/O with
-  the existing `log_step` timestamps after deployment; data size and caching
-  determine the actual gain.
-- **Validation:** `validate_referral_provider_rollup.py` checks the rollup
-  grain, all reused fields, and removal of the redundant enrichment CTEs.
-- **Status:** source change complete. Run `03_silver_business_rules` before
-  `04_gold_model` so both new and existing enrichment materialisations are
-  refreshed together.
+- **Symptom (2026-09-18):** `03_silver_business_rules` derived `referral_enrichment` through separate provider/offer, provider-seen, live- provider, and engaged-provider CTEs. The same provider assignment data was therefore read repeatedly in one Silver business-rules run.
+- **Cause:** related referral-grain aggregates and flags were defined at their individual consumer sites rather than behind one reusable materialisation.
+- **Fix:** added `silver.referral_provider_rollup`, written once per run from the provider-to-offer join. It supplies offer counts, distinct provider and home counts, first offer and provider-seen timestamps, accepted-offer date, and live/engaged provider flags to `silver.referral_enrichment`. The latter remains the single materialised referral-grain output consumed by Gold.
+- **Performance expectation:** this replaces the previous independent scans for the offer rollup, provider-seen date, and two engagement flags with one scan plus a reusable Delta read. Confirm the net runtime and stage I/O with the existing `log_step` timestamps after deployment; data size and caching determine the actual gain.
+- **Validation:** `validate_referral_provider_rollup.py` checks the rollup grain, all reused fields, and removal of the redundant enrichment CTEs.
+- **Status:** source change complete. Run `03_silver_business_rules` before `04_gold_model` so both new and existing enrichment materialisations are refreshed together.
 
 ## GLD-017 — Closure-reason classifications and sequence order
 
-add the following to dim_referral_provider_reject_reason...
-rule
+add the following to dim_referral_provider_reject_reason... rule
 ```
 Closure Reason Clean =
 VAR ReasonText =
@@ -2198,35 +1210,16 @@ SWITCH(
 
 there should only be one dim_referral_provider_reject_reason for fact_referral_provider so to make sure just ass a sequence_order with the latest reason being 1 and the oldest being nTH number.
 
-- **Cause (2026-09-18):** the consolidated rejection-reason dimension exposed
-  the raw cancel/decline reason fields but did not persist the report's cleaned
-  and grouped closure classifications. Its existing row number only removed
-  repeated source snapshots for each reason ID; it did not order the distinct
-  reasons belonging to one referral-provider assignment.
-- **Fix (2026-09-18):** `gold.dim_referral_provider_reject_reason` now adds
-  `closure_reason_clean`, `closure_reason_grouped`, and
-  `closed_referral_reason_bucket` using the supplied rule translated from DAX
-  to Spark SQL. It also adds `sequence_order`, partitioned by
-  `referral_provider_id` and ordered by `created_date`, source export timestamp,
-  and the collision-safe reason ID. The newest reason is 1. The cancel and
-  decline sources remain consolidated in this single dimension.
-- **Validation:** `validate_gld015_reject_reason_dimension.py` checks both the
-  primary and deployed Gold-dimensions notebooks for every classification,
-  source-snapshot deduplication, and deterministic per-provider sequencing.
-- **Status:** resolved; rerun `05_gold_dimensions` to rebuild the Delta table
-  with the new columns and sequence values.
-
+- **Cause (2026-09-18):** the consolidated rejection-reason dimension exposed the raw cancel/decline reason fields but did not persist the report's cleaned and grouped closure classifications. Its existing row number only removed repeated source snapshots for each reason ID; it did not order the distinct reasons belonging to one referral-provider assignment.
+- **Fix (2026-09-18):** `gold.dim_referral_provider_reject_reason` now adds `closure_reason_clean`, `closure_reason_grouped`, and `closed_referral_reason_bucket` using the supplied rule translated from DAX to Spark SQL. It also adds `sequence_order`, partitioned by `referral_provider_id` and ordered by `created_date`, source export timestamp, and the collision-safe reason ID. The newest reason is 1. The cancel and decline sources remain consolidated in this single dimension.
+- **Validation:** `validate_gld015_reject_reason_dimension.py` checks both the primary and deployed Gold-dimensions notebooks for every classification, source-snapshot deduplication, and deterministic per-provider sequencing.
+- **Status:** resolved; rerun `05_gold_dimensions` to rebuild the Delta table with the new columns and sequence values.
 
 ## GLD-018 — Missing offer assignment key caused live provider KPI failure
 
 error on 04_gold_model step:
 
-=== FAILED 04_gold_model: An error occurred while calling o7082.throwExceptionIfHave.
-: com.microsoft.spark.notebook.msutils.NotebookExecutionException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `referral_provider_id` cannot be resolved. Did you mean one of the following? [`provider_id`, `referral_id`, `offer_id`, `as_of_date`, `export_date`].; line 4 pos 9;
-'ReplaceTableAsSelect TableSpec(Map(),None,Map(),None,None,None,false), true, false
-:- ResolvedIdentifier org.apache.spark.sql.delta.catalog.DeltaCatalog@5776e9ac, chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg.fact_provider_kpi_monthly
-+- 'Aggregate ['provider_id, 'assignment_month, 'security_scope_key], ['provider_id, cast('assignment_month as date) AS assignment_month#7511417, 'security_scope_key, 'COUNT(distinct 'referral_provider_id) AS response_opportunity_count#7511418, 'SUM(CASE WHEN 'has_qualifying_response THEN 1 ELSE 0 END) AS qualifying_response_count#7511419, 'SUM('offers_submitted_count) AS offers_submitted_count#7511420, 'SUM('accepted_offer_count) AS accepted_offer_count#7511421, 'COUNT(distinct CASE WHEN ('accepted_offer_count > 0) THEN 'referral_id END) AS successful_referral_count#7511422, 'COUNT(distinct CASE WHEN (('accepted_offer_count > 0) AND 'placed_by_required_date) THEN 'referral_id END) AS placed_by_target_count#7511423, 'AVG(cast('response_elapsed_minutes as double)) AS average_response_minutes#7511424, 'PERCENTILE_APPROX('response_elapsed_minutes, 0.5) AS median_response_minutes#7511425, ASSIGNMENT_COHORT_OFFER_OR_REASON_V1 AS kpi_rule_version#7511426, 6e8e7eb7-515f-4863-ad4e-15ee116aa187 AS job_run_id#7511427, current_timestamp() AS gold_modelled_at#7511428]
-   +- 'SubqueryAlias assignment_component
+=== FAILED 04_gold_model: An error occurred while calling o7082.throwExceptionIfHave. : com.microsoft.spark.notebook.msutils.NotebookExecutionException: [UNRESOLVED_COLUMN.WITH_SUGGESTION] A column or function parameter with name `referral_provider_id` cannot be resolved. Did you mean one of the following? [`provider_id`, `referral_id`, `offer_id`, `as_of_date`, `export_date`].; line 4 pos 9; 'ReplaceTableAsSelect TableSpec(Map(),None,Map(),None,None,None,false), true, false :- ResolvedIdentifier org.apache.spark.sql.delta.catalog.DeltaCatalog@5776e9ac, chimcobldhq2alqjbt146l2vat6l0k159h45ugi3ahflejaga0imerrccg.fact_provider_kpi_monthly +- 'Aggregate ['provider_id, 'assignment_month, 'security_scope_key], ['provider_id, cast('assignment_month as date) AS assignment_month#7511417, 'security_scope_key, 'COUNT(distinct 'referral_provider_id) AS response_opportunity_count#7511418, 'SUM(CASE WHEN 'has_qualifying_response THEN 1 ELSE 0 END) AS qualifying_response_count#7511419, 'SUM('offers_submitted_count) AS offers_submitted_count#7511420, 'SUM('accepted_offer_count) AS accepted_offer_count#7511421, 'COUNT(distinct CASE WHEN ('accepted_offer_count > 0) THEN 'referral_id END) AS successful_referral_count#7511422, 'COUNT(distinct CASE WHEN (('accepted_offer_count > 0) AND 'placed_by_required_date) THEN 'referral_id END) AS placed_by_target_count#7511423, 'AVG(cast('response_elapsed_minutes as double)) AS average_response_minutes#7511424, 'PERCENTILE_APPROX('response_elapsed_minutes, 0.5) AS median_response_minutes#7511425, ASSIGNMENT_COHORT_OFFER_OR_REASON_V1 AS kpi_rule_version#7511426, 6e8e7eb7-515f-4863-ad4e-15ee116aa187 AS job_run_id#7511427, current_timestamp() AS gold_modelled_at#7511428] +- 'SubqueryAlias assignment_component
       +- 'Project ['rp.provider_id, 'DATE_TRUNC(month, 'rp.assigned_at) AS assignment_month#7511431, 'scope.security_scope_key, 'rp.referral_provider_id, 'rp.referral_id, 'rp.has_qualifying_response, 'rp.response_elapsed_minutes, 'COALESCE('o.offers_submitted_count, 0) AS offers_submitted_count#7511432, 'COALESCE('o.accepted_offer_count, 0) AS accepted_offer_count#7511433, 'COALESCE('f.placed_by_required_date, false) AS placed_by_required_date#7511434]
          +- 'Filter isnotnull('rp.assigned_at)
             +- 'Join LeftOuter, ((('rp.referral_id = 'scope.referral_id) AND 'COALESCE('scope.is_active, false)) AND ((isnull('scope.valid_from) OR ('scope.valid_from <= 2026-09-21)) AND (isnull('scope.valid_to) OR ('scope.valid_to >= 2026-09-21))))
@@ -2240,26 +1233,12 @@ error on 04_gold_model step:
                :  :        +- 'Aggregate ['referral_provider_id], ['referral_provider_id, count(distinct offer_id#7511457) AS offers_submitted_count#7511429L, count(distinct CASE WHEN lower(coalesce(offer_status#7511464, )) IN (accepted,approved,selected,offer_successful) THEN offer_id#7511457 END) AS accepted_offer_count#7511430L]
                :  :           +- SubqueryAlias spark_catalog.chim ===
 
-
-
 ### Resolution (2026-09-21)
 
-- **Cause:** the provider KPI `offer_component` correctly grouped the Gold
-  offer fact by `referral_provider_id`, but the deployed `gold.fact_offer`
-  projection omitted that assignment key. Spark therefore failed query
-  analysis before `fact_provider_kpi_monthly` could be replaced.
-- **Fix:** `04_gold_model` now publishes `referral_provider_id` on
-  `gold.fact_offer`. The provider KPI continues to read the governed Gold fact
-  and joins to `gold.fact_referral_provider` at the exact assignment grain.
-  The fact's existing as-of cut-off keeps historical execution reproducible
-  and avoids a potentially lossy `provider_id` + `referral_id` fallback when a
-  provider is assigned to the same referral more than once.
-- **Validation:** `validate_gld016_provider_kpi_offer_keys.py` now verifies the
-  assignment key in the Gold offer projection, the source as-of cut-off, and
-  the downstream Gold-to-Gold group and join contract.
-- **Status:** resolved in repository source. Apply the revised
-  `04_gold_model.py` cell to the client notebook and rerun `04_gold_model`;
-  Fabric execution remains the deployment acceptance test.
+- **Cause:** the provider KPI `offer_component` correctly grouped the Gold offer fact by `referral_provider_id`, but the deployed `gold.fact_offer` projection omitted that assignment key. Spark therefore failed query analysis before `fact_provider_kpi_monthly` could be replaced.
+- **Fix:** `04_gold_model` now publishes `referral_provider_id` on `gold.fact_offer`. The provider KPI continues to read the governed Gold fact and joins to `gold.fact_referral_provider` at the exact assignment grain. The fact's existing as-of cut-off keeps historical execution reproducible and avoids a potentially lossy `provider_id` + `referral_id` fallback when a provider is assigned to the same referral more than once.
+- **Validation:** `validate_gld016_provider_kpi_offer_keys.py` now verifies the assignment key in the Gold offer projection, the source as-of cut-off, and the downstream Gold-to-Gold group and join contract.
+- **Status:** resolved in repository source. Apply the revised `04_gold_model.py` cell to the client notebook and rerun `04_gold_model`; Fabric execution remains the deployment acceptance test.
 
 ## GLD-019 — Missing framework-category links in referral and offer facts
 
@@ -2288,22 +1267,11 @@ where b.referral_id  = 'ced6730c-da21-452d-960e-1e27d54f6810'
 ideally we need a id for the following
 - fact_referral.framework_category_id from c2.framework_category_id **category assigned initial referral creation
 
-
 ### Resolution (2026-09-25)
 
-- **Fix:** the offer fact now exposes the proposed `framework_category_id` and
-  a separate `provider_home_framework_category_id`. Referral and home category
-  roll-ups return a single ID only when exactly one distinct membership exists;
-  category counts distinguish missing and multiple memberships. The new
-  `bridge_referral_framework_category` and existing home framework bridge retain
-  all category links without multiplying fact rows. Referral snapshots retain
-  the new single-category key and count.
-- **Validation:** synthetic ETL regressions cover duplicate links, multiple
-  memberships, missing/unknown keys and distinct offer/home category roles.
-- **Status:** implemented in repository source. Client Fabric execution and
-  downstream category relationships remain outstanding. The supplied current
-  Silver state does not prove category membership at initial referral creation;
-  that requires effective-dated source evidence.
+- **Fix:** the offer fact now exposes the proposed `framework_category_id` and a separate `provider_home_framework_category_id`. Referral and home category roll-ups return a single ID only when exactly one distinct membership exists; category counts distinguish missing and multiple memberships. The new `bridge_referral_framework_category` and existing home framework bridge retain all category links without multiplying fact rows. Referral snapshots retain the new single-category key and count.
+- **Validation:** synthetic ETL regressions cover duplicate links, multiple memberships, missing/unknown keys and distinct offer/home category roles.
+- **Status:** implemented in repository source. Client Fabric execution and downstream category relationships remain outstanding. The supplied current Silver state does not prove category membership at initial referral creation; that requires effective-dated source evidence.
 
 ## GLD-020 — Rename the offer home key to provider_home_id
 
@@ -2311,53 +1279,31 @@ change the home_id to provider_home_id to remove ambiguity
 
 ### Resolution (2026-09-25)
 
-- **Fix:** `gold.fact_offer.provider_home_id` replaces `home_id`; no duplicate
-  legacy alias is retained. The reusable report builder's Homes Offered
-  expression uses the renamed key.
-- **Validation:** the ETL contract test requires `provider_home_id` and rejects
-  the old offer alias.
-- **Status:** implemented in repository source. Deploy the revised Gold notebook
-  and rebind downstream imports, relationships and measures. Versioned client
-  semantic models/reports were not edited or tested for this ETL change.
+- **Fix:** `gold.fact_offer.provider_home_id` replaces `home_id`; no duplicate legacy alias is retained. The reusable report builder's Homes Offered expression uses the renamed key.
+- **Validation:** the ETL contract test requires `provider_home_id` and rejects the old offer alias.
+- **Status:** implemented in repository source. Deploy the revised Gold notebook and rebind downstream imports, relationships and measures. Versioned client semantic models/reports were not edited or tested for this ETL change.
 
 ## GLD-021 — Add provider-home and referral spot-category bridges
 
 it will be good to add spot bridge table/s
 
-LH_BCT_WMPP.silver.provider_home_spot_category
-LH_BCT_WMPP.silver.referral_spot_category
+LH_BCT_WMPP.silver.provider_home_spot_category LH_BCT_WMPP.silver.referral_spot_category
 
 call them bridge_ followed by the original name
 
 ### Resolution (2026-09-25)
 
-- **Fix:** `05_gold_dimensions` now creates
-  `gold.bridge_provider_home_spot_category` and
-  `gold.bridge_referral_spot_category`. Source IDs and the distinct
-  `spot_category_code`/`spot_category` names are retained, together with export
-  metadata and job correlation. Setup registers both bridges in Gold lineage.
-- **Validation:** ETL regressions check both bridge contracts and their lineage
-  registrations; no semantic/report project tests are involved.
-- **Status:** implemented in repository source; client execution and downstream
-  adoption remain outstanding.
+- **Fix:** `05_gold_dimensions` now creates `gold.bridge_provider_home_spot_category` and `gold.bridge_referral_spot_category`. Source IDs and the distinct `spot_category_code`/`spot_category` names are retained, together with export metadata and job correlation. Setup registers both bridges in Gold lineage.
+- **Validation:** ETL regressions check both bridge contracts and their lineage registrations; no semantic/report project tests are involved.
+- **Status:** implemented in repository source; client execution and downstream adoption remain outstanding.
 
 ## SLV-001 — Generalised referral location and approximate offer distance
 
 ### Resolution (2026-09-25)
 
-- **Fix:** derived referral/provider-home location tables use local matching and
-  approved city/postcode reference data. The default city is the forwarded
-  notebook parameter `DEFAULT_LOCATION_CITY` (Birmingham). Offer distance is
-  explicitly approximate, straight-line and in kilometres, with endpoint
-  provenance and missing/default/review statuses. Ambiguous or excluded locations
-  cannot produce a distance; no referral text is sent to an external geocoder.
-- **Validation:** local ETL tests cover classification, defaults, exclusions,
-  multiple cities, missing/invalid coordinates, distance calculation and offer
-  join grain. The full Python/ETL suite passed 99 tests; direct Ruff checks passed.
-- **Status:** implemented in repository source. Approved coordinate data,
-  classification acceptance and client Fabric verification remain outstanding;
-  distance values remain null until suitable local coordinates are supplied.
-  See the [implementation guide](../client%20documentation/04_Data_and_Reporting/CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+- **Fix:** derived referral/provider-home location tables use local matching and approved city/postcode reference data. The default city is the forwarded notebook parameter `DEFAULT_LOCATION_CITY` (Birmingham). Offer distance is explicitly approximate, straight-line and in kilometres, with endpoint provenance and missing/default/review statuses. Ambiguous or excluded locations cannot produce a distance; no referral text is sent to an external geocoder.
+- **Validation:** local ETL tests cover classification, defaults, exclusions, multiple cities, missing/invalid coordinates, distance calculation and offer join grain. The full Python/ETL suite passed 99 tests; direct Ruff checks passed.
+- **Status:** implemented in repository source. Approved coordinate data, classification acceptance and client Fabric verification remain outstanding; distance values remain null until suitable local coordinates are supplied. See the [implementation guide](../client%20documentation/04_Data_and_Reporting/CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
 
 ## GLD-023 - GENERATE EXTRACTS FROM THE REPORT
 i need to generate extracts from the power bi report.. here are the feidls that are needed. this is the old semantic model script used to generate the extracts
@@ -2414,166 +1360,55 @@ combine them to generate a single extract from the notebook through to the seman
 
 ### Resolution (2026-10-05)
 
-The provider-only grain recorded below is superseded by the provider/home
-expansion dated 6 October 2026. The original decision remains here for audit.
+The provider-only grain recorded below is superseded by the provider/home expansion dated 6 October 2026. The original decision remains here for audit.
 
-- **Cause:** both pasted queries are identical Fostering-only extracts. They
-  depend on old staging queries and choose one arbitrary framework when a
-  provider has multiple memberships after `Table.Distinct`.
-- **Fix:** `05_gold_dimensions.py` now builds one materialized
-  `gold.rpt_provider_registry` from current provider records and Gold framework
-  membership. It retains all nine contact fields, one row per Provider ID and
-  a sorted distinct list of Fostering framework codes. Providers do not need
-  offers. Phone numbers stay strings; missing contacts stay NULL. Other placement
-  types remain excluded to preserve the supplied legacy scope.
-- **Semantic/report integration:** the saved `reports/WIP/SM WMPP v16 updated WIP`
-  imports the table and has a hidden **Provider Registry Extract** page with all
-  16 named legacy fields plus Provider ID, Provider Status, County, Country and
-  Source Export Date. Existing page visuals, bookmarks, relationships and
-  navigation are unchanged. A reproducible installer/template and backup
-  preserve the local, Git-ignored report edits.
-- **Access:** the existing dynamic reader role explicitly denies rows on this
-  new contact table pending an approved audience. Other role rules are unchanged.
-  No service publication, permissions, role membership or export settings were
-  changed. Hidden-page status alone is not security; editors and direct SQL
-  access require separate controls.
-- **Validation:** 17 new synthetic ETL and safe-file-edit checks pass; the full
-  local suite passes **248 tests and 158 subtests**. Tool/test lint and the Gold
-  notebook contract validator pass. The backed-up report apply verifies that
-  every unlisted saved model/report file is unchanged (excluding `.pbi` cache).
-- **Status:** source and saved WIP definitions implemented, not deployed or
-  refreshed in Fabric/Desktop. Actual registry counts, contact reconciliation,
-  native rendering/export and the intended reader audience remain acceptance
-  checks. See [deployment and export instructions](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+- **Cause:** both pasted queries are identical Fostering-only extracts. They depend on old staging queries and choose one arbitrary framework when a provider has multiple memberships after `Table.Distinct`.
+- **Fix:** `05_gold_dimensions.py` now builds one materialized `gold.rpt_provider_registry` from current provider records and Gold framework membership. It retains all nine contact fields, one row per Provider ID and a sorted distinct list of Fostering framework codes. Providers do not need offers. Phone numbers stay strings; missing contacts stay NULL. Other placement types remain excluded to preserve the supplied legacy scope.
+- **Semantic/report integration:** the saved `WMPP_v16` imports the table and has a hidden **Provider Registry Extract** page with all 16 named legacy fields plus Provider ID, Provider Status, County, Country and Source Export Date. Existing page visuals, bookmarks, relationships and navigation are unchanged. A reproducible installer/template and backup preserve the local, Git-ignored report edits.
+- **Access:** the existing dynamic reader role explicitly denies rows on this new contact table pending an approved audience. Other role rules are unchanged. No service publication, permissions, role membership or export settings were changed. Hidden-page status alone is not security; editors and direct SQL access require separate controls.
+- **Validation:** 17 new synthetic ETL and safe-file-edit checks pass; the full local suite passes **248 tests and 158 subtests**. Tool/test lint and the Gold notebook contract validator pass. The backed-up report apply verifies that every unlisted saved model/report file is unchanged (excluding `.pbi` cache).
+- **Status:** source and saved WMPP_v16 definitions implemented, not deployed or refreshed in Fabric/Desktop. Actual registry counts, contact reconciliation, native rendering/export and the intended reader audience remain acceptance checks. See [deployment and export instructions](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
 
 ### Approved audience follow-up (2026-10-06)
 
 Superseded by the group-based follow-up below; this records the earlier decision.
 
-- The user approved `akhtar@bham.co.uk` and `hamanat@bham.co.uk` as the only
-  ordinary viewers/exporters of the Fostering registry. The saved WIP now
-  applies their exact sign-in allowlist to `rpt_provider_registry` within the
-  existing dynamic role; other readers receive no registry rows. Existing
-  referral/scoring permissions and all other model roles are unchanged.
-- Unhid the registry page and clarified its access note. This is shared page
-  navigation, not per-user page security. No other page layout, sidebar,
-  bookmark, relationship or import was changed. The edited registry import
-  was preserved. Backups: `reports/WIP/_review/registry-access-20261006-154319`.
-- 26 focused synthetic ETL/safe-edit checks passed; access-only preview of the
-  saved WIP is idempotent. This does not establish live Power BI identity/RLS
-  or export behaviour. The installer supports explicit `--registry-user`
-  approval and `--access-only` without replacing the edited import.
-- **Remaining:** publish/refresh the reviewed WIP, confirm actual sign-in UPNs,
-  assign consumer role membership and test approved/unapproved Viewer accounts.
-  Export remains **disabled** in the saved report. IT must approve the scoped
-  Excel/CSV export policy before report exports are enabled, or provide a
-  separately restricted extract report. Tenant changes affect other reports.
-  No live permissions, publication, export-policy change or contact file has
-  been generated by this local edit. Admin/editor and direct SQL access require
-  separate controls.
+- The user approved `akhtar@bham.co.uk` and `hamanat@bham.co.uk` as the only ordinary viewers/exporters of the Fostering registry. The saved WMPP_v16 now applies their exact sign-in allowlist to `rpt_provider_registry` within the existing dynamic role; other readers receive no registry rows. Existing referral/scoring permissions and all other model roles are unchanged.
+- Unhid the registry page and clarified its access note. This is shared page navigation, not per-user page security. No other page layout, sidebar, bookmark, relationship or import was changed. The edited registry import was preserved. Backups: `reports/WMPP_v16/_review/registry-access-20261006-154319`.
+- 26 focused synthetic ETL/safe-edit checks passed; access-only preview of the saved WMPP_v16 is idempotent. This does not establish live Power BI identity/RLS or export behaviour. The installer supports explicit `--registry-user` approval and `--access-only` without replacing the edited import.
+- **Remaining:** publish/refresh the reviewed WMPP_v16, confirm actual sign-in UPNs, assign consumer role membership and test approved/unapproved Viewer accounts. Export remains **disabled** in the saved report. IT must approve the scoped Excel/CSV export policy before report exports are enabled, or provide a separately restricted extract report. Tenant changes affect other reports. No live permissions, publication, export-policy change or contact file has been generated by this local edit. Admin/editor and direct SQL access require separate controls.
 
 ### Group-based audience follow-up (2026-10-06)
 
-- User named `wmpp_report_users` and `wmpp_provider_registry_users`. Removed the
-  two-email exception from the ordinary reader role, restoring registry denial.
-  Added `WMPP Provider Registry RLS` for the registry group, allowing the current
-  Fostering directory while preserving every other table predicate from the
-  dynamic reader role. The roles' union does not widen referral/scoring scope.
-- Service handover: assign the report group to `WMPP Dynamic Detail RLS` and
-  the registry group to `WMPP Provider Registry RLS`, with report/app read access
-  or workspace Viewer. `WMPP_ServiceGroup` annotations are labels only; live
-  membership is not stored or activated by these file edits.
-- Model role registration is updated; report visuals, layouts, relationships,
-  bookmarks and edited imports are unchanged. Backup:
-  `reports/WIP/_review/registry-groups-20261006-162157`. The explicit group-mode
-  installer guards scope-filter equality and refuses existing role drift.
-- **Verification:** 296 tests and 158 subtests passed, including 34 focused
-  registry checks. Both saved roles have identical six non-registry table
-  predicates; group preview plans no further edits. Hashes confirm 2,733
-  unlisted project files unchanged, excluding cache. Native identity and export
-  acceptance remain unverified.
-- **Remaining:** publish/refresh; verify both are Entra security groups; assign
-  role membership; confirm user-to-referral-scope mappings; test real Viewers
-  in either/both/neither group. Report exports remain **None**. IT must review
-  Excel/CSV export policy for the registry group before enabling summarized
-  exports. No groups, live permissions, tenant settings or contact files were
-  created or changed by this local implementation.
+- User named `wmpp_report_users` and `wmpp_provider_registry_users`. Removed the two-email exception from the ordinary reader role, restoring registry denial. Added `WMPP Provider Registry RLS` for the registry group, allowing the current Fostering directory while preserving every other table predicate from the dynamic reader role. The roles' union does not widen referral/scoring scope.
+- Service handover: assign the report group to `WMPP Dynamic Detail RLS` and the registry group to `WMPP Provider Registry RLS`, with report/app read access or workspace Viewer. `WMPP_ServiceGroup` annotations are labels only; live membership is not stored or activated by these file edits.
+- Model role registration is updated; report visuals, layouts, relationships, bookmarks and edited imports are unchanged. Backup: `reports/WMPP_v16/_review/registry-groups-20261006-162157`. The explicit group-mode installer guards scope-filter equality and refuses existing role drift.
+- **Verification:** 296 tests and 158 subtests passed, including 34 focused registry checks. Both saved roles have identical six non-registry table predicates; group preview plans no further edits. Hashes confirm 2,733 unlisted project files unchanged, excluding cache. Native identity and export acceptance remain unverified.
+- **Remaining:** publish/refresh; verify both are Entra security groups; assign role membership; confirm user-to-referral-scope mappings; test real Viewers in either/both/neither group. Report exports remain **None**. IT must review Excel/CSV export policy for the registry group before enabling summarized exports. No groups, live permissions, tenant settings or contact files were created or changed by this local implementation.
 
 ### Provider/home and metric expansion (2026-10-06)
 
-The Fostering-only eligibility below is superseded by the complete-directory
-correction dated 7 October 2026; retained here as delivery history.
+The Fostering-only eligibility below is superseded by the complete-directory correction dated 7 October 2026; retained here as delivery history.
 
-- User requested provider LEFT provider_home, not one provider row. Current
-  Fostering eligibility remains unchanged; one row per provider/home ID,
-  including homes without offers and one blank-home row for a no-home provider.
-- Actual home name/service, status, addresses, contacts, beds and spot flag are
-  included. The raw table now has 72 direct column fields (51 additions).
-- Separate deduplicated provider/home offer and IPA aggregates include drafts,
-  accepted/rejected offers, provider/both-party signatures, active/completed IPAs,
-  offer distance denominators/averages, estimated active weekly liability and
-  estimated prorated lifetime cost to date. Missing-cost counters distinguish
-  partial/unknown estimates from genuine zeros. Closed lifetime costs remain;
-  future days are not accrued. No invoice/rate-history actual-spend claim.
-- Messages, assignment declines and observed response minutes remain
-  provider-wide: the sources have no home key. Provider-wide figures repeat on
-  every home row and must not be summed. IPAs require an accepted-offer link;
-  unattributed facts are not assigned to a home by inference. Cost cut-off is
-  the common Gold fact as-of date, not today against stale/archive facts.
-- Setup registers eight registry source dependencies. `04_gold_model` must be
-  current before `05_gold_dimensions`; the existing runners already order them.
-  Missing source columns or inconsistent/unknown metric as-of dates stop the
-  registry before overwrite. No reset or historical replay is required.
-- Updated the saved WIP registry import, table query columns and grain note
-  only. Preserved connection, existing lineage, all coordinates/styles, other
-  pages, roles, relationships, bookmarks, cache and export mode None. Backup:
-  `reports/WIP/_review/registry-home-metrics-20261006-165955`. Hashes confirm
-  all 2,733 unlisted project files unchanged, excluding `.pbi` cache. Separate
-  `--expand-registry` preview is idempotent and preserves user-edited definitions.
-- **Validation:** 306 tests and 158 subtests pass, including 44 focused registry
-  checks; Gold dimensions and setup validators pass. Native Fabric/Delta,
-  refresh/rendering, actual counts and approved Viewer exports remain unverified.
-  Registry aggregates span available provider activity across referral scopes;
-  review that aggregate audience/small-cell disclosure before publication.
-- No live database execution, publication, permissions or exported file changed.
-  Follow [updated definitions and deployment](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+- User requested provider LEFT provider_home, not one provider row. Current Fostering eligibility remains unchanged; one row per provider/home ID, including homes without offers and one blank-home row for a no-home provider.
+- Actual home name/service, status, addresses, contacts, beds and spot flag are included. The raw table now has 72 direct column fields (51 additions).
+- Separate deduplicated provider/home offer and IPA aggregates include drafts, accepted/rejected offers, provider/both-party signatures, active/completed IPAs, offer distance denominators/averages, estimated active weekly liability and estimated prorated lifetime cost to date. Missing-cost counters distinguish partial/unknown estimates from genuine zeros. Closed lifetime costs remain; future days are not accrued. No invoice/rate-history actual-spend claim.
+- Messages, assignment declines and observed response minutes remain provider-wide: the sources have no home key. Provider-wide figures repeat on every home row and must not be summed. IPAs require an accepted-offer link; unattributed facts are not assigned to a home by inference. Cost cut-off is the common Gold fact as-of date, not today against stale/archive facts.
+- Setup registers eight registry source dependencies. `04_gold_model` must be current before `05_gold_dimensions`; the existing runners already order them. Missing source columns or inconsistent/unknown metric as-of dates stop the registry before overwrite. No reset or historical replay is required.
+- Updated the saved WMPP_v16 registry import, table query columns and grain note only. Preserved connection, existing lineage, all coordinates/styles, other pages, roles, relationships, bookmarks, cache and export mode None. Backup: `reports/WMPP_v16/_review/registry-home-metrics-20261006-165955`. Hashes confirm all 2,733 unlisted project files unchanged, excluding `.pbi` cache. Separate `--expand-registry` preview is idempotent and preserves user-edited definitions.
+- **Validation:** 306 tests and 158 subtests pass, including 44 focused registry checks; Gold dimensions and setup validators pass. Native Fabric/Delta, refresh/rendering, actual counts and approved Viewer exports remain unverified. Registry aggregates span available provider activity across referral scopes; review that aggregate audience/small-cell disclosure before publication.
+- No live database execution, publication, permissions or exported file changed. Follow [updated definitions and deployment](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
 
 ### Complete directory baseline correction (2026-10-07)
 
-- **Cause:** the registry retained an INNER JOIN to Fostering framework
-  membership, which removed basic providers despite the provider/home LEFT
-  JOIN. The earlier grain change did not correct that eligibility restriction.
-- **Resolution:** the baseline is now exactly `gold.dim_provider a LEFT OUTER
-  JOIN gold.dim_provider_home b ON a.provider_id = b.provider_id`. No status,
-  membership, placement-type or activity filter is applied. A baseline of
-  1,002 rows must produce exactly 1,002 registry rows, with the same keys.
-  Providers without homes have a blank-home row; each existing home gets a row.
-- Basic directory attributes come from the two Gold dimensions; latest contacts,
-  all descriptive framework memberships and provider/home metric aggregates are
-  LEFT joined. Missing contacts, unknown frameworks and zero activity do not
-  remove providers. Provider/home IDs are not deduplicated to hide source faults.
-- Before overwrite, counts and the provider/home key multiset must match the
-  dimension baseline in both directions. Missing, extra, multiplied or
-  substituted pairs stop the registry write. Invalid duplicate pairs stop for
-  source-quality review rather than writing a smaller registry.
-- Retained the requested signatures, IPA/offer/draft/message/rejection counts,
-  response minutes, city-to-postcode distance and estimated active weekly and
-  lifetime-to-date costs. Provider-wide metrics repeat across homes and are
-  not additive down the file. Existing estimate/denominator warnings remain.
-- Setup lineage now has ten dependencies. The saved WIP import and raw table
-  regain the missing fields (78 model columns, 72 table columns); known scope
-  labels say all providers/homes. Connection, old lineage, coordinates/styles,
-  other pages, roles and export settings remain unchanged. Backup:
-  `reports/WIP/_review/registry-complete-baseline-20261007-a681f71c`.
-- **Validation:** 313 tests and 158 subtests, including 51 registry checks;
-  Gold-dimensions/setup validators and idempotent report preview pass. The
-  synthetic regression was 3 rows before the fix versus its 1,002-row dimension
-  baseline; the corrected generated SQL retains all 1,002 keys. All 2,732
-  unlisted WIP files are hash-identical, excluding `.pbi` cache.
-- Deploy updated setup and `05_gold_dimensions`, then refresh the registry
-  import. Native Fabric execution, actual counts, rendering and approved Viewer
-  exports remain acceptance checks. No live run/publication/permission change.
-  See [current deployment and acceptance](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
+- **Cause:** the registry retained an INNER JOIN to Fostering framework membership, which removed basic providers despite the provider/home LEFT JOIN. The earlier grain change did not correct that eligibility restriction.
+- **Resolution:** the baseline is now exactly `gold.dim_provider a LEFT OUTER JOIN gold.dim_provider_home b ON a.provider_id = b.provider_id`. No status, membership, placement-type or activity filter is applied. A baseline of 1,002 rows must produce exactly 1,002 registry rows, with the same keys. Providers without homes have a blank-home row; each existing home gets a row.
+- Basic directory attributes come from the two Gold dimensions; latest contacts, all descriptive framework memberships and provider/home metric aggregates are LEFT joined. Missing contacts, unknown frameworks and zero activity do not remove providers. Provider/home IDs are not deduplicated to hide source faults.
+- Before overwrite, counts and the provider/home key multiset must match the dimension baseline in both directions. Missing, extra, multiplied or substituted pairs stop the registry write. Invalid duplicate pairs stop for source-quality review rather than writing a smaller registry.
+- Retained the requested signatures, IPA/offer/draft/message/rejection counts, response minutes, city-to-postcode distance and estimated active weekly and lifetime-to-date costs. Provider-wide metrics repeat across homes and are not additive down the file. Existing estimate/denominator warnings remain.
+- Setup lineage now has ten dependencies. The saved WMPP_v16 import and raw table regain the missing fields (78 model columns, 72 table columns); known scope labels say all providers/homes. Connection, old lineage, coordinates/styles, other pages, roles and export settings remain unchanged. Backup: `reports/WMPP_v16/_review/registry-complete-baseline-20261007-a681f71c`.
+- **Validation:** 313 tests and 158 subtests, including 51 registry checks; Gold-dimensions/setup validators and idempotent report preview pass. The synthetic regression was 3 rows before the fix versus its 1,002-row dimension baseline; the corrected generated SQL retains all 1,002 keys. All 2,732 unlisted WMPP_v16 files are hash-identical, excluding `.pbi` cache.
+- Deploy updated setup and `05_gold_dimensions`, then refresh the registry import. Native Fabric execution, actual counts, rendering and approved Viewer exports remain acceptance checks. No live run/publication/permission change. See [current deployment and acceptance](../client%20documentation/04_Data_and_Reporting/PROVIDER_REGISTRY_EXTRACT.md).
 
 ## SEM-002 - Adding a linked referral table in the semantic model
 
@@ -2714,9 +1549,7 @@ RETURN
         & " | Other pairs: "
         & FORMAT ( COALESCE ( COUNTROWS ( otherPairs ), 0 ), "0" )
         ```
-WITH LINKED FILTER
-`// DAX Query
-DEFINE
+WITH LINKED FILTER `// DAX Query DEFINE
 	VAR __DS0FilterTable =
 		FILTER(
 			KEEPFILTERS(VALUES('dim_provider'[provider_name])),
@@ -2771,9 +1604,7 @@ ORDER BY
 	'Linked Provider Referrals'[provider_name]
 `
 
-WITOUT LINKED FILTER
-`// DAX Query
-DEFINE
+WITOUT LINKED FILTER `// DAX Query DEFINE
 	VAR __DS0FilterTable =
 		FILTER(
 			KEEPFILTERS(VALUES('dim_provider'[provider_name])),
@@ -2815,224 +1646,81 @@ ORDER BY
 
 ### Resolution — 11 October 2026
 
-Implemented in `reports/WIP/SM WMPP v16 updated WIP` only. The earlier
-provider-only captured query omitted `referral_id`, so `SELECTEDVALUE(referral_id)`
-was blank for providers with multiple referrals and the visibility filter hid
-their rows. Removing that filter exposed the full provider list. The latest
-saved pair-grain visual already restricted its rows correctly, but could still
-look broad because assignment-only links intentionally count.
+Implemented in `WMPP_v16` only. The earlier provider-only captured query omitted `referral_id`, so `SELECTEDVALUE(referral_id)` was blank for providers with multiple referrals and the visibility filter hid their rows. Removing that filter exposed the full provider list. The latest saved pair-grain visual already restricted its rows correctly, but could still look broad because assignment-only links intentionally count.
 
-- Visibility now tests for at least one shared referral at provider grouping,
-  and the exact referral at referral/provider grouping. It excludes searched
-  providers and stays blank without a name/ID search.
-- Selected canonical provider IDs are applied directly to both assignment and
-  offer fact keys. No disconnected provider-search table was introduced.
-- The linked table retains its pair keys and `Linked provider row visible = 1`
-  filter. Its debugging flag column is replaced with distinct assignments,
-  offers (including drafts) and messages, all scoped to visible shared pairs.
-  Messages are attributed through `referral_provider_id`, in either direction.
-- No visual positions/sizes, page layout, relationships, bookmarks, RLS roles,
-  source connections, client-deliverables files or ZIP archives were changed.
+- Visibility now tests for at least one shared referral at provider grouping, and the exact referral at referral/provider grouping. It excludes searched providers and stays blank without a name/ID search.
+- Selected canonical provider IDs are applied directly to both assignment and offer fact keys. No disconnected provider-search table was introduced.
+- The linked table retains its pair keys and `Linked provider row visible = 1` filter. Its debugging flag column is replaced with distinct assignments, offers (including drafts) and messages, all scoped to visible shared pairs. Messages are attributed through `referral_provider_id`, in either direction.
+- No visual positions/sizes, page layout, relationships, bookmarks, RLS roles, source connections, client-deliverables files or ZIP archives were changed.
 
-Validation: saved expressions executed as read-only query-local overrides in
-the loaded native Power BI model; pair/provider membership and all three counts
-reconciled against independent fact-key filters. The cleared-search visibility
-check passed. The entire saved definition passed Power BI's native TMDL parser,
-and the report's visibility filter and all visual positions were checked.
-`linked-provider-acceptance.dax` in the WIP root provides a native recheck after
-opening the updated PBIP; it is not a Python approximation or pytest assertion.
+Validation: saved expressions executed as read-only query-local overrides in the loaded native Power BI model; pair/provider membership and all three counts reconciled against independent fact-key filters. The cleared-search visibility check passed. The entire saved definition passed Power BI's native TMDL parser, and the report's visibility filter and all visual positions were checked. `linked-provider-acceptance.dax` in the WMPP_v16 root provides a native recheck after opening the updated PBIP; it is not a Python approximation or pytest assertion.
 
-Status: saved-file repair implemented. Desktop closed before additional
-multi-provider/unmatched-search checks; those checks, visual rendering and
-Viewer/RLS acceptance remain to be confirmed after reopening. No live model
-write, refresh, publication or permission change was performed.
+Status: saved-file repair implemented. Desktop closed before additional multi-provider/unmatched-search checks; those checks, visual rendering and Viewer/RLS acceptance remain to be confirmed after reopening. No live model write, refresh, publication or permission change was performed.
 
 ### Approved scope follow-up — 11 October 2026
 
-The user approved excluding assignment-only links and requested a KPI card for
-all linked providers. This is an explicit narrowing of the earlier broad rule,
-not a provider-dimension replacement. Both the searched provider and the other
-provider must have an offer or recorded message on the same referral. Offers
-include drafts; messages in either direction qualify. All searched providers
-are excluded from the supplementary results.
+The user approved excluding assignment-only links and requested a KPI card for all linked providers. This is an explicit narrowing of the earlier broad rule, not a provider-dimension replacement. Both the searched provider and the other provider must have an offer or recorded message on the same referral. Offers include drafts; messages in either direction qualify. All searched providers are excluded from the supplementary results.
 
-Implemented in the saved WIP only:
+Implemented in the saved WMPP_v16 only:
 
-- `Linked provider row visible` derives the searched referral set from offers
-  and message-bearing assignments, then checks the other provider's activity
-  on those exact shared referrals. It still supports provider-only grouping.
-- Added `Linked providers in selection` and a **Linked providers** card. A
-  provider is counted once across referrals; no search/unmatched search shows
-  zero. The search filters the card, while a clicked linked-table row does not.
-- Existing linked offer/assignment/message counts retain exact pair filtering
-  and now follow the narrower visibility rule. The table title explains that
-  both sides require offers or messages.
-- All 123 existing visuals retain their exact positions, sizes and stacking
-  order. Page dimensions are unchanged. The added card is within the canvas
-  with zero bounding-box overlaps, including hidden popup visuals.
+- `Linked provider row visible` derives the searched referral set from offers and message-bearing assignments, then checks the other provider's activity on those exact shared referrals. It still supports provider-only grouping.
+- Added `Linked providers in selection` and a **Linked providers** card. A provider is counted once across referrals; no search/unmatched search shows zero. The search filters the card, while a clicked linked-table row does not.
+- Existing linked offer/assignment/message counts retain exact pair filtering and now follow the narrower visibility rule. The table title explains that both sides require offers or messages.
+- All 123 existing visuals retain their exact positions, sizes and stacking order. Page dimensions are unchanged. The added card is within the canvas with zero bounding-box overlaps, including hidden popup visuals.
 
-Acceptance: the independent native DAX query went from FAIL before the change
-to PASS with the saved expressions. Hayshousing reconciles to 700 shared pairs,
-103 distinct linked providers, 560 offers, 700 assignments and 1,114 messages.
-Two searched providers reconcile to 56 pairs / 42 distinct linked providers;
-unmatched and cleared searches return no visible pairs and a zero card. There
-are no extra or missing expected pairs in these checks. The complete saved model
-passes the native TMDL parser. Updated report JSON passes the published page
-2.1.0 and visual 2.12.0 compatibility schemas; only the validation copy's schema
-label was substituted because Desktop's saved 2.13.0 schema is not published.
-The actual source declarations remain unchanged.
+Acceptance: the independent native DAX query went from FAIL before the change to PASS with the saved expressions. Hayshousing reconciles to 700 shared pairs, 103 distinct linked providers, 560 offers, 700 assignments and 1,114 messages. Two searched providers reconcile to 56 pairs / 42 distinct linked providers; unmatched and cleared searches return no visible pairs and a zero card. There are no extra or missing expected pairs in these checks. The complete saved model passes the native TMDL parser. Updated report JSON passes the published page 2.1.0 and visual 2.12.0 compatibility schemas; only the validation copy's schema label was substituted because Desktop's saved 2.13.0 schema is not published. The actual source declarations remain unchanged.
 
-Status: approved saved-file changes and native formula checks completed.
-Reopen `SM_WMPP_v16.pbip` to load the saved changes. Visual rendering and
-Viewer/RLS acceptance still require a reopened report; no running-model write,
-refresh, publication, permissions, ETL, client-deliverable or ZIP changes.
+Status: approved saved-file changes and native formula checks completed. Reopen `SM_WMPP_v16.pbip` to load the saved changes. Visual rendering and Viewer/RLS acceptance still require a reopened report; no running-model write, refresh, publication, permissions, ETL, client-deliverable or ZIP changes.
 
 ### Requested linked-table columns — 11 October 2026
 
-User supplied the earlier offer/status/response/message instructions and asked
-to add any missing columns. Offer and message counts already existed. Added
-distinct offer statuses, distinct recorded provider-response statuses, and a
-latest-message timestamp plus 150-character preview. All use exact visible
-referral/provider keys; messages are attributed through referral-provider
-assignment IDs in either direction. The preview is blank for multi-pair totals
-and uses message ID descending to resolve equal latest timestamps.
+User supplied the earlier offer/status/response/message instructions and asked to add any missing columns. Offer and message counts already existed. Added distinct offer statuses, distinct recorded provider-response statuses, and a latest-message timestamp plus 150-character preview. All use exact visible referral/provider keys; messages are attributed through referral-provider assignment IDs in either direction. The preview is blank for multi-pair totals and uses message ID descending to resolve equal latest timestamps.
 
-The saved WIP Provider Explorer table now shows these columns alongside its
-existing UUID keys, provider name and assignment/offer/message counts. Totals
-and value wrapping are off; new text-column widths are limited without moving
-or resizing any of the 124 visuals. Existing linkage/search/card behaviour,
-filters, relationships, roles and source connections are unchanged. No other
-page, ETL, client-deliverable, ZIP, publication or permissions change.
+The saved WMPP_v16 Provider Explorer table now shows these columns alongside its existing UUID keys, provider name and assignment/offer/message counts. Totals and value wrapping are off; new text-column widths are limited without moving or resizing any of the 124 visuals. Existing linkage/search/card behaviour, filters, relationships, roles and source connections are unchanged. No other page, ETL, client-deliverable, ZIP, publication or permissions change.
 
-Validation: native query-local execution of the saved measures reconciled all
-700 Hayshousing pairs and all 56 pairs for two searched providers against
-independent fact-key lookups, with zero mismatched offer statuses, response
-statuses or latest-message previews. Empty/cleared searches produce no text
-payload and aggregate previews are blank. Existing counts/card checks still
-pass; Hayshousing retains 103 distinct linked providers. The full saved model
-passes the native TMDL parser; report JSON passes published 2.12.0 compatibility
-validation, retaining Desktop's 2.13.0 declaration in the actual file. Native
-recheck: `linked-provider-details-acceptance.dax` in the WIP root (no message
-contents output). Reopen the PBIP for rendering and Viewer/RLS checks. No write
-to the running Desktop model or refresh was performed.
+Validation: native query-local execution of the saved measures reconciled all 700 Hayshousing pairs and all 56 pairs for two searched providers against independent fact-key lookups, with zero mismatched offer statuses, response statuses or latest-message previews. Empty/cleared searches produce no text payload and aggregate previews are blank. Existing counts/card checks still pass; Hayshousing retains 103 distinct linked providers. The full saved model passes the native TMDL parser; report JSON passes published 2.12.0 compatibility validation, retaining Desktop's 2.13.0 declaration in the actual file. Native recheck: `linked-provider-details-acceptance.dax` in the WMPP_v16 root (no message contents output). Reopen the PBIP for rendering and Viewer/RLS checks. No write to the running Desktop model or refresh was performed.
 
 ### Exclude cancelled links — 11 October 2026
 
-User identified the remaining broad linked results as including cancelled
-referrals and requested exclusion when `current_status` is `CANCELLED` or a
-provider's `provider_response_status` is `Cancelled`.
+User identified the remaining broad linked results as including cancelled referrals and requested exclusion when `current_status` is `CANCELLED` or a provider's `provider_response_status` is `Cancelled`.
 
-The read-only native before-check reproduced the exact issue: Hayshousing had
-700 visible pairs but only 128 eligible pairs under this rule; 572 visible pairs
-had cancelled referral/response statuses. The cause is a missing cancellation
-condition in the activity-only scope, not a layout or provider-dimension issue.
-No broader hypothesis/bisection was needed after the explicit rule and native
-reconciliation confirmed it.
+The read-only native before-check reproduced the exact issue: Hayshousing had 700 visible pairs but only 128 eligible pairs under this rule; 572 visible pairs had cancelled referral/response statuses. The cause is a missing cancellation condition in the activity-only scope, not a layout or provider-dimension issue. No broader hypothesis/bisection was needed after the explicit rule and native reconciliation confirmed it.
 
-Updated the saved WIP's shared visibility measure only. Cancelled referrals
-are excluded globally; cancelled response pairs are excluded on both searched
-and comparison sides. An offer cannot bring a cancelled pair back into scope.
-Comparisons ignore case/surrounding spaces; blank statuses are retained. A
-response cancellation applies to that provider/referral pair, not every other
-provider on the referral. The existing linked card, counts, statuses and message
-preview inherit the exclusion without individual rewrites. No visual changes;
-all 124 visual positions/sizes/stacking orders are identical.
+Updated the saved WMPP_v16's shared visibility measure only. Cancelled referrals are excluded globally; cancelled response pairs are excluded on both searched and comparison sides. An offer cannot bring a cancelled pair back into scope. Comparisons ignore case/surrounding spaces; blank statuses are retained. A response cancellation applies to that provider/referral pair, not every other provider on the referral. The existing linked card, counts, statuses and message preview inherit the exclusion without individual rewrites. No visual changes; all 124 visual positions/sizes/stacking orders are identical.
 
-After-check: native PASS with 128 exact pairs, 56 linked providers, 102 offers,
-128 assignments and 244 messages for Hayshousing; zero extra/missing pairs or
-visible cancelled referral/response pairs. Multiple searched providers return
-9 pairs / 9 providers; unmatched/cleared searches remain empty. Status and
-latest-message checks still pass, and the entire saved model parses natively.
-The current data has no mixed cancelled/non-cancelled response pairs or cancelled
-activity pairs on non-cancelled referrals; isolated examples of those cases are
-not available in this snapshot. The native acceptance query now checks both
-requested status exclusions, preventing recurrence in later data.
+After-check: native PASS with 128 exact pairs, 56 linked providers, 102 offers, 128 assignments and 244 messages for Hayshousing; zero extra/missing pairs or visible cancelled referral/response pairs. Multiple searched providers return 9 pairs / 9 providers; unmatched/cleared searches remain empty. Status and latest-message checks still pass, and the entire saved model parses natively. The current data has no mixed cancelled/non-cancelled response pairs or cancelled activity pairs on non-cancelled referrals; isolated examples of those cases are not available in this snapshot. The native acceptance query now checks both requested status exclusions, preventing recurrence in later data.
 
-Status: saved-file change implemented and native checks completed. Reopen the
-PBIP to load it; rendering and Viewer/RLS checks remain pending. No running-model
-write, refresh, publication, permissions, relationship, ETL, source connection,
-other-page, client-deliverable or ZIP changes.
+Status: saved-file change implemented and native checks completed. Reopen the PBIP to load it; rendering and Viewer/RLS checks remain pending. No running-model write, refresh, publication, permissions, relationship, ETL, source connection, other-page, client-deliverable or ZIP changes.
 
 ### Source Reference ID on linked table — 11 October 2026
 
-User requested `dim_person[Source Reference ID]` in the calculated linked table
-and its visual. Added a string display column through the exact mapping
-`referral_id -> fact_referral.person_id -> dim_person[Source Reference ID]`.
-The source field's renamed model name was checked before editing. Existing UUID
-pair keys and relationships remain unchanged, so repeated person references do
-not merge referrals. Missing values stay blank and do not remove rows.
+User requested `dim_person[Source Reference ID]` in the calculated linked table and its visual. Added a string display column through the exact mapping `referral_id -> fact_referral.person_id -> dim_person[Source Reference ID]`. The source field's renamed model name was checked before editing. Existing UUID pair keys and relationships remain unchanged, so repeated person references do not merge referrals. Missing values stay blank and do not remove rows.
 
-Provider Explorer now displays Source Reference ID first, retaining the current
-user-edited projection list and layout (124 visuals unchanged). No change to
-cancellation/activity eligibility, linked counts/statuses/preview/KPI, other
-pages, permissions, ETL, connections, client deliverables or ZIPs.
+Provider Explorer now displays Source Reference ID first, retaining the current user-edited projection list and layout (124 visuals unchanged). No change to cancellation/activity eligibility, linked counts/statuses/preview/KPI, other pages, permissions, ETL, connections, client deliverables or ZIPs.
 
-Native verification of the exact saved partition expression preserves all
-106,267 pairs, with zero extra/missing pairs or reference mismatches against
-the active referral/person relationship; all current pairs have a reference.
-The native TMDL parser confirms four calculated-table columns with string type
-for the new reference. Existing acceptance checks still pass, including 128
-Hayshousing pairs / 56 linked providers. Report JSON passes the published
-2.12.0 compatibility schema without changing its actual 2.13.0 declaration.
+Native verification of the exact saved partition expression preserves all 106,267 pairs, with zero extra/missing pairs or reference mismatches against the active referral/person relationship; all current pairs have a reference. The native TMDL parser confirms four calculated-table columns with string type for the new reference. Existing acceptance checks still pass, including 128 Hayshousing pairs / 56 linked providers. Report JSON passes the published 2.12.0 compatibility schema without changing its actual 2.13.0 declaration.
 
-Status: saved files implemented and the expression validated read-only.
-Reopen and refresh the WIP PBIP to recalculate/populate this new column. No
-running-model write or refresh was performed; persisted-column rendering and
-Viewer/RLS checks remain pending.
+Status: saved files implemented and the expression validated read-only. Reopen and refresh the WMPP_v16 PBIP to recalculate/populate this new column. No running-model write or refresh was performed; persisted-column rendering and Viewer/RLS checks remain pending.
 
 ### Qualifying-offer pair restriction — 17 October 2026
 
-User approved restricting the calculated linked table to providers with an
-`OFFER_MADE`, `OFFER_SUCCESSFUL` or `OFFER_UNSUCCESSFUL` offer. These values belong
-to `fact_offer.offer_status`, not `fact_referral_provider.provider_response_status`
-(whose cached values are Assigned, Declined, Cancelled, Closed and Excluded).
+User approved restricting the calculated linked table to providers with an `OFFER_MADE`, `OFFER_SUCCESSFUL` or `OFFER_UNSUCCESSFUL` offer. These values belong to `fact_offer.offer_status`, not `fact_referral_provider.provider_response_status` (whose cached values are Assigned, Declined, Cancelled, Closed and Excluded).
 
-Replaced only the `providerPairs` assignment/offer union with distinct filtered
-offer pairs; updated its explanatory comment. Existing measure formulas,
-columns/lineage tags, UUID keys, provider-name and Source Reference ID lookups,
-cancelled-referral/response exclusions, counts/status/message measures and
-relationships remain unchanged. Assignment/message-only and draft/withdrawn-only
-pairs are excluded. This narrows candidate pairs on both sides; it does not
-filter the underlying detail measures to hide every draft/withdrawn record when
-the same pair also has a qualifying offer.
+Replaced only the `providerPairs` assignment/offer union with distinct filtered offer pairs; updated its explanatory comment. Existing measure formulas, columns/lineage tags, UUID keys, provider-name and Source Reference ID lookups, cancelled-referral/response exclusions, counts/status/message measures and relationships remain unchanged. Assignment/message-only and draft/withdrawn-only pairs are excluded. This narrows candidate pairs on both sides; it does not filter the underlying detail measures to hide every draft/withdrawn record when the same pair also has a qualifying offer.
 
-Validation: new saved-definition guard fails before and passes after (three
-tests). Native TMDL parses 72 tables, 54 relationships, two roles and four linked
-columns. Read-only execution of the exact saved calculated expression against
-cached data reduces 106,267 pairs to 1,702 with zero extra/missing/duplicate or
-blank-key pairs; all 1,702 retain a Source Reference ID. All 4,324 other WIP files
-retain their hashes. Cached database bytes, SHA-256 and timestamp are unchanged.
-Recovery: `reports/_review/linked-offer-status-before-20261017`.
+Validation: new saved-definition guard fails before and passes after (three tests). Native TMDL parses 72 tables, 54 relationships, two roles and four linked columns. Read-only execution of the exact saved calculated expression against cached data reduces 106,267 pairs to 1,702 with zero extra/missing/duplicate or blank-key pairs; all 1,702 retain a Source Reference ID. All 4,324 other WMPP_v16 files retain their hashes. Cached database bytes, checksum and timestamp are unchanged. Recovery: `reports/_review/linked-offer-status-before-20261017`.
 
-Status: saved-model update complete. Reopen WIP and recalculate/refresh the
-calculated table before checking the visual. No live-model write, refresh,
-publication, report/mobile layout, performance-filter, permission, connection,
-ETL, alternate-project or ZIP change performed.
+Status: saved-model update complete. Reopen WMPP_v16 and recalculate/refresh the calculated table before checking the visual. No live-model write, refresh, publication, report/mobile layout, performance-filter, permission, connection, ETL, alternate-project or ZIP change performed.
 
-## PERF-002 — WMPP WIP report query performance
+## PERF-002 — WMPP WMPP_v16 report query performance
 
-Reported 11 October 2026: user requested Performance Analyzer and runtime
-improvements for `SM WMPP v16 updated WIP`, then confirmed all pages are in scope.
+Reported 11 October 2026: user requested Performance Analyzer and runtime improvements for `WMPP_v16`, then confirmed all pages are in scope.
 
-Desktop screen capture failed with a FrameArrived timeout and returned no
-accessibility controls. No Performance Analyzer recording was obtained. Used
-read-only native DAX workloads reconstructed from saved projections and supported
-filters instead; these are not captured visual queries or end-to-end page timings.
-All 36 pages were inventoried: 310 data workloads attempted, 283 measured, 27
-field-parameter/unsupported-shape/timeout gaps. Guide-only pages have no data query.
-The loaded import snapshot has 926 referrals, 2,572 offers and 106,267 linked pairs.
+Desktop screen capture failed with a FrameArrived timeout and returned no accessibility controls. No Performance Analyzer recording was obtained. Used read-only native DAX workloads reconstructed from saved projections and supported filters instead; these are not captured visual queries or end-to-end page timings. All 36 pages were inventoried: 310 data workloads attempted, 283 measured, 27 field-parameter/unsupported-shape/timeout gaps. Guide-only pages have no data query. The loaded import snapshot has 926 referrals, 2,572 offers and 106,267 linked pairs.
 
-Cause confirmed by A/B timing: provider eligibility recalculated row visibility
-for every provider repeatedly within KPI cells. Saved a fast path in 34 measures
-across `_Explorer KPI Measures` (26) and `_Report Journey Measures` (8). When offer
-status is unrestricted and the stage selector resolves to -1, use nonblank current
-provider IDs and, if homes are directly filtered, their visible provider IDs.
-Otherwise the original eligibility expression is retained. Fact calculations,
-KEEPFILTERS, lineage tags, relationships and business rules are unchanged.
+Cause confirmed by A/B timing: provider eligibility recalculated row visibility for every provider repeatedly within KPI cells. Saved a fast path in 34 measures across `_Explorer KPI Measures` (26) and `_Report Journey Measures` (8). When offer status is unrestricted and the stage selector resolves to -1, use nonblank current provider IDs and, if homes are directly filtered, their visible provider IDs. Otherwise the original eligibility expression is retained. Fact calculations, KEEPFILTERS, lineage tags, relationships and business rules are unchanged.
 
-Consistent query-local A/B workloads include all 56 affected/dependent measure
-definitions: leaf overrides alone do not rebind stored parent measures in the
-observed Desktop engine. Warm medians, same snapshot and identical result digests:
+Consistent query-local A/B workloads include all 56 affected/dependent measure definitions: leaf overrides alone do not rebind stored parent measures in the observed Desktop engine. Warm medians, same snapshot and identical result digests:
 
 | Projection workload | Before | After | Reduction |
 |---|---:|---:|---:|
@@ -3041,75 +1729,29 @@ observed Desktop engine. Warm medians, same snapshot and identical result digest
 | Provider Detail KPI list | 578.66 ms | 271.18 ms | 53.14% |
 | Page 2 provider-home offer table | 5,431.31 ms | 1,727.20 ms | 68.20% |
 
-The exact saved expressions match the still-loaded original measures for all 34
-measures across 17 scenarios, including all provider rows and aggregate totals:
-zero mismatches. Scenarios cover search/no match/multiple providers, home IDs,
-service types, home-provider filters, offer/no-offer/multiple statuses, stages,
-scoring month, referral and combined filters. Native TMDL parsing passes with
-71 tables, 484 measures and 54 relationships. The SHA256 over every report
-definition JSON is identical before/after: no layout, theme, visual, bookmark,
-filter or navigation changes. Linked-pruning and narrow fact-filter alternatives
-were rejected after measurements showed no benefit or worse runtime.
+The exact saved expressions match the still-loaded original measures for all 34 measures across 17 scenarios, including all provider rows and aggregate totals: zero mismatches. Scenarios cover search/no match/multiple providers, home IDs, service types, home-provider filters, offer/no-offer/multiple statuses, stages, scoring month, referral and combined filters. Native TMDL parsing passes with 71 tables, 484 measures and 54 relationships. The SHA256 over every report definition JSON is identical before/after: no layout, theme, visual, bookmark, filter or navigation changes. Linked-pruning and narrow fact-filter alternatives were rejected after measurements showed no benefit or worse runtime.
 
-Durable read-only profiler: `project X/tools/profile_wmpp_wip.ps1` (requires the
-loaded Desktop engine port). Results and per-page coverage are in the WIP root's
-`PERFORMANCE_REVIEW.json`; no identifiers or message payloads are exported.
+Durable read-only profiler: `project X/tools/profile_wmpp_wip.ps1` (requires the loaded Desktop engine port). Results and per-page coverage are in the WMPP_v16 root's `PERFORMANCE_REVIEW.json`; no identifiers or message payloads are exported.
 
-Status: saved-file optimisation implemented and native verification passed.
-Reopen the saved PBIP to load it, reconciling unsaved Desktop edits before saving
-over the updated files. Actual Performance Analyzer capture, rendering/Other
-timings, generated queries for the 27 gaps, drillthrough contexts and published
-Viewer/RLS verification remain pending. No running-model write, data refresh,
-publication, permissions, ETL, client-deliverable or ZIP changes.
+Status: saved-file optimisation implemented and native verification passed. Reopen the saved PBIP to load it, reconciling unsaved Desktop edits before saving over the updated files. Actual Performance Analyzer capture, rendering/Other timings, generated queries for the 27 gaps, drillthrough contexts and published Viewer/RLS verification remain pending. No running-model write, data refresh, publication, permissions, ETL, client-deliverable or ZIP changes.
 
-### Reapplied to replacement WIP — 12 October 2026
+### Reapplied to replacement WMPP_v16 — 12 October 2026
 
-User requested reapplication to a new project, then corrected the destination to
-`project X/reports/WIP/SM WMPP v16 updated WIP`. The initially supplied
-`SM WMPP v16 updated` folder was inspected read-only; no writes were made there.
+User requested reapplication to a new project, then corrected the destination to `WMPP_v16`. The initially supplied `v15 or earlier` folder was inspected read-only; no writes were made there.
 
-The corrected WIP's 484 saved measure expressions matched its open Desktop model.
-All 34 original provider-eligibility expressions were present, with no fast path.
-Reapplied exactly the verified tuning in the two measure files, preserving the
-current surrounding calculations rather than copying the old model/report.
+The corrected WMPP_v16's 484 saved measure expressions matched its open Desktop model. All 34 original provider-eligibility expressions were present, with no fast path. Reapplied exactly the verified tuning in the two measure files, preserving the current surrounding calculations rather than copying the old model/report.
 
-Fresh native A/B projection-workload medians, identical returned-row digests:
-Provider Explorer directory 2,156.70 to 84.76 ms; Provider Explorer KPI list 569.26
-to 348.47 ms; Provider Detail KPI list 567.77 to 269.23 ms; Page 2 home table
-5,472.28 to 1,710.72 ms. Both variants redefine the same 56 affected/dependent
-expressions so stored parent measures use the appropriate query-local variants.
-These are reconstructed DAX timings, not Performance Analyzer page-load timings;
-the full report inventory was not repeated in this reapplication.
+Fresh native A/B projection-workload medians, identical returned-row digests: Provider Explorer directory 2,156.70 to 84.76 ms; Provider Explorer KPI list 569.26 to 348.47 ms; Provider Detail KPI list 567.77 to 269.23 ms; Page 2 home table 5,472.28 to 1,710.72 ms. Both variants redefine the same 56 affected/dependent expressions so stored parent measures use the appropriate query-local variants. These are reconstructed DAX timings, not Performance Analyzer page-load timings; the full report inventory was not repeated in this reapplication.
 
-All 34 tuned measures reconcile at provider-row and aggregate-total level across
-17 filter scenarios, with zero mismatches. The exact saved expressions match the
-loaded originals plus only the intended replacements; formats, lineage tags,
-descriptions, folders and hidden flags are unchanged. Native TMDL parsing passes
-with 71 tables, 484 measures and 54 relationships. Before/after hashes confirm
-every report file and all other model-definition files are unchanged.
+All 34 tuned measures reconcile at provider-row and aggregate-total level across 17 filter scenarios, with zero mismatches. The exact saved expressions match the loaded originals plus only the intended replacements; formats, lineage tags, descriptions, folders and hidden flags are unchanged. Native TMDL parsing passes with 71 tables, 484 measures and 54 relationships. Before/after hashes confirm every report file and all other model-definition files are unchanged.
 
-Status: saved-file reapplication implemented and verified. Reopen the corrected
-PBIP to load the changes, reconciling any unsaved Desktop edits first. The WIP
-`PERFORMANCE_REVIEW.json` records this new run separately from the previous full
-report investigation. No live model writes, refresh, publication, permissions,
-ETL, client-deliverable, ZIP or alternate-project changes.
+Status: saved-file reapplication implemented and verified. Reopen the corrected PBIP to load the changes, reconciling any unsaved Desktop edits first. The WMPP_v16 `PERFORMANCE_REVIEW.json` records this new run separately from the previous full report investigation. No live model writes, refresh, publication, permissions, ETL, client-deliverable, ZIP or alternate-project changes.
 
 ## PERF-003 — Provider Explorer home-table selection cap
 
-Reported 12 October 2026: user identified the Provider Explorer home table as
-extremely slow with broad provider selections and requested no data above five
-providers, with the warning `Please select 1 or fewer providers`. The numerical
-cap is five; the warning text is retained exactly as requested.
+Reported 12 October 2026: user identified the Provider Explorer home table as extremely slow with broad provider selections and requested no data above five providers, with the warning `Please select 1 or fewer providers`. The numerical cap is five; the warning text is retained exactly as requested.
 
-Native before-check confirmed the table still returned home rows for six providers
-(21 homes). Added six saved measures: page-wide eligible-provider selection count,
-guarded row visibility, three guarded offer measures and a dynamic title. The
-selection count uses `ALLSELECTED()` so provider/home/person row axes cannot reduce
-the count to one inside each table row. Existing page filtering and eligibility
-rules remain in effect. Guarding every projected offer measure prevents evaluating
-the expensive detail branch when the selection exceeds five, rather than merely
-hiding the resulting rows. The warning uses the existing title area; no overlapping
-visual or interaction-blocking overlay was added.
+Native before-check confirmed the table still returned home rows for six providers (21 homes). Added six saved measures: page-wide eligible-provider selection count, guarded row visibility, three guarded offer measures and a dynamic title. The selection count uses `ALLSELECTED()` so provider/home/person row axes cannot reduce the count to one inside each table row. Existing page filtering and eligibility rules remain in effect. Guarding every projected offer measure prevents evaluating the expensive detail branch when the selection exceeds five, rather than merely hiding the resulting rows. The warning uses the existing title area; no overlapping visual or interaction-blocking overlay was added.
 
 Native after-check of exact saved definitions passes all five regression cases:
 
@@ -3121,691 +1763,215 @@ Native after-check of exact saved definitions passes all five regression cases:
 | Unrestricted | 706 | 0 | PASS |
 | No match | 0 | 0 | PASS |
 
-Full table projections for allowed selections have zero extra/missing rows and
-unchanged values versus the original. Six-provider and unrestricted full queries
-return zero rows in about 79 and 125 ms. These are reconstructed native workload
-timings, not a Performance Analyzer recording or complete page-load measurement.
-The existing Source Reference ID projection multiplies home rows in the full
-table; this pre-existing column/grain behaviour is intentionally unchanged by
-the requested cap. Reusable read-only native regression query:
-`project X/reports/WIP/SM WMPP v16 updated WIP/provider-homes-cap-acceptance.dax`.
+Full table projections for allowed selections have zero extra/missing rows and unchanged values versus the original. Six-provider and unrestricted full queries return zero rows in about 79 and 125 ms. These are reconstructed native workload timings, not a Performance Analyzer recording or complete page-load measurement. The existing Source Reference ID projection multiplies home rows in the full table; this pre-existing column/grain behaviour is intentionally unchanged by the requested cap. Reusable read-only native regression query: `WMPP_v16`.
 
-Native TMDL parses with 71 tables, 490 measures and 54 relationships. The exact
-edited visual passes its published 2.7.0 JSON schema. All existing expressions,
-including the previous 34 optimisations, are unchanged. Table position, dimensions,
-columns, labels and formatting are preserved. Hashes confirm that every other
-report/model definition file is unchanged. Only this visual's three offer-measure
-bindings, visibility filter and title expression were rewired.
+Native TMDL parses with 71 tables, 490 measures and 54 relationships. The exact edited visual passes its published 2.7.0 JSON schema. All existing expressions, including the previous 34 optimisations, are unchanged. Table position, dimensions, columns, labels and formatting are preserved. Hashes confirm that every other report/model definition file is unchanged. Only this visual's three offer-measure bindings, visibility filter and title expression were rewired.
 
-Status: saved-file change implemented and native acceptance passed. Reopen the
-WIP PBIP to load it; reconcile unsaved Desktop edits before saving over updated
-files. Rendering and Viewer/RLS acceptance remain pending. No live model writes,
-refresh, publication, permissions, ETL, relationships, source connections, other
-pages, client-deliverables, ZIPs or alternate projects were changed.
+Status: saved-file change implemented and native acceptance passed. Reopen the WMPP_v16 PBIP to load it; reconcile unsaved Desktop edits before saving over updated files. Rendering and Viewer/RLS acceptance remain pending. No live model writes, refresh, publication, permissions, ETL, relationships, source connections, other pages, client-deliverables, ZIPs or alternate projects were changed.
 
 ## MOB-001 — Phone-friendly WMPP report and collapsible navigation
 
-Requested 12 October 2026: convert the current report to a desirable mobile
-experience with a slide-out navigation bar and phone-friendly visual sizes.
-User confirmed the saved WIP Power BI report, not the referral-journey preview.
+Requested 12 October 2026: convert the current report to a desirable mobile experience with a slide-out navigation bar and phone-friendly visual sizes. User confirmed the saved WMPP_v16 Power BI report, not the referral-journey preview.
 
-Implemented native phone layouts for 31 functional, detail, extract and guide
-pages. The five old scratch/superseded/tooltip pages are excluded. The desktop
-layout is not resized: all original visual/page/bookmark definitions stay intact,
-apart from appending a new mobile group to the bookmark index. No semantic-model,
-ETL, security-role, permission, relationship or source-connection changes.
+Implemented native phone layouts for 31 functional, detail, extract and guide pages. The five old scratch/superseded/tooltip pages are excluded. The desktop layout is not resized: all original visual/page/bookmark definitions stay intact, apart from appending a new mobile group to the bookmark index. No semantic-model, ETL, security-role, permission, relationship or source-connection changes.
 
-Mobile formatting uses the existing theme, a 323-point canvas, full-width data
-visuals, larger readable text, compact KPI arrangements, touch-sized actions and
-vertical journey milestones. All displayed table columns are retained; dense
-tables require horizontal panning. Long selection-context messages and milestone
-dates receive appropriate smaller text. Source queries, business rules, provider
-scoring, existing detail/back/guide actions, chart/table alternatives and previous
-performance changes remain in place. Existing native filter panels are retained.
+Mobile formatting uses the existing theme, a 323-point canvas, full-width data visuals, larger readable text, compact KPI arrangements, touch-sized actions and vertical journey milestones. All displayed table columns are retained; dense tables require horizontal panning. Long selection-context messages and milestone dates receive appropriate smaller text. Source queries, business rules, provider scoring, existing detail/back/guide actions, chart/table alternatives and previous performance changes remain in place. Existing native filter panels are retained.
 
-The menu opens/closes a native bookmark-driven drawer; Power BI does not supply
-a smooth slide transition here. Default/selected menu rows are neutral, with
-orange hover styling. Twelve destinations include both explorers. The registry
-extract remains hidden and is not exposed through this menu. New navigation
-controls are outside the desktop canvas. The 74 navigation bookmarks target only
-new navigation visuals; 18 additional filter-panel bookmarks target the existing
-filter groups and new standalone close buttons. All are display-only and preserve
-data filters. Filter-close controls do not extend the original desktop groups.
+The menu opens/closes a native bookmark-driven drawer; Power BI does not supply a smooth slide transition here. Default/selected menu rows are neutral, with orange hover styling. Twelve destinations include both explorers. The registry extract remains hidden and is not exposed through this menu. New navigation controls are outside the desktop canvas. The 74 navigation bookmarks target only new navigation visuals; 18 additional filter-panel bookmarks target the existing filter groups and new standalone close buttons. All are display-only and preserve data filters. Filter-close controls do not extend the original desktop groups.
 
-Schema and saved-layout checks pass, with zero default-visible overlaps. Original
-report and semantic-model fingerprints are unchanged. Validation does not claim
-a rendered Power BI/phone test: reopen the PBIP and inspect View > Mobile layout,
-then test the menu, filters, detail buttons and horizontal table panning in the
-Power BI mobile app before deployment. No refresh or publication was performed.
+Schema and saved-layout checks pass, with zero default-visible overlaps. Original report and semantic-model fingerprints are unchanged. Validation does not claim a rendered Power BI/phone test: reopen the PBIP and inspect View > Mobile layout, then test the menu, filters, detail buttons and horizontal table panning in the Power BI mobile app before deployment. No refresh or publication was performed.
 
-Durable builder/checker: `project X/tools/plan_wmpp_mobile_layout.py`; manifest and
-QA results: `MOBILE_LAYOUT_DELIVERY.json` and `MOBILE_LAYOUT_QA.json` in the WIP root.
-A recoverable report-definition backup is kept at
-`project X/reports/_review/mobile-before-20261012/definition`, excluded from Git.
+Durable builder/checker: `project X/tools/plan_wmpp_mobile_layout.py`; manifest and QA results: `MOBILE_LAYOUT_DELIVERY.json` and `MOBILE_LAYOUT_QA.json` in the WMPP_v16 root. A recoverable report-definition backup is kept at `project X/reports/_review/mobile-before-20261012/definition`, excluded from Git.
 
-Status: saved-file mobile implementation complete; on-device rendering and
-published Viewer/RLS acceptance pending. No client-deliverable or ZIP changes.
+Status: saved-file mobile implementation complete; on-device rendering and published Viewer/RLS acceptance pending. No client-deliverable or ZIP changes.
 
 ## GLD-023 — Registry extract visual columns (13 October 2026)
 
-Reported: Provider Registry Extract shows Provider Name and QA Flag, but the
-additional fields listed in the visual's Columns panel are not displayed.
-User authorised a saved-file repair if manual re-adding is time-consuming.
+Reported: Provider Registry Extract shows Provider Name and QA Flag, but the additional fields listed in the visual's Columns panel are not displayed. User authorised a saved-file repair if manual re-adding is time-consuming.
 
-Saved-file finding: 17 of 21 projections in registry table
-`27ec22f5d1db5ca3895f` on page `1fd2b1f8c98559e99f4d` were inactive. This includes
-Town/City, Postcode, Framework Code, Placement Type, Home Name and contact fields.
-Microsoft's visual schema defines `active` as whether a field is currently active
-in the visual. The source fields are populated: a read-only native query found
-2,662 registry rows, 2,662 populated Town/City and Postcode values, 1,439 populated
-Framework Codes and 2,562 populated Home Names. Missing source data is therefore
-not an explanation for those two populated location columns being absent.
+Saved-file finding: 17 of 21 projections in registry table `27ec22f5d1db5ca3895f` on page `1fd2b1f8c98559e99f4d` were inactive. This includes Town/City, Postcode, Framework Code, Placement Type, Home Name and contact fields. Microsoft's visual schema defines `active` as whether a field is currently active in the visual. The source fields are populated: a read-only native query found 2,662 registry rows, 2,662 populated Town/City and Postcode values, 1,439 populated Framework Codes and 2,562 populated Home Names. Missing source data is therefore not an explanation for those two populated location columns being absent.
 
-Repair: set those 17 activation flags to true in the requested saved WIP visual.
-No fields added, removed or reordered; only those flags and a final newline
-changed. Layout, formatting, filters, mobile state and semantic model are intact.
-All 4,640 other report/model definition files have unchanged fingerprints.
-Recoverable original visual:
-`reports/_review/registry-columns-before-20261013-9f1a17c0/visual.json`.
+Repair: set those 17 activation flags to true in the requested saved WMPP_v16 visual. No fields added, removed or reordered; only those flags and a final newline changed. Layout, formatting, filters, mobile state and semantic model are intact. All 4,640 other report/model definition files have unchanged fingerprints. Recoverable original visual: `reports/_review/registry-columns-before-20261013-9f1a17c0/visual.json`.
 
-Verification: the inactive-projection check is red before (17 inactive) and green
-after (all 21 active). A read-only native query using every configured field
-returns all 21 columns with data rows. These are configuration/data checks, not
-a rendered regression: Desktop capture timed out during diagnosis. Reopen
-`SM_WMPP_v16.pbip` and confirm all columns display, scrolling horizontally as
-needed. Preserve unsaved Desktop work in a separate copy before reopening; do
-not save the old in-memory report over the repaired files.
+Verification: the inactive-projection check is red before (17 inactive) and green after (all 21 active). A read-only native query using every configured field returns all 21 columns with data rows. These are configuration/data checks, not a rendered regression: Desktop capture timed out during diagnosis. Reopen `SM_WMPP_v16.pbip` and confirm all columns display, scrolling horizontally as needed. Preserve unsaved Desktop work in a separate copy before reopening; do not save the old in-memory report over the repaired files.
 
-Status: saved-file repair implemented; rendered acceptance after reopen pending.
-No live model writes, refresh, publication, permissions, ETL, other pages,
-client-deliverables, report ZIPs or alternate project changes.
+Status: saved-file repair implemented; rendered acceptance after reopen pending. No live model writes, refresh, publication, permissions, ETL, other pages, client-deliverables, report ZIPs or alternate project changes.
 
 ### Same-day repeat restoration
 
-The user reported that columns had disappeared again. The current visual,
-last saved at 18:49:43 on 13 October, still contained all 21 fields but had 13
-inactive projections. It also contained six new column widths and Provider ID
-at the end, unlike the initial backup. None of the saved bookmarks contains this
-table's state. These findings do not establish whether an open Desktop save,
-visual-state normalisation or another action caused the recurrence.
+The user reported that columns had disappeared again. The current visual, last saved at 18:49:43 on 13 October, still contained all 21 fields but had 13 inactive projections. It also contained six new column widths and Provider ID at the end, unlike the initial backup. None of the saved bookmarks contains this table's state. These findings do not establish whether an open Desktop save, visual-state normalisation or another action caused the recurrence.
 
-Restored the 13 inactive projections, preserving the current field order,
-column widths, position, size, styling and filters. Only those flags and text
-line endings changed; all 4,644 other report/model definitions are unchanged.
-The configuration check fails before (13 inactive) and passes after (all 21
-active). A read-only cached-model query resolves every configured column and
-returns data rows. Original visual saved in the Git-excluded backup:
-`reports/_review/registry-columns-repeat-20261013-736c913f/visual.json`.
+Restored the 13 inactive projections, preserving the current field order, column widths, position, size, styling and filters. Only those flags and text line endings changed; all 4,644 other report/model definitions are unchanged. The configuration check fails before (13 inactive) and passes after (all 21 active). A read-only cached-model query resolves every configured column and returns data rows. Original visual saved in the Git-excluded backup: `reports/_review/registry-columns-repeat-20261013-736c913f/visual.json`.
 
-The patch tool initially rejected the long path with a reparse-point error.
-Read-only inspection confirmed that the exact target and every ancestor are
-ordinary non-linked paths within the authorised repository. The bundled patch
-editor then applied the narrowly scoped change successfully from the visual
-directory. No shell-based file rewrite was used.
+The patch tool initially rejected the long path with a reparse-point error. Read-only inspection confirmed that the exact target and every ancestor are ordinary non-linked paths within the authorised repository. The bundled patch editor then applied the narrowly scoped change successfully from the visual directory. No shell-based file rewrite was used.
 
-Power BI Desktop remains open. Do not save its older in-memory report over this
-repair; preserve any unsaved work separately and reopen the updated WIP PBIP.
-Rendered acceptance and persistence through a subsequent Desktop save remain
-pending. This is a saved-file restoration, not a verified durable runtime fix.
+Power BI Desktop remains open. Do not save its older in-memory report over this repair; preserve any unsaved work separately and reopen the updated WMPP_v16 PBIP. Rendered acceptance and persistence through a subsequent Desktop save remain pending. This is a saved-file restoration, not a verified durable runtime fix.
 
 ## MOB-002 — Smaller mobile fonts, buttons and proportional spacing
 
-Requested 13 October 2026: reduce mobile font/button sizes and other objects
-proportionally, ensuring tables do not overlap tiles. Scope is the saved WIP
-phone layouts; Desktop definitions and the semantic model stay unchanged.
+Requested 13 October 2026: reduce mobile font/button sizes and other objects proportionally, ensuring tables do not overlap tiles. Scope is the saved WMPP_v16 phone layouts; Desktop definitions and the semantic model stay unchanged.
 
-Updated all 1,344 current mobile state files across 31 pages. Main vertical
-geometry is scaled to 80%, with row reflow and a minimum 8-point gap. Phone width
-stays 323 points, so tables retain usable width and every existing column.
-Body/table text is mostly 8-9pt, button text up to 10pt, headings up to 14pt and
-KPI numbers up to 20pt, with smaller journey/context labels. Button heights
-shrink to 36-52 points; icons, padding and explicit table column widths are
-proportionally reduced. Table row padding is 3 points. Existing low-size fonts
-are not enlarged except for the 8-point readability floor.
+Updated all 1,344 current mobile state files across 31 pages. Main vertical geometry is scaled to 80%, with row reflow and a minimum 8-point gap. Phone width stays 323 points, so tables retain usable width and every existing column. Body/table text is mostly 8-9pt, button text up to 10pt, headings up to 14pt and KPI numbers up to 20pt, with smaller journey/context labels. Button heights shrink to 36-52 points; icons, padding and explicit table column widths are proportionally reduced. Table row padding is 3 points. Existing low-size fonts are not enlarged except for the 8-point readability floor.
 
-Mobile formatting uses the published 2.4 schema, including phone-only object
-overrides and container typography. Existing colours, text, field order, field
-bindings, conditional formatting and dynamic titles are retained. Current
-Desktop group definitions, source queries, navigation actions and bookmarks
-are unmodified. Filter controls have explicit phone positions; hidden chart/
-table alternatives retain their corresponding visible slot.
+Mobile formatting uses the published 2.4 schema, including phone-only object overrides and container typography. Existing colours, text, field order, field bindings, conditional formatting and dynamic titles are retained. Current Desktop group definitions, source queries, navigation actions and bookmarks are unmodified. Filter controls have explicit phone positions; hidden chart/ table alternatives retain their corresponding visible slot.
 
-Verification: nine portable tests cover source preservation, selectors, dynamic
-titles, text units/content, overlap detection, group visibility, hidden technical
-column widths and smaller callout fonts. All 1,344 mobile documents validate
-against Microsoft's public schemas. The saved geometry has zero visible default
-overlaps and no table/tile collisions in 823 existing bookmark/page states.
-Protected report/model/bookmark file fingerprints match the pre-change state.
-No native Power BI rendering or on-device test is claimed.
+Verification: nine portable tests cover source preservation, selectors, dynamic titles, text units/content, overlap detection, group visibility, hidden technical column widths and smaller callout fonts. All 1,344 mobile documents validate against Microsoft's public schemas. The saved geometry has zero visible default overlaps and no table/tile collisions in 823 existing bookmark/page states. Protected report/model/bookmark file fingerprints match the pre-change state. No native Power BI rendering or on-device test is claimed.
 
-Original phone files are recoverable from
-`reports/_review/mobile-compact-before-20261013`, excluded from Git. All edits
-went through the bundled patch editor, not direct file rewrites. Delivery and
-QA records in the WIP root: `MOBILE_COMPACT_LAYOUT_DELIVERY.json` and
-`MOBILE_COMPACT_LAYOUT_QA.json`. Tool `tools/compact_wmpp_mobile_layout.py` previews
-first, applies with backups and guards, and refuses to scale a delivered layout
-twice; `--verify --validate` checks the saved result.
+Original phone files are recoverable from `reports/_review/mobile-compact-before-20261013`, excluded from Git. All edits went through the bundled patch editor, not direct file rewrites. Delivery and QA records in the WMPP_v16 root: `MOBILE_COMPACT_LAYOUT_DELIVERY.json` and `MOBILE_COMPACT_LAYOUT_QA.json`. Tool `tools/compact_wmpp_mobile_layout.py` previews first, applies with backups and guards, and refuses to scale a delivered layout twice; `--verify --validate` checks the saved result.
 
-Status: saved-file compact mobile update implemented. Reopen WIP > View > Mobile
-layout, then verify phone readability, menu/filter controls and table panning
-before publication. Preserve unsaved Desktop work separately rather than saving
-an older in-memory report over these files. No refresh, publication, ETL, live
-model writes, permissions, client-deliverable or ZIP changes.
+Status: saved-file compact mobile update implemented. Reopen WMPP_v16 > View > Mobile layout, then verify phone readability, menu/filter controls and table panning before publication. Preserve unsaved Desktop work separately rather than saving an older in-memory report over these files. No refresh, publication, ETL, live model writes, permissions, client-deliverable or ZIP changes.
 
 ## MOB-003 — Mobile drawer shows headings but no button labels
 
-Reported after the compact update: the open phone drawer shows its white panel,
-WMPP heading and EXPLORERS heading, but page links and Close are absent. The
-user's screenshot is the real rendered symptom; prior geometry/schema checks
-did not cover this native appearance failure.
+Reported after the compact update: the open phone drawer shows its white panel, WMPP heading and EXPLORERS heading, but page links and Close are absent. The user's screenshot is the real rendered symptom; prior geometry/schema checks did not cover this native appearance failure.
 
-Live inspection attempted with the supported Windows Computer Use helper. The
-first capture reported a minimised window; activation, fresh window selection
-and one retry then failed with `FrameArrived timed out`. No blind UI input,
-closing, save or refresh was attempted after capture failed.
+Live inspection attempted with the supported Windows Computer Use helper. The first capture reported a minimised window; activation, fresh window selection and one retry then failed with `FrameArrived timed out`. No blind UI input, closing, save or refresh was attempted after capture failed.
 
-Saved-file finding: compact mobile action-button `text` entries contain size and
-margins but omit explicit `show`, label, font family and colour. The caption
-check on Target & Urgency Performance fails for all 16 named mobile controls.
-This is a concrete configuration gap, not proof that inheritance is the native
-root cause. Mobile and source layer orders and bookmark visibility require a
-native check if explicit text does not resolve the symptom.
+Saved-file finding: compact mobile action-button `text` entries contain size and margins but omit explicit `show`, label, font family and colour. The caption check on Target & Urgency Performance fails for all 16 named mobile controls. This is a concrete configuration gap, not proof that inheritance is the native root cause. Mobile and source layer orders and bookmark visibility require a native check if explicit text does not resolve the symptom.
 
-Applied a backed-up one-page pilot only on Target & Urgency Performance
-(`6ae319c8916a5d63a4ff`): merge the original complete text settings with compact
-mobile sizes/margins for those 16 named controls. Preserve position, dimensions,
-layer order, fills, page links, bookmarks, main content and semantic model.
-All 3,301 non-mobile definitions are unchanged; the 16 changed mobile documents
-pass their published schemas and the explicit-label check is green. Backup:
-`reports/_review/mobile-drawer-labels-20261013-6ae319c8916a5d63a4ff`, excluded
-from Git.
+Applied a backed-up one-page pilot only on Target & Urgency Performance (`6ae319c8916a5d63a4ff`): merge the original complete text settings with compact mobile sizes/margins for those 16 named controls. Preserve position, dimensions, layer order, fills, page links, bookmarks, main content and semantic model. All 3,301 non-mobile definitions are unchanged; the 16 changed mobile documents pass their published schemas and the explicit-label check is green. Backup: `reports/_review/mobile-drawer-labels-20261013-6ae319c8916a5d63a4ff`, excluded from Git.
 
-Added a formatter regression test before correcting the generator: it fails
-when mobile font updates discard the original button label/show properties and
-passes after retaining the complete text object. All ten formatter tests pass.
-`tools/repair_wmpp_mobile_drawer_labels.py --page <page-id> --check` checks the
-saved label contract; it explicitly does not claim native rendering.
+Added a formatter regression test before correcting the generator: it fails when mobile font updates discard the original button label/show properties and passes after retaining the complete text object. All ten formatter tests pass. `tools/repair_wmpp_mobile_drawer_labels.py --page <page-id> --check` checks the saved label contract; it explicitly does not claim native rendering.
 
-Status: one-page pilot saved, awaiting a human-in-the-loop rendered check. Reopen
-WIP, open Target & Urgency Performance in Mobile layout, open Menu and capture
-whether Home, the other links and Close are now visible. Do not roll out across
-all pages until the pilot's native result confirms or falsifies this candidate.
-No publication, live model writes, permissions or main-page changes.
+Status: one-page pilot saved, awaiting a human-in-the-loop rendered check. Reopen WMPP_v16, open Target & Urgency Performance in Mobile layout, open Menu and capture whether Home, the other links and Close are now visible. Do not roll out across all pages until the pilot's native result confirms or falsifies this candidate. No publication, live model writes, permissions or main-page changes.
 
 ### Further feedback: still blank (page identification initially uncertain)
 
-The user returned another native screenshot
-`codex-clipboard-71e50a34-e9e5-4a9e-aa3a-7eedd641679e.png` and reported that the
-drawer is still blank. That cropped screenshot did not establish that the
-Target & Urgency pilot page was being tested. Its saved explicit-label check
-remains green, but configuration checks do not establish native rendering.
-The unscoped-label pilot is not a confirmed solution.
+The user returned another native screenshot `codex-clipboard-71e50a34-e9e5-4a9e-aa3a-7eedd641679e.png` and reported that the drawer is still blank. That cropped screenshot did not establish that the Target & Urgency pilot page was being tested. Its saved explicit-label check remains green, but configuration checks do not establish native rendering. The unscoped-label pilot is not a confirmed solution.
 
-Ranked remaining checks: (1) bookmark visibility is not reaching the action
-buttons; (2) another layer covers them; (3) the visible session did not load the
-saved pilot. The public bookmark schema confirms that visible state is expressed
-by absence of the hidden display mode; adding an invented `visible` mode would
-be invalid. No such mode was added. Source desktop layers were renumbered into
-166,000-186,000 whereas mobile chrome retains 1,000,000-level ordering. The
-mobile ordering itself places links above the panel, but native layer/visibility
-behaviour cannot be established from these files alone.
+Ranked remaining checks: (1) bookmark visibility is not reaching the action buttons; (2) another layer covers them; (3) the visible session did not load the saved pilot. The public bookmark schema confirms that visible state is expressed by absence of the hidden display mode; adding an invented `visible` mode would be invalid. No such mode was added. Source desktop layers were renumbered into 166,000-186,000 whereas mobile chrome retains 1,000,000-level ordering. The mobile ordering itself places links above the panel, but native layer/visibility behaviour cannot be established from these files alone.
 
-Status: native bug still open. Request the mobile Selection pane with the menu
-open, including the link and panel visibility/layer entries, before another
-configuration trial. No additional report/model mutation after this feedback;
-main compact content and the one-page pilot remain preserved.
+Status: native bug still open. Request the mobile Selection pane with the menu open, including the link and panel visibility/layer entries, before another configuration trial. No additional report/model mutation after this feedback; main compact content and the one-page pilot remain preserved.
 
 ### Selected-button evidence and state-specific text repair
 
-The next full native screenshot
-`codex-clipboard-5aa7a86c-ded6-4329-9b54-488a092e0e62.png` explicitly identifies
-WMPP Homepage, not the earlier Target & Urgency pilot. A drawer button is present,
-visible and selected; its Style / Default / Text setting is on but the Text field
-is empty. This supersedes the assumption that the earlier screenshot falsified
-the pilot on its own page. Layer and visibility changes are not justified by this
-new evidence.
+The next full native screenshot `codex-clipboard-5aa7a86c-ded6-4329-9b54-488a092e0e62.png` explicitly identifies WMPP Homepage, not the earlier Target & Urgency pilot. A drawer button is present, visible and selected; its Style / Default / Text setting is on but the Text field is empty. This supersedes the assumption that the earlier screenshot falsified the pilot on its own page. Layer and visibility changes are not justified by this new evidence.
 
-The focused configuration loop now checks the actual Default-state text object.
-Before repair, all 452 named new mobile controls across 31 pages lacked an
-explicit Default-state label; Homepage alone failed for all 14 controls. A
-minimised legacy-generator/phone-formatter test failed on the missing Default
-`show`/`text` object. Existing working sidebar buttons provide text separately
-for `default`, `hover`, `selected` and `disabled`; new mobile buttons only had an
-unscoped source label and font-only mobile overrides. The earlier pilot restored
-the unscoped label but still omitted these state-specific entries.
+The focused configuration loop now checks the actual Default-state text object. Before repair, all 452 named new mobile controls across 31 pages lacked an explicit Default-state label; Homepage alone failed for all 14 controls. A minimised legacy-generator/phone-formatter test failed on the missing Default `show`/`text` object. Existing working sidebar buttons provide text separately for `default`, `hover`, `selected` and `disabled`; new mobile buttons only had an unscoped source label and font-only mobile overrides. The earlier pilot restored the unscoped label but still omitted these state-specific entries.
 
-Saved backed-up mobile-only text settings for all four native states on the 452
-named controls. Preserve compact font sizes/margins, distinct per-state labels,
-positions, dimensions, fills/hover colours, layer order, visibility and actions.
-The original generator and compact formatter now retain complete state text,
-with regression checks for the saved legacy pattern and future generation.
-Backup: `reports/_review/mobile-drawer-text-states-20261013-all`, excluded from Git.
+Saved backed-up mobile-only text settings for all four native states on the 452 named controls. Preserve compact font sizes/margins, distinct per-state labels, positions, dimensions, fills/hover colours, layer order, visibility and actions. The original generator and compact formatter now retain complete state text, with regression checks for the saved legacy pattern and future generation. Backup: `reports/_review/mobile-drawer-text-states-20261013-all`, excluded from Git.
 
-Verification: the state-label check is green for all 452 controls; 13 portable
-tests and 452 published mobile schemas pass. All 3,301 non-mobile definitions
-retain the compact baseline fingerprint. Default visible overlaps remain zero,
-as do table/tile collisions across 823 bookmark/page states. No source report
-visual, bookmark, semantic model, ETL, permission, refresh or publication changes.
+Verification: the state-label check is green for all 452 controls; 13 portable tests and 452 published mobile schemas pass. All 3,301 non-mobile definitions retain the compact baseline fingerprint. Default visible overlaps remain zero, as do table/tile collisions across 823 bookmark/page states. No source report visual, bookmark, semantic model, ETL, permission, refresh or publication changes.
 
-Status: common text-state configuration gap repaired in saved WIP; native
-rendering remains unverified. Reopen the saved PBIP without overwriting it from
-the stale open session, then open WMPP Homepage / Mobile layout / Menu and check
-the link labels. Do not treat schema/configuration success as rendered acceptance.
+Status: common text-state configuration gap repaired in saved WMPP_v16; native rendering remains unverified. Reopen the saved PBIP without overwriting it from the stale open session, then open WMPP Homepage / Mobile layout / Menu and check the link labels. Do not treat schema/configuration success as rendered acceptance.
 
 ## MOB-004 — Homepage mobile images overlap their button titles
 
-Reported in `codex-clipboard-d41e77db-7d79-4e71-ab24-6a78e184ae91.png`:
-Performance, Referrals and Referral Explorer have their images over their titles
-in the homepage phone layout. This is an internal button-content collision, not
-an overlap between separate visuals, so the earlier page bounding-box checks
-could not catch it.
+Reported in `codex-clipboard-d41e77db-7d79-4e71-ab24-6a78e184ae91.png`: Performance, Referrals and Referral Explorer have their images over their titles in the homepage phone layout. This is an internal button-content collision, not an overlap between separate visuals, so the earlier page bounding-box checks could not catch it.
 
-The saved-state feedback loop (`compact_wmpp_mobile_layout.py --check-home-buttons`)
-fails for all three buttons in Default, Hover, Selected and Disabled. The compact
-formatter removed the desktop title's 74-point top margin, but retained the
-custom icon's centred horizontal position and 16/20.8-point phone top margin.
-In the 52-point-high button, the image occupies the title's reserved content area.
-The minimised formatter regression reproduces this geometry without needing the
-saved report or a native renderer.
+The saved-state feedback loop (`compact_wmpp_mobile_layout.py --check-home-buttons`) fails for all three buttons in Default, Hover, Selected and Disabled. The compact formatter removed the desktop title's 74-point top margin, but retained the custom icon's centred horizontal position and 16/20.8-point phone top margin. In the 52-point-high button, the image occupies the title's reserved content area. The minimised formatter regression reproduces this geometry without needing the saved report or a native renderer.
 
-Saved a mobile-only horizontal layout for the three existing homepage buttons:
-24-point existing image on the left with a 12-point inset; title left-aligned
-with a 52-point left inset, reserving a 16-point gap after the image. Apply this
-to all four native states and the unscoped fallback. Keep the existing image
-resource bindings, font sizes/colours, button dimensions/positions, fills, actions,
-descriptions, drawer controls, desktop layout and semantic model unchanged.
-Backup: `reports/_review/mobile-home-button-spacing-20261013`, excluded from Git.
+Saved a mobile-only horizontal layout for the three existing homepage buttons: 24-point existing image on the left with a 12-point inset; title left-aligned with a 52-point left inset, reserving a 16-point gap after the image. Apply this to all four native states and the unscoped fallback. Keep the existing image resource bindings, font sizes/colours, button dimensions/positions, fills, actions, descriptions, drawer controls, desktop layout and semantic model unchanged. Backup: `reports/_review/mobile-home-button-spacing-20261013`, excluded from Git.
 
-Verification: the saved internal content-region check changes from 12 collisions
-to zero; all 14 regression/preservation tests and the three published mobile
-schemas pass. All 1,341 other mobile files are byte-for-byte unchanged, as are
-all 3,301 protected non-mobile definitions. Default page overlaps and table/tile
-collisions across 823 bookmark/page states remain zero. The drawer's 452-button
-state-label checks still pass. No ETL, permission, refresh or publication changes.
+Verification: the saved internal content-region check changes from 12 collisions to zero; all 14 regression/preservation tests and the three published mobile schemas pass. All 1,341 other mobile files are byte-for-byte unchanged, as are all 3,301 protected non-mobile definitions. Default page overlaps and table/tile collisions across 823 bookmark/page states remain zero. The drawer's 452-button state-label checks still pass. No ETL, permission, refresh or publication changes.
 
-Status: saved homepage button content spacing repaired. Native appearance after
-reopening the WIP PBIP remains an acceptance check; static checks are not proof
-of rendering. Do not overwrite saved repairs from an older open Desktop session.
+Status: saved homepage button content spacing repaired. Native appearance after reopening the WMPP_v16 PBIP remains an acceptance check; static checks are not proof of rendering. Do not overwrite saved repairs from an older open Desktop session.
 
 ### Follow-up — White symbols separated from orange badge backgrounds
 
-Native feedback `codex-clipboard-bcfe3bdc-ecc5-4dc4-89c0-9e40bd1429eb.png`
-shows the white symbols on the left but their orange circles still centred in
-the buttons. The earlier repair moved only the icon layer and missed the image
-inside the button's state-specific `fill` object. The circle is drawn by the
-separate `wmpp-bubble-background-*.svg` fill assets; the white symbol is drawn
-by `lucide-nav-*-white.svg`. The new screenshot and those asset definitions are
-direct evidence, so a wider speculative hypothesis search was unnecessary.
-The prior geometry/image-binding tests did not cover this two-layer dependency.
+Native feedback `codex-clipboard-bcfe3bdc-ecc5-4dc4-89c0-9e40bd1429eb.png` shows the white symbols on the left but their orange circles still centred in the buttons. The earlier repair moved only the icon layer and missed the image inside the button's state-specific `fill` object. The circle is drawn by the separate `wmpp-bubble-background-*.svg` fill assets; the white symbol is drawn by `lucide-nav-*-white.svg`. The new screenshot and those asset definitions are direct evidence, so a wider speculative hypothesis search was unnecessary. The prior geometry/image-binding tests did not cover this two-layer dependency.
 
-The new feedback loop (`compact_wmpp_mobile_layout.py --check-home-badges`) fails
-for all three buttons in all four native states. A portable regression recreates
-the white-only icon plus independent fill-circle pattern and fails before the
-correction. Reuse the already-registered `wmpp-sidebar-chart-no-axes-combined.svg`
-and `wmpp-sidebar-user-round-plus.svg` assets, which each include the existing
-orange `#EF7911` circle and white glyph in one SVG. Set the phone icons to 32
-points at the existing left inset, preserving an 8-point gap before the title.
-Disable the independent fill-image layer in each phone state to remove the
-stray centred circles. No new images or resource registrations are required.
+The new feedback loop (`compact_wmpp_mobile_layout.py --check-home-badges`) fails for all three buttons in all four native states. A portable regression recreates the white-only icon plus independent fill-circle pattern and fails before the correction. Reuse the already-registered `wmpp-sidebar-chart-no-axes-combined.svg` and `wmpp-sidebar-user-round-plus.svg` assets, which each include the existing orange `#EF7911` circle and white glyph in one SVG. Set the phone icons to 32 points at the existing left inset, preserving an 8-point gap before the title. Disable the independent fill-image layer in each phone state to remove the stray centred circles. No new images or resource registrations are required.
 
-Saved this correction to the same three mobile button files only. Their title
-fonts/colours/labels, row dimensions/positions, descriptions and actions remain
-unchanged; desktop visuals, original assets, bookmarks and semantic model are
-untouched. Backup: `reports/_review/mobile-home-badges-20261013`, excluded from Git.
+Saved this correction to the same three mobile button files only. Their title fonts/colours/labels, row dimensions/positions, descriptions and actions remain unchanged; desktop visuals, original assets, bookmarks and semantic model are untouched. Backup: `reports/_review/mobile-home-badges-20261013`, excluded from Git.
 
-Verification: both spacing and combined-badge checks pass for all three buttons;
-the two reused assets are registered and contain both orange circles and white
-glyphs. Fifteen portable tests and the three mobile schemas pass. All 1,341 other
-mobile files and 3,301 protected non-mobile definitions remain unchanged. Drawer
-state labels and the 823 bookmark/page collision checks still pass. Native
-appearance after reopening the WIP remains unverified; no refresh/publication.
+Verification: both spacing and combined-badge checks pass for all three buttons; the two reused assets are registered and contain both orange circles and white glyphs. Fifteen portable tests and the three mobile schemas pass. All 1,341 other mobile files and 3,301 protected non-mobile definitions remain unchanged. Drawer state labels and the 823 bookmark/page collision checks still pass. Native appearance after reopening the WMPP_v16 remains unverified; no refresh/publication.
 
 ## MOB-005 — Add a homepage Provider Explorer quick link
 
-Requested on 2026-10-14: add another homepage button below Referral Explorer so
-users can jump directly to Provider Explorer. Added visible content button
-`a786374f5b2d40d37613` on WMPP Homepage in Desktop and phone layouts. Reuse the
-existing building badge and `5d2360e07f9eb62f82a7` (Go to Provider Explorer), which
-activates page `08ef33dc6a87d1b14392` and suppresses data-state changes.
+Requested on 2026-10-14: add another homepage button below Referral Explorer so users can jump directly to Provider Explorer. Added visible content button `a786374f5b2d40d37613` on WMPP Homepage in Desktop and phone layouts. Reuse the existing building badge and `5d2360e07f9eb62f82a7` (Go to Provider Explorer), which activates page `08ef33dc6a87d1b14392` and suppresses data-state changes.
 
-Desktop: same neutral/orange-hover button styling as the existing provider link;
-fit below the referral description. Only that description's empty box height
-changes from 118 to 72; its text, 18px font, position and width are preserved.
-Phone: add a 323-by-52 button after the referral description using the combined
-orange/white building badge, separate from its title. Move the two footer cards
-down 60 points to keep clear gaps. Existing main shortcut icons, sidebar/drawer
-links, page size, provider content and other report pages remain unchanged.
+Desktop: same neutral/orange-hover button styling as the existing provider link; fit below the referral description. Only that description's empty box height changes from 118 to 72; its text, 18px font, position and width are preserved. Phone: add a 323-by-52 button after the referral description using the combined orange/white building badge, separate from its title. Move the two footer cards down 60 points to keep clear gaps. Existing main shortcut icons, sidebar/drawer links, page size, provider content and other report pages remain unchanged.
 
-The five report-file changes are two new button definition/state files, one
-Desktop paragraph container-height change and two phone footer position changes.
-Current report/model/resources outside those targets are fingerprint-preserved;
-all 3,294 other existing non-mobile definitions and 1,338 other current mobile
-files remain unchanged. No semantic model, bookmark, resource registration,
-source SVG, ETL, permission, refresh or publication edits.
+The five report-file changes are two new button definition/state files, one Desktop paragraph container-height change and two phone footer position changes. Current report/model/resources outside those targets are fingerprint-preserved; all 3,294 other existing non-mobile definitions and 1,338 other current mobile files remain unchanged. No semantic model, bookmark, resource registration, source SVG, ETL, permission, refresh or publication edits.
 
-Backup: `reports/_review/home-provider-shortcut-before-20261014`, excluded from Git.
-Reusable builder/checker: `tools/add_wmpp_home_provider_shortcut.py`. Compact
-validation metadata now records the authorised homepage definition change,
-rather than claiming that the Desktop homepage was unchanged.
+Backup: `reports/_review/home-provider-shortcut-before-20261014`, excluded from Git. Reusable builder/checker: `tools/add_wmpp_home_provider_shortcut.py`. Compact validation metadata now records the authorised homepage definition change, rather than claiming that the Desktop homepage was unchanged.
 
-Validation: the new button links to the intended existing bookmark and page,
-does not overlap existing content in either layout, and has a combined badge
-in every state. Sixteen portable tests and all four homepage badge/spacing checks
-pass; the 34 homepage bookmark/page table-tile checks pass. The five changed
-documents pass Microsoft's published compatible 2.7 visual/2.4 phone contracts
-on validation copies only. Desktop's actual saved 2.13/2.8 references are kept;
-their public schema URLs returned 404, so exact-version schema validation and
-native render/click validation are not claimed.
+Validation: the new button links to the intended existing bookmark and page, does not overlap existing content in either layout, and has a combined badge in every state. Sixteen portable tests and all four homepage badge/spacing checks pass; the 34 homepage bookmark/page table-tile checks pass. The five changed documents pass Microsoft's published compatible 2.7 visual/2.4 phone contracts on validation copies only. Desktop's actual saved 2.13/2.8 references are kept; their public schema URLs returned 404, so exact-version schema validation and native render/click validation are not claimed.
 
-The latest Desktop save predates this task's changes and differs from the old
-compact metadata: four mobile objects were already absent (one Referral Detail
-slicer, plus a Referral Explorer slicer/textbox/Sankey). Reconcile the inventory
-metadata to those actual saved files without restoring removed objects. The
-whole-report check then identifies an unchanged Referral Detail control at x=1,
-width=323, extending one pixel beyond the strict 323-point checker. QA records
-that out-of-scope warning; it does not claim a global mobile pass. Homepage checks
-pass independently. Status: saved shortcut complete; reopen WIP for native
-appearance/click acceptance without overwriting it from the older open session.
+The latest Desktop save predates this task's changes and differs from the old compact metadata: four mobile objects were already absent (one Referral Detail slicer, plus a Referral Explorer slicer/textbox/Sankey). Reconcile the inventory metadata to those actual saved files without restoring removed objects. The whole-report check then identifies an unchanged Referral Detail control at x=1, width=323, extending one pixel beyond the strict 323-point checker. QA records that out-of-scope warning; it does not claim a global mobile pass. Homepage checks pass independently. Status: saved shortcut complete; reopen WMPP_v16 for native appearance/click acceptance without overwriting it from the older open session.
 
 ## MOB-006 — Group Referral Explorer phone filters, except person search
 
-Requested on 2026-10-14 with the Offers-style Filters / Filter this dashboard /
-Close box screenshots. The person-search control must remain visible separately.
-Implemented a closed-by-default phone panel on Referral Explorer, reusing the
-Offers Overview white panel, heading and default-neutral/orange-hover buttons.
+Requested on 2026-10-14 with the Offers-style Filters / Filter this dashboard / Close box screenshots. The person-search control must remain visible separately. Implemented a closed-by-default phone panel on Referral Explorer, reusing the Offers Overview white panel, heading and default-neutral/orange-hover buttons.
 
-Includes the 11 currently visible user-facing slicers: Spot, Provider Response,
-Open and overdue, Open referral, Current status, Offer status, Placement urgency
-band, Placement type, Framework category, Days since offer activity, and the
-existing Search / select referral IDs control. Hidden journey-stage, alternate
-person/referral helper and dashboard-metric slicers are not moved or exposed.
-The custom Search / select person visual and its phone placement remain untouched.
+Includes the 11 currently visible user-facing slicers: Spot, Provider Response, Open and overdue, Open referral, Current status, Offer status, Placement urgency band, Placement type, Framework category, Days since offer activity, and the existing Search / select referral IDs control. Hidden journey-stage, alternate person/referral helper and dashboard-metric slicers are not moved or exposed. The custom Search / select person visual and its phone placement remain untouched.
 
-Because source grouping/visibility is shared with Desktop, the panel uses
-off-canvas phone copies, rather than reparenting/hiding Desktop's actual filters.
-Each original/copy pair uses one page-specific sync group with field/filter
-sync enabled; original positions, queries, formatting, field bindings and filter
-configuration are unchanged. This follows [Microsoft's separate-slicer sync
-guidance](https://learn.microsoft.com/power-bi/visuals/power-bi-visualization-slicers#sync-separate-slicers).
-Native sync behaviour after reopening has not yet been observed.
+Because source grouping/visibility is shared with Desktop, the panel uses off-canvas phone copies, rather than reparenting/hiding Desktop's actual filters. Each original/copy pair uses one page-specific sync group with field/filter sync enabled; original positions, queries, formatting, field bindings and filter configuration are unchanged. This follows [Microsoft's separate-slicer sync guidance](https://learn.microsoft.com/power-bi/visuals/power-bi-visualization-slicers#sync-separate-slicers). Native sync behaviour after reopening has not yet been observed.
 
-Open and Close bookmarks target only the panel group and close control, with
-data and active-page changes suppressed. The existing mobile navigation-open
-bookmark also hides the filter panel without resetting selections. The panel's
-mobile layers sit above content but below navigation. Person search ends at
-y=143; Filters starts at y=151, and the panel starts at y=198. Fields use 303-wide,
-80-high rows with gaps; the long group remains scrollable with the phone page.
+Open and Close bookmarks target only the panel group and close control, with data and active-page changes suppressed. The existing mobile navigation-open bookmark also hides the filter panel without resetting selections. The panel's mobile layers sit above content but below navigation. Person search ends at y=143; Filters starts at y=151, and the panel starts at y=198. Fields use 303-wide, 80-high rows with gaps; the long group remains scrollable with the phone page.
 
-Removed only the 10 old standalone `mobile.json` slicer placements; all original
-Desktop slicer definitions remain. Backed up those placements and every modified
-file under `reports/_review/referral-mobile-filters-before-20261014` (Git excluded).
-Thirty-nine existing phone content placements move up 1,196.4 points, with widths,
-heights, formatting and bindings preserved; the journey now begins at y=199.
-This also removes the prior blank space left by the already-removed phone Sankey.
-No semantic-model, asset, other-page, permission, refresh or publication changes.
+Removed only the 10 old standalone `mobile.json` slicer placements; all original Desktop slicer definitions remain. Backed up those placements and every modified file under `reports/_review/referral-mobile-filters-before-20261014` (Git excluded). Thirty-nine existing phone content placements move up 1,196.4 points, with widths, heights, formatting and bindings preserved; the journey now begins at y=199. This also removes the prior blank space left by the already-removed phone Sankey. No semantic-model, asset, other-page, permission, refresh or publication changes.
 
-Verification: the saved panel contains all 11 intended fields, excludes person
-search, keeps exact paired queries/formatting, and uses display-only bookmarks.
-Zero default visible overlaps and zero collisions among heading/close/field
-content; all fields fit the panel bounds. All 18 portable tests and 85 published
-compatible schema checks pass (validation copies use available 2.7/2.4 contracts,
-while actual newer saved references are preserved). The homepage shortcut and
-four homepage badge checks still pass. All unrelated report/model/resource bytes
-are preserved; original Desktop definitions differ only in the intended sync
-metadata. Status: saved configuration complete; native open/close, selections,
-scrolling and navigation layering require a post-reopen acceptance check.
+Verification: the saved panel contains all 11 intended fields, excludes person search, keeps exact paired queries/formatting, and uses display-only bookmarks. Zero default visible overlaps and zero collisions among heading/close/field content; all fields fit the panel bounds. All 18 portable tests and 85 published compatible schema checks pass (validation copies use available 2.7/2.4 contracts, while actual newer saved references are preserved). The homepage shortcut and four homepage badge checks still pass. All unrelated report/model/resource bytes are preserved; original Desktop definitions differ only in the intended sync metadata. Status: saved configuration complete; native open/close, selections, scrolling and navigation layering require a post-reopen acceptance check.
 
 ## MOB-007 — Match mobile filter design on Offer Locations and provider pages
 
-- **Request (2026-10-14):** apply Referral Explorer's compact Filters / Close
-  panel to Offer Locations, Provider Explorer and Provider Registry Extract.
-- **Fix:** saved closed-by-default panels with the existing Offers Overview
-  styling. Offer Locations groups Provider, Offer Status, Offer framework and
-  Offer category; person search moves above Filters, below the unchanged
-  straight-line-distance warning. Provider Explorer groups Service type, with
-  Offer Status and Scoring assignment month; provider-name search stays visible.
-  Registry groups Provider Status, Home Status and Town/City; Provider Name and
-  Home Name searches remain outside. Existing field bindings are retained,
-  including the two registry status slicers' current home-status binding.
-- **Desktop preservation:** originals keep their geometry, query, formatting
-  and saved filter definitions, gaining only paired-sync metadata. Phone copies
-  belong to off-canvas hidden groups; hidden helper slicers stay hidden. Copy
-  explicit incoming/outgoing interaction rules to phone counterparts. No table
-  columns, semantic model, assets, other report pages, security, ETL, refresh or
-  publication changes.
-- **Display behaviour:** Filters opens the panel; Close hides it; opening mobile
-  navigation hides the panel. These bookmarks suppress data and active-page
-  changes. Panel layers remain above content and below existing mobile chrome.
-  Search and content sizes/fonts remain unchanged; only positions move to close
-  the removed inline filter stack. Default visible objects and panel contents
-  have no geometric collisions on the three pages.
-- **Recovery:** removed only ten obsolete original `mobile.json` placements,
-  retaining all corresponding desktop visual definitions. Backup of affected
-  files/placements: `reports/_review/mobile-filter-panels-three-pages-before-20261014`.
-  Delivery inventory: `MOBILE_FILTER_PANELS_DELIVERY.json` in the saved WIP.
-- **Validation:** 23 portable tests and 132 published compatible schema checks
-  pass. Original/copy query, formatting, selection config and sync metadata match;
-  original definitions differ only by added sync metadata. Unrelated report,
-  model and assets pass byte-preservation assertions. Existing Referral Explorer
-  panel and homepage shortcut checks still pass. Newer actual schema references
-  remain unchanged; compatible-contract validation is not native-render proof.
-- **Status:** saved configuration complete. Reopen the saved WIP without saving
-  an older open copy over these changes, then check expanded filters, selection
-  synchronization and navigation in Power BI's mobile view.
+- **Request (2026-10-14):** apply Referral Explorer's compact Filters / Close panel to Offer Locations, Provider Explorer and Provider Registry Extract.
+- **Fix:** saved closed-by-default panels with the existing Offers Overview styling. Offer Locations groups Provider, Offer Status, Offer framework and Offer category; person search moves above Filters, below the unchanged straight-line-distance warning. Provider Explorer groups Service type, with Offer Status and Scoring assignment month; provider-name search stays visible. Registry groups Provider Status, Home Status and Town/City; Provider Name and Home Name searches remain outside. Existing field bindings are retained, including the two registry status slicers' current home-status binding.
+- **Desktop preservation:** originals keep their geometry, query, formatting and saved filter definitions, gaining only paired-sync metadata. Phone copies belong to off-canvas hidden groups; hidden helper slicers stay hidden. Copy explicit incoming/outgoing interaction rules to phone counterparts. No table columns, semantic model, assets, other report pages, security, ETL, refresh or publication changes.
+- **Display behaviour:** Filters opens the panel; Close hides it; opening mobile navigation hides the panel. These bookmarks suppress data and active-page changes. Panel layers remain above content and below existing mobile chrome. Search and content sizes/fonts remain unchanged; only positions move to close the removed inline filter stack. Default visible objects and panel contents have no geometric collisions on the three pages.
+- **Recovery:** removed only ten obsolete original `mobile.json` placements, retaining all corresponding desktop visual definitions. Backup of affected files/placements: `reports/_review/mobile-filter-panels-three-pages-before-20261014`. Delivery inventory: `MOBILE_FILTER_PANELS_DELIVERY.json` in the saved WMPP_v16.
+- **Validation:** 23 portable tests and 132 published compatible schema checks pass. Original/copy query, formatting, selection config and sync metadata match; original definitions differ only by added sync metadata. Unrelated report, model and assets pass byte-preservation assertions. Existing Referral Explorer panel and homepage shortcut checks still pass. Newer actual schema references remain unchanged; compatible-contract validation is not native-render proof.
+- **Status:** saved configuration complete. Reopen the saved WMPP_v16 without saving an older open copy over these changes, then check expanded filters, selection synchronization and navigation in Power BI's mobile view.
 
 ## RPT-001 — Update report version labels from one shared parameter
 
-- **Request (2026-10-15):** manage the `Version: 0.16` footer once in Power BI
-  instead of editing each page separately.
+- **Request (2026-10-15):** manage the `Version: 0.16` footer once in Power BI instead of editing each page separately.
 - **Cause:** 14 existing desktop text boxes contain independent static text.
-- **Fix:** introduced required text parameter `ReportVersion` (current `0.16`),
-  a disconnected local `Report Settings` query/table and `Report Version Label`
-  measure. All 14 existing text boxes use that measure through native dynamic
-  text-value bindings. Text type preserves values such as `0.20`; whitespace is
-  trimmed and a blank version raises a refresh error. No business/security
-  relationships, data-source connections, existing measures or roles change.
-- **Update once:** Desktop Home > Transform data > Manage Parameters >
-  ReportVersion > Current Value; then Close & Apply. Apply/refresh the local
-  settings row before expecting the labels to change; publish the updated
-  report/model for service consumers. This is not a user-selectable slicer.
-- **Preserved:** existing control IDs/type/geometry/formatting/alignment, all
-  phone layout files, unrelated report/model definitions, assets and ZIPs.
-  Changes affect the 14 existing labels only, not pages without version footers.
-- **Validation:** six new portable tests plus 23 mobile tests pass, as do 14
-  published compatible visual schemas and native TMDL parsing (72 tables,
-  491 measures, two expressions, unchanged 54 relationships and two roles).
-  Version-label checks confirm zero remaining static labels. Existing Referral
-  Explorer filter-panel and homepage shortcut checks pass. A broader Offer
-  Locations phone check finds five pre-existing collisions, confirmed identical
-  with pre-change version definitions; those unrelated layouts remain untouched.
-- **Recovery:** every replaced file is copied to
-  `reports/_review/report-version-parameter-before-20261015`. The WIP root has
-  `REPORT_VERSION_PARAMETER_DELIVERY.json` with the changed-label inventory.
-- **Status:** saved configuration complete. Reopen the saved WIP without
-  overwriting it from an older open copy, apply/refresh Report Settings, and
-  confirm rendering. No running-model write, refresh or publication performed.
+- **Fix:** introduced required text parameter `ReportVersion` (current `0.16`), a disconnected local `Report Settings` query/table and `Report Version Label` measure. All 14 existing text boxes use that measure through native dynamic text-value bindings. Text type preserves values such as `0.20`; whitespace is trimmed and a blank version raises a refresh error. No business/security relationships, data-source connections, existing measures or roles change.
+- **Update once:** Desktop Home > Transform data > Manage Parameters > ReportVersion > Current Value; then Close & Apply. Apply/refresh the local settings row before expecting the labels to change; publish the updated report/model for service consumers. This is not a user-selectable slicer.
+- **Preserved:** existing control IDs/type/geometry/formatting/alignment, all phone layout files, unrelated report/model definitions, assets and ZIPs. Changes affect the 14 existing labels only, not pages without version footers.
+- **Validation:** six new portable tests plus 23 mobile tests pass, as do 14 published compatible visual schemas and native TMDL parsing (72 tables, 491 measures, two expressions, unchanged 54 relationships and two roles). Version-label checks confirm zero remaining static labels. Existing Referral Explorer filter-panel and homepage shortcut checks pass. A broader Offer Locations phone check finds five pre-existing collisions, confirmed identical with pre-change version definitions; those unrelated layouts remain untouched.
+- **Recovery:** every replaced file is copied to `reports/_review/report-version-parameter-before-20261015`. The WMPP_v16 root has `REPORT_VERSION_PARAMETER_DELIVERY.json` with the changed-label inventory.
+- **Status:** saved configuration complete. Reopen the saved WMPP_v16 without overwriting it from an older open copy, apply/refresh Report Settings, and confirm rendering. No running-model write, refresh or publication performed.
 
 ## RPT-002 — Desktop Provider Explorer shortcut does not match its neighbours
 
-- **Request (2026-10-15):** the homepage Provider Explorer button should look
-  like the other desktop homepage shortcuts, not the small horizontal pill
-  shown below the Referral Explorer description.
-- **Cause:** the initial new shortcut cloned the sidebar navigation button,
-  with a 232-by-48 horizontal layout, a small combined badge, a rounded white
-  background and left-aligned text. Existing desktop shortcuts instead use
-  approximately 96-by-107 controls, with a large orange bubble background,
-  white glyph and centred label underneath. This is a saved-style mismatch,
-  not a stale report cache or a missing icon.
-- **Fix:** copied the neighbour's complete desktop button objects and dimensions,
-  using the existing white building glyph and Provider Explorer label in all
-  states. Keep the original destination, accessible name and container settings.
-  Reflow the four desktop shortcuts into equally spaced columns; narrow/move
-  existing descriptions without changing words or fonts, restore the third
-  description's empty height, and add a matching provider description/divider.
-  Page height and existing footer tiles do not change.
-- **Preserved:** all mobile files, effective provider phone icon/text/shape/fill
-  appearance, original links/bookmarks, semantic model, shared version labels,
-  assets, sidebar and unrelated report pages. No ZIP, refresh or publication.
-- **Validation:** `restyle_wmpp_home_provider_shortcut.py --check-style` fails on
-  the original compact definition and passes on the saved correction. New
-  portable tests reject the original pill and a single bad hover override;
-  all 34 desktop/mobile/version tests pass. Eleven published compatible visual
-  schema checks pass with actual saved schema references retained. Four-column
-  spacing, all-state style matching, phone-style preservation and absence of
-  button/description/footer collisions pass. Native rendering remains unverified.
-- **Recovery:** nine original visual definitions and the compact-layout manifest
-  are backed up under `reports/_review/home-desktop-provider-style-before-20261015`.
-  The root delivery inventory is `HOMEPAGE_DESKTOP_SHORTCUTS_DELIVERY.json`.
-  A Windows command-length limit interrupted the large style replacement;
-  resumed only exact backed-up or already-planned values, with all final JSON
-  equality and preservation assertions passing. Oversized replacements now
-  require an exact recovery copy before bounded apply_patch reconstruction.
-- **Prevention:** an explicit desktop-style regression check is now separate
-  from the mobile badge checks, so matching mobile appearance cannot mask a
-  mismatched desktop template.
-- **Status:** saved correction complete; reopen the saved WIP to inspect native
-  appearance without overwriting it from an older open copy.
+- **Request (2026-10-15):** the homepage Provider Explorer button should look like the other desktop homepage shortcuts, not the small horizontal pill shown below the Referral Explorer description.
+- **Cause:** the initial new shortcut cloned the sidebar navigation button, with a 232-by-48 horizontal layout, a small combined badge, a rounded white background and left-aligned text. Existing desktop shortcuts instead use approximately 96-by-107 controls, with a large orange bubble background, white glyph and centred label underneath. This is a saved-style mismatch, not a stale report cache or a missing icon.
+- **Fix:** copied the neighbour's complete desktop button objects and dimensions, using the existing white building glyph and Provider Explorer label in all states. Keep the original destination, accessible name and container settings. Reflow the four desktop shortcuts into equally spaced columns; narrow/move existing descriptions without changing words or fonts, restore the third description's empty height, and add a matching provider description/divider. Page height and existing footer tiles do not change.
+- **Preserved:** all mobile files, effective provider phone icon/text/shape/fill appearance, original links/bookmarks, semantic model, shared version labels, assets, sidebar and unrelated report pages. No ZIP, refresh or publication.
+- **Validation:** `restyle_wmpp_home_provider_shortcut.py --check-style` fails on the original compact definition and passes on the saved correction. New portable tests reject the original pill and a single bad hover override; all 34 desktop/mobile/version tests pass. Eleven published compatible visual schema checks pass with actual saved schema references retained. Four-column spacing, all-state style matching, phone-style preservation and absence of button/description/footer collisions pass. Native rendering remains unverified.
+- **Recovery:** nine original visual definitions and the compact-layout manifest are backed up under `reports/_review/home-desktop-provider-style-before-20261015`. The root delivery inventory is `HOMEPAGE_DESKTOP_SHORTCUTS_DELIVERY.json`. A Windows command-length limit interrupted the large style replacement; resumed only exact backed-up or already-planned values, with all final JSON equality and preservation assertions passing. Oversized replacements now require an exact recovery copy before bounded apply_patch reconstruction.
+- **Prevention:** an explicit desktop-style regression check is now separate from the mobile badge checks, so matching mobile appearance cannot mask a mismatched desktop template.
+- **Status:** saved correction complete; reopen the saved WMPP_v16 to inspect native appearance without overwriting it from an older open copy.
 
 ## MOB-008 — Remove duplicate custom navigation from phone layouts
 
-- **Request (2026-10-15):** rely on Power BI mobile's built-in page navigation;
-  remove the custom Menu/drawer from mobile only. Keep desktop navigation,
-  Filters panels, homepage shortcuts and necessary Back/drill-through routes.
-- **Fix:** removed only the 18 identified custom navigation placements on each
-  of the 31 existing mobile layouts: Menu, scrim, panel, drawer title, drawer
-  Close, EXPLORERS heading and twelve drawer destination rows. The page title
-  stays, widened to the 323-point phone canvas without other formatting or
-  geometry changes. Actual report content is not reflowed or resized.
-- **Preservation:** all other mobile placement bytes, including 48 filter
-  visuals, filter controls, all four homepage shortcuts, two Back and two
-  drill-through buttons are preserved. Source visual definitions, desktop page
-  geometry/navigation, bookmark definitions/index, queries, semantic model,
-  shared report-version parameter, hidden-page settings and assets are unchanged.
-  Source controls parked off-canvas and their bookmarks remain for compatibility
-  and recovery, but no longer have placements on phone canvases.
-- **Recovery:** 558 removed `mobile.json` files, 31 old heading placements and
-  the prior compact-layout inventory are copied to
-  `reports/_review/native-mobile-navigation-before-20261015`. Removal targets
-  were resolved, page/role-checked and byte-compared with their backup first.
-  No recursive deletes, source-definition deletes or broad filesystem targets.
-- **Validation:** 40 portable checks pass. All 31 changed headings pass published
-  compatible mobile contracts while retaining actual saved schema references.
-  Inventory confirms no custom navigation placements remain. Byte preservation
-  confirms unrelated mobile controls, all source/model/bookmarks and assets are
-  unchanged by this operation. No new default-layout collisions; pre-existing
-  warnings on Offer Locations, Overall Performance, Target & Urgency Performance,
-  Referrals and Provider Detail remain unchanged. Existing Referral Explorer
-  filter panel, homepage shortcut/style/badges and shared-version checks pass.
-- **Provenance:** reconciled the older compact source fingerprint with the
-  current saved definitions without changing them. A pre-existing Desktop-added
-  trailing blank line in Report Settings is accepted by the version validator;
-  a regression test still rejects substantive measure/query changes. Finishing
-  metadata after a Windows patch-size limit did not repeat any removals or alter
-  report/model files. Delivery/QA: `MOBILE_NATIVE_NAVIGATION_DELIVERY.json` and
-  `MOBILE_NATIVE_NAVIGATION_QA.json` in the saved WIP root.
-- **Status:** saved mobile configuration complete. Reopen WIP without overwriting
-  it from an older open copy, inspect the phone view and publish when ready to
-  update app consumers. Native app rendering is not yet verified. No running-model
-  write, refresh, permission change, ZIP update or publication performed.
+- **Request (2026-10-15):** rely on Power BI mobile's built-in page navigation; remove the custom Menu/drawer from mobile only. Keep desktop navigation, Filters panels, homepage shortcuts and necessary Back/drill-through routes.
+- **Fix:** removed only the 18 identified custom navigation placements on each of the 31 existing mobile layouts: Menu, scrim, panel, drawer title, drawer Close, EXPLORERS heading and twelve drawer destination rows. The page title stays, widened to the 323-point phone canvas without other formatting or geometry changes. Actual report content is not reflowed or resized.
+- **Preservation:** all other mobile placement bytes, including 48 filter visuals, filter controls, all four homepage shortcuts, two Back and two drill-through buttons are preserved. Source visual definitions, desktop page geometry/navigation, bookmark definitions/index, queries, semantic model, shared report-version parameter, hidden-page settings and assets are unchanged. Source controls parked off-canvas and their bookmarks remain for compatibility and recovery, but no longer have placements on phone canvases.
+- **Recovery:** 558 removed `mobile.json` files, 31 old heading placements and the prior compact-layout inventory are copied to `reports/_review/native-mobile-navigation-before-20261015`. Removal targets were resolved, page/role-checked and byte-compared with their backup first. No recursive deletes, source-definition deletes or broad filesystem targets.
+- **Validation:** 40 portable checks pass. All 31 changed headings pass published compatible mobile contracts while retaining actual saved schema references. Inventory confirms no custom navigation placements remain. Byte preservation confirms unrelated mobile controls, all source/model/bookmarks and assets are unchanged by this operation. No new default-layout collisions; pre-existing warnings on Offer Locations, Overall Performance, Target & Urgency Performance, Referrals and Provider Detail remain unchanged. Existing Referral Explorer filter panel, homepage shortcut/style/badges and shared-version checks pass.
+- **Provenance:** reconciled the older compact source fingerprint with the current saved definitions without changing them. A pre-existing Desktop-added trailing blank line in Report Settings is accepted by the version validator; a regression test still rejects substantive measure/query changes. Finishing metadata after a Windows patch-size limit did not repeat any removals or alter report/model files. Delivery/QA: `MOBILE_NATIVE_NAVIGATION_DELIVERY.json` and `MOBILE_NATIVE_NAVIGATION_QA.json` in the saved WMPP_v16 root.
+- **Status:** saved mobile configuration complete. Reopen WMPP_v16 without overwriting it from an older open copy, inspect the phone view and publish when ready to update app consumers. Native app rendering is not yet verified. No running-model write, refresh, permission change, ZIP update or publication performed.
 
-## RPT-003 — WIP folder grows to approximately 79.6 MB; keep cached database
+## RPT-003 — WMPP_v16 folder grows to approximately 79.6 MB; keep cached database
 
-- **Request (2026-10-15):** reduce report size without removing the cached
-  database (called `cach.adb` in the request; actual file is `.pbi/cache.abf`).
-- **Measured cause:** the saved project contains 83,542,375 bytes (79.672 MiB).
-  Report definitions account for 53,866,491 bytes, compared with 21,649,003 bytes
-  for the cache. Significant indentation/pretty-printing in 4,054 JSON files
-  accounts for 35,827,070 safely removable bytes. Media and extra working files
-  are minor contributors. No data-table reduction is required for this saving.
-- **Fix:** losslessly compact only report-definition JSON, preserving every
-  parsed object, array, string, number and property. Reject duplicate keys or
-  non-standard numeric constants before formatting. Use backed-up originals,
-  pre-write byte checks and atomic file replacements; never format `.pbi`,
-  semantic-model definitions, assets or project content outside that report
-  definition directory. Existing provenance records reflect the authorised
-  representation-only change.
-- **Result:** WIP folder now 47,717,099 bytes (45.507 MiB), including delivery
-  metadata: 35,825,276 bytes saved (approximately 43%). Report-definition JSON
-  totals 18,039,421 bytes. No data, formulas, fields, layouts, visuals, filters,
-  bookmarks, hidden pages, assets or model logic were removed or altered.
-- **Cache protection:** `cache.abf` retains exactly the same byte count,
-  SHA-256 hash and modification timestamp. All other cache/local-state files,
-  semantic-model files, resources/media and other unlisted project files pass
-  byte-preservation checks. No cached data was processed or refreshed.
-- **Recovery:** original JSON files and prior provenance records are under
-  `reports/_review/report-json-format-before-20261015`, outside the WIP folder.
-  `REPORT_JSON_COMPACTION_DELIVERY.json` records sizes, semantic fingerprints,
-  cache hashes and protected-file fingerprint. The existing WIP ZIP is unchanged.
-- **Validation:** `compact_wmpp_report_json.py --check-compact` goes from a
-  failing 4,054-file/35,827,070-byte saving opportunity to zero. All 46 portable
-  checks pass. Every compacted definition parses identically to its original;
-  cached database bytes/timestamp and all non-target files are unchanged. Saved
-  native-navigation-removal, desktop-homepage-style and shared-version checks
-  still pass. No formatting temporary files remain.
-- **Status/limits:** saved project-folder reduction complete. Native Desktop
-  reopen is not yet verified. No live-model change, refresh, publication, ZIP
-  rebuild or permission change. Desktop may pretty-print JSON again on a future
-  save; this is an on-disk representation reduction, not compressed-model or
-  memory optimisation.
+- **Request (2026-10-15):** reduce report size without removing the cached database (called `cach.adb` in the request; actual file is `.pbi/cache.abf`).
+- **Measured cause:** the saved project contains 83,542,375 bytes (79.672 MiB). Report definitions account for 53,866,491 bytes, compared with 21,649,003 bytes for the cache. Significant indentation/pretty-printing in 4,054 JSON files accounts for 35,827,070 safely removable bytes. Media and extra working files are minor contributors. No data-table reduction is required for this saving.
+- **Fix:** losslessly compact only report-definition JSON, preserving every parsed object, array, string, number and property. Reject duplicate keys or non-standard numeric constants before formatting. Use backed-up originals, pre-write byte checks and atomic file replacements; never format `.pbi`, semantic-model definitions, assets or project content outside that report definition directory. Existing provenance records reflect the authorised representation-only change.
+- **Result:** WMPP_v16 folder now 47,717,099 bytes (45.507 MiB), including delivery metadata: 35,825,276 bytes saved (approximately 43%). Report-definition JSON totals 18,039,421 bytes. No data, formulas, fields, layouts, visuals, filters, bookmarks, hidden pages, assets or model logic were removed or altered.
+- **Cache protection:** `cache.abf` retains exactly the same byte count, checksum and modification timestamp. All other cache/local-state files, semantic-model files, resources/media and other unlisted project files pass byte-preservation checks. No cached data was processed or refreshed.
+- **Recovery:** original JSON files and prior provenance records are under `reports/_review/report-json-format-before-20261015`, outside the WMPP_v16 folder. `REPORT_JSON_COMPACTION_DELIVERY.json` records sizes, semantic fingerprints, cache hashes and protected-file fingerprint. The existing WMPP_v16 ZIP is unchanged.
+- **Validation:** `compact_wmpp_report_json.py --check-compact` goes from a failing 4,054-file/35,827,070-byte saving opportunity to zero. All 46 portable checks pass. Every compacted definition parses identically to its original; cached database bytes/timestamp and all non-target files are unchanged. Saved native-navigation-removal, desktop-homepage-style and shared-version checks still pass. No formatting temporary files remain.
+- **Status/limits:** saved project-folder reduction complete. Native Desktop reopen is not yet verified. No live-model change, refresh, publication, ZIP rebuild or permission change. Desktop may pretty-print JSON again on a future save; this is an on-disk representation reduction, not compressed-model or memory optimisation.
 
 ## MOB-009 — Repeat the saved mobile logo/title header on every phone page
 
-- **Request (2026-10-15):** add the BCT logo to every mobile page and use
-  the user's newly chosen size-9 title, matching Target & Urgency Performance.
-- **Baseline:** waited for the user's Desktop save. Preserved that exact
-  example: logo at (0, 9), 111 × 25; title at (120, 9), 203 × 25, size 9.
-  Scope is all 31 existing phone layouts, not the four excluded scratch/tooltip
-  pages without mobile layouts. Existing page-specific title words are retained.
-- **Change:** 30 title phone states and 30 logo phone placements; 15 logo
-  sources added off the desktop canvas on pages without the matching source.
-  All logos share the existing embedded PNG. Other phone visuals/positions,
-  existing source visual definitions, desktop layouts, bookmarks, filters,
-  security, page visibility, semantic model, media and cached data are unchanged.
-- **Validation:** the actual saved-header coverage check fails before with a
-  missing logo placement and passes afterwards across all 31 pages. All 75
-  definitions pass published compatible schemas; actual schema references are
-  preserved. Fifty portable tests pass. No new content/header/logo overlaps,
-  no custom mobile navigation restored. Every non-target project file retains
-  its hash; cached database hash, size and modification timestamp are unchanged
-  from the user's saved baseline. The supplied example is byte-preserved.
-- **Recovery:** all 30 replaced states are backed up outside WIP at
-  `reports/_review/mobile-logo-headers-before-20261015`. New source/placement
-  paths and preservation hashes are listed in `MOBILE_LOGO_HEADERS_DELIVERY.json`.
-  Application resumed after an encoding verification mismatch and a sandbox
-  write restriction; the already-written files were compared with the original
-  plan before continuing. Final saved-state and preservation checks pass.
-- **Status:** saved-file implementation complete; close/reopen WIP without
-  saving an older open session to view the change. Native rendering remains
-  unverified for this update. No live-model write, refresh, ZIP update,
-  publication or permission change was performed.
+- **Request (2026-10-15):** add the BCT logo to every mobile page and use the user's newly chosen size-9 title, matching Target & Urgency Performance.
+- **Baseline:** waited for the user's Desktop save. Preserved that exact example: logo at (0, 9), 111 × 25; title at (120, 9), 203 × 25, size 9. Scope is all 31 existing phone layouts, not the four excluded scratch/tooltip pages without mobile layouts. Existing page-specific title words are retained.
+- **Change:** 30 title phone states and 30 logo phone placements; 15 logo sources added off the desktop canvas on pages without the matching source. All logos share the existing embedded PNG. Other phone visuals/positions, existing source visual definitions, desktop layouts, bookmarks, filters, security, page visibility, semantic model, media and cached data are unchanged.
+- **Validation:** the actual saved-header coverage check fails before with a missing logo placement and passes afterwards across all 31 pages. All 75 definitions pass published compatible schemas; actual schema references are preserved. Fifty portable tests pass. No new content/header/logo overlaps, no custom mobile navigation restored. Every non-target project file retains its hash; cached database hash, size and modification timestamp are unchanged from the user's saved baseline. The supplied example is byte-preserved.
+- **Recovery:** all 30 replaced states are backed up outside WMPP_v16 at `reports/_review/mobile-logo-headers-before-20261015`. New source/placement paths and preservation hashes are listed in `MOBILE_LOGO_HEADERS_DELIVERY.json`. Application resumed after an encoding verification mismatch and a sandbox write restriction; the already-written files were compared with the original plan before continuing. Final saved-state and preservation checks pass.
+- **Status:** saved-file implementation complete; close/reopen WMPP_v16 without saving an older open session to view the change. Native rendering remains unverified for this update. No live-model write, refresh, ZIP update, publication or permission change was performed.
 
 ## SEM-003 — Filter the Referral Detail location directory from selected offers
 
-- **Request (2026-10-17):** selecting a row in Offers and proposed provider
-  homes should filter the circled Provider / offer location directory. User
-  approved the offer-home-only behaviour: assigned-provider address rows are
-  hidden during selection, restored when selection is cleared.
-- **Cause:** the directory uses `Referral Map Points`, related to referrals
-  but not directly to offer IDs; a visual interaction alone cannot match them.
-- **Change:** added `Detail location matches offer` under `_Story Measures`,
-  an equals-1 directory visual filter, and an explicit DataFilter interaction
-  from source visual `79a53defabe24e19d2e1` to `df60c76f07c5702701ed` on page
-  `4cad3706fca6451c66b8`. Match by offer UUID with `TREATAS`/`KEEPFILTERS`.
-  Preserve existing single-referral scope and require actual map rows in the
-  cleared branch, rather than retaining unrelated combinations with a constant 1.
-- **Validation:** three saved-contract tests, two compatible JSON schemas and
-  native TMDL parsing pass. The clearing test initially exposed unrelated rows
-  and passes after the new row-presence check. Exact saved measure executed
-  read-only against cached Import data: one/two selected offers return 1/2
-  locations, clearing restores the test referral's 131 locations; zero unrelated
-  or assigned-provider rows during selection, zero no-match/no-referral rows.
-- **Preservation/recovery:** only the measure table, target visual definition
-  and page interaction definition changed. All other WIP files retain their
-  hashes; cache bytes, hash and timestamp are unchanged. No other measures,
-  existing visual projections/styles/geometry, mobile placements, linked-provider
-  definition, roles, relationships, source connections, permissions or ETL edits.
-  Recovery/acceptance: `reports/_review/detail-offer-location-filter-before-20261017`.
-- **Status:** saved implementation and data-query checks complete. Reopen WIP
-  without saving the older open session to load it. Native visual clicking and
-  rendering remain a post-reopen check. No live-model write, refresh, ZIP update
-  or publication was performed.
+- **Request (2026-10-17):** selecting a row in Offers and proposed provider homes should filter the circled Provider / offer location directory. User approved the offer-home-only behaviour: assigned-provider address rows are hidden during selection, restored when selection is cleared.
+- **Cause:** the directory uses `Referral Map Points`, related to referrals but not directly to offer IDs; a visual interaction alone cannot match them.
+- **Change:** added `Detail location matches offer` under `_Story Measures`, an equals-1 directory visual filter, and an explicit DataFilter interaction from source visual `79a53defabe24e19d2e1` to `df60c76f07c5702701ed` on page `4cad3706fca6451c66b8`. Match by offer UUID with `TREATAS`/`KEEPFILTERS`. Preserve existing single-referral scope and require actual map rows in the cleared branch, rather than retaining unrelated combinations with a constant 1.
+- **Validation:** three saved-contract tests, two compatible JSON schemas and native TMDL parsing pass. The clearing test initially exposed unrelated rows and passes after the new row-presence check. Exact saved measure executed read-only against cached Import data: one/two selected offers return 1/2 locations, clearing restores the test referral's 131 locations; zero unrelated or assigned-provider rows during selection, zero no-match/no-referral rows.
+- **Preservation/recovery:** only the measure table, target visual definition and page interaction definition changed. All other WMPP_v16 files retain their hashes; cache bytes, hash and timestamp are unchanged. No other measures, existing visual projections/styles/geometry, mobile placements, linked-provider definition, roles, relationships, source connections, permissions or ETL edits. Recovery/acceptance: `reports/_review/detail-offer-location-filter-before-20261017`.
+- **Status:** saved implementation and data-query checks complete. Reopen WMPP_v16 without saving the older open session to load it. Native visual clicking and rendering remain a post-reopen check. No live-model write, refresh, ZIP update or publication was performed.

@@ -1,0 +1,260 @@
+# Fabric notebook runbook
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
+
+The KPI dictionary now references the current saved-WMPP_v16 calculations and 45 static notebook producer/reference spans. No notebook sequence, parameter, contract, replay or runtime behaviour changed. Deploy sources and refresh/reconcile the consuming models separately.
+
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
+
+[Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
+
+## Offline coordinate reference maintenance - updated 1 October 2026
+
+For null offer distances caused by an empty coordinate lookup, use `00c_load_location_coordinates.py` and the [local-reference instructions](../../configuration/location-reference/README.md). Upload approved CSV ZIP deliveries `codepo_gb.zip` and `opname_csv_gb.zip` to `Files/cfg_files/location_reference/`. The notebook extracts the data CSVs itself; manual unzipping is not required. Original ZIPs are preserved and each run's extracted files remain under `_extracted/` for Spark reads/inspection. Preview creates these files but does not write the lookup. Configure the source releases and an approved local pyproj environment. Preview first, then explicitly enable the merge. No public geocoding/API request or runtime package download is made. This notebook is not automatically invoked by the runners.
+
+Order: setup → Silver formatting → reference preview/approved merge → Silver business rules → Gold model/dimensions → reporting/model refresh. Repeat reference maintenance when new provider postcodes or approved source releases are introduced. The lookup only hydrates postcodes present in the current Silver provider-home state; separately plan historical coverage before archive replay. This local implementation has not been deployed or run in Fabric.
+
+## Reporting reassessment 30 September 2026
+
+The reporting layer has changed to the WMPP_v16 explorers, drillthroughs, snapshots and journey selectors. The processing instructions below remain applicable within their stated scope; this documentation reassessment did not deploy notebooks, replay archives or verify a new Fabric run. After the governed Gold build, refresh WMPP_v16, reconcile its business totals, test the new interactions and complete role-based acceptance before publication.
+
+See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+**Client:** Birmingham Children's Trust **Solution:** WMPP Fabric Lakehouse **Active baseline:** version 02 04 promoted to `project X` root
+
+## 1. Before the first run
+
+1. Import every active `.ipynb` file from `project X` into the same Fabric workspace. Keep the item names aligned with the filenames (without the `.ipynb` extension).
+2. Attach the target Lakehouse to every notebook.
+3. Publish the files from `WMPP/templates/configuration` to `Files/cfg_files/` in the Lakehouse:
+   - `schema_definition.csv`
+   - `dq_rule_definition.csv`
+4. Confirm the latest extract shortcut/path and archive ZIP/folder paths in the parameter cells.
+5. Run `00_setup_cfg` once and confirm that the `monitoring` configuration tables and `gold.cfg_placement_urgency_rule` are created.
+
+Every ETL/control notebook also calls setup itself, so later schema additions are applied automatically. The manual first run makes deployment errors easier to isolate.
+
+## 2. Stream A - historical archive hydration
+
+Use this stream to build the historical `archived` layer and replay canonical monthly Silver/Gold states.
+
+### 2.1 Standard initial archive load
+
+Use `90_run_archive_pipeline.py` for the standard archive route. Its new default, `ARCHIVE_RUN_MODE="ARCHIVE_ONLY"`, runs setup, archive load, archived-schema capture and monitoring reports only. Schedule this mode after dated exports arrive for nightly raw retention without rebuilding Silver/Gold. It reads the archive input folders, not the live `latest/` folder.
+
+For historical Silver/Gold processing, set `ARCHIVE_RUN_MODE="REPLAY"`. It creates one `JOB_RUN_ID` and runs the following order:
+
+1. `00_setup_cfg`
+2. `00_archive_load`
+3. `01a_cfg_schema_capture_archive`
+4. `02a_archive_silver`
+5. `05_gold_dimensions`
+6. `06_reports`
+
+The runner lets `02a_archive_silver` invoke DQ and Gold facts for each month, then runs dimensions once and defines the monitoring reports. Use the individual notebooks only to investigate schema drift before replay or to perform a controlled single-month recovery.
+
+Before step 3, verify that `COMPARED_SCHEMA` points to the deployed archive schema. Before step 4, confirm archive business tables contain a valid row-level `export_date`. If any canonical month lacks an eligible archived `framework` snapshot-or the table is absent-confirm `Files/deprecated_wmpp_files/framework.csv` exists and contains `framework_code`, `framework_name`, `start_date`, `end_date`, and `placement_type` before starting archive Silver replay.
+
+With `RUN_GOLD_AT_MONTH_END = True`, step 4 processes each canonical month in chronological order and invokes:
+
+1. `03_silver_business_rules`
+2. `04_gold_model` with that month's `AS_OF_DATE`
+
+The orchestration result is recorded in `monitoring.cfg_month_end_gold_run`.
+
+### 2.2 Existing archive estate or recovered controls
+
+If archive tables already exist but global monitoring controls are missing or were created by an older version, run:
+
+1. `00_setup_cfg`
+2. `00a_rehydrate_archive_cfg`
+3. Review tables reported as missing a valid `export_date`.
+4. Continue with archive schema capture and `02a_archive_silver`.
+
+Rehydration reconstructs controls; it does not reload business rows.
+
+### 2.3 Archive parameters
+
+| Parameter | Guidance |
+|---|---|
+| `PROCESS_EXPORT_DATE` | Blank for all archive dates; set `YYYY-MM-DD` to restrict archive ingestion |
+| `RUN_ZIP_EXTRACTION` | `True` to discover/extract ZIPs; `False` to process existing dated files only |
+| `LOAD_ARCHIVE_AUDIT` | Normally `False`; enable only for an audit-event catch-up |
+| `RESET_ARCHIVE_TABLES` | Administrative rebuild only; do not combine with one selected date |
+| `STOP_ON_FIRST_ERROR` | Normally `False` so independent files continue and failures are summarised |
+| `BATCH_EXPORT_DATE` | Blank for all canonical months; any date selects that calendar month |
+| `RUN_GOLD_AT_MONTH_END` | `True` for complete historical Silver/DQ/Gold replay |
+| `FRAMEWORK_FALLBACK_PATH` | Controlled framework CSV used only when no archived framework snapshot exists on or before the canonical month; default `Files/deprecated_wmpp_files/framework.csv` |
+
+### 2.4 Archive completion checks
+
+- `cfg_archive_zip_load` and `cfg_archive_file_load` show expected success/skip states and no unexplained failures.
+- Archive tables contain the expected dated slices and valid `export_date`.
+- `cfg_silver_export_load` has successful `ARCHIVE_MONTH_END` outcomes.
+- When fallback was required, `silver.framework` has the canonical monthly `export_date`, `_archive_fallback = true`, and the expected `_source_file`.
+- `cfg_data_quality_result` has no unresolved critical failures.
+- `cfg_month_end_gold_run` has one successful row per canonical snapshot date.
+- `gold.fact_referral_snapshot` contains the expected historical dates.
+
+## 3. Stream B - BAU latest extracts
+
+Run this stream for each new latest-extract delivery:
+
+1. `00_setup_cfg`
+2. `01_bronze_get_latest`
+3. `01a_cfg_schema_capture_live`
+4. Review `monitoring.cfg_schema_drift_event` and the schema-definition candidate. Approve contract changes before relying on new/changed columns.
+5. `02_silver_formatter`
+6. `03_silver_business_rules`
+7. `04_gold_model`
+8. `05_gold_dimensions`
+9. `06_reports`
+
+`common_util` excludes explicit internal reference tables and every logical `ref_*` table before extract-date/contract checks. Do not add synthetic `export_date` fields to internal reference/configuration tables to make them look like business extracts.
+
+### 3.1 BAU completion checks
+
+- Bronze reports the expected business-table count and newest export timestamp.
+- Schema drift contains no unapproved critical table/column/FK changes.
+- Latest Silver run summary has no failed tables; missing contracts are visible as auditable skips.
+- DQ has no unresolved critical failures; expected missing sources/parents are visible as `SKIPPED`, not silent omissions.
+- Gold views and the current referral snapshot refresh successfully.
+
+### 3.2 How a latest Bronze field reaches Silver
+
+`02_silver_formatter` uses the approved `monitoring.cfg_schema_contract_column` rows loaded from `configuration/schema_definition.csv`; it is not a separate, hand-maintained mapping per table. For example, `bronze.referral` resolves to the `referral` contract and is written as `silver.referral`.
+
+The 19 contracted referral fields keep their source names. UUID and text fields become trimmed strings; the two required/response dates become `DATE`; the created, modified, and export fields become `TIMESTAMP`; the five flags become normalised booleans; and `sibling_count` becomes `INT`. The formatter uses the latest valid `export_date`, keeps one row per contracted primary key (`referral_id`) using the newest `_ingestion_timestamp`, and adds `_record_source`, `_source_table`, `_silver_run_id`, and `_silver_load_ts` to the Silver output.
+
+Only contracted business fields are materialised. A missing contracted field is written as a typed null and logged as `MISSING` schema drift; an unexpected non-technical Bronze field is omitted and logged as `EXTRA` drift. Bronze ingestion fields (`_ingestion_timestamp`, `_source_file`, `_ingestion_id`) are not copied to Silver. See the [technical worked example](../03_Architecture_and_Design/TFD.md#worked-example-bronzereferral-to-silverreferral) for the complete field groups and type rules.
+
+## 4. Controlled reruns
+
+### Latest Silver table/export
+
+Set `reload = true` for the exact `source_kind`, source table, and export timestamp in `monitoring.cfg_silver_export_load`, then rerun the latest Silver formatter and downstream notebooks.
+
+### Live-pipeline one-off rerun
+
+For an urgent same-day reload after a code or configuration change, run `90_run_live_pipeline` with `FORCE_RERUN = True`. The runner forwards the parameter to `02_silver_formatter`, which bypasses a prior successful Bronze-to-Silver audit for that execution only. It does not alter the audit table's `reload` flags, so the next normal run returns to the standard skip behaviour. Leave the parameter as `False` for scheduled runs.
+
+### Live-pipeline DQ mode
+
+`90_run_live_pipeline` accepts `RUN_ESSENTIAL_DQ`. Set it to `True` for the weekday path: step `03_silver_business_rules` runs only rules whose configured severity is `CRITICAL`, while still rebuilding its Silver reporting tables. Set it to `False` (the default) for the thorough run, which executes every active DQ rule. The `cfg_pipeline_run.source_kind` value records `LATEST_ESSENTIAL` or `LATEST_THOROUGH` for the step, so scheduled weekend runs can be distinguished in monitoring.
+
+### Archive file/date
+
+Set `reload = true` in `cfg_archive_zip_load` and/or `cfg_archive_file_load` for the intended date/file, then rerun archive loading.
+
+### Historical month
+
+Set `reload = true` for the actual canonical snapshot date in `monitoring.cfg_month_end_gold_run`, then rerun archive Silver replay.
+
+## 5. Administrative reset
+
+`00b_reset_silver_cfg` is not a routine pipeline step. It previews the scope and performs destructive work only when `CONFIRM_RESET` exactly equals `RESET SILVER`. Review all reset flags and the preview before enabling it.
+
+## 6. Validation
+
+Portable static checks are held in `WMPP/templates/tests`. Run them with a Python environment before deployment. Spark/Delta and cross-notebook execution must be validated in Fabric because they require the Lakehouse and `notebookutils`.
+
+For operational detail, also read:
+
+- `ARCHIVE_BATCH_PROCESS.md`
+- `ARCHIVE_LOAD_NOTES.md`
+- `VALIDATION.md`
+
+### SI-006 recovery - Gold referral source validation
+
+If Gold reports missing referral fields, do not run `04_gold_model` by itself. First deploy the updated Gold notebook and replace `Files/cfg_files/schema_definition.csv` with the project copy. Rerun `02a_archive_silver` for the affected month so `silver.referral` is rebuilt with `placement_type`, `referral_created_date`, `referral_modified_date`, and `referral_status`. If 2026-04-30 already has a successful month-control row, set its reload flag before rerunning.
+
+The source does not deliver a referral event-log table. `03_silver_business_rules` therefore derives both `silver.referral_lifecycle_event` from delivered Referral, Offer and IPA timestamps, and the one-row-per-referral `silver.referral_enrichment` relation. Gold projects the enrichment into `gold.fact_referral` and its snapshot; it does not recompute the lifecycle roll-ups. The lifecycle-event relation is not a source-system audit log and `gold.fact_referral_snapshot` remains a snapshot table, not event history. Run Silver business rules before Gold.
+
+### SI-007 onwards - Contract and Silver materialisation recovery
+
+The project contract is evidence-based. Deploy the rebuilt `configuration/schema_definition.csv` together with the notebooks; do not copy the retired 57-table contract. `join_class=TRIAL_JOIN` entries are diagnostic mappings and must be reconciled in Fabric before being promoted to contract foreign keys. `INVALID_JOIN` entries are intentionally excluded from DQ referential rules until their parent source is delivered.
+
+The Silver business-rules notebook rebuilds these tables on every successful run: `age_band`, `directory_summary_axis`, `fostering_axis`, `referral_closure_reason_summary`, and `dim_date`. Verify their schemas and row counts before refreshing the semantic model.
+
+### Schema capture and inspection
+
+The approved contract and the observed source schemas are deliberately stored separately. `monitoring.cfg_schema_contract_column` is the approved CSV-loaded contract used by Silver and DQ; do not overwrite it with source observations, or schema-drift detection becomes ineffective.
+
+`01a_cfg_schema_capture_live` captures the current Bronze catalogue in `monitoring.cfg_bronze_schema_live`. Inspect it in Fabric with:
+
+```sql
+SELECT table_name, ordinal_position, column_name, live_data_type, is_nullable, captured_at
+FROM monitoring.cfg_bronze_schema_live
+ORDER BY table_name, ordinal_position;
+```
+
+`01a_cfg_schema_capture_archive` captures the Archive catalogue in `monitoring.cfg_archived_schema_live`. Inspect it with:
+
+```sql
+SELECT table_name, ordinal_position, column_name, data_type, is_nullable, contract_loaded_at
+FROM monitoring.cfg_archived_schema_live
+ORDER BY table_name, ordinal_position;
+```
+
+Use `monitoring.cfg_schema_drift_event` to review differences between either observed schema and the approved contract. A future unified observation table may add a `source_kind` field for combined reporting, but it must remain separate from the contract table.
+
+### Configuration bootstrap - schema and DQ rules
+
+`00_setup_cfg` is the sole runtime reader of `Files/cfg_files/schema_definition.csv` and `Files/cfg_files/dq_rule_definition.csv`. It loads them into `monitoring.cfg_schema_contract_column` and `monitoring.cfg_data_quality_rule`; child notebooks read those Delta tables only. The default `LOAD_FILE_CONFIG = False` reuses existing tables and automatically bootstraps a missing table. Set it to `True` only for an intentional contract/rule refresh, then return it to `False`.
+
+## 8. Linked live execution
+
+Use `90_run_live_pipeline` for the standard live sequence: setup, Bronze latest, live schema capture, Silver formatter, Silver business rules, Gold facts, Gold dimensions, then `06_reports`. Use `90_run_archive_pipeline` with `ARCHIVE_RUN_MODE="ARCHIVE_ONLY"` for raw retention or `"REPLAY"` for the full historical sequence. Full reset remains separately confirmed; after replay, run the live pipeline to restore current Silver/Gold reporting state. The detailed archive and nightly scheduling procedure is in `ARCHIVE_PIPELINE_RUNBOOK.md`.
+
+The runner prints one `JOB_RUN_ID` and passes it to every child notebook. Use that value to follow the whole execution through the monitor tables:
+
+```sql
+SELECT *
+FROM monitoring.cfg_job_run
+WHERE job_run_id = '<JOB_RUN_ID>';
+
+SELECT *
+FROM monitoring.cfg_job_step_run
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY step_sequence;
+```
+
+Child notebooks retain their own `run_id` for an individual retry. The shared `job_run_id` is also stored in `cfg_pipeline_run`, `cfg_silver_export_load`, `cfg_table_load_metric`, and the DQ result, rejection, and referential-exception tables when those records are produced by the linked live execution.
+
+## 9. Job monitoring, lineage and data quality views
+
+`00_setup_cfg` creates the monitoring configuration and control tables. `06_reports` defines the following materialized lake views after Gold dimensions. They are the supported way to inspect a linked run without manually joining the control tables.
+
+Configure a Fabric Lakehouse materialized lake view refresh after the parent live/archive pipeline completes. The final parent job status and the `06_reports` step outcome are written after `06_reports` defines the views; the post-run refresh includes those final records. Use a suitable Lakehouse refresh schedule or, where enabled, a job-completion event trigger. Creating the definitions does not configure that refresh schedule. See [Microsoft's materialized lake view refresh guidance](https://learn.microsoft.com/en-us/fabric/data-engineering/materialized-lake-views/schedule-lineage-run) when configuring the client Lakehouse.
+
+| View | Purpose |
+|---|---|
+| `monitoring.rpt_job_run_summary` | Whole-job status, elapsed time, Silver counts, DQ and active-drift totals |
+| `monitoring.rpt_job_step_timing` | Ordered step status, duration and wait time since the preceding step |
+| `monitoring.rpt_job_step_summary` | Per-step pipeline counts, Silver metrics, DQ outcomes and drift totals |
+| `monitoring.rpt_job_schema_drift` | Job-linked drift events with the approved schema-definition join metadata |
+| `monitoring.rpt_job_data_quality` | Rule outcomes, failed rows, rejected keys and referential exceptions |
+| `monitoring.rpt_job_layer_lineage` | Bronze/Archive-to-Silver and Silver-to-Gold lineage/status rows |
+
+For a single execution, replace `<JOB_RUN_ID>` with the ID printed by the live runner:
+
+```sql
+SELECT * FROM monitoring.rpt_job_run_summary
+WHERE job_run_id = '<JOB_RUN_ID>';
+
+SELECT * FROM monitoring.rpt_job_step_summary
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY step_sequence;
+
+SELECT * FROM monitoring.rpt_job_layer_lineage
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY lineage_stage, source_object, target_object;
+
+SELECT * FROM monitoring.rpt_job_schema_drift
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY status, source_table, column_name;
+
+SELECT * FROM monitoring.rpt_job_data_quality
+WHERE job_run_id = '<JOB_RUN_ID>'
+ORDER BY severity, status, source_table, rule_id;
+```

@@ -1,10 +1,10 @@
 # Mission Control dashboard overview and KPI logic
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
-The active operational source for this reconciliation is `reports/WIP/SM WMPP Mission Control`, not the older Im/v16 ZIP. Its 184 fixed numeric/date operational metrics are registered as MC-KPI records; all 351 definitions, including flags, text, SVG and selection helpers, remain separately classified in Gold Source Coverage. Retained domain changes, previous-load row comparisons and Watch Tower/calendar context are included.
+The active operational source for this reconciliation is `reports/WMPP_v16/SM WMPP Mission Control`, not the older Im/v16 ZIP. Its 184 fixed numeric/date operational metrics are registered as MC-KPI records; all 351 definitions, including flags, text, SVG and selection helpers, remain separately classified in Gold Source Coverage. Retained domain changes, previous-load row comparisons and Watch Tower/calendar context are included.
 
 No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
 
@@ -12,10 +12,9 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
+This review concerns the business WMPP WMPP_v16 report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
-
 
 ## Purpose
 
@@ -25,17 +24,9 @@ Use this document with [the Mission Control DAX build guide](MISSION_CONTROL_SEM
 
 ## What the client package supports now
 
-The repository candidate at `reports/current/SM WMPP Mission Control v16`
-provides `cfg_pipeline_run`, archive controls, month-end Gold run control, DQ
-results/rules, archived schema capture, `rpt_job_run_summary` and
-`rpt_job_step_timing`. It now includes `_MissionControl_Measures` with 87
-measures and a six-page monitoring-only PBIR report. The earlier referral KPI
-bindings have been removed from this candidate.
+The repository candidate at `reports/current/SM WMPP Mission Control v16` provides `cfg_pipeline_run`, archive controls, month-end Gold run control, DQ results/rules, archived schema capture, `rpt_job_run_summary` and `rpt_job_step_timing`. It now includes `_MissionControl_Measures` with 87 measures and a six-page monitoring-only PBIR report. The earlier referral KPI bindings have been removed from this candidate.
 
-Schema-drift event detail, referential-exception detail, rejected-row detail
-and data-domain profiling remain future imports. Current job-summary drift
-counts and DQ-derived RI metrics must not be presented as row-level event or
-orphan-record evidence.
+Schema-drift event detail, referential-exception detail, rejected-row detail and data-domain profiling remain future imports. Current job-summary drift counts and DQ-derived RI metrics must not be presented as row-level event or orphan-record evidence.
 
 ## Operating model
 
@@ -55,8 +46,7 @@ flowchart LR
     M --> C[Mission Control report]
 ```
 
-`job_run_id` is the orchestration and cross-visual key. `run_id` identifies a
-child notebook execution and remains useful for deeper pipeline drillthrough.
+`job_run_id` is the orchestration and cross-visual key. `run_id` identifies a child notebook execution and remains useful for deeper pipeline drillthrough.
 
 ## Pages and visual contract
 
@@ -88,24 +78,11 @@ child notebook execution and remains useful for deeper pipeline drillthrough.
 
 ## Visual implementation
 
-The current PBIR is generated by
-`tools/rebuild_mission_control_dashboard_v16.py`. Every one of the 87 measures
-is referenced by at least one KPI card, while the supporting tables retain the
-row-level identifiers, times, outcomes, volumes and error evidence needed for
-triage.
+The current PBIR is generated by `tools/rebuild_mission_control_dashboard_v16.py`. Every one of the 87 measures is referenced by at least one KPI card, while the supporting tables retain the row-level identifiers, times, outcomes, volumes and error evidence needed for triage.
 
-The job timeline uses two `Gantt1448688115699` visuals. The job Gantt binds
-start/end time, pipeline, status and `job_run_id`; the step Gantt binds start
-time, corrected duration-in-days, job ID, notebook and status. Explicit visual
-interactions make the job Gantt and job table selection sources for both step
-targets. The hidden drillthrough page provides the full job/step/pipeline
-record when a single job requires investigation.
+The job timeline uses two `Gantt1448688115699` visuals. The job Gantt binds start/end time, pipeline, status and `job_run_id`; the step Gantt binds start time, corrected duration-in-days, job ID, notebook and status. Explicit visual interactions make the job Gantt and job table selection sources for both step targets. The hidden drillthrough page provides the full job/step/pipeline record when a single job requires investigation.
 
-The 14-day window is represented by
-`rpt_job_run_summary[job_run_window]`, calculated at semantic-model refresh,
-and a locked page filter on `Last 14 days`. Keep the refresh schedule current
-and do not reinterpret this as a rolling DirectQuery predicate between
-refreshes.
+The 14-day window is represented by `rpt_job_run_summary[job_run_window]`, calculated at semantic-model refresh, and a locked page filter on `Last 14 days`. Keep the refresh schedule current and do not reinterpret this as a rolling DirectQuery predicate between refreshes.
 
 ## Thresholds and alerting
 
@@ -126,15 +103,9 @@ Error messages and `sample_key_json` may contain operationally sensitive detail.
 
 1. `_MissionControl_Measures` loads with all 87 measures and no unresolved table or column references.
 2. Status cards reconcile to table visuals after confirming the real status values.
-3. The Job Runs & Steps page is locked to `job_run_window = "Last 14 days"`
-   after refresh.
-4. Selecting a `job_run_id` in the job Gantt or job table filters both the step
-   Gantt and ordered step-detail table to that job.
-5. Right-click drillthrough opens the hidden job page with its summary, every
-   notebook step and linked pipeline execution rows.
-6. Step Gantt duration is `step_duration_seconds / 86400.0` and is never
-   multiplied by zero.
-7. Every report field resolves to the local Mission Control model, all 87
-   measures are referenced, and no referral KPI binding remains.
-8. Live client refresh, tenant custom-visual approval, layout inspection and
-   sensitive-field authorization are confirmed before publish.
+3. The Job Runs & Steps page is locked to `job_run_window = "Last 14 days"` after refresh.
+4. Selecting a `job_run_id` in the job Gantt or job table filters both the step Gantt and ordered step-detail table to that job.
+5. Right-click drillthrough opens the hidden job page with its summary, every notebook step and linked pipeline execution rows.
+6. Step Gantt duration is `step_duration_seconds / 86400.0` and is never multiplied by zero.
+7. Every report field resolves to the local Mission Control model, all 87 measures are referenced, and no referral KPI binding remains.
+8. Live client refresh, tenant custom-visual approval, layout inspection and sensitive-field authorization are confirmed before publish.

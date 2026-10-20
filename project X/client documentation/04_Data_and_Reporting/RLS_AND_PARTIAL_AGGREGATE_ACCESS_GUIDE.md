@@ -2,123 +2,68 @@
 
 ## Reporting reassessment 30 September 2026
 
-The current WIP contains the `WMPP Dynamic Detail RLS` role, security-scope tables and separate global summary described in the repository design. The 20 September client-site “no role” statement below is historical, not the current file inventory.
+The WMPP_v16 contains the `WMPP Dynamic Detail RLS` role, security-scope tables and separate global summary described in the repository design. The 20 September client-site “no role” statement below is historical, not the current file inventory.
 
 No identity-based acceptance is asserted. Test new Referral Map Points, message/free-text, provider-detail and provider-journey calculations under each authorised/unauthorised identity. Journey selectors and ALLSELECTED calculations must not expand authorised data; ordinary filter behaviour is not a substitute for RLS testing. Mappings, small-cell disclosure, Build/export access and break-glass governance remain open.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
+## Provider registry audience - 6 October 2026
 
-## Provider registry audience — 6 October 2026
+The user replaced the earlier two-email approval with named security groups. Assign `wmpp_report_users` to `WMPP Dynamic Detail RLS` (registry denied), and `wmpp_provider_registry_users` to the new `WMPP Provider Registry RLS` (registry permitted). The registry role copies every other table predicate from the ordinary role; both roles and their union retain the same referral/scoring scope. Keep these predicates synchronised in future; a registry-only role with no other table filters would be unsafe because roles are additive.
 
-The user replaced the earlier two-email approval with named security groups.
-Assign `wmpp_report_users` to `WMPP Dynamic Detail RLS` (registry denied), and
-`wmpp_provider_registry_users` to the new `WMPP Provider Registry RLS`
-(registry permitted). The registry role copies every other table predicate from
-the ordinary role; both roles and their union retain the same referral/scoring
-scope. Keep these predicates synchronised in future; a registry-only role with
-no other table filters would be unsafe because roles are additive.
+The two named emails are no longer model exceptions: access requires approved group membership and service role assignment. The saved `WMPP_ServiceGroup` annotations are handover labels, not active membership rules. No Entra group or live role membership changed. The page is unhidden; page visibility is not security. Export mode remains **None** until the approved group-specific export policy is in place. Editors/direct database access are outside this reader restriction. See the [registry handover and Viewer checks](PROVIDER_REGISTRY_EXTRACT.md#contact-access).
 
-The two named emails are no longer model exceptions: access requires approved
-group membership and service role assignment. The saved `WMPP_ServiceGroup`
-annotations are handover labels, not active membership rules. No Entra group
-or live role membership changed. The page is unhidden; page visibility is not
-security. Export mode remains **None** until the approved group-specific export
-policy is in place. Editors/direct database access are outside this reader
-restriction. See the
-[registry handover and Viewer checks](PROVIDER_REGISTRY_EXTRACT.md#contact-access).
+The same-day registry expansion changes its grain to provider LEFT home and adds precomputed provider/home performance and estimated cost columns. These registry aggregates cover the available current Gold population, not the viewer-specific referral scope; the registry group can see them without receiving referral-detail access. Review aggregate/small-cell disclosure for this approved audience before publishing. No referral/child IDs or message bodies were added. Provider totals repeat across home rows and must not be summed down the extract. The roles and export restrictions were preserved. See [metric definitions and safe totals](PROVIDER_REGISTRY_EXTRACT.md#metric-definitions-and-safe-totals).
 
-The same-day registry expansion changes its grain to provider LEFT home and
-adds precomputed provider/home performance and estimated cost columns. These
-registry aggregates cover the available current Gold population, not the
-viewer-specific referral scope; the registry group can see them without
-receiving referral-detail access. Review aggregate/small-cell disclosure for
-this approved audience before publishing. No referral/child IDs or message
-bodies were added. Provider totals repeat across home rows and must not be
-summed down the extract. The roles and export restrictions were preserved.
-See [metric definitions and safe totals](PROVIDER_REGISTRY_EXTRACT.md#metric-definitions-and-safe-totals).
+### Complete directory population - 7 October 2026
 
-### Complete directory population — 7 October 2026
+The registry now contains exactly the unfiltered `gold.dim_provider` LEFT JOIN `gold.dim_provider_home` population, not only providers with Fostering framework membership. Every provider status and placement type is included, as are providers without homes, memberships, offers, messages or contact evidence. Frameworks and performance metrics are optional enrichments, not eligibility rules. The pre-write check compares both the row count and provider/home key multiset against that dimension baseline.
 
-The registry now contains exactly the unfiltered `gold.dim_provider` LEFT JOIN
-`gold.dim_provider_home` population, not only providers with Fostering framework
-membership. Every provider status and placement type is included, as are
-providers without homes, memberships, offers, messages or contact evidence.
-Frameworks and performance metrics are optional enrichments, not eligibility
-rules. The pre-write check compares both the row count and provider/home key
-multiset against that dimension baseline.
-
-This expands the directory visible to the approved registry audience. Review
-that complete contact/aggregate population before publication. It does not
-grant referral-detail access or change group assignments, RLS predicates,
-export restrictions or report layout. The count guarantee applies to the
-unfiltered Gold table; explicit report filters and existing security still apply.
+This expands the directory visible to the approved registry audience. Review that complete contact/aggregate population before publication. It does not grant referral-detail access or change group assignments, RLS predicates, export restrictions or report layout. The count guarantee applies to the unfiltered Gold table; explicit report filters and existing security still apply.
 
 ## Purpose
 
-This guide captures the partial-RLS design discussed in the ChatGPT Work
-conversation **“Power BI Partial RLS Setup”** and reconciles it with WMPP
-requirement R55.
+This guide captures the partial-RLS design discussed in the ChatGPT Work conversation **“Power BI Partial RLS Setup”** and reconciles it with WMPP requirement R55.
 
 The required behaviour is:
 
 - authorised users can see approved organisation-wide summary KPIs;
-- row-level referral and related detail is limited to the user's authorised
-  authority and/or UserGroup scope; and
-- unrestricted summaries cannot be sliced finely enough to disclose a child,
-  referral, provider interaction or another team's small population.
+- row-level referral and related detail is limited to the user's authorised authority and/or UserGroup scope; and
+- unrestricted summaries cannot be sliced finely enough to disclose a child, referral, provider interaction or another team's small population.
 
-Power BI DAX cannot remove an RLS filter. Microsoft recommends a separate
-summary model table for partial-RLS scenarios. See [RLS guidance: Design
-partial RLS](https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance#design-partial-rls).
+Power BI DAX cannot remove an RLS filter. Microsoft recommends a separate summary model table for partial-RLS scenarios. See [RLS guidance: Design partial RLS](https://learn.microsoft.com/en-us/power-bi/guidance/rls-guidance#design-partial-rls).
 
-## Client-site status — 20 September 2026
+## Client-site status - 20 September 2026
 
-The reviewed `SM_WMPP_v16` semantic model has:
+The reviewed `WMPP_v16` semantic model has:
 
 - no `roles/` definition and therefore no model RLS role;
 - no UPN, UserGroup, authority or security-scope mapping table;
 - no UserGroup/security key on `fact_referral`;
 - a `region` field that the reviewed Gold notebook populates as `NULL`;
-- no intentionally safe organisation-wide aggregate fact separated from the
-  detail security path; and
-- four bidirectional business relationships, including an active current-
-  referral-to-snapshot relationship, which should be removed before RLS.
+- no intentionally safe organisation-wide aggregate fact separated from the detail security path; and
+- four bidirectional business relationships, including an active current- referral-to-snapshot relationship, which should be removed before RLS.
 
-RLS is therefore **not implemented** in the current client-site package. R55
-and partial RLS are blocked until the data owner supplies authoritative scope
-keys and the identity team supplies user-to-scope mappings. Do not implement a
-role against the current null `region` placeholder.
+RLS is therefore **not implemented** in the current client-site package. R55 and partial RLS are blocked until the data owner supplies authoritative scope keys and the identity team supplies user-to-scope mappings. Do not implement a role against the current null `region` placeholder.
 
-## Repository implementation candidate — 20 September 2026
+## Repository implementation candidate - 20 September 2026
 
-The client ZIP remains the immutable baseline, but the repository candidate at
-`reports/current/SM WMPP v16 updated` now implements a deny-by-default model:
+The client ZIP remains the immutable baseline, but the repository candidate at v15 or earlier now implements a deny-by-default model:
 
-- setup creates empty governed configuration tables
-  `monitoring.cfg_security_scope`, `monitoring.cfg_user_scope_access` and
-  `monitoring.cfg_referral_scope`;
-- Gold publishes `dim_security_scope`, `sec_user_scope_access` and
-  `bridge_referral_scope`, applying active/effective-date rules;
-- the TMDL role `WMPP Dynamic Detail RLS` filters current referrals, snapshots
-  and scoped provider KPI aggregates with `USERPRINCIPALNAME()`;
-- ordinary fact relationships are single-direction and the direct
-  current-to-snapshot fact relationship is removed; and
-- `fact_referral_global_summary` is physically identifier-free and is not
-  included in the detail role.
+- setup creates empty governed configuration tables `monitoring.cfg_security_scope`, `monitoring.cfg_user_scope_access` and `monitoring.cfg_referral_scope`;
+- Gold publishes `dim_security_scope`, `sec_user_scope_access` and `bridge_referral_scope`, applying active/effective-date rules;
+- the TMDL role `WMPP Dynamic Detail RLS` filters current referrals, snapshots and scoped provider KPI aggregates with `USERPRINCIPALNAME()`;
+- ordinary fact relationships are single-direction and the direct current-to-snapshot fact relationship is removed; and
+- `fact_referral_global_summary` is physically identifier-free and is not included in the detail role.
 
-Empty mappings return no secured detail. Before deployment, the client must
-load approved mappings and complete the identity/test matrix below. The global
-summary currently has no small-cell suppression because neither a threshold
-nor disclosure policy has been approved; do not grant Build/export access to
-it until that decision is made.
+Empty mappings return no secured detail. Before deployment, the client must load approved mappings and complete the identity/test matrix below. The global summary currently has no small-cell suppression because neither a threshold nor disclosure policy has been approved; do not grant Build/export access to it until that decision is made.
 
 ## Security decisions required
 
 Information Governance and the data owner must approve:
 
-1. the protected detail scope: local authority, region, placement UserGroup,
-   or a combination;
+1. the protected detail scope: local authority, region, placement UserGroup, or a combination;
 2. cross-boundary rules, including which authorities can see a shared case;
 3. which operational roles can see organisation-wide summary data;
 4. the approved aggregate visibility grain;
@@ -126,8 +71,7 @@ Information Governance and the data owner must approve:
 6. whether provider-level aggregates are organisation-wide or scoped;
 7. access to message/free-text and officer feedback fields;
 8. break-glass membership, duration, approval and audit; and
-9. whether external/B2B identities are in scope and which identifier is
-   authoritative.
+9. whether external/B2B identities are in scope and which identifier is authoritative.
 
 ## Target model
 
@@ -154,14 +98,9 @@ There is no relationship from sec_user_scope_access or dim_security_scope to
 fact_referral_global_summary.
 ```
 
-`bridge_referral_scope` supports a referral that is legitimately visible to
-more than one authority or UserGroup. If the business confirms exactly one
-scope per referral, a validated `security_scope_key` can instead sit directly
-on `fact_referral` and its related facts.
+`bridge_referral_scope` supports a referral that is legitimately visible to more than one authority or UserGroup. If the business confirms exactly one scope per referral, a validated `security_scope_key` can instead sit directly on `fact_referral` and its related facts.
 
-The global summary must be a physical Gold object at the approved grain. Do
-not copy the detail fact and merely hide identifiers. Hidden columns are not a
-security boundary.
+The global summary must be a physical Gold object at the approved grain. Do not copy the detail fact and merely hide identifiers. Hidden columns are not a security boundary.
 
 ## Minimum Gold objects
 
@@ -173,15 +112,11 @@ security boundary.
 | `fact_referral_global_summary` | approved month/status/placement-type dimensions and additive counts only |
 | `dim_disclosure_rule` | approved threshold, effective dates and owner if suppression is configurable |
 
-Normalise UPNs to lower case and trim whitespace in Gold. Unknown, missing or
-expired mappings must deny detail by default. Give an all-area operational user
-explicit rows for the approved scopes rather than a wildcard that is difficult
-to audit.
+Normalise UPNs to lower case and trim whitespace in Gold. Unknown, missing or expired mappings must deny detail by default. Give an all-area operational user explicit rows for the approved scopes rather than a wildcard that is difficult to audit.
 
 ## Approved aggregate visibility grain
 
-“Aggregate visibility grain” means the finest organisation-wide breakdown a
-user may see even when they cannot see the underlying referrals.
+“Aggregate visibility grain” means the finest organisation-wide breakdown a user may see even when they cannot see the underlying referrals.
 
 An initial proposal for approval is:
 
@@ -193,49 +128,28 @@ An initial proposal for approval is:
 | A high-level authority total, only if cross-authority totals are approved | UserGroup or case team |
 | Pre-approved KPI counts/rates | Exact age, exact postcode and free text |
 
-This is a proposal, not an approval. Combining month, provider, exact age,
-gender, location and placement type can reduce an “aggregate” to one case.
-Subtraction can also disclose another team's population; for example, global
-count 101 minus the user's count 100 reveals one out-of-scope referral.
+This is a proposal, not an approval. Combining month, provider, exact age, gender, location and placement type can reduce an “aggregate” to one case. Subtraction can also disclose another team's population; for example, global count 101 minus the user's count 100 reveals one out-of-scope referral.
 
-Build only the approved columns into `fact_referral_global_summary`. Apply the
-approved suppression rule in Gold so that users with Build permission cannot
-recover unsuppressed small cells by writing a different DAX query. A display
-measure such as `IF([Count] < threshold, BLANK(), [Count])` can improve the
-report experience, but it is not a substitute for a safe aggregate object and
-controlled semantic-model permissions.
+Build only the approved columns into `fact_referral_global_summary`. Apply the approved suppression rule in Gold so that users with Build permission cannot recover unsuppressed small cells by writing a different DAX query. A display measure such as `IF([Count] < threshold, BLANK(), [Count])` can improve the report experience, but it is not a substitute for a safe aggregate object and controlled semantic-model permissions.
 
 ## Dynamic RLS role
 
-The repository candidate creates one dynamic role, `WMPP Dynamic Detail RLS`.
-The published access table is already active/effective-date filtered; its
-identity permission is:
+The repository candidate creates one dynamic role, `WMPP Dynamic Detail RLS`. The published access table is already active/effective-date filtered; its identity permission is:
 
 ```DAX
 LOWER ( 'sec_user_scope_access'[user_principal_name] ) =
 LOWER ( USERPRINCIPALNAME () )
 ```
 
-Prefer a Gold view that already applies valid-from/valid-to dates, so the role
-expression remains simple and testable.
+Prefer a Gold view that already applies valid-from/valid-to dates, so the role expression remains simple and testable.
 
-The implemented role evaluates `bridge_referral_scope` explicitly in the
-permissions for `fact_referral` and `fact_referral_snapshot`, avoiding a
-general bidirectional relationship. The current-referral permission propagates
-to related offer, IPA, lifecycle and provider-assignment facts over active
-single-direction relationships. If a later design replaces this with **Apply
-security filter in both directions**, limit it to one approved relationship
-and performance-test it. See [Row-level security with Power
-BI](https://learn.microsoft.com/fabric/security/service-admin-row-level-security#bi-directional-cross-filtering-with-rls).
+The implemented role evaluates `bridge_referral_scope` explicitly in the permissions for `fact_referral` and `fact_referral_snapshot`, avoiding a general bidirectional relationship. The current-referral permission propagates to related offer, IPA, lifecycle and provider-assignment facts over active single-direction relationships. If a later design replaces this with **Apply security filter in both directions**, limit it to one approved relationship and performance-test it. See [Row-level security with Power BI](https://learn.microsoft.com/fabric/security/service-admin-row-level-security#bi-directional-cross-filtering-with-rls).
 
-RLS propagates only through active relationships. `USERELATIONSHIP` does not
-make an inactive path carry RLS. See [Active versus inactive relationship
-guidance](https://learn.microsoft.com/en-us/power-bi/guidance/relationships-active-inactive#inactive-relationships).
+RLS propagates only through active relationships. `USERELATIONSHIP` does not make an inactive path carry RLS. See [Active versus inactive relationship guidance](https://learn.microsoft.com/en-us/power-bi/guidance/relationships-active-inactive#inactive-relationships).
 
 ## Partial-RLS measures
 
-The measures are intentionally simple because the security boundary is in the
-model, not in `REMOVEFILTERS`.
+The measures are intentionally simple because the security boundary is in the model, not in `REMOVEFILTERS`.
 
 ```DAX
 Organisation Referrals =
@@ -248,8 +162,7 @@ My Share of Organisation Referrals =
 DIVIDE ( [My Authorised Referrals], [Organisation Referrals] )
 ```
 
-Do not use `ALL`, `REMOVEFILTERS` or a disconnected measure to try to bypass
-RLS on the detail fact. DAX cannot override the security filter.
+Do not use `ALL`, `REMOVEFILTERS` or a disconnected measure to try to bypass RLS on the detail fact. DAX cannot override the security filter.
 
 ## Related-detail propagation
 
@@ -262,31 +175,18 @@ The same security scope must protect:
 - provider/officer messages; and
 - drill-through and export data.
 
-Prefer active, single-direction referral/dimension-to-detail paths. Remove the
-client model's general bidirectional fact relationships first. If message text
-must be hidden from users who may still see the row, RLS is insufficient
-because it filters rows, not columns; separate the text into a more restricted
-semantic model/table or implement an approved object-level security design.
+Prefer active, single-direction referral/dimension-to-detail paths. Remove the client model's general bidirectional fact relationships first. If message text must be hidden from users who may still see the row, RLS is insufficient because it filters rows, not columns; separate the text into a more restricted semantic model/table or implement an approved object-level security design.
 
 ## Power BI Service configuration
 
 1. Create and validate the dynamic role in the semantic model.
 2. Publish to the controlled workspace.
-3. Assign an Entra security group, not individuals where avoidable, to the RLS
-   role.
-4. Give report consumers the workspace **Viewer** role or distribute through
-   an app. Microsoft states that RLS applies to Viewers; workspace Admin,
-   Member and Contributor roles have edit permission and RLS does not apply to
-   them. See [RLS with workspaces](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security#use-rls-with-workspaces-in-power-bi).
-5. Restrict Build, Analyze in Excel, export and downstream semantic-model
-   permissions according to the approved aggregate design.
-6. Record role membership, mapping refresh, mapping owner and emergency access
-   in the operational audit process.
+3. Assign an Entra security group, not individuals where avoidable, to the RLS role.
+4. Give report consumers the workspace **Viewer** role or distribute through an app. Microsoft states that RLS applies to Viewers; workspace Admin, Member and Contributor roles have edit permission and RLS does not apply to them. See [RLS with workspaces](https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security#use-rls-with-workspaces-in-power-bi).
+5. Restrict Build, Analyze in Excel, export and downstream semantic-model permissions according to the approved aggregate design.
+6. Record role membership, mapping refresh, mapping owner and emergency access in the operational audit process.
 
-`USERPRINCIPALNAME()` returns the service-resolved UPN. For B2B users the value
-may differ from the user's mail address, so test with the actual guest identity
-and store the observed UPN in the mapping. Microsoft's service guidance also
-notes that “Test as role” does not fully reproduce an external user's identity.
+`USERPRINCIPALNAME()` returns the service-resolved UPN. For B2B users the value may differ from the user's mail address, so test with the actual guest identity and store the observed UPN in the mapping. Microsoft's service guidance also notes that “Test as role” does not fully reproduce an external user's identity.
 
 ## Test matrix
 
@@ -312,18 +212,12 @@ For each identity, test:
 - global-minus-local subtraction scenarios; and
 - suppressed small cells and combinations of filters.
 
-Acceptance requires zero prohibited referral visibility and signed approval of
-the aggregate grain and suppression rule across all 14 authority scenarios and
-the required UserGroup scenarios.
+Acceptance requires zero prohibited referral visibility and signed approval of the aggregate grain and suppression rule across all 14 authority scenarios and the required UserGroup scenarios.
 
 ## Operational controls
 
-- Refresh the security mapping before the semantic model or make the mapping
-  part of the same atomic release.
-- Alert on duplicate UPN/scope rows, unknown scopes, expired-only users and
-  detail facts without a valid security scope.
+- Refresh the security mapping before the semantic model or make the mapping part of the same atomic release.
+- Alert on duplicate UPN/scope rows, unknown scopes, expired-only users and detail facts without a valid security scope.
 - Review access at an agreed cadence and on staff/team changes.
-- Use the controlled break-glass process in the HOLD register; do not hard-code
-  an unrestricted username in DAX.
-- Re-run the complete RLS test pack after relationship, role, scope or aggregate
-  grain changes.
+- Use the controlled break-glass process in the HOLD register; do not hard-code an unrestricted username in DAX.
+- Re-run the complete RLS test pack after relationship, role, scope or aggregate grain changes.

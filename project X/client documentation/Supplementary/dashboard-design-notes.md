@@ -2,10 +2,9 @@
 
 ## Reporting reassessment 30 September 2026
 
-The current WIP uses consistent 1680-pixel visible pages, reordered bubble navigation and scoped expandable menus. Explorer filters remain persistent. Connected journey strips use centred circles, labels/counts and stage-only actions. The latest repair still needs Desktop visual/interaction acceptance; past screenshots and old style proposals are not sign-off.
+The WMPP_v16 uses consistent 1680-pixel visible pages, reordered bubble navigation and scoped expandable menus. Explorer filters remain persistent. Connected journey strips use centred circles, labels/counts and stage-only actions. The latest repair still needs Desktop visual/interaction acceptance; past screenshots and old style proposals are not sign-off.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
-
 
 ## Executive page
 

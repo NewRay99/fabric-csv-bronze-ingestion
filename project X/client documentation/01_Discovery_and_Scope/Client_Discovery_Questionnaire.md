@@ -2,16 +2,11 @@
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** WMPP (West Midlands Placement Portal)
-**Document Type:** Client Discovery Questionnaire
-**Date:** 12 July 2026
-**Prepared by:** [Consultant Name]
-**Classification:** Commercial in Confidence
+**Project:** WMPP (West Midlands Placement Portal) **Document Type:** Client Discovery Questionnaire **Date:** 12 July 2026 **Prepared by:** [Consultant Name] **Classification:** Commercial in Confidence
 
 ---
 
@@ -40,7 +35,7 @@ The responses will be used to:
 
 ---
 
-## 2. Section A — Organisation & Project Context
+## 2. Section A - Organisation & Project Context
 
 ### A1. Participating Authorities
 
@@ -75,7 +70,7 @@ The responses will be used to:
 
 | Ref | Question | Priority |
 |-----|----------|----------|
-| A4.1 | What is the current incumbent solution for placement matching? (The functional spec references a "micro-procurement style portal" — please confirm.) | 🔴 |
+| A4.1 | What is the current incumbent solution for placement matching? (The functional spec references a "micro-procurement style portal" - please confirm.) | 🔴 |
 | A4.2 | What are the top 3 limitations or pain points with the current Power BI report (V13.1)? | 🔴 |
 | A4.3 | Are there any known data quality issues with the current CSV files that we should be aware of? | 🔴 |
 | A4.4 | Is the KPI Logic Document (authored by Hamant K Jakhu, 23 June 2026) the authoritative KPI specification? Are there any amendments? | 🔴 |
@@ -83,7 +78,7 @@ The responses will be used to:
 
 ---
 
-## 3. Section B — Azure Estate & Fabric Capabilities
+## 3. Section B - Azure Estate & Fabric Capabilities
 
 ### B1. Azure Tenant & Identity
 
@@ -168,7 +163,7 @@ The responses will be used to:
 
 ---
 
-## 4. Section C — Current Data Architecture (As-Is)
+## 4. Section C - Current Data Architecture (As-Is)
 
 ### C1. Network Drive & CSV Files
 
@@ -204,7 +199,7 @@ The responses will be used to:
 
 ---
 
-## 5. Section D — Power BI Report & Reporting Requirements
+## 5. Section D - Power BI Report & Reporting Requirements
 
 ### D1. Current Report Usage
 
@@ -239,7 +234,7 @@ The responses will be used to:
 
 ---
 
-## 6. Section E — Security & Compliance
+## 6. Section E - Security & Compliance
 
 ### E1. Data Protection
 
@@ -248,8 +243,8 @@ The responses will be used to:
 | E1.1 | Has a Data Protection Impact Assessment (DPIA) been completed for the WMPP programme? If yes, please share. | 🔴 |
 | E1.2 | What is the data classification for the placement data? (Official-Sensitive, OFFICIAL, other?) | 🔴 |
 | E1.3 | Are there any restrictions on data residency? Must all data be stored within the UK? | 🔴 |
-| E1.4 | Is encryption at rest required? (Default in Azure — please confirm acceptance.) | 🔴 |
-| E1.5 | Is encryption in transit required? (Default in Azure — please confirm acceptance.) | 🔴 |
+| E1.4 | Is encryption at rest required? (Default in Azure - please confirm acceptance.) | 🔴 |
+| E1.5 | Is encryption in transit required? (Default in Azure - please confirm acceptance.) | 🔴 |
 | E1.6 | Are there any specific key management requirements? (Customer-managed keys in Key Vault, Bring Your Own Key?) | 🟡 |
 
 ### E2. Data Sharing & Governance
@@ -267,13 +262,13 @@ The responses will be used to:
 
 | Ref | Question | Priority |
 |-----|----------|----------|
-| E3.1 | Is break-glass access required? (R79 — controlled, auditable, emergency access.) | 🔴 |
+| E3.1 | Is break-glass access required? (R79 - controlled, auditable, emergency access.) | 🔴 |
 | E3.2 | Are there privileged access management (PAM) requirements? (Just-in-time access, approval workflows?) | 🟡 |
 | E3.3 | Are there any compliance frameworks that must be adhered to beyond GDPR/DPA 2018? (e.g., ISO 27001, Cyber Essentials Plus, NHS DSPT?) | 🟡 |
 
 ---
 
-## 7. Section F — Future State & Expectations
+## 7. Section F - Future State & Expectations
 
 ### F1. Architecture Preferences
 
@@ -325,8 +320,8 @@ Please provide responses in the table format below. Where a question requires a 
 
 1. **Client completes this questionnaire** and returns within [5 business days].
 2. **Discovery workshop** scheduled to review responses and discuss open items.
-3. **Azure estate assessment** — consultant reviews the client's Azure environment with the client technical lead.
-4. **Solution finalisation** — the Proposed Solution & Architecture document is updated based on responses.
+3. **Azure estate assessment** - consultant reviews the client's Azure environment with the client technical lead.
+4. **Solution finalisation** - the Proposed Solution & Architecture document is updated based on responses.
 5. **Statement of Work** issued for formal approval.
 
 ---
@@ -348,8 +343,8 @@ Please provide responses in the table format below. Where a question requires a 
 ---
 
 *This questionnaire should be read in conjunction with the following documents:*
-- *02_As_Is_Assessment_Report.md* — Current state analysis
-- *03_Gap_Analysis_Report.md* — Identified functional and architectural gaps
-- *04_Proposed_Solution_Architecture.md* — Proposed future state
-- *05_HOLD_Register.md* — Assumptions, constraints, dependencies, decisions
-- *06_Statement_of_Work.md* — Formal engagement terms
+- *02_As_Is_Assessment_Report.md* - Current state analysis
+- *03_Gap_Analysis_Report.md* - Identified functional and architectural gaps
+- *04_Proposed_Solution_Architecture.md* - Proposed future state
+- *05_HOLD_Register.md* - Assumptions, constraints, dependencies, decisions
+- *06_Statement_of_Work.md* - Formal engagement terms

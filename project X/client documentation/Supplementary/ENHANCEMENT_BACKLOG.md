@@ -2,7 +2,7 @@
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
@@ -573,16 +573,12 @@ The main principle is:
 
 The referral-created date is therefore valuable and correct for board reporting. It simply should not be used as the only date for every referral and placement measure.
 
-
-
 ## IDEAS for Imporovement
 Would a Sankey diagram be worth using. If so what could we use it for
 
-
 # Answer
 
-
-Yes — a **Sankey diagram could be very valuable**, but I would use it for one specific purpose: showing **how referrals flow through the placement process and where they are being lost or delayed**.
+Yes - a **Sankey diagram could be very valuable**, but I would use it for one specific purpose: showing **how referrals flow through the placement process and where they are being lost or delayed**.
 
 I would **not** make it one of the main headline visuals. Your KPI cards, target hit rates, ageing and required-placement-date measures are better for the board's primary view. A Sankey would work brilliantly as a supporting **“Referral Journey / Placement Pipeline”** visual.
 
@@ -614,17 +610,13 @@ Visually, the width of the flow tells the board immediately where referrals are 
 
 The most important final split should probably be:
 
-**Placed by Required Placement Date**
-**Placed after Required Placement Date**
-**Still Open**
-**Withdrawn / Cancelled**
-**Closed — no match**
+**Placed by Required Placement Date** **Placed after Required Placement Date** **Still Open** **Withdrawn / Cancelled** **Closed - no match**
 
 That connects the Sankey directly to the target logic we designed.
 
 ---
 
-## Sankey 1 — Referral Journey
+## Sankey 1 - Referral Journey
 
 This would probably be my first choice.
 
@@ -658,8 +650,8 @@ This would probably be my first choice.
 
 - IPA issued by target
 - IPA issued late
-- Open — on track
-- Open — overdue
+- Open - on track
+- Open - overdue
 - Closed without placement
 
 This could reveal something such as:
@@ -670,7 +662,7 @@ That is a much more useful story than simply reporting "18 referrals are overdue
 
 ---
 
-# Sankey 2 — Provider → Home → Placement
+# Sankey 2 - Provider → Home → Placement
 
 There is another very useful operational Sankey based on your provider structure.
 
@@ -714,7 +706,7 @@ I would keep this off the main board page and use it on a **Provider Performance
 
 ---
 
-# Sankey 3 — Where overdue referrals come from
+# Sankey 3 - Where overdue referrals come from
 
 This could be an excellent executive visual.
 
@@ -823,23 +815,17 @@ I'd add a fourth dashboard/page called:
 
 Top KPIs:
 
-**128**
-Referrals Created
+**128** Referrals Created
 
-**109**
-Received ≥1 Offer
+**109** Received ≥1 Offer
 
-**97**
-Preferred Match Selected
+**97** Preferred Match Selected
 
-**91**
-IPA Issued
+**91** IPA Issued
 
-**76%**
-Placed by Required Date
+**76%** Placed by Required Date
 
-**18**
-Currently Overdue
+**18** Currently Overdue
 
 Then a large Sankey occupying about 60–70% of the page:
 

@@ -2,21 +2,13 @@
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
 ## Bronze-to-Silver field mapping
 
-The latest Silver formatter uses the approved schema contract as its mapping
-specification. `bronze.referral` is a representative example: its contracted
-fields retain their names in `silver.referral`, are cast to their declared
-types, and are deduplicated by `referral_id` within the newest `export_date`.
-Only approved contract fields are materialised; missing and extra fields are
-recorded as schema drift. The formatter then appends Silver lineage columns,
-not the Bronze ingestion columns. The detailed rule and field groups are in the
-[technical design](../03_Architecture_and_Design/TFD.md#worked-example-bronzereferral-to-silverreferral).
+The latest Silver formatter uses the approved schema contract as its mapping specification. `bronze.referral` is a representative example: its contracted fields retain their names in `silver.referral`, are cast to their declared types, and are deduplicated by `referral_id` within the newest `export_date`. Only approved contract fields are materialised; missing and extra fields are recorded as schema drift. The formatter then appends Silver lineage columns, not the Bronze ingestion columns. The detailed rule and field groups are in the [technical design](../03_Architecture_and_Design/TFD.md#worked-example-bronzereferral-to-silverreferral).
 
 ## Implemented from available data
 

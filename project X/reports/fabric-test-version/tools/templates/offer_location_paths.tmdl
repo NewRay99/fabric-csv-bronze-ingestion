@@ -1,0 +1,197 @@
+table 'Offer Location Paths'
+	lineageTag: 397bd503-d6c2-51c4-a6ac-ea8ae1749df0
+
+	measure 'Map connection visible' =
+			IF (
+			    HASONEVALUE ( 'fact_offer'[referral_id] )
+			        && NOT ISBLANK ( SELECTEDVALUE ( 'fact_offer'[referral_id] ) ),
+			    1
+			)
+		formatString: 0
+		displayFolder: Offer locations
+		lineageTag: a14d16b4-58a6-5a1d-9837-cc2e841aec65
+
+	measure 'Map connection summary' =
+			VAR selectedReferrals =
+			    COUNTROWS ( FILTER ( VALUES ( 'fact_offer'[referral_id] ), NOT ISBLANK ( 'fact_offer'[referral_id] ) ) )
+			VAR selectedOffers = COALESCE ( DISTINCTCOUNTNOBLANK ( 'fact_offer'[offer_id] ), 0 )
+			VAR mappedOffers = COALESCE ( DISTINCTCOUNTNOBLANK ( 'Offer Location Paths'[Offer ID] ), 0 )
+			VAR defaultOffers =
+			    COALESCE ( CALCULATE ( DISTINCTCOUNTNOBLANK ( 'Offer Location Paths'[Offer ID] ),
+			        'Offer Location Paths'[Location quality] = "Default-city estimate" ), 0 )
+			RETURN
+			    SWITCH ( TRUE (),
+			        selectedOffers = 0, "No offers match these filters.",
+			        selectedReferrals <> 1, "Select one referral above, or an offer row, to show its connections.",
+			        mappedOffers = 0, "No connection available: endpoint coordinates are missing or the location needs review.",
+			        FORMAT ( mappedOffers, "#,0" ) & " of " & FORMAT ( selectedOffers, "#,0" ) & " offers mapped"
+			            & IF ( defaultOffers > 0, " | " & FORMAT ( defaultOffers, "#,0" ) & " use a default city", "" )
+			            & IF ( selectedOffers > mappedOffers, " | " & FORMAT ( selectedOffers - mappedOffers, "#,0" ) & " unavailable / review", "" )
+			    )
+		displayFolder: Offer locations
+		lineageTag: 2e9f77a6-93d9-510a-9776-a811807212b6
+
+	measure 'Connection referral' = SELECTEDVALUE ( 'Offer Location Paths'[Referral ID] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: 4dcf92f6-c9ab-5575-b2ea-2daa40e3c07c
+
+	measure 'Connection city' = SELECTEDVALUE ( 'Offer Location Paths'[Referral city] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: 9d04b705-6177-5230-87e6-451b0b371a91
+
+	measure 'Connection postcode' = SELECTEDVALUE ( 'Offer Location Paths'[Home postcode] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: ab2abade-cf17-54e2-b809-65591f1cb933
+
+	measure 'Connection provider' = SELECTEDVALUE ( 'Offer Location Paths'[Provider] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: a59ed3d0-8056-5e2a-9670-5ce7e17945e9
+
+	measure 'Connection home' = SELECTEDVALUE ( 'Offer Location Paths'[Home] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: 40c3fb54-f676-55a7-a310-91f37ed63407
+
+	measure 'Connection offer status' = SELECTEDVALUE ( 'Offer Location Paths'[Offer status] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: 2dfaaace-2528-582c-9287-5ab985fb5e92
+
+	measure 'Connection endpoint' = SELECTEDVALUE ( 'Offer Location Paths'[Endpoint type] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: f40ae7c9-a791-57c4-a0a3-126cbdbb589f
+
+	measure 'Connection quality' = SELECTEDVALUE ( 'Offer Location Paths'[Location quality] )
+		displayFolder: Offer locations/Tooltips
+		lineageTag: da406637-d270-577a-a9ec-5de70b6ca0f5
+
+	measure 'Connection straight-line km' = SELECTEDVALUE ( 'Offer Location Paths'[Distance km] )
+		formatString: 0.0" km"
+		displayFolder: Offer locations/Tooltips
+		lineageTag: a161695e-114b-5966-ad93-36a89bda9fd1
+
+	column 'Offer ID'
+		dataType: string
+		lineageTag: fc69988e-b5e3-5669-bfc1-eb76f39c14f4
+		summarizeBy: none
+		sourceColumn: [Offer ID]
+
+	column 'Referral ID'
+		dataType: string
+		lineageTag: 6f1b2685-923b-5442-8ec4-31dce2afcda8
+		summarizeBy: none
+		sourceColumn: [Referral ID]
+
+	column Provider
+		dataType: string
+		lineageTag: 3fbb5b7e-6fd3-5a57-8625-a4f3d35f0033
+		summarizeBy: none
+		sourceColumn: [Provider]
+
+	column Home
+		dataType: string
+		lineageTag: 15bda09e-c2d5-54b5-85d8-3a19e598e92d
+		summarizeBy: none
+		sourceColumn: [Home]
+
+	column 'Referral city'
+		dataType: string
+		lineageTag: cbe33f2e-6c3d-5881-9673-20f1fe4f885b
+		summarizeBy: none
+		sourceColumn: [Referral city]
+
+	column 'Home postcode'
+		dataType: string
+		lineageTag: 544e44aa-aa4b-572c-96fc-5f2386d3c265
+		summarizeBy: none
+		sourceColumn: [Home postcode]
+
+	column 'Offer status'
+		dataType: string
+		lineageTag: fb93c5c6-87ec-58d1-a86a-61c610f7dff4
+		summarizeBy: none
+		sourceColumn: [Offer status]
+
+	column 'Distance km'
+		dataType: double
+		formatString: 0.0
+		lineageTag: 3f8e7565-5750-5dcf-89f9-aa859788a169
+		summarizeBy: none
+		sourceColumn: [Distance km]
+
+	column 'Location quality'
+		dataType: string
+		lineageTag: 7be7b6b7-9d26-5c4c-879f-517a58e1d1ea
+		summarizeBy: none
+		sourceColumn: [Location quality]
+
+	column 'Endpoint type'
+		dataType: string
+		lineageTag: 82d739c4-8fc2-50ed-a8c2-0c8b5732b870
+		summarizeBy: none
+		sourceColumn: [Endpoint type]
+
+	column 'Point order'
+		dataType: int64
+		formatString: 0
+		lineageTag: 22420163-06ed-5ac7-8c3d-82cb8117427a
+		summarizeBy: none
+		sourceColumn: [Point order]
+
+	column Latitude
+		dataType: double
+		formatString: 0.000000
+		dataCategory: Latitude
+		lineageTag: 95eb67ed-01f7-5c24-b2ed-435c06c6945a
+		summarizeBy: none
+		sourceColumn: [Latitude]
+
+	column Longitude
+		dataType: double
+		formatString: 0.000000
+		dataCategory: Longitude
+		lineageTag: 749402d6-d23c-5c75-8f99-e1cc9ae3c0cd
+		summarizeBy: none
+		sourceColumn: [Longitude]
+
+	partition 'Offer Location Paths' = calculated
+		mode: import
+		source =
+				VAR eligibleOffers =
+				    FILTER ( 'fact_offer',
+				        NOT ISBLANK ( 'fact_offer'[offer_id] )
+				            && NOT ISBLANK ( 'fact_offer'[referral_id] )
+				            && 'fact_offer'[referral_to_home_distance_status] IN { "APPROXIMATE_PREFERENCE_CITY", "APPROXIMATE_DEFAULT_CITY" }
+				            && NOT ( 'fact_offer'[location_requires_review] == TRUE () )
+				            && NOT ISBLANK ( 'fact_offer'[referral_latitude] )
+				            && NOT ISBLANK ( 'fact_offer'[referral_longitude] )
+				            && NOT ISBLANK ( 'fact_offer'[provider_home_latitude] )
+				            && NOT ISBLANK ( 'fact_offer'[provider_home_longitude] )
+				            && 'fact_offer'[referral_latitude] >= -90 && 'fact_offer'[referral_latitude] <= 90
+				            && 'fact_offer'[provider_home_latitude] >= -90 && 'fact_offer'[provider_home_latitude] <= 90
+				            && 'fact_offer'[referral_longitude] >= -180 && 'fact_offer'[referral_longitude] <= 180
+				            && 'fact_offer'[provider_home_longitude] >= -180 && 'fact_offer'[provider_home_longitude] <= 180
+				    )
+				RETURN
+				    UNION (
+				        SELECTCOLUMNS ( eligibleOffers,
+				            "Offer ID", 'fact_offer'[offer_id], "Referral ID", 'fact_offer'[referral_id],
+				            "Provider", RELATED ( 'dim_provider'[provider_name] ),
+				            "Home", RELATED ( 'dim_provider_home (offer)'[home_name] ),
+				            "Referral city", 'fact_offer'[referral_location], "Home postcode", 'fact_offer'[provider_home_postcode],
+				            "Offer status", 'fact_offer'[offer_status], "Distance km", 'fact_offer'[referral_to_home_distance_km],
+				            "Location quality", IF ( 'fact_offer'[location_is_default], "Default-city estimate", "Preferred-city estimate" ),
+				            "Endpoint type", "Referral city representative point", "Point order", 0,
+				            "Latitude", 'fact_offer'[referral_latitude], "Longitude", 'fact_offer'[referral_longitude]
+				        ),
+				        SELECTCOLUMNS ( eligibleOffers,
+				            "Offer ID", 'fact_offer'[offer_id], "Referral ID", 'fact_offer'[referral_id],
+				            "Provider", RELATED ( 'dim_provider'[provider_name] ),
+				            "Home", RELATED ( 'dim_provider_home (offer)'[home_name] ),
+				            "Referral city", 'fact_offer'[referral_location], "Home postcode", 'fact_offer'[provider_home_postcode],
+				            "Offer status", 'fact_offer'[offer_status], "Distance km", 'fact_offer'[referral_to_home_distance_km],
+				            "Location quality", IF ( 'fact_offer'[location_is_default], "Default-city estimate", "Preferred-city estimate" ),
+				            "Endpoint type", "Provider home postcode representative point", "Point order", 1,
+				            "Latitude", 'fact_offer'[provider_home_latitude], "Longitude", 'fact_offer'[provider_home_longitude]
+				        )
+				    )
+
+	annotation WMPP_MapContract = OfflineCoordinates_OfferID_TwoEndpoints_V1

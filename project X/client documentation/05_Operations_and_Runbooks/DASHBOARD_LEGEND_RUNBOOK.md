@@ -1,6 +1,16 @@
 # Dashboard Legend release runbook
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence. Reopen the WMPP_v16 PBIP and refresh calculated metadata. DAX boundary/cohort checks, visual/mobile review and authorised-user role tests are required before publication; use the linked acceptance checklist and read-only DAX query.
+
+[Implementation, exact calculations, gaps and acceptance](../04_Data_and_Reporting/REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
 The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
 
@@ -8,7 +18,7 @@ Import KPI Definition row 1 as headers and include all 567 records (through row 
 
 Date Added means first catalogue registration. Original dates and evidenced dates of older Gold catalogue IDs remain intact; 366 newly registered current definitions are dated 17 October 2026. The 49 older Gold IDs newly surfaced in this sheet retain 26 August dates. No implementation/approval date is invented from file timestamps.
 
-Run `python "project X/tools/validate_dashboard_legend.py"`. The current release JSON fixes row identities/content hashes, date values, source inventories and helper classification. Keep it with the workbook and current calculation snapshot.
+Run `python "WMPP/templates/tools/validate_dashboard_legend.py"`. The current release JSON fixes row identities/content hashes, date values, source inventories and helper classification. Keep it with the workbook and current calculation snapshot.
 
 Static verification covers the v1 hash/import schema, original IDs/specifications, native dates, complete current measure classification/coverage, exact current DAX snapshots, transitive calculated-table dependencies and notebook spans. The preceding 152-record workbook is a negative control and must fail the new release check. These checks do not rerun Fabric or Power BI native queries or certify client acceptance.
 
@@ -16,9 +26,9 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 [Current DAX, Python/Spark SQL and source evidence](../04_Data_and_Reporting/KPI_LATEST_CALCULATIONS.md).
 
-## 17 October 2026 — New catalogue entries in KPI Definition
+## 17 October 2026 - New catalogue entries in KPI Definition
 
-Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WMPP_v16 measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
 
 The 35 rows carry **30 September 2026** as `Date Added`, their first evidenced appearance anywhere in the version-controlled Dashboard Legend, commit [`70b71eb`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/70b71eb95648eaea487830bdcd8f9931b527a05e). The four earlier workbook revisions contain no `GOLD-KPI-110`–`GOLD-KPI-144`. This date predates their move into KPI Definition on 17 October. The original 117 dates remain 26 August 2026. This field records catalogue provenance, not business creation, model implementation or approval.
 
@@ -26,7 +36,7 @@ Each appended row includes the exact saved measure name/DAX, existing source-tab
 
 The release validator requires all 35 appended IDs in order, exact catalogue measure/source/calculation matches, proposed requirement status, existing Section values and typed dates. Preserve rows 2–118 and their original identifiers; include rows 119–153 when importing KPI Definition. Do not generate replacement KPI-118-style identifiers or add these same records a second time from Gold Source Coverage.
 
-## 17 October 2026 — KPI Date Added metadata
+## 17 October 2026 - KPI Date Added metadata
 
 The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
 
@@ -53,8 +63,8 @@ Exact headers are verified against the untouched v1 workbook, not a handwritten 
 
 ## Static release checks
 
-1. Run `python "project X/tools/validate_dashboard_legend.py"` from the repository root.
-2. Confirm v1 file SHA-256 is unchanged, original header text/order/blank spacer match, all 80 RIDs and original 117 KPI IDs remain in order, all 35 appended Gold IDs match the catalogue, original formulas/requirement text/notes/Section fields are retained, and no original sheet has extra columns.
+1. Run `python "WMPP/templates/tools/validate_dashboard_legend.py"` from the repository root.
+2. Confirm v1 file checksum is unchanged, original header text/order/blank spacer match, all 80 RIDs and original 117 KPI IDs remain in order, all 35 appended Gold IDs match the catalogue, original formulas/requirement text/notes/Section fields are retained, and no original sheet has extra columns.
 3. Inspect the first rows and representative long calculation/requirement cells in Excel. The original white/yellow header convention remains; text wrapping/row height accommodates calculation detail. New evidence sections are separate from import ranges.
 4. Verify every named measure and source locator against the inspected archives/notebooks; retain gaps explicitly. Do not interpret a reference-table label as proof that a measure currently exists.
 

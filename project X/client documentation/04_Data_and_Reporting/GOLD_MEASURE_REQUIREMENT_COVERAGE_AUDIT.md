@@ -1,24 +1,33 @@
 # Gold measures and requirements coverage audit
 
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence.
+
+[Implementation, exact calculations, gaps and acceptance](REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
 ## Reporting reassessment 30 September 2026
 
-This is a historical pre-migration audit; its inventory and coverage counts are retained as baseline evidence. Current saved WIP evidence is 58 model tables, 366 measures and 144 curated catalogue entries. The new 80-row requirement reassessment supersedes the earlier requirement status table for present delivery decisions.
+This is a historical pre-migration audit; its inventory and coverage counts are retained as baseline evidence. Current saved WMPP_v16 evidence is 58 model tables, 366 measures and 144 curated catalogue entries. The new 80-row requirement reassessment supersedes the earlier requirement status table for present delivery decisions.
 
 No ratio of measure names to requirements is an acceptance score. The latest report includes explorations, both drillthrough routes, journey selectors and snapshot/closure views, but portal writes, notifications, compliance decisions, security approval and UAT are separate.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-Audit date: 15 September 2026. **Historical baseline: the model has since been migrated. See the [20 September client-site v16 reconciliation](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md) for current status.** Scope: the extracted **SM WMPP v15 - bu 15092026.zip** project, not Mission Control.
+Audit date: 15 September 2026. **Historical baseline: the model has since been migrated. See the [20 September client-site v16 reconciliation](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md) for current status.** Scope: the extracted **SM WMPP v15 - bu 15092026.zip** project, not Mission Control.
 
 ## Pre-migration result
 
-**All 195 concrete WIP-guide measures are already present in the extracted model. Zero measures need adding to satisfy that inventory. This does not mean all business requirements are implemented.**
+**All 195 concrete WMPP_v16-guide measures are already present in the extracted model. Zero measures need adding to satisfy that inventory. This does not mean all business requirements are implemented.**
 
 | Check | Result |
 | --- | --- |
 | Extracted v15 model | 87 tables; 270 measures |
-| WIP guide | 195 distinct concrete measures; all present |
+| WMPP_v16 guide | 195 distinct concrete measures; all present |
 | Generic `<Base>` examples | 5 templates; excluded from the measure inventory |
 | `reports/current/_Measures.tmdl` | 271 measures; all 195 guide names also present |
 | Formula comparison | 172 match after ignoring comments, whitespace, identifier case and optional table quotes; 23 differ |
@@ -28,11 +37,11 @@ Audit date: 15 September 2026. **Historical baseline: the model has since been m
 | Live metadata | Open SM_WMPP instance reports 87 tables, 270 measures, 87 partitions, 82 relationships and 0 roles |
 | Runtime calculations | Not verified: the DAX query confirmation was declined; no further DAX queries were run |
 
-No measure definitions were replaced simply to match a WIP document. The tables below distinguish name presence, formula differences, source/relationship prerequisites and original business acceptance. Existing report layout helpers and aliases are not counted as new missing measures.
+No measure definitions were replaced simply to match a WMPP_v16 document. The tables below distinguish name presence, formula differences, source/relationship prerequisites and original business acceptance. Existing report layout helpers and aliases are not counted as new missing measures.
 
 ## Evidence and limits
 
-- [WIP DAX guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md): concrete formula inventory and intended Gold relationships.
+- [WMPP_v16 DAX guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md): concrete formula inventory and intended Gold relationships.
 - [KPI Reference Guide](KPI_Reference_Guide.md): current KPI dispositions and aliases.
 - [As-Is Assessment](../02_Assessment_and_Requirements/As_Is_Assessment_Report.md): section 0 lists 80 requirements; section 4.7 lists 117 historical KPIs.
 - Saved model: `reports/client-deliverables/SM WMPP v15/SM_WMPP.SemanticModel/definition`; measures in `tables/_Measures.tmdl`; relationships in `relationships.tmdl`.
@@ -45,7 +54,7 @@ No measure definitions were replaced simply to match a WIP document. The tables 
 1. **Missing filter relationships.** Eight expected links are missing and the provider-to-home link is inactive. The shared date table is not actively related to referral creation or snapshot dates. Time comparisons and cross-fact cohorts can return plausible but unfiltered totals. Add relationships only after checking key uniqueness, orphan keys and existing ambiguous paths; do not enable every old path.
 2. **Draft and QA formulas need correction.** Draft Offers With Activity Since Creation omits the draft-status condition. Both QA measures filter the framework bridge instead of the documented provider/home flag, without a valid reverse filtering route. The exact review expressions appear below.
 3. **Cohorts and grains differ.** Pending bands use different age clocks; IPA counts, offer counts and referral signature proxies are not interchangeable. Several aliases map a count to a percentage or an active subset to a broader population.
-4. **Gold-only sourcing is incomplete.** `dim_person` derives from the query named `bronze referral_person`, whose actual partition reads `silver.referral_person`. It creates `[Gender Clean]`, whereas the WIP expects Gold `[gender_clean]`. `fact_referral_category` and `dim_referral_gender` also read Silver. A Gold-looking semantic table name alone is not proof of Gold lineage.
+4. **Gold-only sourcing is incomplete.** `dim_person` derives from the query named `bronze referral_person`, whose actual partition reads `silver.referral_person`. It creates `[Gender Clean]`, whereas the WMPP_v16 expects Gold `[gender_clean]`. `fact_referral_category` and `dim_referral_gender` also read Silver. A Gold-looking semantic table name alone is not proof of Gold lineage.
 5. **Source gaps remain.** The reference explicitly blocks 13 KPIs and labels 4 as proxies. Payment lifecycle, expected-document completeness/blocking, reliable referral region, framework-change history, message response/unread state and durable update/audit evidence cannot be supplied by inventing measures.
 6. **Security and non-measure acceptance remain separate.** The inspected model has zero roles. R12/R55/R76/R78/R79 require security/access evidence; application features, reminders, notifications, accessibility, disaster recovery and SLAs require their own acceptance tests.
 
@@ -126,7 +135,7 @@ QA Flagged Homes =
 CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[qa_flag] = TRUE () )
 ```
 
-## Complete WIP measure inventory
+## Complete WMPP_v16 measure inventory
 
 Presence is confirmed by name across every table in the extracted model. “Matches” means normalized expression match, not business sign-off. Formatting, source lineage, relationships and visual context are separate checks.
 
@@ -155,7 +164,7 @@ Presence is confirmed by name across every table in the extracted model. “Matc
 | IPAs Created | Yes | Matches |
 | Active IPAs | Yes | Matches |
 | Estimated Active Weekly Cost | Yes | Matches |
-| Average Estimated Weekly Cost — Confirmed Referrals | Yes | Matches |
+| Average Estimated Weekly Cost - Confirmed Referrals | Yes | Matches |
 | Provider Assignments | Yes | Matches |
 | Provider Declines | Yes | Matches |
 | Provider Decline Rate | Yes | Matches |
@@ -369,10 +378,10 @@ The reference status is reproduced as a claim from that document. “Definition 
 | KPI-33 | [R24] | Referrals With One or More Offers | Referrals With an Offer | 🔁 Alias | Definition present; relationship, source and result acceptance still required. |
 | KPI-34 | [R54] | Closed Referrals (by Reason) | Closed Referrals + `fact_referral[referral_closure_reason]` visual dimension | ✅ Covered | Closure reasons and provider decline reasons have different grains. This cannot close all of R54. |
 | KPI-35 | [R25-R29] | Total Offers Made (Active Referrals Under Offer) | Offers on Referrals Under Offer | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-36 | [R25-R29] | Offer IDs (Under Offer Referrals) | Retired — internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary |
+| KPI-36 | [R25-R29] | Offer IDs (Under Offer Referrals) | Retired - internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary |
 | KPI-37 | [R26] | Offers per Provider (Under Offer Referrals) | Offers per Provider (Under Offer Referrals) | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-38 | [R67,R68] | Framework Offers (Under Offer Referrals) | Framework Offers (Under Offer Referrals) | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-39 | [R28,R35] | Accepted Offers (Scoped Table) | Retired — internal scoped-table helper (see KPI-36) | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — internal scoped-table helper (see KPI-36) |
+| KPI-39 | [R28,R35] | Accepted Offers (Scoped Table) | Retired - internal scoped-table helper (see KPI-36) | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - internal scoped-table helper (see KPI-36) |
 | KPI-40 | [R91,R93] | Provider Homes Registered | Provider Homes Registered | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-41 | [R91,R93] | Providers Registered | Providers Registered | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-42 | [R95] | Providers - Fostering | Providers - Fostering | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
@@ -381,11 +390,11 @@ The reference status is reproduced as a claim from that document. “Definition 
 | KPI-45 | [R67] | Framework Providers | Framework Providers | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-46 | [R46] | NON Framework Providers | Non-Framework Providers | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-47 | [R46] | Is Non Framework Provider | Is Non Framework Provider (row helper) | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-48 | [R93] | Directory Summary Count | Retired — depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed |
+| KPI-48 | [R93] | Directory Summary Count | Retired - depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed |
 | KPI-49 | [R96] | Residential Homes | Residential Homes | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-50 | [R91] | Supported Accommodation Homes | Supported Accommodation Homes | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-51 | [R95] | Fostering Providers | Providers - Fostering | 🔁 Alias | Definition present; relationship, source and result acceptance still required. |
-| KPI-52 | [R95] | Fostering Chart Count | Retired — depended on `rpt_provider_fostering` report-view table (see KPI-48) | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — depended on `rpt_provider_fostering` report-view table (see KPI-48) |
+| KPI-52 | [R95] | Fostering Chart Count | Retired - depended on `rpt_provider_fostering` report-view table (see KPI-48) | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - depended on `rpt_provider_fostering` report-view table (see KPI-48) |
 | KPI-53 | [R24] | Draft No Activity Since Creation | Draft Offers With No Activity Since Creation | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-54 | [R24] | Draft Offers With Activity Since Creation | Draft Offers With Activity Since Creation | ✅ Covered | Model filters two FALSE flags but omits offer_status = draft. Non-draft offers can satisfy both FALSE flags. Restore the draft-status predicate before using KPI-54/56. |
 | KPI-55 | [R24] | Draft Offers Missing Dates | Draft Offers Missing Dates | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
@@ -397,7 +406,7 @@ The reference status is reproduced as a claim from that document. “Definition 
 | KPI-61 | [R24] | Draft Offer Count | Offers in Draft | 🔁 Alias | Definition present; relationship, source and result acceptance still required. |
 | KPI-62 | [R24] | Draft With No Activity Since Creation (%) | Draft Offers With No Activity % | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
 | KPI-63 | [R24] | Drafts With No Activity 14+ Days | Draft Offers Stalled 14+ Days | 🔁 Alias | Definition present; relationship, source and result acceptance still required. |
-| KPI-64 | [R24] | Pending Offers by Age Bucket | Retired — disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands |
+| KPI-64 | [R24] | Pending Offers by Age Bucket | Retired - disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands |
 | KPI-65 | [R24] | Pending Offers 15–30 Days | Pending Offers 15-29 Days | ✅ Covered | Reference changes 15-30 inclusive to 15-29 to avoid overlap with 30+. Confirm the boundary; model also mixes query-time and stored age. |
 | KPI-66 | [R24] | Pending Offers 30+ Days | Pending Offers 30+ Days | ✅ Covered | Model computes age at query time from reviewed/submitted date; 0-7/8-14 use stored Gold age. Mixed clocks can cause overlaps/gaps between bands. |
 | KPI-67 | [R24] | Pending Offers 0–7 Days | Pending Offers 0-7 Days | ✅ Covered | Stored activity-age band; test blanks, negative ages and day-7 boundary. Must use the same clock as 15-29/30+. |
@@ -407,48 +416,48 @@ The reference status is reproduced as a claim from that document. “Definition 
 | KPI-71 | [R24] | Offers Outside Timeframe (15–30 Days) | Pending Offers 15-29 Days | 🔁 Alias | Alias must use non-overlapping 15-29 band and the agreed common age clock. |
 | KPI-72 | [R24] | Critical Offers (30+ Days) | Pending Offers 30+ Days | 🔁 Alias | Model computes age at query time from reviewed/submitted date; 0-7/8-14 use stored Gold age. Mixed clocks can cause overlaps/gaps between bands. |
 | KPI-73 | [R35] | IPA Exists | IPA Exists (row helper) | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-74 | [R28] | Is In Accepted KPI | Blocked — no IPA-grain signature status; use the referral-grain IPA funnel instead | ❌ Blocked | Reference marks this blocked; WIP describes a retired layout helper. Use Accepted Offers and explicit IPA row flags rather than asserting this proves an IPA signature. |
-| KPI-75 | [R28,R35] | Accepted Offers Base | Retired — internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it |
+| KPI-74 | [R28] | Is In Accepted KPI | Blocked - no IPA-grain signature status; use the referral-grain IPA funnel instead | ❌ Blocked | Reference marks this blocked; WMPP_v16 describes a retired layout helper. Use Accepted Offers and explicit IPA row flags rather than asserting this proves an IPA signature. |
+| KPI-75 | [R28,R35] | Accepted Offers Base | Retired - internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it |
 | KPI-76 | [R35] | IPA Created | IPAs Created | ✅ Covered | IPAs Created counts ipa_id; legacy IPA Created counts accepted offer_id with IPA. Use the correct named measure for the requested grain. |
-| KPI-77 | [R35] | IPA Completed | IPA Completed — offer-grain, GLD-013 | ✅ Covered | Present at offer grain using is_ipa_completed. Original assessment asks for distinct signed IPAs; not evidence of per-IPA signature completion. |
-| KPI-78 | [R35] | IPAs Pending Completion | IPAs Pending Completion — offer-grain, GLD-013 (referral-grain proxy [Referrals With IPA Pending Signature] also available) | ✅ Covered | Present at offer grain using is_ipa_pending. Original asks for unsigned, non-closed IPAs; agree scope before marking exact coverage. |
+| KPI-77 | [R35] | IPA Completed | IPA Completed - offer-grain, GLD-013 | ✅ Covered | Present at offer grain using is_ipa_completed. Original assessment asks for distinct signed IPAs; not evidence of per-IPA signature completion. |
+| KPI-78 | [R35] | IPAs Pending Completion | IPAs Pending Completion - offer-grain, GLD-013 (referral-grain proxy [Referrals With IPA Pending Signature] also available) | ✅ Covered | Present at offer grain using is_ipa_pending. Original asks for unsigned, non-closed IPAs; agree scope before marking exact coverage. |
 | KPI-79 | [R35] | Offers Awaiting IPA Creation | Offers Awaiting IPA Creation | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-80 | [R35] | Is IPA Pending | Is IPA Pending (row helper) — GLD-013 | ✅ Covered | Offer-grain row helper; does not supply missing per-IPA signature history. |
+| KPI-80 | [R35] | Is IPA Pending | Is IPA Pending (row helper) - GLD-013 | ✅ Covered | Offer-grain row helper; does not supply missing per-IPA signature history. |
 | KPI-81 | [R35] | Is Awaiting IPA Creation | Is Awaiting IPA Creation (row helper) | ✅ Covered | Definition present; relationship, source and result acceptance still required. |
-| KPI-82 | [R35] | Is IPA Completed | Is IPA Completed (row helper) — GLD-013 | ✅ Covered | Offer-grain row helper; does not supply missing per-IPA signature history. |
+| KPI-82 | [R35] | Is IPA Completed | Is IPA Completed (row helper) - GLD-013 | ✅ Covered | Offer-grain row helper; does not supply missing per-IPA signature history. |
 | KPI-83 | [R35] | Accepted Offer to IPA Conversion % | Accepted Offer to IPA Conversion % | ✅ Covered | Offer-to-IPA flag conversion; do not interpret as a count of IPAs per offer. |
 | KPI-84 | [R35] | Offers Still to Progress to IPA | Offers Still to Progress to IPA % | ✅ Covered | Assessment asks for a count; reference maps to a percentage. Offers Awaiting IPA Creation supplies the count and Offers Still to Progress to IPA % supplies the rate. |
-| KPI-85 | [R35] | IPA Created to Completion % | IPA Created to Completion % — GLD-013 | ✅ Covered | Model uses [IPA Created] with alternate result 0; the helper counts accepted offers with IPA. Guide uses [Accepted Offers With IPA]. Both are offer-grain, but confirm accepted-status cohorts and blank-versus-zero reporting. |
-| KPI-86 | [R35] | Successful Offers to IPA Completed % | Successful Offers to IPA Completed % — GLD-013 | ✅ Covered | Offer-grain completion ratio and empty-denominator policy require sign-off, not an IPA-grain signature KPI. |
+| KPI-85 | [R35] | IPA Created to Completion % | IPA Created to Completion % - GLD-013 | ✅ Covered | Model uses [IPA Created] with alternate result 0; the helper counts accepted offers with IPA. Guide uses [Accepted Offers With IPA]. Both are offer-grain, but confirm accepted-status cohorts and blank-versus-zero reporting. |
+| KPI-86 | [R35] | Successful Offers to IPA Completed % | Successful Offers to IPA Completed % - GLD-013 | ✅ Covered | Offer-grain completion ratio and empty-denominator policy require sign-off, not an IPA-grain signature KPI. |
 | KPI-87 | [R82] | Dashboard Last Refreshed | Gold Model Last Refreshed | 🔁 Alias | Gold model timestamp measures data freshness, not rendering latency, scalability or an R82 performance SLA. |
 | KPI-88 | [R53] | Latest Export per Offer | Latest Offer Source Export | 🔁 Alias | Definition present; relationship, source and result acceptance still required. |
-| KPI-89 | [R24] | Latest Offer Status Count | Retired — Gold `fact_offer` is already deduplicated to the latest state per offer | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired — Gold `fact_offer` is already deduplicated to the latest state per offer |
+| KPI-89 | [R24] | Latest Offer Status Count | Retired - Gold `fact_offer` is already deduplicated to the latest state per offer | 🗄 Retired | Intentional retirement; verify replacement visual behaviour. Retired - Gold `fact_offer` is already deduplicated to the latest state per offer |
 | KPI-90 | [R22] | Overlap Referrals | Referrals With Multiple Provider Assignments | ✅ Covered | Multiple provider assignments are not evidence of an out-of-region placement. R22 remains open. |
 | KPI-91 | [R18,R57] | Emergency Referrals | Emergency Referrals | ✅ Covered | Emergency reporting is present; original asks for active same-day cases. Reconcile Gold flag semantics and active/all denominator; distinct emergency IDs and finance workflow are outside DAX. |
 | KPI-92 | [R18,R57] | Emergency Placement Rate | Emergency Placement Rate | ✅ Covered | Confirm active emergency numerator and denominator scope; do not substitute spot for emergency. |
 | KPI-93 | [R57] | Planned Referrals | Planned Referrals | ✅ Covered | Model requires required date after creation; guide uses non-emergency with dates present. Negative date intervals differ. Define the invalid-date treatment and emergency/planned denominator. |
 | KPI-94 | [R18,R57] | Emergency vs Planned Split | Visual split using [Emergency Referrals] and [Planned Referrals]; no separate measure | ✅ Covered | Two existing measures can drive a visual; emergency/planned scope and invalid-date handling need agreement. |
-| KPI-95 | [R22] | Out-of-Region Referrals | Blocked — `fact_referral[region]` is null until a reliable source supplies it | ❌ Blocked | Open data/definition gap. Blocked — `fact_referral[region]` is null until a reliable source supplies it |
-| KPI-96 | [R22] | Out-of-Region Placement Rate | Blocked — as KPI-95 | ❌ Blocked | Open data/definition gap. Blocked — as KPI-95 |
+| KPI-95 | [R22] | Out-of-Region Referrals | Blocked - `fact_referral[region]` is null until a reliable source supplies it | ❌ Blocked | Open data/definition gap. Blocked - `fact_referral[region]` is null until a reliable source supplies it |
+| KPI-96 | [R22] | Out-of-Region Placement Rate | Blocked - as KPI-95 | ❌ Blocked | Open data/definition gap. Blocked - as KPI-95 |
 | KPI-97 | [R41] | Providers with QA Flags | Providers With QA Flags | ✅ Covered | Model filters bridge_provider_framework[qa_flag] while counting dim_provider. With the saved one-way relationship, the bridge cannot filter the provider dimension back. Use the provider QA flag for the documented KPI, or explicitly transfer framework-provider IDs if framework QA is intended. |
-| KPI-98 | [R41] | QA Flag Type Breakdown | Blocked — no QA flag-type dimension to unpivot in Gold | ❌ Blocked | Open data/definition gap. Blocked — no QA flag-type dimension to unpivot in Gold |
+| KPI-98 | [R41] | QA Flag Type Breakdown | Blocked - no QA flag-type dimension to unpivot in Gold | ❌ Blocked | Open data/definition gap. Blocked - no QA flag-type dimension to unpivot in Gold |
 | KPI-99 | [R41] | QA Flagged Providers by Home | QA Flagged Homes | ✅ Covered | Model filters bridge_provider_framework[qa_flag] while counting dim_provider_home; there is no active filtering route to homes. Use home QA flags for the guide definition; a provider-to-home inherited flag requires an explicit agreed rule. |
 | KPI-100 | [R47] | Documents Expiring (30 Days) | Documents Expiring Next 30 Days | ✅ Covered | Expiry dates support the metric; reminder delivery and missing-document completeness require separate workflow evidence. |
 | KPI-101 | [R47,R48] | Documents Expired | Documents Expired | ✅ Covered | Expired-document count is present; it does not prove referral exclusion for R48. |
-| KPI-102 | [R48] | Providers Blocked (Incomplete Docs) | Blocked — no expected-document set in Gold to test completeness against | ❌ Blocked | Open data/definition gap. Blocked — no expected-document set in Gold to test completeness against |
-| KPI-103 | [R48] | Document Compliance Rate | Blocked — as KPI-102 | ❌ Blocked | Open data/definition gap. Blocked — as KPI-102 |
+| KPI-102 | [R48] | Providers Blocked (Incomplete Docs) | Blocked - no expected-document set in Gold to test completeness against | ❌ Blocked | Open data/definition gap. Blocked - no expected-document set in Gold to test completeness against |
+| KPI-103 | [R48] | Document Compliance Rate | Blocked - as KPI-102 | ❌ Blocked | Open data/definition gap. Blocked - as KPI-102 |
 | KPI-104 | [R49] | Provider Due Diligence Status | Providers Pending Onboarding / Providers Approved (provider_status split) | ✅ Covered | Provider status is available; verify it represents due-diligence approval rather than just registration status. |
-| KPI-105 | [R54] | Decline Reasons (Referral Level) | Blocked — no decline-reason history in active Gold | ❌ Blocked | Open data/definition gap. Blocked — no decline-reason history in active Gold |
-| KPI-106 | [R58] | Framework Changes During Active Referrals | Blocked — no framework-change history in active Gold | ❌ Blocked | Open data/definition gap. Blocked — no framework-change history in active Gold |
-| KPI-107 | [R62] | Total Weekly Fee Liability | Estimated Active Weekly Cost — estimate, not signed-only actuals | ⚠️ Proxy | Estimated active cost is not signed-only weekly fee liability or actual payments. R62 remains partial. |
-| KPI-108 | [R62] | Payment Method Breakdown | Blocked — no payment method / payment facts in Gold | ❌ Blocked | Open data/definition gap. Blocked — no payment method / payment facts in Gold |
-| KPI-109 | [R62] | IPA Payment Status | Blocked — no payment lifecycle facts in Gold | ❌ Blocked | Open data/definition gap. Blocked — no payment lifecycle facts in Gold |
-| KPI-110 | [R14] | Messages Sent | Provider Messages Sent — lifecycle-event proxy for volume only; no response-time or unread analysis | ⚠️ Proxy | Lifecycle-event volume proxy; verify event coverage. No response-time or unread-message evidence. |
-| KPI-111 | [R14] | Avg Message Response Time (Hours) | Blocked — no message response-time facts in Gold | ❌ Blocked | Open data/definition gap. Blocked — no message response-time facts in Gold |
-| KPI-112 | [R14] | Priority Messages Unread | Blocked — no message-status facts in Gold | ❌ Blocked | Open data/definition gap. Blocked — no message-status facts in Gold |
-| KPI-113 | [R20] | Audit Events by Type | Referral Lifecycle Events — derived roll-up, not the source audit log | ⚠️ Proxy | Derived lifecycle events are not the source audit trail for signatures, approvals and negotiations. |
-| KPI-114 | [R20,R35] | IPA Signature Completion Rate | IPA Signature Completion Rate — referral-grain proxy | ⚠️ Proxy | Referral signature proxy, not original per-IPA signature completion; pending cohort also differs from the guide. |
-| KPI-115 | [R19] | Referral Updates per Day | Blocked — no durable referral update timestamp; lifecycle events provide the supported activity measure | ❌ Blocked | Open data/definition gap. Blocked — no durable referral update timestamp; lifecycle events provide the supported activity measure |
+| KPI-105 | [R54] | Decline Reasons (Referral Level) | Blocked - no decline-reason history in active Gold | ❌ Blocked | Open data/definition gap. Blocked - no decline-reason history in active Gold |
+| KPI-106 | [R58] | Framework Changes During Active Referrals | Blocked - no framework-change history in active Gold | ❌ Blocked | Open data/definition gap. Blocked - no framework-change history in active Gold |
+| KPI-107 | [R62] | Total Weekly Fee Liability | Estimated Active Weekly Cost - estimate, not signed-only actuals | ⚠️ Proxy | Estimated active cost is not signed-only weekly fee liability or actual payments. R62 remains partial. |
+| KPI-108 | [R62] | Payment Method Breakdown | Blocked - no payment method / payment facts in Gold | ❌ Blocked | Open data/definition gap. Blocked - no payment method / payment facts in Gold |
+| KPI-109 | [R62] | IPA Payment Status | Blocked - no payment lifecycle facts in Gold | ❌ Blocked | Open data/definition gap. Blocked - no payment lifecycle facts in Gold |
+| KPI-110 | [R14] | Messages Sent | Provider Messages Sent - lifecycle-event proxy for volume only; no response-time or unread analysis | ⚠️ Proxy | Lifecycle-event volume proxy; verify event coverage. No response-time or unread-message evidence. |
+| KPI-111 | [R14] | Avg Message Response Time (Hours) | Blocked - no message response-time facts in Gold | ❌ Blocked | Open data/definition gap. Blocked - no message response-time facts in Gold |
+| KPI-112 | [R14] | Priority Messages Unread | Blocked - no message-status facts in Gold | ❌ Blocked | Open data/definition gap. Blocked - no message-status facts in Gold |
+| KPI-113 | [R20] | Audit Events by Type | Referral Lifecycle Events - derived roll-up, not the source audit log | ⚠️ Proxy | Derived lifecycle events are not the source audit trail for signatures, approvals and negotiations. |
+| KPI-114 | [R20,R35] | IPA Signature Completion Rate | IPA Signature Completion Rate - referral-grain proxy | ⚠️ Proxy | Referral signature proxy, not original per-IPA signature completion; pending cohort also differs from the guide. |
+| KPI-115 | [R19] | Referral Updates per Day | Blocked - no durable referral update timestamp; lifecycle events provide the supported activity measure | ❌ Blocked | Open data/definition gap. Blocked - no durable referral update timestamp; lifecycle events provide the supported activity measure |
 | KPI-116 | [R59] | Provider Onboarding Pipeline | Providers Pending Onboarding | ✅ Covered | Registration-state reporting supports onboarding visibility, not bulk onboarding execution. |
 | KPI-117 | [R59] | Bulk Onboarding Success Rate | Provider Onboarding Success Rate | ✅ Covered | Approved/registered proportion has no batch/job denominator. It is not a measured bulk-import success rate. |
 
@@ -459,42 +468,42 @@ This retains the assessment’s original requirement text and KPI links. The ori
 | Req | Requirement | Assessment KPI links | Current audit status | Remaining acceptance evidence |
 | --- | --- | --- | --- | --- |
 | R1 | Place children with complex care needs | KPI-01, KPI-08 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R2 | Consider current incumbent solution | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R3 | Single regional platform (cross-boundary) | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R4 | Open source suitability | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R5 | Agile / MVP / backlog | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R6 | COTS preferred over bespoke | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R7 | APIs across WM IT ecosystem | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R8 | Open-source API compliance | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R9 | Form pre-population (referral, OFSTED, auth) | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R2 | Consider current incumbent solution | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R3 | Single regional platform (cross-boundary) | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R4 | Open source suitability | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R5 | Agile / MVP / backlog | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R6 | COTS preferred over bespoke | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R7 | APIs across WM IT ecosystem | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R8 | Open-source API compliance | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R9 | Form pre-population (referral, OFSTED, auth) | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R11 | Publish placement requirements to providers | KPI-01, KPI-08 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R12 | GDPR / DPA 2018 compliance for vulnerable-child data | — | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
+| R12 | GDPR / DPA 2018 compliance for vulnerable-child data | - | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
 | R13 | Filter by specialisms, placement type, placement status | KPI-26, KPI-34 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R14 | In-system messaging (auditable, prioritised, urgent) | KPI-110, KPI-111, KPI-112 | Partial / open | Message-volume proxy present; response times, priority/unread state and messaging workflow remain unproven. |
 | R15 | Digital info & signatures for IPA | KPI-73, KPI-76, KPI-77 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R16 | Priority information flagged in placement requests | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R16 | Priority information flagged in placement requests | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R17 | Placement info immediately available on accept | KPI-75 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R18 | Emergency placements: same-day, distinct ID, separate reporting & finance | KPI-91, KPI-92, KPI-94 | Partial / open | Emergency metrics present; validate active/same-day cohort, distinct emergency ID, separate reporting and finance workflow. |
 | R19 | Update referrals; auto-notify providers | KPI-115 | Partial / open | Missing durable update/notification evidence. Lifecycle activity cannot prove updates or notification delivery. |
 | R20 | Full audit tracking (placements, IPA, signatures, approvals, negotiations) | KPI-113, KPI-114 | Partial / open | Derived lifecycle and referral-signature proxies do not prove a complete source audit trail. |
-| R21 | Auto-notify unsuccessful providers; optional rejection feedback | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R21 | Auto-notify unsuccessful providers; optional rejection feedback | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R22 | Out-of-region placements tagged; finance informed | KPI-90 (partial), KPI-95, KPI-96 | Partial / open | Out-of-region KPIs remain blocked; overlap/provider assignments are not a substitute for geographic tagging or finance notification. |
 | R24 | Dashboard: status overview, provider updates, task mgmt, quick updates | KPI-01–KPI-89 (85 measures) | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R25 | Quickly review detailed placement requests | KPI-11, KPI-12 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R26 | Prioritise by match suitability, SOP, existing placements | KPI-19, KPI-20, KPI-37 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R27 | Request additional info, raise queries, see responses | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R27 | Request additional info, raise queries, see responses | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R28 | Accept / reject / request further info | KPI-15, KPI-16, KPI-75 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R29 | Streamlined offer process | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R31 | Resolved requests auto-removed from provider views | — | Partial / open | Open gap with no mapped KPI: resolved-request visibility/outcome data and a Resolved Requests Visible check are absent from the WIP inventory. |
-| R32 | Matching by SOP and care specialisms | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R33 | Upload and manage placement documentation | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R29 | Streamlined offer process | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R31 | Resolved requests auto-removed from provider views | - | Partial / open | Open gap with no mapped KPI: resolved-request visibility/outcome data and a Resolved Requests Visible check are absent from the WMPP_v16 inventory. |
+| R32 | Matching by SOP and care specialisms | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R33 | Upload and manage placement documentation | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R34 | Emergency referrals identifiable and prioritised | KPI-91, KPI-94 | Partial / open | Emergency flag/reporting support exists; provider prioritisation workflow and cohort require acceptance. |
 | R35 | Digitised IPA (review, approvals, signing, audit) | KPI-73–KPI-86 | Partial / open | Offer-grain IPA funnel present; per-IPA signatures, approval workflow and full audit are not fully evidenced. |
 | R36 | Dedicated view: referrals with outstanding offers / open offers | KPI-10, KPI-29 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R38 | Record QA assessment outcomes against providers | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R39 | Desk-based research; identify missing documentation | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R38 | Record QA assessment outcomes against providers | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R39 | Desk-based research; identify missing documentation | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R41 | Apply advisory notices and flags (information notices, safeguarding) | KPI-97, KPI-98, KPI-99 | Partial / open | QA count formulas need filter correction; flag-type breakdown and apply/remove workflow remain open. |
-| R45 | SPOT providers upload registration documentation | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R45 | SPOT providers upload registration documentation | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R46 | QA intelligence for non-framework providers shared appropriately | KPI-46, KPI-47 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R47 | Monitor documentation expiry; send reminders; highlight missing | KPI-100, KPI-101 | Partial / open | Expiry counts present; missing-document completeness and reminder delivery require more data/workflow evidence. |
 | R48 | Providers with incomplete docs excluded from referrals | KPI-102, KPI-103 | Partial / open | Expected-document set and exclusion outcome missing. Expired documents alone do not prove provider blocking. |
@@ -503,37 +512,37 @@ This retains the assessment’s original requirement text and KPI links. The ori
 | R52 | Accurate and customisable reporting | KPI-23, KPI-24 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R53 | Data consistent, exportable, supports bespoke analysis | KPI-88 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R54 | Capture reasons for declined placements | KPI-34 (partial), KPI-105 | Partial / open | Closure/offer rejection measures do not supply full provider/referral decline history. |
-| R55 | RBAC: commissioners access regional data, market-wide trends | — | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
+| R55 | RBAC: commissioners access regional data, market-wide trends | - | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
 | R57 | Emergency and planned placements separately reportable | KPI-91, KPI-93, KPI-94 | Partial / open | Emergency/planned formulas exist, but date/case scope differs and the split needs visual acceptance. |
 | R58 | Alert when framework changes during active referrals | KPI-106 | Partial / open | Framework-change history and alert-delivery evidence absent. |
 | R59 | Bulk provider onboarding supported | KPI-116, KPI-117 | Partial / open | Provider status/proportion available; bulk onboarding requires batch/job outcomes and a defined denominator. |
 | R62 | View completed placements, access IPAs, extract payment info | KPI-107, KPI-108, KPI-109 | Partial / open | Estimated cost and IPA counts support partial analysis; actual payments, payment methods and signed fee liability remain open. |
 | R67 | Support adding new frameworks | KPI-25, KPI-38 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R68 | Frameworks configurable: display, hide, isolate by region | KPI-25, KPI-38 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R69 | Robust analytical data model | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R70 | Auto-save across workflows | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R69 | Robust analytical data model | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R70 | Auto-save across workflows | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R71 | Digitised IPA: review, approvals, signing, full audit | KPI-73–KPI-86 | Partial / open | Same offer-versus-IPA grain and signature/audit limitations as R35. |
-| R72 | Digitise paper processes: workflow, auditable, trackable, lifecycle | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R73 | Support future enhancements and Agile delivery | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R74 | COTS preferred | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R75 | High availability, scalability, fault tolerance, DR | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R76 | Access restricted to authorised users | — | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
-| R77 | Admin: user management, org onboarding, ownership transfer | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R78 | RBAC and full auditing mandatory | — | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
-| R79 | Break-glass access: controlled, auditable, emergency | — | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
-| R80 | Fast document upload/retrieval, RBAC-protected access | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R81 | WCAG 2.0/2.1/2.2 compliance | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R72 | Digitise paper processes: workflow, auditable, trackable, lifecycle | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R73 | Support future enhancements and Agile delivery | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R74 | COTS preferred | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R75 | High availability, scalability, fault tolerance, DR | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R76 | Access restricted to authorised users | - | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
+| R77 | Admin: user management, org onboarding, ownership transfer | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R78 | RBAC and full auditing mandatory | - | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
+| R79 | Break-glass access: controlled, auditable, emergency | - | Security acceptance open | No roles in inspected model. Verify effective workspace/app permissions, RLS where required, audit and access procedures. |
+| R80 | Fast document upload/retrieval, RBAC-protected access | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R81 | WCAG 2.0/2.1/2.2 compliance | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R82 | Fast response times, scalability, performance reporting | KPI-87 | Partial / open | Freshness timestamp present; performance, scalability and response-time targets need measured SLA evidence. |
-| R83 | Migrate placements, purchases, providers, OFSTED, frameworks, active placements | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R84 | Data integrity, retention, export, configurable policies | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R85 | Deployment: FAQs, user guides, demos, support materials | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R86 | Device agnostic, browser compatible, mobile friendly | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R87 | Incident management, issue reporting, SLAs | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R88 | Modular growth, controlled change, product roadmaps | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R89 | Stakeholder demos, UAT, formal sign-off | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
-| R90 | Hosting options, deployment models, cloud strategy | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R83 | Migrate placements, purchases, providers, OFSTED, frameworks, active placements | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R84 | Data integrity, retention, export, configurable policies | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R85 | Deployment: FAQs, user guides, demos, support materials | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R86 | Device agnostic, browser compatible, mobile friendly | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R87 | Incident management, issue reporting, SLAs | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R88 | Modular growth, controlled change, product roadmaps | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R89 | Stakeholder demos, UAT, formal sign-off | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R90 | Hosting options, deployment models, cloud strategy | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R91 | Provider registration: company, services, homes, docs | KPI-40, KPI-41 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
-| R92 | LA review and approve/reject registrations | — | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
+| R92 | LA review and approve/reject registrations | - | Outside measure scope; not signed off | Requires platform, workflow, service or UAT evidence for the stated requirement; no dedicated KPI is specified in the assessment. |
 | R93 | Placement officer: provider directory, services, homes, docs | KPI-40–KPI-52 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |
 | R94 | QA: search providers, apply/remove flags | KPI-97, KPI-98 (partial) | Partial / open | QA filters need correction; flag-type breakdown and search/apply/remove behaviour remain open. |
 | R95 | Reflect Fostering Framework changes (Q3 2024) | KPI-42, KPI-51 | Reporting definitions present; acceptance open | Resolve relevant KPI audit findings and shared relationship/source gaps; verify visuals, filter context and source totals. Report measures alone do not prove the full application requirement. |

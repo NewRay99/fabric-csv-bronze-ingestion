@@ -1,8 +1,8 @@
-# KPI lineage — active Gold semantic model
+# KPI lineage - active Gold semantic model
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 All current DAX definitions, transitive measure dependencies and 21 calculated-table partitions are retained in the current calculation snapshot. Physical sources resolve from saved partitions; 45 notebook producer/reference spans are quoted without executing them. Local calculated objects are not mislabelled as physical Gold tables.
 
@@ -12,7 +12,7 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-The maintained current index is the revised Dashboard Legend: 109 prior entries plus 35 newly catalogued WIP business measures. All 144 resolve by exact measure name. The detailed 366-measure inventory includes helpers and compatibility calculations. Older “109 publishable / 108 Ready” and closed-gap claims below are historical, not current acceptance.
+The maintained current index is the revised Dashboard Legend: 109 prior entries plus 35 newly catalogued WMPP_v16 business measures. All 144 resolve by exact measure name. The detailed 366-measure inventory includes helpers and compatibility calculations. Older “109 publishable / 108 Ready” and closed-gap claims below are historical, not current acceptance.
 
 Current lineage additions are `referral_person → dim_person → gender measures`; `ipa → fact_ipa → signature/completion measures`; `referral_provider_message → dim_referral_provider_message → detail/journey evidence`; cancellation/decline sources → `dim_referral_provider_reject_reason`; and `referral_category → bridge_referral_framework_category → category-aware distinct counts`. The business source remains Gold. Local selectors and calculated map/stage tables organise that evidence without reading Bronze/Silver directly.
 
@@ -20,32 +20,17 @@ Journey counts, snapshot changes and closure flows have separate grains. Message
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
 ## Purpose and status
 
-This is the maintained lineage record for the active referral reporting model.
-It replaces the implementation role previously inferred from the initial
-assessment documents. It maps functional requirements to the deployed KPI
-families, their DAX calculations and the Bronze-to-Gold transformations that
-support them.
+This is the maintained lineage record for the active referral reporting model. It replaces the implementation role previously inferred from the initial assessment documents. It maps functional requirements to the deployed KPI families, their DAX calculations and the Bronze-to-Gold transformations that support them.
 
-Read this with [KPI Reference Guide](KPI_Reference_Guide.md), which is the
-business definition and Gold-table reference, and [Gold Semantic Model DAX
-Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE%20WIP.md), which contains the
-copy-ready DAX library.
+Read this with [KPI Reference Guide](KPI_Reference_Guide.md), which is the business definition and Gold-table reference, and [Gold Semantic Model DAX Build Guide](GOLD_SEMANTIC_MODEL_DAX_BUILD_GUIDE.md), which contains the copy-ready DAX library.
 
-The current Dashboard Legend catalogue contains 109 publishable measures:
-108 **Ready** and one **Gold lifecycle-event proxy**. Its ten `GOLD-GAP-*`
-rows are explicitly not publishable KPIs until the required Gold fields or
-facts have been added.
+The current Dashboard Legend catalogue contains 109 publishable measures: 108 **Ready** and one **Gold lifecycle-event proxy**. Its ten `GOLD-GAP-*` rows are explicitly not publishable KPIs until the required Gold fields or facts have been added.
 
 ## Publishing rule
 
-Every published KPI DAX expression must use fields from an active Gold fact,
-dimension or bridge imported into the semantic model. Bronze and Silver are
-lineage and transformation layers only; they are never valid KPI DAX sources.
-Review this rule when accepting the client's current project. The former
-version-dependent DAX/report tests have been removed from the repository suite.
+Every published KPI DAX expression must use fields from an active Gold fact, dimension or bridge imported into the semantic model. Bronze and Silver are lineage and transformation layers only; they are never valid KPI DAX sources. Review this rule when accepting the client's current project. The former version-dependent DAX/report tests have been removed from the repository suite.
 
 ## End-to-end data path
 
@@ -86,9 +71,7 @@ Source extract <logical_table>.csv
 
 ## Requirement-to-KPI lineage
 
-The following is the maintained functional-requirement mapping. A requirement
-is shown as **partial** where the current Gold model provides a safe proxy but
-does not meet the original detailed requirement.
+The following is the maintained functional-requirement mapping. A requirement is shown as **partial** where the current Gold model provides a safe proxy but does not meet the original detailed requirement.
 
 | Functional requirement | Current Gold KPI / KPI family | Gold source | Status and boundary |
 | --- | --- | --- | --- |
@@ -110,15 +93,11 @@ does not meet the original detailed requirement.
 | R82 | `Gold Model Last Refreshed` | `fact_referral[gold_modelled_at]` | Ready. |
 | R91, R93 | Provider/home-register measures | `dim_provider`, `dim_provider_home` | Ready. |
 
-Measures whose Dashboard Legend requirement ID is `—` are still valid Gold
-operational measures, but have not yet been formally linked to a functional
-requirement. They must not be counted as requirement coverage until that
-mapping is agreed and added to the catalogue.
+Measures whose Dashboard Legend requirement ID is `-` are still valid Gold operational measures, but have not yet been formally linked to a functional requirement. They must not be counted as requirement coverage until that mapping is agreed and added to the catalogue.
 
 ## Published KPI families
 
-The Dashboard Legend is the detailed measure index; the table below groups
-every active Gold KPI by its DAX source and lineage path.
+The Dashboard Legend is the detailed measure index; the table below groups every active Gold KPI by its DAX source and lineage path.
 
 | KPI family | Gold KPI IDs | Gold DAX source | Upstream source path |
 | --- | --- | --- | --- |
@@ -135,16 +114,9 @@ every active Gold KPI by its DAX source and lineage path.
 
 ## Non-publishable roadmap items
 
-The following Dashboard Legend rows describe genuine model gaps, not DAX work
-to be completed against Bronze or Silver: child demographics; IPA-grain
-signature detail; referral geography; QA flag history; document compliance and
-blocking outcome; referral-level decline reason; framework change history;
-payment/invoice facts; detailed message-status facts; and referral category /
-support-needs analysis.
+The following Dashboard Legend rows describe genuine model gaps, not DAX work to be completed against Bronze or Silver: child demographics; IPA-grain signature detail; referral geography; QA flag history; document compliance and blocking outcome; referral-level decline reason; framework change history; payment/invoice facts; detailed message-status facts; and referral category / support-needs analysis.
 
-See the **Gold Source Coverage** sheet in `configuration/Dashboard Legend.xlsx`
-for the required additional source or Gold object for each gap. The rule is
-simple: promote and validate the field in Gold first, then publish its DAX.
+See the **Gold Source Coverage** sheet in `configuration/Dashboard Legend.xlsx` for the required additional source or Gold object for each gap. The rule is simple: promote and validate the field in Gold first, then publish its DAX.
 
 ## Validation and maintenance
 
@@ -153,11 +125,8 @@ When a new KPI is requested:
 1. Identify its functional requirement ID and record it in Dashboard Legend.
 2. Confirm the data exists in the source contract and specify the source file.
 3. Record every Bronze-to-Silver transformation and DQ condition.
-4. Materialise the required Gold field/fact/dimension with lower-case
-   `snake_case` columns.
+4. Materialise the required Gold field/fact/dimension with lower-case `snake_case` columns.
 5. Add Gold-only DAX to the DAX build guide and the Dashboard Legend catalogue.
 6. Update this lineage record, then run `python -m pytest`.
 
-This document records static implementation lineage. It does not prove live
-Lakehouse data completeness; use monitoring and data-quality outputs to verify
-each deployed run.
+This document records static implementation lineage. It does not prove live Lakehouse data completeness; use monitoring and data-quality outputs to verify each deployed run.

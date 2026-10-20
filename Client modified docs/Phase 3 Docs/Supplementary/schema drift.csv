@@ -1,0 +1,721 @@
+schema_name,table_name,column_name,contract_data_type,live_data_type,validation_status
+Details TBA,,,,,UNCONTRACTED_COLUMN_ADDED
+EG: ,,,,,UNCONTRACTED_COLUMN_ADDED
+Approved,,,,,UNCONTRACTED_COLUMN_ADDED
+Pending,,,,,UNCONTRACTED_COLUMN_ADDED
+eg:,,,,,UNCONTRACTED_COLUMN_ADDED
+Independent school day placement,,,,,UNCONTRACTED_COLUMN_ADDED
+Independent school residential,,,,,UNCONTRACTED_COLUMN_ADDED
+Non-maintained special school setting day placement,,,,,UNCONTRACTED_COLUMN_ADDED
+Non-maintained special school setting residential,,,,,UNCONTRACTED_COLUMN_ADDED
+Other Independent Special School,,,,,UNCONTRACTED_COLUMN_ADDED
+Other Independent School,,,,,UNCONTRACTED_COLUMN_ADDED
+Free School Special,,,,,UNCONTRACTED_COLUMN_ADDED
+Non-Maintained Early Year settings,,,,,UNCONTRACTED_COLUMN_ADDED
+"Special Post 16""",NULL,,,,UNCONTRACTED_COLUMN_ADDED
+"Only populated when Reference Code is """"OTHER?""""""",This entity holds all reasons submitted by a provider for cancelling a referral,,,,UNCONTRACTED_COLUMN_ADDED
+"Only populated when Reference Code is """"OTHER?""""""",This entity holds all reasons submitted by a provider for declining a referral,,,,UNCONTRACTED_COLUMN_ADDED
+"Declined""",This provider entity all key information regarding the provider,,,,UNCONTRACTED_COLUMN_ADDED
+"https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-keys.html""",This table holds file metadata uplated to Amazon S3,,,,UNCONTRACTED_COLUMN_ADDED
+offer,additional_fee,additional_fee_id,uuid,string,MATCH
+offer,additional_fee,export_date,timestamp without time zone,string,MATCH
+offer,additional_fee,fee_frequency,character varying(50),string,MATCH
+offer,additional_fee,fee_title,character varying(9),string,MATCH
+offer,additional_fee,number_of_hours,"numeric(6,1)",string,MATCH
+offer,additional_fee,offer_id,uuid,string,MATCH
+offer,additional_fee,other_fee_title,character varying(50),string,MATCH
+offer,additional_fee,rate,"numeric(6,2)",string,MATCH
+provider,ageband,age_band_id,integer,,CONTRACTED_COLUMN_MISSING
+provider,ageband,age_band_label,character varying(50),,CONTRACTED_COLUMN_MISSING
+provider,ageband,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,ageband,start_age,integer,,CONTRACTED_COLUMN_MISSING
+provider,ageband,up_to_age,integer,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,cognito_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,file_name,character varying,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,json_data,jsonb,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,last_modified_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,provider_name,character varying,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,review_comments,character varying,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,review_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,reviewed_by,uuid,,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,status,character varying(50),,CONTRACTED_COLUMN_MISSING
+provider,form_submissions,submission_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,fost_category_age_band,age_band_id,integer,,CONTRACTED_COLUMN_MISSING
+provider,fost_category_age_band,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,fost_category_age_band,framework_category_id,integer,,CONTRACTED_COLUMN_MISSING
+provider,fost_category_age_band,id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,fost_category_age_band,provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+offer,foster_carer,age,integer,string,MATCH
+offer,foster_carer,approval_details,text,string,MATCH
+offer,foster_carer,date_of_approval,timestamp without time zone,string,MATCH
+offer,foster_carer,email_address,character varying(255),string,MATCH
+offer,foster_carer,ethnicity_code,character varying(9),string,MATCH
+offer,foster_carer,ethnicity_other,character varying(100),string,MATCH
+offer,foster_carer,export_date,timestamp without time zone,string,MATCH
+offer,foster_carer,foster_carer_id,uuid,string,MATCH
+offer,foster_carer,full_name,character varying(255),string,MATCH
+offer,foster_carer,gender_code,character varying(9),string,MATCH
+offer,foster_carer,gender_other,character varying(100),string,MATCH
+offer,foster_carer,is_primary_carer,boolean,string,MATCH
+offer,foster_carer,language_code,character varying(9),string,MATCH
+offer,foster_carer,language_other,character varying(100),string,MATCH
+offer,foster_carer,offer_id,uuid,string,MATCH
+offer,foster_carer,phone_number,character varying(20),string,MATCH
+offer,foster_carer,religion_code,character varying(9),string,MATCH
+offer,foster_carer,religion_other,character varying(100),string,MATCH
+offer,foster_home,address_line1,character varying(255),string,MATCH
+offer,foster_home,address_line2,character varying(255),string,MATCH
+offer,foster_home,county,character varying(100),string,MATCH
+offer,foster_home,export_date,timestamp without time zone,string,MATCH
+offer,foster_home,foster_home_id,uuid,string,MATCH
+offer,foster_home,has_pets,boolean,string,MATCH
+offer,foster_home,offer_id,uuid,string,MATCH
+offer,foster_home,pets_details,text,string,MATCH
+offer,foster_home,postcode,character varying(10),string,MATCH
+offer,foster_home,town_or_city,character varying(100),string,MATCH
+offer,foster_transport,export_date,timestamp without time zone,string,MATCH
+offer,foster_transport,family_transport_details,text,string,MATCH
+offer,foster_transport,family_transport_provision,character varying(20),string,MATCH
+offer,foster_transport,foster_transport_id,uuid,string,MATCH
+offer,foster_transport,offer_id,uuid,string,MATCH
+offer,foster_transport,school_transport_details,text,string,MATCH
+offer,foster_transport,school_transport_provision,character varying(20),string,MATCH
+Bronze,framework,end_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,framework,export_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,framework,framework_code,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,framework,framework_name,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,framework,placement_type,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,framework,start_date,,string,UNCONTRACTED_COLUMN_ADDED
+framework,framework_category,category_name,character varying(255),string,MATCH
+framework,framework_category,export_date,timestamp without time zone,string,MATCH
+framework,framework_category,framework_category_id,integer,string,MATCH
+framework,framework_category,framework_code,character varying(10),string,MATCH
+provider,holding_company,address_line_1,character varying(100),string,MATCH
+provider,holding_company,address_line_2,character varying(100),string,MATCH
+provider,holding_company,companies_house_details,character varying(100),string,MATCH
+provider,holding_company,company_email_address,character varying(100),string,MATCH
+provider,holding_company,company_name,character varying(100),string,MATCH
+provider,holding_company,company_phone_number,character varying(100),string,MATCH
+provider,holding_company,contact_person_email_address,text,string,MATCH
+provider,holding_company,contact_person_name,character varying(100),string,MATCH
+provider,holding_company,contact_person_phone_number,character varying(100),string,MATCH
+provider,holding_company,country,character varying(100),string,MATCH
+provider,holding_company,county,character varying(100),string,MATCH
+provider,holding_company,export_date,timestamp without time zone,string,MATCH
+provider,holding_company,holding_company_id,uuid,string,MATCH
+provider,holding_company,postcode,character varying(20),string,MATCH
+provider,holding_company,town_city,character varying(100),string,MATCH
+ipa,ipa,can_sign,boolean,string,MATCH
+ipa,ipa,can_sign_date,timestamp without time zone,string,MATCH
+ipa,ipa,can_sign_name,character varying(150),string,MATCH
+ipa,ipa,closed,boolean,string,MATCH
+ipa,ipa,closed_datetime,timestamp without time zone,string,MATCH
+ipa,ipa,core_cost_weekly_fee,"numeric(12,2)",string,MATCH
+ipa,ipa,costs_total_core_costs_weekly_fee,"numeric(12,2)",string,MATCH
+ipa,ipa,costs_total_weekly_fee,"numeric(12,2)",string,MATCH
+ipa,ipa,created_by,character varying(150),string,MATCH
+ipa,ipa,created_datetime,timestamp without time zone,string,MATCH
+ipa,ipa,education_addr_county,character varying(200),string,MATCH
+ipa,ipa,education_addr_line1,character varying(200),string,MATCH
+ipa,ipa,education_addr_line2,character varying(200),string,MATCH
+ipa,ipa,education_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,education_addr_town,character varying(100),string,MATCH
+ipa,ipa,education_included_with_referral,boolean,string,MATCH
+ipa,ipa,education_length_weeks,integer,string,MATCH
+ipa,ipa,education_location,character varying(100),string,MATCH
+ipa,ipa,education_provision_cost,"numeric(19,2)",string,MATCH
+ipa,ipa,education_provision_name,character varying(200),string,MATCH
+ipa,ipa,export_date,timestamp without time zone,string,MATCH
+ipa,ipa,home_addr_county,character varying(200),string,MATCH
+ipa,ipa,home_addr_line1,character varying(200),string,MATCH
+ipa,ipa,home_addr_line2,character varying(200),string,MATCH
+ipa,ipa,home_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,home_addr_town,character varying(100),string,MATCH
+ipa,ipa,home_email,character varying(200),string,MATCH
+ipa,ipa,home_name,character varying(200),string,MATCH
+ipa,ipa,home_phone,character varying(20),string,MATCH
+ipa,ipa,invoice_addr_county,character varying(200),string,MATCH
+ipa,ipa,invoice_addr_line1,character varying(200),string,MATCH
+ipa,ipa,invoice_addr_line2,character varying(200),string,MATCH
+ipa,ipa,invoice_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,invoice_addr_town,character varying(100),string,MATCH
+ipa,ipa,invoice_recipient_email,character varying(200),string,MATCH
+ipa,ipa,invoice_recipient_name,character varying(150),string,MATCH
+ipa,ipa,invoice_recipient_team,character varying(150),string,MATCH
+ipa,ipa,ipa_id,uuid,string,MATCH
+ipa,ipa,la_addr_county,character varying(200),string,MATCH
+ipa,ipa,la_addr_line1,character varying(200),string,MATCH
+ipa,ipa,la_addr_line2,character varying(200),string,MATCH
+ipa,ipa,la_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,la_addr_town,character varying(100),string,MATCH
+ipa,ipa,la_email,character varying(200),string,MATCH
+ipa,ipa,la_name,character varying(150),string,MATCH
+ipa,ipa,la_phone,character varying(20),string,MATCH
+ipa,ipa,offer_id,uuid,string,MATCH
+ipa,ipa,payment_method,character varying(120),string,MATCH
+ipa,ipa,placement_admission_date,date,string,MATCH
+ipa,ipa,placement_category,character varying(120),string,MATCH
+ipa,ipa,placement_framework_or_spot,character varying(40),string,MATCH
+ipa,ipa,placement_needs_summary,character varying(3000),string,MATCH
+ipa,ipa,placement_service_type,character varying(120),string,MATCH
+ipa,ipa,placement_type,character varying(120),string,MATCH
+ipa,ipa,placement_type_other_text,character varying(250),string,MATCH
+ipa,ipa,provider_addr_county,character varying(200),string,MATCH
+ipa,ipa,provider_addr_line1,character varying(200),string,MATCH
+ipa,ipa,provider_addr_line2,character varying(200),string,MATCH
+ipa,ipa,provider_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,provider_addr_town,character varying(100),string,MATCH
+ipa,ipa,provider_company_registration_number,character varying(50),string,MATCH
+ipa,ipa,provider_email,character varying(200),string,MATCH
+ipa,ipa,provider_id,uuid,string,MATCH
+ipa,ipa,provider_name,character varying(200),string,MATCH
+ipa,ipa,provider_phone,character varying(20),string,MATCH
+ipa,ipa,provider_urn,character varying(50),string,MATCH
+ipa,ipa,referral_id,uuid,string,MATCH
+ipa,ipa,registered_manager_email,character varying(150),string,MATCH
+ipa,ipa,registered_manager_name,character varying(150),string,MATCH
+ipa,ipa,registered_manager_phone,character varying(20),string,MATCH
+ipa,ipa,registered_manager_registration_number,character varying(150),string,MATCH
+ipa,ipa,schedule_addr_county,character varying(200),string,MATCH
+ipa,ipa,schedule_addr_line1,character varying(200),string,MATCH
+ipa,ipa,schedule_addr_line2,character varying(200),string,MATCH
+ipa,ipa,schedule_addr_postcode,character varying(20),string,MATCH
+ipa,ipa,schedule_addr_town,character varying(100),string,MATCH
+ipa,ipa,schedule_contact_email,character varying(200),string,MATCH
+ipa,ipa,schedule_contact_name,character varying(150),string,MATCH
+ipa,ipa,schedule_contact_phone,character varying(100),string,MATCH
+ipa,ipa,schedule_do_not_send_invoices_note,character varying(3000),string,MATCH
+ipa,ipa,signed_by_local_authority,boolean,string,MATCH
+ipa,ipa,signed_by_local_authority_name,character varying(150),string,MATCH
+ipa,ipa,signed_by_provider,boolean,string,MATCH
+ipa,ipa,signed_by_provider_name,character varying(150),string,MATCH
+ipa,ipa,signed_datetime_for_local_authority,timestamp without time zone,string,MATCH
+ipa,ipa,signed_datetime_for_provider,timestamp without time zone,string,MATCH
+ipa,ipa,status,character varying(100),string,MATCH
+ipa,ipa,updated_by,character varying(150),string,MATCH
+ipa,ipa,updated_datetime,timestamp without time zone,string,MATCH
+ipa,ipa_additional_fee,additional_fee_id,uuid,string,MATCH
+ipa,ipa_additional_fee,created_at,timestamp with time zone,string,MATCH
+ipa,ipa_additional_fee,end_date,date,string,MATCH
+ipa,ipa_additional_fee,export_date,timestamp without time zone,string,MATCH
+ipa,ipa_additional_fee,fee_type,character varying(200),string,MATCH
+ipa,ipa_additional_fee,ipa_id,uuid,string,MATCH
+ipa,ipa_additional_fee,one_off_fee,"numeric(19,2)",string,MATCH
+ipa,ipa_additional_fee,review_date,date,string,MATCH
+ipa,ipa_additional_fee,title,character varying(300),string,MATCH
+ipa,ipa_additional_fee,total,"numeric(19,2)",string,MATCH
+ipa,ipa_additional_fee,updated_at,timestamp with time zone,string,MATCH
+ipa,ipa_child,child_age_years,integer,string,MATCH
+ipa,ipa_child,child_date_of_birth,date,string,MATCH
+ipa,ipa_child,child_ethnicity,character varying(100),string,MATCH
+ipa,ipa_child,child_full_name,character varying(150),string,MATCH
+ipa,ipa_child,child_gender,character varying(40),string,MATCH
+ipa,ipa_child,child_known_as,character varying(150),string,MATCH
+ipa,ipa_child,child_legal_status,character varying(100),string,MATCH
+ipa,ipa_child,child_preferred_language,character varying(80),string,MATCH
+ipa,ipa_child,child_reference_number,character varying(50),string,MATCH
+ipa,ipa_child,child_religion,character varying(80),string,MATCH
+ipa,ipa_child,child_support_needs_other_text,character varying(150),string,MATCH
+ipa,ipa_child,expected_destination_after_placement,character varying(120),string,MATCH
+ipa,ipa_child,expected_destination_other_text,character varying(3000),string,MATCH
+ipa,ipa_child,export_date,timestamp without time zone,string,MATCH
+ipa,ipa_child,ipa_child_id,uuid,string,MATCH
+ipa,ipa_child,ipa_id,uuid,string,MATCH
+ipa,ipa_child_support_needs,export_date,timestamp without time zone,string,MATCH
+ipa,ipa_child_support_needs,ipa_child_id,uuid,string,MATCH
+ipa,ipa_child_support_needs,support_need,character varying(100),string,MATCH
+ipa,ipa_document,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+ipa,ipa_document,ipa_document_id,uuid,,CONTRACTED_COLUMN_MISSING
+ipa,ipa_document,ipa_id,uuid,,CONTRACTED_COLUMN_MISSING
+ipa,ipa_document,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,la_reset_counter_history,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,la_reset_counter_history,is_counter_reset,boolean,,CONTRACTED_COLUMN_MISSING
+referral,la_reset_counter_history,referral_provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,la_reset_counter_history,reset_counter_id,uuid,,CONTRACTED_COLUMN_MISSING
+Bronze,mlv_additional_fee,additional_fee_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,export_date,,date,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,fee_frequency,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,fee_title,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,number_of_hours,,double,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,offer_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,other_fee_title,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,mlv_additional_fee,rate,,double,UNCONTRACTED_COLUMN_ADDED
+offer,offer,can_edit_offer,boolean,string,MATCH
+offer,offer,category,integer,string,MATCH
+offer,offer,category_code,character varying(100),string,MATCH
+offer,offer,child_summary_needs,text,string,MATCH
+offer,offer,core_weekly_fee,"numeric(6,2)",string,MATCH
+offer,offer,decline_reason,character varying(500),string,MATCH
+offer,offer,decline_reason_other,character varying(50),string,MATCH
+offer,offer,education_weekly_fee,"numeric(6,2)",string,MATCH
+offer,offer,estimated_start_date,date,string,MATCH
+offer,offer,export_date,timestamp without time zone,string,MATCH
+offer,offer,id_number,character varying(100),string,MATCH
+offer,offer,includes_education,boolean,string,MATCH
+offer,offer,last_modified_date,timestamp without time zone,string,MATCH
+offer,offer,offer_date,timestamp without time zone,string,MATCH
+offer,offer,offer_id,uuid,string,MATCH
+offer,offer,offer_status,character varying(50),string,MATCH
+offer,offer,offer_type,character varying(50),string,MATCH
+offer,offer,provider_home_id,uuid,string,MATCH
+offer,offer,referral_provider_id,uuid,string,MATCH
+offer,offer,withdraw_reason,character varying(500),string,MATCH
+Bronze,offer,withdraw_reason_other,,string,UNCONTRACTED_COLUMN_ADDED
+offer,offer_document,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+offer,offer_document,offer_id,uuid,,CONTRACTED_COLUMN_MISSING
+offer,offer_document,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+offer,offer_updates,export_date,timestamp without time zone,string,MATCH
+offer,offer_updates,message_id,uuid,string,MATCH
+offer,offer_updates,offer_id,uuid,string,MATCH
+offer,offer_updates,offer_update_id,uuid,string,MATCH
+offer,offer_updates,offer_updates_requested,boolean,string,MATCH
+offer,offer_updates,offer_updates_requested_at,timestamp without time zone,string,MATCH
+offer,offer_view_history,export_date,timestamp without time zone,string,MATCH
+offer,offer_view_history,offer_id,uuid,string,MATCH
+offer,offer_view_history,offer_view_id,uuid,string,MATCH
+offer,offer_view_history,offer_viewed_at,timestamp without time zone,string,MATCH
+offer,offer_view_history,offer_viewed_by,uuid,string,MATCH
+referral,person,age_date_unit,character varying(10),,CONTRACTED_COLUMN_MISSING
+referral,person,age_value,integer,,CONTRACTED_COLUMN_MISSING
+referral,person,child_index,integer,,CONTRACTED_COLUMN_MISSING
+referral,person,ethnicity_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person,ethnicity_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,person,gender_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person,gender_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person,has_restrictions,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person,initials,character varying(10),,CONTRACTED_COLUMN_MISSING
+referral,person,person_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,person,preferred_language_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person,preferred_language_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,person,religion_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person,religion_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person,restriction_details,character varying(400),,CONTRACTED_COLUMN_MISSING
+referral,person,source_reference_id,character varying(15),,CONTRACTED_COLUMN_MISSING
+referral,person,support_need_codes,character varying[],,CONTRACTED_COLUMN_MISSING
+referral,person_aud,age_date_unit,character varying(10),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,age_date_unit_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,age_value,integer,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,age_value_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,ethnicity_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,ethnicity_code_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,ethnicity_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,ethnicity_other_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,gender_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,gender_code_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,gender_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,gender_other_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,has_restrictions,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,has_restrictions_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,initials,character varying(10),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,initials_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,person_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,preferred_language_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,preferred_language_code_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,preferred_language_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,preferred_language_other_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,referral_id_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,religion_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,religion_code_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,religion_other,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,religion_other_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,restriction_details,character varying(400),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,restriction_details_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,rev,integer,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,revtype,bigint,,CONTRACTED_COLUMN_MISSING
+referral,person_aud,source_reference_id,character varying(15),,CONTRACTED_COLUMN_MISSING
+referral,person_aud,source_reference_id_mod,boolean,,CONTRACTED_COLUMN_MISSING
+provider,provider,address_line_1,character varying(100),string,MATCH
+provider,provider,address_line_2,character varying(100),string,MATCH
+provider,provider,companies_house_registration_reference,character varying(100),string,MATCH
+provider,provider,country,character varying(100),string,MATCH
+provider,provider,county,character varying(100),string,MATCH
+provider,provider,created_by,character varying(100),string,MATCH
+provider,provider,created_timestamp,timestamp without time zone,string,MATCH
+provider,provider,export_date,timestamp without time zone,string,MATCH
+provider,provider,holding_company_id,uuid,string,MATCH
+provider,provider,inspection_outcome_rating,character varying(100),string,MATCH
+provider,provider,last_regulating_body_inspection_date,date,string,MATCH
+provider,provider,modified_by,character varying(100),string,MATCH
+provider,provider,modified_timestamp,timestamp without time zone,string,MATCH
+provider,provider,national_contract_external_link,character varying(1000),string,MATCH
+provider,provider,postcode,character varying(20),string,MATCH
+provider,provider,provider_email_address,character varying(100),string,MATCH
+provider,provider,provider_id,uuid,string,MATCH
+provider,provider,provider_name,character varying(100),string,MATCH
+provider,provider,provider_phone_number,character varying(20),string,MATCH
+provider,provider,provider_status,character varying(9),string,MATCH
+provider,provider,qa_flag,boolean,string,MATCH
+provider,provider,qa_flag_fostering_spot,boolean,string,MATCH
+provider,provider,qa_flag_resi,boolean,string,MATCH
+provider,provider,qa_flag_sup_acc,boolean,string,MATCH
+provider,provider,registrant_contact_number,character varying(100),string,MATCH
+provider,provider,registrant_email_address,character varying(100),string,MATCH
+provider,provider,registrant_name,character varying(100),string,MATCH
+provider,provider,registrant_role,character varying(100),string,MATCH
+provider,provider,regulatory_body_registration_reference,character varying(100),string,MATCH
+provider,provider,responsible_individual_contact_number,character varying(20),string,MATCH
+provider,provider,responsible_individual_email_address,character varying(100),string,MATCH
+provider,provider,responsible_individual_name,character varying(100),string,MATCH
+provider,provider,town_city,character varying(100),string,MATCH
+provider,provider_document,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,provider_document,provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,provider_document,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,provider_education_provision,address_line_1,character varying(100),string,MATCH
+provider,provider_education_provision,address_line_2,character varying(100),string,MATCH
+provider,provider_education_provision,contact_email_address,character varying(100),string,MATCH
+provider,provider_education_provision,contact_name,character varying(100),string,MATCH
+provider,provider_education_provision,contact_number,character varying(100),string,MATCH
+provider,provider_education_provision,country,character varying(100),string,MATCH
+provider,provider_education_provision,county,character varying(100),string,MATCH
+provider,provider_education_provision,created_by,character varying(100),string,MATCH
+provider,provider_education_provision,created_timestamp,timestamp without time zone,string,MATCH
+provider,provider_education_provision,education_privision_name,character varying(100),string,MATCH
+provider,provider_education_provision,education_provision_type,character varying(100),string,MATCH
+provider,provider_education_provision,export_date,timestamp without time zone,string,MATCH
+provider,provider_education_provision,inspection_outcome_rating,character varying(100),string,MATCH
+provider,provider_education_provision,last_regulating_body_inspection_date,date,string,MATCH
+provider,provider_education_provision,modified_timestamp,timestamp without time zone,string,MATCH
+provider,provider_education_provision,postcode,character varying(20),string,MATCH
+provider,provider_education_provision,provider_education_provision_id,uuid,string,MATCH
+provider,provider_education_provision,provider_home_id,uuid,string,MATCH
+provider,provider_education_provision,provider_id,uuid,string,MATCH
+provider,provider_education_provision,regulatory_body_registration_reference,character varying(100),string,MATCH
+provider,provider_education_provision,town_city,character varying(100),string,MATCH
+Bronze,provider_education_provision,updated_by,,string,UNCONTRACTED_COLUMN_ADDED
+provider,provider_framework,export_date,timestamp without time zone,string,MATCH
+provider,provider_framework,framework_code,character varying(10),string,MATCH
+provider,provider_framework,provider_framework_id,bigint,string,MATCH
+provider,provider_framework,provider_id,uuid,string,MATCH
+provider,provider_framework,qa_flag,boolean,string,MATCH
+provider,provider_home,address_line_1,character varying(100),string,MATCH
+provider,provider_home,address_line_2,character varying(100),string,MATCH
+provider,provider_home,country,character varying(100),string,MATCH
+provider,provider_home,county,character varying(100),string,MATCH
+provider,provider_home,created_by,character varying(100),string,MATCH
+provider,provider_home,created_timestamp,timestamp without time zone,string,MATCH
+provider,provider_home,export_date,timestamp without time zone,string,MATCH
+provider,provider_home,home_contact_number,character varying(100),string,MATCH
+provider,provider_home,home_email_address,character varying(100),string,MATCH
+provider,provider_home,home_name,character varying(100),string,MATCH
+provider,provider_home,inspection_outcome_rating,character varying(100),string,MATCH
+provider,provider_home,is_spot,boolean,string,MATCH
+provider,provider_home,last_regulating_body_inspection_date,date,string,MATCH
+provider,provider_home,modified_by,character varying(100),string,MATCH
+provider,provider_home,modified_timestamp,timestamp without time zone,string,MATCH
+provider,provider_home,number_of_registered_beds,integer,string,MATCH
+provider,provider_home,postcode,character varying(20),string,MATCH
+provider,provider_home,provider_home_id,uuid,string,MATCH
+provider,provider_home,provider_id,uuid,string,MATCH
+provider,provider_home,qa_flag,boolean,string,MATCH
+provider,provider_home,qa_flag_spot,boolean,string,MATCH
+provider,provider_home,registered_manager_contact_number,character varying(100),string,MATCH
+provider,provider_home,registered_manager_email_address,character varying(100),string,MATCH
+provider,provider_home,registered_manager_name,character varying(100),string,MATCH
+provider,provider_home,regulatory_body_registration_reference,character varying(100),string,MATCH
+provider,provider_home,service_type,character varying(100),string,MATCH
+provider,provider_home,town_city,character varying(100),string,MATCH
+provider,provider_home_age,export_date,timestamp without time zone,string,MATCH
+provider,provider_home_age,max_age,integer,string,MATCH
+provider,provider_home_age,min_age,integer,string,MATCH
+provider,provider_home_age,provider_home_age_id,bigint,string,MATCH
+provider,provider_home_age,provider_home_id,uuid,string,MATCH
+provider,provider_home_category,export_date,timestamp without time zone,string,MATCH
+provider,provider_home_category,framework_category_id,integer,string,MATCH
+provider,provider_home_category,provider_home_category_id,bigint,string,MATCH
+provider,provider_home_category,provider_home_id,uuid,string,MATCH
+provider,provider_home_gender,export_date,timestamp without time zone,string,MATCH
+provider,provider_home_gender,provider_home_gender_id,bigint,string,MATCH
+provider,provider_home_gender,provider_home_id,uuid,string,MATCH
+provider,provider_home_gender,supported_gender,character varying(80),string,MATCH
+provider,provider_home_ofsted_category,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,provider_home_ofsted_category,ofsted_category,character varying(9),,CONTRACTED_COLUMN_MISSING
+provider,provider_home_ofsted_category,provider_home_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,provider_home_ofsted_category,provider_home_ofsted_category_id,integer,,CONTRACTED_COLUMN_MISSING
+provider,provider_home_spot_category,export_date,timestamp without time zone,string,MATCH
+provider,provider_home_spot_category,provider_home_id,uuid,string,MATCH
+provider,provider_home_spot_category,provider_home_spot_category_id,bigint,string,MATCH
+provider,provider_home_spot_category,spot_category_code,character varying(9),string,MATCH
+Bronze,provider_sic_codes,export_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_sic_codes,provider_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_sic_codes,sic_code,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,document_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,document_name,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,document_type,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,expiry_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,export_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,home_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,last_updated,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,next_review_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,s3_file_metadata_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,service_type,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,start_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,provider_submission_docs,submission_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,Calculation,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,KPI Description,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,KPI ID,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,PBI Measure,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,Section,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,Tables,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,ref FR IDs,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_Definition,ref FR IDs Description,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_RID_linkage,KPI ID,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_KPI_RID_linkage,Req ID,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,KPI_s_,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Oiriginal ID,,bigint,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Priority,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Req ID,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Requirement,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Stakeholder,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_RID,Status,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_Table_Lineage,Functional Area,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_Table_Lineage,Gold Table,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_Table_Lineage,Schema Definition Table,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,ref_Table_Lineage,Silver Source,,string,UNCONTRACTED_COLUMN_ADDED
+refdata,refdata,created_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,created_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+refdata,refdata,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+refdata,refdata,is_active,boolean,,CONTRACTED_COLUMN_MISSING
+refdata,refdata,modified_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,modified_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+refdata,refdata,ref_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,ref_type,character varying(100),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,ref_value_1,character varying(100),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,ref_value_2,character varying(200),,CONTRACTED_COLUMN_MISSING
+refdata,refdata,valid_from,date,,CONTRACTED_COLUMN_MISSING
+refdata,refdata,valid_to,date,,CONTRACTED_COLUMN_MISSING
+referral,referral,additional_information,character varying(3000),string,MATCH
+referral,referral,export_date,timestamp without time zone,string,MATCH
+referral,referral,has_location_preferrence,boolean,string,MATCH
+referral,referral,has_location_restriction,boolean,string,MATCH
+referral,referral,is_parent_child_placement,boolean,string,MATCH
+referral,referral,is_sibling_placement,boolean,string,MATCH
+referral,referral,is_spot,boolean,string,MATCH
+referral,referral,location_preference_details,character varying(300),string,MATCH
+referral,referral,location_restriction_details,character varying(300),string,MATCH
+Bronze,referral,placement_type,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral,referral_created_by,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral,referral_created_date,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral,referral_id,uuid,string,MATCH
+Bronze,referral,referral_modified_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral,referral_status,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral,referral_updated_by,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral,required_start_date,date,string,MATCH
+referral,referral,response_required_by_date,date,string,MATCH
+referral,referral,sibling_count,integer,string,MATCH
+referral,referral_aud,additional_information,character varying(3000),,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,additional_information_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,created_by,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,created_by_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,created_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,created_timestamp_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,has_location_preference_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,has_location_preferrence,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,has_location_restriction,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,has_location_restriction_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,location_preference_details,character varying(300),,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,location_preference_details_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,location_restriction_details,character varying(300),,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,location_restriction_details_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,modified_by,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,modified_by_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,modified_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,modified_timestamp_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,placement_type_code,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,placement_type_code_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,required_start_date,date,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,required_start_date_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,response_required_by_date,date,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,response_required_by_date_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,rev,integer,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,revtype,bigint,,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,status,character varying(50),,CONTRACTED_COLUMN_MISSING
+referral,referral_aud,status_mod,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_category,export_date,timestamp without time zone,string,MATCH
+referral,referral_category,framework_category_id,integer,string,MATCH
+referral,referral_category,referral_id,uuid,string,MATCH
+referral,referral_category_aud,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_category_aud,framework_category_id,integer,,CONTRACTED_COLUMN_MISSING
+referral,referral_category_aud,id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_category_aud,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_category_aud,rev,integer,,CONTRACTED_COLUMN_MISSING
+referral,referral_category_aud,revtype,bigint,,CONTRACTED_COLUMN_MISSING
+referral,referral_document,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_document,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_document,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,rev,integer,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,revtype,bigint,,CONTRACTED_COLUMN_MISSING
+referral,referral_document_aud,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,created_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,created_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,event_id,bigint,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,event_message,character varying(250),,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,event_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,event_type,character varying(9),,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,event_username,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_event_log,sequence_number,integer,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,created_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,is_referral_owner,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,local_authority_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,modified_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_local_authority,referral_local_authority_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_person,age_date_unit,character varying(200),string,MATCH
+referral,referral_person,age_value,integer,string,MATCH
+referral,referral_person,child_index,integer,string,MATCH
+referral,referral_person,ethnicity,character varying(200),string,MATCH
+referral,referral_person,ethnicity_other,character varying(200),string,MATCH
+referral,referral_person,export_date,timestamp without time zone,string,MATCH
+referral,referral_person,gender,character varying(200),string,MATCH
+referral,referral_person,gender_other,character varying(200),string,MATCH
+referral,referral_person,has_restrictions,boolean,string,MATCH
+referral,referral_person,initials,STRING,string,MATCH
+referral,referral_person,person_id,uuid,string,MATCH
+referral,referral_person,preferred_language,character varying(200),string,MATCH
+referral,referral_person,preferred_language_other,character varying(200),string,MATCH
+referral,referral_person,referral_id,uuid,string,MATCH
+referral,referral_person,religion,character varying(200),string,MATCH
+referral,referral_person,religion_other,character varying(200),string,MATCH
+referral,referral_person,restriction_details,character varying(200),string,MATCH
+referral,referral_person,source_reference_id,character varying(50),string,MATCH
+Bronze,referral_person_support_needs,export_date,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral_person_support_needs,person_id,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral_person_support_needs,support_need,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral_provider,created_by,character varying(100),string,MATCH
+Bronze,referral_provider,created_date,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral_provider,export_date,timestamp without time zone,string,MATCH
+referral,referral_provider,is_cancelled,boolean,string,MATCH
+referral,referral_provider,is_closed,boolean,string,MATCH
+referral,referral_provider,is_declined,boolean,string,MATCH
+referral,referral_provider,is_excluded,boolean,string,MATCH
+referral,referral_provider,is_spot,boolean,string,MATCH
+referral,referral_provider,modified_by,character varying(100),string,MATCH
+Bronze,referral_provider,modified_date,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral_provider,provider_id,uuid,string,MATCH
+referral,referral_provider,referral_id,uuid,string,MATCH
+referral,referral_provider,referral_provider_id,uuid,string,MATCH
+referral,referral_provider_cancel_reason,cancel_reason,character varying(9),string,MATCH
+referral,referral_provider_cancel_reason,cancel_reason_id,bigint,string,MATCH
+referral,referral_provider_cancel_reason,cancel_reason_other_text,character varying(100),string,MATCH
+referral,referral_provider_cancel_reason,created_by,character varying(100),string,MATCH
+referral,referral_provider_cancel_reason,created_date,timestamp without time zone,string,MATCH
+referral,referral_provider_cancel_reason,export_date,timestamp without time zone,string,MATCH
+referral,referral_provider_cancel_reason,referral_provider_id,uuid,string,MATCH
+referral,referral_provider_decline_reason,created_by,character varying(100),string,MATCH
+referral,referral_provider_decline_reason,created_date,timestamp without time zone,string,MATCH
+referral,referral_provider_decline_reason,decline_reason,character varying(9),string,MATCH
+referral,referral_provider_decline_reason,decline_reason_id,bigint,string,MATCH
+referral,referral_provider_decline_reason,decline_reason_other_text,character varying(100),string,MATCH
+referral,referral_provider_decline_reason,export_date,timestamp without time zone,string,MATCH
+referral,referral_provider_decline_reason,referral_provider_id,uuid,string,MATCH
+referral,referral_provider_message,created_by,character varying(100),string,MATCH
+referral,referral_provider_message,created_timestamp,timestamp without time zone,string,MATCH
+referral,referral_provider_message,export_date,timestamp without time zone,string,MATCH
+referral,referral_provider_message,message_id,uuid,string,MATCH
+Bronze,referral_provider_message,message_read_by,,string,UNCONTRACTED_COLUMN_ADDED
+Bronze,referral_provider_message,message_read_timestamp,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral_provider_message,message_text,character varying(3000),string,MATCH
+referral,referral_provider_message,referral_provider_id,uuid,string,MATCH
+referral,referral_provider_message_attachement,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_attachement,message_attachement_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_attachement,message_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_attachement,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_status,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_status,message_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_status,message_read_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_status,message_read_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_message_status,message_status_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_reopen_history,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_reopen_history,referral_provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_reopen_history,referral_provider_reopen_history_id,bigint,,CONTRACTED_COLUMN_MISSING
+referral,referral_provider_reopen_history,referral_reopen_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_save,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_save,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_save,referral_save_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_save,saved_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,referral_save,saved_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_spot_category,export_date,timestamp without time zone,string,MATCH
+referral,referral_spot_category,referral_id,uuid,string,MATCH
+referral,referral_spot_category,referral_spot_category_id,bigint,string,MATCH
+Bronze,referral_spot_category,spot_category,,string,UNCONTRACTED_COLUMN_ADDED
+referral,referral_updates_history,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_updates_history,isviewedbyprovider,boolean,,CONTRACTED_COLUMN_MISSING
+referral,referral_updates_history,referral_provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_updates_history,referral_update_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_updates_history,update_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_view_history,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+referral,referral_view_history,referral_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_view_history,referral_view_id,uuid,,CONTRACTED_COLUMN_MISSING
+referral,referral_view_history,viewed_by,character varying(100),,CONTRACTED_COLUMN_MISSING
+referral,referral_view_history,viewed_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+wmpp_users,roles,description,character varying(100),,CONTRACTED_COLUMN_MISSING
+wmpp_users,roles,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+wmpp_users,roles,role_id,uuid,,CONTRACTED_COLUMN_MISSING
+wmpp_users,roles,role_name,character varying(50),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,content_type,character varying(100),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,document_name,character varying(100),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,document_type,character varying(50),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,expiry_data,date,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,expiry_date,date,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,file_name,character varying(500),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,file_size,character varying(50),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,home_id,uuid,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,last_updated,date,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,next_review_date,date,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,object_key,character varying(500),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,original_filename,character varying(500),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,s3_bucket,character varying(500),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,service_type,character varying(50),,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,start_date,date,,CONTRACTED_COLUMN_MISSING
+document,s3_file_metadata,upload_timestamp,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,document_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,document_name,character varying(100),,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,document_type,character varying(50),,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,expiry_date,date,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,home_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,last_updated,date,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,next_review_date,date,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,s3_file_metadata_id,uuid,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,service_type,character varying(50),,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,start_date,date,,CONTRACTED_COLUMN_MISSING
+provider,submission_documents,submission_id,uuid,,CONTRACTED_COLUMN_MISSING
+offer,supervising_social_worker,email_address,character varying(255),string,MATCH
+offer,supervising_social_worker,export_date,timestamp without time zone,string,MATCH
+offer,supervising_social_worker,full_name,character varying(255),string,MATCH
+offer,supervising_social_worker,offer_id,uuid,string,MATCH
+offer,supervising_social_worker,phone_number,character varying(20),string,MATCH
+offer,supervising_social_worker,social_worker_id,uuid,string,MATCH
+wmpp_users,users,email,character varying(255),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,export_date,timestamp without time zone,,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,firstname,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,job_tile,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,lastname,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,local_authority_id,uuid,,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,local_authority_team,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,mobile_phone,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,office_phone,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,personal_email,character varying(100),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,provider_id,uuid,,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,role_id,uuid,,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,service_type,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,title,character varying(10),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,user_group,character varying(50),,CONTRACTED_COLUMN_MISSING
+wmpp_users,users,user_id,uuid,,CONTRACTED_COLUMN_MISSING

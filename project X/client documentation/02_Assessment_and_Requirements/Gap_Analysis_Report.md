@@ -8,13 +8,7 @@ Demographics, IPA-grain signatures, detailed messages, current decline/cancellat
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** West Midlands Placement Portal (WMPP)
-**Document Reference:** WMPP-GAP-001
-**Version:** 1.0
-**Date:** 12 July 2026
-**Prepared by:** WMPP Migration Team
-**Classification:** Official — Client Confidential
+**Project:** West Midlands Placement Portal (WMPP) **Document Reference:** WMPP-GAP-001 **Version:** 1.0 **Date:** 12 July 2026 **Prepared by:** WMPP Migration Team **Classification:** Official - Client Confidential
 
 ---
 
@@ -22,7 +16,7 @@ See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_ST
 
 | Field | Value |
 |---|---|
-| Document Title | Gap Analysis Report — WMPP Power BI to Fabric Migration |
+| Document Title | Gap Analysis Report - WMPP Power BI to Fabric Migration |
 | Document ID | WMPP-GAP-001 |
 | Version | 1.0 |
 | Date Issued | 12 July 2026 |
@@ -36,7 +30,7 @@ See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_ST
 
 This report presents a comprehensive gap analysis of the current WMPP Power BI reporting solution (V13.1) against the functional specification requirements governing the child placement platform across fourteen West Midlands local authorities.
 
-The analysis identifies **seventeen (17) functional gaps** spanning eight high-priority, six medium-priority, and three low-priority deficiencies. The current Power BI report contains **ninety (90) measures** against a proposed target of **one hundred and seventeen (117) KPIs** in the future-state specification — a coverage rate of approximately 77%. However, raw coverage figures mask deeper structural issues: several existing measures are duplicated, ambiguously named, or do not satisfy the semantic intent of their corresponding requirements.
+The analysis identifies **seventeen (17) functional gaps** spanning eight high-priority, six medium-priority, and three low-priority deficiencies. The current Power BI report contains **ninety (90) measures** against a proposed target of **one hundred and seventeen (117) KPIs** in the future-state specification - a coverage rate of approximately 77%. However, raw coverage figures mask deeper structural issues: several existing measures are duplicated, ambiguously named, or do not satisfy the semantic intent of their corresponding requirements.
 
 Beyond the functional gaps, the analysis reveals a significant **architecture gap**. The current solution depends on CSV files stored on network drives, refreshed manually, and loaded into Power BI in Import mode. This architecture lacks data lineage, schema enforcement, automated refresh pipelines, and ACID transaction guarantees. A full migration to a Microsoft Fabric lakehouse with bronze-silver-gold medallion architecture is required to address these foundational deficiencies.
 
@@ -53,7 +47,7 @@ Beyond the functional gaps, the analysis reveals a significant **architecture ga
 
 ### Risk Posture
 
-The most critical risks stem from the absence of emergency placement differentiation (R18/R57), out-of-region placement tracking (R22), and finance-specific reporting (R62). These gaps directly affect statutory compliance, financial oversight, and safeguarding transparency. The architecture migration is a prerequisite for sustainable remediation — patching the current CSV-based model would replicate existing fragility.
+The most critical risks stem from the absence of emergency placement differentiation (R18/R57), out-of-region placement tracking (R22), and finance-specific reporting (R62). These gaps directly affect statutory compliance, financial oversight, and safeguarding transparency. The architecture migration is a prerequisite for sustainable remediation - patching the current CSV-based model would replicate existing fragility.
 
 ---
 
@@ -63,22 +57,18 @@ The most critical risks stem from the absence of emergency placement differentia
 
 The gap analysis was conducted using a structured, evidence-based methodology comparing the as-is Power BI report (V13.1) against the WMPP functional specification. The analysis followed a four-stage process:
 
-**Stage 1 — Requirement Extraction**
-All functional requirements were extracted from the WMPP functional specification and catalogued with unique requirement references (R1–R62+). Each requirement was classified by stakeholder group (Operations, Finance, QA, Commissioners, Providers) and mapped to expected KPIs.
+**Stage 1 - Requirement Extraction** All functional requirements were extracted from the WMPP functional specification and catalogued with unique requirement references (R1–R62+). Each requirement was classified by stakeholder group (Operations, Finance, QA, Commissioners, Providers) and mapped to expected KPIs.
 
-**Stage 2 — As-Is Inventory**
-The existing Power BI report (V13.1) was analysed to produce a complete inventory of all 90 measures. Each measure was documented with its DAX expression, source table, data lineage (where traceable), and stakeholder visibility. Measures were cross-referenced against the requirement catalogue to determine coverage.
+**Stage 2 - As-Is Inventory** The existing Power BI report (V13.1) was analysed to produce a complete inventory of all 90 measures. Each measure was documented with its DAX expression, source table, data lineage (where traceable), and stakeholder visibility. Measures were cross-referenced against the requirement catalogue to determine coverage.
 
-**Stage 3 — Gap Identification**
-Each requirement was assessed against the as-is inventory. A gap was recorded where:
+**Stage 3 - Gap Identification** Each requirement was assessed against the as-is inventory. A gap was recorded where:
 - No measure existed for a stated requirement
 - A measure existed but did not fully satisfy the semantic intent of the requirement
 - A measure existed but its data source or calculation was unclear or unverifiable
 
 Gaps were classified by priority (High, Medium, Low) based on business impact, regulatory exposure, and stakeholder dependency.
 
-**Stage 4 — Architecture & Data Quality Assessment**
-The underlying data architecture was reviewed against best-practice patterns for Fabric lakehouse implementations. Data quality was assessed by examining measure names, DAX expressions, and source data for duplicates, typographical errors, and semantic ambiguity.
+**Stage 4 - Architecture & Data Quality Assessment** The underlying data architecture was reviewed against best-practice patterns for Fabric lakehouse implementations. Data quality was assessed by examining measure names, DAX expressions, and source data for duplicates, typographical errors, and semantic ambiguity.
 
 ### 2.2 Inputs
 
@@ -174,9 +164,9 @@ The current WMPP reporting architecture presents fundamental limitations that ex
 - **No reusability:** Transformations embedded in Power Query cannot be reused by other workloads (e.g., data science, ad-hoc SQL queries).
 
 **Recommendation:** Implement a three-layer medallion architecture:
-- **Bronze:** Raw landing zone — CSV data ingested as-is into Delta tables
-- **Silver:** Cleansed and conformed — deduplication, type enforcement, reference data joins
-- **Gold:** Curated business tables — fact and dimension tables optimised for the semantic model
+- **Bronze:** Raw landing zone - CSV data ingested as-is into Delta tables
+- **Silver:** Cleansed and conformed - deduplication, type enforcement, reference data joins
+- **Gold:** Curated business tables - fact and dimension tables optimised for the semantic model
 
 ### 4.3 No Automated Refresh Pipeline (AG-003)
 
@@ -227,7 +217,7 @@ Five duplicate measures were identified in the current model. These are pending 
 | KPI-70 | KPI-68 | Identical DAX expression, different name |
 | KPI-71 | KPI-65 | Identical DAX expression, different name |
 | KPI-72 | KPI-66 | Identical DAX expression, different name |
-| *(1 additional duplicate)* | — | Pending confirmation |
+| *(1 additional duplicate)* | - | Pending confirmation |
 
 **Impact:** Duplicate measures inflate the measure count, create confusion for report consumers, and increase the maintenance burden. They also risk divergence if one copy is updated but the other is not.
 
@@ -273,19 +263,19 @@ The following analysis assesses the extent to which the current report serves ea
 
 | Stakeholder Group | Required KPIs | Existing KPIs | Coverage % | Gap Count | Status |
 |---|---|---|---|---|---|
-| Operations / Placement Team | 45 | 38 | 84% | 7 | Partial — core placement KPIs covered, emergency/out-of-region gaps |
-| Commissioners | 25 | 18 | 72% | 7 | Partial — framework change and RBAC gaps |
-| QA Team | 12 | 3 | 25% | 9 | Critical — advisory flags, document compliance missing |
-| Finance Team | 20 | 0 | 0% | 20 | Critical — no finance KPIs exist |
-| Providers | 15 | 11 | 73% | 4 | Partial — due diligence and onboarding gaps |
+| Operations / Placement Team | 45 | 38 | 84% | 7 | Partial - core placement KPIs covered, emergency/out-of-region gaps |
+| Commissioners | 25 | 18 | 72% | 7 | Partial - framework change and RBAC gaps |
+| QA Team | 12 | 3 | 25% | 9 | Critical - advisory flags, document compliance missing |
+| Finance Team | 20 | 0 | 0% | 20 | Critical - no finance KPIs exist |
+| Providers | 15 | 11 | 73% | 4 | Partial - due diligence and onboarding gaps |
 
 ### 6.2 Coverage Analysis
 
 The coverage analysis reveals two critical blind spots:
 
-**Finance Team (0% coverage):** The complete absence of finance-specific KPIs is the most significant coverage gap. Finance operations — including weekly fee liability tracking, payment method monitoring, invoice reconciliation, and IPA payment status — are entirely unsupported by the current report. This forces the Finance team to maintain separate spreadsheets, creating data silos and reconciliation risk.
+**Finance Team (0% coverage):** The complete absence of finance-specific KPIs is the most significant coverage gap. Finance operations - including weekly fee liability tracking, payment method monitoring, invoice reconciliation, and IPA payment status - are entirely unsupported by the current report. This forces the Finance team to maintain separate spreadsheets, creating data silos and reconciliation risk.
 
-**QA Team (25% coverage):** The QA team's coverage is limited to basic provider count and referral volume measures. Critical QA functions — advisory notice tracking, document expiry monitoring, provider compliance status, and flag type breakdown — are not represented. This severely limits the QA team's ability to monitor safeguarding and compliance through the WMPP report.
+**QA Team (25% coverage):** The QA team's coverage is limited to basic provider count and referral volume measures. Critical QA functions - advisory notice tracking, document expiry monitoring, provider compliance status, and flag type breakdown - are not represented. This severely limits the QA team's ability to monitor safeguarding and compliance through the WMPP report.
 
 The Operations and Commissioner groups have reasonable coverage (72–84%) but are impacted by the high-priority gaps in emergency placement tracking and framework change monitoring.
 
@@ -323,11 +313,11 @@ The following matrix visualises the prioritisation of all 17 functional gaps bas
 
 | Quadrant | Gaps | Strategy |
 |---|---|---|
-| High Impact / Small Effort | GAP-011, GAP-013 | **Do immediately** — quick wins with significant compliance value |
-| High Impact / Medium Effort | GAP-001, GAP-002, GAP-004, GAP-005, GAP-006, GAP-007, GAP-014 | **Prioritise in Sprint 1–2** — core remediation work |
-| High Impact / Large Effort | GAP-003, GAP-008 | **Plan carefully** — QA flags and Finance KPIs require new data sources |
-| Medium Impact / Medium Effort | GAP-009, GAP-010, GAP-012 | **Schedule in Sprint 2–3** — important but not blocking |
-| Low Impact / Small Effort | GAP-015, GAP-016, GAP-017 | **Batch in Sprint 3** — address alongside other work |
+| High Impact / Small Effort | GAP-011, GAP-013 | **Do immediately** - quick wins with significant compliance value |
+| High Impact / Medium Effort | GAP-001, GAP-002, GAP-004, GAP-005, GAP-006, GAP-007, GAP-014 | **Prioritise in Sprint 1–2** - core remediation work |
+| High Impact / Large Effort | GAP-003, GAP-008 | **Plan carefully** - QA flags and Finance KPIs require new data sources |
+| Medium Impact / Medium Effort | GAP-009, GAP-010, GAP-012 | **Schedule in Sprint 2–3** - important but not blocking |
+| Low Impact / Small Effort | GAP-015, GAP-016, GAP-017 | **Batch in Sprint 3** - address alongside other work |
 
 ### 7.3 Risk Register Summary
 
@@ -339,7 +329,7 @@ The following matrix visualises the prioritisation of all 17 functional gaps bas
 | RSK-004 | GAP-002 | Inter-authority billing errors from untracked out-of-region placements | Medium | High | High |
 | RSK-005 | GAP-013 | GDPR data leakage if RLS not configured | Low | High | Medium |
 | RSK-006 | GAP-007 | Invalid framework agreements used for active referrals | Low | High | Medium |
-| RSK-007 | AG-001–AG-004 | Architecture fragility — single point of failure in CSV pipeline | High | Medium | High |
+| RSK-007 | AG-001–AG-004 | Architecture fragility - single point of failure in CSV pipeline | High | Medium | High |
 
 ---
 
@@ -347,7 +337,7 @@ The following matrix visualises the prioritisation of all 17 functional gaps bas
 
 The following sprint plan sequences the remediation of all identified gaps across three sprints. Each sprint is scoped to deliver incremental value while building toward the target-state Fabric lakehouse architecture.
 
-### Sprint 1 — Immediate Remediation (Weeks 1–4)
+### Sprint 1 - Immediate Remediation (Weeks 1–4)
 
 **Theme:** Critical compliance and architecture foundation
 
@@ -372,7 +362,7 @@ The following sprint plan sequences the remediation of all identified gaps acros
 - Document expiry monitoring live
 - RLS configuration verified and documented
 
-### Sprint 2 — Short-Term Remediation (Weeks 5–8)
+### Sprint 2 - Short-Term Remediation (Weeks 5–8)
 
 **Theme:** Silver layer, QA capabilities, and finance foundation
 
@@ -401,7 +391,7 @@ The following sprint plan sequences the remediation of all identified gaps acros
 - Finance KPIs available in the report (initial set)
 - Data quality issues resolved
 
-### Sprint 3 — Medium-Term Enhancement (Weeks 9–12)
+### Sprint 3 - Medium-Term Enhancement (Weeks 9–12)
 
 **Theme:** Gold layer, automated refresh, and remaining gaps
 
@@ -446,29 +436,27 @@ Week:  1   2   3   4   5   6   7   8   9   10  11  12
 
 This gap analysis has identified seventeen functional gaps, four architecture gaps, and three data quality issues in the current WMPP Power BI reporting solution. The most critical findings are:
 
-1. **Finance has zero visibility** through the WMPP report — a complete absence of finance-specific KPIs that must be addressed as a matter of priority.
+1. **Finance has zero visibility** through the WMPP report - a complete absence of finance-specific KPIs that must be addressed as a matter of priority.
 
 2. **Emergency placements are indistinguishable** from planned and spot placements, creating statutory compliance risk across all fourteen local authorities.
 
-3. **QA safeguarding oversight is severely limited** — no visibility of advisory flags, document expiry, or provider compliance status.
+3. **QA safeguarding oversight is severely limited** - no visibility of advisory flags, document expiry, or provider compliance status.
 
-4. **The architecture is fundamentally fragile** — CSV files on network drives with no lineage, no schema enforcement, and no automated refresh represent a single point of failure.
+4. **The architecture is fundamentally fragile** - CSV files on network drives with no lineage, no schema enforcement, and no automated refresh represent a single point of failure.
 
-5. **Data quality issues exist** — five duplicate measures, a typographical error, and at least one semantically ambiguous measure indicate insufficient governance in the current model.
+5. **Data quality issues exist** - five duplicate measures, a typographical error, and at least one semantically ambiguous measure indicate insufficient governance in the current model.
 
 The recommended three-sprint plan sequences remediation from critical compliance fixes (Sprint 1) through QA and finance capabilities (Sprint 2) to the full Fabric lakehouse migration with Direct Lake mode (Sprint 3). This approach delivers incremental value at each sprint while building toward a sustainable, well-governed reporting architecture.
 
-The migration from CSV-on-network-drive to Fabric lakehouse with medallion architecture is not merely a technical improvement — it is a prerequisite for closing the identified functional gaps in a maintainable and scalable manner. Attempting to patch the current architecture would replicate its fragility and defer the inevitable migration.
+The migration from CSV-on-network-drive to Fabric lakehouse with medallion architecture is not merely a technical improvement - it is a prerequisite for closing the identified functional gaps in a maintainable and scalable manner. Attempting to patch the current architecture would replicate its fragility and defer the inevitable migration.
 
-**Total estimated effort:** 12 weeks (3 sprints × 4 weeks)
-**Gaps addressed:** 17 functional + 4 architecture + 3 data quality = 24 items
-**Target end state:** Fabric lakehouse with bronze-silver-gold medallion architecture, 117 KPIs, Direct Lake semantic model, automated refresh pipeline, and verified RLS.
+**Total estimated effort:** 12 weeks (3 sprints × 4 weeks) **Gaps addressed:** 17 functional + 4 architecture + 3 data quality = 24 items **Target end state:** Fabric lakehouse with bronze-silver-gold medallion architecture, 117 KPIs, Direct Lake semantic model, automated refresh pipeline, and verified RLS.
 
 ---
 
 ## Appendices
 
-### Appendix A — Gap Register (Complete)
+### Appendix A - Gap Register (Complete)
 
 | Gap ID | Req Ref | Priority | Effort | Sprint |
 |---|---|---|---|---|
@@ -490,7 +478,7 @@ The migration from CSV-on-network-drive to Fabric lakehouse with medallion archi
 | GAP-016 | R19 | Low | S | 3 |
 | GAP-017 | R59 | Low | S | 3 |
 
-### Appendix B — Architecture Gap Register
+### Appendix B - Architecture Gap Register
 
 | Gap ID | Description | Priority | Sprint |
 |---|---|---|---|
@@ -499,7 +487,7 @@ The migration from CSV-on-network-drive to Fabric lakehouse with medallion archi
 | AG-003 | No automated refresh pipeline | High | 3 |
 | AG-004 | Import mode limitations | Medium | 3 |
 
-### Appendix C — Data Quality Register
+### Appendix C - Data Quality Register
 
 | DQ ID | Description | Severity | Sprint |
 |---|---|---|---|
@@ -511,5 +499,4 @@ The migration from CSV-on-network-drive to Fabric lakehouse with medallion archi
 
 *End of Report*
 
-*WMPP Gap Analysis Report — Version 1.0 — 12 July 2026*
-*Classification: Official — Client Confidential*
+*WMPP Gap Analysis Report - Version 1.0 - 12 July 2026* *Classification: Official - Client Confidential*

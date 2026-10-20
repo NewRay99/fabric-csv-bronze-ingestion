@@ -1,0 +1,406 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "586a1ac1befa7498ed75",
+  "position": {
+    "x": 1238.0782918149466,
+    "y": 2828.3985765124557,
+    "z": 125000,
+    "height": 814.34163701067621,
+    "width": 690.53380782918146,
+    "tabOrder": 144000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Source Reference ID"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Source Reference ID",
+              "nativeQueryRef": "Source Reference ID",
+              "displayName": "Source Reference ID"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "provider_name"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.provider_name",
+              "nativeQueryRef": "provider_name"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Linked assignment count"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Linked assignment count",
+              "nativeQueryRef": "Assignments",
+              "displayName": "Assignments"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Journey Measures"
+                    }
+                  },
+                  "Property": "Linked offer count"
+                }
+              },
+              "queryRef": "_Journey Measures.Linked offer count",
+              "nativeQueryRef": "Offers",
+              "displayName": "Offers"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Linked offer statuses"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Linked offer statuses",
+              "nativeQueryRef": "Offer statuses",
+              "displayName": "Offer statuses"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Linked response statuses"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Linked response statuses",
+              "nativeQueryRef": "Response statuses",
+              "displayName": "Response statuses"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Linked message count"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Linked message count",
+              "nativeQueryRef": "Messages",
+              "displayName": "Messages"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "Linked latest message"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.Linked latest message",
+              "nativeQueryRef": "Latest message",
+              "displayName": "Latest message"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Linked Provider Referrals"
+                    }
+                  },
+                  "Property": "referral_id"
+                }
+              },
+              "queryRef": "Linked Provider Referrals.referral_id",
+              "nativeQueryRef": "referral_id"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "total": [
+        {
+          "properties": {
+            "totals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "180D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Linked Provider Referrals.Linked offer statuses"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "180D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Linked Provider Referrals.Linked response statuses"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "380D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Linked Provider Referrals.Linked latest message"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "150D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Linked Provider Referrals.Source Reference ID"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {}
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Other providers on shared referrals — offers or messages on both sides'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "divider": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "spaceAbovePlotArea": {
+              "expr": {
+                "Literal": {
+                  "Value": "20D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "4fe99de7be5d111bd4d6",
+        "ordinal": 0,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Linked Provider Referrals"
+              }
+            },
+            "Property": "provider_id"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      },
+      {
+        "name": "8801929150f340f98814",
+        "ordinal": 1,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Linked Provider Referrals"
+              }
+            },
+            "Property": "provider_name"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "6c9a927c0bd4ad510c7c",
+        "ordinal": 2,
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Linked Provider Referrals"
+              }
+            },
+            "Property": "referral_id"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c0864c85dd1325ff6f4a",
+        "ordinal": 3,
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Linked Provider Referrals"
+              }
+            },
+            "Property": "Linked provider row visible"
+          }
+        },
+        "type": "Advanced",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "l",
+              "Entity": "Linked Provider Referrals",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "Comparison": {
+                  "ComparisonKind": 0,
+                  "Left": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Source": "l"
+                        }
+                      },
+                      "Property": "Linked provider row visible"
+                    }
+                  },
+                  "Right": {
+                    "Literal": {
+                      "Value": "1L"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "howCreated": "User"
+      }
+    ],
+    "filterSortOrder": "Custom"
+  }
+}

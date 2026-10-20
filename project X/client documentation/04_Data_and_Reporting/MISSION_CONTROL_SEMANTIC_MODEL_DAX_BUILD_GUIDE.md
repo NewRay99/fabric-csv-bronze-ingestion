@@ -1,8 +1,8 @@
 # Mission Control semantic model DAX build guide
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 Use the complete latest calculation snapshot for the 351 current definitions and their notebook/partition dependencies. Older copied DAX below remains historical. Domain additions/removals respect retained-run selection; load deltas compare the saved context to its prior load and do not invent a zero baseline.
 
@@ -12,140 +12,77 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-This review concerns the business WMPP WIP report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
+This review concerns the business WMPP WMPP_v16 report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
+## ETL lineage update - 25 September 2026
 
-## ETL lineage update — 25 September 2026
+Setup now registers the new referral framework/spot bridges and category/location fact inputs in `monitoring.cfg_gold_lineage_mapping`. The local coordinate reference is created empty; missing coordinates are supported, not a fabricated zero-distance success. See the [category/location deployment and audit guide](CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
 
-Setup now registers the new referral framework/spot bridges and category/location
-fact inputs in `monitoring.cfg_gold_lineage_mapping`. The local coordinate
-reference is created empty; missing coordinates are supported, not a fabricated
-zero-distance success. See the
-[category/location deployment and audit guide](CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+**What's outstanding:** verify the changed ETL in the client Lakehouse; refresh Mission Control's lineage/object list after deployment; check the derived location tables and coordinate provenance; and obtain client approval of location rules and reference data. No Mission Control semantic-model/report tests were run and no version-specific project was changed for this ETL update.
 
-**What's outstanding:** verify the changed ETL in the client Lakehouse; refresh
-Mission Control's lineage/object list after deployment; check the derived location
-tables and coordinate provenance; and obtain client approval of location rules
-and reference data. No Mission Control semantic-model/report tests were run and
-no version-specific project was changed for this ETL update.
+## Supplied v16 package verification - 23 September 2026
 
-## Supplied v16 package verification — 23 September 2026
+The extracted package at `reports/current/SM WMPP Mission Control v16` has been checked alongside the business-model/report reconciliation. Its report uses a repository-local `byPath` binding to `SM WMPP Mission Control.SemanticModel`; `_MissionControl_Measures` contains 87 measures, and every semantic table has an explicit partition. The report JSON parses, its local semantic-model path resolves, and the existing Mission Control validators pass.
 
-The extracted package at `reports/current/SM WMPP Mission Control v16` has
-been checked alongside the business-model/report reconciliation. Its report
-uses a repository-local `byPath` binding to
-`SM WMPP Mission Control.SemanticModel`; `_MissionControl_Measures` contains
-87 measures, and every semantic table has an explicit partition. The report
-JSON parses, its local semantic-model path resolves, and the existing Mission
-Control validators pass.
+### Dashboard rebuild - 23 September 2026
 
-### Dashboard rebuild — 23 September 2026
-
-The repository PBIR report has now been rebuilt as a monitoring-only Mission
-Control experience. The six-page report contains 137 visuals and exposes all
-87 measures from `_MissionControl_Measures` without retaining the referral-
-dashboard bindings that were copied into the original report.
+The repository PBIR report has now been rebuilt as a monitoring-only Mission Control experience. The six-page report contains 137 visuals and exposes all 87 measures from `_MissionControl_Measures` without retaining the referral- dashboard bindings that were copied into the original report.
 
 The report pages are:
 
-1. **Mission Control Overview** — control-health, job-run and pipeline KPI
-   cards, job-status distribution and recent job/exception detail.
-2. **Job Runs & Steps | Last 14 Days** — pipeline, status and job-run slicers;
-   a job-run Gantt; a second notebook-step Gantt; job and step detail tables;
-   and the job-selection/step measure groups.
-3. **Data Quality & Schema** — all DQ and schema-inventory measures with rule,
-   severity, outcome and archived-column evidence.
-4. **Archive & Replay** — all archive-control measures with ZIP, file-load and
-   month-end Gold snapshot details.
-5. Hidden **Job Step Detail (Drillthrough)** — complete job, notebook-step and
-   pipeline execution evidence for a selected `job_run_id`.
-6. Hidden **Job Run Tooltip** — selected job status, duration and failed-step
-   context for the timeline visuals.
+1. **Mission Control Overview** - control-health, job-run and pipeline KPI cards, job-status distribution and recent job/exception detail.
+2. **Job Runs & Steps | Last 14 Days** - pipeline, status and job-run slicers; a job-run Gantt; a second notebook-step Gantt; job and step detail tables; and the job-selection/step measure groups.
+3. **Data Quality & Schema** - all DQ and schema-inventory measures with rule, severity, outcome and archived-column evidence.
+4. **Archive & Replay** - all archive-control measures with ZIP, file-load and month-end Gold snapshot details.
+5. Hidden **Job Step Detail (Drillthrough)** - complete job, notebook-step and pipeline execution evidence for a selected `job_run_id`.
+6. Hidden **Job Run Tooltip** - selected job status, duration and failed-step context for the timeline visuals.
 
-`rpt_job_run_summary[job_run_window]` classifies refreshed rows as `Last 14
-days` or `Older`. The timeline page has a locked page filter on `Last 14 days`.
-This is evaluated when the semantic model refreshes, so the client refresh
-schedule must remain current. Selecting a job-run Gantt bar or job-table row
-has explicit `DataFilter` interactions to both the step Gantt and the step
-detail table. `rpt_job_step_timing[steps_duration_days]` was corrected to
-`DIVIDE ( [step_duration_seconds], 86400.0 )`; the supplied expression
-multiplied the result by zero and therefore could not render step durations.
+`rpt_job_run_summary[job_run_window]` classifies refreshed rows as `Last 14 days` or `Older`. The timeline page has a locked page filter on `Last 14 days`. This is evaluated when the semantic model refreshes, so the client refresh schedule must remain current. Selecting a job-run Gantt bar or job-table row has explicit `DataFilter` interactions to both the step Gantt and the step detail table. `rpt_job_step_timing[steps_duration_days]` was corrected to `DIVIDE ( [step_duration_seconds], 86400.0 )`; the supplied expression multiplied the result by zero and therefore could not render step durations.
 
 The deterministic rebuild and acceptance checks are:
 
 - `tools/rebuild_mission_control_dashboard_v16.py`; and
 - `tools/validate_mission_control_dashboard_v16.py`.
 
-The acceptance check parses every PBIR JSON document, resolves every visual
-field against the semantic model, asserts the two Gantt bindings and their
-cross-filter interactions, checks the 14-day filter and drillthrough binding,
-and confirms all 87 measures are referenced by the report.
+The acceptance check parses every PBIR JSON document, resolves every visual field against the semantic model, asserts the two Gantt bindings and their cross-filter interactions, checks the 14-day filter and drillthrough binding, and confirms all 87 measures are referenced by the report.
 
-This is static repository validation. Power BI Desktop is not installed on the
-review machine, and the client monitoring sources/credentials are not
-available here, so a live refresh and Desktop load cannot be claimed.
+This is static repository validation. Power BI Desktop is not installed on the review machine, and the client monitoring sources/credentials are not available here, so a live refresh and Desktop load cannot be claimed.
 
 ### What's outstanding
 
-1. Run the current `00_setup_cfg` in Fabric so the materialized job-run and
-   job-step reporting objects exist and contain current client data.
-2. Open the supplied Mission Control PBIP in Power BI Desktop, set the client
-   Lakehouse connection, refresh and confirm the 87 measures load without a
-   model validation error.
-3. Exercise the latest-job fallback, historical job selection, job-Gantt-to-
-   step-Gantt/table interaction, drillthrough, complete error text and
-   authorized child-result detail against refreshed client data.
-4. Validate status vocabulary, refresh timestamps and sensitive operational
-   fields against the real monitoring tables.
-5. **Final task, only after the user has reviewed and checked in all completed
-   repository work:** repeat the open/refresh/publish check in the client
-   environment and resolve any client-only credential, gateway or semantic-
-   model binding error before release.
+1. Run the current `00_setup_cfg` in Fabric so the materialized job-run and job-step reporting objects exist and contain current client data.
+2. Open the supplied Mission Control PBIP in Power BI Desktop, set the client Lakehouse connection, refresh and confirm the 87 measures load without a model validation error.
+3. Exercise the latest-job fallback, historical job selection, job-Gantt-to- step-Gantt/table interaction, drillthrough, complete error text and authorized child-result detail against refreshed client data.
+4. Validate status vocabulary, refresh timestamps and sensitive operational fields against the real monitoring tables.
+5. **Final task, only after the user has reviewed and checked in all completed repository work:** repeat the open/refresh/publish check in the client environment and resolve any client-only credential, gateway or semantic- model binding error before release.
 
 ## Purpose
 
-This guide defines the operational measures and job-to-step interaction for the
-WMPP Mission Control model. They use monitoring control and reporting tables,
-rather than referral, offer or placement facts.
+This guide defines the operational measures and job-to-step interaction for the WMPP Mission Control model. They use monitoring control and reporting tables, rather than referral, offer or placement facts.
 
-## Job-run and step alignment — 21 September 2026
+## Job-run and step alignment - 21 September 2026
 
-The repaired package
-`reports/client-deliverables/SM WMPP Mission Control - SEM-02 repaired.zip`
-was inspected against the interaction described by
-`reports/mission-control/index.html`. The repaired model opened without the
-SEM-02 automatic-date-table error, but it could not implement the Job steps &
-errors experience because it contained neither a top-level job table nor a
-job-step table and had no `job_run_id` relationship.
+The repaired package `reports/client-deliverables/SM WMPP Mission Control - SEM-02 repaired.zip` was inspected against the interaction described by `reports/mission-control/index.html`. The repaired model opened without the SEM-02 automatic-date-table error, but it could not implement the Job steps & errors experience because it contained neither a top-level job table nor a job-step table and had no `job_run_id` relationship.
 
 The aligned deliverable adds:
 
 - `rpt_job_run_summary`, one row per orchestrated job run;
 - `rpt_job_step_timing`, one row per notebook step in a job;
-- an active, single-direction one-to-many relationship from
-  `rpt_job_run_summary[job_run_id]` to
-  `rpt_job_step_timing[job_run_id]`;
-- `cfg_pipeline_run[job_run_id]` and a second single-direction relationship so
-  the existing pipeline measures also respond to a selected job; and
-- 20 job-run, step, error and latest-selection measures in
-  `_MissionControl_Measures`.
+- an active, single-direction one-to-many relationship from `rpt_job_run_summary[job_run_id]` to `rpt_job_step_timing[job_run_id]`;
+- `cfg_pipeline_run[job_run_id]` and a second single-direction relationship so the existing pipeline measures also respond to a selected job; and
+- 20 job-run, step, error and latest-selection measures in `_MissionControl_Measures`.
 
-The monitoring notebook publishes `rpt_job_run_summary` and
-`rpt_job_step_timing` as materialised Lake views so they are discoverable by
-the Lakehouse semantic model. Refresh `00_setup_cfg` before refreshing the
-aligned semantic model.
+The monitoring notebook publishes `rpt_job_run_summary` and `rpt_job_step_timing` as materialised Lake views so they are discoverable by the Lakehouse semantic model. Refresh `00_setup_cfg` before refreshing the aligned semantic model.
 
-## Client-site package reconciliation — 20 September 2026
+## Client-site package reconciliation - 20 September 2026
 
-`reports/current/MWPP Repo 20092026.zip` is the latest client-site export
-reviewed for this update. It contains the business-report project
-`SM_WMPP_v16`; it does **not** contain a Mission Control semantic model.
+`reports/current/MWPP Repo 20092026.zip` is the latest client-site export reviewed for this update. It contains the business-report project `WMPP_v16`; it does **not** contain a Mission Control semantic model.
 
 The static inventory is:
 
-| Check | `SM_WMPP_v16` result | Mission Control consequence |
+| Check | `WMPP_v16` result | Mission Control consequence |
 | --- | ---: | --- |
 | Semantic tables | 117 TMDL tables: 29 business/model tables, 87 `LocalDateTable_*` tables and one `DateTableTemplate_*` | This is the business model, not the monitoring model. |
 | Measures | 274 | None of the 67 `_MissionControl_Measures` are present. |
@@ -153,19 +90,12 @@ The static inventory is:
 | `_MissionControl_Measures` table | Absent | Import the maintained artifact only into the dedicated Mission Control model. |
 | RLS roles | 0 | Security is also not implemented in this business-model export; see [RLS and partial aggregate access guide](RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md). |
 
-The client-site ZIP therefore does not replace or supersede the separate
-Mission Control model. Do not add the monitoring measures to `SM_WMPP_v16`
-unless the architecture is deliberately changed to import the eight required
-monitoring tables. The preferred deployment remains two semantic models:
+The client-site ZIP therefore does not replace or supersede the separate Mission Control model. Do not add the monitoring measures to `WMPP_v16` unless the architecture is deliberately changed to import the eight required monitoring tables. The preferred deployment remains two semantic models:
 
-1. `SM_WMPP_v16` for Gold referral, offer, IPA and provider reporting; and
-2. a dedicated Mission Control model for `cfg_pipeline_run`, archive controls,
-   Gold replay controls, data-quality results and schema inventory.
+1. `WMPP_v16` for Gold referral, offer, IPA and provider reporting; and
+2. a dedicated Mission Control model for `cfg_pipeline_run`, archive controls, Gold replay controls, data-quality results and schema inventory.
 
-Before the next Mission Control release, export the deployed monitoring PBIP
-from the client site and repeat the table, relationship, partition and report-
-binding checks. The latest client-site ZIP provides no evidence that the
-Mission Control model or its 67 measures are deployed.
+Before the next Mission Control release, export the deployed monitoring PBIP from the client site and repeat the table, relationship, partition and report- binding checks. The latest client-site ZIP provides no evidence that the Mission Control model or its 67 measures are deployed.
 
 ## Delivery assessment
 
@@ -190,20 +120,14 @@ The package contains an `SM WMPP v15.zip` referral model as a separate nested de
 
 ## Model setup
 
-Keep the technical table names in the measure expressions. They match the
-tables in the aligned `.pbip` model.
+Keep the technical table names in the measure expressions. They match the tables in the aligned `.pbip` model.
 
-Use `rpt_job_run_summary[job_run_id]` as the one-side reporting key. The
-materialised reporting table is already one row per orchestrated job. Relate
-it one-to-many, single-direction to:
+Use `rpt_job_run_summary[job_run_id]` as the one-side reporting key. The materialised reporting table is already one row per orchestrated job. Relate it one-to-many, single-direction to:
 
 - `rpt_job_step_timing[job_run_id]`; and
 - `cfg_pipeline_run[job_run_id]`.
 
-Do not make either relationship bidirectional. A selected run must filter its
-steps and child pipeline rows; a step row must not unexpectedly filter the
-historical job-run chart. `run_id` remains the child notebook execution key
-and must not replace `job_run_id` for the Gantt-to-step interaction.
+Do not make either relationship bidirectional. A selected run must filter its steps and child pipeline rows; a step row must not unexpectedly filter the historical job-run chart. `run_id` remains the child notebook execution key and must not replace `job_run_id` for the Gantt-to-step interaction.
 
 Relate `cfg_data_quality_rule[rule_id]` one-to-many to `cfg_data_quality_result[rule_id]` after confirming the rule table has one current row per ID. `cfg_archived_schema_live` has no run ID and should be shown as a separately dated schema-inventory subject.
 
@@ -211,20 +135,9 @@ Treat statuses case-insensitively. The measures recognise `SUCCESS`/`SUCCEEDED`,
 
 ## TMDL build artifact
 
-`reports/current/_MissionControl_Measures.tmdl` contains 87 measures: the
-original 67 operational measures plus 20 job-run/step interaction measures.
-It uses the project’s required triple-backtick TMDL expression format. Import
-it as the `_MissionControl_Measures` table in the Mission Control semantic
-model.
+`reports/current/_MissionControl_Measures.tmdl` contains 87 measures: the original 67 operational measures plus 20 job-run/step interaction measures. It uses the project’s required triple-backtick TMDL expression format. Import it as the `_MissionControl_Measures` table in the Mission Control semantic model.
 
-The aligned package includes this table at
-`SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl`,
-with a matching `ref table` in `model.tmdl`. Keep the measure formulas and
-partition definition aligned between source and deployment. Power BI adds
-`lineageTag` IDs and changes serialization whitespace when saving; the
-validator accepts these differences while preserving checks on expressions,
-names, formats and the Import partition. Do not overwrite Desktop-generated
-lineage tags merely to make the files textually identical.
+The aligned package includes this table at `SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl`, with a matching `ref table` in `model.tmdl`. Keep the measure formulas and partition definition aligned between source and deployment. Power BI adds `lineageTag` IDs and changes serialization whitespace when saving; the validator accepts these differences while preserving checks on expressions, names, formats and the Import partition. Do not overwrite Desktop-generated lineage tags merely to make the files textually identical.
 
 ### Opening the project after adding the measures
 
@@ -544,16 +457,9 @@ FORMAT ( UTCNOW (), "dd mmm yyyy HH:mm" )
 
 ## Measures deliberately deferred
 
-The aligned model now contains job-run and job-step timing tables, so failed
-notebook steps, slow steps and job/step error evidence are no longer deferred.
-It still does not import the table-load metric, schema-drift event,
-referential-exception, rejected-row or data-domain profile reporting tables.
-Do not create detail visuals for those subjects until the corresponding
-`rpt_job_*` tables are imported.
+The aligned model now contains job-run and job-step timing tables, so failed notebook steps, slow steps and job/step error evidence are no longer deferred. It still does not import the table-load metric, schema-drift event, referential-exception, rejected-row or data-domain profile reporting tables. Do not create detail visuals for those subjects until the corresponding `rpt_job_*` tables are imported.
 
-The dashboard wireframe at `reports/mission-control/index.html` remains the
-layout reference. Its Job steps & errors concept can now be implemented from
-the two imported `rpt_job_*` tables.
+The dashboard wireframe at `reports/mission-control/index.html` remains the layout reference. Its Job steps & errors concept can now be implemented from the two imported `rpt_job_*` tables.
 
 ## Same-page latest job, historical Gantt and step detail
 
@@ -561,11 +467,7 @@ Build the feature on one report page as follows.
 
 ### 1. Page filters and latest-job behaviour
 
-Add a `pipeline_name` slicer from `rpt_job_run_summary`. For a today-only
-operations page, add a relative date filter on
-`rpt_job_run_summary[started_at]` set to **is in this day**. The runner writes
-UTC timestamps, so agree the report/service timezone before using a local-day
-operational cut-off.
+Add a `pipeline_name` slicer from `rpt_job_run_summary`. For a today-only operations page, add a relative date filter on `rpt_job_run_summary[started_at]` set to **is in this day**. The runner writes UTC timestamps, so agree the report/service timezone before using a local-day operational cut-off.
 
 Use these cards:
 
@@ -578,9 +480,7 @@ Use these cards:
 | Failed steps | `[Selected or Latest Failed Steps]` |
 | Job error | `[Selected or Latest Job Error]` |
 
-With no explicit job selected, the measures choose the most recent
-`started_at` within the page's current date and pipeline filters. Selecting a
-single historical run replaces that fallback automatically.
+With no explicit job selected, the measures choose the most recent `started_at` within the page's current date and pipeline filters. Selecting a single historical run replaces that fallback automatically.
 
 ### 2. Historical job-run Gantt
 
@@ -595,16 +495,9 @@ Configure the Gantt from `rpt_job_run_summary`:
 | Legend/colour | `status` |
 | Tooltip | `job_run_id`, `status`, `steps_succeeded`, `steps_failed`, `error_message` |
 
-Use `job_run_id`, not `run_id`, as the selectable bar identity. If the chosen
-Gantt visual requires duration rather than an end time, use
-`job_duration_seconds`. Apply status colours consistently: succeeded green,
-running amber/blue and failed red.
+Use `job_run_id`, not `run_id`, as the selectable bar identity. If the chosen Gantt visual requires duration rather than an end time, use `job_duration_seconds`. Apply status colours consistently: succeeded green, running amber/blue and failed red.
 
-In **Format → Edit interactions**, select the Gantt and set its interaction
-with the step table to **Filter**, not Highlight or None. The active
-single-direction relationship then filters the table to every step belonging
-to the clicked job. Clearing the Gantt selection returns the table to the
-latest job in the current page filters.
+In **Format → Edit interactions**, select the Gantt and set its interaction with the step table to **Filter**, not Highlight or None. The active single-direction relationship then filters the table to every step belonging to the clicked job. Clearing the Gantt selection returns the table to the latest job in the current page filters.
 
 ### 3. Step table on the same page
 
@@ -619,18 +512,9 @@ Build a table from `rpt_job_step_timing` using:
 7. `gap_from_previous_step_seconds`; and
 8. `error_message`.
 
-Sort ascending by `step_sequence`. Add
-`[Show Step for Selected or Latest Job Run]` to **Filters on this visual** and
-set it to `1`. This is the important fallback: it limits the table to the
-latest run when no Gantt bar is selected, while the relationship handles a
-clicked historical run.
+Sort ascending by `step_sequence`. Add `[Show Step for Selected or Latest Job Run]` to **Filters on this visual** and set it to `1`. This is the important fallback: it limits the table to the latest run when no Gantt bar is selected, while the relationship handles a clicked historical run.
 
-Turn on word wrap for `error_message`, give it enough width, and conditionally
-format failed/error statuses red. Successful steps naturally show a blank
-error. Use `[Selected Step Error Detail]` in a multi-row card or tooltip when
-the full error is too long for the table. `child_result` may be added to an
-authorised drillthrough page, but it should not replace `error_message` as the
-failure field.
+Turn on word wrap for `error_message`, give it enough width, and conditionally format failed/error statuses red. Successful steps naturally show a blank error. Use `[Selected Step Error Detail]` in a multi-row card or tooltip when the full error is too long for the table. `child_result` may be added to an authorised drillthrough page, but it should not replace `error_message` as the failure field.
 
 ### 4. Expected interaction
 
@@ -644,9 +528,7 @@ Step table + error text
 No Gantt selection ──latest-job measures──→ latest run in current filters
 ```
 
-This design keeps the operational context on one page. A drillthrough page is
-optional for untruncated `error_message` and `child_result`, not required for
-the basic latest-job and clicked-history workflow.
+This design keeps the operational context on one page. A drillthrough page is optional for untruncated `error_message` and `child_result`, not required for the basic latest-job and clicked-history workflow.
 
 ## Formatting and visual use
 
@@ -662,40 +544,17 @@ the basic latest-job and clicked-history workflow.
 
 ## Deployment checklist
 
-1. Run the current live or archive pipeline. `00_setup_cfg` creates the
-   monitoring control tables; its final `06_reports` step defines
-   `rpt_job_run_summary` and `rpt_job_step_timing` as materialized lake views.
-   Refresh the views after the parent job completes to include its final status.
-2. Open the aligned PBIP, set the Lakehouse connection if prompted, and run a
-   full semantic-model refresh.
-3. Confirm `rpt_job_run_summary[job_run_id]` is unique and the two
-   relationships are active, one-to-many and single-direction.
-4. Validate the actual status vocabulary with a table visual before relying
-   on success/failure cards.
-5. Build the Gantt and step table using the field assignments above; set the
-   Gantt-to-table interaction to Filter and the step-table fallback measure to
-   `1`.
-6. Test three cases: no selection shows today's latest job, a successful job
-   shows all steps with blank errors, and a failed historical job shows its
-   failed step and complete `error_message`.
-7. Add a date-only dimension only when a consistent reporting-date field is
-   agreed; do not mix `started_at`, `export_date`, `snapshot_date`,
-   `checked_at`, and `contract_loaded_at` in one relationship.
-8. Keep sample-key JSON, child results and full errors on authorised
-   operational pages; do not surface sensitive evidence on executive pages.
+1. Run the current live or archive pipeline. `00_setup_cfg` creates the monitoring control tables; its final `06_reports` step defines `rpt_job_run_summary` and `rpt_job_step_timing` as materialized lake views. Refresh the views after the parent job completes to include its final status.
+2. Open the aligned PBIP, set the Lakehouse connection if prompted, and run a full semantic-model refresh.
+3. Confirm `rpt_job_run_summary[job_run_id]` is unique and the two relationships are active, one-to-many and single-direction.
+4. Validate the actual status vocabulary with a table visual before relying on success/failure cards.
+5. Build the Gantt and step table using the field assignments above; set the Gantt-to-table interaction to Filter and the step-table fallback measure to `1`.
+6. Test three cases: no selection shows today's latest job, a successful job shows all steps with blank errors, and a failed historical job shows its failed step and complete `error_message`.
+7. Add a date-only dimension only when a consistent reporting-date field is agreed; do not mix `started_at`, `export_date`, `snapshot_date`, `checked_at`, and `contract_loaded_at` in one relationship.
+8. Keep sample-key JSON, child results and full errors on authorised operational pages; do not surface sensitive evidence on executive pages.
 
-## Shared report theme — 2026-09-23
+## Shared report theme - 2026-09-23
 
-The current Mission Control report now uses the same maintained theme as the
-WMPP dashboard: `project X/reports/templates/WMPP_Common_Theme.json`.
-Its KPI/card and container style variants are captured as shared presets; the
-job/step Gantt custom-visual settings, status colours, two-week filter,
-cross-filter interactions, measures and semantic-model connection are preserved.
-See `project X/reports/templates/README.md` for the five-report rollout and the
-offline sync command. This changes report styling, not model data or DAX.
+The current Mission Control report now uses the same maintained theme as the WMPP dashboard: `WMPP/templates/reports/templates/WMPP_Common_Theme.json`. Its KPI/card and container style variants are captured as shared presets; the job/step Gantt custom-visual settings, status colours, two-week filter, cross-filter interactions, measures and semantic-model connection are preserved. See `WMPP/templates/reports/templates/README.md` for the five-report rollout and the offline sync command. This changes report styling, not model data or DAX.
 
-Outstanding: reopen in Power BI Desktop and visually check cards, tables,
-buttons and job/step Gantt colours after theme application. No live refresh or
-rendering verification is claimed. Keep client-environment reconnection and
-deployment as the final workstatement, after user check-in and acceptance of
-all other completed work.
+Outstanding: reopen in Power BI Desktop and visually check cards, tables, buttons and job/step Gantt colours after theme application. No live refresh or rendering verification is claimed. Keep client-environment reconnection and deployment as the final workstatement, after user check-in and acceptance of all other completed work.

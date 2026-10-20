@@ -2,16 +2,15 @@
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-## WMPP Data Engineering Engagement — Fabric Lakehouse Migration & KPI Implementation
+## WMPP Data Engineering Engagement - Fabric Lakehouse Migration & KPI Implementation
 
 | Field | Value |
 |---|---|
-| **Document Title** | Statement of Work — WMPP Fabric Lakehouse Migration |
+| **Document Title** | Statement of Work - WMPP Fabric Lakehouse Migration |
 | **Document Reference** | WMPP-DE-SoW-001 |
 | **Version** | 1.0 |
 | **Date** | 12 July 2026 |
@@ -21,7 +20,7 @@ See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_ST
 
 ---
 
-> **Baseline control note — 23 July 2026:** The archived v01 semantic model contains 95 measures and 48 relationships. This draft retains its commercial baseline of 90 migrated plus 27 new measures (117 total) until the client classifies the five v01 additions through the change-control process in Section 10. See [WMPP-DE-CHG-001](07_Semantic_Model_Changelog_v00_to_v01.md) for the archive evidence, affected clauses, count options, and required relationship regression tests. This note does not itself amend scope, fees, timeline, deliverables, or acceptance criteria.
+> **Baseline control note - 23 July 2026:** The archived v01 semantic model contains 95 measures and 48 relationships. This draft retains its commercial baseline of 90 migrated plus 27 new measures (117 total) until the client classifies the five v01 additions through the change-control process in Section 10. See [WMPP-DE-CHG-001](07_Semantic_Model_Changelog_v00_to_v01.md) for the archive evidence, affected clauses, count options, and required relationship regression tests. This note does not itself amend scope, fees, timeline, deliverables, or acceptance criteria.
 
 ---
 
@@ -31,11 +30,11 @@ See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_ST
 
 The West Midlands Placement Portal (WMPP) is a regional child placement platform operating across fourteen (14) West Midlands local authorities. The platform currently relies on a Power BI report (version 13.1) containing 90 measures, sourced directly from CSV files stored on network drives. This architecture presents significant operational, performance, and governance limitations:
 
-- **Data fragility** — CSV files on network drives are susceptible to schema drift, file naming inconsistencies, and uncontrolled edits with no audit trail.
-- **Performance constraints** — Power BI import-mode refreshes against flat-file sources are slow, resource-intensive, and bounded by desktop capacity.
-- **Scalability limitations** — the current measure set (90 KPIs) cannot be extended without further degrading refresh performance and increasing maintenance overhead.
-- **Functional gaps** — seventeen (17) functional gaps have been identified against stakeholder requirements, spanning emergency placements, QA workflows, finance reconciliation, document tracking, messaging, audit, and onboarding.
-- **Governance deficit** — no medallion architecture, no lineage, no schema enforcement, no automated validation, and no role-level security for commissioner regional access.
+- **Data fragility** - CSV files on network drives are susceptible to schema drift, file naming inconsistencies, and uncontrolled edits with no audit trail.
+- **Performance constraints** - Power BI import-mode refreshes against flat-file sources are slow, resource-intensive, and bounded by desktop capacity.
+- **Scalability limitations** - the current measure set (90 KPIs) cannot be extended without further degrading refresh performance and increasing maintenance overhead.
+- **Functional gaps** - seventeen (17) functional gaps have been identified against stakeholder requirements, spanning emergency placements, QA workflows, finance reconciliation, document tracking, messaging, audit, and onboarding.
+- **Governance deficit** - no medallion architecture, no lineage, no schema enforcement, no automated validation, and no role-level security for commissioner regional access.
 
 The client has approved an architectural transition to Microsoft Fabric, adopting a bronze-silver-gold medallion pattern with Spark-based transformation notebooks and Power BI Direct Lake connectivity.
 
@@ -79,14 +78,14 @@ The following items are explicitly included in the scope of this engagement:
 - Configuration of Azure Data Lake Storage Gen2 (ADLS Gen2) storage accounts and Fabric shortcuts to network-drive CSV source locations.
 - Establishment of workspace(s), environment configurations, and access control policies within the Fabric tenant.
 
-#### 2.1.2 Bronze Layer — Ingestion
+#### 2.1.2 Bronze Layer - Ingestion
 
 - Development and deployment of the **bronze loader** Spark notebook.
 - Automated ingestion of all identified CSV source files into bronze-layer Delta tables (raw preservation, no transformation).
 - Metadata capture: source file path, ingestion timestamp, row count, file hash.
 - Idempotency and incremental-load logic (append or overwrite as appropriate per source).
 
-#### 2.1.3 Silver Layer — Schema Enforcement
+#### 2.1.3 Silver Layer - Schema Enforcement
 
 - Development and deployment of the **silver formatter** Spark notebook.
 - Type casting, null handling, column renaming, and schema enforcement for all bronze tables.
@@ -94,7 +93,7 @@ The following items are explicitly included in the scope of this engagement:
 - Data quality flag columns (is_valid, validation_error).
 - Schema documentation and enforcement metadata.
 
-#### 2.1.4 Gold Layer — KPI Views
+#### 2.1.4 Gold Layer - KPI Views
 
 - Development and deployment of the **gold translator** Spark notebook.
 - Migration of all 90 existing DAX measures to gold-layer Spark SQL views.
@@ -106,8 +105,8 @@ The following items are explicitly included in the scope of this engagement:
   - Messaging (e.g., response time averages, unread message count, message volume trends)
   - Audit (e.g., audit trail completeness, change log coverage, access audit metrics)
   - Onboarding (e.g., onboarding completion rate, time-to-onboard, onboarding dropout count)
-- Duplicate measure consolidation — identified duplicates will be merged into canonical definitions with stakeholder confirmation.
-- Measure name corrections — identified typographical errors will be corrected with a rename mapping documented.
+- Duplicate measure consolidation - identified duplicates will be merged into canonical definitions with stakeholder confirmation.
+- Measure name corrections - identified typographical errors will be corrected with a rename mapping documented.
 
 #### 2.1.5 Data Validation & Reconciliation
 
@@ -147,22 +146,22 @@ The following items are explicitly included in the scope of this engagement:
 
 The following items are explicitly excluded from this engagement:
 
-1. **Source system changes** — modifications to upstream systems that generate CSV files (e.g., the WMPP application database, third-party provider systems) are not included.
-2. **New data sources** — ingestion of data sources not currently part of the CSV pipeline at the time of scope agreement. Any additional sources will be handled via the change control process (Section 10).
-3. **Application development** — no changes to the WMPP application front-end, back-end, or API layer.
-4. **Data migration beyond CSV scope** — migration of data stores not related to the current CSV pipeline is excluded.
-5. **Network infrastructure changes** — client network, VPN, firewall, or Active Directory configuration changes are the responsibility of the client's IT team.
-6. **Licensing procurement** — Fabric capacity licensing, Power BI Premium per-user licensing, and Azure storage costs are the client's responsibility. The consultant will advise on appropriate SKUs but does not procure licences on behalf of the client.
-7. **Ongoing operational support beyond hypercare** — post-hypercare, ongoing maintenance, monitoring, and enhancement will be governed by a separate support agreement.
-8. **Report redesign** — visual design changes beyond those necessitated by Direct Lake migration are excluded. The consultant will migrate existing visuals; cosmetic redesign is out of scope.
-9. **Additional KPIs beyond the agreed 117** — any KPIs identified after scope agreement will be processed via change control.
-10. **Mobile/reporting server configuration** — configuration of Power BI Report Server, paginated reports, or mobile report publishing is excluded.
+1. **Source system changes** - modifications to upstream systems that generate CSV files (e.g., the WMPP application database, third-party provider systems) are not included.
+2. **New data sources** - ingestion of data sources not currently part of the CSV pipeline at the time of scope agreement. Any additional sources will be handled via the change control process (Section 10).
+3. **Application development** - no changes to the WMPP application front-end, back-end, or API layer.
+4. **Data migration beyond CSV scope** - migration of data stores not related to the current CSV pipeline is excluded.
+5. **Network infrastructure changes** - client network, VPN, firewall, or Active Directory configuration changes are the responsibility of the client's IT team.
+6. **Licensing procurement** - Fabric capacity licensing, Power BI Premium per-user licensing, and Azure storage costs are the client's responsibility. The consultant will advise on appropriate SKUs but does not procure licences on behalf of the client.
+7. **Ongoing operational support beyond hypercare** - post-hypercare, ongoing maintenance, monitoring, and enhancement will be governed by a separate support agreement.
+8. **Report redesign** - visual design changes beyond those necessitated by Direct Lake migration are excluded. The consultant will migrate existing visuals; cosmetic redesign is out of scope.
+9. **Additional KPIs beyond the agreed 117** - any KPIs identified after scope agreement will be processed via change control.
+10. **Mobile/reporting server configuration** - configuration of Power BI Report Server, paginated reports, or mobile report publishing is excluded.
 
 ---
 
 ## 3. Delivery Approach
 
-The engagement is structured into three sequential phases over a twelve (12) week period. Each phase has defined entry criteria, deliverables, and exit gates. Phases are sequential — a phase cannot commence until the preceding phase's exit criteria are met.
+The engagement is structured into three sequential phases over a twelve (12) week period. Each phase has defined entry criteria, deliverables, and exit gates. Phases are sequential - a phase cannot commence until the preceding phase's exit criteria are met.
 
 ### Phase 1: Foundation & Bronze-Silver Pipeline (Weeks 1–4)
 
@@ -223,7 +222,7 @@ The engagement is structured into three sequential phases over a twelve (12) wee
 - Power BI Direct Lake connection configuration to gold-layer Delta tables.
 - Dashboard migration: visuals, layouts, navigation, bookmarks from V13.1 to the new Direct Lake dataset.
 - Visual reconfiguration where Direct Lake semantic model differences require adjustment.
-- RLS implementation for commissioner regional access (R55) — row-level filters for each of the 14 local authorities.
+- RLS implementation for commissioner regional access (R55) - row-level filters for each of the 14 local authorities.
 - RLS testing with test accounts across all authority regions.
 - Performance testing and optimisation (target: dashboard load < 5 seconds).
 - User Acceptance Testing with stakeholder representatives (placement officers, QA, commissioners, finance).
@@ -366,8 +365,8 @@ The following measurable success criteria must be met for engagement completion 
 
 | Ref | Criterion | Measurement | Target |
 |---|---|---|---|
-| AC1 | KPI Reconciliation — Migrated Measures | Gold KPI values vs. PBI V13.1 values | ≤ 0.1% variance for all 90 migrated measures |
-| AC2 | KPI Reconciliation — New Measures | Business stakeholder sign-off | 100% of 27 new measures signed off |
+| AC1 | KPI Reconciliation - Migrated Measures | Gold KPI values vs. PBI V13.1 values | ≤ 0.1% variance for all 90 migrated measures |
+| AC2 | KPI Reconciliation - New Measures | Business stakeholder sign-off | 100% of 27 new measures signed off |
 | AC3 | Total KPI Count | Spark SQL views in gold layer | 117 KPIs (90 migrated + 27 new) |
 | AC4 | Dashboard Load Performance | Time-to-first-render measured in Power BI Service | < 5 seconds for primary dashboard pages |
 | AC5 | Data Loss Prevention | Comparison of row counts and key metrics vs. current report | Zero (0) data loss incidents |
@@ -523,9 +522,9 @@ Phase sign-off will be recorded separately upon completion of each phase's exit 
 
 | Phase | Sign-Off Date | Client Signatory | Consultant Signatory |
 |---|---|---|---|
-| Phase 1 — Foundation & Bronze-Silver Pipeline | __________ | __________ | __________ |
-| Phase 2 — Gold Layer & KPI Implementation | __________ | __________ | __________ |
-| Phase 3 — Power BI Integration & Migration | __________ | __________ | __________ |
+| Phase 1 - Foundation & Bronze-Silver Pipeline | __________ | __________ | __________ |
+| Phase 2 - Gold Layer & KPI Implementation | __________ | __________ | __________ |
+| Phase 3 - Power BI Integration & Migration | __________ | __________ | __________ |
 | Hypercare Completion & Engagement Closure | __________ | __________ | __________ |
 
 ### 11.3 Document Control
@@ -536,4 +535,4 @@ Phase sign-off will be recorded separately upon completion of each phase's exit 
 
 ---
 
-*End of Statement of Work — WMPP-DE-SoW-001*
+*End of Statement of Work - WMPP-DE-SoW-001*

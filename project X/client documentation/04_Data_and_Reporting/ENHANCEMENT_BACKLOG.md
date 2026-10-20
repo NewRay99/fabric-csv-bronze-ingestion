@@ -2,7 +2,7 @@
 
 ## Reporting reassessment 30 September 2026
 
-Moved from design to saved WIP implementation: full-width Explorer/report layouts, consistent reordered navigation, expanded main-page Filters drawers, referral/provider detail routes, category/status icon labels, Overall Performance snapshot comparison, referral current-stage/evidence strips and provider-stage exploration with selector actions.
+Moved from design to saved WMPP_v16 implementation: full-width Explorer/report layouts, consistent reordered navigation, expanded main-page Filters drawers, referral/provider detail routes, category/status icon labels, Overall Performance snapshot comparison, referral current-stage/evidence strips and provider-stage exploration with selector actions.
 
 Still open: newest visual/filter UAT, priority versus urgency decision, approved activity bands and emergency semantics, provider browsing/confirmation evidence, message-author/unread rules, immutable event/reason/framework history, support-needs reporting, region evidence, document compliance/blocking, payment facts, security/disclosure and client release. Embedded Requirement Matrix references also need controlled synchronisation with the revised Legend. Older ideas below retain their historical/design status unless explicitly advanced above.
 
@@ -58,10 +58,7 @@ The placement’s estimated start, estimated end, actual start, actual end, dura
 
 ## Implemented Gold fact mappings
 
-The active Gold model now implements the source-supported backlog facts as
-managed tables. `gold.fact_referral_snapshot` carries the full referral fact shape for
-each reporting snapshot, while `gold.fact_offer`, `gold.fact_ipa`, and
-`gold.fact_referral_provider` retain their natural source grains.
+The active Gold model now implements the source-supported backlog facts as managed tables. `gold.fact_referral_snapshot` carries the full referral fact shape for each reporting snapshot, while `gold.fact_offer`, `gold.fact_ipa`, and `gold.fact_referral_provider` retain their natural source grains.
 
 | Backlog fact | Implemented Gold object | Notes |
 |---|---|---|
@@ -71,11 +68,7 @@ each reporting snapshot, while `gold.fact_offer`, `gold.fact_ipa`, and
 | `fact_ipa` | `gold.fact_ipa` | One row per IPA, linked to referral and accepted offer, with IPA issue/admission, cost, status and closure information. Actual start/end, actual cost and end reason remain null because the delivered source does not provide them. |
 | Provider response | `gold.fact_referral_provider` | One row per referral-provider assignment with supplied status flags and first observed extract date. |
 
-`person_id` (formerly `ChildID`) is the stable minimum delivered
-`referral_person.person_id` for a
-referral. This preserves the one-row-per-referral fact grain; multi-child
-analysis should use the child-grain source relation rather than treating this
-convenience field as a complete child bridge.
+`person_id` (formerly `ChildID`) is the stable minimum delivered `referral_person.person_id` for a referral. This preserves the one-row-per-referral fact grain; multi-child analysis should use the child-grain source relation rather than treating this convenience field as a complete child bridge.
 
 ## Essential board-reporting dates
 
@@ -107,24 +100,17 @@ Because one referral may receive multiple offers, these belong in an Offer table
 
 Each provider home offered should ideally be a separate row.
 
-## Proposed enhancement — auditable offer decision history
+## Proposed enhancement - auditable offer decision history
 
-**Status:** Proposed
-**Priority:** High — required before reporting an exact offer-decision date or
-historical offer-status position.
+**Status:** Proposed **Priority:** High - required before reporting an exact offer-decision date or historical offer-status position.
 
 ### Problem
 
-`gold.fact_offer.offer_decision_date` is currently populated with
-`silver.offer.last_modified_date` when the offer's current status is a
-terminal outcome. A later amendment to another field can update
-`last_modified_date`; it is therefore not reliable evidence of when the
-decision itself was made.
+`gold.fact_offer.offer_decision_date` is currently populated with `silver.offer.last_modified_date` when the offer's current status is a terminal outcome. A later amendment to another field can update `last_modified_date`; it is therefore not reliable evidence of when the decision itself was made.
 
 ### Proposed model
 
-Create `gold.fact_offer_status_event` at the grain **one row per offer-status
-change**, sourced from the offer audit event where `offerStatus` changes.
+Create `gold.fact_offer_status_event` at the grain **one row per offer-status change**, sourced from the offer audit event where `offerStatus` changes.
 
 | Field | Definition |
 | --- | --- |
@@ -137,27 +123,18 @@ change**, sourced from the offer audit event where `offerStatus` changes.
 | `audit_event_id` | Immutable source event identifier for traceability |
 | `source_export_date` | Archive/live extract batch containing the event |
 
-Derive the following clearly named fields in `gold.fact_offer` from this
-event fact:
+Derive the following clearly named fields in `gold.fact_offer` from this event fact:
 
-- `first_terminal_status_at`: first transition into accepted, approved,
-  selected, successful, declined, rejected, unsuccessful or withdrawn.
-- `current_terminal_status_at`: latest transition into a terminal status,
-  populated only when the current offer status is terminal.
+- `first_terminal_status_at`: first transition into accepted, approved, selected, successful, declined, rejected, unsuccessful or withdrawn.
+- `current_terminal_status_at`: latest transition into a terminal status, populated only when the current offer status is terminal.
 
-Retire the misleading generic `offer_decision_date` field once consuming DAX
-has been moved to the explicit replacement field appropriate to its purpose.
+Retire the misleading generic `offer_decision_date` field once consuming DAX has been moved to the explicit replacement field appropriate to its purpose.
 
 ### Snapshot treatment
 
-Do **not** add one unqualified `offer_decision_date` to
-`gold.fact_referral_snapshot`: its grain is one referral per snapshot date,
-whereas a referral can have many offers and decisions.
+Do **not** add one unqualified `offer_decision_date` to `gold.fact_referral_snapshot`: its grain is one referral per snapshot date, whereas a referral can have many offers and decisions.
 
-If historical offer-state reporting is required, create
-`gold.fact_offer_snapshot` at **one row per `snapshot_date` and `offer_id`**.
-The referral snapshot may instead carry explicit aggregates calculated from
-events on or before its `snapshot_date`, such as:
+If historical offer-state reporting is required, create `gold.fact_offer_snapshot` at **one row per `snapshot_date` and `offer_id`**. The referral snapshot may instead carry explicit aggregates calculated from events on or before its `snapshot_date`, such as:
 
 - `offers_decided_count`
 - `first_offer_decision_date`
@@ -166,12 +143,10 @@ events on or before its `snapshot_date`, such as:
 
 ### Acceptance criteria
 
-1. Every reported offer decision timestamp can be traced to an immutable
-   offer-status audit event.
+1. Every reported offer decision timestamp can be traced to an immutable offer-status audit event.
 2. A later non-status amendment cannot change an established decision time.
 3. The model preserves status transitions, including any reopen/reversal.
-4. DAX uses the explicitly named terminal-status fields; it does not infer a
-   decision from `last_modified_date`.
+4. DAX uses the explicitly named terminal-status fields; it does not infer a decision from `last_modified_date`.
 5. Snapshot measures only include offer events on or before `snapshot_date`.
 
 ## Placement/IPA dates
@@ -662,16 +637,12 @@ The main principle is:
 
 The referral-created date is therefore valuable and correct for board reporting. It simply should not be used as the only date for every referral and placement measure.
 
-
-
 ## IDEAS for Imporovement
 Would a Sankey diagram be worth using. If so what could we use it for
 
-
 # Answer
 
-
-Yes — a **Sankey diagram could be very valuable**, but I would use it for one specific purpose: showing **how referrals flow through the placement process and where they are being lost or delayed**.
+Yes - a **Sankey diagram could be very valuable**, but I would use it for one specific purpose: showing **how referrals flow through the placement process and where they are being lost or delayed**.
 
 I would **not** make it one of the main headline visuals. Your KPI cards, target hit rates, ageing and required-placement-date measures are better for the board's primary view. A Sankey would work brilliantly as a supporting **“Referral Journey / Placement Pipeline”** visual.
 
@@ -703,17 +674,13 @@ Visually, the width of the flow tells the board immediately where referrals are 
 
 The most important final split should probably be:
 
-**Placed by Required Placement Date**
-**Placed after Required Placement Date**
-**Still Open**
-**Withdrawn / Cancelled**
-**Closed — no match**
+**Placed by Required Placement Date** **Placed after Required Placement Date** **Still Open** **Withdrawn / Cancelled** **Closed - no match**
 
 That connects the Sankey directly to the target logic we designed.
 
 ---
 
-## Sankey 1 — Referral Journey
+## Sankey 1 - Referral Journey
 
 This would probably be my first choice.
 
@@ -747,8 +714,8 @@ This would probably be my first choice.
 
 - IPA issued by target
 - IPA issued late
-- Open — on track
-- Open — overdue
+- Open - on track
+- Open - overdue
 - Closed without placement
 
 This could reveal something such as:
@@ -759,7 +726,7 @@ That is a much more useful story than simply reporting "18 referrals are overdue
 
 ---
 
-# Sankey 2 — Provider → Home → Placement
+# Sankey 2 - Provider → Home → Placement
 
 There is another very useful operational Sankey based on your provider structure.
 
@@ -803,7 +770,7 @@ I would keep this off the main board page and use it on a **Provider Performance
 
 ---
 
-# Sankey 3 — Where overdue referrals come from
+# Sankey 3 - Where overdue referrals come from
 
 This could be an excellent executive visual.
 
@@ -912,23 +879,17 @@ I'd add a fourth dashboard/page called:
 
 Top KPIs:
 
-**128**
-Referrals Created
+**128** Referrals Created
 
-**109**
-Received ≥1 Offer
+**109** Received ≥1 Offer
 
-**97**
-Preferred Match Selected
+**97** Preferred Match Selected
 
-**91**
-IPA Issued
+**91** IPA Issued
 
-**76%**
-Placed by Required Date
+**76%** Placed by Required Date
 
-**18**
-Currently Overdue
+**18** Currently Overdue
 
 Then a large Sankey occupying about 60–70% of the page:
 

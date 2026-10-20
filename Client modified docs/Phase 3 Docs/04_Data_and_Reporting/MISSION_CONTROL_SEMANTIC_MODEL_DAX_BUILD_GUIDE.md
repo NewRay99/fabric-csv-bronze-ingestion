@@ -1,0 +1,560 @@
+# Mission Control semantic model DAX build guide
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
+
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
+
+Use the complete latest calculation snapshot for the 351 current definitions and their notebook/partition dependencies. Older copied DAX below remains historical. Domain additions/removals respect retained-run selection; load deltas compare the saved context to its prior load and do not invent a zero baseline.
+
+No report/model, notebook, relationship, RLS or deployment was changed. Existing requirement dispositions remain evidence-led; new associations without source evidence remain unmapped for owner review. Embedded Power BI reference tables still need controlled synchronisation, refresh/context/role checks and client acceptance.
+
+[Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
+
+## Reporting reassessment 30 September 2026
+
+This review concerns the business WMPP WMPP_v16 report and its current model. Mission Control is a separate project; its earlier deployment and test evidence below has not been rerun or upgraded by the WMPP journey changes. Continue to use its own monitoring/runbook acceptance and distinguish job freshness from report correctness.
+
+See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
+
+## ETL lineage update - 25 September 2026
+
+Setup now registers the new referral framework/spot bridges and category/location fact inputs in `monitoring.cfg_gold_lineage_mapping`. The local coordinate reference is created empty; missing coordinates are supported, not a fabricated zero-distance success. See the [category/location deployment and audit guide](CATEGORY_AND_LOCATION_ETL_IMPLEMENTATION.md).
+
+**What's outstanding:** verify the changed ETL in the client Lakehouse; refresh Mission Control's lineage/object list after deployment; check the derived location tables and coordinate provenance; and obtain client approval of location rules and reference data. No Mission Control semantic-model/report tests were run and no version-specific project was changed for this ETL update.
+
+## Supplied v16 package verification - 23 September 2026
+
+The extracted package at `reports/current/SM WMPP Mission Control v16` has been checked alongside the business-model/report reconciliation. Its report uses a repository-local `byPath` binding to `SM WMPP Mission Control.SemanticModel`; `_MissionControl_Measures` contains 87 measures, and every semantic table has an explicit partition. The report JSON parses, its local semantic-model path resolves, and the existing Mission Control validators pass.
+
+### Dashboard rebuild - 23 September 2026
+
+The repository PBIR report has now been rebuilt as a monitoring-only Mission Control experience. The six-page report contains 137 visuals and exposes all 87 measures from `_MissionControl_Measures` without retaining the referral- dashboard bindings that were copied into the original report.
+
+The report pages are:
+
+1. **Mission Control Overview** - control-health, job-run and pipeline KPI cards, job-status distribution and recent job/exception detail.
+2. **Job Runs & Steps | Last 14 Days** - pipeline, status and job-run slicers; a job-run Gantt; a second notebook-step Gantt; job and step detail tables; and the job-selection/step measure groups.
+3. **Data Quality & Schema** - all DQ and schema-inventory measures with rule, severity, outcome and archived-column evidence.
+4. **Archive & Replay** - all archive-control measures with ZIP, file-load and month-end Gold snapshot details.
+5. Hidden **Job Step Detail (Drillthrough)** - complete job, notebook-step and pipeline execution evidence for a selected `job_run_id`.
+6. Hidden **Job Run Tooltip** - selected job status, duration and failed-step context for the timeline visuals.
+
+`rpt_job_run_summary[job_run_window]` classifies refreshed rows as `Last 14 days` or `Older`. The timeline page has a locked page filter on `Last 14 days`. This is evaluated when the semantic model refreshes, so the client refresh schedule must remain current. Selecting a job-run Gantt bar or job-table row has explicit `DataFilter` interactions to both the step Gantt and the step detail table. `rpt_job_step_timing[steps_duration_days]` was corrected to `DIVIDE ( [step_duration_seconds], 86400.0 )`; the supplied expression multiplied the result by zero and therefore could not render step durations.
+
+The deterministic rebuild and acceptance checks are:
+
+- `tools/rebuild_mission_control_dashboard_v16.py`; and
+- `tools/validate_mission_control_dashboard_v16.py`.
+
+The acceptance check parses every PBIR JSON document, resolves every visual field against the semantic model, asserts the two Gantt bindings and their cross-filter interactions, checks the 14-day filter and drillthrough binding, and confirms all 87 measures are referenced by the report.
+
+This is static repository validation. Power BI Desktop is not installed on the review machine, and the client monitoring sources/credentials are not available here, so a live refresh and Desktop load cannot be claimed.
+
+### What's outstanding
+
+1. Run the current `00_setup_cfg` in Fabric so the materialized job-run and job-step reporting objects exist and contain current client data.
+2. Open the supplied Mission Control PBIP in Power BI Desktop, set the client Lakehouse connection, refresh and confirm the 87 measures load without a model validation error.
+3. Exercise the latest-job fallback, historical job selection, job-Gantt-to- step-Gantt/table interaction, drillthrough, complete error text and authorized child-result detail against refreshed client data.
+4. Validate status vocabulary, refresh timestamps and sensitive operational fields against the real monitoring tables.
+5. **Final task, only after the user has reviewed and checked in all completed repository work:** repeat the open/refresh/publish check in the client environment and resolve any client-only credential, gateway or semantic- model binding error before release.
+
+## Purpose
+
+This guide defines the operational measures and job-to-step interaction for the WMPP Mission Control model. They use monitoring control and reporting tables, rather than referral, offer or placement facts.
+
+## Job-run and step alignment - 21 September 2026
+
+The repaired package `reports/client-deliverables/SM WMPP Mission Control - SEM-02 repaired.zip` was inspected against the interaction described by `reports/mission-control/index.html`. The repaired model opened without the SEM-02 automatic-date-table error, but it could not implement the Job steps & errors experience because it contained neither a top-level job table nor a job-step table and had no `job_run_id` relationship.
+
+The aligned deliverable adds:
+
+- `rpt_job_run_summary`, one row per orchestrated job run;
+- `rpt_job_step_timing`, one row per notebook step in a job;
+- an active, single-direction one-to-many relationship from `rpt_job_run_summary[job_run_id]` to `rpt_job_step_timing[job_run_id]`;
+- `cfg_pipeline_run[job_run_id]` and a second single-direction relationship so the existing pipeline measures also respond to a selected job; and
+- 20 job-run, step, error and latest-selection measures in `_MissionControl_Measures`.
+
+The monitoring notebook publishes `rpt_job_run_summary` and `rpt_job_step_timing` as materialised Lake views so they are discoverable by the Lakehouse semantic model. Refresh `00_setup_cfg` before refreshing the aligned semantic model.
+
+## Client-site package reconciliation - 20 September 2026
+
+`reports/current/MWPP Repo 20092026.zip` is the latest client-site export reviewed for this update. It contains the business-report project `WMPP_v16`; it does **not** contain a Mission Control semantic model.
+
+The static inventory is:
+
+| Check | `WMPP_v16` result | Mission Control consequence |
+| --- | ---: | --- |
+| Semantic tables | 117 TMDL tables: 29 business/model tables, 87 `LocalDateTable_*` tables and one `DateTableTemplate_*` | This is the business model, not the monitoring model. |
+| Measures | 274 | None of the 67 `_MissionControl_Measures` are present. |
+| `cfg_*` tables | 0 | The operational measures in this guide cannot run in this model. |
+| `_MissionControl_Measures` table | Absent | Import the maintained artifact only into the dedicated Mission Control model. |
+| RLS roles | 0 | Security is also not implemented in this business-model export; see [RLS and partial aggregate access guide](RLS_AND_PARTIAL_AGGREGATE_ACCESS_GUIDE.md). |
+
+The client-site ZIP therefore does not replace or supersede the separate Mission Control model. Do not add the monitoring measures to `WMPP_v16` unless the architecture is deliberately changed to import the eight required monitoring tables. The preferred deployment remains two semantic models:
+
+1. `WMPP_v16` for Gold referral, offer, IPA and provider reporting; and
+2. a dedicated Mission Control model for `cfg_pipeline_run`, archive controls, Gold replay controls, data-quality results and schema inventory.
+
+Before the next Mission Control release, export the deployed monitoring PBIP from the client site and repeat the table, relationship, partition and report- binding checks. The latest client-site ZIP provides no evidence that the Mission Control model or its 67 measures are deployed.
+
+## Delivery assessment
+
+The earlier client package at `reports/client-deliverables/SM WMPP Mission Control.zip` was extracted and inspected for the original assessment below. Its semantic model contains the monitoring configuration/control tables below, but no `_Measures.tmdl` table. The included Power BI report references `_Measures` and currently binds 18 referral-oriented measures such as `Total Referrals` and `Active Referrals Under Offer`; those measures cannot be calculated from the delivered monitoring tables. Replace or rebind those visuals to the measures in `reports/current/_MissionControl_Measures.tmdl` before publishing the operational report. This remains a historical package assessment until a newer Mission Control PBIP is supplied from the client site.
+
+The package contains an `SM WMPP v15.zip` referral model as a separate nested deliverable. It is not a source for Mission Control operational KPIs.
+
+## Tables available in the delivered model
+
+| Semantic table | Grain | Measures supported |
+| --- | --- | --- |
+| `rpt_job_run_summary` | One orchestrated live/archive job (`job_run_id`) | Job outcome, latest/selected job, duration, steps succeeded/failed, job error, Silver volume, DQ and drift summaries |
+| `rpt_job_step_timing` | One ordered notebook step per `job_run_id` | Step outcome, duration, preceding-step gap, child result and full step error |
+| `cfg_pipeline_run` | Pipeline/layer run | Outcome, duration, table counts, processing volume and error evidence |
+| `cfg_archive_zip_load` | Archive ZIP export | ZIP outcome, reload queue, file count and elapsed time |
+| `cfg_archive_file_load` | Extracted archive file | File outcome, reload queue and row volume |
+| `cfg_archive_table_export_load` | Archive source-table export | Export outcome, reload queue and source row count |
+| `cfg_month_end_gold_run` | Gold snapshot/replay run | Snapshot outcome, replay queue and DQ result |
+| `cfg_data_quality_result` | Rule execution | Check outcome, failed/checked rows, severity and sample-key availability |
+| `cfg_data_quality_rule` | Configured rule | Active and critical rule inventory |
+| `cfg_archived_schema_live` | Observed archived column | Schema capture, table count, data-type and nullable-column inventory |
+
+## Model setup
+
+Keep the technical table names in the measure expressions. They match the tables in the aligned `.pbip` model.
+
+Use `rpt_job_run_summary[job_run_id]` as the one-side reporting key. The materialised reporting table is already one row per orchestrated job. Relate it one-to-many, single-direction to:
+
+- `rpt_job_step_timing[job_run_id]`; and
+- `cfg_pipeline_run[job_run_id]`.
+
+Do not make either relationship bidirectional. A selected run must filter its steps and child pipeline rows; a step row must not unexpectedly filter the historical job-run chart. `run_id` remains the child notebook execution key and must not replace `job_run_id` for the Gantt-to-step interaction.
+
+Relate `cfg_data_quality_rule[rule_id]` one-to-many to `cfg_data_quality_result[rule_id]` after confirming the rule table has one current row per ID. `cfg_archived_schema_live` has no run ID and should be shown as a separately dated schema-inventory subject.
+
+Treat statuses case-insensitively. The measures recognise `SUCCESS`/`SUCCEEDED`, `FAILED`/`FAIL`/`ERROR`, and `RUNNING`/`IN_PROGRESS`/`STARTED` so the report remains resilient to current control-table values.
+
+## TMDL build artifact
+
+`reports/current/_MissionControl_Measures.tmdl` contains 87 measures: the original 67 operational measures plus 20 job-run/step interaction measures. It uses the project’s required triple-backtick TMDL expression format. Import it as the `_MissionControl_Measures` table in the Mission Control semantic model.
+
+The aligned package includes this table at `SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl`, with a matching `ref table` in `model.tmdl`. Keep the measure formulas and partition definition aligned between source and deployment. Power BI adds `lineageTag` IDs and changes serialization whitespace when saving; the validator accepts these differences while preserving checks on expressions, names, formats and the Import partition. Do not overwrite Desktop-generated lineage tags merely to make the files textually identical.
+
+### Opening the project after adding the measures
+
+The initial table addition omitted its partition. Power BI Desktop then reported `Model validation failed. A composite model cannot be used with entity based query sources.` The TMDL parsed successfully, but `_MissionControl_Measures` was the only table without a partition; all 32 existing tables used Import mode. This made the new table's Desktop load definition incomplete.
+
+Both measure-table copies now include an explicit Import Power Query partition returning an empty table: `#table ( type table [], {} )`. This supplies the measure container without loading business rows or introducing another external data source. Preserve that partition when editing or copying the measures. The triple-backtick DAX expression delimiters are valid and remain in place. Microsoft describes partitions as the table's data-source definition in its [tables documentation](https://learn.microsoft.com/en-us/analysis-services/tmsl/tables-object-tmsl).
+
+The earlier validation used the Microsoft TMDL deserializer and a static Mission Control validator. The version-dependent semantic/report test scripts have since been removed from the repository suite per user direction. Those historical checks covered syntax and saved table structure, not Desktop model loading or live DAX results. When client acceptance is requested, reopen the current project's `.pbip` in Desktop to confirm the reported load error is resolved. If it persists, retain the new error details for further diagnosis.
+
+## Copy-ready DAX
+
+```DAX
+
+// Pipeline execution
+Pipeline Runs =
+DISTINCTCOUNT ( 'cfg_pipeline_run'[run_id] )
+
+Successful Pipeline Runs =
+CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Failed Pipeline Runs =
+CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Running Pipeline Runs =
+CALCULATE ( [Pipeline Runs], FILTER ( 'cfg_pipeline_run', UPPER ( COALESCE ( 'cfg_pipeline_run'[status], "" ) ) IN { "RUNNING", "IN_PROGRESS", "STARTED" } ) )
+
+Completed Pipeline Runs =
+[Successful Pipeline Runs] + [Failed Pipeline Runs]
+
+Pipeline Success Rate =
+DIVIDE ( [Successful Pipeline Runs], [Completed Pipeline Runs] )
+
+Live Pipeline Runs =
+CALCULATE ( [Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_live_pipeline" )
+
+Archive Pipeline Runs =
+CALCULATE ( [Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_archive_pipeline" )
+
+Live Pipeline Failures =
+CALCULATE ( [Failed Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_live_pipeline" )
+
+Archive Pipeline Failures =
+CALCULATE ( [Failed Pipeline Runs], 'cfg_pipeline_run'[pipeline_name] = "90_run_archive_pipeline" )
+
+Pipeline Tables Succeeded =
+SUM ( 'cfg_pipeline_run'[tables_succeeded] )
+
+Pipeline Tables Failed =
+SUM ( 'cfg_pipeline_run'[tables_failed] )
+
+Pipeline Rows Read =
+SUM ( 'cfg_pipeline_run'[rows_read] )
+
+Pipeline Rows Written =
+SUM ( 'cfg_pipeline_run'[rows_written] )
+
+Pipeline Runs With Error =
+COUNTROWS ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[error_message] ) ) )
+
+Average Pipeline Duration (min) =
+AVERAGEX ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ) )
+
+P95 Pipeline Duration (min) =
+PERCENTILEX.INC ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ), 0.95 )
+
+Total Pipeline Duration (min) =
+SUMX ( FILTER ( 'cfg_pipeline_run', NOT ISBLANK ( 'cfg_pipeline_run'[started_at] ) && NOT ISBLANK ( 'cfg_pipeline_run'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_pipeline_run'[started_at], 'cfg_pipeline_run'[ended_at], SECOND ), 60.0 ) )
+
+Pipeline Rows per Minute =
+DIVIDE ( [Pipeline Rows Written], [Total Pipeline Duration (min)] )
+
+Latest Pipeline End =
+MAX ( 'cfg_pipeline_run'[ended_at] )
+
+Latest Pipeline Status =
+VAR latest_end = [Latest Pipeline End]
+RETURN
+    CALCULATE ( CONCATENATEX ( VALUES ( 'cfg_pipeline_run'[status] ), 'cfg_pipeline_run'[status], ", " ), 'cfg_pipeline_run'[ended_at] = latest_end )
+
+// Orchestrated jobs and same-page job-to-step interaction
+Job Runs =
+DISTINCTCOUNT ( 'rpt_job_run_summary'[job_run_id] )
+
+Successful Job Runs =
+CALCULATE ( [Job Runs], FILTER ( 'rpt_job_run_summary', UPPER ( COALESCE ( 'rpt_job_run_summary'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Failed Job Runs =
+CALCULATE ( [Job Runs], FILTER ( 'rpt_job_run_summary', UPPER ( COALESCE ( 'rpt_job_run_summary'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Job Success Rate =
+DIVIDE ( [Successful Job Runs], [Successful Job Runs] + [Failed Job Runs] )
+
+Latest Job Run Started =
+MAXX ( FILTER ( ALLSELECTED ( 'rpt_job_run_summary' ), NOT ISBLANK ( 'rpt_job_run_summary'[started_at] ) ), 'rpt_job_run_summary'[started_at] )
+
+Latest Job Run ID =
+VAR latest_job =
+    TOPN (
+        1,
+        FILTER ( ALLSELECTED ( 'rpt_job_run_summary' ), NOT ISBLANK ( 'rpt_job_run_summary'[started_at] ) ),
+        'rpt_job_run_summary'[started_at], DESC,
+        'rpt_job_run_summary'[job_run_id], DESC
+    )
+RETURN
+    MAXX ( latest_job, 'rpt_job_run_summary'[job_run_id] )
+
+Selected or Latest Job Run ID =
+COALESCE ( SELECTEDVALUE ( 'rpt_job_run_summary'[job_run_id] ), [Latest Job Run ID] )
+
+Selected or Latest Job Status =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+RETURN
+    CALCULATE ( SELECTEDVALUE ( 'rpt_job_run_summary'[status] ), 'rpt_job_run_summary'[job_run_id] = selected_job_run_id )
+
+Selected or Latest Job Error =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+RETURN
+    CALCULATE ( SELECTEDVALUE ( 'rpt_job_run_summary'[error_message] ), 'rpt_job_run_summary'[job_run_id] = selected_job_run_id )
+
+Selected or Latest Job Duration (min) =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+RETURN
+    CALCULATE ( DIVIDE ( MAX ( 'rpt_job_run_summary'[job_duration_seconds] ), 60.0 ), 'rpt_job_run_summary'[job_run_id] = selected_job_run_id )
+
+Job Steps =
+COUNTROWS ( 'rpt_job_step_timing' )
+
+Successful Job Steps =
+CALCULATE ( [Job Steps], FILTER ( 'rpt_job_step_timing', UPPER ( COALESCE ( 'rpt_job_step_timing'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Failed Job Steps =
+CALCULATE ( [Job Steps], FILTER ( 'rpt_job_step_timing', UPPER ( COALESCE ( 'rpt_job_step_timing'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Job Steps With Error =
+COUNTROWS ( FILTER ( 'rpt_job_step_timing', NOT ISBLANK ( 'rpt_job_step_timing'[error_message] ) && 'rpt_job_step_timing'[error_message] <> "" ) )
+
+Selected or Latest Job Steps =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+RETURN
+    CALCULATE ( [Job Steps], KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id ) )
+
+Selected or Latest Failed Steps =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+RETURN
+    CALCULATE ( [Failed Job Steps], KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id ) )
+
+Total Job Step Duration (min) =
+DIVIDE ( SUM ( 'rpt_job_step_timing'[step_duration_seconds] ), 60.0 )
+
+Longest Job Step Duration (min) =
+DIVIDE ( MAX ( 'rpt_job_step_timing'[step_duration_seconds] ), 60.0 )
+
+Show Step for Selected or Latest Job Run =
+VAR selected_job_run_id = [Selected or Latest Job Run ID]
+VAR matching_steps =
+    CALCULATE (
+        COUNTROWS ( 'rpt_job_step_timing' ),
+        KEEPFILTERS ( 'rpt_job_step_timing'[job_run_id] = selected_job_run_id )
+    )
+RETURN
+    IF ( NOT ISBLANK ( selected_job_run_id ) && matching_steps > 0, 1, 0 )
+
+Selected Step Error Detail =
+CONCATENATEX (
+    FILTER (
+        VALUES ( 'rpt_job_step_timing'[error_message] ),
+        NOT ISBLANK ( 'rpt_job_step_timing'[error_message] )
+            && 'rpt_job_step_timing'[error_message] <> ""
+    ),
+    'rpt_job_step_timing'[error_message],
+    UNICHAR ( 10 ) & UNICHAR ( 10 )
+)
+
+// Archive and replay control
+Archive ZIP Batches =
+COUNTROWS ( 'cfg_archive_zip_load' )
+
+Successful Archive ZIP Batches =
+COUNTROWS ( FILTER ( 'cfg_archive_zip_load', UPPER ( COALESCE ( 'cfg_archive_zip_load'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Failed Archive ZIP Batches =
+COUNTROWS ( FILTER ( 'cfg_archive_zip_load', UPPER ( COALESCE ( 'cfg_archive_zip_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Archive ZIP Batches Awaiting Reload =
+CALCULATE ( [Archive ZIP Batches], 'cfg_archive_zip_load'[reload] = TRUE () )
+
+Archive ZIP Files Declared =
+SUM ( 'cfg_archive_zip_load'[file_count] )
+
+Average Archive ZIP Duration (min) =
+AVERAGEX ( FILTER ( 'cfg_archive_zip_load', NOT ISBLANK ( 'cfg_archive_zip_load'[started_at] ) && NOT ISBLANK ( 'cfg_archive_zip_load'[ended_at] ) ), DIVIDE ( DATEDIFF ( 'cfg_archive_zip_load'[started_at], 'cfg_archive_zip_load'[ended_at], SECOND ), 60.0 ) )
+
+Archive Files Processed =
+COUNTROWS ( 'cfg_archive_file_load' )
+
+Successful Archive Files =
+COUNTROWS ( FILTER ( 'cfg_archive_file_load', UPPER ( COALESCE ( 'cfg_archive_file_load'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Archive File Failures =
+COUNTROWS ( FILTER ( 'cfg_archive_file_load', UPPER ( COALESCE ( 'cfg_archive_file_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Archive Files Awaiting Reload =
+CALCULATE ( [Archive Files Processed], 'cfg_archive_file_load'[reload] = TRUE () )
+
+Archive File Rows Read =
+SUM ( 'cfg_archive_file_load'[rows_read] )
+
+Archive File Rows Written =
+SUM ( 'cfg_archive_file_load'[rows_written] )
+
+Archive Table Exports =
+COUNTROWS ( 'cfg_archive_table_export_load' )
+
+Failed Archive Table Exports =
+COUNTROWS ( FILTER ( 'cfg_archive_table_export_load', UPPER ( COALESCE ( 'cfg_archive_table_export_load'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Archive Table Exports Awaiting Reload =
+CALCULATE ( [Archive Table Exports], 'cfg_archive_table_export_load'[reload] = TRUE () )
+
+Archive Export Rows =
+SUM ( 'cfg_archive_table_export_load'[row_count] )
+
+Gold Snapshot Runs =
+COUNTROWS ( 'cfg_month_end_gold_run' )
+
+Successful Gold Snapshots =
+COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[status], "" ) ) IN { "SUCCESS", "SUCCEEDED" } ) )
+
+Failed Gold Snapshots =
+COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+Gold Snapshots Awaiting Replay =
+CALCULATE ( [Gold Snapshot Runs], 'cfg_month_end_gold_run'[reload] = TRUE () )
+
+Gold Snapshot DQ Failures =
+COUNTROWS ( FILTER ( 'cfg_month_end_gold_run', UPPER ( COALESCE ( 'cfg_month_end_gold_run'[dq_result], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+// Data quality and referential rules
+DQ Checks =
+COUNTROWS ( 'cfg_data_quality_result' )
+
+DQ Evaluated Checks =
+COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "PASS", "SUCCESS", "FAILED", "FAIL", "ERROR" } ) )
+
+DQ Failed Checks =
+COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+DQ Failure Rate =
+DIVIDE ( [DQ Failed Checks], [DQ Evaluated Checks] )
+
+DQ Checked Rows =
+SUM ( 'cfg_data_quality_result'[checked_row_count] )
+
+DQ Failed Rows =
+SUM ( 'cfg_data_quality_result'[failed_row_count] )
+
+Weighted DQ Failure Percentage =
+DIVIDE ( [DQ Failed Rows], [DQ Checked Rows] )
+
+Critical Rules Failing =
+CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[severity], "" ) ) = "CRITICAL" && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+High or Critical Rules Failing =
+CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[severity], "" ) ) IN { "CRITICAL", "HIGH" } && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+DQ Failures With Sample Keys =
+COUNTROWS ( FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } && NOT ISBLANK ( 'cfg_data_quality_result'[sample_key_json] ) ) )
+
+Active DQ Rules =
+COUNTROWS ( FILTER ( 'cfg_data_quality_rule', UPPER ( COALESCE ( 'cfg_data_quality_rule'[active], "" ) ) IN { "TRUE", "Y", "1" } ) )
+
+Critical Active DQ Rules =
+COUNTROWS ( FILTER ( 'cfg_data_quality_rule', UPPER ( COALESCE ( 'cfg_data_quality_rule'[active], "" ) ) IN { "TRUE", "Y", "1" } && UPPER ( COALESCE ( 'cfg_data_quality_rule'[severity], "" ) ) = "CRITICAL" ) )
+
+RI Rules Failing =
+CALCULATE ( DISTINCTCOUNT ( 'cfg_data_quality_result'[rule_id] ), FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" && UPPER ( COALESCE ( 'cfg_data_quality_result'[status], "" ) ) IN { "FAILED", "FAIL", "ERROR" } ) )
+
+RI Checked Rows =
+CALCULATE ( [DQ Checked Rows], FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" ) )
+
+RI Failed Rows =
+CALCULATE ( [DQ Failed Rows], FILTER ( 'cfg_data_quality_result', UPPER ( COALESCE ( 'cfg_data_quality_result'[rule_type], "" ) ) = "REFERENTIAL_INTEGRITY" ) )
+
+RI Failure Rate =
+DIVIDE ( [RI Failed Rows], [RI Checked Rows] )
+
+// Archived schema inventory
+Archived Schema Columns =
+COUNTROWS ( 'cfg_archived_schema_live' )
+
+Archived Schema Tables =
+COUNTROWS ( SUMMARIZE ( 'cfg_archived_schema_live', 'cfg_archived_schema_live'[schema_name], 'cfg_archived_schema_live'[table_name] ) )
+
+Latest Archived Schema Capture =
+MAX ( 'cfg_archived_schema_live'[contract_loaded_at] )
+
+Archived Nullable Columns =
+COUNTROWS ( FILTER ( 'cfg_archived_schema_live', UPPER ( COALESCE ( 'cfg_archived_schema_live'[is_nullable], "" ) ) IN { "TRUE", "YES", "Y", "1" } ) )
+
+Archived Schema Data Types =
+DISTINCTCOUNT ( 'cfg_archived_schema_live'[data_type] )
+
+// Control health
+Reload Requests =
+[Archive ZIP Batches Awaiting Reload] + [Archive Files Awaiting Reload] + [Archive Table Exports Awaiting Reload] + [Gold Snapshots Awaiting Replay]
+
+Control Failures =
+[Failed Pipeline Runs] + [Failed Archive ZIP Batches] + [Archive File Failures] + [Failed Archive Table Exports] + [Failed Gold Snapshots]
+
+Operational Exception Count =
+[Control Failures] + [DQ Failed Checks]
+
+Dashboard Last Refreshed =
+FORMAT ( UTCNOW (), "dd mmm yyyy HH:mm" )
+
+```
+
+## Measures deliberately deferred
+
+The aligned model now contains job-run and job-step timing tables, so failed notebook steps, slow steps and job/step error evidence are no longer deferred. It still does not import the table-load metric, schema-drift event, referential-exception, rejected-row or data-domain profile reporting tables. Do not create detail visuals for those subjects until the corresponding `rpt_job_*` tables are imported.
+
+The dashboard wireframe at `reports/mission-control/index.html` remains the layout reference. Its Job steps & errors concept can now be implemented from the two imported `rpt_job_*` tables.
+
+## Same-page latest job, historical Gantt and step detail
+
+Build the feature on one report page as follows.
+
+### 1. Page filters and latest-job behaviour
+
+Add a `pipeline_name` slicer from `rpt_job_run_summary`. For a today-only operations page, add a relative date filter on `rpt_job_run_summary[started_at]` set to **is in this day**. The runner writes UTC timestamps, so agree the report/service timezone before using a local-day operational cut-off.
+
+Use these cards:
+
+| Card | Field |
+| --- | --- |
+| Selected/latest run | `[Selected or Latest Job Run ID]` |
+| Status | `[Selected or Latest Job Status]` |
+| Duration | `[Selected or Latest Job Duration (min)]` |
+| Step count | `[Selected or Latest Job Steps]` |
+| Failed steps | `[Selected or Latest Failed Steps]` |
+| Job error | `[Selected or Latest Job Error]` |
+
+With no explicit job selected, the measures choose the most recent `started_at` within the page's current date and pipeline filters. Selecting a single historical run replaces that fallback automatically.
+
+### 2. Historical job-run Gantt
+
+Configure the Gantt from `rpt_job_run_summary`:
+
+| Gantt role | Field |
+| --- | --- |
+| Task/category | `job_run_id` |
+| Parent/resource | `pipeline_name` |
+| Start | `started_at` |
+| End | `ended_at` |
+| Legend/colour | `status` |
+| Tooltip | `job_run_id`, `status`, `steps_succeeded`, `steps_failed`, `error_message` |
+
+Use `job_run_id`, not `run_id`, as the selectable bar identity. If the chosen Gantt visual requires duration rather than an end time, use `job_duration_seconds`. Apply status colours consistently: succeeded green, running amber/blue and failed red.
+
+In **Format → Edit interactions**, select the Gantt and set its interaction with the step table to **Filter**, not Highlight or None. The active single-direction relationship then filters the table to every step belonging to the clicked job. Clearing the Gantt selection returns the table to the latest job in the current page filters.
+
+### 3. Step table on the same page
+
+Build a table from `rpt_job_step_timing` using:
+
+1. `step_sequence`;
+2. `notebook_name`;
+3. `status`;
+4. `started_at`;
+5. `ended_at`;
+6. `step_duration_seconds`;
+7. `gap_from_previous_step_seconds`; and
+8. `error_message`.
+
+Sort ascending by `step_sequence`. Add `[Show Step for Selected or Latest Job Run]` to **Filters on this visual** and set it to `1`. This is the important fallback: it limits the table to the latest run when no Gantt bar is selected, while the relationship handles a clicked historical run.
+
+Turn on word wrap for `error_message`, give it enough width, and conditionally format failed/error statuses red. Successful steps naturally show a blank error. Use `[Selected Step Error Detail]` in a multi-row card or tooltip when the full error is too long for the table. `child_result` may be added to an authorised drillthrough page, but it should not replace `error_message` as the failure field.
+
+### 4. Expected interaction
+
+```text
+Date/pipeline filters
+        ↓
+Historical job Gantt ──click job_run_id──→ selected job
+        ↓ active 1:* relationship
+Step table + error text
+
+No Gantt selection ──latest-job measures──→ latest run in current filters
+```
+
+This design keeps the operational context on one page. A drillthrough page is optional for untruncated `error_message` and `child_result`, not required for the basic latest-job and clicked-history workflow.
+
+## Formatting and visual use
+
+| Measure group | Card/visual use | Format |
+| --- | --- | --- |
+| Job runs and selection | Historical Gantt, latest/selected job status, duration and job error | Whole counts; minutes to one decimal; error text with word wrap |
+| Job steps | Same-page ordered step table, failed-step cards and error detail | Whole counts; seconds or minutes; untruncated error text |
+| Pipeline execution | Executive health, Live ETL and Archive ETL outcome cards; duration and volume trends | Whole counts; minutes to one decimal; rates as percentages |
+| Archive control | Archive readiness, retry/reload queue and Gold snapshot replay | Whole counts and row volumes |
+| Data quality | Failed checks, failed rows, severity and RI rule outcome | Whole counts and percentages |
+| Schema inventory | Archived schema coverage and capture recency | Whole counts and date/time |
+| Control health | Executive exception and reload cards | Whole counts; it is a category total, not a unique-event total |
+
+## Deployment checklist
+
+1. Run the current live or archive pipeline. `00_setup_cfg` creates the monitoring control tables; its final `06_reports` step defines `rpt_job_run_summary` and `rpt_job_step_timing` as materialized lake views. Refresh the views after the parent job completes to include its final status.
+2. Open the aligned PBIP, set the Lakehouse connection if prompted, and run a full semantic-model refresh.
+3. Confirm `rpt_job_run_summary[job_run_id]` is unique and the two relationships are active, one-to-many and single-direction.
+4. Validate the actual status vocabulary with a table visual before relying on success/failure cards.
+5. Build the Gantt and step table using the field assignments above; set the Gantt-to-table interaction to Filter and the step-table fallback measure to `1`.
+6. Test three cases: no selection shows today's latest job, a successful job shows all steps with blank errors, and a failed historical job shows its failed step and complete `error_message`.
+7. Add a date-only dimension only when a consistent reporting-date field is agreed; do not mix `started_at`, `export_date`, `snapshot_date`, `checked_at`, and `contract_loaded_at` in one relationship.
+8. Keep sample-key JSON, child results and full errors on authorised operational pages; do not surface sensitive evidence on executive pages.
+
+## Shared report theme - 2026-09-23
+
+The current Mission Control report now uses the same maintained theme as the WMPP dashboard: `WMPP/templates/reports/templates/WMPP_Common_Theme.json`. Its KPI/card and container style variants are captured as shared presets; the job/step Gantt custom-visual settings, status colours, two-week filter, cross-filter interactions, measures and semantic-model connection are preserved. See `WMPP/templates/reports/templates/README.md` for the five-report rollout and the offline sync command. This changes report styling, not model data or DAX.
+
+Outstanding: reopen in Power BI Desktop and visually check cards, tables, buttons and job/step Gantt colours after theme application. No live refresh or rendering verification is claimed. Keep client-environment reconnection and deployment as the final workstatement, after user check-in and acceptance of all other completed work.

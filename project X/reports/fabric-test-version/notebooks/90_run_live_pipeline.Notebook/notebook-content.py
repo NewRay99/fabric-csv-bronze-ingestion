@@ -1,0 +1,203 @@
+# Fabric notebook source
+
+# METADATA ********************
+
+# META {
+# META   "kernel_info": {
+# META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "d286fa39-f255-4ba7-a982-32cb69362ef7",
+# META       "default_lakehouse_name": "LH_BCT_WMPP",
+# META       "default_lakehouse_workspace_id": "fefdb483-d26c-4bd9-9a4f-0c41cc786770",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "d286fa39-f255-4ba7-a982-32cb69362ef7"
+# META         }
+# META       ]
+# META     }
+# META   }
+# META }
+
+# MARKDOWN ********************
+
+# # 90 — Live pipeline runner
+# Run the live Bronze-to-Gold sequence in one controlled order. Each child notebook remains independently runnable for recovery.
+
+# PARAMETERS CELL ********************
+
+DEFAULT_LOCATION_CITY = "Birmingham"  # Forwarded to local preference-location enrichment.
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+NOTEBOOK_TIMEOUT_SECONDS = 7800
+STOP_ON_ERROR = True
+JOB_RUN_ID = ""  # Optional caller-supplied ID; generated when blank.
+FORCE_RERUN = False  # Set True to reprocess an already-successful Bronze export.
+RUN_ESSENTIAL_DQ = True  # True runs only CRITICAL DQ rules in step 03.
+
+LIVE_STEPS = [
+    ("00_setup_cfg", {}),
+    ("01_bronze_get_latest", {}),
+    ("01a_cfg_schema_capture_live", {}),
+    ("02_silver_formatter", {}),
+    ("03_silver_business_rules", {}),
+    ("04_gold_model", {}),
+    ("05_gold_dimensions", {}),
+    ("06_reports", {}),
+]
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+%run ./99_common_library
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+import uuid
+from datetime import datetime, timezone
+
+from notebookutils import mssparkutils
+
+PIPELINE_NAME = "90_run_live_pipeline"
+JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())
+FORCE_RERUN = str(FORCE_RERUN).strip().lower() in {"true", "1", "yes", "y"}
+RUN_ESSENTIAL_DQ = str(RUN_ESSENTIAL_DQ).strip().lower() in {"true", "1", "yes", "y"}
+started_at = datetime.now(timezone.utc)
+results = []
+def record_step(step_sequence, notebook_name, status, step_started,
+                child_result=None, error_message=None):
+    merge_monitor_row(
+        "monitoring.cfg_job_step_run",
+        (JOB_RUN_ID, step_sequence, notebook_name, step_started,
+         None if status == "RUNNING" else datetime.now(timezone.utc), status,
+         child_result[:4000] if child_result else None,
+         error_message[:4000] if error_message else None, datetime.now(timezone.utc)),
+        "job_run_id string,step_sequence int,notebook_name string,started_at timestamp,ended_at timestamp,status string,child_result string,error_message string,last_updated_at timestamp",
+        "target.job_run_id = source.job_run_id AND target.step_sequence = source.step_sequence",
+    )
+
+
+# Setup is deliberately first: it creates or upgrades the two orchestration
+# monitor tables before this runner writes its first status record.
+setup_name, setup_parameters = LIVE_STEPS[0]
+setup_started = datetime.now(timezone.utc)
+print(f"JOB_RUN_ID={JOB_RUN_ID}")
+print(f"FORCE_RERUN={FORCE_RERUN}")
+print(f"RUN_ESSENTIAL_DQ={RUN_ESSENTIAL_DQ}")
+print(f"=== START {setup_name} ===")
+try:
+    setup_result = mssparkutils.notebook.run(
+        setup_name, NOTEBOOK_TIMEOUT_SECONDS,
+        {**setup_parameters, "JOB_RUN_ID": JOB_RUN_ID},
+    )
+except Exception:
+    # Monitoring tables may not yet exist, so Fabric's notebook error is the
+    # authoritative failure record for a failed setup bootstrap.
+    raise
+
+merge_monitor_row(
+    "monitoring.cfg_job_run",
+    (JOB_RUN_ID, PIPELINE_NAME, started_at, None, "RUNNING", 1, 0, None,
+     datetime.now(timezone.utc)),
+    "job_run_id string,pipeline_name string,started_at timestamp,ended_at timestamp,status string,steps_succeeded int,steps_failed int,error_message string,last_updated_at timestamp",
+    "target.job_run_id = source.job_run_id",
+)
+record_step(1, setup_name, "SUCCESS", setup_started, str(setup_result))
+results.append((setup_name, "SUCCESS", str(setup_result)))
+print(f"=== SUCCESS {setup_name} ===")
+
+try:
+    for step_sequence, (notebook_name, parameters) in enumerate(LIVE_STEPS[1:], start=2):
+        step_started = datetime.now(timezone.utc)
+        print(f"=== START {notebook_name}; JOB_RUN_ID={JOB_RUN_ID} ===")
+        record_step(step_sequence, notebook_name, "RUNNING", step_started)
+        try:
+            child_parameters = {**parameters, "JOB_RUN_ID": JOB_RUN_ID}
+            if notebook_name == "02_silver_formatter":
+                child_parameters["FORCE_RERUN"] = str(FORCE_RERUN).lower()
+            if notebook_name == "03_silver_business_rules":
+                child_parameters["RUN_ESSENTIAL_DQ"] = str(RUN_ESSENTIAL_DQ).lower()
+                child_parameters["DEFAULT_LOCATION_CITY"] = DEFAULT_LOCATION_CITY
+            result = mssparkutils.notebook.run(
+                notebook_name, NOTEBOOK_TIMEOUT_SECONDS,
+                child_parameters,
+            )
+            result_text = str(result)
+            record_step(step_sequence, notebook_name, "SUCCESS", step_started,
+                        child_result=result_text)
+            results.append((notebook_name, "SUCCESS", result_text))
+            print(f"=== SUCCESS {notebook_name} ===")
+        except Exception as exc:
+            error_text = str(exc)[:4000]
+            record_step(step_sequence, notebook_name, "FAILED", step_started,
+                        error_message=error_text)
+            results.append((notebook_name, "FAILED", error_text))
+            print(f"=== FAILED {notebook_name}: {error_text} ===")
+            if STOP_ON_ERROR:
+                raise
+finally:
+    failed = [name for name, status, _ in results if status == "FAILED"]
+    succeeded = sum(1 for _, status, _ in results if status == "SUCCESS")
+    status = "FAILED" if failed else "SUCCESS"
+    error_message = f"Failed notebook(s): {failed}" if failed else None
+    merge_monitor_row(
+        "monitoring.cfg_job_run",
+        (JOB_RUN_ID, PIPELINE_NAME, started_at, datetime.now(timezone.utc), status,
+         succeeded, len(failed), error_message, datetime.now(timezone.utc)),
+        "job_run_id string,pipeline_name string,started_at timestamp,ended_at timestamp,status string,steps_succeeded int,steps_failed int,error_message string,last_updated_at timestamp",
+        "target.job_run_id = source.job_run_id",
+    )
+
+    # 06_reports only creates missing views; publish all six after closing the job.
+    try:
+        for view in (
+            "rpt_job_step_timing",
+            "rpt_job_step_summary",
+            "rpt_job_run_summary",
+            "rpt_job_schema_drift",
+            "rpt_job_data_quality",
+            "rpt_job_layer_lineage",
+        ):
+            spark.sql(
+                f"REFRESH MATERIALIZED LAKE VIEW monitoring.{view} FULL"
+            )
+    except Exception as refresh_error:
+        # A reporting refresh failure must not mask the original ETL outcome.
+        print(f"WARNING: Monitoring refresh failed: {refresh_error}")
+
+failed = [name for name, status, _ in results if status == "FAILED"]
+print(
+    f"Live pipeline {status}; JOB_RUN_ID={JOB_RUN_ID}; "
+    f"started={started_at.isoformat()}; results={results}"
+)
+if failed:
+    raise RuntimeError(f"Live pipeline failed notebook(s): {failed}")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

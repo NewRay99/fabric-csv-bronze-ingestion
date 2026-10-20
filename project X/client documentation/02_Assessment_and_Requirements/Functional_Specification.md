@@ -1,6 +1,16 @@
 # AM Functional Specification
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
+
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence. Functional/technical changes: document-level UUID grouping, unknown-date expiry flag, provider/home interactions and exact requirement-token filtering. R47 remains partial, R48 open and R93 UAT pending.
+
+[Implementation, exact calculations, gaps and acceptance](../04_Data_and_Reporting/REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
 The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
 
@@ -12,12 +22,11 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-The R-identifiers and requirement wording below remain the functional baseline. The new 80-row requirement reassessment records the WIP reporting evidence and remaining actions separately. Read-only explorers, measures and journey visuals do not fulfil write workflows such as accepting an offer, signing an IPA, sending notifications or uploading documents.
+The R-identifiers and requirement wording below remain the functional baseline. The new 80-row requirement reassessment records the WMPP_v16 reporting evidence and remaining actions separately. Read-only explorers, measures and journey visuals do not fulfil write workflows such as accepting an offer, signing an IPA, sending notifications or uploading documents.
 
 `Req ID` represents Requirement_Id. It must not replace KPI_ID: one requirement can have several measures and one measure can support several requirements. New associations in the Legend are proposed, pending owner approval.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
-
 
 ## Overview
 
@@ -28,16 +37,14 @@ This document defines the functional and non-functional requirements for a regio
 # 1. High-Level Purpose
 
 ## R1
-**Requirement:**
-Provide local authorities and children's trusts with the ability to place children with complex care needs with providers across the region who can meet those needs.
+**Requirement:** Provide local authorities and children's trusts with the ability to place children with complex care needs with providers across the region who can meet those needs.
 
 **Notes:**
 - Must support multiple organisations across the West Midlands region.
 - Must operate across different IT estates, systems, and applications.
 
 ## R2
-**Requirement:**
-Consider the current incumbent solution and associated processes when designing the future-state architecture.
+**Requirement:** Consider the current incumbent solution and associated processes when designing the future-state architecture.
 
 **Notes:**
 - Current solution uses a micro-procurement style portal.

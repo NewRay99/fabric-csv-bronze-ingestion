@@ -1,21 +1,14 @@
-# Measures Comparison Checklist — PBI Report vs Functional Specification
+# Measures Comparison Checklist - PBI Report vs Functional Specification
 
 ## Reporting reassessment 30 September 2026
 
 The legacy KPI-01–117 comparison below is retained for traceability. The current Legend preserves those references while assigning separate GOLD-KPI identifiers to 144 curated measures. Use the current requirement assessment for readiness; an older check mark must not imply current full-workflow acceptance.
 
-Recheck demographics, IPA-grain signatures, message detail, decline reasons and category membership against WIP before treating them as missing. Test journey selector isolation, same-IPA signing, provider-to-offer attribution, snapshot versus closure populations and category distinct counts before signing off the current report.
+Recheck demographics, IPA-grain signatures, message detail, decline reasons and category membership against WMPP_v16 before treating them as missing. Test journey selector isolation, same-IPA signing, provider-to-offer attribution, snapshot versus closure populations and category distinct counts before signing off the current report.
 
 See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** WMPP (West Midlands Placement Portal)
-**Report:** WMPP PILOT DASHBOARD V13 (v0.1 project)
-**Semantic model:** `SM_WMPP` — 95 measures in the current TMDL
-**Current catalogue:** [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md)
-**v00 → v01 changelog:** [`client documentation/07_Semantic_Model_Changelog_v00_to_v01.md`](client%20documentation/07_Semantic_Model_Changelog_v00_to_v01.md)
-**Date:** 10 July 2026
-**Prepared by:** Hermes Agent
+**Project:** WMPP (West Midlands Placement Portal) **Report:** WMPP PILOT DASHBOARD V13 (v0.1 project) **Semantic model:** `SM_WMPP` - 95 measures in the current TMDL **Current catalogue:** [`brand pack/WMPP_Semantic_Model_Measures.md`](brand%20pack/WMPP_Semantic_Model_Measures.md) **v00 → v01 changelog:** [`client documentation/07_Semantic_Model_Changelog_v00_to_v01.md`](client%20documentation/07_Semantic_Model_Changelog_v00_to_v01.md) **Date:** 10 July 2026 **Prepared by:** Hermes Agent
 
 ---
 
@@ -29,10 +22,10 @@ See [current status and release checks](WMPP_CURRENT_STATUS.md). This dated reas
 This checklist is retained as a comparison of the legacy functional-specification mapping. The v01 semantic model is the current source of truth and contains **95 measures**, not the older 90-measure inventory. Sections 1–9 classify the 90 names retained from v00; the five v01 additions are recorded separately in WMPP-DE-CHG-001 and remain unclassified pending stakeholder validation. Use the generated catalogue linked above for the exact current names and display folders.
 
 Each measure is checked for:
-- ✅ **Implemented** — exists in the PBI model AND maps to a functional requirement
-- ⚠️ **Partial** — exists in PBI but functional requirement is broader than what's measured
-- ❌ **Missing** — functional requirement exists but no corresponding PBI measure found
-- 📋 **Extra** — PBI measure exists but no functional requirement found (may be operational)
+- ✅ **Implemented** - exists in the PBI model AND maps to a functional requirement
+- ⚠️ **Partial** - exists in PBI but functional requirement is broader than what's measured
+- ❌ **Missing** - functional requirement exists but no corresponding PBI measure found
+- 📋 **Extra** - PBI measure exists but no functional requirement found (may be operational)
 
 ---
 
@@ -40,7 +33,7 @@ Each measure is checked for:
 
 | # | PBI Measure | KPI Logic Document | Functional Requirement | Status | Notes |
 |---|-------------|--------------------|-----------------------|--------|-------|
-| 1 | Total Referrals | ✅ "Unique referrals in selected period" | R24: Dashboard with referral status overview | ✅ Implemented | Core KPI — flow-based reporting |
+| 1 | Total Referrals | ✅ "Unique referrals in selected period" | R24: Dashboard with referral status overview | ✅ Implemented | Core KPI - flow-based reporting |
 | 2 | Referrals With Offers | ✅ "Open referrals with at least one offer" | R24, R51: Placement reporting | ✅ Implemented | |
 | 3 | Referrals Awaiting Offer | ✅ "Open referrals with no offers" | R24: Referral status overview | ✅ Implemented | |
 | 4 | Male Referrals | ✅ Gender cards support demographic monitoring | R51: Robust data model | ✅ Implemented | |
@@ -51,7 +44,7 @@ Each measure is checked for:
 | 9 | Referrals With Offers (Created in Period) | ✅ Period-based view | R51: Placement records | ✅ Implemented | |
 | 10 | Total Referrals That Recieved Offers | ✅ Referral offer rate | R51: Value analysis | ✅ Implemented | Typo in measure name ("Recieved") |
 
-**Gap:** ❌ No measure for **Emergency vs Planned referral split** — required by R18 and R57. The PBI model has `is_spot` but no KPI distinguishing emergency referrals.
+**Gap:** ❌ No measure for **Emergency vs Planned referral split** - required by R18 and R57. The PBI model has `is_spot` but no KPI distinguishing emergency referrals.
 
 ---
 
@@ -65,7 +58,7 @@ Each measure is checked for:
 | 14 | Avg Offers per Provider (Under Offer) | ✅ "Avg Offers per Provider: 4.97" | R51: Value analysis | ✅ Implemented | |
 | 15 | Successful Offers (Under Offer Referrals) | ✅ "Successful Offers: 10" | R28: Accept placements | ✅ Implemented | |
 | 16 | Unsuccessful Offers (Under Offer Referrals) | ✅ "Unsuccessful Offers: 40" | R28: Reject placements | ✅ Implemented | |
-| 17 | Offers in Draft (Under Offer Referrals) | ✅ "Offers in Draft Status: 162" | — | 📋 Extra | Operational KPI, not in functional spec |
+| 17 | Offers in Draft (Under Offer Referrals) | ✅ "Offers in Draft Status: 162" | - | 📋 Extra | Operational KPI, not in functional spec |
 | 18 | Pending Offers (Under Offer Referrals) | ✅ "Pending Offers: 377" | R24: Referral status | ✅ Implemented | |
 | 19 | Active Referrals With Provider Engagement | ✅ "Active Referral Engagement Rate: 94%" | R24, R26: Provider engagement | ✅ Implemented | |
 | 20 | Active Referral Engagement Rate | ✅ "Active Referral Engagement Rate" | R24: Referral status overview | ✅ Implemented | |
@@ -118,21 +111,21 @@ Each measure is checked for:
 
 | # | PBI Measure | KPI Logic Document | Functional Requirement | Status | Notes |
 |---|-------------|--------------------|-----------------------|--------|-------|
-| 40 | Provider Homes Registered | — | R91, R93: Provider directory | ✅ Implemented | |
-| 41 | Providers Registered | — | R91, R93: Provider directory | ✅ Implemented | |
-| 42 | Providers - Fostering | — | R95: Fostering Framework | ✅ Implemented | |
-| 43 | Providers - Residential | — | R96: Residential Framework 2.0 | ✅ Implemented | |
-| 44 | Providers - Supported Accommodation | — | R91: Provider services | ✅ Implemented | |
-| 45 | Framework Providers | — | R67: Framework management | ✅ Implemented | |
-| 46 | NON Framework Providers | — | R46: Non-framework QA | ✅ Implemented | |
-| 47 | Is Non Framework Provider | — | R46 | ✅ Implemented | |
-| 48 | Directory Summary Count | — | R93: Provider directory | ✅ Implemented | |
-| 49 | Residential Homes | — | R96 | ✅ Implemented | |
-| 50 | Supported Accommodation Homes | — | R91 | ✅ Implemented | |
-| 51 | Fostering Providers | — | R95 | ✅ Implemented | |
-| 52 | Fostering Chart Count | — | R95 | ✅ Implemented | |
+| 40 | Provider Homes Registered | - | R91, R93: Provider directory | ✅ Implemented | |
+| 41 | Providers Registered | - | R91, R93: Provider directory | ✅ Implemented | |
+| 42 | Providers - Fostering | - | R95: Fostering Framework | ✅ Implemented | |
+| 43 | Providers - Residential | - | R96: Residential Framework 2.0 | ✅ Implemented | |
+| 44 | Providers - Supported Accommodation | - | R91: Provider services | ✅ Implemented | |
+| 45 | Framework Providers | - | R67: Framework management | ✅ Implemented | |
+| 46 | NON Framework Providers | - | R46: Non-framework QA | ✅ Implemented | |
+| 47 | Is Non Framework Provider | - | R46 | ✅ Implemented | |
+| 48 | Directory Summary Count | - | R93: Provider directory | ✅ Implemented | |
+| 49 | Residential Homes | - | R96 | ✅ Implemented | |
+| 50 | Supported Accommodation Homes | - | R91 | ✅ Implemented | |
+| 51 | Fostering Providers | - | R95 | ✅ Implemented | |
+| 52 | Fostering Chart Count | - | R95 | ✅ Implemented | |
 
-**Gap:** ❌ No measure for **QA flag tracking** — R41 requires "advisory notices and flags against providers" but no KPI shows flagged provider counts or flag types (safeguarding, information notices).
+**Gap:** ❌ No measure for **QA flag tracking** - R41 requires "advisory notices and flags against providers" but no KPI shows flagged provider counts or flag types (safeguarding, information notices).
 
 ---
 
@@ -144,12 +137,12 @@ Each measure is checked for:
 |---|-------------|--------------------|-----------------------|--------|-------|
 | 53 | Draft No Activity Since Creation (Under Offer Referrals) | ✅ "Draft No Activity Since Creation: 165" | R24: Dashboard task management | ✅ Implemented | |
 | 54 | Draft Offers With Activity Since Creation | ✅ "Draft Offers With Activity: 1" | R24 | ✅ Implemented | |
-| 55 | Draft Offers Missing Dates | — | — | 📋 Extra | Data quality KPI |
-| 56 | Draft Offers Updated After Creation | — | — | 📋 Extra | |
-| 57 | Draft No Activity 7+ Days | — | R24 | ✅ Implemented | |
+| 55 | Draft Offers Missing Dates | - | - | 📋 Extra | Data quality KPI |
+| 56 | Draft Offers Updated After Creation | - | - | 📋 Extra | |
+| 57 | Draft No Activity 7+ Days | - | R24 | ✅ Implemented | |
 | 58 | Drafts No Activity 14+ Days (Under Offer Referrals) | ✅ "Drafts No Activity 14+ Days: 114" | R24 | ✅ Implemented | |
 | 59 | Average Days in Draft | ✅ "Average Days in Draft" | R24 | ✅ Implemented | |
-| 60 | Oldest Draft Age (Days) | — | R24 | ✅ Implemented | |
+| 60 | Oldest Draft Age (Days) | - | R24 | ✅ Implemented | |
 | 61 | Draft Offer Count (Under Offer Referrals) | ✅ "Offers in Draft Status: 166" | R24 | ✅ Implemented | |
 | 62 | Draft With No Activity Since Creation (%) | ✅ "99%" | R24 | ✅ Implemented | |
 | 63 | Drafts With No Activity 14+ Days | ✅ "114" | R24 | ✅ Implemented | Duplicate of #58 |
@@ -174,16 +167,16 @@ Each measure is checked for:
 
 | # | PBI Measure | KPI Logic Document | Functional Requirement | Status | Notes |
 |---|-------------|--------------------|-----------------------|--------|-------|
-| 73 | IPA Exists | — | R35: Digitised IPA | ✅ Implemented | |
-| 74 | Is In Accepted KPI | — | R28: Accept placements | ✅ Implemented | |
+| 73 | IPA Exists | - | R35: Digitised IPA | ✅ Implemented | |
+| 74 | Is In Accepted KPI | - | R28: Accept placements | ✅ Implemented | |
 | 75 | Accepted Offers Base | ✅ "Successful Offers: 10" | R28, R35 | ✅ Implemented | |
 | 76 | IPA Created | ✅ "IPA Created: 6" | R35: Digitised IPA | ✅ Implemented | |
 | 77 | IPA Completed | ✅ "IPA Completed: 1" (both signatures) | R35: Electronic signatures | ✅ Implemented | |
 | 78 | IPAs Pending Completion | ✅ "IPAs Pending Completion: 5" | R35 | ✅ Implemented | |
 | 79 | Offers Awaiting IPA Creation | ✅ "Offers Awaiting IPA Creation: 4" | R35 | ✅ Implemented | |
-| 80 | Is IPA Pending | — | R35 | ✅ Implemented | |
-| 81 | Is Awaiting IPA Creation | — | R35 | ✅ Implemented | |
-| 82 | Is IPA Completed | — | R35 | ✅ Implemented | |
+| 80 | Is IPA Pending | - | R35 | ✅ Implemented | |
+| 81 | Is Awaiting IPA Creation | - | R35 | ✅ Implemented | |
+| 82 | Is IPA Completed | - | R35 | ✅ Implemented | |
 | 83 | Accepted Offer to IPA Conversion % | ✅ "Accepted Offers to IPA Creation: 60%" | R35 | ✅ Implemented | |
 | 84 | Offers Still to Progress to IPA | ✅ "Offers Still to Progress to IPA: 40%" | R35 | ✅ Implemented | |
 | 85 | IPA Created to Completion % | ✅ "IPAs Created to Completion: 17%" | R35 | ✅ Implemented | |
@@ -195,10 +188,10 @@ Each measure is checked for:
 
 | # | PBI Measure | KPI Logic Document | Functional Requirement | Status | Notes |
 |---|-------------|--------------------|-----------------------|--------|-------|
-| 87 | Dashboard Last Refreshed: | — | R82: Performance reporting | ✅ Implemented | Operational |
-| 88 | Latest Export per Offer | — | R53: Data exportable | ✅ Implemented | |
-| 89 | Latest Offer Status Count | — | R24: Referral status | ✅ Implemented | |
-| 90 | Overlap Referrals | — | R22: Out-of-region placements | ⚠️ Partial | May support R22 but unclear if it tracks external placements |
+| 87 | Dashboard Last Refreshed: | - | R82: Performance reporting | ✅ Implemented | Operational |
+| 88 | Latest Export per Offer | - | R53: Data exportable | ✅ Implemented | |
+| 89 | Latest Offer Status Count | - | R24: Referral status | ✅ Implemented | |
+| 90 | Overlap Referrals | - | R22: Out-of-region placements | ⚠️ Partial | May support R22 but unclear if it tracks external placements |
 
 ---
 
@@ -210,14 +203,14 @@ These are functional requirements from the spec that have **no corresponding mea
 
 | Req ID | Requirement | Gap Description | Suggested Action |
 |--------|------------|-----------------|-----------------|
-| **R18** | Emergency placements — distinct identification, separate reporting | No KPI distinguishes emergency from planned/spot. `is_spot` ≠ emergency. | Add `Emergency Referrals` and `Emergency Placement Rate` measures. Add `is_emergency` flag to fact_referral. |
+| **R18** | Emergency placements - distinct identification, separate reporting | No KPI distinguishes emergency from planned/spot. `is_spot` ≠ emergency. | Add `Emergency Referrals` and `Emergency Placement Rate` measures. Add `is_emergency` flag to fact_referral. |
 | **R22** | Out-of-region placements tagged and finance-informed | `Overlap Referrals` measure exists but unclear if it tracks external (non-WM) placements specifically. | Add `Out-of-Region Referrals` measure with geographic tagging. |
 | **R41** | QA advisory notices and flags against providers | No KPI shows flagged provider counts or flag types (safeguarding, info notices). | Add `Providers with QA Flags`, `QA Flag Type Breakdown` measures. Use provider.qa_flag_* fields. |
 | **R47** | Document expiry monitoring and reminders | No KPI for documents nearing expiry or expired. | Add `Documents Expiring (30 days)`, `Documents Expired` measures. Use s3_file_metadata.expiry_date. |
 | **R48** | Providers with incomplete documentation excluded from referrals | No measure showing providers blocked due to incomplete docs. | Add `Providers Blocked (Incomplete Docs)` measure. |
 | **R54** | Capture reasons for declined placements | `Closed Referrals (by Reason)` exists but only covers offer decline codes, not full referral-level decline reasons. | Expand to include `referral_provider_decline_reason` data. |
 | **R58** | Commissioners alerted when framework changes during referral activity | No KPI for framework change tracking during active referrals. | Add `Framework Changes During Active Referrals` measure. |
-| **R62** | Finance officer — view completed placements, current IPAs, extract payment info | IPA funnel exists but no finance-specific views (weekly fees, payment methods, invoice details). | Add `Total Weekly Fee Liability`, `Payment Method Breakdown`, `IPA Payment Status` measures. |
+| **R62** | Finance officer - view completed placements, current IPAs, extract payment info | IPA funnel exists but no finance-specific views (weekly fees, payment methods, invoice details). | Add `Total Weekly Fee Liability`, `Payment Method Breakdown`, `IPA Payment Status` measures. |
 
 ### Medium Priority Gaps
 
@@ -226,8 +219,8 @@ These are functional requirements from the spec that have **no corresponding mea
 | **R14** | In-system messaging between placement officers and providers | Message table exists (`fact_provider_message`) but no KPI for message volume, response times, or priority handling. | Add `Messages Sent`, `Avg Response Time`, `Priority Messages Unread` measures. |
 | **R20** | Full audit tracking across placement activities, IPA, signatures, approvals, negotiations | No audit trail KPIs. | Add `Audit Events by Type`, `IPA Signature Completion Rate` measures. |
 | **R31** | Resolved requests automatically removed from provider views | No measure tracking resolved-but-not-hidden requests. | Add `Resolved Requests Visible` measure for data quality. |
-| **R49** | QA officer — easily identify provider due diligence status | No KPI for due diligence status. | Add `Providers by Due Diligence Status` measure. |
-| **R55** | RBAC for commissioners — access regional data, market-wide trends | This is a security requirement, not a measure gap. Verify RLS is configured. | Check if RLS is implemented in the semantic model. |
+| **R49** | QA officer - easily identify provider due diligence status | No KPI for due diligence status. | Add `Providers by Due Diligence Status` measure. |
+| **R55** | RBAC for commissioners - access regional data, market-wide trends | This is a security requirement, not a measure gap. Verify RLS is configured. | Check if RLS is implemented in the semantic model. |
 | **R57** | Emergency and planned placements separately reportable | Same as R18. | See R18 action. |
 
 ### Low Priority Gaps
@@ -272,9 +265,9 @@ The first three status rows reconcile the 90 legacy catalogue entries (85 + 2 + 
 ## Recommended Next Steps
 
 1. **Immediate (sprint 1):**
-   - Add emergency placement KPIs (R18, R57) — highest business impact
-   - Add QA flag tracking measures (R41) — safeguarding critical
-   - Add finance measures (R62) — payment tracking required
+   - Add emergency placement KPIs (R18, R57) - highest business impact
+   - Add QA flag tracking measures (R41) - safeguarding critical
+   - Add finance measures (R62) - payment tracking required
 
 2. **Short-term (sprint 2):**
    - Add document expiry monitoring (R47, R48)

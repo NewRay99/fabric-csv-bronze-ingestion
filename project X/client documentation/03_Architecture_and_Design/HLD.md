@@ -1,8 +1,18 @@
 # High-Level Design (HLD)
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
+
+The saved business model now has 73 tables/501 definitions/35 pages; relationships and roles remain 54/two. KPI Definition preserves all preceding 567 records and its column contract, appends GOLD-KPI-327–330 dated 18 October, and contains 571 dictionary records. Mission Control remains 34 tables/351 definitions/17 pages. These counts include helpers and historical dispositions; they do not establish accepted KPI scope.
+
+Saved model and catalogue checks have passed. Refreshed results, report and mobile review, access checks and client acceptance remain pending. The data owner must confirm how documents are assigned to homes; the model link and schema contract currently differ. Document compliance, reminder delivery and referral blocking still require separate rules and evidence. Architecture remains the existing imported Gold model; one disconnected metadata table is added. No new physical Gold fact, home relationship, RLS rule or document-content integration is introduced.
+
+[Implementation, exact calculations, gaps and acceptance](../04_Data_and_Reporting/REQUIREMENT_DASHBOARD_ADDITIONS.md).
+
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
+
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 The workbook remains a controlled reporting dictionary; it is not an ETL feed or a deployed-model guarantee. Current source provenance supersedes older archive counts below.
 
@@ -12,31 +22,22 @@ No report/model, notebook, relationship, RLS or deployment was changed. Existing
 
 ## Reporting reassessment 30 September 2026
 
-The report experience is now Overall Performance → Referrals → Referral Explorer → Referral Detail, with Provider Explorer → Provider Detail in parallel. The local WIP has 58 semantic tables including local helpers, and uses Import partitions. Do not describe this saved model as a deployed Direct Lake solution.
+The report experience is now Overall Performance → Referrals → Referral Explorer → Referral Detail, with Provider Explorer → Provider Detail in parallel. The local WMPP_v16 has 58 semantic tables including local helpers, and uses Import partitions. Do not describe this saved model as a deployed Direct Lake solution.
 
 Gold includes current demographic, IPA-signature, message/reason and category evidence. Calculated journey stages and selectors live in the semantic layer; they do not add source event history or write back to the portal. The dynamic role and separate global-summary design require identity/disclosure acceptance before client release.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** West Midlands Placement Portal data platform
-**Client:** Birmingham Children's Trust
-**Platform:** Microsoft Fabric Lakehouse
-**Status:** Current implementation baseline
-**Baseline date:** 16 August 2026
+**Project:** West Midlands Placement Portal data platform **Client:** Birmingham Children's Trust **Platform:** Microsoft Fabric Lakehouse **Status:** Current implementation baseline **Baseline date:** 16 August 2026
 
 ## 1. Purpose
 
-This document defines the high-level architecture for ingesting WMPP current
-and historical extracts, conforming them into a governed Silver layer, applying
-data-quality controls, and publishing a Gold referral model for reporting.
+This document defines the high-level architecture for ingesting WMPP current and historical extracts, conforming them into a governed Silver layer, applying data-quality controls, and publishing a Gold referral model for reporting.
 
 The solution supports two operational streams:
 
-1. **Historical archive hydration** — builds the archive, replays canonical
-   monthly Silver states, and writes historical Gold snapshots.
-2. **Business-as-usual latest processing** — loads the latest extracts through
-   Bronze, Silver, data quality, and Gold.
+1. **Historical archive hydration** - builds the archive, replays canonical monthly Silver states, and writes historical Gold snapshots.
+2. **Business-as-usual latest processing** - loads the latest extracts through Bronze, Silver, data quality, and Gold.
 
 ## 2. Architecture overview
 
@@ -89,10 +90,7 @@ flowchart LR
     F --> G["04 Gold model\nhistorical snapshot"]
 ```
 
-Archive exports are treated as complete table snapshots. The replay selects
-the final available export in each calendar month and, for each table, uses its
-latest available export on or before that canonical date. DQ and Gold are
-orchestrated after a successful monthly Silver state.
+Archive exports are treated as complete table snapshots. The replay selects the final available export in each calendar month and, for each table, uses its latest available export on or before that canonical date. DQ and Gold are orchestrated after a successful monthly Silver state.
 
 ### 4.2 BAU latest processing
 
@@ -105,44 +103,32 @@ flowchart LR
     E --> F["04 Gold model"]
 ```
 
-The latest stream overwrites/refreshed current Bronze entities, captures schema
-drift against the approved contract, formats the newest export into Silver,
-then runs DQ and Gold.
+The latest stream overwrites/refreshed current Bronze entities, captures schema drift against the approved contract, formats the newest export into Silver, then runs DQ and Gold.
 
 ## 5. Configuration and governance
 
-- `00_setup_cfg.ipynb` is the sole owner of configuration-table DDL and
-  non-destructive legacy column upgrades.
+- `00_setup_cfg.ipynb` is the sole owner of configuration-table DDL and non-destructive legacy column upgrades.
 - `schema_definition.csv` is the approved schema, PK, and FK contract.
 - `dq_rule_definition.csv` contains supplementary DQ rules.
-- `ref_*` internal/reference tables are excluded through `common_util.ipynb`;
-  they are not dated business extracts.
-- Schema changes are recorded in `monitoring.cfg_schema_drift_event`; the
-  approved definition is materialised in
-  `monitoring.cfg_schema_drift_definition`.
-- ETL defects and their resolutions are recorded in
-  `change tracking/ETL_ISSUE_LOG.md`; material implementation batches are
-  summarised in `change tracking/ETL_CHANGE_LOG.md`.
+- `ref_*` internal/reference tables are excluded through `common_util.ipynb`; they are not dated business extracts.
+- Schema changes are recorded in `monitoring.cfg_schema_drift_event`; the approved definition is materialised in `monitoring.cfg_schema_drift_definition`.
+- ETL defects and their resolutions are recorded in `change tracking/ETL_ISSUE_LOG.md`; material implementation batches are summarised in `change tracking/ETL_CHANGE_LOG.md`.
 
 ## 6. Resilience and recoverability
 
 - Archive ZIP/file controls and Silver export controls make runs resumable.
-- `SUCCESS` with `reload = false` is skipped; failed, interrupted, unseen, or
-  explicitly reloaded work is retried.
+- `SUCCESS` with `reload = false` is skipped; failed, interrupted, unseen, or explicitly reloaded work is retried.
 - Archive file replacement is idempotent by source path and export date.
-- Missing schema contracts and missing DQ source/parent objects are recorded as
-  auditable skips rather than causing unrelated tables to fail.
+- Missing schema contracts and missing DQ source/parent objects are recorded as auditable skips rather than causing unrelated tables to fail.
 - The guarded Silver reset notebook requires an exact confirmation phrase.
 
 ## 7. Security and operational boundaries
 
-- Fabric workspace and Lakehouse access must use Entra ID and least-privilege
-  workspace roles.
+- Fabric workspace and Lakehouse access must use Entra ID and least-privilege workspace roles.
 - Source and Lakehouse permissions are managed outside these notebooks.
 - Rejected-row logging stores key references, not full child records.
 - Notebook diagnostics should contain identifiers, dates, and counts only.
-- Secrets and local `.env` files must never be committed or deployed as
-  notebook assets.
+- Secrets and local `.env` files must never be committed or deployed as notebook assets.
 
 ## 8. High-level non-functional requirements
 
@@ -157,9 +143,6 @@ then runs DQ and Gold.
 
 ## 9. Current boundaries
 
-- End-to-end execution requires Fabric Spark, Delta Lake, `notebookutils`, the
-  target Lakehouse, and deployed `Files/cfg_files` configuration.
-- Bronze catalogue inspection cannot infer trustworthy PK/FK relationships;
-  referential metadata must be approved in `schema_definition.csv`.
-- The archive audit-event table is intentionally excluded from standard entity
-  replay and requires a dedicated event model if reporting is needed later.
+- End-to-end execution requires Fabric Spark, Delta Lake, `notebookutils`, the target Lakehouse, and deployed `Files/cfg_files` configuration.
+- Bronze catalogue inspection cannot infer trustworthy PK/FK relationships; referential metadata must be approved in `schema_definition.csv`.
+- The archive audit-event table is intentionally excluded from standard entity replay and requires a dedicated event model if reporting is needed later.

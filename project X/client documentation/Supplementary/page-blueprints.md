@@ -6,20 +6,14 @@ Use the current storyboard: Overall Performance for executive snapshots/cost; Re
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-Use the active Gold v02 fact names and measures in
-[Measures Comparison Checklist](Measures_Comparison_Checklist.md).
-The referral outcome visual should group
-`Fact Referral[RequiredPlacementDateOutcome]`; target-hit cards should use the
-`Placement Target Hit Rate` measure rather than comparing unrelated placement
-and referral cohorts.
+Use the active Gold v02 fact names and measures in [Measures Comparison Checklist](Measures_Comparison_Checklist.md). The referral outcome visual should group `Fact Referral[RequiredPlacementDateOutcome]`; target-hit cards should use the `Placement Target Hit Rate` measure rather than comparing unrelated placement and referral cohorts.
 
 ## 1. Executive Overview
 
 - Header: title, refresh date, reporting period and urgency slicer.
 - KPI row: New referrals; Open referrals; Placed by target; Critical overdue; IPAs issued; committed cost.
 - Main left visual: 12-month created referrals vs IPAs issued by required date.
-- Main right visual: open referrals by target status — On track, Due soon, Overdue.
+- Main right visual: open referrals by target status - On track, Due soon, Overdue.
 - Lower row: target hit rate by urgency, referral-to-IPA funnel, board attention table.
 
 ## 2. Target & Urgency

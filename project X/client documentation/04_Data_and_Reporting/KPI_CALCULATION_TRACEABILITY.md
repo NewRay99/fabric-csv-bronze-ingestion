@@ -1,24 +1,24 @@
 # KPI calculation traceability
 
-## 17 October 2026 — KPI Definition reconciled to latest saved WIP
+## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
-The archive-based assessment below is retained as dated evidence. The latest saved-WIP calculation snapshot supersedes it for current DAX/source definitions.
+The archive-based assessment below is retained as dated evidence. The latest saved-WMPP_v16 calculation snapshot supersedes it for current DAX/source definitions.
 
-KPI Definition is now reconciled to the latest saved local WIP, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. These local report definitions include changes newer than default `master` (`0a65e96`); they are captured by source hashes and complete calculation snapshots, not represented as committed model changes or deployment evidence.
+KPI Definition is now reconciled to the latest saved local WMPP_v16, rather than only the September catalogue or repository ZIP. The business source has 72 tables/492 measure definitions/35 pages; current Mission Control has 34 tables/351 definitions/17 pages. The calculation reference records these changes; production refresh and acceptance remain pending.
 
 The sheet retains the original A:H column names/order and Date Added in I. Original KPI IDs, requirement links/descriptions, Section values and original specifications are preserved. Current Tables/Calculation/PBI Measure fields have been refreshed and missing reporting definitions appended. It now has **567 dictionary records**: the preceding 152 plus 231 additional business definitions and 184 operational metrics. This is a dictionary record count including historical aliases/dispositions, not an approved KPI scope total. Display/filter/selection helpers are separately labelled in Gold Source Coverage; all 843 current definitions are documented.
 
 [Current DAX, Python/Spark SQL and source evidence](KPI_LATEST_CALCULATIONS.md).
 
-## 17 October 2026 — New catalogue entries in KPI Definition
+## 17 October 2026 - New catalogue entries in KPI Definition
 
-Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WIP measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
+Appended `GOLD-KPI-110`–`GOLD-KPI-144` to **KPI Definition rows 119–153** using the existing A:I fields. The sheet now contains 152 records: the unchanged 117 legacy records plus 35 later catalogue entries. Stable Gold identifiers are retained. These are existing WMPP_v16 measures newly included in this import sheet; no calculation was implemented by this workbook change. The overlapping 144-entry Gold catalogue is unchanged, and 152 is a workbook record count, not an accepted KPI scope baseline.
 
 The 35 rows carry **30 September 2026** as `Date Added`, their first evidenced appearance anywhere in the version-controlled Dashboard Legend, commit [`70b71eb`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/70b71eb95648eaea487830bdcd8f9931b527a05e). The four earlier workbook revisions contain no `GOLD-KPI-110`–`GOLD-KPI-144`. This date predates their move into KPI Definition on 17 October. The original 117 dates remain 26 August 2026. This field records catalogue provenance, not business creation, model implementation or approval.
 
 Each appended row includes the exact saved measure name/DAX, existing source-table and Python/Spark SQL locators, full calculation-trace reference, existing Section classification and proposed requirement links. Requirement descriptions explicitly retain owner approval pending; implementation status remains Built; UAT pending. The original rows, headers, v1 reference and all other workbook cells are unchanged. Embedded Power BI reference tables still need separate synchronisation and refreshed-model/UAT checks.
 
-## 17 October 2026 — KPI Date Added metadata
+## 17 October 2026 - KPI Date Added metadata
 
 The user-approved `Date Added` column is appended as **column I** on `KPI Definition`; the original eight columns A:H retain their names, order and definitions. All 117 existing KPI rows are dated **26 August 2026**, because every one was already present in the first workbook upload, commit [`b372181`](https://github.com/NewRay99/fabric-csv-bronze-ingestion/commit/b372181ac72ce43ac274b2928ca8473f32921891). The untouched v1 workbook is the same original content.
 
@@ -29,16 +29,6 @@ Reviewed 17 October 2026; source default branch `master`, commit `0a65e962ff3ab9
 The workbook keeps the original 117 `KPI-xx` records. The separate 144-entry `GOLD-KPI-xxx` catalogue is retained without converting either list into an accepted KPI total. Mission Control has 276 saved measures, including selectors, state/display helpers and benchmarks; they are not 276 new business KPIs.
 
 Original requirement wording, IDs, dated notes, KPI descriptions, original specification calculations and original Section values remain preserved. New operational requirement associations are proposed and require business/operations-owner approval. A similarly named measure or explicit old catalogue mapping does not prove equal population, grain, filter context or security behaviour.
-
-## Inspected source baselines
-
-| Package | SHA-256 | Saved inventory |
-|---|---|---|
-| Business WIP: `project X\reports\WIP\SM WMPP v16 updated WIP.zip` | `96e11470a29966e7fb91cb900a2ed3a53262b99d639b3f4a1ee48750557dbe7c` | 71 tables; 490 measures; 35 pages |
-| Mission Control current Im: `project X\reports\current\SM WMPP Mission Control Im.zip` | `ab11841888301e8d262efa6c0df2354d4ef1043d8edc4e95105423c7da068b27` | 33 tables; 276 measures; 17 pages |
-| Mission Control older LM: `project X\reports\WIP\SM WMPP Mission Control (LM).zip` | `fcd58bcdd9c2640e6cd072ba4a0e972670acd9bb8757198da7166f7cacdf3660` | 33 tables; 67 measures; 4 pages |
-
-Archive member paths below are paths *inside* these ZIP files. Notebook links are pinned to the inspected commit. Current models use Import M partitions for physical sources; saved files are not proof of deployment or Direct Lake.
 
 ## Legacy KPI assessments
 
@@ -74,7 +64,7 @@ Original calculation/specification:
 Accepted offers
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — internal scoped-table helper (see KPI-36); historical classification: 🗄 Retired Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
+Assessment: **Legacy helper retired; original specification retained**. Retired - internal scoped-table helper (see KPI-36); historical classification: 🗄 Retired Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
 
 Current named measures: [Accepted Offers](#dax-business-accepted-offers)
 
@@ -96,7 +86,7 @@ Original calculation/specification:
 `COUNT(DISTINCT offer_id) WHERE offer_status = 'ACCEPTED'`
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it; historical classification: 🗄 Retired Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
+Assessment: **Legacy helper retired; original specification retained**. Retired - internal base helper; [Successful Offers (Under Offer Referrals)] + `dim_offer_status` cover it; historical classification: 🗄 Retired Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
 
 Current named measures: [Accepted Offers](#dax-business-accepted-offers)
 
@@ -250,7 +240,7 @@ Original calculation/specification:
 `COUNT(DISTINCT event_id) GROUP BY event_type`
 ```
 
-Assessment: **Defined in saved model; runtime/UAT pending**. Referral Lifecycle Events — derived roll-up, not the source audit log; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
+Assessment: **Defined in saved model; runtime/UAT pending**. Referral Lifecycle Events - derived roll-up, not the source audit log; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
 
 Current named measures: [Referral Lifecycle Events](#dax-business-referral-lifecycle-events)
 
@@ -294,7 +284,7 @@ Original calculation/specification:
 `AVG(response hours between messages)`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no message response-time facts in Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no message response-time facts in Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -448,7 +438,7 @@ Original calculation/specification:
 `COUNT(DISTINCT referral_id) GROUP BY decline_reason_code`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no decline-reason history in active Gold; historical classification: ❌ Blocked Current closure-reason lookup logic is present in 05_gold_dimensions.py; that is not an approved referral-level decline-history KPI.
+Assessment: **Source/business-definition gap remains**. Blocked - no decline-reason history in active Gold; historical classification: ❌ Blocked Current closure-reason lookup logic is present in 05_gold_dimensions.py; that is not an approved referral-level decline-history KPI.
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -470,7 +460,7 @@ Original calculation/specification:
 Aggregated provider count
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed; historical classification: 🗄 Retired
+Assessment: **Legacy helper retired; original specification retained**. Retired - depended on report-view axis tables; rebuild with field parameters over `dim_provider_home[service_type]` if needed; historical classification: 🗄 Retired
 
 Current named measures: [Directory Summary Count](#dax-business-directory-summary-count)
 
@@ -492,7 +482,7 @@ Original calculation/specification:
 `(Total Providers - KPI-102) / Total Providers * 100`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — as KPI-102; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - as KPI-102; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -844,7 +834,7 @@ Original calculation/specification:
 Chart aggregation
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — depended on `rpt_provider_fostering` report-view table (see KPI-48); historical classification: 🗄 Retired
+Assessment: **Legacy helper retired; original specification retained**. Retired - depended on `rpt_provider_fostering` report-view table (see KPI-48); historical classification: 🗄 Retired
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -888,7 +878,7 @@ Original calculation/specification:
 Active referrals where referral category changed during lifecycle
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no framework-change history in active Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no framework-change history in active Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1042,7 +1032,7 @@ Original calculation/specification:
 `COUNT(DISTINCT ipa_id) GROUP BY payment lifecycle status`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no payment lifecycle facts in Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no payment lifecycle facts in Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1240,7 +1230,7 @@ Original calculation/specification:
 `COUNT(DISTINCT offer_id) GROUP BY offer_status ORDER BY count DESC`
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — Gold `fact_offer` is already deduplicated to the latest state per offer; historical classification: 🗄 Retired
+Assessment: **Legacy helper retired; original specification retained**. Retired - Gold `fact_offer` is already deduplicated to the latest state per offer; historical classification: 🗄 Retired
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1284,7 +1274,7 @@ Original calculation/specification:
 `COUNT(DISTINCT message_id)`
 ```
 
-Assessment: **Defined in saved model; runtime/UAT pending**. Provider Messages Sent — lifecycle-event proxy for volume only; no response-time or unread analysis; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
+Assessment: **Defined in saved model; runtime/UAT pending**. Provider Messages Sent - lifecycle-event proxy for volume only; no response-time or unread analysis; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
 
 Current named measures: [Provider Messages Sent](#dax-business-provider-messages-sent)
 
@@ -1372,7 +1362,7 @@ Original calculation/specification:
 Distinct offer IDs
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary; historical classification: 🗄 Retired
+Assessment: **Legacy helper retired; original specification retained**. Retired - internal CALCULATETABLE helper; Gold relationship graph + TREATAS make it unnecessary; historical classification: 🗄 Retired
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1570,7 +1560,7 @@ Original calculation/specification:
 `KPI-95 / KPI-01 * 100`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — as KPI-95; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - as KPI-95; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1592,7 +1582,7 @@ Original calculation/specification:
 `COUNT(DISTINCT r.referral_id) JOIN fact_referral_offer rpo JOIN dim_provider p WHERE p.country != 'United Kingdom' OR p.county NOT LIKE '%West Midlands%'`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — `fact_referral[region]` is null until a reliable source supplies it; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - `fact_referral[region]` is null until a reliable source supplies it; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1636,7 +1626,7 @@ Original calculation/specification:
 `COUNT(DISTINCT ipa_id) GROUP BY payment_method WHERE closed = false`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no payment method / payment facts in Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no payment method / payment facts in Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1768,7 +1758,7 @@ Original calculation/specification:
 `COUNT(DISTINCT offer_id) WHERE offer_status = 'PENDING' AND DATEDIFF(current_date(), offer_date) BETWEEN min_days AND max_days GROUP BY band_label`
 ```
 
-Assessment: **Legacy helper retired; original specification retained**. Retired — disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands; historical classification: 🗄 Retired
+Assessment: **Legacy helper retired; original specification retained**. Retired - disconnected age-band table; the four pending-age measures (KPI-65–68) cover the same bands; historical classification: 🗄 Retired
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -1834,7 +1824,7 @@ Original calculation/specification:
 `COUNT(DISTINCT message_id) WHERE no message status exists`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no message-status facts in Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no message-status facts in Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -2010,7 +2000,7 @@ Original calculation/specification:
 `COUNT(DISTINCT provider_id) WHERE expired documentation exists`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no expected-document set in Gold to test completeness against; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no expected-document set in Gold to test completeness against; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -2076,7 +2066,7 @@ Original calculation/specification:
 `UNPIVOT qa_flag columns → COUNT(DISTINCT provider_id) GROUP BY flag_type`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no QA flag-type dimension to unpivot in Gold; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no QA flag-type dimension to unpivot in Gold; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -2120,7 +2110,7 @@ Original calculation/specification:
 `COUNT(DISTINCT referral_id) / COUNT(DISTINCT DATE(modified_timestamp))`
 ```
 
-Assessment: **Source/business-definition gap remains**. Blocked — no durable referral update timestamp; lifecycle events provide the supported activity measure; historical classification: ❌ Blocked
+Assessment: **Source/business-definition gap remains**. Blocked - no durable referral update timestamp; lifecycle events provide the supported activity measure; historical classification: ❌ Blocked
 
 Current named measures: None verified. No DAX or source data has been fabricated.
 
@@ -2582,7 +2572,7 @@ Original calculation/specification:
 `SUM(costs_total_weekly_fee) WHERE signed_by_local_authority = true AND signed_by_provider = true AND closed = false`
 ```
 
-Assessment: **Defined in saved model; runtime/UAT pending**. Estimated Active Weekly Cost — estimate, not signed-only actuals; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
+Assessment: **Defined in saved model; runtime/UAT pending**. Estimated Active Weekly Cost - estimate, not signed-only actuals; historical classification: ⚠️ Proxy Compare population, grain and filters with the original specification; a named alternative does not establish semantic equivalence.
 
 Current named measures: [Estimated Active Weekly Cost](#dax-business-estimated-active-weekly-cost)
 
@@ -2622,150 +2612,150 @@ These 144 entries are a separate catalogue with its existing identifiers; the 35
 
 | Catalogue ID | Measure | Legacy mapping | Requirement association | Current interpretation |
 |---|---|---|---|---|
-| GOLD-KPI-001 | [Total Referrals](#dax-business-total-referrals) | KPI-01 | R24, R51 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-002 | [Open Referrals](#dax-business-open-referrals) | KPI-08, KPI-29 | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-003 | [Closed Referrals](#dax-business-closed-referrals) | KPI-31 | R13 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-004 | [Referrals With an Offer](#dax-business-referrals-with-an-offer) | KPI-02, KPI-09, KPI-33 | R24, R36, R51 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-005 | [Referrals Awaiting Offer](#dax-business-referrals-awaiting-offer) | KPI-03, KPI-32 | R24, R36 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-006 | [Referrals Without Provider Assignment](#dax-business-referrals-without-provider-assignment) | New Gold KPI | R24, R26 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-007 | [Open Overdue Referrals](#dax-business-open-overdue-referrals) | New Gold KPI | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-008 | [Referrals Placed by Required Date](#dax-business-referrals-placed-by-required-date) | New Gold KPI | R18, R57 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-009 | [Placement Target Hit Rate](#dax-business-placement-target-hit-rate) | New Gold KPI | R18, R57 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-010 | [Median Days to First Action](#dax-business-median-days-to-first-action) | New Gold KPI | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-011 | [Median Days to First Offer](#dax-business-median-days-to-first-offer) | New Gold KPI | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-012 | [Median Days to IPA](#dax-business-median-days-to-ipa) | New Gold KPI | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-013 | [Open Referrals Stalled 7+ Days](#dax-business-open-referrals-stalled-7-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-014 | [Offers Submitted](#dax-business-offers-submitted) | KPI-12, KPI-28 | R25–R29 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-015 | [Accepted Offers](#dax-business-accepted-offers) | KPI-15, KPI-39, KPI-75 | R28, R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-016 | [Offers with a Decision](#dax-business-offers-with-a-decision) | New Gold KPI | R28 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-017 | [Offer Acceptance Rate](#dax-business-offer-acceptance-rate) | New Gold KPI | R28 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-018 | [Average Offers per Referral](#dax-business-average-offers-per-referral) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-019 | [Offers in Draft](#dax-business-offers-in-draft) | KPI-17, KPI-61 | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-020 | [Draft Offers Stalled 7+ Days](#dax-business-draft-offers-stalled-7-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-021 | [IPAs Created](#dax-business-ipas-created) | KPI-76 | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-022 | [Active IPAs](#dax-business-active-ipas) | New Gold KPI | R35, R62 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-001 | [Total Referrals](#dax-business-total-referrals) | KPI-01 | R24, R51 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-002 | [Open Referrals](#dax-business-open-referrals) | KPI-08, KPI-29 | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-003 | [Closed Referrals](#dax-business-closed-referrals) | KPI-31 | R13 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-004 | [Referrals With an Offer](#dax-business-referrals-with-an-offer) | KPI-02, KPI-09, KPI-33 | R24, R36, R51 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-005 | [Referrals Awaiting Offer](#dax-business-referrals-awaiting-offer) | KPI-03, KPI-32 | R24, R36 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-006 | [Referrals Without Provider Assignment](#dax-business-referrals-without-provider-assignment) | New Gold KPI | R24, R26 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-007 | [Open Overdue Referrals](#dax-business-open-overdue-referrals) | New Gold KPI | R24 | Definition present in SM_WMPP_v16WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-008 | [Referrals Placed by Required Date](#dax-business-referrals-placed-by-required-date) | New Gold KPI | R18, R57 | Definition present in SM_WMPP_v16WMPP_v16WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-009 | [Placement Target Hit Rate](#dax-business-placement-target-hit-rate) | New Gold KPI | R18, R57 | Definition present in SM_WMPP_v16WMPP_v16WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-010 | [Median Days to First Action](#dax-business-median-days-to-first-action) | New Gold KPI | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-011 | [Median Days to First Offer](#dax-business-median-days-to-first-offer) | New Gold KPI | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-012 | [Median Days to IPA](#dax-business-median-days-to-ipa) | New Gold KPI | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-013 | [Open Referrals Stalled 7+ Days](#dax-business-open-referrals-stalled-7-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-014 | [Offers Submitted](#dax-business-offers-submitted) | KPI-12, KPI-28 | R25–R29 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-015 | [Accepted Offers](#dax-business-accepted-offers) | KPI-15, KPI-39, KPI-75 | R28, R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-016 | [Offers with a Decision](#dax-business-offers-with-a-decision) | New Gold KPI | R28 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-017 | [Offer Acceptance Rate](#dax-business-offer-acceptance-rate) | New Gold KPI | R28 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-018 | [Average Offers per Referral](#dax-business-average-offers-per-referral) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-019 | [Offers in Draft](#dax-business-offers-in-draft) | KPI-17, KPI-61 | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-020 | [Draft Offers Stalled 7+ Days](#dax-business-draft-offers-stalled-7-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-021 | [IPAs Created](#dax-business-ipas-created) | KPI-76 | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-022 | [Active IPAs](#dax-business-active-ipas) | New Gold KPI | R35, R62 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
 | GOLD-KPI-023 | [Estimated Active Weekly Cost](#dax-business-estimated-active-weekly-cost) | KPI-107 replacement | R62 | Estimated active weekly liability, not actual spend or verified signed fee liability. |
-| GOLD-KPI-024 | [Average Estimated Weekly Cost — Confirmed Referrals](#dax-business-average-estimated-weekly-cost-confirmed-referrals) | New Gold KPI | R62 | Average referral-level estimated weekly cost for issued IPAs, not actual cost. |
-| GOLD-KPI-025 | [Provider Assignments](#dax-business-provider-assignments) | New Gold KPI | R24, R26 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-026 | [Provider Declines](#dax-business-provider-declines) | New Gold KPI | R54 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-027 | [Provider Decline Rate](#dax-business-provider-decline-rate) | New Gold KPI | R54 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-028 | [Snapshot Referrals](#dax-business-snapshot-referrals) | New Gold KPI | R24, R52 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-029 | [Open Referrals at Snapshot](#dax-business-open-referrals-at-snapshot) | New Gold KPI | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-024 | [Average Estimated Weekly Cost - Confirmed Referrals](#dax-business-average-estimated-weekly-cost-confirmed-referrals) | New Gold KPI | R62 | Average referral-level estimated weekly cost for issued IPAs, not actual cost. |
+| GOLD-KPI-025 | [Provider Assignments](#dax-business-provider-assignments) | New Gold KPI | R24, R26 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-026 | [Provider Declines](#dax-business-provider-declines) | New Gold KPI | R54 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-027 | [Provider Decline Rate](#dax-business-provider-decline-rate) | New Gold KPI | R54 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-028 | [Snapshot Referrals](#dax-business-snapshot-referrals) | New Gold KPI | R24, R52 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-029 | [Open Referrals at Snapshot](#dax-business-open-referrals-at-snapshot) | New Gold KPI | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
 | GOLD-KPI-030 | [Closed Referrals at Snapshot](#dax-business-closed-referrals-at-snapshot) | New Gold KPI | R13 | Closure-date predicate at the retained snapshot date; distinguish closed/cancelled status snapshot measure. |
-| GOLD-KPI-031 | [Referrals with IPA at Snapshot](#dax-business-referrals-with-ipa-at-snapshot) | New Gold KPI | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-032 | [Open Overdue Referrals at Snapshot](#dax-business-open-overdue-referrals-at-snapshot) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-033 | [Open On-Track Referrals at Snapshot](#dax-business-open-on-track-referrals-at-snapshot) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-034 | [Open Referral Rate at Snapshot](#dax-business-open-referral-rate-at-snapshot) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-035 | [Placement Rate at Snapshot](#dax-business-placement-rate-at-snapshot) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-036 | [Referrals Created This Month](#dax-business-referrals-created-this-month) | KPI-23 | R24, R52 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-037 | [Referrals Created Previous Month](#dax-business-referrals-created-previous-month) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-038 | [Referral Volume Month on Month](#dax-business-referral-volume-month-on-month) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-039 | [Referral Volume Month on Month %](#dax-business-referral-volume-month-on-month-percent) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-040 | [Referrals Created This Financial Year](#dax-business-referrals-created-this-financial-year) | KPI-24 | R52 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-041 | [Referrals Currently Active](#dax-business-referrals-currently-active) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-042 | [Referrals Under Offer](#dax-business-referrals-under-offer) | KPI-30 | R24, R36 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-043 | [Closed or Cancelled Referrals](#dax-business-closed-or-cancelled-referrals) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-044 | [Active Referrals With Provider Engagement](#dax-business-active-referrals-with-provider-engagement) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-045 | [Active Referral Engagement Rate](#dax-business-active-referral-engagement-rate) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-046 | [Active Awaiting Offers With Engagement](#dax-business-active-awaiting-offers-with-engagement) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-047 | [Active Awaiting Offers Without Engagement](#dax-business-active-awaiting-offers-without-engagement) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-031 | [Referrals with IPA at Snapshot](#dax-business-referrals-with-ipa-at-snapshot) | New Gold KPI | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-032 | [Open Overdue Referrals at Snapshot](#dax-business-open-overdue-referrals-at-snapshot) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-033 | [Open On-Track Referrals at Snapshot](#dax-business-open-on-track-referrals-at-snapshot) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-034 | [Open Referral Rate at Snapshot](#dax-business-open-referral-rate-at-snapshot) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-035 | [Placement Rate at Snapshot](#dax-business-placement-rate-at-snapshot) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-036 | [Referrals Created This Month](#dax-business-referrals-created-this-month) | KPI-23 | R24, R52 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-037 | [Referrals Created Previous Month](#dax-business-referrals-created-previous-month) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-038 | [Referral Volume Month on Month](#dax-business-referral-volume-month-on-month) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-039 | [Referral Volume Month on Month %](#dax-business-referral-volume-month-on-month-percent) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-040 | [Referrals Created This Financial Year](#dax-business-referrals-created-this-financial-year) | KPI-24 | R52 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-041 | [Referrals Currently Active](#dax-business-referrals-currently-active) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-042 | [Referrals Under Offer](#dax-business-referrals-under-offer) | KPI-30 | R24, R36 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-043 | [Closed or Cancelled Referrals](#dax-business-closed-or-cancelled-referrals) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-044 | [Active Referrals With Provider Engagement](#dax-business-active-referrals-with-provider-engagement) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-045 | [Active Referral Engagement Rate](#dax-business-active-referral-engagement-rate) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-046 | [Active Awaiting Offers With Engagement](#dax-business-active-awaiting-offers-with-engagement) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-047 | [Active Awaiting Offers Without Engagement](#dax-business-active-awaiting-offers-without-engagement) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
 | GOLD-KPI-048 | [Emergency Referrals](#dax-business-emergency-referrals) | KPI-91 | R18, R57 | Same-day-date flag and active statuses; not an approved statutory emergency classification. |
 | GOLD-KPI-049 | [Planned Referrals](#dax-business-planned-referrals) | KPI-93 | R57 | Different-date rule; missing dates excluded and reversed dates require review. |
 | GOLD-KPI-050 | [Emergency Placement Rate](#dax-business-emergency-placement-rate) | KPI-92 | R18, R57 | Emergency-referral numerator divided by all selected referrals; not actual placement completion. |
 | GOLD-KPI-051 | [Referrals With Multiple Provider Assignments](#dax-business-referrals-with-multiple-provider-assignments) | KPI-90 | R24, R26 (proposed) | Assignment overlap only; unrelated to out-of-region placement. |
-| GOLD-KPI-052 | [Non-Draft Offers](#dax-business-non-draft-offers) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-053 | [Pending Offers](#dax-business-pending-offers) | KPI-18 | R24 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-054 | [Unsuccessful Offers](#dax-business-unsuccessful-offers) | KPI-16 | R28 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-055 | [Offers With Recorded Rejection Reason](#dax-business-offers-with-recorded-rejection-reason) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-056 | [Providers Who Made Offers](#dax-business-providers-who-made-offers) | KPI-11 | R25, R26 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-057 | [Average Offers per Provider](#dax-business-average-offers-per-provider) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-058 | [Average Offers per Referral Under Offer](#dax-business-average-offers-per-referral-under-offer) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-059 | [Offers on Referrals Under Offer](#dax-business-offers-on-referrals-under-offer) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-060 | [Spot Offers](#dax-business-spot-offers) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-061 | [Non-Spot Offers](#dax-business-non-spot-offers) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-062 | [Spot Offer Rate](#dax-business-spot-offer-rate) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-063 | [Draft Offers With No Activity Since Creation](#dax-business-draft-offers-with-no-activity-since-creation) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-064 | [Draft Offers With Activity Since Creation](#dax-business-draft-offers-with-activity-since-creation) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-065 | [Draft Offers Missing Dates](#dax-business-draft-offers-missing-dates) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-066 | [Draft Offers Stalled 14+ Days](#dax-business-draft-offers-stalled-14-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-067 | [Average Days in Draft](#dax-business-average-days-in-draft) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-068 | [Oldest Draft Age Days](#dax-business-oldest-draft-age-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-069 | [Draft Offers With No Activity %](#dax-business-draft-offers-with-no-activity-percent) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-070 | [Pending Offers 0-7 Days](#dax-business-pending-offers-0-7-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-071 | [Pending Offers 8-14 Days](#dax-business-pending-offers-8-14-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-072 | [Pending Offers 15-29 Days](#dax-business-pending-offers-15-29-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-073 | [Pending Offers 30+ Days](#dax-business-pending-offers-30-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-074 | [Providers With Pending Offers 30+ Days](#dax-business-providers-with-pending-offers-30-days) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-075 | [Latest Offer Source Export](#dax-business-latest-offer-source-export) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-076 | [Provider Homes Registered](#dax-business-provider-homes-registered) | KPI-40 | R91, R93 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-077 | [Providers Registered](#dax-business-providers-registered) | KPI-41 | R91, R93 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-078 | [Providers - Fostering](#dax-business-providers-fostering) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-079 | [Providers - Residential](#dax-business-providers-residential) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-080 | [Providers - Supported Accommodation](#dax-business-providers-supported-accommodation) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-081 | [Residential Homes](#dax-business-residential-homes) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-082 | [Supported Accommodation Homes](#dax-business-supported-accommodation-homes) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-083 | [Fostering Homes](#dax-business-fostering-homes) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-084 | [Framework Providers](#dax-business-framework-providers) | KPI-45 | R67 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-085 | [Non-Framework Providers](#dax-business-non-framework-providers) | KPI-46 | R46 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-086 | [Providers With QA Flags](#dax-business-providers-with-qa-flags) | KPI-97 | R41 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-087 | [QA Flagged Homes](#dax-business-qa-flagged-homes) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-088 | [Providers Pending Onboarding](#dax-business-providers-pending-onboarding) | KPI-116 | R59 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-089 | [Providers Approved](#dax-business-providers-approved) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-052 | [Non-Draft Offers](#dax-business-non-draft-offers) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-053 | [Pending Offers](#dax-business-pending-offers) | KPI-18 | R24 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-054 | [Unsuccessful Offers](#dax-business-unsuccessful-offers) | KPI-16 | R28 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-055 | [Offers With Recorded Rejection Reason](#dax-business-offers-with-recorded-rejection-reason) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-056 | [Providers Who Made Offers](#dax-business-providers-who-made-offers) | KPI-11 | R25, R26 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-057 | [Average Offers per Provider](#dax-business-average-offers-per-provider) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-058 | [Average Offers per Referral Under Offer](#dax-business-average-offers-per-referral-under-offer) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-059 | [Offers on Referrals Under Offer](#dax-business-offers-on-referrals-under-offer) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-060 | [Spot Offers](#dax-business-spot-offers) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-061 | [Non-Spot Offers](#dax-business-non-spot-offers) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-062 | [Spot Offer Rate](#dax-business-spot-offer-rate) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-063 | [Draft Offers With No Activity Since Creation](#dax-business-draft-offers-with-no-activity-since-creation) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-064 | [Draft Offers With Activity Since Creation](#dax-business-draft-offers-with-activity-since-creation) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-065 | [Draft Offers Missing Dates](#dax-business-draft-offers-missing-dates) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-066 | [Draft Offers Stalled 14+ Days](#dax-business-draft-offers-stalled-14-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-067 | [Average Days in Draft](#dax-business-average-days-in-draft) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-068 | [Oldest Draft Age Days](#dax-business-oldest-draft-age-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-069 | [Draft Offers With No Activity %](#dax-business-draft-offers-with-no-activity-percent) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-070 | [Pending Offers 0-7 Days](#dax-business-pending-offers-0-7-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-071 | [Pending Offers 8-14 Days](#dax-business-pending-offers-8-14-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-072 | [Pending Offers 15-29 Days](#dax-business-pending-offers-15-29-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-073 | [Pending Offers 30+ Days](#dax-business-pending-offers-30-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-074 | [Providers With Pending Offers 30+ Days](#dax-business-providers-with-pending-offers-30-days) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-075 | [Latest Offer Source Export](#dax-business-latest-offer-source-export) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-076 | [Provider Homes Registered](#dax-business-provider-homes-registered) | KPI-40 | R91, R93 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-077 | [Providers Registered](#dax-business-providers-registered) | KPI-41 | R91, R93 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-078 | [Providers - Fostering](#dax-business-providers-fostering) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-079 | [Providers - Residential](#dax-business-providers-residential) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-080 | [Providers - Supported Accommodation](#dax-business-providers-supported-accommodation) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-081 | [Residential Homes](#dax-business-residential-homes) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-082 | [Supported Accommodation Homes](#dax-business-supported-accommodation-homes) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-083 | [Fostering Homes](#dax-business-fostering-homes) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-084 | [Framework Providers](#dax-business-framework-providers) | KPI-45 | R67 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-085 | [Non-Framework Providers](#dax-business-non-framework-providers) | KPI-46 | R46 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-086 | [Providers With QA Flags](#dax-business-providers-with-qa-flags) | KPI-97 | R41 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-087 | [QA Flagged Homes](#dax-business-qa-flagged-homes) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-088 | [Providers Pending Onboarding](#dax-business-providers-pending-onboarding) | KPI-116 | R59 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-089 | [Providers Approved](#dax-business-providers-approved) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
 | GOLD-KPI-090 | [Provider Onboarding Success Rate](#dax-business-provider-onboarding-success-rate) | KPI-117 | R59 | Approved-provider share, not bulk onboarding job success. |
-| GOLD-KPI-091 | [Provider Submission Documents](#dax-business-provider-submission-documents) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-092 | [Documents Expiring Next 30 Days](#dax-business-documents-expiring-next-30-days) | KPI-100 | R47 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-093 | [Documents Expired](#dax-business-documents-expired) | KPI-101 | R47, R48 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-094 | [Provider Homes With Expired Documents](#dax-business-provider-homes-with-expired-documents) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-095 | [IPAs Issued This Month](#dax-business-ipas-issued-this-month) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-096 | [Closed IPAs](#dax-business-closed-ipas) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-097 | [Average Active IPA Weekly Cost](#dax-business-average-active-ipa-weekly-cost) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-098 | [Total IPA Weekly Cost](#dax-business-total-ipa-weekly-cost) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-099 | [Accepted Offers With IPA](#dax-business-accepted-offers-with-ipa) | KPI-79 replacement | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-100 | [Offers Awaiting IPA Creation](#dax-business-offers-awaiting-ipa-creation) | KPI-79 | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-101 | [Accepted Offer to IPA Conversion %](#dax-business-accepted-offer-to-ipa-conversion-percent) | KPI-83 | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-102 | [Offers Still to Progress to IPA %](#dax-business-offers-still-to-progress-to-ipa-percent) | KPI-84 | R35 | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-103 | [Referrals With Fully Signed IPA](#dax-business-referrals-with-fully-signed-ipa) | New Gold KPI | — | Distinct referral IDs with at least one completed IPA; not a count of IPAs. |
-| GOLD-KPI-104 | [IPA Signature Completion Rate](#dax-business-ipa-signature-completion-rate) | New Gold KPI | — | IPA Completed / IPAs Created at IPA grain; both signature flags required. |
+| GOLD-KPI-091 | [Provider Submission Documents](#dax-business-provider-submission-documents) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-092 | [Documents Expiring Next 30 Days](#dax-business-documents-expiring-next-30-days) | KPI-100 | R47 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-093 | [Documents Expired](#dax-business-documents-expired) | KPI-101 | R47, R48 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-094 | [Provider Homes With Expired Documents](#dax-business-provider-homes-with-expired-documents) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-095 | [IPAs Issued This Month](#dax-business-ipas-issued-this-month) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-096 | [Closed IPAs](#dax-business-closed-ipas) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-097 | [Average Active IPA Weekly Cost](#dax-business-average-active-ipa-weekly-cost) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-098 | [Total IPA Weekly Cost](#dax-business-total-ipa-weekly-cost) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-099 | [Accepted Offers With IPA](#dax-business-accepted-offers-with-ipa) | KPI-79 replacement | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-100 | [Offers Awaiting IPA Creation](#dax-business-offers-awaiting-ipa-creation) | KPI-79 | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-101 | [Accepted Offer to IPA Conversion %](#dax-business-accepted-offer-to-ipa-conversion-percent) | KPI-83 | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-102 | [Offers Still to Progress to IPA %](#dax-business-offers-still-to-progress-to-ipa-percent) | KPI-84 | R35 | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-103 | [Referrals With Fully Signed IPA](#dax-business-referrals-with-fully-signed-ipa) | New Gold KPI | - | Distinct referral IDs with at least one completed IPA; not a count of IPAs. |
+| GOLD-KPI-104 | [IPA Signature Completion Rate](#dax-business-ipa-signature-completion-rate) | New Gold KPI | - | IPA Completed / IPAs Created at IPA grain; both signature flags required. |
 | GOLD-KPI-105 | [Referral Lifecycle Events](#dax-business-referral-lifecycle-events) | KPI-113 | R20 | Derived activity roll-up, not a complete source audit trail. |
-| GOLD-KPI-106 | [Referrals With Lifecycle Activity](#dax-business-referrals-with-lifecycle-activity) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
-| GOLD-KPI-107 | [Average Lifecycle Events per Referral](#dax-business-average-lifecycle-events-per-referral) | New Gold KPI | — | Definition present in WIP _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-106 | [Referrals With Lifecycle Activity](#dax-business-referrals-with-lifecycle-activity) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
+| GOLD-KPI-107 | [Average Lifecycle Events per Referral](#dax-business-average-lifecycle-events-per-referral) | New Gold KPI | - | Definition present in WMPP_v16 _Measures. Reconcile against refreshed Gold and approved business rules. |
 | GOLD-KPI-108 | [Gold Model Last Refreshed](#dax-business-gold-model-last-refreshed) | KPI-87 | R82 | Persisted Gold build timestamp; not source completeness or service-performance evidence. |
 | GOLD-KPI-109 | [Provider Messages Sent](#dax-business-provider-messages-sent) | KPI-110 proxy | R14 | Counts ProviderMessageSent lifecycle events; either sender may be represented. Not provider-authored response time. |
-| GOLD-KPI-110 | [Male Referrals](#dax-business-male-referrals) | WIP addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
-| GOLD-KPI-111 | [Female Referrals](#dax-business-female-referrals) | WIP addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
-| GOLD-KPI-112 | [Other Gender Referrals](#dax-business-other-gender-referrals) | WIP addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
-| GOLD-KPI-113 | [Total Gendered Referrals](#dax-business-total-gendered-referrals) | WIP addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
-| GOLD-KPI-114 | [IPA Completed](#dax-business-ipa-completed) | WIP addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
-| GOLD-KPI-115 | [IPAs Pending Completion](#dax-business-ipas-pending-completion) | WIP addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
-| GOLD-KPI-116 | [IPAs Signed by Provider](#dax-business-ipas-signed-by-provider) | WIP addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
-| GOLD-KPI-117 | [IPAs Signed by Local Authority](#dax-business-ipas-signed-by-local-authority) | WIP addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
-| GOLD-KPI-118 | [Snapshot referrals previous month](#dax-business-snapshot-referrals-previous-month) | WIP addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
-| GOLD-KPI-119 | [Snapshot referrals MoM change](#dax-business-snapshot-referrals-mom-change) | WIP addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
-| GOLD-KPI-120 | [Snapshot referrals MoM percent](#dax-business-snapshot-referrals-mom-percent) | WIP addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
-| GOLD-KPI-121 | [Referrals closed during month](#dax-business-referrals-closed-during-month) | WIP addition | R24, R51 (proposed) | Distinct referrals by closure date in month; a flow measure, not closed state at snapshot. Closure date is derived. |
-| GOLD-KPI-122 | [Matching referrals](#dax-business-matching-referrals) | WIP addition | R13, R24, R25 (proposed) | Distinct referrals after category and matching-offer filters; category totals are not additive. |
-| GOLD-KPI-123 | [Journey referrals 1](#dax-business-journey-referrals-1) | WIP addition | R24, R25, R35, R51 (proposed) | Referral created. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-124 | [Journey referrals 2](#dax-business-journey-referrals-2) | WIP addition | R24, R25, R35, R51 (proposed) | Provider search. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-125 | [Journey referrals 3](#dax-business-journey-referrals-3) | WIP addition | R24, R25, R35, R51 (proposed) | Offers received. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-126 | [Journey referrals 4](#dax-business-journey-referrals-4) | WIP addition | R24, R25, R35, R51 (proposed) | Offer accepted. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-127 | [Journey referrals 5](#dax-business-journey-referrals-5) | WIP addition | R24, R25, R35, R51 (proposed) | IPA created. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-128 | [Journey referrals 6](#dax-business-journey-referrals-6) | WIP addition | R24, R25, R35, R51 (proposed) | IPA signed. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-129 | [Journey referrals 7](#dax-business-journey-referrals-7) | WIP addition | R24, R25, R35, R51 (proposed) | Closed / cancelled / withdrawn. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-130 | [Journey referrals 8](#dax-business-journey-referrals-8) | WIP addition | R24, R25, R35, R51 (proposed) | Needs review. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
-| GOLD-KPI-131 | [Journey providers 0](#dax-business-journey-providers-0) | WIP addition | R24, R26, R28, R35 (proposed) | Assigned / draft / unclear. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
-| GOLD-KPI-132 | [Journey providers 1](#dax-business-journey-providers-1) | WIP addition | R24, R26, R28, R35 (proposed) | Message activity only. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
-| GOLD-KPI-133 | [Journey providers 2](#dax-business-journey-providers-2) | WIP addition | R24, R26, R28, R35 (proposed) | Offers made. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
-| GOLD-KPI-134 | [Journey providers 3](#dax-business-journey-providers-3) | WIP addition | R24, R26, R28, R35 (proposed) | Offer accepted. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
-| GOLD-KPI-135 | [Journey providers 5](#dax-business-journey-providers-5) | WIP addition | R24, R26, R28, R35 (proposed) | Provider signed. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
-| GOLD-KPI-136 | [Journey providers both signed](#dax-business-journey-providers-both-signed) | WIP addition | R35, R62 (proposed) | Providers with both-signed IPA evidence; subset of provider-signed, not a further stage. |
-| GOLD-KPI-137 | [Provider Response Rate](#dax-business-provider-response-rate) | WIP addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
-| GOLD-KPI-138 | [Provider Average Response Hours](#dax-business-provider-average-response-hours) | WIP addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
-| GOLD-KPI-139 | [Provider Offer Conversion Rate](#dax-business-provider-offer-conversion-rate) | WIP addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
-| GOLD-KPI-140 | [Provider Target Placement Rate](#dax-business-provider-target-placement-rate) | WIP addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
-| GOLD-KPI-141 | [Preferred-city distance coverage](#dax-business-preferred-city-distance-coverage) | WIP addition | R13, R51 (proposed) | Share of offers with preference-city distance evidence. Missing coordinates are not zero distance. |
-| GOLD-KPI-142 | [Median preferred-city distance km](#dax-business-median-preferred-city-distance-km) | WIP addition | R13, R51 (proposed) | City-centroid to postcode straight-line estimate, not child-address or road distance; approved coordinates required. |
-| GOLD-KPI-143 | [Homes Offered](#dax-business-homes-offered) | WIP addition | R26, R51, R93 (proposed) | Distinct offered homes in current context; not spare capacity or available beds. |
-| GOLD-KPI-144 | [Critical Overdue Referrals](#dax-business-critical-overdue-referrals) | WIP addition | R16, R24 (proposed) | Operational overdue/critical cohort; validate urgency rule with owner before escalation. |
+| GOLD-KPI-110 | [Male Referrals](#dax-business-male-referrals) | WMPP_v16 addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
+| GOLD-KPI-111 | [Female Referrals](#dax-business-female-referrals) | WMPP_v16 addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
+| GOLD-KPI-112 | [Other Gender Referrals](#dax-business-other-gender-referrals) | WMPP_v16 addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
+| GOLD-KPI-113 | [Total Gendered Referrals](#dax-business-total-gendered-referrals) | WMPP_v16 addition | R51 (proposed) | Gender-based referral analysis; reconcile unknowns and validate access controls. |
+| GOLD-KPI-114 | [IPA Completed](#dax-business-ipa-completed) | WMPP_v16 addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
+| GOLD-KPI-115 | [IPAs Pending Completion](#dax-business-ipas-pending-completion) | WMPP_v16 addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
+| GOLD-KPI-116 | [IPAs Signed by Provider](#dax-business-ipas-signed-by-provider) | WMPP_v16 addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
+| GOLD-KPI-117 | [IPAs Signed by Local Authority](#dax-business-ipas-signed-by-local-authority) | WMPP_v16 addition | R15, R35, R62 (proposed) | IPA-grain completion/signing backlog; completed includes closed signed records; pending excludes closed unsigned records. |
+| GOLD-KPI-118 | [Snapshot referrals previous month](#dax-business-snapshot-referrals-previous-month) | WMPP_v16 addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
+| GOLD-KPI-119 | [Snapshot referrals MoM change](#dax-business-snapshot-referrals-mom-change) | WMPP_v16 addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
+| GOLD-KPI-120 | [Snapshot referrals MoM percent](#dax-business-snapshot-referrals-mom-percent) | WMPP_v16 addition | R24, R51, R52 (proposed) | Compare retained month-end state with the prior calendar month; missing prior data remains blank. |
+| GOLD-KPI-121 | [Referrals closed during month](#dax-business-referrals-closed-during-month) | WMPP_v16 addition | R24, R51 (proposed) | Distinct referrals by closure date in month; a flow measure, not closed state at snapshot. Closure date is derived. |
+| GOLD-KPI-122 | [Matching referrals](#dax-business-matching-referrals) | WMPP_v16 addition | R13, R24, R25 (proposed) | Distinct referrals after category and matching-offer filters; category totals are not additive. |
+| GOLD-KPI-123 | [Journey referrals 1](#dax-business-journey-referrals-1) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Referral created. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-124 | [Journey referrals 2](#dax-business-journey-referrals-2) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Provider search. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-125 | [Journey referrals 3](#dax-business-journey-referrals-3) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Offers received. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-126 | [Journey referrals 4](#dax-business-journey-referrals-4) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Offer accepted. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-127 | [Journey referrals 5](#dax-business-journey-referrals-5) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | IPA created. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-128 | [Journey referrals 6](#dax-business-journey-referrals-6) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | IPA signed. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-129 | [Journey referrals 7](#dax-business-journey-referrals-7) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Closed / cancelled / withdrawn. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-130 | [Journey referrals 8](#dax-business-journey-referrals-8) | WMPP_v16 addition | R24, R25, R35, R51 (proposed) | Needs review. One current stage per referral at refresh. Closed status overrides milestones; counts are not historic funnel conversion. |
+| GOLD-KPI-131 | [Journey providers 0](#dax-business-journey-providers-0) | WMPP_v16 addition | R24, R26, R28, R35 (proposed) | Assigned / draft / unclear. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
+| GOLD-KPI-132 | [Journey providers 1](#dax-business-journey-providers-1) | WMPP_v16 addition | R24, R26, R28, R35 (proposed) | Message activity only. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
+| GOLD-KPI-133 | [Journey providers 2](#dax-business-journey-providers-2) | WMPP_v16 addition | R24, R26, R28, R35 (proposed) | Offers made. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
+| GOLD-KPI-134 | [Journey providers 3](#dax-business-journey-providers-3) | WMPP_v16 addition | R24, R26, R28, R35 (proposed) | Offer accepted. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
+| GOLD-KPI-135 | [Journey providers 5](#dax-business-journey-providers-5) | WMPP_v16 addition | R24, R26, R28, R35 (proposed) | Provider signed. Distinct provider at furthest evidenced stage in current cohort; not additive offer counts. No browsing evidence. |
+| GOLD-KPI-136 | [Journey providers both signed](#dax-business-journey-providers-both-signed) | WMPP_v16 addition | R35, R62 (proposed) | Providers with both-signed IPA evidence; subset of provider-signed, not a further stage. |
+| GOLD-KPI-137 | [Provider Response Rate](#dax-business-provider-response-rate) | WMPP_v16 addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
+| GOLD-KPI-138 | [Provider Average Response Hours](#dax-business-provider-average-response-hours) | WMPP_v16 addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
+| GOLD-KPI-139 | [Provider Offer Conversion Rate](#dax-business-provider-offer-conversion-rate) | WMPP_v16 addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
+| GOLD-KPI-140 | [Provider Target Placement Rate](#dax-business-provider-target-placement-rate) | WMPP_v16 addition | R26, R51 (proposed) | Assignment-cohort component based on qualifying offers/reasons. Not a message SLA, composite score or suitability rating. |
+| GOLD-KPI-141 | [Preferred-city distance coverage](#dax-business-preferred-city-distance-coverage) | WMPP_v16 addition | R13, R51 (proposed) | Share of offers with preference-city distance evidence. Missing coordinates are not zero distance. |
+| GOLD-KPI-142 | [Median preferred-city distance km](#dax-business-median-preferred-city-distance-km) | WMPP_v16 addition | R13, R51 (proposed) | City-centroid to postcode straight-line estimate, not child-address or road distance; approved coordinates required. |
+| GOLD-KPI-143 | [Homes Offered](#dax-business-homes-offered) | WMPP_v16 addition | R26, R51, R93 (proposed) | Distinct offered homes in current context; not spare capacity or available beds. |
+| GOLD-KPI-144 | [Critical Overdue Referrals](#dax-business-critical-overdue-referrals) | WMPP_v16 addition | R16, R24 (proposed) | Operational overdue/critical cohort; validate urgency rule with owner before escalation. |
 
 ## Mission Control operational coverage
 
@@ -3089,12 +3079,12 @@ All saved measures are included for calculation transparency; helper measures ar
 | [Step comparison](#dax-mission-step-comparison) | `_Run Benchmarks` | Job & Step Timelines | None asserted |
 | [Single calendar day](#dax-mission-single-calendar-day) | `_Run Benchmarks` | Job & Step Timelines; Load Calendar | None asserted |
 
-## Exact saved DAX — business
+## Exact saved DAX - business
 
 <a id="dax-business-accepted-offer-to-ipa-conversion-percent"></a>
 ### Accepted Offer to IPA Conversion %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 447. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 447. Measure container: `_Measures`.
 
 ```dax
 [Accepted Offer to IPA Conversion %] =
@@ -3104,7 +3094,7 @@ DIVIDE ( [IPAs Created], [Accepted Offers] )
 <a id="dax-business-accepted-offers"></a>
 ### Accepted Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 967. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 967. Measure container: `_Measures`.
 
 ```dax
 [Accepted Offers] =
@@ -3120,7 +3110,7 @@ CALCULATE (
 <a id="dax-business-accepted-offers-with-ipa"></a>
 ### Accepted Offers With IPA
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1193. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1193. Measure container: `_Measures`.
 
 ```dax
 [Accepted Offers With IPA] =
@@ -3131,7 +3121,7 @@ VAR linked_offers = VALUES ( 'fact_ipa'[accepted_offer_id] )
 <a id="dax-business-active-awaiting-offers-with-engagement"></a>
 ### Active Awaiting Offers With Engagement
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 343. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 343. Measure container: `_Measures`.
 
 ```dax
 [Active Awaiting Offers With Engagement] =
@@ -3146,7 +3136,7 @@ CALCULATE (
 <a id="dax-business-active-awaiting-offers-without-engagement"></a>
 ### Active Awaiting Offers Without Engagement
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 354. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 354. Measure container: `_Measures`.
 
 ```dax
 [Active Awaiting Offers Without Engagement] =
@@ -3161,7 +3151,7 @@ CALCULATE (
 <a id="dax-business-active-ipas"></a>
 ### Active IPAs
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 983. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 983. Measure container: `_Measures`.
 
 ```dax
 [Active IPAs] =
@@ -3171,7 +3161,7 @@ CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = FALSE () )
 <a id="dax-business-active-referral-engagement-rate"></a>
 ### Active Referral Engagement Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 338. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 338. Measure container: `_Measures`.
 
 ```dax
 [Active Referral Engagement Rate] =
@@ -3181,7 +3171,7 @@ DIVIDE ( [Active Referrals With Provider Engagement], [Referrals Currently Activ
 <a id="dax-business-active-referrals-with-provider-engagement"></a>
 ### Active Referrals With Provider Engagement
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 328. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 328. Measure container: `_Measures`.
 
 ```dax
 [Active Referrals With Provider Engagement] =
@@ -3195,7 +3185,7 @@ CALCULATE (
 <a id="dax-business-average-active-ipa-weekly-cost"></a>
 ### Average Active IPA Weekly Cost
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1183. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1183. Measure container: `_Measures`.
 
 ```dax
 [Average Active IPA Weekly Cost] =
@@ -3205,7 +3195,7 @@ DIVIDE ( [Estimated Active Weekly Cost], [Active IPAs] )
 <a id="dax-business-average-days-in-draft"></a>
 ### Average Days in Draft
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 163. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 163. Measure container: `_Measures`.
 
 ```dax
 [Average Days in Draft] =
@@ -3220,12 +3210,12 @@ AVERAGEX (
 ```
 
 <a id="dax-business-average-estimated-weekly-cost-confirmed-referrals"></a>
-### Average Estimated Weekly Cost — Confirmed Referrals
+### Average Estimated Weekly Cost - Confirmed Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 987. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 987. Measure container: `_Measures`.
 
 ```dax
-[Average Estimated Weekly Cost — Confirmed Referrals] =
+[Average Estimated Weekly Cost - Confirmed Referrals] =
 AVERAGEX (
 			    FILTER (
 			        'fact_referral',
@@ -3239,7 +3229,7 @@ AVERAGEX (
 <a id="dax-business-average-lifecycle-events-per-referral"></a>
 ### Average Lifecycle Events per Referral
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1522. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1522. Measure container: `_Measures`.
 
 ```dax
 [Average Lifecycle Events per Referral] =
@@ -3249,7 +3239,7 @@ DIVIDE ( [Referral Lifecycle Events], [Referrals With Lifecycle Activity] )
 <a id="dax-business-average-offers-per-provider"></a>
 ### Average Offers per Provider
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1106. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1106. Measure container: `_Measures`.
 
 ```dax
 [Average Offers per Provider] =
@@ -3259,7 +3249,7 @@ DIVIDE ( [Non-Draft Offers], [Providers Who Made Offers] )
 <a id="dax-business-average-offers-per-referral"></a>
 ### Average Offers per Referral
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 978. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 978. Measure container: `_Measures`.
 
 ```dax
 [Average Offers per Referral] =
@@ -3269,7 +3259,7 @@ DIVIDE ( [Offers Submitted], [Referrals With an Offer] )
 <a id="dax-business-average-offers-per-referral-under-offer"></a>
 ### Average Offers per Referral Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1091. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1091. Measure container: `_Measures`.
 
 ```dax
 [Average Offers per Referral Under Offer] =
@@ -3288,7 +3278,7 @@ DIVIDE (
 <a id="dax-business-avg-offers-per-provider-under-offer"></a>
 ### Avg Offers per Provider (Under Offer)
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 23. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 23. Measure container: `_Measures`.
 
 ```dax
 [Avg Offers per Provider (Under Offer)] =
@@ -3302,7 +3292,7 @@ DIVIDE(
 <a id="dax-business-closed-ipas"></a>
 ### Closed IPAs
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1179. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1179. Measure container: `_Measures`.
 
 ```dax
 [Closed IPAs] =
@@ -3312,7 +3302,7 @@ CALCULATE ( [IPAs Created], 'fact_ipa'[is_placement_closed] = TRUE () )
 <a id="dax-business-closed-referrals"></a>
 ### Closed Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 896. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 896. Measure container: `_Measures`.
 
 ```dax
 [Closed Referrals] =
@@ -3322,7 +3312,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = FALSE () )
 <a id="dax-business-closed-referrals-at-snapshot"></a>
 ### Closed Referrals at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 797. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 797. Measure container: `_Measures`.
 
 ```dax
 [Closed Referrals at Snapshot] =
@@ -3339,7 +3329,7 @@ CALCULATE (
 <a id="dax-business-closed-or-cancelled-referrals"></a>
 ### Closed or Cancelled Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 108. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 108. Measure container: `_Measures`.
 
 ```dax
 [Closed or Cancelled Referrals] =
@@ -3356,7 +3346,7 @@ CALCULATE (
 <a id="dax-business-critical-overdue-referrals"></a>
 ### Critical Overdue Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl`, line 31. Measure container: `_Design Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl`, line 31. Measure container: `_Design Measures`.
 
 ```dax
 [Critical Overdue Referrals] =
@@ -3367,7 +3357,7 @@ CALCULATE ( [Open Overdue Referrals],
 <a id="dax-business-directory-summary-count"></a>
 ### Directory Summary Count
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 246. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 246. Measure container: `_Measures`.
 
 ```dax
 [Directory Summary Count] =
@@ -3382,7 +3372,7 @@ SWITCH ( SELECTEDVALUE ( 'Directory Summary Axis'[Display Type] ),
 <a id="dax-business-documents-expired"></a>
 ### Documents Expired
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1490. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1490. Measure container: `_Measures`.
 
 ```dax
 [Documents Expired] =
@@ -3399,7 +3389,7 @@ CALCULATE (
 <a id="dax-business-documents-expiring-next-30-days"></a>
 ### Documents Expiring Next 30 Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1477. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1477. Measure container: `_Measures`.
 
 ```dax
 [Documents Expiring Next 30 Days] =
@@ -3417,7 +3407,7 @@ CALCULATE (
 <a id="dax-business-draft-offers-missing-dates"></a>
 ### Draft Offers Missing Dates
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 144. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 144. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers Missing Dates] =
@@ -3427,7 +3417,7 @@ CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_missing_dates] = TRUE () )
 <a id="dax-business-draft-offers-stalled-14-days"></a>
 ### Draft Offers Stalled 14+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1448. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1448. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers Stalled 14+ Days] =
@@ -3444,7 +3434,7 @@ CALCULATE (
 <a id="dax-business-draft-offers-stalled-7-days"></a>
 ### Draft Offers Stalled 7+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1416. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1416. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers Stalled 7+ Days] =
@@ -3461,7 +3451,7 @@ CALCULATE (
 <a id="dax-business-draft-offers-with-activity-since-creation"></a>
 ### Draft Offers With Activity Since Creation
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 134. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 134. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers With Activity Since Creation] =
@@ -3475,7 +3465,7 @@ CALCULATE (
 <a id="dax-business-draft-offers-with-no-activity-percent"></a>
 ### Draft Offers With No Activity %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1460. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1460. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers With No Activity %] =
@@ -3485,7 +3475,7 @@ DIVIDE ( [Draft Offers With No Activity Since Creation], [Offers in Draft] )
 <a id="dax-business-draft-offers-with-no-activity-since-creation"></a>
 ### Draft Offers With No Activity Since Creation
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1444. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1444. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers With No Activity Since Creation] =
@@ -3495,7 +3485,7 @@ CALCULATE ( [Offers Submitted], 'fact_offer'[is_draft_no_activity] = TRUE () )
 <a id="dax-business-draft-offers-on-referrals-under-offer"></a>
 ### Draft Offers on Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1328. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1328. Measure container: `_Measures`.
 
 ```dax
 [Draft Offers on Referrals Under Offer] =
@@ -3511,7 +3501,7 @@ CALCULATE (
 <a id="dax-business-drafts-no-activity-14-days"></a>
 ### Drafts No Activity 14+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1632. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1632. Measure container: `_Measures`.
 
 ```dax
 [Drafts No Activity 14+ Days] =
@@ -3521,7 +3511,7 @@ CALCULATE ( [Offers in Draft], KEEPFILTERS ( 'fact_offer'[offer_age_days] >= 14 
 <a id="dax-business-emergency-placement-rate"></a>
 ### Emergency Placement Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1046. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1046. Measure container: `_Measures`.
 
 ```dax
 [Emergency Placement Rate] =
@@ -3531,7 +3521,7 @@ DIVIDE ( [Emergency Referrals], [Total Referrals] )
 <a id="dax-business-emergency-referrals"></a>
 ### Emergency Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1034. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1034. Measure container: `_Measures`.
 
 ```dax
 [Emergency Referrals] =
@@ -3541,7 +3531,7 @@ CALCULATE ( [Total Referrals], KEEPFILTERS ( 'fact_referral'[current_status] IN 
 <a id="dax-business-estimated-active-weekly-cost"></a>
 ### Estimated Active Weekly Cost
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 862. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 862. Measure container: `_Measures`.
 
 ```dax
 [Estimated Active Weekly Cost] =
@@ -3554,7 +3544,7 @@ CALCULATE (
 <a id="dax-business-explorer-referrals"></a>
 ### Explorer referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl`, line 530. Measure container: `_Explorer KPI Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl`, line 530. Measure container: `_Explorer KPI Measures`.
 
 ```dax
 [Explorer referrals] =
@@ -3577,7 +3567,7 @@ VAR categories = VALUES('Referral Category'[Category ID])
 <a id="dax-business-female-referrals"></a>
 ### Female Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 74. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 74. Measure container: `_Measures`.
 
 ```dax
 [Female Referrals] =
@@ -3587,7 +3577,7 @@ CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Female" )
 <a id="dax-business-fostering-homes"></a>
 ### Fostering Homes
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1126. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1126. Measure container: `_Measures`.
 
 ```dax
 [Fostering Homes] =
@@ -3597,7 +3587,7 @@ CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[service_type] = "Fo
 <a id="dax-business-framework-offers-under-offer-referrals"></a>
 ### Framework Offers (Under Offer Referrals)
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 375. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 375. Measure container: `_Measures`.
 
 ```dax
 [Framework Offers (Under Offer Referrals)] =
@@ -3612,7 +3602,7 @@ Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition
 <a id="dax-business-framework-providers"></a>
 ### Framework Providers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 225. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 225. Measure container: `_Measures`.
 
 ```dax
 [Framework Providers] =
@@ -3622,7 +3612,7 @@ DISTINCTCOUNT(bridge_provider_framework[provider_id])
 <a id="dax-business-gold-model-last-refreshed"></a>
 ### Gold Model Last Refreshed
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1215. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1215. Measure container: `_Measures`.
 
 ```dax
 [Gold Model Last Refreshed] =
@@ -3632,7 +3622,7 @@ MAX ( 'fact_referral'[gold_modelled_at] )
 <a id="dax-business-homes-offered"></a>
 ### Homes Offered
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl`, line 82. Measure container: `_Design Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl`, line 82. Measure container: `_Design Measures`.
 
 ```dax
 [Homes Offered] =
@@ -3643,7 +3633,7 @@ CALCULATE ( DISTINCTCOUNT ( 'fact_offer'[provider_home_id] ),
 <a id="dax-business-ipa-completed"></a>
 ### IPA Completed
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 405. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 405. Measure container: `_Measures`.
 
 ```dax
 [IPA Completed] =
@@ -3653,7 +3643,7 @@ CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[is_ipa_completed] = TRUE ()
 <a id="dax-business-ipa-created-to-completion-percent"></a>
 ### IPA Created to Completion %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 453. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 453. Measure container: `_Measures`.
 
 ```dax
 [IPA Created to Completion %] =
@@ -3663,7 +3653,7 @@ DIVIDE ( [IPA Completed], [IPAs Created] )
 <a id="dax-business-ipa-exists"></a>
 ### IPA Exists
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 386. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 386. Measure container: `_Measures`.
 
 ```dax
 [IPA Exists] =
@@ -3678,7 +3668,7 @@ IF (
 <a id="dax-business-ipa-signature-completion-rate"></a>
 ### IPA Signature Completion Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1208. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1208. Measure container: `_Measures`.
 
 ```dax
 [IPA Signature Completion Rate] =
@@ -3688,7 +3678,7 @@ DIVIDE ( [IPA Completed], [IPAs Created] )
 <a id="dax-business-ipas-created"></a>
 ### IPAs Created
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 873. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 873. Measure container: `_Measures`.
 
 ```dax
 [IPAs Created] =
@@ -3698,7 +3688,7 @@ DISTINCTCOUNT ( 'fact_ipa'[ipa_id] )
 <a id="dax-business-ipas-issued-this-month"></a>
 ### IPAs Issued This Month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1167. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1167. Measure container: `_Measures`.
 
 ```dax
 [IPAs Issued This Month] =
@@ -3715,7 +3705,7 @@ VAR as_of = MAX ( 'fact_ipa'[as_of_date] )
 <a id="dax-business-ipas-pending-completion"></a>
 ### IPAs Pending Completion
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 410. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 410. Measure container: `_Measures`.
 
 ```dax
 [IPAs Pending Completion] =
@@ -3725,7 +3715,7 @@ CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[is_ipa_pending] = TRUE () )
 <a id="dax-business-ipas-signed-by-local-authority"></a>
 ### IPAs Signed by Local Authority
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1617. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1617. Measure container: `_Measures`.
 
 ```dax
 [IPAs Signed by Local Authority] =
@@ -3735,7 +3725,7 @@ CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[signed_by_local_authority] 
 <a id="dax-business-ipas-signed-by-provider"></a>
 ### IPAs Signed by Provider
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1612. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1612. Measure container: `_Measures`.
 
 ```dax
 [IPAs Signed by Provider] =
@@ -3745,7 +3735,7 @@ CALCULATE ( [IPAs Created], KEEPFILTERS ( 'fact_ipa'[signed_by_provider] = TRUE 
 <a id="dax-business-is-awaiting-ipa-creation"></a>
 ### Is Awaiting IPA Creation
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 431. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 431. Measure container: `_Measures`.
 
 ```dax
 [Is Awaiting IPA Creation] =
@@ -3755,7 +3745,7 @@ IF ( COALESCE ( SELECTEDVALUE ( 'fact_offer'[is_awaiting_ipa_creation] ), FALSE 
 <a id="dax-business-is-ipa-completed"></a>
 ### Is IPA Completed
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 436. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 436. Measure container: `_Measures`.
 
 ```dax
 [Is IPA Completed] =
@@ -3770,7 +3760,7 @@ IF (
 <a id="dax-business-is-ipa-pending"></a>
 ### Is IPA Pending
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 420. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 420. Measure container: `_Measures`.
 
 ```dax
 [Is IPA Pending] =
@@ -3785,7 +3775,7 @@ IF (
 <a id="dax-business-is-in-accepted-kpi"></a>
 ### Is In Accepted KPI
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 396. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 396. Measure container: `_Measures`.
 
 ```dax
 [Is In Accepted KPI] =
@@ -3799,7 +3789,7 @@ IF (
 <a id="dax-business-is-non-framework-provider"></a>
 ### Is Non Framework Provider
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 241. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 241. Measure container: `_Measures`.
 
 ```dax
 [Is Non Framework Provider] =
@@ -3809,7 +3799,7 @@ IF ( CALCULATE ( COUNTROWS ( 'bridge_provider_framework' ) ) = 0, 1, 0 )
 <a id="dax-business-journey-provider-stage"></a>
 ### Journey provider stage
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 199. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 199. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey provider stage] =
@@ -3830,7 +3820,7 @@ VAR homeScope = ISFILTERED('dim_provider_home')
 <a id="dax-business-journey-providers-0"></a>
 ### Journey providers 0
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 216. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 216. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers 0] =
@@ -3840,7 +3830,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), NOT ISBLANK('dim_
 <a id="dax-business-journey-providers-1"></a>
 ### Journey providers 1
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 221. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 221. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers 1] =
@@ -3850,7 +3840,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), NOT ISBLANK('dim_
 <a id="dax-business-journey-providers-2"></a>
 ### Journey providers 2
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 226. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 226. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers 2] =
@@ -3860,7 +3850,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), NOT ISBLANK('dim_
 <a id="dax-business-journey-providers-3"></a>
 ### Journey providers 3
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 231. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 231. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers 3] =
@@ -3870,7 +3860,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), NOT ISBLANK('dim_
 <a id="dax-business-journey-providers-5"></a>
 ### Journey providers 5
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 236. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 236. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers 5] =
@@ -3880,7 +3870,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), NOT ISBLANK('dim_
 <a id="dax-business-journey-providers-both-signed"></a>
 ### Journey providers both signed
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 249. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 249. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey providers both signed] =
@@ -3893,7 +3883,7 @@ COALESCE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]),
 <a id="dax-business-journey-referrals-1"></a>
 ### Journey referrals 1
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 4. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 4. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 1] =
@@ -3903,7 +3893,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-2"></a>
 ### Journey referrals 2
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 9. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 9. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 2] =
@@ -3913,7 +3903,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-3"></a>
 ### Journey referrals 3
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 14. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 14. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 3] =
@@ -3923,7 +3913,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-4"></a>
 ### Journey referrals 4
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 19. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 19. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 4] =
@@ -3933,7 +3923,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-5"></a>
 ### Journey referrals 5
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 24. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 24. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 5] =
@@ -3943,7 +3933,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-6"></a>
 ### Journey referrals 6
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 29. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 29. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 6] =
@@ -3953,7 +3943,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-7"></a>
 ### Journey referrals 7
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 34. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 34. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 7] =
@@ -3963,7 +3953,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-journey-referrals-8"></a>
 ### Journey referrals 8
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 39. Measure container: `_Journey Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl`, line 39. Measure container: `_Journey Measures`.
 
 ```dax
 [Journey referrals 8] =
@@ -3973,7 +3963,7 @@ COALESCE(CALCULATE([Matching referrals], KEEPFILTERS('fact_referral'[Journey sta
 <a id="dax-business-latest-offer-source-export"></a>
 ### Latest Offer Source Export
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1590. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1590. Measure container: `_Measures`.
 
 ```dax
 [Latest Offer Source Export] =
@@ -3983,7 +3973,7 @@ MAX ( 'fact_offer'[source_export_date] )
 <a id="dax-business-male-referrals"></a>
 ### Male Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 69. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 69. Measure container: `_Measures`.
 
 ```dax
 [Male Referrals] =
@@ -3993,7 +3983,7 @@ CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Male" )
 <a id="dax-business-matching-referrals"></a>
 ### Matching referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 4. Measure container: `_Story Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 4. Measure container: `_Story Measures`.
 
 ```dax
 [Matching referrals] =
@@ -4003,7 +3993,7 @@ Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition
 <a id="dax-business-median-days-to-first-action"></a>
 ### Median Days to First Action
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 928. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 928. Measure container: `_Measures`.
 
 ```dax
 [Median Days to First Action] =
@@ -4016,7 +4006,7 @@ MEDIANX (
 <a id="dax-business-median-days-to-first-offer"></a>
 ### Median Days to First Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 937. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 937. Measure container: `_Measures`.
 
 ```dax
 [Median Days to First Offer] =
@@ -4029,7 +4019,7 @@ MEDIANX (
 <a id="dax-business-median-days-to-ipa"></a>
 ### Median Days to IPA
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 946. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 946. Measure container: `_Measures`.
 
 ```dax
 [Median Days to IPA] =
@@ -4042,7 +4032,7 @@ MEDIANX (
 <a id="dax-business-median-preferred-city-distance-km"></a>
 ### Median preferred-city distance km
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 62. Measure container: `_Explore Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 62. Measure container: `_Explore Measures`.
 
 ```dax
 [Median preferred-city distance km] =
@@ -4052,7 +4042,7 @@ MEDIANX(FILTER('fact_offer','fact_offer'[referral_to_home_distance_status]="APPR
 <a id="dax-business-no-providers-who-made-offers"></a>
 ### No. Providers Who Made Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 14. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 14. Measure container: `_Measures`.
 
 ```dax
 [No. Providers Who Made Offers] =
@@ -4065,7 +4055,7 @@ CALCULATE (
 <a id="dax-business-non-draft-offers"></a>
 ### Non-Draft Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1051. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1051. Measure container: `_Measures`.
 
 ```dax
 [Non-Draft Offers] =
@@ -4078,7 +4068,7 @@ CALCULATE (
 <a id="dax-business-non-framework-providers"></a>
 ### Non-Framework Providers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 230. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 230. Measure container: `_Measures`.
 
 ```dax
 [Non-Framework Providers] =
@@ -4093,7 +4083,7 @@ COUNTROWS (
 <a id="dax-business-non-spot-offers"></a>
 ### Non-Spot Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1122. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1122. Measure container: `_Measures`.
 
 ```dax
 [Non-Spot Offers] =
@@ -4103,7 +4093,7 @@ CALCULATE ( [Non-Draft Offers], 'dim_provider_home (offer)'[is_spot] = FALSE () 
 <a id="dax-business-offer-acceptance-rate"></a>
 ### Offer Acceptance Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1411. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1411. Measure container: `_Measures`.
 
 ```dax
 [Offer Acceptance Rate] =
@@ -4113,7 +4103,7 @@ DIVIDE ( [Accepted Offers], [Offers with a Decision] )
 <a id="dax-business-offers-awaiting-ipa-creation"></a>
 ### Offers Awaiting IPA Creation
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 415. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 415. Measure container: `_Measures`.
 
 ```dax
 [Offers Awaiting IPA Creation] =
@@ -4123,7 +4113,7 @@ CALCULATE ( [Offers Submitted], 'fact_offer'[is_awaiting_ipa_creation] = TRUE ()
 <a id="dax-business-offers-still-to-progress-to-ipa-percent"></a>
 ### Offers Still to Progress to IPA %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1199. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1199. Measure container: `_Measures`.
 
 ```dax
 [Offers Still to Progress to IPA %] =
@@ -4133,7 +4123,7 @@ IF ( NOT ISBLANK ( [Accepted Offer to IPA Conversion %] ), 1 - [Accepted Offer t
 <a id="dax-business-offers-submitted"></a>
 ### Offers Submitted
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 963. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 963. Measure container: `_Measures`.
 
 ```dax
 [Offers Submitted] =
@@ -4143,7 +4133,7 @@ DISTINCTCOUNT ( 'fact_offer'[offer_id] )
 <a id="dax-business-offers-with-recorded-rejection-reason"></a>
 ### Offers With Recorded Rejection Reason
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1431. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1431. Measure container: `_Measures`.
 
 ```dax
 [Offers With Recorded Rejection Reason] =
@@ -4156,7 +4146,7 @@ CALCULATE (
 <a id="dax-business-offers-in-draft"></a>
 ### Offers in Draft
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 55. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 55. Measure container: `_Measures`.
 
 ```dax
 [Offers in Draft] =
@@ -4166,7 +4156,7 @@ CALCULATE ( [Offers Submitted], LOWER ( 'fact_offer'[offer_status] ) = "draft" )
 <a id="dax-business-offers-on-referrals-under-offer"></a>
 ### Offers on Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1111. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1111. Measure container: `_Measures`.
 
 ```dax
 [Offers on Referrals Under Offer] =
@@ -4182,7 +4172,7 @@ CALCULATE (
 <a id="dax-business-offers-per-provider-under-offer-referrals"></a>
 ### Offers per Provider (Under Offer Referrals)
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 365. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 365. Measure container: `_Measures`.
 
 ```dax
 [Offers per Provider (Under Offer Referrals)] =
@@ -4192,7 +4182,7 @@ DIVIDE ( [Offers on Referrals Under Offer], [No. Providers Who Made Offers], 0 )
 <a id="dax-business-offers-with-a-decision"></a>
 ### Offers with a Decision
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1404. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1404. Measure container: `_Measures`.
 
 ```dax
 [Offers with a Decision] =
@@ -4205,7 +4195,7 @@ CALCULATE (
 <a id="dax-business-offers-with-preferred-city-distance"></a>
 ### Offers with preferred-city distance
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 67. Measure container: `_Explore Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 67. Measure container: `_Explore Measures`.
 
 ```dax
 [Offers with preferred-city distance] =
@@ -4215,7 +4205,7 @@ CALCULATE([Offers Submitted],KEEPFILTERS(FILTER('fact_offer','fact_offer'[referr
 <a id="dax-business-oldest-draft-age-days"></a>
 ### Oldest Draft Age Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 177. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 177. Measure container: `_Measures`.
 
 ```dax
 [Oldest Draft Age Days] =
@@ -4232,7 +4222,7 @@ MAXX (
 <a id="dax-business-open-on-track-referrals-at-snapshot"></a>
 ### Open On-Track Referrals at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 810. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 810. Measure container: `_Measures`.
 
 ```dax
 [Open On-Track Referrals at Snapshot] =
@@ -4245,7 +4235,7 @@ CALCULATE (
 <a id="dax-business-open-overdue-referrals"></a>
 ### Open Overdue Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 828. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 828. Measure container: `_Measures`.
 
 ```dax
 [Open Overdue Referrals] =
@@ -4255,7 +4245,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_open_overdue] = TRUE () )
 <a id="dax-business-open-overdue-referrals-at-snapshot"></a>
 ### Open Overdue Referrals at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1000. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1000. Measure container: `_Measures`.
 
 ```dax
 [Open Overdue Referrals at Snapshot] =
@@ -4265,7 +4255,7 @@ CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open_overdue] = TR
 <a id="dax-business-open-referral-rate-at-snapshot"></a>
 ### Open Referral Rate at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 833. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 833. Measure container: `_Measures`.
 
 ```dax
 [Open Referral Rate at Snapshot] =
@@ -4275,7 +4265,7 @@ DIVIDE ( [Open Referrals at Snapshot], [Snapshot Referrals] )
 <a id="dax-business-open-referrals"></a>
 ### Open Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 878. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 878. Measure container: `_Measures`.
 
 ```dax
 [Open Referrals] =
@@ -4285,7 +4275,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 <a id="dax-business-open-referrals-stalled-7-days"></a>
 ### Open Referrals Stalled 7+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 955. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 955. Measure container: `_Measures`.
 
 ```dax
 [Open Referrals Stalled 7+ Days] =
@@ -4298,7 +4288,7 @@ CALCULATE (
 <a id="dax-business-open-referrals-at-snapshot"></a>
 ### Open Referrals at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 705. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 705. Measure container: `_Measures`.
 
 ```dax
 [Open Referrals at Snapshot] =
@@ -4308,7 +4298,7 @@ CALCULATE ( [Snapshot Referrals], 'fact_referral_snapshot'[is_open] = TRUE () )
 <a id="dax-business-other-gender-referrals"></a>
 ### Other Gender Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 79. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 79. Measure container: `_Measures`.
 
 ```dax
 [Other Gender Referrals] =
@@ -4318,7 +4308,7 @@ CALCULATE ( [Total Referrals], 'dim_person'[gender_clean] = "Other" )
 <a id="dax-business-pending-offers"></a>
 ### Pending Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1059. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1059. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers] =
@@ -4331,7 +4321,7 @@ CALCULATE (
 <a id="dax-business-pending-offers-under-offer-referrals"></a>
 ### Pending Offers (Under Offer Referrals)
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 60. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 60. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers (Under Offer Referrals)] =
@@ -4344,7 +4334,7 @@ CALCULATE (
 <a id="dax-business-pending-offers-0-7-days"></a>
 ### Pending Offers 0-7 Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 289. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 289. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers 0-7 Days] =
@@ -4357,7 +4347,7 @@ CALCULATE (
 <a id="dax-business-pending-offers-15-29-days"></a>
 ### Pending Offers 15-29 Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 271. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 271. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers 15-29 Days] =
@@ -4370,7 +4360,7 @@ CALCULATE (
 <a id="dax-business-pending-offers-15-30-days"></a>
 ### Pending Offers 15–30 Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1627. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1627. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers 15–30 Days] =
@@ -4380,7 +4370,7 @@ CALCULATE ( [Pending Offers], KEEPFILTERS ( FILTER ( 'fact_offer', 'fact_offer'[
 <a id="dax-business-pending-offers-30-days"></a>
 ### Pending Offers 30+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 280. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 280. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers 30+ Days] =
@@ -4393,7 +4383,7 @@ CALCULATE (
 <a id="dax-business-pending-offers-8-14-days"></a>
 ### Pending Offers 8-14 Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 298. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 298. Measure container: `_Measures`.
 
 ```dax
 [Pending Offers 8-14 Days] =
@@ -4406,7 +4396,7 @@ CALCULATE (
 <a id="dax-business-placement-rate-at-snapshot"></a>
 ### Placement Rate at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 839. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 839. Measure container: `_Measures`.
 
 ```dax
 [Placement Rate at Snapshot] =
@@ -4416,7 +4406,7 @@ DIVIDE ( [Referrals with IPA at Snapshot], [Snapshot Referrals] )
 <a id="dax-business-placement-target-hit-rate"></a>
 ### Placement Target Hit Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 912. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 912. Measure container: `_Measures`.
 
 ```dax
 [Placement Target Hit Rate] =
@@ -4436,7 +4426,7 @@ DIVIDE (
 <a id="dax-business-planned-referrals"></a>
 ### Planned Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1038. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1038. Measure container: `_Measures`.
 
 ```dax
 [Planned Referrals] =
@@ -4449,7 +4439,7 @@ CALCULATE (
 <a id="dax-business-preferred-city-distance-coverage"></a>
 ### Preferred-city distance coverage
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 77. Measure container: `_Explore Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl`, line 77. Measure container: `_Explore Measures`.
 
 ```dax
 [Preferred-city distance coverage] =
@@ -4459,7 +4449,7 @@ DIVIDE([Offers with preferred-city distance],[Offers Submitted])
 <a id="dax-business-provider-assignments"></a>
 ### Provider Assignments
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1594. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1594. Measure container: `_Measures`.
 
 ```dax
 [Provider Assignments] =
@@ -4469,7 +4459,7 @@ DISTINCTCOUNT ( 'fact_referral_provider'[referral_provider_id] )
 <a id="dax-business-provider-average-response-hours"></a>
 ### Provider Average Response Hours
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1680. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1680. Measure container: `_Measures`.
 
 ```dax
 [Provider Average Response Hours] =
@@ -4486,7 +4476,7 @@ DIVIDE (
 <a id="dax-business-provider-decline-rate"></a>
 ### Provider Decline Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1602. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1602. Measure container: `_Measures`.
 
 ```dax
 [Provider Decline Rate] =
@@ -4496,7 +4486,7 @@ DIVIDE ( [Provider Declines], [Provider Assignments] )
 <a id="dax-business-provider-declines"></a>
 ### Provider Declines
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1598. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1598. Measure container: `_Measures`.
 
 ```dax
 [Provider Declines] =
@@ -4506,7 +4496,7 @@ CALCULATE ( [Provider Assignments], 'fact_referral_provider'[is_declined] = TRUE
 <a id="dax-business-provider-homes-registered"></a>
 ### Provider Homes Registered
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 89. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 89. Measure container: `_Measures`.
 
 ```dax
 [Provider Homes Registered] =
@@ -4519,7 +4509,7 @@ IF ( ISFILTERED ( 'dim_provider' ),
 <a id="dax-business-provider-homes-with-expired-documents"></a>
 ### Provider Homes With Expired Documents
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1502. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1502. Measure container: `_Measures`.
 
 ```dax
 [Provider Homes With Expired Documents] =
@@ -4536,7 +4526,7 @@ CALCULATE (
 <a id="dax-business-provider-messages-sent"></a>
 ### Provider Messages Sent
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1527. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1527. Measure container: `_Measures`.
 
 ```dax
 [Provider Messages Sent] =
@@ -4549,7 +4539,7 @@ CALCULATE (
 <a id="dax-business-provider-offer-conversion-rate"></a>
 ### Provider Offer Conversion Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1662. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1662. Measure container: `_Measures`.
 
 ```dax
 [Provider Offer Conversion Rate] =
@@ -4562,7 +4552,7 @@ DIVIDE (
 <a id="dax-business-provider-onboarding-success-rate"></a>
 ### Provider Onboarding Success Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1162. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1162. Measure container: `_Measures`.
 
 ```dax
 [Provider Onboarding Success Rate] =
@@ -4572,7 +4562,7 @@ DIVIDE ( [Providers Approved], [Providers Registered] )
 <a id="dax-business-provider-qualifying-responses"></a>
 ### Provider Qualifying Responses
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1652. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1652. Measure container: `_Measures`.
 
 ```dax
 [Provider Qualifying Responses] =
@@ -4582,7 +4572,7 @@ SUM ( 'fact_provider_kpi_monthly'[qualifying_response_count] )
 <a id="dax-business-provider-response-opportunities"></a>
 ### Provider Response Opportunities
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1647. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1647. Measure container: `_Measures`.
 
 ```dax
 [Provider Response Opportunities] =
@@ -4592,7 +4582,7 @@ SUM ( 'fact_provider_kpi_monthly'[response_opportunity_count] )
 <a id="dax-business-provider-response-rate"></a>
 ### Provider Response Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1657. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1657. Measure container: `_Measures`.
 
 ```dax
 [Provider Response Rate] =
@@ -4602,7 +4592,7 @@ DIVIDE ( [Provider Qualifying Responses], [Provider Response Opportunities] )
 <a id="dax-business-provider-submission-documents"></a>
 ### Provider Submission Documents
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1473. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1473. Measure container: `_Measures`.
 
 ```dax
 [Provider Submission Documents] =
@@ -4612,7 +4602,7 @@ DISTINCTCOUNT ( 'dim_provider_submission_document'[document_id] )
 <a id="dax-business-provider-target-placement-rate"></a>
 ### Provider Target Placement Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1671. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1671. Measure container: `_Measures`.
 
 ```dax
 [Provider Target Placement Rate] =
@@ -4625,7 +4615,7 @@ DIVIDE (
 <a id="dax-business-provider-matches-offer-status"></a>
 ### Provider matches offer status
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl`, line 853. Measure container: `_Explorer KPI Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl`, line 853. Measure container: `_Explorer KPI Measures`.
 
 ```dax
 [Provider matches offer status] =
@@ -4649,7 +4639,7 @@ VAR providerKey = SELECTEDVALUE('dim_provider'[provider_id])
 <a id="dax-business-providers-fostering"></a>
 ### Providers - Fostering
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 199. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 199. Measure container: `_Measures`.
 
 ```dax
 [Providers - Fostering] =
@@ -4661,7 +4651,7 @@ VAR framework_providers = CALCULATETABLE ( VALUES ( 'bridge_provider_framework'[
 <a id="dax-business-providers-residential"></a>
 ### Providers - Residential
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 207. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 207. Measure container: `_Measures`.
 
 ```dax
 [Providers - Residential] =
@@ -4674,7 +4664,7 @@ CALCULATE (
 <a id="dax-business-providers-supported-accommodation"></a>
 ### Providers - Supported Accommodation
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 216. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 216. Measure container: `_Measures`.
 
 ```dax
 [Providers - Supported Accommodation] =
@@ -4687,7 +4677,7 @@ CALCULATE (
 <a id="dax-business-providers-approved"></a>
 ### Providers Approved
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1154. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1154. Measure container: `_Measures`.
 
 ```dax
 [Providers Approved] =
@@ -4700,7 +4690,7 @@ CALCULATE (
 <a id="dax-business-providers-pending-onboarding"></a>
 ### Providers Pending Onboarding
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1146. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1146. Measure container: `_Measures`.
 
 ```dax
 [Providers Pending Onboarding] =
@@ -4713,7 +4703,7 @@ CALCULATE (
 <a id="dax-business-providers-registered"></a>
 ### Providers Registered
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 98. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 98. Measure container: `_Measures`.
 
 ```dax
 [Providers Registered] =
@@ -4723,7 +4713,7 @@ DISTINCTCOUNT(dim_provider[provider_id])
 <a id="dax-business-providers-who-made-offers"></a>
 ### Providers Who Made Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1078. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1078. Measure container: `_Measures`.
 
 ```dax
 [Providers Who Made Offers] =
@@ -4741,7 +4731,7 @@ CALCULATE (
 <a id="dax-business-providers-with-pending-offers-30-days"></a>
 ### Providers With Pending Offers 30+ Days
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1465. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1465. Measure container: `_Measures`.
 
 ```dax
 [Providers With Pending Offers 30+ Days] =
@@ -4754,7 +4744,7 @@ CALCULATE (
 <a id="dax-business-providers-with-qa-flags"></a>
 ### Providers With QA Flags
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1130. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1130. Measure container: `_Measures`.
 
 ```dax
 [Providers With QA Flags] =
@@ -4764,7 +4754,7 @@ CALCULATE ( [Providers Registered], KEEPFILTERS ( 'dim_provider'[qa_flag] = TRUE
 <a id="dax-business-qa-flagged-homes"></a>
 ### QA Flagged Homes
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1134. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1134. Measure container: `_Measures`.
 
 ```dax
 [QA Flagged Homes] =
@@ -4781,7 +4771,7 @@ VAR flagged_providers = CALCULATETABLE ( VALUES ( 'dim_provider'[provider_id] ),
 <a id="dax-business-referral-lifecycle-events"></a>
 ### Referral Lifecycle Events
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1514. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1514. Measure container: `_Measures`.
 
 ```dax
 [Referral Lifecycle Events] =
@@ -4791,7 +4781,7 @@ DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[event_id] )
 <a id="dax-business-referral-volume-month-on-month"></a>
 ### Referral Volume Month on Month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1014. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1014. Measure container: `_Measures`.
 
 ```dax
 [Referral Volume Month on Month] =
@@ -4801,7 +4791,7 @@ Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition
 <a id="dax-business-referral-volume-month-on-month-percent"></a>
 ### Referral Volume Month on Month %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1018. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1018. Measure container: `_Measures`.
 
 ```dax
 [Referral Volume Month on Month %] =
@@ -4811,7 +4801,7 @@ DIVIDE ( [Referral Volume Month on Month], [Referrals Created Previous Month] )
 <a id="dax-business-referrals-awaiting-offer"></a>
 ### Referrals Awaiting Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 9. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 9. Measure container: `_Measures`.
 
 ```dax
 [Referrals Awaiting Offer] =
@@ -4821,7 +4811,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_awaiting_offer] = TRUE () )
 <a id="dax-business-referrals-created-previous-month"></a>
 ### Referrals Created Previous Month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1010. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1010. Measure container: `_Measures`.
 
 ```dax
 [Referrals Created Previous Month] =
@@ -4831,7 +4821,7 @@ CALCULATE ( [Total Referrals], DATEADD ( 'dim_date'[date], -1, MONTH ) )
 <a id="dax-business-referrals-created-this-financial-year"></a>
 ### Referrals Created This Financial Year
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1023. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1023. Measure container: `_Measures`.
 
 ```dax
 [Referrals Created This Financial Year] =
@@ -4843,7 +4833,7 @@ VAR as_of = MAX ( 'fact_referral'[as_of_date] )
 <a id="dax-business-referrals-created-this-month"></a>
 ### Referrals Created This Month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1004. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1004. Measure container: `_Measures`.
 
 ```dax
 [Referrals Created This Month] =
@@ -4854,7 +4844,7 @@ VAR as_of = MAX ( 'fact_referral'[as_of_date] )
 <a id="dax-business-referrals-currently-active"></a>
 ### Referrals Currently Active
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 103. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 103. Measure container: `_Measures`.
 
 ```dax
 [Referrals Currently Active] =
@@ -4864,7 +4854,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_open] = TRUE () )
 <a id="dax-business-referrals-placed-by-required-date"></a>
 ### Referrals Placed by Required Date
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 908. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 908. Measure container: `_Measures`.
 
 ```dax
 [Referrals Placed by Required Date] =
@@ -4874,7 +4864,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[placed_by_required_date] = TRUE (
 <a id="dax-business-referrals-under-offer"></a>
 ### Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1030. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1030. Measure container: `_Measures`.
 
 ```dax
 [Referrals Under Offer] =
@@ -4884,7 +4874,7 @@ CALCULATE ( [Total Referrals], KEEPFILTERS ( 'fact_referral'[is_open] = TRUE () 
 <a id="dax-business-referrals-with-fully-signed-ipa"></a>
 ### Referrals With Fully Signed IPA
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1204. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1204. Measure container: `_Measures`.
 
 ```dax
 [Referrals With Fully Signed IPA] =
@@ -4894,7 +4884,7 @@ CALCULATE ( DISTINCTCOUNT ( 'fact_ipa'[referral_id] ), KEEPFILTERS ( 'fact_ipa'[
 <a id="dax-business-referrals-with-lifecycle-activity"></a>
 ### Referrals With Lifecycle Activity
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1518. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1518. Measure container: `_Measures`.
 
 ```dax
 [Referrals With Lifecycle Activity] =
@@ -4904,7 +4894,7 @@ DISTINCTCOUNT ( 'fact_referral_lifecycle_event'[referral_id] )
 <a id="dax-business-referrals-with-multiple-provider-assignments"></a>
 ### Referrals With Multiple Provider Assignments
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1428. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1428. Measure container: `_Measures`.
 
 ```dax
 [Referrals With Multiple Provider Assignments] =
@@ -4914,7 +4904,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[provider_assignment_count] > 1 )
 <a id="dax-business-referrals-with-an-offer"></a>
 ### Referrals With an Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 900. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 900. Measure container: `_Measures`.
 
 ```dax
 [Referrals With an Offer] =
@@ -4924,7 +4914,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[has_offer] = TRUE () )
 <a id="dax-business-referrals-without-provider-assignment"></a>
 ### Referrals Without Provider Assignment
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 904. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 904. Measure container: `_Measures`.
 
 ```dax
 [Referrals Without Provider Assignment] =
@@ -4934,7 +4924,7 @@ CALCULATE ( [Total Referrals], 'fact_referral'[is_not_seen_by_providers] = TRUE 
 <a id="dax-business-referrals-closed-during-month"></a>
 ### Referrals closed during month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 19. Measure container: `_Story Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 19. Measure container: `_Story Measures`.
 
 ```dax
 [Referrals closed during month] =
@@ -4944,7 +4934,7 @@ CALCULATE(DISTINCTCOUNT('fact_referral'[referral_id]), USERELATIONSHIP('fact_ref
 <a id="dax-business-referrals-with-ipa-at-snapshot"></a>
 ### Referrals with IPA at Snapshot
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 883. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 883. Measure container: `_Measures`.
 
 ```dax
 [Referrals with IPA at Snapshot] =
@@ -4961,7 +4951,7 @@ CALCULATE (
 <a id="dax-business-residential-homes"></a>
 ### Residential Homes
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 257. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 257. Measure container: `_Measures`.
 
 ```dax
 [Residential Homes] =
@@ -4971,7 +4961,7 @@ CALCULATE ( [Provider Homes Registered], 'dim_provider_home'[service_type] = "Re
 <a id="dax-business-snapshot-referrals"></a>
 ### Snapshot Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 700. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 700. Measure container: `_Measures`.
 
 ```dax
 [Snapshot Referrals] =
@@ -4981,7 +4971,7 @@ DISTINCTCOUNT ( 'fact_referral_snapshot'[referral_id] )
 <a id="dax-business-snapshot-referrals-mom-change"></a>
 ### Snapshot referrals MoM change
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 31. Measure container: `_Story Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 31. Measure container: `_Story Measures`.
 
 ```dax
 [Snapshot referrals MoM change] =
@@ -4993,7 +4983,7 @@ VAR currentTotal = [Snapshot Referrals]
 <a id="dax-business-snapshot-referrals-mom-percent"></a>
 ### Snapshot referrals MoM percent
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 39. Measure container: `_Story Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 39. Measure container: `_Story Measures`.
 
 ```dax
 [Snapshot referrals MoM percent] =
@@ -5003,7 +4993,7 @@ DIVIDE([Snapshot referrals MoM change],[Snapshot referrals previous month])
 <a id="dax-business-snapshot-referrals-previous-month"></a>
 ### Snapshot referrals previous month
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 24. Measure container: `_Story Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl`, line 24. Measure container: `_Story Measures`.
 
 ```dax
 [Snapshot referrals previous month] =
@@ -5014,7 +5004,7 @@ VAR currentMonth = SELECTEDVALUE('dim_snapshot_month'[month_start])
 <a id="dax-business-spot-offer-rate"></a>
 ### Spot Offer Rate
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1439. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1439. Measure container: `_Measures`.
 
 ```dax
 [Spot Offer Rate] =
@@ -5024,7 +5014,7 @@ DIVIDE ( [Spot Offers], [Non-Draft Offers] )
 <a id="dax-business-spot-offers"></a>
 ### Spot Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 370. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 370. Measure container: `_Measures`.
 
 ```dax
 [Spot Offers] =
@@ -5034,7 +5024,7 @@ CALCULATE ( [Non-Draft Offers], 'dim_provider_home (offer)'[is_spot] = TRUE () )
 <a id="dax-business-spot-offers-on-referrals-under-offer"></a>
 ### Spot Offers on Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1350. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1350. Measure container: `_Measures`.
 
 ```dax
 [Spot Offers on Referrals Under Offer] =
@@ -5053,7 +5043,7 @@ VAR homes =
 <a id="dax-business-successful-offers-on-referrals-under-offer"></a>
 ### Successful Offers on Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 34. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 34. Measure container: `_Measures`.
 
 ```dax
 [Successful Offers on Referrals Under Offer] =
@@ -5069,7 +5059,7 @@ CALCULATE (
 <a id="dax-business-successful-offers-to-ipa-completed-percent"></a>
 ### Successful Offers to IPA Completed %
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 459. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 459. Measure container: `_Measures`.
 
 ```dax
 [Successful Offers to IPA Completed %] =
@@ -5079,7 +5069,7 @@ DIVIDE ( [IPA Completed], [Accepted Offers] )
 <a id="dax-business-supported-accommodation-homes"></a>
 ### Supported Accommodation Homes
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 262. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 262. Measure container: `_Measures`.
 
 ```dax
 [Supported Accommodation Homes] =
@@ -5092,7 +5082,7 @@ CALCULATE (
 <a id="dax-business-total-gendered-referrals"></a>
 ### Total Gendered Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 84. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 84. Measure container: `_Measures`.
 
 ```dax
 [Total Gendered Referrals] =
@@ -5102,7 +5092,7 @@ CALCULATE ( [Total Referrals], KEEPFILTERS ( FILTER ( 'dim_person', NOT ISBLANK 
 <a id="dax-business-total-ipa-weekly-cost"></a>
 ### Total IPA Weekly Cost
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1188. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1188. Measure container: `_Measures`.
 
 ```dax
 [Total IPA Weekly Cost] =
@@ -5112,7 +5102,7 @@ SUM ( 'fact_ipa'[estimated_weekly_cost] )
 <a id="dax-business-total-referrals"></a>
 ### Total Referrals
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 4. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 4. Measure container: `_Measures`.
 
 ```dax
 [Total Referrals] =
@@ -5122,7 +5112,7 @@ DISTINCTCOUNT ( 'fact_referral'[referral_id] )
 <a id="dax-business-unsuccessful-offers"></a>
 ### Unsuccessful Offers
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1578. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1578. Measure container: `_Measures`.
 
 ```dax
 [Unsuccessful Offers] =
@@ -5139,7 +5129,7 @@ CALCULATE (
 <a id="dax-business-unsuccessful-offers-on-referrals-under-offer"></a>
 ### Unsuccessful Offers on Referrals Under Offer
 
-Source ZIP member: `SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1067. Measure container: `_Measures`.
+Source ZIP member: `SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl`, line 1067. Measure container: `_Measures`.
 
 ```dax
 [Unsuccessful Offers on Referrals Under Offer] =
@@ -5152,8 +5142,7 @@ CALCULATE (
 			)
 ```
 
-
-## Exact saved DAX — mission
+## Exact saved DAX - mission
 
 <a id="dax-mission-active-dq-rules"></a>
 ### Active DQ Rules
@@ -8900,7 +8889,7 @@ These are verbatim source definitions or notebook cells, extracted without execu
 <a id="python-00-archive-load-py-653"></a>
 ### 00_archive_load.py:653
 
-Source: [project X/00_archive_load.py:653](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_archive_load.py#L653). Observed physical object: `monitoring.cfg_archive_zip_load`.
+Source: [WMPP/notebooks/00_archive_load.py:653](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_archive_load.py#L653). Observed physical object: `monitoring.cfg_archive_zip_load`.
 
 ```python
 zip_root_posix = f"/lakehouse/default/{ARCHIVE_ZIP_ROOT}"
@@ -9043,7 +9032,7 @@ print(
 <a id="python-00-archive-load-py-798"></a>
 ### 00_archive_load.py:798
 
-Source: [project X/00_archive_load.py:798](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_archive_load.py#L798). Observed physical object: `monitoring.cfg_archive_file_load`.
+Source: [WMPP/notebooks/00_archive_load.py:798](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_archive_load.py#L798). Observed physical object: `monitoring.cfg_archive_file_load`.
 
 ```python
 # Build one inventory dataframe directly from ARCHIVE_FILE_ROOT. This is
@@ -9314,7 +9303,7 @@ for pending_row in pending_files_df.toLocalIterator():
 <a id="python-00-setup-cfg-py-96"></a>
 ### 00_setup_cfg.py:96
 
-Source: [project X/00_setup_cfg.py:96](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_setup_cfg.py#L96). Observed physical object: `monitoring.cfg_silver_export_load`.
+Source: [WMPP/notebooks/00_setup_cfg.py:96](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/00_setup_cfg.py#L96). Observed physical object: `monitoring.cfg_silver_export_load`.
 
 ```python
 CONFIG_TABLE_DEFINITIONS = {
@@ -9508,7 +9497,7 @@ print(
 <a id="python-01a-cfg-schema-capture-archive-py-107"></a>
 ### 01a_cfg_schema_capture_archive.py:107
 
-Source: [project X/01a_cfg_schema_capture_archive.py:107](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_archive.py#L107). Observed physical object: `monitoring.cfg_archived_schema_live`.
+Source: [WMPP/notebooks/01a_cfg_schema_capture_archive.py:107](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_archive.py#L107). Observed physical object: `monitoring.cfg_archived_schema_live`.
 
 ```python
 # 1. define target schema
@@ -9545,7 +9534,7 @@ schema_df.withColumn("contract_loaded_at", F.current_timestamp()) \
 <a id="python-01a-cfg-schema-capture-live-py-120"></a>
 ### 01a_cfg_schema_capture_live.py:120
 
-Source: [project X/01a_cfg_schema_capture_live.py:120](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_live.py#L120). Observed physical object: `monitoring.cfg_schema_drift_definition`.
+Source: [WMPP/notebooks/01a_cfg_schema_capture_live.py:120](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_live.py#L120). Observed physical object: `monitoring.cfg_schema_drift_definition`.
 
 ```python
 schema_df = spark.table("monitoring.cfg_schema_contract_column")
@@ -9611,7 +9600,7 @@ print(f"Loaded {definition_df.count():,} definition rows; captured {current_live
 <a id="python-01a-cfg-schema-capture-live-py-308"></a>
 ### 01a_cfg_schema_capture_live.py:308
 
-Source: [project X/01a_cfg_schema_capture_live.py:308](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_live.py#L308). Observed physical object: `monitoring.cfg_schema_drift_event`.
+Source: [WMPP/notebooks/01a_cfg_schema_capture_live.py:308](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/01a_cfg_schema_capture_live.py#L308). Observed physical object: `monitoring.cfg_schema_drift_event`.
 
 ```python
 event_table = DeltaTable.forName(spark, "monitoring.cfg_schema_drift_event")
@@ -9658,7 +9647,7 @@ if not resolved.rdd.isEmpty():
 <a id="python-02a-archive-silver-py-611"></a>
 ### 02a_archive_silver.py:611
 
-Source: [project X/02a_archive_silver.py:611](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/02a_archive_silver.py#L611). Observed physical object: `monitoring.cfg_month_end_gold_run`.
+Source: [WMPP/notebooks/02a_archive_silver.py:611](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/02a_archive_silver.py#L611). Observed physical object: `monitoring.cfg_month_end_gold_run`.
 
 ```python
 from notebookutils import mssparkutils
@@ -10041,7 +10030,7 @@ if errors and FAIL_ON_TABLE_ERROR:
 <a id="python-03-silver-business-rules-py-119"></a>
 ### 03_silver_business_rules.py:119
 
-Source: [project X/03_silver_business_rules.py:119](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L119). Observed physical object: `monitoring.cfg_pipeline_run`.
+Source: [WMPP/notebooks/03_silver_business_rules.py:119](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L119). Observed physical object: `monitoring.cfg_pipeline_run`.
 
 ```python
 append_rows("monitoring.cfg_pipeline_run", [(PIPELINE_RUN_ID, "03_silver_business_rules", "SILVER", f"LATEST_{DQ_RUN_MODE}",
@@ -10053,7 +10042,7 @@ log_step("Pipeline run row registered")
 <a id="python-03-silver-business-rules-py-133"></a>
 ### 03_silver_business_rules.py:133
 
-Source: [project X/03_silver_business_rules.py:133](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L133). Observed physical object: `monitoring.cfg_data_quality_rule`.
+Source: [WMPP/notebooks/03_silver_business_rules.py:133](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L133). Observed physical object: `monitoring.cfg_data_quality_rule`.
 
 ```python
 schema_df = spark.table("monitoring.cfg_schema_contract_column")
@@ -10126,7 +10115,7 @@ log_step(f"Prepared {len(rules):,} data-quality rules; DQ mode={DQ_RUN_MODE}; sc
 <a id="python-03-silver-business-rules-py-208"></a>
 ### 03_silver_business_rules.py:208
 
-Source: [project X/03_silver_business_rules.py:208](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L208). Observed physical object: `monitoring.cfg_data_quality_result`.
+Source: [WMPP/notebooks/03_silver_business_rules.py:208](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/03_silver_business_rules.py#L208). Observed physical object: `monitoring.cfg_data_quality_result`.
 
 ```python
 result_schema = "run_id string,rule_id string,severity string,rule_type string,source_table string,column_name string,status string,failed_row_count long,checked_row_count long,failure_percentage double,sample_key_json string,checked_at timestamp,message string,job_run_id string"
@@ -10282,7 +10271,7 @@ log_step(f"Main DQ pass complete: {len(result_rows)} checks, {len(critical_failu
 <a id="python-04-gold-model-py-232"></a>
 ### 04_gold_model.py:232
 
-Source: [project X/04_gold_model.py:232](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L232). Observed physical object: `gold.fact_referral`.
+Source: [WMPP/notebooks/04_gold_model.py:232](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L232). Observed physical object: `gold.fact_referral`.
 
 ```python
 spark.sql(f"""
@@ -10615,7 +10604,7 @@ FROM reference_profile
 <a id="python-04-gold-model-py-567"></a>
 ### 04_gold_model.py:567
 
-Source: [project X/04_gold_model.py:567](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L567). Observed physical object: `gold.fact_referral_snapshot`.
+Source: [WMPP/notebooks/04_gold_model.py:567](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L567). Observed physical object: `gold.fact_referral_snapshot`.
 
 ```python
 # Preserve historic snapshot rows while migrating the physical field names
@@ -10744,7 +10733,7 @@ GROUP BY snapshot_month_start, snapshot_month_end, current_status,
 <a id="python-04-gold-model-py-698"></a>
 ### 04_gold_model.py:698
 
-Source: [project X/04_gold_model.py:698](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L698). Observed physical object: `gold.fact_referral_lifecycle_event`.
+Source: [WMPP/notebooks/04_gold_model.py:698](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L698). Observed physical object: `gold.fact_referral_lifecycle_event`.
 
 ```python
 spark.sql(f"""
@@ -10763,7 +10752,7 @@ LEFT JOIN (
 <a id="python-04-gold-model-py-712"></a>
 ### 04_gold_model.py:712
 
-Source: [project X/04_gold_model.py:712](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L712). Observed physical object: `gold.fact_offer`.
+Source: [WMPP/notebooks/04_gold_model.py:712](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L712). Observed physical object: `gold.fact_offer`.
 
 ```python
 spark.sql(f"""
@@ -10875,7 +10864,7 @@ WHERE o.offer_date IS NULL OR TO_DATE(o.offer_date) <= {AS_OF_SQL}
 <a id="python-04-gold-model-py-817"></a>
 ### 04_gold_model.py:817
 
-Source: [project X/04_gold_model.py:817](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L817). Observed physical object: `gold.fact_ipa`.
+Source: [WMPP/notebooks/04_gold_model.py:817](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L817). Observed physical object: `gold.fact_ipa`.
 
 ```python
 spark.sql(f"""
@@ -10912,7 +10901,7 @@ WHERE i.created_datetime IS NULL OR TO_DATE(i.created_datetime) <= {AS_OF_SQL}
 <a id="python-04-gold-model-py-847"></a>
 ### 04_gold_model.py:847
 
-Source: [project X/04_gold_model.py:847](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L847). Observed physical object: `gold.fact_referral_provider`.
+Source: [WMPP/notebooks/04_gold_model.py:847](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L847). Observed physical object: `gold.fact_referral_provider`.
 
 ```python
 spark.sql(f"""
@@ -11004,7 +10993,7 @@ FROM assignment_response rp
 <a id="python-04-gold-model-py-935"></a>
 ### 04_gold_model.py:935
 
-Source: [project X/04_gold_model.py:935](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L935). Observed physical object: `gold.fact_provider_kpi_monthly`.
+Source: [WMPP/notebooks/04_gold_model.py:935](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/04_gold_model.py#L935). Observed physical object: `gold.fact_provider_kpi_monthly`.
 
 ```python
 spark.sql(f"""
@@ -11058,7 +11047,7 @@ GROUP BY provider_id, assignment_month, security_scope_key
 <a id="python-05-gold-dimensions-py-128"></a>
 ### 05_gold_dimensions.py:128
 
-Source: [project X/05_gold_dimensions.py:128](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L128). Observed physical object: `gold.dim_date`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:128](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L128). Observed physical object: `gold.dim_date`.
 
 ```python
 spark.sql(f"""
@@ -11086,7 +11075,7 @@ FROM (
 <a id="python-05-gold-dimensions-py-155"></a>
 ### 05_gold_dimensions.py:155
 
-Source: [project X/05_gold_dimensions.py:155](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L155). Observed physical object: `gold.dim_provider`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:155](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L155). Observed physical object: `gold.dim_provider`.
 
 ```python
 latest_dimension(
@@ -11102,7 +11091,7 @@ latest_dimension(
 <a id="python-05-gold-dimensions-py-163"></a>
 ### 05_gold_dimensions.py:163
 
-Source: [project X/05_gold_dimensions.py:163](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L163). Observed physical object: `gold.dim_provider_home`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:163](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L163). Observed physical object: `gold.dim_provider_home`.
 
 ```python
 latest_dimension(
@@ -11120,7 +11109,7 @@ latest_dimension(
 <a id="python-05-gold-dimensions-py-173"></a>
 ### 05_gold_dimensions.py:173
 
-Source: [project X/05_gold_dimensions.py:173](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L173). Observed physical object: `gold.dim_framework`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:173](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L173). Observed physical object: `gold.dim_framework`.
 
 ```python
 latest_dimension(
@@ -11134,7 +11123,7 @@ latest_dimension(
 <a id="python-05-gold-dimensions-py-194"></a>
 ### 05_gold_dimensions.py:194
 
-Source: [project X/05_gold_dimensions.py:194](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L194). Observed physical object: `gold.dim_person`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:194](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L194). Observed physical object: `gold.dim_person`.
 
 ```python
 copy_bridge(
@@ -11484,7 +11473,7 @@ print(f"gold.dim_offer_status: {offer_statuses.count():,} rows from silver.offer
 <a id="python-05-gold-dimensions-py-210"></a>
 ### 05_gold_dimensions.py:210
 
-Source: [project X/05_gold_dimensions.py:210](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L210). Observed physical object: `gold.bridge_referral_framework_category`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:210](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L210). Observed physical object: `gold.bridge_referral_framework_category`.
 
 ```python
 copy_bridge(
@@ -11499,7 +11488,7 @@ copy_bridge(
 <a id="python-05-gold-dimensions-py-239"></a>
 ### 05_gold_dimensions.py:239
 
-Source: [project X/05_gold_dimensions.py:239](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L239). Observed physical object: `gold.dim_provider_submission_document`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:239](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L239). Observed physical object: `gold.dim_provider_submission_document`.
 
 ```python
 latest_dimension(
@@ -11516,7 +11505,7 @@ latest_dimension(
 <a id="python-05-gold-dimensions-py-253"></a>
 ### 05_gold_dimensions.py:253
 
-Source: [project X/05_gold_dimensions.py:253](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L253). Observed physical object: `gold.dim_referral_provider_message`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:253](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L253). Observed physical object: `gold.dim_referral_provider_message`.
 
 ```python
 latest_dimension(
@@ -11532,7 +11521,7 @@ latest_dimension(
 <a id="python-05-gold-dimensions-py-390"></a>
 ### 05_gold_dimensions.py:390
 
-Source: [project X/05_gold_dimensions.py:390](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L390). Observed physical object: `gold.dim_snapshot_month`.
+Source: [WMPP/notebooks/05_gold_dimensions.py:390](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/05_gold_dimensions.py#L390). Observed physical object: `gold.dim_snapshot_month`.
 
 ```python
 spark.sql(f"""
@@ -11556,7 +11545,7 @@ FROM (
 <a id="python-06-reports-py-45"></a>
 ### 06_reports.py:45
 
-Source: [project X/06_reports.py:45](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L45). Observed physical object: `monitoring.rpt_job_step_timing`.
+Source: [WMPP/notebooks/06_reports.py:45](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L45). Observed physical object: `monitoring.rpt_job_step_timing`.
 
 ```python
 spark.sql("""
@@ -11580,7 +11569,7 @@ FROM ordered_steps
 <a id="python-06-reports-py-74"></a>
 ### 06_reports.py:74
 
-Source: [project X/06_reports.py:74](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L74). Observed physical object: `monitoring.rpt_job_step_summary`.
+Source: [WMPP/notebooks/06_reports.py:74](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L74). Observed physical object: `monitoring.rpt_job_step_summary`.
 
 ```python
 spark.sql("""
@@ -11644,7 +11633,7 @@ LEFT JOIN drift d ON d.job_run_id = s.job_run_id
 <a id="python-06-reports-py-141"></a>
 ### 06_reports.py:141
 
-Source: [project X/06_reports.py:141](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L141). Observed physical object: `monitoring.rpt_job_run_summary`.
+Source: [WMPP/notebooks/06_reports.py:141](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L141). Observed physical object: `monitoring.rpt_job_run_summary`.
 
 ```python
 spark.sql("""
@@ -11676,7 +11665,7 @@ LEFT JOIN drift ON drift.job_run_id = j.job_run_id
 <a id="python-06-reports-py-177"></a>
 ### 06_reports.py:177
 
-Source: [project X/06_reports.py:177](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L177). Observed physical object: `monitoring.rpt_job_schema_drift`.
+Source: [WMPP/notebooks/06_reports.py:177](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L177). Observed physical object: `monitoring.rpt_job_schema_drift`.
 
 ```python
 spark.sql("""
@@ -11697,7 +11686,7 @@ LEFT JOIN monitoring.cfg_schema_drift_definition d
 <a id="python-06-reports-py-202"></a>
 ### 06_reports.py:202
 
-Source: [project X/06_reports.py:202](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L202). Observed physical object: `monitoring.rpt_job_data_quality`.
+Source: [WMPP/notebooks/06_reports.py:202](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L202). Observed physical object: `monitoring.rpt_job_data_quality`.
 
 ```python
 spark.sql("""
@@ -11726,7 +11715,7 @@ WHERE r.job_run_id IS NOT NULL
 <a id="python-06-reports-py-235"></a>
 ### 06_reports.py:235
 
-Source: [project X/06_reports.py:235](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L235). Observed physical object: `monitoring.rpt_job_layer_lineage`.
+Source: [WMPP/notebooks/06_reports.py:235](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/06_reports.py#L235). Observed physical object: `monitoring.rpt_job_layer_lineage`.
 
 ```python
 spark.sql("""
@@ -11756,7 +11745,7 @@ WHERE s.notebook_name IN ('04_gold_model', '05_gold_dimensions', '04_gold_model.
 <a id="python-99-common-library-py-462"></a>
 ### 99_common_library.py:462
 
-Source: [project X/99_common_library.py:462](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/99_common_library.py#L462). Observed physical object: `monitoring.cfg_data_domain`.
+Source: [WMPP/notebooks/99_common_library.py:462](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/99_common_library.py#L462). Observed physical object: `monitoring.cfg_data_domain`.
 
 ```python
 DATA_DOMAIN_SCHEMA = StructType([
@@ -11967,7 +11956,7 @@ def replace_data_domain(domain_table, source_schema, source_table, column_name,
 <a id="python-99-data-domain-py-110"></a>
 ### 99_data_domain.py:110
 
-Source: [project X/99_data_domain.py:110](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/99_data_domain.py#L110). Observed physical object: `monitoring.cfg_data_domain`.
+Source: [WMPP/notebooks/99_data_domain.py:110](https://github.com/NewRay99/fabric-csv-bronze-ingestion/blob/0a65e962ff3ab9681ed87d9a0a54df610774b736/project%20X/99_data_domain.py#L110). Observed physical object: `monitoring.cfg_data_domain`.
 
 ```python
 def record_domain_job(status, error_message=None):

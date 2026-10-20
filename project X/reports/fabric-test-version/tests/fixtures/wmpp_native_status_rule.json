@@ -1,0 +1,37 @@
+{
+  "kind": "Icon",
+  "layout": {"expr": {"Literal": {"Value": "'Before'"}}},
+  "verticalAlignment": {"expr": {"Literal": {"Value": "'Middle'"}}},
+  "value": {
+    "expr": {
+      "Conditional": {
+        "Cases": [
+          {
+            "Condition": {
+              "Comparison": {
+                "ComparisonKind": 0,
+                "Left": {
+                  "Aggregation": {
+                    "Expression": {
+                      "Column": {
+                        "Expression": {"SourceRef": {"Entity": "fact_referral"}},
+                        "Property": "current_status"
+                      }
+                    },
+                    "Function": 3
+                  }
+                },
+                "Right": {"Literal": {"Value": "'UNDER_OFFER'"}}
+              },
+              "Annotations": {
+                "PowerBI.SQExprEvaluationKind": 1,
+                "PowerBI.SQExprTextOperatorOption": 2
+              }
+            },
+            "Value": {"Literal": {"Value": "'wmpp-category-high'"}}
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+// Read-only acceptance after reopening and refreshing the saved WIP model.
+// Supply a provider/home filter in DAX Studio for the scoped acceptance cases.
+EVALUATE
+VAR __rows = SUMMARIZECOLUMNS(
+    'dim_provider'[provider_id], 'dim_provider_home'[provider_home_id],
+    'dim_provider_submission_document'[document_id],
+    'dim_provider_submission_document'[home_id],
+    'dim_provider_submission_document'[expiry_date],
+    "visible", [Provider document row visible],
+    "flag", [expired_docs], "status", [Document expiry status])
+VAR __visible = FILTER(__rows, [visible] = 1)
+RETURN ROW(
+    "visible_document_rows", COUNTROWS(__visible),
+    "cross_home_mismatches", COUNTROWS(FILTER(__visible,
+        'dim_provider_home'[provider_home_id] <> 'dim_provider_submission_document'[home_id])),
+    "blank_expiry_with_flag", COUNTROWS(FILTER(__visible,
+        ISBLANK('dim_provider_submission_document'[expiry_date]) && NOT ISBLANK([flag]))),
+    "dated_flag_mismatches", COUNTROWS(FILTER(__visible,
+        NOT ISBLANK('dim_provider_submission_document'[expiry_date]) &&
+        [flag] <> IF('dim_provider_submission_document'[expiry_date] < TODAY(), 1, 0))))
+
+EVALUATE
+SUMMARIZECOLUMNS('Requirement KPI Monitor'[KPI IDs],
+    'Requirement KPI Monitor'[Requirement IDs], 'Requirement KPI Monitor'[Metric],
+    "value", [Requirement KPI value])

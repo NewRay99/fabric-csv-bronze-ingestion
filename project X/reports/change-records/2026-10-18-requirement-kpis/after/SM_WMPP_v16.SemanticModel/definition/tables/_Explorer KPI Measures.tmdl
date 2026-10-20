@@ -1,0 +1,1049 @@
+table '_Explorer KPI Measures'
+	lineageTag: 90961a29-6500-59b8-9c53-a30740c9138c
+
+	measure 'Explorer provider row visible' =
+			VAR providerKey = SELECTEDVALUE('dim_provider'[provider_id])
+			VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR matchingHomes = CALCULATE(COUNTROWS('dim_provider_home'))
+			VAR stage = SELECTEDVALUE('Journey Provider Selection'[Stage], -1)
+			RETURN IF(NOT ISBLANK(providerKey) && (NOT homeFilter || matchingHomes > 0) && [Provider matches offer status] = 1 && (stage = -1 || [Journey provider stage] == stage), 1, BLANK())
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: 332ec6fe-a1d9-54d9-aa67-9d87d04f4d98
+
+	measure 'Explorer providers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('dim_provider'[provider_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 9b82abcd-e13b-5db5-b96a-e3ad24d6535b
+
+	measure 'Explorer providers without offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COUNTROWS(FILTER(VALUES('dim_provider'[provider_id]), CALCULATE([Explorer provider offers]) = 0)), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: e6f3c6ae-6aa9-5f7d-9abc-e52f136327fa
+
+	measure 'Explorer provider assignment row visible' = IF([Explorer provider row visible] = 1 && COUNTROWS('fact_referral_provider') > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: 9530a038-9d2e-536f-abc6-11f5b217ceb4
+
+	measure 'Explorer provider offer row visible' =
+
+			IF (
+			    COUNTROWS ( 'fact_offer' ) > 0,
+			    IF (
+			        [Explorer provider row visible] = 1,
+			        1,
+			        BLANK ()
+			    ),
+			    BLANK ()
+			)
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: cd9d5285-b4e3-5ec3-96f5-c3d63aa25bdf
+
+	measure 'Explorer provider message row visible' = IF([Explorer provider row visible] = 1 && COUNTROWS('dim_referral_provider_message') > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: d463284c-d7a2-56a1-8b7d-f355225e0241
+
+	measure 'Explorer provider monthly row visible' = IF([Explorer provider row visible] = 1 && COUNTROWS('fact_provider_kpi_monthly') > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: ea8a25f4-4503-5ca3-acff-da4c138f8d70
+
+	measure 'Explorer provider homes' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('dim_provider_home'[provider_home_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: fa30d3df-f819-5454-b823-229d7b6da673
+
+	measure 'Explorer provider beds' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('dim_provider_home'[registered_beds]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 61e04327-a399-5f54-a4cd-9aee7ea25967
+
+	measure 'Explorer provider offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR homes = VALUES('dim_provider_home'[provider_home_id])
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 16c6cc93-7cda-5dde-8f27-936052d2e62a
+
+	measure 'Explorer provider offers made' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR homes = VALUES('dim_provider_home'[provider_home_id])
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(FILTER('fact_offer', NOT ISBLANK('fact_offer'[offer_status]) && LOWER(TRIM('fact_offer'[offer_status])) <> "draft"))), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 64bca625-fb62-509c-ae9c-42bc0e7d59c2
+
+	measure 'Explorer provider drafts' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR homes = VALUES('dim_provider_home'[provider_home_id])
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(FILTER('fact_offer', LOWER(TRIM('fact_offer'[offer_status])) = "draft"))), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 3f93d6bd-a756-5270-b5b8-9f08e5f98034
+
+	measure 'Explorer provider accepted offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR homes = VALUES('dim_provider_home'[provider_home_id])
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(FILTER('fact_offer', LOWER(TRIM('fact_offer'[offer_status])) IN {"accepted", "approved", "selected", "offer_successful"}))), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: de4ca327-5e54-513c-8315-99d33ede0ff4
+
+	measure 'Explorer provider pending offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home')
+			VAR homes = VALUES('dim_provider_home'[provider_home_id])
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(FILTER('fact_offer', LOWER(TRIM('fact_offer'[offer_status])) IN {"pending", "submitted", "offered", "offer_made", "offer_pending", "under_review", "under review", "awaiting", "awaiting_decision", "awaiting decision"}))), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: e3cbc552-20c6-585d-9644-cea09eebe469
+
+	measure 'Explorer provider assignments' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral_provider'[referral_provider_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 7cdef8fd-50a6-5dc9-9bba-e4ed84e59183
+
+	measure 'Explorer provider assigned referrals' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral_provider'[referral_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 3f07cd02-38ae-5b3d-bed8-e50a8644b55c
+
+	measure 'Explorer provider messages' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('dim_referral_provider_message'[message_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 04ad5a0b-1c82-561f-8657-59e8f78e843b
+
+	measure 'Explorer provider qualifying responses' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral_provider'[referral_provider_id]),0), KEEPFILTERS('fact_referral_provider'[has_qualifying_response] == TRUE())), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: e9d83450-6892-5ab0-b914-11269e6edc9a
+
+	measure 'Explorer provider response rate' = DIVIDE([Explorer provider qualifying responses],[Explorer provider assignments])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: db3f2230-26e7-5253-acb0-1e181f468260
+
+	measure 'Explorer provider offer acceptance rate' = DIVIDE([Explorer provider accepted offers],[Explorer provider offers made])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: 68470337-0441-57e0-89ae-223aeef0e98d
+
+	measure 'Explorer provider average response minutes' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(AVERAGE('fact_referral_provider'[response_elapsed_minutes]), KEEPFILTERS(eligible))
+		formatString: 0.0
+		displayFolder: Explorer KPIs
+		lineageTag: af1e1a98-4ab7-5b98-85ab-1f98191f5b99
+
+	measure 'Explorer provider median response minutes' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(MEDIAN('fact_referral_provider'[response_elapsed_minutes]), KEEPFILTERS(eligible))
+		formatString: 0.0
+		displayFolder: Explorer KPIs
+		lineageTag: 7d14d528-88b8-5cfb-9156-8201f3d4e7bf
+
+	measure 'Explorer provider IPAs' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home') VAR homes = VALUES('dim_provider_home'[provider_home_id]) VAR offers = CALCULATETABLE(VALUES('fact_offer'[offer_id]), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))) RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_ipa'[ipa_id]),0), KEEPFILTERS(TREATAS(offers,'fact_ipa'[accepted_offer_id])), KEEPFILTERS(FILTER('fact_ipa', TRUE()))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 197a4df7-9e76-571f-b6e8-d421bb95a069
+
+	measure 'Explorer provider signed IPAs' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home') VAR homes = VALUES('dim_provider_home'[provider_home_id]) VAR offers = CALCULATETABLE(VALUES('fact_offer'[offer_id]), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))) RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_ipa'[ipa_id]),0), KEEPFILTERS(TREATAS(offers,'fact_ipa'[accepted_offer_id])), KEEPFILTERS(FILTER('fact_ipa', 'fact_ipa'[signed_by_provider] == TRUE()))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: bfd109ef-6223-5241-bc40-df3935e74aac
+
+	measure 'Explorer provider completed IPAs' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(VAR homeFilter = ISFILTERED('dim_provider_home') VAR homes = VALUES('dim_provider_home'[provider_home_id]) VAR offers = CALCULATETABLE(VALUES('fact_offer'[offer_id]), KEEPFILTERS(FILTER('fact_offer', NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))) RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_ipa'[ipa_id]),0), KEEPFILTERS(TREATAS(offers,'fact_ipa'[accepted_offer_id])), KEEPFILTERS(FILTER('fact_ipa', 'fact_ipa'[is_ipa_completed] == TRUE()))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: d5a911d8-38d2-5a91-a796-c085b7622be8
+
+	measure 'Explorer Gold opportunities' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[response_opportunity_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 66dc7f69-fc71-537e-8710-625e16e2f0ae
+
+	measure 'Explorer Gold responses' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[qualifying_response_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 58c5163b-41a6-5d7b-a8d6-fbff3d7002df
+
+	measure 'Explorer Gold offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[offers_submitted_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 94005ec3-4f00-5ecb-a6f1-8555351526c8
+
+	measure 'Explorer Gold accepted offers' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[accepted_offer_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: d2322630-90b1-5466-928a-4925e6a866c7
+
+	measure 'Explorer Gold successful referrals' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[successful_referral_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: c72cb32a-5c39-5d32-82fe-31803306be74
+
+	measure 'Explorer Gold placed by target' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(SUM('fact_provider_kpi_monthly'[placed_by_target_count]), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: d6569f2f-fe5c-5c1f-9295-bae06984686c
+
+	measure 'Explorer Gold response rate' = DIVIDE([Explorer Gold responses],[Explorer Gold opportunities])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: 663fb21e-1107-5a94-97e3-99677a12cd0b
+
+	measure 'Explorer Gold offer acceptance rate' = DIVIDE([Explorer Gold accepted offers],[Explorer Gold offers])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: 16bf446f-689b-51e6-9d8e-3cb51ba7b46b
+
+	measure 'Explorer Gold target placement rate' = DIVIDE([Explorer Gold placed by target],[Explorer Gold successful referrals])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: 054d01e1-305b-57f4-84ce-5da6b8d47042
+
+	measure 'Explorer Gold average response minutes' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(IF(COUNTROWS('fact_provider_kpi_monthly') = 1, MAX('fact_provider_kpi_monthly'[average_response_minutes])), KEEPFILTERS(eligible))
+		formatString: 0.0
+		displayFolder: Explorer KPIs
+		lineageTag: e52b644c-07c1-555b-8590-43fe9d413fe8
+
+	measure 'Explorer Gold median response minutes' =
+			VAR unrestricted =
+			    NOT ISFILTERED('Provider Offer Status'[Status])
+			    && SELECTEDVALUE('Journey Provider Selection'[Stage], -1) = -1
+			VAR homeFilterActive = ISFILTERED('dim_provider_home')
+			VAR homeProviderIds = VALUES('dim_provider_home'[provider_id])
+			VAR eligible =
+			    FILTER(VALUES('dim_provider'[provider_id]),
+			        NOT ISBLANK('dim_provider'[provider_id])
+			        && IF(unrestricted,
+			            NOT homeFilterActive || 'dim_provider'[provider_id] IN homeProviderIds,
+			            CALCULATE([Explorer provider row visible]) = 1))
+			RETURN CALCULATE(IF(COUNTROWS('fact_provider_kpi_monthly') = 1, MAX('fact_provider_kpi_monthly'[median_response_minutes])), KEEPFILTERS(eligible))
+		formatString: 0.0
+		displayFolder: Explorer KPIs
+		lineageTag: f3a93545-c8d0-55ed-a2b0-f170dfe4c43f
+
+	measure 'Explorer referral row visible' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN IF(COUNTROWS(eligible) > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: b1060f41-78c9-5713-ab45-df9681d3ca5b
+
+	measure 'Explorer referrals' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral'[referral_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 44af462a-06e0-57b0-9338-22baa70becca
+
+	measure 'Explorer referrals open' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral'[referral_id]),0), KEEPFILTERS(FILTER('fact_referral','fact_referral'[is_open] == TRUE()))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 34ba4fdf-8be0-5efc-940d-1f7c2b179667
+
+	measure 'Explorer referrals open overdue' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral'[referral_id]),0), KEEPFILTERS(FILTER('fact_referral','fact_referral'[is_open_overdue] == TRUE()))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 3fd31857-5cd6-55ad-95e3-04e2fd81ccd8
+
+	measure 'Explorer referrals closed' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral'[referral_id]),0), KEEPFILTERS(FILTER('fact_referral',LOWER(TRIM('fact_referral'[current_status])) IN {"closed","cancelled","canceled","withdrawn","completed"}))), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 7017f9a8-a0e5-5d00-add0-c757cf0d569a
+
+	measure 'Explorer referral offers' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 2aa42f65-e41a-5b54-8446-afd9b0c70189
+
+	measure 'Explorer referrals with offers' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_offer'[referral_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: cfa47b7c-297d-5fc1-89e8-6598ca9f9fbb
+
+	measure 'Explorer referrals without offers' = [Explorer referrals] - [Explorer referrals with offers]
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: a35bcd5a-9a7b-52f5-9e06-24865f7df58e
+
+	measure 'Explorer referral assignments' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_referral_provider'[referral_provider_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: ecb4d538-d9c9-505e-b652-8a8b19878313
+
+	measure 'Explorer referral messages' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('dim_referral_provider_message'[message_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: d52ff87e-f732-5e2c-9108-4cec8e0877b7
+
+	measure 'Explorer referral IPAs' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(DISTINCTCOUNTNOBLANK('fact_ipa'[ipa_id]),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 8d1b4bad-c78e-5b3d-9248-441b38399cbe
+
+	measure 'Explorer referral completed IPAs' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(CALCULATE(DISTINCTCOUNTNOBLANK('fact_ipa'[ipa_id]), KEEPFILTERS('fact_ipa'[is_ipa_completed] == TRUE())),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: b32c2a28-07fe-5693-82fb-5094b665fb73
+
+	measure 'Explorer referral accepted offers' =
+			VAR categories = VALUES('Referral Category'[Category ID])
+			VAR categoryRefs = CALCULATETABLE(VALUES('bridge_referral_framework_category'[referral_id]), TREATAS(categories,'bridge_referral_framework_category'[framework_category_id]))
+			VAR statuses = VALUES('Explorer Offer Status'[Status])
+			VAR bands = VALUES('Explorer Offer Activity'[Band])
+			VAR statusFilter = ISFILTERED('Explorer Offer Status'[Status])
+			VAR bandFilter = ISFILTERED('Explorer Offer Activity'[Band])
+			VAR offerRows = FILTER('fact_offer', (NOT statusFilter || COALESCE('fact_offer'[offer_status],"(Unknown status)") IN statuses) && (NOT bandFilter || COALESCE('fact_offer'[Offer activity band],"(Unknown activity)") IN bands))
+			VAR offeredRefs = SELECTCOLUMNS(offerRows,"Referral",'fact_offer'[referral_id])
+			VAR anyOfferedRefs = CALCULATETABLE(VALUES('fact_offer'[referral_id]), REMOVEFILTERS('fact_offer'[offer_status], 'fact_offer'[Offer activity band]))
+			VAR noOfferChoice = (NOT statusFilter || "(No offers)" IN statuses) && (NOT bandFilter || "(No offers)" IN bands)
+			VAR eligible = FILTER(VALUES('fact_referral'[referral_id]), NOT ISBLANK('fact_referral'[referral_id]) &&
+			    (NOT ISCROSSFILTERED('Referral Category') || 'fact_referral'[referral_id] IN categoryRefs) &&
+			    (NOT(statusFilter || bandFilter) || 'fact_referral'[referral_id] IN offeredRefs || (noOfferChoice && NOT('fact_referral'[referral_id] IN anyOfferedRefs))))
+			RETURN CALCULATE(COALESCE(CALCULATE(DISTINCTCOUNTNOBLANK('fact_offer'[offer_id]), KEEPFILTERS(FILTER('fact_offer',LOWER(TRIM('fact_offer'[offer_status])) IN {"accepted", "approved", "selected", "offer_successful"}))),0), KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Explorer KPIs
+		lineageTag: 41818ef9-e8f9-55b1-b2ef-67ed1c264ae3
+
+	measure 'Explorer referral offer coverage' = DIVIDE([Explorer referrals with offers],[Explorer referrals])
+		formatString: 0.0%
+		displayFolder: Explorer KPIs
+		lineageTag: e76e1b5a-d67b-51fc-9806-bb574f62d4b3
+
+	measure 'Provider explorer KPI value' =
+			SWITCH(SELECTEDVALUE('Provider Explorer KPI'[Ordinal]),
+			0, IF(ISBLANK([Explorer providers without offers]), "—", FORMAT([Explorer providers without offers], "#,0")),
+			1, IF(ISBLANK([Explorer providers]), "—", FORMAT([Explorer providers], "#,0")),
+			2, IF(ISBLANK([Explorer provider homes]), "—", FORMAT([Explorer provider homes], "#,0")),
+			3, IF(ISBLANK([Explorer provider beds]), "—", FORMAT([Explorer provider beds], "#,0")),
+			4, IF(ISBLANK([Explorer provider offers]), "—", FORMAT([Explorer provider offers], "#,0")),
+			5, IF(ISBLANK([Explorer provider offers made]), "—", FORMAT([Explorer provider offers made], "#,0")),
+			6, IF(ISBLANK([Explorer provider drafts]), "—", FORMAT([Explorer provider drafts], "#,0")),
+			7, IF(ISBLANK([Explorer provider accepted offers]), "—", FORMAT([Explorer provider accepted offers], "#,0")),
+			8, IF(ISBLANK([Explorer provider pending offers]), "—", FORMAT([Explorer provider pending offers], "#,0")),
+			9, IF(ISBLANK([Explorer provider offer acceptance rate]), "—", FORMAT([Explorer provider offer acceptance rate], "0.0%")),
+			10, IF(ISBLANK([Explorer provider assigned referrals]), "—", FORMAT([Explorer provider assigned referrals], "#,0")),
+			11, IF(ISBLANK([Explorer provider assignments]), "—", FORMAT([Explorer provider assignments], "#,0")),
+			12, IF(ISBLANK([Explorer provider messages]), "—", FORMAT([Explorer provider messages], "#,0")),
+			13, IF(ISBLANK([Explorer provider qualifying responses]), "—", FORMAT([Explorer provider qualifying responses], "#,0")),
+			14, IF(ISBLANK([Explorer provider response rate]), "—", FORMAT([Explorer provider response rate], "0.0%")),
+			15, IF(ISBLANK([Explorer provider average response minutes]), "—", FORMAT([Explorer provider average response minutes], "0.0")),
+			16, IF(ISBLANK([Explorer provider median response minutes]), "—", FORMAT([Explorer provider median response minutes], "0.0")),
+			17, IF(ISBLANK([Explorer provider IPAs]), "—", FORMAT([Explorer provider IPAs], "#,0")),
+			18, IF(ISBLANK([Explorer provider signed IPAs]), "—", FORMAT([Explorer provider signed IPAs], "#,0")),
+			19, IF(ISBLANK([Explorer provider completed IPAs]), "—", FORMAT([Explorer provider completed IPAs], "#,0")),
+			20, IF(ISBLANK([Provider unanswered assignments]), "—", FORMAT([Provider unanswered assignments], "#,0")),
+			21, IF(ISBLANK([Provider response timing coverage]), "—", FORMAT([Provider response timing coverage], "0.0%")),
+			22, IF(ISBLANK([Provider QA flagged homes]), "—", FORMAT([Provider QA flagged homes], "#,0")),
+			23, IF(ISBLANK([Provider no recorded activity]), "—", FORMAT([Provider no recorded activity], "#,0")), 			24, IF(ISBLANK([Explorer provider documents]), "—", FORMAT([Explorer provider documents], "#,0")),
+			25, IF(ISBLANK([Explorer provider documents expired]), "—", FORMAT([Explorer provider documents expired], "#,0")),
+			26, IF(ISBLANK([Explorer provider documents expiring 30 days]), "—", FORMAT([Explorer provider documents expiring 30 days], "#,0")),
+			27, IF(ISBLANK([Explorer provider homes with expired documents]), "—", FORMAT([Explorer provider homes with expired documents], "#,0")), BLANK())
+		displayFolder: Explorer KPIs
+		lineageTag: b337b565-be9f-57f1-8121-e85f4264bb38
+
+	measure 'Provider detail KPI value' =
+			IF(HASONEVALUE('dim_provider'[provider_id]), SWITCH(SELECTEDVALUE('Provider Explorer KPI'[Ordinal]),
+			0, IF(ISBLANK([Explorer providers without offers]), "—", FORMAT([Explorer providers without offers], "#,0")),
+			1, IF(ISBLANK([Explorer providers]), "—", FORMAT([Explorer providers], "#,0")),
+			2, IF(ISBLANK([Explorer provider homes]), "—", FORMAT([Explorer provider homes], "#,0")),
+			3, IF(ISBLANK([Explorer provider beds]), "—", FORMAT([Explorer provider beds], "#,0")),
+			4, IF(ISBLANK([Explorer provider offers]), "—", FORMAT([Explorer provider offers], "#,0")),
+			5, IF(ISBLANK([Explorer provider offers made]), "—", FORMAT([Explorer provider offers made], "#,0")),
+			6, IF(ISBLANK([Explorer provider drafts]), "—", FORMAT([Explorer provider drafts], "#,0")),
+			7, IF(ISBLANK([Explorer provider accepted offers]), "—", FORMAT([Explorer provider accepted offers], "#,0")),
+			8, IF(ISBLANK([Explorer provider pending offers]), "—", FORMAT([Explorer provider pending offers], "#,0")),
+			9, IF(ISBLANK([Explorer provider offer acceptance rate]), "—", FORMAT([Explorer provider offer acceptance rate], "0.0%")),
+			10, IF(ISBLANK([Explorer provider assigned referrals]), "—", FORMAT([Explorer provider assigned referrals], "#,0")),
+			11, IF(ISBLANK([Explorer provider assignments]), "—", FORMAT([Explorer provider assignments], "#,0")),
+			12, IF(ISBLANK([Explorer provider messages]), "—", FORMAT([Explorer provider messages], "#,0")),
+			13, IF(ISBLANK([Explorer provider qualifying responses]), "—", FORMAT([Explorer provider qualifying responses], "#,0")),
+			14, IF(ISBLANK([Explorer provider response rate]), "—", FORMAT([Explorer provider response rate], "0.0%")),
+			15, IF(ISBLANK([Explorer provider average response minutes]), "—", FORMAT([Explorer provider average response minutes], "0.0")),
+			16, IF(ISBLANK([Explorer provider median response minutes]), "—", FORMAT([Explorer provider median response minutes], "0.0")),
+			17, IF(ISBLANK([Explorer provider IPAs]), "—", FORMAT([Explorer provider IPAs], "#,0")),
+			18, IF(ISBLANK([Explorer provider signed IPAs]), "—", FORMAT([Explorer provider signed IPAs], "#,0")),
+			19, IF(ISBLANK([Explorer provider completed IPAs]), "—", FORMAT([Explorer provider completed IPAs], "#,0")),
+			20, IF(ISBLANK([Provider unanswered assignments]), "—", FORMAT([Provider unanswered assignments], "#,0")),
+			21, IF(ISBLANK([Provider response timing coverage]), "—", FORMAT([Provider response timing coverage], "0.0%")),
+			22, IF(ISBLANK([Provider QA flagged homes]), "—", FORMAT([Provider QA flagged homes], "#,0")),
+			23, IF(ISBLANK([Provider no recorded activity]), "—", FORMAT([Provider no recorded activity], "#,0")), 			24, IF(ISBLANK([Explorer provider documents]), "—", FORMAT([Explorer provider documents], "#,0")),
+			25, IF(ISBLANK([Explorer provider documents expired]), "—", FORMAT([Explorer provider documents expired], "#,0")),
+			26, IF(ISBLANK([Explorer provider documents expiring 30 days]), "—", FORMAT([Explorer provider documents expiring 30 days], "#,0")),
+			27, IF(ISBLANK([Explorer provider homes with expired documents]), "—", FORMAT([Explorer provider homes with expired documents], "#,0")), BLANK()))
+		displayFolder: Explorer KPIs
+		lineageTag: 94e5cb17-10be-51a4-982d-3b6015e28452
+
+	measure 'Referral explorer KPI value' =
+			SWITCH(SELECTEDVALUE('Referral Explorer KPI'[Ordinal]),
+			0, IF(ISBLANK([Explorer referrals]), "—", FORMAT([Explorer referrals], "#,0")),
+			1, IF(ISBLANK([Explorer referrals open]), "—", FORMAT([Explorer referrals open], "#,0")),
+			2, IF(ISBLANK([Explorer referrals open overdue]), "—", FORMAT([Explorer referrals open overdue], "#,0")),
+			3, IF(ISBLANK([Explorer referrals closed]), "—", FORMAT([Explorer referrals closed], "#,0")),
+			4, IF(ISBLANK([Explorer referrals with offers]), "—", FORMAT([Explorer referrals with offers], "#,0")),
+			5, IF(ISBLANK([Explorer referrals without offers]), "—", FORMAT([Explorer referrals without offers], "#,0")),
+			6, IF(ISBLANK([Explorer referral offer coverage]), "—", FORMAT([Explorer referral offer coverage], "0.0%")),
+			7, IF(ISBLANK([Explorer referral offers]), "—", FORMAT([Explorer referral offers], "#,0")),
+			8, IF(ISBLANK([Explorer referral accepted offers]), "—", FORMAT([Explorer referral accepted offers], "#,0")),
+			9, IF(ISBLANK([Explorer referral assignments]), "—", FORMAT([Explorer referral assignments], "#,0")),
+			10, IF(ISBLANK([Explorer referral messages]), "—", FORMAT([Explorer referral messages], "#,0")),
+			11, IF(ISBLANK([Explorer referral IPAs]), "—", FORMAT([Explorer referral IPAs], "#,0")),
+			12, IF(ISBLANK([Explorer referral completed IPAs]), "—", FORMAT([Explorer referral completed IPAs], "#,0")),
+			13, IF(ISBLANK([Referral open without offers]), "—", FORMAT([Referral open without offers], "#,0")),
+			14, IF(ISBLANK([Referral open without assignments]), "—", FORMAT([Referral open without assignments], "#,0")),
+			15, IF(ISBLANK([Referral accepted without IPA]), "—", FORMAT([Referral accepted without IPA], "#,0")),
+			16, IF(ISBLANK([Referral IPAs awaiting signatures]), "—", FORMAT([Referral IPAs awaiting signatures], "#,0")),
+			17, IF(ISBLANK([Referral open overdue share]), "—", FORMAT([Referral open overdue share], "0.0%")), BLANK())
+		displayFolder: Explorer KPIs
+		lineageTag: aec3e886-dbfa-5efc-bb5a-56a4c919d48c
+
+	measure 'Referral detail KPI value' =
+			IF(HASONEVALUE('fact_referral'[referral_id]), SWITCH(SELECTEDVALUE('Referral Explorer KPI'[Ordinal]),
+			0, IF(ISBLANK([Explorer referrals]), "—", FORMAT([Explorer referrals], "#,0")),
+			1, IF(ISBLANK([Explorer referrals open]), "—", FORMAT([Explorer referrals open], "#,0")),
+			2, IF(ISBLANK([Explorer referrals open overdue]), "—", FORMAT([Explorer referrals open overdue], "#,0")),
+			3, IF(ISBLANK([Explorer referrals closed]), "—", FORMAT([Explorer referrals closed], "#,0")),
+			4, IF(ISBLANK([Explorer referrals with offers]), "—", FORMAT([Explorer referrals with offers], "#,0")),
+			5, IF(ISBLANK([Explorer referrals without offers]), "—", FORMAT([Explorer referrals without offers], "#,0")),
+			6, IF(ISBLANK([Explorer referral offer coverage]), "—", FORMAT([Explorer referral offer coverage], "0.0%")),
+			7, IF(ISBLANK([Explorer referral offers]), "—", FORMAT([Explorer referral offers], "#,0")),
+			8, IF(ISBLANK([Explorer referral accepted offers]), "—", FORMAT([Explorer referral accepted offers], "#,0")),
+			9, IF(ISBLANK([Explorer referral assignments]), "—", FORMAT([Explorer referral assignments], "#,0")),
+			10, IF(ISBLANK([Explorer referral messages]), "—", FORMAT([Explorer referral messages], "#,0")),
+			11, IF(ISBLANK([Explorer referral IPAs]), "—", FORMAT([Explorer referral IPAs], "#,0")),
+			12, IF(ISBLANK([Explorer referral completed IPAs]), "—", FORMAT([Explorer referral completed IPAs], "#,0")),
+			13, IF(ISBLANK([Referral open without offers]), "—", FORMAT([Referral open without offers], "#,0")),
+			14, IF(ISBLANK([Referral open without assignments]), "—", FORMAT([Referral open without assignments], "#,0")),
+			15, IF(ISBLANK([Referral accepted without IPA]), "—", FORMAT([Referral accepted without IPA], "#,0")),
+			16, IF(ISBLANK([Referral IPAs awaiting signatures]), "—", FORMAT([Referral IPAs awaiting signatures], "#,0")),
+			17, IF(ISBLANK([Referral open overdue share]), "—", FORMAT([Referral open overdue share], "0.0%")), BLANK()))
+		displayFolder: Explorer KPIs
+		lineageTag: 4456f480-90d5-5b32-aac3-4be8862f2199
+
+	measure 'Provider matches offer status' =
+			VAR providerKey = SELECTEDVALUE('dim_provider'[provider_id])
+			VAR limited = ISFILTERED('Provider Offer Status'[Status])
+			VAR statuses = VALUES('Provider Offer Status'[Status])
+			VAR homeFilter = CALCULATE(ISFILTERED('dim_provider_home'), ALLSELECTED())
+			VAR homes = CALCULATETABLE(VALUES('dim_provider_home'[provider_home_id]), ALLSELECTED())
+			VAR offerEvidence = CALCULATETABLE(
+			    SUMMARIZE('fact_offer', 'fact_offer'[provider_id], 'fact_offer'[provider_home_id], 'fact_offer'[offer_status]),
+			    ALLSELECTED())
+			VAR providerOffers = FILTER(offerEvidence,
+			    'fact_offer'[provider_id] == providerKey && (NOT homeFilter || 'fact_offer'[provider_home_id] IN homes))
+			VAR matchingOffers = COUNTROWS(FILTER(providerOffers,
+			    COALESCE('fact_offer'[offer_status], "(Unknown status)") IN statuses))
+			RETURN IF(ISBLANK(providerKey), BLANK(),
+			    IF(NOT limited, 1,
+			        IF(matchingOffers > 0 || ("(No offers)" IN statuses && COUNTROWS(providerOffers) = 0), 1, BLANK())))
+		formatString: 0
+		displayFolder: Explorer KPIs
+		lineageTag: c1acf5f4-136b-5857-a983-5ac8885e8333
+
+	measure 'Explorer provider assignment table title' =
+			VAR visibleRows = FILTER(
+			    SUMMARIZE(
+			        'fact_referral_provider',
+			        'fact_referral'[referral_id],
+			        'dim_provider'[provider_id],
+			        'dim_provider'[provider_name],
+			        'fact_referral_provider'[referral_id],
+			        'fact_referral_provider'[provider_response_status],
+			        'fact_referral_provider'[assigned_at],
+			        'fact_referral_provider'[first_qualifying_response_at],
+			        'fact_referral_provider'[response_elapsed_minutes],
+			        'fact_referral_provider'[is_engaged]
+			    ),
+			    CALCULATE([Explorer provider assignment row visible]) = 1
+			)
+			VAR providerJourney = IF(HASONEVALUE('dim_provider'[provider_id]), [Rail provider cohort label])
+			RETURN "Referral assignment and response evidence" & SWITCH(TRUE(), ISEMPTY(visibleRows), " - No rows to return", NOT ISBLANK(providerJourney), " - " & providerJourney, "")
+		displayFolder: Report experience
+		lineageTag: d5eaba12-251a-49ec-a003-cc646c01e3bf
+
+	measure 'Explorer provider offer table title' =
+			VAR visibleRows = FILTER(
+			    SUMMARIZE(
+			        'fact_offer',
+			        'fact_referral'[referral_id],
+			        'dim_provider'[provider_id],
+			        'dim_provider'[provider_name],
+			        'fact_offer'[referral_id],
+			        'fact_offer'[offer_id],
+			        'fact_offer'[offer_status],
+			        'fact_offer'[offer_submitted_date],
+			        'fact_offer'[offer_decision_date],
+			        'fact_offer'[estimated_weekly_cost],
+			        'dim_provider_home (offer)'[home_name]
+			    ),
+			    CALCULATE([Explorer provider offer row visible]) = 1
+			)
+			VAR providerJourney = IF(HASONEVALUE('dim_provider'[provider_id]), [Rail provider cohort label])
+			RETURN "Offer records and proposed homes" & SWITCH(TRUE(), ISEMPTY(visibleRows), " - No rows to return", NOT ISBLANK(providerJourney), " - " & providerJourney, "")
+		displayFolder: Report experience
+		lineageTag: 90fd8957-34c9-4227-8816-3164d52130f9
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes selected providers' = CALCULATE([Explorer providers], ALLSELECTED())
+		formatString: #,0
+		displayFolder: Explorer table guards
+		lineageTag: cf312eb8-3d4a-4f7f-a81a-187b64f45ca1
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes table row visible' =
+			VAR selectedProviders = [Provider homes selected providers]
+			RETURN IF(selectedProviders > 0 && selectedProviders <= 5, [Explorer provider row visible])
+		formatString: 0
+		displayFolder: Explorer table guards
+		lineageTag: d18b7476-bf55-4d44-99df-4dc1f306bc56
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes table offers' =
+			VAR selectedProviders = [Provider homes selected providers]
+			RETURN IF(selectedProviders > 0 && selectedProviders <= 5, [Explorer provider offers])
+		formatString: #,0
+		displayFolder: Explorer table guards
+		lineageTag: e9f30f71-5416-4d45-9b68-934af467619e
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes table offers made' =
+			VAR selectedProviders = [Provider homes selected providers]
+			RETURN IF(selectedProviders > 0 && selectedProviders <= 5, [Explorer provider offers made])
+		formatString: #,0
+		displayFolder: Explorer table guards
+		lineageTag: 731f65d6-64af-4d8d-b189-73f94e2e9874
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes table accepted offers' =
+			VAR selectedProviders = [Provider homes selected providers]
+			RETURN IF(selectedProviders > 0 && selectedProviders <= 5, [Explorer provider accepted offers])
+		formatString: #,0
+		displayFolder: Explorer table guards
+		lineageTag: d11b1c6d-8f2c-4b26-b53f-c3f697c5f906
+
+	/// Selection guard for the Provider Explorer homes table only.
+	measure 'Provider homes table title' =
+			IF([Provider homes selected providers] > 5,
+			    "Please select 1 or fewer providers",
+			    "Provider homes — including homes with no offers")
+		displayFolder: Explorer table guards
+		lineageTag: e45b7389-90bc-4093-a5f2-e9effa7b5a7d
+
+	/// Document rows require an existing matching home and an eligible provider; no monthly-performance dependency.
+	measure 'Provider document row visible' =
+			VAR providerKey = SELECTEDVALUE('dim_provider'[provider_id])
+			VAR homeKey = SELECTEDVALUE('dim_provider_submission_document'[home_id])
+			VAR matchingHome = CALCULATE(COUNTROWS('dim_provider_home'),
+			    KEEPFILTERS(TREATAS({homeKey}, 'dim_provider_home'[provider_home_id])))
+			RETURN IF(NOT ISBLANK(providerKey) && NOT ISBLANK(homeKey)
+			    && matchingHome > 0 && [Explorer provider row visible] = 1
+			    && COUNTROWS('dim_provider_submission_document') > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Requirements reporting
+		lineageTag: 4929fdea-1cf2-5c1f-9f2e-89e4cbece5cf
+
+	/// Per-document expiry flag: 1 expired, 0 dated and not expired; blank for unknown date or non-document totals.
+	measure 'expired_docs' =
+			VAR oneDocument = HASONEVALUE('dim_provider_submission_document'[document_id])
+			VAR expiry = SELECTEDVALUE('dim_provider_submission_document'[expiry_date])
+			RETURN IF(oneDocument && COUNTROWS('dim_provider_submission_document') > 0
+			    && NOT ISBLANK(expiry), IF(expiry < TODAY(), 1, 0), BLANK())
+		formatString: 0
+		displayFolder: Requirements reporting
+		lineageTag: 8558fde5-6c19-5e15-b100-b49bf221b097
+
+	/// Expiry status only; does not certify required-document completeness.
+	measure 'Document expiry status' =
+			VAR expiry = SELECTEDVALUE('dim_provider_submission_document'[expiry_date])
+			RETURN IF(HASONEVALUE('dim_provider_submission_document'[document_id])
+			    && COUNTROWS('dim_provider_submission_document') > 0,
+			    SWITCH(TRUE(), ISBLANK(expiry), "Unknown expiry",
+			        expiry < TODAY(), "Expired", expiry <= TODAY() + 30, "Expiring in 30 days", "Not expired"), BLANK())
+		displayFolder: Requirements reporting
+		lineageTag: 63a815dd-b78a-549e-8792-386fd8e9d3c5
+
+	/// Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.
+	measure 'Explorer provider documents' =
+			VAR eligible = FILTER(VALUES('dim_provider'[provider_id]),
+			    NOT ISBLANK('dim_provider'[provider_id]) && CALCULATE([Explorer provider row visible]) = 1)
+			RETURN CALCULATE([Provider Submission Documents], KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Requirements reporting
+		lineageTag: 1420400d-56f9-5c53-adbe-5611938b4eb7
+
+	/// Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.
+	measure 'Explorer provider documents expired' =
+			VAR eligible = FILTER(VALUES('dim_provider'[provider_id]),
+			    NOT ISBLANK('dim_provider'[provider_id]) && CALCULATE([Explorer provider row visible]) = 1)
+			RETURN CALCULATE([Documents Expired], KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Requirements reporting
+		lineageTag: c08dc54b-238d-5c39-97fd-7e3214a55fb7
+
+	/// Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.
+	measure 'Explorer provider documents expiring 30 days' =
+			VAR eligible = FILTER(VALUES('dim_provider'[provider_id]),
+			    NOT ISBLANK('dim_provider'[provider_id]) && CALCULATE([Explorer provider row visible]) = 1)
+			RETURN CALCULATE([Documents Expiring Next 30 Days], KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Requirements reporting
+		lineageTag: 76283d11-701e-5595-9ccf-f78d6c4aec6d
+
+	/// Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.
+	measure 'Explorer provider homes with expired documents' =
+			VAR eligible = FILTER(VALUES('dim_provider'[provider_id]),
+			    NOT ISBLANK('dim_provider'[provider_id]) && CALCULATE([Explorer provider row visible]) = 1)
+			RETURN CALCULATE([Provider Homes With Expired Documents], KEEPFILTERS(eligible))
+		formatString: #,0
+		displayFolder: Requirements reporting
+		lineageTag: 29df056f-03f9-5897-98a2-72eec38dc726
+
+	partition '_Explorer KPI Measures' = m
+		mode: import
+		source = #table(type table [], {})

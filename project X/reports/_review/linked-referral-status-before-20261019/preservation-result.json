@@ -1,0 +1,13 @@
+{
+  "preservation": "passed",
+  "unchangedFiles": 4330,
+  "changedFiles": [
+    "SM_WMPP_v16.Report\\definition\\pages\\08ef33dc6a87d1b14392\\visuals\\586a1ac1befa7498ed75\\mobile.json",
+    "SM_WMPP_v16.Report\\definition\\pages\\08ef33dc6a87d1b14392\\visuals\\586a1ac1befa7498ed75\\visual.json",
+    "SM_WMPP_v16.SemanticModel\\definition\\tables\\Linked Provider Referrals.tmdl"
+  ],
+  "cacheBytesAndTimestamp": "unchanged",
+  "liveModelWritten": false,
+  "refreshed": false,
+  "published": false
+}

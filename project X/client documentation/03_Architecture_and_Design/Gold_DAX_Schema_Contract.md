@@ -2,23 +2,17 @@
 
 ## Reporting reassessment 30 September 2026
 
-The reviewed WIP imports `fact_ipa` with both signature flags and completion/pending fields, `dim_person`, `dim_referral_provider_message`, `dim_referral_provider_reject_reason` and `bridge_referral_framework_category`. Refer to the current object inventory rather than the older object counts below.
+The reviewed WMPP_v16 imports `fact_ipa` with both signature flags and completion/pending fields, `dim_person`, `dim_referral_provider_message`, `dim_referral_provider_reject_reason` and `bridge_referral_framework_category`. Refer to the current object inventory rather than the older object counts below.
 
 `dim_category` is a second semantic import of `gold.dim_framework_category`; it is not a separate Gold object. `Referral Map Points`, journey selectors and other local helpers are model objects, not warehouse publications. Current category bridges are not historical membership. Source deployment and row-level data quality require a refresh check.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** WMPP Fabric data platform
-**Layer:** Gold (analytical model)
-**Date:** 27 August 2026 (rev 2 — legacy v15 measure-library reconciliation)
-**Status:** Current implementation baseline
-**Baseline:** Active notebook set version 02 04
+**Project:** WMPP Fabric data platform **Layer:** Gold (analytical model) **Date:** 27 August 2026 (rev 2 - legacy v15 measure-library reconciliation) **Status:** Current implementation baseline **Baseline:** Active notebook set version 02 04
 
 ---
 
-
-## 15 September 2026 — IPA signature contract and migrated report
+## 15 September 2026 - IPA signature contract and migrated report
 
 `04_gold_model.py` now publishes four non-null boolean fields on `gold.fact_ipa`:
 
@@ -88,7 +82,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 
 ## 3. Column-to-DAX mapping
 
-### 3.1 `fact_referral` — core referral fact
+### 3.1 `fact_referral` - core referral fact
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -114,18 +108,18 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `days_to_ipa` | INT | `silver.referral_enrichment` | Median Days to IPA |
 | `days_without_activity` | INT | Derived | Open Referrals Stalled 7+ Days |
 | `current_status` | STRING | `silver.referral` | Referrals Under Offer, Closed/Cancelled, Engagement |
-| `referral_closure_reason` | STRING | `silver.referral` | Visual dimension — closure reason breakdown |
-| `placement_type_required` | STRING | `silver.referral` | Visual dimension — placement type |
-| `priority` | STRING | `silver.referral` | Visual dimension — urgency band |
-| `estimated_weekly_cost` | DECIMAL | `silver.referral` | Average Estimated Weekly Cost — Confirmed Referrals |
+| `referral_closure_reason` | STRING | `silver.referral` | Visual dimension - closure reason breakdown |
+| `placement_type_required` | STRING | `silver.referral` | Visual dimension - placement type |
+| `priority` | STRING | `silver.referral` | Visual dimension - urgency band |
+| `estimated_weekly_cost` | DECIMAL | `silver.referral` | Average Estimated Weekly Cost - Confirmed Referrals |
 | `ipa_2_signatures` | BOOLEAN | Derived from `silver.referral_enrichment` | Referrals With Fully Signed IPA, Signature Completion Rate |
 | `ipa_issued_date` | DATE | `silver.referral_enrichment` | Placement Target Hit Rate, Fully Signed IPA |
 | `gold_modelled_at` | TIMESTAMP | Derived | Gold Model Last Refreshed |
 | `referral_created_date` | DATE | `silver.referral` | Time-intelligence measures (MTD, FY, etc.) |
-| `region` | STRING | `CAST(NULL AS STRING)` | **Blocked** — see Section 5 |
-| `complexity_band` | STRING | `CAST(NULL AS STRING)` | **Blocked** — see Section 5 |
+| `region` | STRING | `CAST(NULL AS STRING)` | **Blocked** - see Section 5 |
+| `complexity_band` | STRING | `CAST(NULL AS STRING)` | **Blocked** - see Section 5 |
 
-### 3.2 `fact_referral_snapshot` — point-in-time store
+### 3.2 `fact_referral_snapshot` - point-in-time store
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -139,9 +133,9 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `referral_closed_date` | DATE | Derived | Closed Referrals at Snapshot |
 | `ipa_issued_date` | DATE | Derived | Referrals with IPA at Snapshot |
 | `required_placement_date_outcome` | STRING | Derived | Open Overdue / On-Track at Snapshot |
-| *(all other `fact_referral` columns)* | — | — | Available for future snapshot measures |
+| *(all other `fact_referral` columns)* | - | - | Available for future snapshot measures |
 
-### 3.3 `fact_offer` — offer grain
+### 3.3 `fact_offer` - offer grain
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -165,7 +159,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `is_ipa_pending` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPAs Pending Completion |
 | `is_ipa_completed` | BOOLEAN | Derived from `silver.ipa` signature flags (GLD-013) | IPA Completed, IPA Created to Completion % |
 
-### 3.4 `fact_ipa` — IPA grain
+### 3.4 `fact_ipa` - IPA grain
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -176,7 +170,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `estimated_weekly_cost` | DECIMAL | `silver.ipa` | Estimated Active Weekly Cost, Total IPA Weekly Cost |
 | `is_placement_closed` | BOOLEAN | Derived | Active IPAs, Closed IPAs, cost measures |
 
-### 3.5 `fact_referral_provider` — provider response grain
+### 3.5 `fact_referral_provider` - provider response grain
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -186,7 +180,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 | `is_declined` | BOOLEAN | Derived | Provider Declines, Decline Rate |
 | `is_engaged` | BOOLEAN | Derived (GLD-012: not cancelled, not closed, not excluded) | Engagement measures, Active Referrals Awaiting Offers |
 
-### 3.6 `fact_referral_lifecycle_event` — derived event grain
+### 3.6 `fact_referral_lifecycle_event` - derived event grain
 
 | Column | Data type | Source | DAX measures using it |
 |---|---|---|---|
@@ -222,7 +216,7 @@ This is a companion to the [High-Level Design](HLD.md) and [Technical/Functional
 |---|---|---|---|
 | `dim_date[date]` | `fact_referral[referral_created_date]` | Active (or role-playing) | Referral-created time intelligence |
 | `dim_date[date]` | `fact_referral_snapshot[snapshot_date]` | Active (or role-playing) | Snapshot timeline |
-| `dim_date[date]` | `fact_ipa[ipa_issued_date]` | **Inactive** — use USERELATIONSHIP | IPA-issued time intelligence |
+| `dim_date[date]` | `fact_ipa[ipa_issued_date]` | **Inactive** - use USERELATIONSHIP | IPA-issued time intelligence |
 | `dim_date[date]` | `fact_referral[required_placement_date]` | Inactive | Target date analysis |
 | `dim_date[date]` | `fact_referral[referral_closed_date]` | Inactive | Closure date analysis |
 
@@ -248,9 +242,7 @@ The following fields exist in the Gold schema but are **not populated** by the c
 
 The following KPI groups require fields that do not exist in **any** Gold table:
 
-*KPI-04–07 (gender breakdown) was removed from this list in the GLD-006/007
-remediation: `dim_person[gender_clean]` plus `fact_referral[person_id]` now
-support it.*
+*KPI-04–07 (gender breakdown) was removed from this list in the GLD-006/007 remediation: `dim_person[gender_clean]` plus `fact_referral[person_id]` now support it.*
 
 | KPI group | Missing field/grain | Required source change |
 |---|---|---|

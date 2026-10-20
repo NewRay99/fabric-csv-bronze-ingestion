@@ -1,5 +1,19 @@
 # Notebook regression checks
 
+To build a separate test project in the Fabric Git folder format used by
+`reports/Notebooks v16.zip`, run from the repository root:
+
+```powershell
+python "project X/tools/build_fabric_test_version.py"
+```
+
+The output is `project X/reports/fabric-test-version`, with current numbered
+Python source copied into `notebooks/<name>.Notebook/notebook-content.py` and
+its own `tests` folder. ZIP notebook metadata is retained; current source
+replaces the ZIP code. The builder refuses to overwrite an existing output;
+use `--output` with a new directory for another snapshot. See the output README
+for the test command and runtime limits.
+
 The numbered `.py` notebooks in `project X` are the primary source. Every
 notebook validator and the Gold SQL extractor reads that source through
 `notebook_loader.py`, which uses the shared Fabric parser in

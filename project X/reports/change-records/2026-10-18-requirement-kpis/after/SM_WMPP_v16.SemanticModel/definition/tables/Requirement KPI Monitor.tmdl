@@ -1,0 +1,130 @@
+table 'Requirement KPI Monitor'
+	lineageTag: 9f9cb52d-7d0b-5c60-b992-89bb7561f3c2
+
+	column 'KPI IDs'
+		dataType: string
+		lineageTag: 69ca8efa-b5a8-53f8-b844-3841f7c30551
+		summarizeBy: none
+		sourceColumn: [KPI IDs]
+
+	column 'Requirement IDs'
+		dataType: string
+		lineageTag: e15a33ab-f1fb-5a1a-b18b-70e1811ebbae
+		summarizeBy: none
+		sourceColumn: [Requirement IDs]
+
+	column 'Metric'
+		dataType: string
+		lineageTag: 7233b9f1-a7ac-56c8-81d6-f7bdfeba1ce2
+		summarizeBy: none
+		sourceColumn: [Metric]
+		sortByColumn: Ordinal
+
+	column 'Interpretation'
+		dataType: string
+		lineageTag: 3f22efc1-e98f-557a-850c-3931fb054f4e
+		summarizeBy: none
+		sourceColumn: [Interpretation]
+
+	column 'Requirement keys'
+		dataType: string
+		lineageTag: 76b96296-3d09-5df0-81ab-b56f85ef3520
+		summarizeBy: none
+		sourceColumn: [Requirement keys]
+		isHidden
+
+	column 'Ordinal'
+		dataType: int64
+		lineageTag: 2d408bb4-3834-5692-a569-321d24ccd045
+		summarizeBy: none
+		sourceColumn: [Ordinal]
+		isHidden
+
+	/// Requirement selection filters the local monitor through exact requirement tokens.
+	measure 'Requirement KPI row visible' =
+			VAR requirementKeys = SELECTEDVALUE('Requirement KPI Monitor'[Requirement keys])
+			VAR selectedRequirements = VALUES('ref_RID'[Req ID])
+			VAR matches = COUNTROWS(FILTER(selectedRequirements,
+			    CONTAINSSTRING(requirementKeys, "|" & TRIM('ref_RID'[Req ID]) & "|")))
+			RETURN IF(NOT ISCROSSFILTERED('ref_RID') || matches > 0, 1, BLANK())
+		formatString: 0
+		displayFolder: Requirements reporting
+		lineageTag: 17eb206a-fda0-50d8-8ea6-a354c2c375fb
+
+	/// Presentation of existing requirement-linked measures; labels retain known semantic limitations.
+	measure 'Requirement KPI value' =
+			IF([Requirement KPI row visible] = 1, SWITCH(SELECTEDVALUE('Requirement KPI Monitor'[Ordinal]),
+			    0, IF(ISBLANK('_Measures'[Active Awaiting Offers With Engagement]), "—", FORMAT('_Measures'[Active Awaiting Offers With Engagement], "#,0")),
+			    1, IF(ISBLANK('_Measures'[Average Estimated Weekly Cost — Confirmed Referrals]), "—", FORMAT('_Measures'[Average Estimated Weekly Cost — Confirmed Referrals], "£#,0.00")),
+			    2, IF(ISBLANK('_Measures'[Closed Referrals at Snapshot]), "—", FORMAT('_Measures'[Closed Referrals at Snapshot], "#,0")),
+			    3, IF(ISBLANK('_Measures'[Documents Expired]), "—", FORMAT('_Measures'[Documents Expired], "#,0")),
+			    4, IF(ISBLANK('_Measures'[Documents Expiring Next 30 Days]), "—", FORMAT('_Measures'[Documents Expiring Next 30 Days], "#,0")),
+			    5, IF(ISBLANK('_Measures'[Draft Offers on Referrals Under Offer]), "—", FORMAT('_Measures'[Draft Offers on Referrals Under Offer], "#,0")),
+			    6, IF(ISBLANK('_Measures'[Drafts No Activity 14+ Days]), "—", FORMAT('_Measures'[Drafts No Activity 14+ Days], "#,0")),
+			    7, IF(ISBLANK('_Measures'[Emergency Placement Rate]), "—", FORMAT('_Measures'[Emergency Placement Rate], "0.0%")),
+			    8, IF(ISBLANK('_Measures'[Emergency Referrals]), "—", FORMAT('_Measures'[Emergency Referrals], "#,0")),
+			    9, IF(ISBLANK('_Measures'[IPA Signature Completion Rate]), "—", FORMAT('_Measures'[IPA Signature Completion Rate], "0.0%")),
+			    10, IF(ISBLANK('_Measures'[IPAs Signed by Local Authority]), "—", FORMAT('_Measures'[IPAs Signed by Local Authority], "#,0")),
+			    11, IF(ISBLANK('_Measures'[IPAs Signed by Provider]), "—", FORMAT('_Measures'[IPAs Signed by Provider], "#,0")),
+			    12, IF(ISBLANK('_Measures'[Latest Offer Source Export]), "—", FORMAT('_Measures'[Latest Offer Source Export], "dd MMM yyyy HH:mm")),
+			    13, IF(ISBLANK('_Measures'[Median Days to First Action]), "—", FORMAT('_Measures'[Median Days to First Action], "0.0")),
+			    14, IF(ISBLANK('_Measures'[Median Days to First Offer]), "—", FORMAT('_Measures'[Median Days to First Offer], "0.0")),
+			    15, IF(ISBLANK('_Measures'[Offers Still to Progress to IPA %]), "—", FORMAT('_Measures'[Offers Still to Progress to IPA %], "0.0%")),
+			    16, IF(ISBLANK('_Measures'[Other Gender Referrals]), "—", FORMAT('_Measures'[Other Gender Referrals], "#,0")),
+			    17, IF(ISBLANK('_Measures'[Planned Referrals]), "—", FORMAT('_Measures'[Planned Referrals], "#,0")),
+			    18, IF(ISBLANK('_Measures'[Provider Average Response Hours]), "—", FORMAT('_Measures'[Provider Average Response Hours], "0.0")),
+			    19, IF(ISBLANK('_Measures'[Provider Decline Rate]), "—", FORMAT('_Measures'[Provider Decline Rate], "0.0%")),
+			    20, IF(ISBLANK('_Measures'[Provider Declines]), "—", FORMAT('_Measures'[Provider Declines], "#,0")),
+			    21, IF(ISBLANK('_Measures'[Provider Messages Sent]), "—", FORMAT('_Measures'[Provider Messages Sent], "#,0")),
+			    22, IF(ISBLANK('_Measures'[Provider Offer Conversion Rate]), "—", FORMAT('_Measures'[Provider Offer Conversion Rate], "0.0%")),
+			    23, IF(ISBLANK('_Measures'[Provider Onboarding Success Rate]), "—", FORMAT('_Measures'[Provider Onboarding Success Rate], "0.0%")),
+			    24, IF(ISBLANK('_Measures'[Provider Response Rate]), "—", FORMAT('_Measures'[Provider Response Rate], "0.0%")),
+			    25, IF(ISBLANK('_Measures'[Provider Target Placement Rate]), "—", FORMAT('_Measures'[Provider Target Placement Rate], "0.0%")),
+			    26, IF(ISBLANK('_Measures'[Providers Approved]), "—", FORMAT('_Measures'[Providers Approved], "#,0")),
+			    27, IF(ISBLANK('_Measures'[Providers Pending Onboarding]), "—", FORMAT('_Measures'[Providers Pending Onboarding], "#,0")),
+			    28, IF(ISBLANK('_Measures'[Providers With QA Flags]), "—", FORMAT('_Measures'[Providers With QA Flags], "#,0")),
+			    29, IF(ISBLANK('_Measures'[QA Flagged Homes]), "—", FORMAT('_Measures'[QA Flagged Homes], "#,0")),
+			    30, IF(ISBLANK('_Measures'[Referral Lifecycle Events]), "—", FORMAT('_Measures'[Referral Lifecycle Events], "#,0")),
+			    31, IF(ISBLANK('_Measures'[Referrals Without Provider Assignment]), "—", FORMAT('_Measures'[Referrals Without Provider Assignment], "#,0")),
+			    32, IF(ISBLANK('_Measures'[Unsuccessful Offers on Referrals Under Offer]), "—", FORMAT('_Measures'[Unsuccessful Offers on Referrals Under Offer], "#,0")), BLANK()))
+		displayFolder: Requirements reporting
+		lineageTag: 06e3a200-f55d-58a2-afaf-c87dd46ac777
+
+	partition 'Requirement KPI Monitor' = calculated
+		mode: import
+		source =
+			DATATABLE("KPI IDs",STRING,"Requirement IDs",STRING,"Metric",STRING,"Interpretation",STRING,"Requirement keys",STRING,"Ordinal",INTEGER,{
+			    {"KPI-21","R24, R26","Active Awaiting Offers With Engagement","Existing reporting definition; refreshed totals and requirement acceptance remain pending.","|R24|R26|",0},
+			    {"GOLD-KPI-024","R62","Average estimated weekly cost (IPA issued)","Estimate for referrals with IPA issue dates; not actual spend.","|R62|",1},
+			    {"GOLD-KPI-030","R13","Closed referrals at selected snapshot","Snapshot-state metric; select a snapshot month. Not closures occurring during a period.","|R13|",2},
+			    {"KPI-101","R47, R48","Expired documents","Expiry before today; a document count, not a compliance decision.","|R47|R48|",3},
+			    {"KPI-100","R47","Documents expiring in 30 days","Expiry from today through today + 30 inclusive; missing dates excluded.","|R47|",4},
+			    {"KPI-17","R24","Draft Offers on Referrals Under Offer","Existing reporting definition; refreshed totals and requirement acceptance remain pending.","|R24|",5},
+			    {"KPI-58; KPI-63","R24","Draft offers aged 14+ days","Existing measure uses offer_age_days; does not establish 14 days without activity.","|R24|",6},
+			    {"KPI-92","R18, R57","Same-day referral share","Gold emergency proxy / all referrals; not a placement success rate. Owner approval pending.","|R18|R57|",7},
+			    {"KPI-91; KPI-94","R18, R57","Same-day referrals (current open/under offer)","Gold same-day-date proxy, not a statutory emergency classification.","|R18|R57|",8},
+			    {"KPI-114","R20, R35","Recorded IPA completion rate","IPA Completed / IPAs Created; completion flag does not certify both signatures.","|R20|R35|",9},
+			    {"GOLD-KPI-117","R15, R35, R62","IPAs Signed by Local Authority","Recorded signature evidence at IPA grain; does not perform signing or certify the other party.","|R15|R35|R62|",10},
+			    {"GOLD-KPI-116","R15, R35, R62","IPAs Signed by Provider","Recorded signature evidence at IPA grain; does not perform signing or certify the other party.","|R15|R35|R62|",11},
+			    {"KPI-88","R53","Latest offer source export","Latest source export timestamp in context; not a Service refresh or SLA.","|R53|",12},
+			    {"GOLD-KPI-010","R24","Median Days to First Action","Existing reporting definition; refreshed totals and requirement acceptance remain pending.","|R24|",13},
+			    {"GOLD-KPI-011","R24","Median Days to First Offer","Existing reporting definition; refreshed totals and requirement acceptance remain pending.","|R24|",14},
+			    {"KPI-84","R35","Accepted-offer share without linked IPA","Complement of accepted-offer-to-IPA conversion; respects existing blank denominator handling.","|R35|",15},
+			    {"KPI-06; GOLD-KPI-112","R51","Referrals in recorded Other gender group","Uses gender_clean = Other; missing/unknown categories retain current source treatment.","|R51|",16},
+			    {"KPI-94; KPI-93","R18, R57","Planned referrals (current open/under offer)","Dated non-emergency proxy; undated records excluded. Definition approval pending.","|R18|R57|",17},
+			    {"GOLD-KPI-138","R26, R51","Provider Average Response Hours","Assignment-month Gold component; not a provider score. Choose the cohort deliberately; business approval pending.","|R26|R51|",18},
+			    {"GOLD-KPI-027","R54","Provider Decline Rate","Recorded assignment decline status; reasons, cancellation distinction and history need owner reconciliation.","|R54|",19},
+			    {"GOLD-KPI-026","R54","Provider Declines","Recorded assignment decline status; reasons, cancellation distinction and history need owner reconciliation.","|R54|",20},
+			    {"KPI-110","R14","ProviderMessageSent lifecycle events","Counts recorded event type; authorship and complete message audit require validation.","|R14|",21},
+			    {"GOLD-KPI-139","R26, R51","Provider Offer Conversion Rate","Assignment-month Gold component; not a provider score. Choose the cohort deliberately; business approval pending.","|R26|R51|",22},
+			    {"KPI-117","R59","Approved provider share","Approved / registered providers; does not measure bulk-job success or due diligence.","|R59|",23},
+			    {"GOLD-KPI-137","R26, R51","Provider Response Rate","Assignment-month Gold component; not a provider score. Choose the cohort deliberately; business approval pending.","|R26|R51|",24},
+			    {"GOLD-KPI-140","R26, R51","Provider Target Placement Rate","Assignment-month Gold component; not a provider score. Choose the cohort deliberately; business approval pending.","|R26|R51|",25},
+			    {"KPI-104","R49","Providers approved","Current approval status only; does not certify required documents.","|R49|",26},
+			    {"KPI-104; KPI-116","R49, R59","Providers pending approval","Current provider-status proxy; no bulk process or due-diligence certification.","|R49|R59|",27},
+			    {"KPI-97","R41","Providers with current QA flags","Current flags only; historical flag types and apply/remove workflow are absent.","|R41|",28},
+			    {"KPI-99","R41","Homes flagged directly or through provider","Home QA flag OR flagged provider; not a quality-of-care score.","|R41|",29},
+			    {"KPI-113","R20","Recorded lifecycle events","Distinct event IDs; not a complete application audit trail.","|R20|",30},
+			    {"GOLD-KPI-006","R24, R26","Referrals flagged not seen by providers","Uses Gold is_not_seen_by_providers; validate the proxy against assignment records.","|R24|R26|",31},
+			    {"KPI-16","R28","Unsuccessful Offers on Referrals Under Offer","Existing reporting definition; refreshed totals and requirement acceptance remain pending.","|R28|",32}
+			})

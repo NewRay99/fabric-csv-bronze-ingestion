@@ -1,0 +1,412 @@
+table 'Linked Provider Referrals'
+	lineageTag: 0ba73430-368f-46e2-9967-18803fc24154
+
+	/// Shows other providers on shared referrals. Calculated pair candidates on
+	/// both sides require an OFFER_MADE, OFFER_SUCCESSFUL or OFFER_UNSUCCESSFUL
+	/// offer. Draft/withdrawn-only, assignment-only and message-only pairs are absent.
+	/// Existing assignment, message and offer detail measures remain unchanged.
+	/// CANCELLED referrals and pairs with a Cancelled response are excluded on
+	/// both sides. Cancellation checks ignore case and surrounding spaces.
+	measure 'Linked provider row visible' =
+			VAR hasProviderSearch =
+			    ISFILTERED('dim_provider'[provider_name])
+			    || ISFILTERED('dim_provider'[provider_id])
+			VAR searchedProviderIds = VALUES('dim_provider'[provider_id])
+			VAR cancelledReferralIds =
+			    CALCULATETABLE(
+			        SELECTCOLUMNS(FILTER('fact_referral',
+			            UPPER(TRIM(COALESCE('fact_referral'[current_status], ""))) = "CANCELLED"),
+			            "referral_id", 'fact_referral'[referral_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        REMOVEFILTERS('fact_referral'[current_status])
+			    )
+			VAR cancelledResponsePairs =
+			    CALCULATETABLE(
+			        SUMMARIZE(FILTER('fact_referral_provider',
+			            UPPER(TRIM(COALESCE('fact_referral_provider'[provider_response_status], ""))) = "CANCELLED"),
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        REMOVEFILTERS('fact_referral_provider'[provider_response_status])
+			    )
+			VAR eligibleSearchedPairs =
+			    EXCEPT(
+			        FILTER(
+			            CALCULATETABLE(
+			                SUMMARIZE('Linked Provider Referrals',
+			                    'Linked Provider Referrals'[referral_id],
+			                    'Linked Provider Referrals'[provider_id]),
+			                REMOVEFILTERS('Linked Provider Referrals'),
+			                REMOVEFILTERS('dim_provider')
+			            ),
+			            'Linked Provider Referrals'[provider_id] IN searchedProviderIds
+			            && NOT ('Linked Provider Referrals'[referral_id] IN cancelledReferralIds)
+			        ),
+			        cancelledResponsePairs
+			    )
+			VAR searchedAssignmentIds =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[referral_provider_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(eligibleSearchedPairs,
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]))
+			    )
+			VAR searchedMessageAssignmentIds =
+			    CALCULATETABLE(
+			        VALUES('dim_referral_provider_message'[referral_provider_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(searchedAssignmentIds,
+			            'dim_referral_provider_message'[referral_provider_id]))
+			    )
+			VAR messagedReferralIds =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[referral_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(searchedProviderIds, 'fact_referral_provider'[provider_id])),
+			        KEEPFILTERS(TREATAS(searchedMessageAssignmentIds,
+			            'fact_referral_provider'[referral_provider_id]))
+			    )
+			VAR offeredReferralIds =
+			    CALCULATETABLE(
+			        VALUES('fact_offer'[referral_id]),
+			        REMOVEFILTERS('Linked Provider Referrals'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(eligibleSearchedPairs,
+			            'fact_offer'[referral_id], 'fact_offer'[provider_id]))
+			    )
+			VAR searchedReferralIds =
+			    FILTER(DISTINCT(UNION(messagedReferralIds, offeredReferralIds)),
+			        NOT ISBLANK([referral_id]))
+			VAR linkedProviderId = SELECTEDVALUE('Linked Provider Referrals'[provider_id])
+			VAR cancelledLinkedReferralIds =
+			    SELECTCOLUMNS(FILTER(cancelledResponsePairs,
+			        'fact_referral_provider'[provider_id] == linkedProviderId),
+			        "referral_id", 'fact_referral_provider'[referral_id])
+			VAR sharedReferralIds =
+			    EXCEPT(
+			        INTERSECT(VALUES('Linked Provider Referrals'[referral_id]), searchedReferralIds),
+			        cancelledLinkedReferralIds
+			    )
+			VAR linkedOffers =
+			    CALCULATE(
+			        COUNTROWS('fact_offer'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS({linkedProviderId}, 'fact_offer'[provider_id])),
+			        KEEPFILTERS(TREATAS(sharedReferralIds, 'fact_offer'[referral_id]))
+			    )
+			VAR linkedAssignmentIds =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[referral_provider_id]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS({linkedProviderId}, 'fact_referral_provider'[provider_id])),
+			        KEEPFILTERS(TREATAS(sharedReferralIds, 'fact_referral_provider'[referral_id]))
+			    )
+			VAR linkedMessages =
+			    CALCULATE(
+			        COUNTROWS('dim_referral_provider_message'),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedAssignmentIds,
+			            'dim_referral_provider_message'[referral_provider_id]))
+			    )
+			RETURN IF(
+			    hasProviderSearch
+			    && NOT ISBLANK(linkedProviderId)
+			    && NOT (linkedProviderId IN searchedProviderIds)
+			    && COUNTROWS(sharedReferralIds) > 0
+			    && (linkedOffers > 0 || linkedMessages > 0),
+			    1,
+			    BLANK()
+			)
+		formatString: 0
+		lineageTag: c0ba737e-b691-42f3-82b4-ce59fe0cea9a
+
+	measure 'Linked debug' =
+
+			VAR searchDetected =
+			    ISFILTERED ( 'dim_provider'[provider_name] )
+			        || ISFILTERED ( 'dim_provider'[provider_id] )
+
+			VAR searchedProviders =
+			    VALUES ( 'dim_provider'[provider_id] )
+
+			VAR searchedReferrals =
+			    FILTER (
+			        DISTINCT (
+			            UNION (
+			                VALUES ( 'fact_referral_provider'[referral_id] ),
+			                VALUES ( 'fact_offer'[referral_id] )
+			            )
+			        ),
+			        NOT ISBLANK ( [referral_id] )
+			    )
+
+			VAR candidatePairs =
+			    CALCULATETABLE (
+			        'Linked Provider Referrals',
+			        REMOVEFILTERS ( 'dim_provider' )
+			    )
+
+			VAR otherPairs =
+			    FILTER (
+			        candidatePairs,
+			        'Linked Provider Referrals'[referral_id] IN searchedReferrals
+			            && NOT (
+			                'Linked Provider Referrals'[provider_id]
+			                    IN searchedProviders
+			            )
+			    )
+
+			RETURN
+			    "Search: " & IF ( searchDetected, "Yes", "No" )
+			        & " | Providers: "
+			        & FORMAT ( COALESCE ( COUNTROWS ( searchedProviders ), 0 ), "0" )
+			        & " | Referrals: "
+			        & FORMAT ( COALESCE ( COUNTROWS ( searchedReferrals ), 0 ), "0" )
+			        & " | Other pairs: "
+			        & FORMAT ( COALESCE ( COUNTROWS ( otherPairs ), 0 ), "0" )
+		lineageTag: 1f2064ab-28da-4171-a3f8-6ff6c2f4c3f9
+
+	/// Distinct assignments for visible shared referral/provider pairs.
+	/// Includes assignments without offers.
+	measure 'Linked assignment count' =
+			VAR linkedPairs =
+			    FILTER(
+			        SUMMARIZE('Linked Provider Referrals',
+			            'Linked Provider Referrals'[referral_id],
+			            'Linked Provider Referrals'[provider_id]),
+			        CALCULATE([Linked provider row visible]) = 1
+			    )
+			RETURN IF(COUNTROWS(linkedPairs) > 0,
+			    COALESCE(CALCULATE(
+			        DISTINCTCOUNT('fact_referral_provider'[referral_provider_id]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedPairs,
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]))
+			    ), 0))
+		formatString: #,0
+		displayFolder: Linked referrals
+		lineageTag: 2b9053e5-b015-4f1f-9b6d-45b28f3a8ef6
+
+	/// Distinct recorded messages in either direction, attributed through assignment
+	/// IDs to the visible shared referral/provider pairs.
+	measure 'Linked message count' =
+			VAR linkedPairs =
+			    FILTER(
+			        SUMMARIZE('Linked Provider Referrals',
+			            'Linked Provider Referrals'[referral_id],
+			            'Linked Provider Referrals'[provider_id]),
+			        CALCULATE([Linked provider row visible]) = 1
+			    )
+			VAR assignmentIds =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[referral_provider_id]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedPairs,
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]))
+			    )
+			RETURN IF(COUNTROWS(linkedPairs) > 0,
+			    COALESCE(CALCULATE(
+			        DISTINCTCOUNT('dim_referral_provider_message'[message_id]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(assignmentIds,
+			            'dim_referral_provider_message'[referral_provider_id]))
+			    ), 0))
+		formatString: #,0
+		displayFolder: Linked referrals
+		lineageTag: 64a83782-c32e-4977-9f21-d52d92a0e263
+
+	/// Distinct other providers with offers/messages on the searched providers'
+	/// shared offer/message referrals. A provider is counted once across referrals.
+	/// Matches the linked table's rule; returns zero without a provider search.
+	measure 'Linked providers in selection' =
+			VAR hasProviderSearch =
+			    ISFILTERED('dim_provider'[provider_name])
+			    || ISFILTERED('dim_provider'[provider_id])
+			RETURN IF(hasProviderSearch,
+			    COALESCE(COUNTROWS(FILTER(
+			        VALUES('Linked Provider Referrals'[provider_id]),
+			        NOT ISBLANK('Linked Provider Referrals'[provider_id])
+			        && CALCULATE([Linked provider row visible]) = 1
+			    )), 0), 0)
+		formatString: #,0
+		displayFolder: Linked referrals
+		lineageTag: 5def946e-f152-4e3a-b19d-b0df9d44f82e
+
+	/// Distinct offer statuses for the visible shared referral/provider pairs.
+	/// Blank statuses display as Unknown status; includes drafts.
+	measure 'Linked offer statuses' =
+			VAR linkedPairs =
+			    FILTER(
+			        SUMMARIZE('Linked Provider Referrals',
+			            'Linked Provider Referrals'[referral_id],
+			            'Linked Provider Referrals'[provider_id]),
+			        CALCULATE([Linked provider row visible]) = 1
+			    )
+			VAR statusValues =
+			    CALCULATETABLE(
+			        VALUES('fact_offer'[offer_status]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedPairs,
+			            'fact_offer'[referral_id], 'fact_offer'[provider_id]))
+			    )
+			RETURN IF(COUNTROWS(linkedPairs) > 0,
+			    COALESCE(CONCATENATEX(
+			        statusValues,
+			        COALESCE('fact_offer'[offer_status], "(Unknown status)"),
+			        ", ",
+			        'fact_offer'[offer_status], ASC
+			    ), "No offers in scope"))
+		displayFolder: Linked referrals
+		lineageTag: f12a8cb5-333b-42c8-8f11-fea5c5728096
+
+	/// Distinct recorded assignment response statuses for visible shared pairs.
+	/// Blank responses display as Unknown response.
+	measure 'Linked response statuses' =
+			VAR linkedPairs =
+			    FILTER(
+			        SUMMARIZE('Linked Provider Referrals',
+			            'Linked Provider Referrals'[referral_id],
+			            'Linked Provider Referrals'[provider_id]),
+			        CALCULATE([Linked provider row visible]) = 1
+			    )
+			VAR responseValues =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[provider_response_status]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedPairs,
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]))
+			    )
+			RETURN IF(COUNTROWS(linkedPairs) > 0,
+			    COALESCE(CONCATENATEX(
+			        responseValues,
+			        COALESCE('fact_referral_provider'[provider_response_status], "(Unknown response)"),
+			        ", ",
+			        'fact_referral_provider'[provider_response_status], ASC
+			    ), "No assignment in scope"))
+		displayFolder: Linked referrals
+		lineageTag: a10b72f9-079a-496e-aa63-648cf96fe24f
+
+	/// Latest recorded message timestamp plus a 150-character preview for one visible
+	/// referral/provider pair, matched through assignment IDs. Timestamp ties use
+	/// message_id descending. Blank for totals or multi-pair groups.
+	measure 'Linked latest message' =
+			VAR isSinglePair =
+			    HASONEVALUE('Linked Provider Referrals'[referral_id])
+			    && HASONEVALUE('Linked Provider Referrals'[provider_id])
+			VAR linkedPairs =
+			    FILTER(
+			        SUMMARIZE('Linked Provider Referrals',
+			            'Linked Provider Referrals'[referral_id],
+			            'Linked Provider Referrals'[provider_id]),
+			        CALCULATE([Linked provider row visible]) = 1
+			    )
+			VAR assignmentIds =
+			    CALCULATETABLE(
+			        VALUES('fact_referral_provider'[referral_provider_id]),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(linkedPairs,
+			            'fact_referral_provider'[referral_id],
+			            'fact_referral_provider'[provider_id]))
+			    )
+			VAR latestMessage =
+			    CALCULATETABLE(
+			        TOPN(1, 'dim_referral_provider_message',
+			            'dim_referral_provider_message'[created_timestamp], DESC,
+			            'dim_referral_provider_message'[message_id], DESC),
+			        REMOVEFILTERS('dim_provider'),
+			        KEEPFILTERS(TREATAS(assignmentIds,
+			            'dim_referral_provider_message'[referral_provider_id]))
+			    )
+			RETURN IF(isSinglePair && COUNTROWS(linkedPairs) > 0,
+			    COALESCE(CONCATENATEX(
+			        latestMessage,
+			        FORMAT('dim_referral_provider_message'[created_timestamp], "dd MMM yyyy HH:mm")
+			        & " — "
+			        & LEFT(COALESCE('dim_referral_provider_message'[message_text],
+			            "(No message text)"), 150),
+			        ""
+			    ), "No messages in scope"))
+		displayFolder: Linked referrals
+		lineageTag: c617e485-516a-433c-9e6f-c05a423bda29
+
+	column provider_id
+		lineageTag: d7c72b97-6600-4897-aabe-d960bb213712
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [provider_id]
+
+		annotation SummarizationSetBy = Automatic
+
+	column referral_id
+		lineageTag: c11ddd33-d497-4434-a168-238a66188f1b
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [referral_id]
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_name
+		lineageTag: 2cb55b82-03af-421c-b2ba-fcb21125818a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [provider_name]
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Source person's reference, resolved via referral_id to person_id.
+	/// Display only: not a unique referral key. UUID pair keys remain unchanged.
+	column 'Source Reference ID'
+		dataType: string
+		lineageTag: 66500bf6-9ae2-4d92-a2f6-5b88816c47a7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Source Reference ID]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Linked Provider Referrals' = calculated
+		mode: import
+		source =
+				VAR providerPairs =
+				    DISTINCT(
+				        SELECTCOLUMNS(
+				            FILTER('fact_offer',
+				                'fact_offer'[offer_status] IN {
+				                    "OFFER_MADE",
+				                    "OFFER_SUCCESSFUL",
+				                    "OFFER_UNSUCCESSFUL"
+				                }),
+				            "referral_id", 'fact_offer'[referral_id],
+				            "provider_id", 'fact_offer'[provider_id]
+				        )
+				    )
+				RETURN
+				    ADDCOLUMNS(
+				        FILTER(providerPairs,
+				            NOT ISBLANK([referral_id]) && NOT ISBLANK([provider_id])),
+				        "provider_name",
+				            VAR linkedProviderId = [provider_id]
+				            RETURN COALESCE(
+				                LOOKUPVALUE('dim_provider'[provider_name],
+				                    'dim_provider'[provider_id], linkedProviderId),
+				                "Unknown provider"),
+				        "Source Reference ID",
+				            VAR linkedReferralId = [referral_id]
+				            VAR linkedPersonId =
+				                LOOKUPVALUE('fact_referral'[person_id],
+				                    'fact_referral'[referral_id], linkedReferralId)
+				            RETURN IF(NOT ISBLANK(linkedPersonId),
+				                LOOKUPVALUE('dim_person'[Source Reference ID],
+				                    'dim_person'[person_id], linkedPersonId))
+				    )
+
+	annotation PBI_Id = afe14457f43641a1b6b8d1eb24901f46

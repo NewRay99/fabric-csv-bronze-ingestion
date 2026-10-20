@@ -2,17 +2,11 @@
 
 ## Reporting reassessment 30 September 2026
 
-This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WIP delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
+This document is retained as discovery, design or historical comparison evidence. Its original wording, dated counts and source requirements remain intact below. It is not the current WMPP_v16 delivery status. The new 80-requirement reassessment and revised Legend supersede older “implemented”, missing-data and measure-count conclusions for current reporting decisions; they do not amend contractual scope or certify portal workflows.
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
-**Project:** WMPP — West Midlands Placement Portal
-**Document:** Proposed Solution & Architecture
-**Version:** 1.0
-**Date:** 12 July 2026
-**Prepared by:** [Consultant Name]
-**Classification:** Official — Sensitive
+**Project:** WMPP - West Midlands Placement Portal **Document:** Proposed Solution & Architecture **Version:** 1.0 **Date:** 12 July 2026 **Prepared by:** [Consultant Name] **Classification:** Official - Sensitive
 
 ---
 
@@ -74,13 +68,13 @@ The proposed solution adopts the **medallion architecture** (also known as the m
 
 The primary data source is **CSV files on network drives**, which are surfaced to the Fabric Lakehouse via a shortcut (`Files/Latest/*.csv`). The underlying source system is **PostgreSQL** with the following schemas:
 
-- `document` — provider documents and submission documents
-- `ipa` — in-placement agreement data
-- `offer` — referral offers and offer statuses
-- `provider` — provider registry, homes, frameworks, messages
-- `refdata` — reference data (genders, decline reasons, etc.)
-- `referral` — referrals, referral persons, referral categories, events
-- `framework` — framework definitions and associations
+- `document` - provider documents and submission documents
+- `ipa` - in-placement agreement data
+- `offer` - referral offers and offer statuses
+- `provider` - provider registry, homes, frameworks, messages
+- `refdata` - reference data (genders, decline reasons, etc.)
+- `referral` - referrals, referral persons, referral categories, events
+- `framework` - framework definitions and associations
 
 CSV exports from PostgreSQL are placed on the network drive and picked up by the Bronze ingestion notebook.
 
@@ -147,7 +141,7 @@ CSV exports from PostgreSQL are placed on the network drive and picked up by the
 
 The data pipeline consists of three Fabric notebooks, executed sequentially via a Data Pipeline. Each notebook reads from the preceding layer and writes to the next.
 
-### 4.1 Notebook 1 — Bronze Loader
+### 4.1 Notebook 1 - Bronze Loader
 
 | Attribute | Detail |
 |-----------|--------|
@@ -162,9 +156,9 @@ The data pipeline consists of three Fabric notebooks, executed sequentially via 
 
 The Bronze Loader reads each CSV file from the `Files/Latest/` shortcut and appends its contents to a corresponding Bronze Delta table. All columns are ingested as STRING to ensure maximum fidelity and prevent type-related ingestion failures. Each row receives ingestion metadata:
 
-- `_ingestion_timestamp` — UTC timestamp of ingestion
-- `_source_file` — name of the source CSV file
-- `_ingestion_id` — unique batch identifier
+- `_ingestion_timestamp` - UTC timestamp of ingestion
+- `_source_file` - name of the source CSV file
+- `_ingestion_id` - unique batch identifier
 
 The notebook iterates over a configured list of source CSV filenames and creates or appends to `<source_name>` Delta tables. No transformations, filtering, or type casting occurs at this stage.
 
@@ -174,7 +168,7 @@ The notebook iterates over a configured list of source CSV filenames and creates
 - STRING-only typing defers schema enforcement to Silver, where it can be managed centrally via `schema_definition.csv`.
 - The `Files/Latest/` shortcut abstracts the network drive location, allowing the source path to be changed without modifying the notebook.
 
-### 4.2 Notebook 2 — Silver Formatter
+### 4.2 Notebook 2 - Silver Formatter
 
 | Attribute | Detail |
 |-----------|--------|
@@ -208,23 +202,16 @@ Deduplication is performed by partitioning the dataset by primary key columns an
 
 ### 4.2a Derived Silver enrichment and validation
 
-`03_silver_business_rules` materialises `silver.referral_enrichment` after
-the source-conformed Silver tables are available. It contains one row per
-referral and the reusable calculations needed for operational reporting:
+`03_silver_business_rules` materialises `silver.referral_enrichment` after the source-conformed Silver tables are available. It contains one row per referral and the reusable calculations needed for operational reporting:
 
 - offer count and first-offer date;
 - first date that a referral-provider row was observed, plus a no-provider-row flag;
 - IPA admission, signature-completion and last-signature dates; and
 - the earliest eligible provider-document review date after IPA admission.
 
-The enrichment is intentionally derived from delivered source fields. In
-particular, the source does not expose a provider *viewed* timestamp, so
-`first_provider_seen_date` means first observation of a `referral_provider`
-row in an extract, not a user-interface view event. Configuration-driven DQ
-checks enforce the one-row-per-referral key, non-negative offers, populated
-flags, and applicable date ordering.
+The enrichment is intentionally derived from delivered source fields. In particular, the source does not expose a provider *viewed* timestamp, so `first_provider_seen_date` means first observation of a `referral_provider` row in an extract, not a user-interface view event. Configuration-driven DQ checks enforce the one-row-per-referral key, non-negative offers, populated flags, and applicable date ordering.
 
-### 4.3 Notebook 3 — Gold Translator
+### 4.3 Notebook 3 - Gold Translator
 
 | Attribute | Detail |
 |-----------|--------|
@@ -257,30 +244,13 @@ This approach ensures that KPI logic is version-controlled, testable, and identi
 
 ### 4.3a Snapshot replacement and archive replay
 
-`gold.fact_referral_snapshot` is a monthly point-in-time store. Each live or
-archive run atomically replaces all snapshot rows in the active calendar month
-with the latest available extract; completed prior months are retained. This
-prevents daily mid-month archive exports from accumulating competing snapshot
-dates while still allowing an archive replay to refresh the current month.
+`gold.fact_referral_snapshot` is a monthly point-in-time store. Each live or archive run atomically replaces all snapshot rows in the active calendar month with the latest available extract; completed prior months are retained. This prevents daily mid-month archive exports from accumulating competing snapshot dates while still allowing an archive replay to refresh the current month.
 
-Gold additionally preserves natural fact grains alongside the referral fact:
-`gold.fact_offer` (one offer), `gold.fact_placement` (one IPA) and
-`gold.fact_referral_provider` (one referral-provider assignment). The source
-does not yet deliver reliable region, complexity, actual placement end/cost or
-end-reason fields; their nullable Gold columns make that controlled source gap
-visible to reporting and data-governance work.
+Gold additionally preserves natural fact grains alongside the referral fact: `gold.fact_offer` (one offer), `gold.fact_placement` (one IPA) and `gold.fact_referral_provider` (one referral-provider assignment). The source does not yet deliver reliable region, complexity, actual placement end/cost or end-reason fields; their nullable Gold columns make that controlled source gap visible to reporting and data-governance work.
 
-The implemented Gold referral fact also publishes `PlacedByRequiredDate`,
-`RequiredPlacementDateOutcome`, lifecycle durations and inactivity/target-age
-indicators. `gold.vw_kpi_referral_board_summary`,
-`gold.vw_kpi_referral_monthly` and `gold.vw_provider_offer_performance` are
-the supported pre-aggregated reporting views. Earlier references in this
-proposal to `fact_referral_offer` and `fact_ipa` describe the proposed v01
-shape; they are not objects created by the active notebook.
+The implemented Gold referral fact also publishes `PlacedByRequiredDate`, `RequiredPlacementDateOutcome`, lifecycle durations and inactivity/target-age indicators. `gold.vw_kpi_referral_board_summary`, `gold.vw_kpi_referral_monthly` and `gold.vw_provider_offer_performance` are the supported pre-aggregated reporting views. Earlier references in this proposal to `fact_referral_offer` and `fact_ipa` describe the proposed v01 shape; they are not objects created by the active notebook.
 
-Archive orchestration passes the selected canonical export date to Gold and
-allows two hours per child notebook. This accommodates multi-table historical
-replays while retaining the existing monitoring and failure controls.
+Archive orchestration passes the selected canonical export date to Gold and allows two hours per child notebook. This accommodates multi-table historical replays while retaining the existing monitoring and failure controls.
 
 ---
 
@@ -288,7 +258,7 @@ replays while retaining the existing monitoring and failure controls.
 
 ### 5.1 Table Inventory
 
-The Gold layer comprises **17 tables** — a mix of fact and dimension tables designed for star-schema analytics in Power BI.
+The Gold layer comprises **17 tables** - a mix of fact and dimension tables designed for star-schema analytics in Power BI.
 
 #### Fact Tables (7)
 
@@ -318,7 +288,7 @@ The Gold layer comprises **17 tables** — a mix of fact and dimension tables de
 | 16 | `fact_referral_provider_decline_reason` | Decline reason dimension: decline ID, referral ID, provider ID, reason code, reason description, decline timestamp. |
 | 17 | `dim_offer_status` | Offer status dimension: status ID, status code, status description, active flag, sort order. |
 
-### 5.2 KPI Summary — 117 KPIs across 14 Categories
+### 5.2 KPI Summary - 117 KPIs across 14 Categories
 
 | # | Category | KPI Count | Description |
 |---|----------|-----------|-------------|
@@ -405,7 +375,7 @@ The Power BI report will include the following dashboard pages, aligned to funct
 
 ## 7. Security Architecture
 
-### 7.1 Authentication — Entra ID (Azure AD)
+### 7.1 Authentication - Entra ID (Azure AD)
 
 All access to the Fabric workspace, Lakehouse, and Power BI semantic model is authenticated through **Microsoft Entra ID** (formerly Azure Active Directory). This provides:
 
@@ -425,7 +395,7 @@ Fabric workspace roles control access to the Lakehouse, notebooks, and pipelines
 | **Contributor** | Report Developers | Create and edit Power BI reports and semantic models. Cannot modify Lakehouse tables or notebooks. |
 | **Viewer** | Commissioners, End Users | View Power BI reports. No access to Lakehouse or notebooks. |
 
-### 7.3 Row-Level Security (RLS) — Regional Commissioner Access (R55)
+### 7.3 Row-Level Security (RLS) - Regional Commissioner Access (R55)
 
 Requirement R55 specifies that commissioners must only see data for their respective local authority or region. This is enforced through **row-level security** in the Power BI semantic model.
 
@@ -536,7 +506,7 @@ The pipeline includes validation gates between notebooks:
 
 The migration follows a **phased approach**: first achieve functional parity with the current V13.1 report, then enhance to deliver the full 117-KPI Gold model.
 
-### 9.2 Phase 1 — Lift and Shift (Weeks 1–4)
+### 9.2 Phase 1 - Lift and Shift (Weeks 1–4)
 
 **Objective:** Establish the Fabric Lakehouse pipeline with parity to the current 90-measure V13.1 report.
 
@@ -547,13 +517,13 @@ The migration follows a **phased approach**: first achieve functional parity wit
 | 1.3 | Deploy and configure `schema_definition.csv` | All source table schemas documented |
 | 1.4 | Deploy Notebook 1 (Bronze Loader) | `<table>` Delta tables created from CSV files |
 | 1.5 | Deploy Notebook 2 (Silver Formatter) | `<table>` Delta tables with typed columns and deduplication |
-| 1.6 | Deploy Notebook 3 (Gold Translator) — V13.1 parity subset | Gold tables with the existing 90 measures |
+| 1.6 | Deploy Notebook 3 (Gold Translator) - V13.1 parity subset | Gold tables with the existing 90 measures |
 | 1.7 | Build Power BI semantic model (Direct Lake) | Semantic model connected to Gold tables |
 | 1.8 | Recreate V13.1 report pages in new workspace | Report pages matching V13.1 layout |
 | 1.9 | User acceptance testing (UAT) | Sign-off from Placement Officers and Commissioners |
 | 1.10 | Cutover: V13.1 report decommissioned | New report promoted to production |
 
-### 9.3 Phase 2 — Enhance (Weeks 5–8)
+### 9.3 Phase 2 - Enhance (Weeks 5–8)
 
 **Objective:** Extend the Gold model to deliver all 117 KPIs and close the 17 functional gaps.
 

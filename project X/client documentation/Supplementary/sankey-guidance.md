@@ -6,7 +6,6 @@ Distinguish the hidden/expandable referral-flow chart from the new journey strip
 
 See [current status and release checks](../04_Data_and_Reporting/WMPP_CURRENT_STATUS.md). This dated reassessment takes precedence over older reporting status claims below.
 
-
 Use one board-level Sankey to explain the referral journey:
 
 `Urgency → Offer availability → Match decision → Required-placement-date outcome`

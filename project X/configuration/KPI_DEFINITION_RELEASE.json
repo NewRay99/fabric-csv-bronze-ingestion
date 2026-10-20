@@ -1,15 +1,15 @@
 {
-  "review_date": "2026-10-17",
+  "review_date": "2026-10-18",
   "repository_branch": "master",
-  "repository_commit": "0a65e962ff3ab9681ed87d9a0a54df610774b736",
-  "actual_source": "Latest saved local WIP definitions; includes uncommitted/ignored local report changes, newer than repository ZIPs",
+  "repository_commit": "0563ff09a052b540e7b33b258de7d3a150b47e0b",
+  "actual_source": "Saved local WIP plus 18 October provider-document and requirement-monitor changes; runtime/acceptance pending.",
   "source_models": {
     "business": {
       "path": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP v16 updated WIP",
-      "tables": 72,
-      "measures": 492,
+      "tables": 73,
+      "measures": 501,
       "pages": 35,
-      "manifest_sha256": "f4ba89db005b5ab4f6eda9756d1f95b9145d546749ed22fa4b5d15103aa1f8c2"
+      "manifest_sha256": "63e38cb559a0f27eb807e01c72e0edcedae84226df23b7b64f9309c3277f229a"
     },
     "mission": {
       "path": "C:\\repos\\BCT\\fabric-csv-bronze-ingestion\\project X\\reports\\WIP\\SM WMPP Mission Control",
@@ -20,16 +20,16 @@
     }
   },
   "source_tmdl_hashes": {
-    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/cultures/en-GB.tmdl": "2766ccbfb3bd97e6da5dfe36e9c963d2b2e94ca14ea9fb00774bc64f55b68a3a",
+    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/cultures/en-GB.tmdl": "d761bfd28eb4b8dc09c1f8acefbb453765bf915bc2a7ada734fb761dea24d76c",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/database.tmdl": "822c914b643bca32bb20abd8a762df8204a1b9ef02acc2bc7348727f6699cb96",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/expressions.tmdl": "88fbcd4c35f4abd0fc69dad58b1dcb95a8adc705762f012a50af606fc08faf9a",
-    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/model.tmdl": "3f053025050f64793be223990525b07adb694053bbaf7548622a2f2ed79000e5",
+    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/model.tmdl": "05094c3587ee5cf3b0748c6eca910b834a9b767b3b08a555b704727d1ab1bd1c",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/relationships.tmdl": "a6853c37740f4a83f1c0e5d207f83579b7b458766129b9369779ebb5d8c5859c",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/roles/WMPP Dynamic Detail RLS.tmdl": "de3c6eb766459d87512efdd5e7b0d88831046016634f092eaa5c5b581768e3a0",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/roles/WMPP Temporary Full Access.tmdl": "e1169f8c8e5fbaf6236a9f78ca8e2e4ea8fc5a7e8eac943068c4ab4954fee6e8",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl": "2a9a0a4817508de1475ab7ced895a073bab050d53a0446b5b65babb134c52204",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl": "a88d0cf2a75190ced2e697ad3d62a3e12ddc9e680f6244b37f851fc70b9cd9fd",
-    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl": "673cb656275d2243bb9d7119ec5df374f7368d23e25860db9d1bbb09ed08d2a3",
+    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl": "8bb768f500d0912f75ccfaefd122c297decfb229b455d15b247c91deafbbe599",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Interaction.tmdl": "646761882e56bd15d7da6d73b68d35fd54ea42b673f28094acc4a10176c08916",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Journey Measures.tmdl": "1bd64e2915798c4588c3bb13fba924ddfc3a07bb3a6f647d31adf156607676c2",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl": "4d52dc8d475391ed4b124958bf1f94877b9406ae1e8e95d86ed6de63ce6423c1",
@@ -83,7 +83,7 @@
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Offer Location Paths.tmdl": "9e2ffb98fc72bc1d84dc9c0292a1de47ac3c6e04aabb9740f133e38410da4618",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Open Referral Age.tmdl": "2f29ff5a9c98303eedae603a58c92b17cdba12e8f935019e6fb7132a852ac876",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Placement Window.tmdl": "2894f7bf8731116264531b3eec9d3f76ae6364392576f6d2686e9342e16a6cb7",
-    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Provider Explorer KPI.tmdl": "aad0cb0329ebdd1c72ca14d03ed0089cf1721edce5a3ac7a958420633105c170",
+    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Provider Explorer KPI.tmdl": "635991b9c230ca20f49dc9d9019703245bccaa25a786beb325e694950f866df3",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Provider Offer Status.tmdl": "88fd3ca12a80607e44272ab78284c8ed99a8c92d9e7dd88a3b6dab551df45282",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Provider Scoring Evidence.tmdl": "d54a43e0ccc2112b0c9496a393365aeb994265126bdfa9a7fd17ac2e1b9e98c3",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/ref_KPI.tmdl": "a3a62c40fcbb072730886c33ecee35af83afbc5213b72e6d866baecde935a59f",
@@ -95,6 +95,7 @@
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Referral Map Points.tmdl": "ce60aaa15c3a828cd3eb62d6b19434bef00f551940ab70f298f0d76605569015",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Referral Metric.tmdl": "a749bf8e0ce1c51c2f76e4da636cc9f31a2d4701f4f4c1010830f54b7cff875e",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Report Settings.tmdl": "336d513dc13906275e46a39f20078e847adf0b582f04e9cafbd124d7208ba738",
+    "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Requirement KPI Monitor.tmdl": "feba51c8364d6388070b126fe0e7f823ec99d7313e6f2fa58069e83c9356a277",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/rpt_provider_registry.tmdl": "048aa198be70821656ba7a0bdcdc39d8d1b844e3f9a784dc8102550bbee2d8a9",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/sec_user_scope_access.tmdl": "3a6c7e49999f33d9c72d1288586fb7260a282347ce61690e15220c7f8332708b",
     "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Snapshot Window.tmdl": "c81094a9d3e4b58ff69b4d30bad423ee7f56b98916971661d4771474459c8ee0",
@@ -149,7 +150,7 @@
     "Section",
     "Date Added"
   ],
-  "kpi_definition_records": 567,
+  "kpi_definition_records": 571,
   "retained_records": 152,
   "new_records": [
     {
@@ -2641,6 +2642,30 @@
       "model": "mission",
       "measure": "Weighted DQ Failure Percentage",
       "date_added": "2026-10-17"
+    },
+    {
+      "id": "GOLD-KPI-327",
+      "model": "business",
+      "measure": "Explorer provider documents",
+      "date_added": "2026-10-18"
+    },
+    {
+      "id": "GOLD-KPI-328",
+      "model": "business",
+      "measure": "Explorer provider documents expired",
+      "date_added": "2026-10-18"
+    },
+    {
+      "id": "GOLD-KPI-329",
+      "model": "business",
+      "measure": "Explorer provider documents expiring 30 days",
+      "date_added": "2026-10-18"
+    },
+    {
+      "id": "GOLD-KPI-330",
+      "model": "business",
+      "measure": "Explorer provider homes with expired documents",
+      "date_added": "2026-10-18"
     }
   ],
   "records": [
@@ -6045,6 +6070,30 @@
       "row": 568,
       "date_serial": 46312,
       "record_sha256": "d0cfcf43a6ac4cc3ffc8f33473df5de22640e73ec11f46e2b1b8432620629eef"
+    },
+    {
+      "id": "GOLD-KPI-327",
+      "row": 569,
+      "date_serial": 46313,
+      "record_sha256": "f5475dc51278dece0d3078eaa9708985517334aae7ee7f0574871b77bff244ea"
+    },
+    {
+      "id": "GOLD-KPI-328",
+      "row": 570,
+      "date_serial": 46313,
+      "record_sha256": "0b6c3838b9541c1fb7db30d7fb637d749703d2f4c29e9282f13298257389525c"
+    },
+    {
+      "id": "GOLD-KPI-329",
+      "row": 571,
+      "date_serial": 46313,
+      "record_sha256": "24e791174f565caf95f4666b200c99dd612433def9883666ce14c808254b0488"
+    },
+    {
+      "id": "GOLD-KPI-330",
+      "row": 572,
+      "date_serial": 46313,
+      "record_sha256": "d0d9bfa6482ac52910508545ce39c422c599a0ecedb5c3d9a63ee1aaa7367d03"
     }
   ],
   "measure_inventory": [
@@ -6229,19 +6278,6 @@
     },
     {
       "model": "business",
-      "measure": "Active Referrals Awaiting Offers at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-150"
-      ],
-      "dax_sha256": "ae11d23b04dff178c50a782b9dbdeae2f9fbd46fe75e270731e90e08a4debc7f",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 724
-    },
-    {
-      "model": "business",
       "measure": "Active Referrals Awaiting Offers Previous Month",
       "container": "_Measures",
       "classification": "Business metric",
@@ -6290,16 +6326,16 @@
     },
     {
       "model": "business",
-      "measure": "Active Referrals Under Offer at Snapshot",
+      "measure": "Active Referrals Awaiting Offers at Snapshot",
       "container": "_Measures",
       "classification": "Business metric",
       "reason": "Saved business count, rate, duration, cost or comparison",
       "kpi_ids": [
-        "GOLD-KPI-153"
+        "GOLD-KPI-150"
       ],
-      "dax_sha256": "3440bb917f498efc306aff4d91ad4f46c6ffcfe50fc58baa712f27c006d59068",
+      "dax_sha256": "ae11d23b04dff178c50a782b9dbdeae2f9fbd46fe75e270731e90e08a4debc7f",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 734
+      "line": 724
     },
     {
       "model": "business",
@@ -6348,6 +6384,19 @@
       "dax_sha256": "f957c9793b3ef331fa6209acd8ea6df14079876331a650056e702414d81c3993",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 666
+    },
+    {
+      "model": "business",
+      "measure": "Active Referrals Under Offer at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-153"
+      ],
+      "dax_sha256": "3440bb917f498efc306aff4d91ad4f46c6ffcfe50fc58baa712f27c006d59068",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 734
     },
     {
       "model": "business",
@@ -6546,6 +6595,93 @@
     },
     {
       "model": "business",
+      "measure": "Closed Referrals",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-003"
+      ],
+      "dax_sha256": "5079ac129da44f17d4a2c3e301fb712b431d514973ea3cde434ec432e58bde09",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 896
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals MoM %",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-165"
+      ],
+      "dax_sha256": "06c5868b7f313b4c03107aa2fe3be039da0559472b7d6655f80d0ef2a9fe7fca",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 480
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals Previous Month",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-166"
+      ],
+      "dax_sha256": "a6b8ad116dc58a1841f2716bbe8ce5c72e2930b7d4f3538e5ab01712212bb06e",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 470
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals Variance",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-167"
+      ],
+      "dax_sha256": "c548b23dedd23737197db071b844a82c36bdba9bd30bd9dc24d3ee637bff5572",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 505
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals Variance Indicator",
+      "container": "_Measures",
+      "classification": "Display/filter helper",
+      "reason": "Legacy presentation, flag or row-filter expression",
+      "kpi_ids": [],
+      "dax_sha256": "30ce9e54ec9633fd5f3d2ed96aa5bef520b3472c289fc2d522b6251b99c98694",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 501
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals Variance Indicator Color",
+      "container": "_Measures",
+      "classification": "Display/filter helper",
+      "reason": "Legacy presentation, flag or row-filter expression",
+      "kpi_ids": [],
+      "dax_sha256": "b4be4a1106db6f9311feb769a4071074639d0ab021c5213ad7b65db43132cbd4",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 528
+    },
+    {
+      "model": "business",
+      "measure": "Closed Referrals at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-030"
+      ],
+      "dax_sha256": "f5d519c8a2bcab2354412fc8a8c72f5793f6524a293c5819c24d2666261fdd18",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 797
+    },
+    {
+      "model": "business",
       "measure": "Closed or Cancelled Referrals",
       "container": "_Measures",
       "classification": "Business metric",
@@ -6556,19 +6692,6 @@
       "dax_sha256": "a8a6d9a290ade25c8bf2b6eb0eaefdc0920f55193c3b315f4a8b149b6928ce92",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 108
-    },
-    {
-      "model": "business",
-      "measure": "Closed or Cancelled Referrals at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-161"
-      ],
-      "dax_sha256": "9f85f66beeb83b616296b8ab179e4d447aaabff717e88b998a247edea41d58c6",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 711
     },
     {
       "model": "business",
@@ -6633,90 +6756,16 @@
     },
     {
       "model": "business",
-      "measure": "Closed Referrals",
+      "measure": "Closed or Cancelled Referrals at Snapshot",
       "container": "_Measures",
       "classification": "Business metric",
       "reason": "Saved business count, rate, duration, cost or comparison",
       "kpi_ids": [
-        "GOLD-KPI-003"
+        "GOLD-KPI-161"
       ],
-      "dax_sha256": "5079ac129da44f17d4a2c3e301fb712b431d514973ea3cde434ec432e58bde09",
+      "dax_sha256": "9f85f66beeb83b616296b8ab179e4d447aaabff717e88b998a247edea41d58c6",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 896
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-030"
-      ],
-      "dax_sha256": "f5d519c8a2bcab2354412fc8a8c72f5793f6524a293c5819c24d2666261fdd18",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 797
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals MoM %",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-165"
-      ],
-      "dax_sha256": "06c5868b7f313b4c03107aa2fe3be039da0559472b7d6655f80d0ef2a9fe7fca",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 480
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals Previous Month",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-166"
-      ],
-      "dax_sha256": "a6b8ad116dc58a1841f2716bbe8ce5c72e2930b7d4f3538e5ab01712212bb06e",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 470
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals Variance",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-167"
-      ],
-      "dax_sha256": "c548b23dedd23737197db071b844a82c36bdba9bd30bd9dc24d3ee637bff5572",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 505
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals Variance Indicator",
-      "container": "_Measures",
-      "classification": "Display/filter helper",
-      "reason": "Legacy presentation, flag or row-filter expression",
-      "kpi_ids": [],
-      "dax_sha256": "30ce9e54ec9633fd5f3d2ed96aa5bef520b3472c289fc2d522b6251b99c98694",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 501
-    },
-    {
-      "model": "business",
-      "measure": "Closed Referrals Variance Indicator Color",
-      "container": "_Measures",
-      "classification": "Display/filter helper",
-      "reason": "Legacy presentation, flag or row-filter expression",
-      "kpi_ids": [],
-      "dax_sha256": "b4be4a1106db6f9311feb769a4071074639d0ab021c5213ad7b65db43132cbd4",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 528
+      "line": 711
     },
     {
       "model": "business",
@@ -6932,6 +6981,17 @@
     },
     {
       "model": "business",
+      "measure": "Document expiry status",
+      "container": "_Explorer KPI Measures",
+      "classification": "Display/filter helper",
+      "reason": "Expiry status only; does not certify required-document completeness.",
+      "kpi_ids": [],
+      "dax_sha256": "ac44a3f82be1b79c41b3fd882c215f3d2634fd2f0c7a3fb87bcd34889f770d8e",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 1002
+    },
+    {
+      "model": "business",
       "measure": "Documents Expired",
       "container": "_Measures",
       "classification": "Business metric",
@@ -6994,19 +7054,6 @@
       "dax_sha256": "0a1044c1bc80411fe7cc8d58d9f55de336c9ee82bfed93a905f3810f6834f811",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 144
-    },
-    {
-      "model": "business",
-      "measure": "Draft Offers on Referrals Under Offer",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-17"
-      ],
-      "dax_sha256": "413d77a25d877623c0db07fdf793cf01212bf9653ab01ff4dc311b02c40dc4c5",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1328
     },
     {
       "model": "business",
@@ -7099,6 +7146,19 @@
       "dax_sha256": "b99ae7fec1d578b60317ca1c1f4af65b6ce39e26538c63db87a18422d2187e07",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 1444
+    },
+    {
+      "model": "business",
+      "measure": "Draft Offers on Referrals Under Offer",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-17"
+      ],
+      "dax_sha256": "413d77a25d877623c0db07fdf793cf01212bf9653ab01ff4dc311b02c40dc4c5",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1328
     },
     {
       "model": "business",
@@ -7324,6 +7384,19 @@
     },
     {
       "model": "business",
+      "measure": "Explorer provider IPAs",
+      "container": "_Explorer KPI Measures",
+      "classification": "Business metric",
+      "reason": "Explorer or detail metric with its saved selection context",
+      "kpi_ids": [
+        "GOLD-KPI-198"
+      ],
+      "dax_sha256": "a2ed59a49844eb37a6e739f17a2474e15ce675927f67971fb0e30567293265d8",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 319
+    },
+    {
+      "model": "business",
       "measure": "Explorer provider accepted offers",
       "container": "_Explorer KPI Measures",
       "classification": "Business metric",
@@ -7368,7 +7441,7 @@
       "kpi_ids": [],
       "dax_sha256": "f923f74a0477b948f38da3c72f82bd00e2040dfabf84097450c671d5f8253633",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 883
+      "line": 889
     },
     {
       "model": "business",
@@ -7424,6 +7497,45 @@
     },
     {
       "model": "business",
+      "measure": "Explorer provider documents",
+      "container": "_Explorer KPI Measures",
+      "classification": "Business metric",
+      "reason": "Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.",
+      "kpi_ids": [
+        "GOLD-KPI-327"
+      ],
+      "dax_sha256": "7a1e59aaeea35218d9c920ecc909139ba9f44845ebcb54198b05cde26c566bf9",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 1012
+    },
+    {
+      "model": "business",
+      "measure": "Explorer provider documents expired",
+      "container": "_Explorer KPI Measures",
+      "classification": "Business metric",
+      "reason": "Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.",
+      "kpi_ids": [
+        "GOLD-KPI-328"
+      ],
+      "dax_sha256": "39e613e4a33a5bb25d98f1d9916bfba4002a1d1336c2a273d84155c3ca41f2bd",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 1021
+    },
+    {
+      "model": "business",
+      "measure": "Explorer provider documents expiring 30 days",
+      "container": "_Explorer KPI Measures",
+      "classification": "Business metric",
+      "reason": "Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.",
+      "kpi_ids": [
+        "GOLD-KPI-329"
+      ],
+      "dax_sha256": "f95cd947b7c94363139abf99494248e39f6baa704de20a1dff723ef4113a5e9e",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 1030
+    },
+    {
+      "model": "business",
       "measure": "Explorer provider drafts",
       "container": "_Explorer KPI Measures",
       "classification": "Business metric",
@@ -7450,16 +7562,16 @@
     },
     {
       "model": "business",
-      "measure": "Explorer provider IPAs",
+      "measure": "Explorer provider homes with expired documents",
       "container": "_Explorer KPI Measures",
       "classification": "Business metric",
-      "reason": "Explorer or detail metric with its saved selection context",
+      "reason": "Existing expiry aggregation restricted to the current eligible provider selection; existing home join requires owner validation.",
       "kpi_ids": [
-        "GOLD-KPI-198"
+        "GOLD-KPI-330"
       ],
-      "dax_sha256": "a2ed59a49844eb37a6e739f17a2474e15ce675927f67971fb0e30567293265d8",
+      "dax_sha256": "de295ac74c50b77ffe2ad811a1be7eeb8a9322abab87e6a1dc1e294a0df52906",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 319
+      "line": 1039
     },
     {
       "model": "business",
@@ -7542,7 +7654,7 @@
       "kpi_ids": [],
       "dax_sha256": "3a777c0100b9a0d1262e2d65f92cee8679d2427e0f98a35464374b2badddbd31",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 904
+      "line": 910
     },
     {
       "model": "business",
@@ -7661,6 +7773,19 @@
     },
     {
       "model": "business",
+      "measure": "Explorer referral IPAs",
+      "container": "_Explorer KPI Measures",
+      "classification": "Business metric",
+      "reason": "Explorer or detail metric with its saved selection context",
+      "kpi_ids": [
+        "GOLD-KPI-213"
+      ],
+      "dax_sha256": "7fd53e8fe8d8b950f2617399a65e2094cb1f3259f4946cf5959955b8444783b6",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 697
+    },
+    {
+      "model": "business",
       "measure": "Explorer referral accepted offers",
       "container": "_Explorer KPI Measures",
       "classification": "Business metric",
@@ -7697,19 +7822,6 @@
       "dax_sha256": "d3b8037293e28ca66d405856724802bb6004fe99d4df0ded6154b84103e7e7fd",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
       "line": 716
-    },
-    {
-      "model": "business",
-      "measure": "Explorer referral IPAs",
-      "container": "_Explorer KPI Measures",
-      "classification": "Business metric",
-      "reason": "Explorer or detail metric with its saved selection context",
-      "kpi_ids": [
-        "GOLD-KPI-213"
-      ],
-      "dax_sha256": "7fd53e8fe8d8b950f2617399a65e2094cb1f3259f4946cf5959955b8444783b6",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 697
     },
     {
       "model": "business",
@@ -8089,19 +8201,6 @@
     },
     {
       "model": "business",
-      "measure": "Is In Accepted KPI",
-      "container": "_Measures",
-      "classification": "Display/filter helper",
-      "reason": "Legacy presentation, flag or row-filter expression",
-      "kpi_ids": [
-        "KPI-74"
-      ],
-      "dax_sha256": "a175a086e2a7de03deec8e7bb044ee985a81eb17495bd457c2b982a0659da771",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 396
-    },
-    {
-      "model": "business",
       "measure": "Is IPA Completed",
       "container": "_Measures",
       "classification": "Display/filter helper",
@@ -8125,6 +8224,19 @@
       "dax_sha256": "f0cff4c4e7ff8dc77796300f3741aa29776c7aa6d9d307e74b43a578df09f69f",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 420
+    },
+    {
+      "model": "business",
+      "measure": "Is In Accepted KPI",
+      "container": "_Measures",
+      "classification": "Display/filter helper",
+      "reason": "Legacy presentation, flag or row-filter expression",
+      "kpi_ids": [
+        "KPI-74"
+      ],
+      "dax_sha256": "a175a086e2a7de03deec8e7bb044ee985a81eb17495bd457c2b982a0659da771",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 396
     },
     {
       "model": "business",
@@ -9122,6 +9234,45 @@
     },
     {
       "model": "business",
+      "measure": "Offers Still to Progress to IPA %",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-84"
+      ],
+      "dax_sha256": "a96cccfa368030701585d95f7c3d6b719ff7094c5a0f28f234d89f487f46cd54",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1199
+    },
+    {
+      "model": "business",
+      "measure": "Offers Submitted",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-28"
+      ],
+      "dax_sha256": "63d5ec843d348786d39dd3fb8c686af3778355a6aaf8fa4655a907f8721a929e",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 963
+    },
+    {
+      "model": "business",
+      "measure": "Offers With Recorded Rejection Reason",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-055"
+      ],
+      "dax_sha256": "0b76d60e100fd3a5c58ec09e6d6642e8998270eb54ec8163457f2bf902001f9a",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1431
+    },
+    {
+      "model": "business",
       "measure": "Offers in Draft",
       "container": "_Measures",
       "classification": "Business metric",
@@ -9222,32 +9373,6 @@
     },
     {
       "model": "business",
-      "measure": "Offers Still to Progress to IPA %",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-84"
-      ],
-      "dax_sha256": "a96cccfa368030701585d95f7c3d6b719ff7094c5a0f28f234d89f487f46cd54",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1199
-    },
-    {
-      "model": "business",
-      "measure": "Offers Submitted",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-28"
-      ],
-      "dax_sha256": "63d5ec843d348786d39dd3fb8c686af3778355a6aaf8fa4655a907f8721a929e",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 963
-    },
-    {
-      "model": "business",
       "measure": "Offers with a Decision",
       "container": "_Measures",
       "classification": "Business metric",
@@ -9271,19 +9396,6 @@
       "dax_sha256": "cb3cceaa6710c1d2b092b68799bb2cc80701a705fe11f60d4ed6bce665c8a31c",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explore Measures.tmdl",
       "line": 67
-    },
-    {
-      "model": "business",
-      "measure": "Offers With Recorded Rejection Reason",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-055"
-      ],
-      "dax_sha256": "0b76d60e100fd3a5c58ec09e6d6642e8998270eb54ec8163457f2bf902001f9a",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1431
     },
     {
       "model": "business",
@@ -9378,58 +9490,6 @@
     },
     {
       "model": "business",
-      "measure": "Open Referrals at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-029"
-      ],
-      "dax_sha256": "fb9e6f4ee4f27a1971c70e2499fa1f920dfc28c3370fb007573b72805fc06381",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 705
-    },
-    {
-      "model": "business",
-      "measure": "Open Referrals by Age",
-      "container": "_Design Measures",
-      "classification": "Business metric",
-      "reason": "Saved target, demand, time or cost metric",
-      "kpi_ids": [
-        "GOLD-KPI-248"
-      ],
-      "dax_sha256": "99e11dc3520cb075d6b9b98cbdc92c61871c5f7e690f81787e391131cccedf44",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 129
-    },
-    {
-      "model": "business",
-      "measure": "Open Referrals by Days to Target",
-      "container": "_Design Measures",
-      "classification": "Business metric",
-      "reason": "Saved target, demand, time or cost metric",
-      "kpi_ids": [
-        "GOLD-KPI-249"
-      ],
-      "dax_sha256": "f8cabfc3d23e3345888cb38e81a76c27d5fb1657d8883b025a4e8009e2e05ff2",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 117
-    },
-    {
-      "model": "business",
-      "measure": "Open Referrals by Target Status",
-      "container": "_Design Measures",
-      "classification": "Business metric",
-      "reason": "Saved target, demand, time or cost metric",
-      "kpi_ids": [
-        "GOLD-KPI-250"
-      ],
-      "dax_sha256": "c1bdb1467dd751118adc341c4974f9332f2dcb85d689230ebff9c7e4bb4dc4ec",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 105
-    },
-    {
-      "model": "business",
       "measure": "Open Referrals Due in 3 Days",
       "container": "_Design Measures",
       "classification": "Business metric",
@@ -9514,6 +9574,58 @@
       "dax_sha256": "247611d793859fab88e2b117ff11e210de3ffc9a5a8435bae780a799cb4ab69d",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 532
+    },
+    {
+      "model": "business",
+      "measure": "Open Referrals at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-029"
+      ],
+      "dax_sha256": "fb9e6f4ee4f27a1971c70e2499fa1f920dfc28c3370fb007573b72805fc06381",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 705
+    },
+    {
+      "model": "business",
+      "measure": "Open Referrals by Age",
+      "container": "_Design Measures",
+      "classification": "Business metric",
+      "reason": "Saved target, demand, time or cost metric",
+      "kpi_ids": [
+        "GOLD-KPI-248"
+      ],
+      "dax_sha256": "99e11dc3520cb075d6b9b98cbdc92c61871c5f7e690f81787e391131cccedf44",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 129
+    },
+    {
+      "model": "business",
+      "measure": "Open Referrals by Days to Target",
+      "container": "_Design Measures",
+      "classification": "Business metric",
+      "reason": "Saved target, demand, time or cost metric",
+      "kpi_ids": [
+        "GOLD-KPI-249"
+      ],
+      "dax_sha256": "f8cabfc3d23e3345888cb38e81a76c27d5fb1657d8883b025a4e8009e2e05ff2",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 117
+    },
+    {
+      "model": "business",
+      "measure": "Open Referrals by Target Status",
+      "container": "_Design Measures",
+      "classification": "Business metric",
+      "reason": "Saved target, demand, time or cost metric",
+      "kpi_ids": [
+        "GOLD-KPI-250"
+      ],
+      "dax_sha256": "c1bdb1467dd751118adc341c4974f9332f2dcb85d689230ebff9c7e4bb4dc4ec",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 105
     },
     {
       "model": "business",
@@ -9816,19 +9928,6 @@
     },
     {
       "model": "business",
-      "measure": "Provider Contact Referrals at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-262"
-      ],
-      "dax_sha256": "a21988280907738363a2058cbfb36b083acfd030c50706257c73cdbb449a3fcc",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 754
-    },
-    {
-      "model": "business",
       "measure": "Provider Contact Referrals MoM %",
       "container": "_Measures",
       "classification": "Business metric",
@@ -9839,6 +9938,19 @@
       "dax_sha256": "a51ffe5d51744c90480c67e5579af73f027a8a099e421f6e60abed5b89570cb7",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 495
+    },
+    {
+      "model": "business",
+      "measure": "Provider Contact Referrals at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-262"
+      ],
+      "dax_sha256": "a21988280907738363a2058cbfb36b083acfd030c50706257c73cdbb449a3fcc",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 754
     },
     {
       "model": "business",
@@ -9865,6 +9977,173 @@
       "dax_sha256": "c9c32417226dafec2d6963e72a92bdb9e1bb0933341f532c345d98c29c8e478f",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 1598
+    },
+    {
+      "model": "business",
+      "measure": "Provider Homes Registered",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-40"
+      ],
+      "dax_sha256": "3675d622ed3266b1e012242f907aaee2f5177728682eb8828f7378b1bc34733d",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 89
+    },
+    {
+      "model": "business",
+      "measure": "Provider Homes With Expired Documents",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-094"
+      ],
+      "dax_sha256": "45e72b8d58ce081adfafb173dfb98154c25c774c4344f04a4bf4545662ae0022",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1502
+    },
+    {
+      "model": "business",
+      "measure": "Provider Median Days to First Offer",
+      "container": "_Design Measures",
+      "classification": "Business metric",
+      "reason": "Saved target, demand, time or cost metric",
+      "kpi_ids": [
+        "GOLD-KPI-268"
+      ],
+      "dax_sha256": "4cfcf04d3f849a9c65b7eafd7e0eb8a76ef51f8a9ad71e287f45d8bde09dcf07",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 94
+    },
+    {
+      "model": "business",
+      "measure": "Provider Messages Sent",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-110"
+      ],
+      "dax_sha256": "f3a2f03514b9641be85c32756336637f841805134384df529c7f248321663a49",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1527
+    },
+    {
+      "model": "business",
+      "measure": "Provider Offer Conversion Rate",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-139"
+      ],
+      "dax_sha256": "66717a7f94b31fab6e62c14ce7cca31ffe6a4093ecf20327126cf54f72ce3c30",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1662
+    },
+    {
+      "model": "business",
+      "measure": "Provider Onboarding Success Rate",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-117"
+      ],
+      "dax_sha256": "2c328502b888c61ef377c983937f0370e1ddd382988d476d9536a6f1c3a5498d",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1162
+    },
+    {
+      "model": "business",
+      "measure": "Provider QA flagged homes",
+      "container": "_Report Journey Measures",
+      "classification": "Business metric",
+      "reason": "Action metric, scoring evidence component or catalogue count",
+      "kpi_ids": [
+        "GOLD-KPI-270"
+      ],
+      "dax_sha256": "536a3cf8a6516d49acff4434d0285eb764c1fcc68b3fbc52f8183d5d2687d338",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
+      "line": 43
+    },
+    {
+      "model": "business",
+      "measure": "Provider Qualifying Responses",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-271"
+      ],
+      "dax_sha256": "3685934237ae98f41163d6e24eb3f27340b493e2476ada214f67cdc61fb0d469",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1652
+    },
+    {
+      "model": "business",
+      "measure": "Provider Response Opportunities",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-273"
+      ],
+      "dax_sha256": "4fffe81bf22f0d9d3b0673d0fe5d01cd35e8b300ca0dd600486c306c389b751e",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1647
+    },
+    {
+      "model": "business",
+      "measure": "Provider Response Rate",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-137"
+      ],
+      "dax_sha256": "78148df2a8f3c36e2bb674bfa610be380a49d172e58ba43e3bc29f945d67809c",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1657
+    },
+    {
+      "model": "business",
+      "measure": "Provider Submission Documents",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-091"
+      ],
+      "dax_sha256": "0cd146ca7e8232b89e044acb11721a0042b77bff28f0c72973025a2a4e285a6b",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1473
+    },
+    {
+      "model": "business",
+      "measure": "Provider Target Placement Rate",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-140"
+      ],
+      "dax_sha256": "aa89513b990e496a721f12201d01060404e4bacb484e0fdc4270027fd4126cd8",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1671
+    },
+    {
+      "model": "business",
+      "measure": "Provider detail KPI value",
+      "container": "_Explorer KPI Measures",
+      "classification": "Filter/context helper",
+      "reason": "Dynamic KPI selector, eligibility, table cap or title",
+      "kpi_ids": [],
+      "dax_sha256": "f03972cf0b14ababad3d0f319ebf2dad8d4b77c8dd4244fbd3355f55b8414281",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 791
     },
     {
       "model": "business",
@@ -9931,17 +10210,6 @@
       "dax_sha256": "f73fab8090ec68dd97686104946a47380265251cbc88f4d0a51e6f7b00b552ee",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Provider Detail Measures.tmdl",
       "line": 14
-    },
-    {
-      "model": "business",
-      "measure": "Provider detail KPI value",
-      "container": "_Explorer KPI Measures",
-      "classification": "Filter/context helper",
-      "reason": "Dynamic KPI selector, eligibility, table cap or title",
-      "kpi_ids": [],
-      "dax_sha256": "29a8f6d39e22086d99c1c37520284d99508083e026f63e9e417f65334f0fd342",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 788
     },
     {
       "model": "business",
@@ -10022,12 +10290,23 @@
     },
     {
       "model": "business",
+      "measure": "Provider document row visible",
+      "container": "_Explorer KPI Measures",
+      "classification": "Display/filter helper",
+      "reason": "Document rows require an existing matching home and an eligible provider; no monthly-performance dependency.",
+      "kpi_ids": [],
+      "dax_sha256": "ddf6d65a8cf754c339ef0bde05df3068cbdab09d0957bc10941a5fb93ff7a83f",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 979
+    },
+    {
+      "model": "business",
       "measure": "Provider explorer KPI value",
       "container": "_Explorer KPI Measures",
       "classification": "Filter/context helper",
       "reason": "Dynamic KPI selector, eligibility, table cap or title",
       "kpi_ids": [],
-      "dax_sha256": "a011043186d060b5543bd5f7fe7db828b50e8550c095c349d650d9f89256227c",
+      "dax_sha256": "e786f507fcba4e4575a4a4b4e77d166f03f8abd226d4b0a5f260f27c3890a48e",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
       "line": 759
     },
@@ -10046,19 +10325,6 @@
     },
     {
       "model": "business",
-      "measure": "Provider Homes Registered",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-40"
-      ],
-      "dax_sha256": "3675d622ed3266b1e012242f907aaee2f5177728682eb8828f7378b1bc34733d",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 89
-    },
-    {
-      "model": "business",
       "measure": "Provider homes selected providers",
       "container": "_Explorer KPI Measures",
       "classification": "Filter/context helper",
@@ -10066,7 +10332,7 @@
       "kpi_ids": [],
       "dax_sha256": "2fa8eb9564de28988994ac9480934f64cb5d546f0e122779ea2201c7b7bc8a08",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 927
+      "line": 933
     },
     {
       "model": "business",
@@ -10079,7 +10345,7 @@
       ],
       "dax_sha256": "50da6561b5334c47933a6731cc440eab3495c1cb4cc7ad54d6593021a2f7f771",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 957
+      "line": 963
     },
     {
       "model": "business",
@@ -10092,7 +10358,7 @@
       ],
       "dax_sha256": "8a70a81df8054386e8b5bbfe14ced63f5b09a65a69dc7917a9c9cc9ec827549b",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 941
+      "line": 947
     },
     {
       "model": "business",
@@ -10105,7 +10371,7 @@
       ],
       "dax_sha256": "bee692ac0985ceae2ad7dad819cd71fd55cdbf1c600fdc7ee95d3bf00398cc11",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 949
+      "line": 955
     },
     {
       "model": "business",
@@ -10116,7 +10382,7 @@
       "kpi_ids": [],
       "dax_sha256": "84990984857bbe48a7c67a4aebf2729ef45c0dbbd4a923c86d82f78cdc0b90f3",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 933
+      "line": 939
     },
     {
       "model": "business",
@@ -10127,20 +10393,7 @@
       "kpi_ids": [],
       "dax_sha256": "dc88d7427f85a37630d1f5323167e6fda438be44f100b1f9d23969eaa848b293",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 965
-    },
-    {
-      "model": "business",
-      "measure": "Provider Homes With Expired Documents",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-094"
-      ],
-      "dax_sha256": "45e72b8d58ce081adfafb173dfb98154c25c774c4344f04a4bf4545662ae0022",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1502
+      "line": 971
     },
     {
       "model": "business",
@@ -10151,33 +10404,7 @@
       "kpi_ids": [],
       "dax_sha256": "4f011aff1c030d71954839d9087b3cc99bf28383bf424f4c0a60a5c4ec2eb957",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 863
-    },
-    {
-      "model": "business",
-      "measure": "Provider Median Days to First Offer",
-      "container": "_Design Measures",
-      "classification": "Business metric",
-      "reason": "Saved target, demand, time or cost metric",
-      "kpi_ids": [
-        "GOLD-KPI-268"
-      ],
-      "dax_sha256": "4cfcf04d3f849a9c65b7eafd7e0eb8a76ef51f8a9ad71e287f45d8bde09dcf07",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 94
-    },
-    {
-      "model": "business",
-      "measure": "Provider Messages Sent",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-110"
-      ],
-      "dax_sha256": "f3a2f03514b9641be85c32756336637f841805134384df529c7f248321663a49",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1527
+      "line": 869
     },
     {
       "model": "business",
@@ -10194,58 +10421,6 @@
     },
     {
       "model": "business",
-      "measure": "Provider Offer Conversion Rate",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-139"
-      ],
-      "dax_sha256": "66717a7f94b31fab6e62c14ce7cca31ffe6a4093ecf20327126cf54f72ce3c30",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1662
-    },
-    {
-      "model": "business",
-      "measure": "Provider Onboarding Success Rate",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-117"
-      ],
-      "dax_sha256": "2c328502b888c61ef377c983937f0370e1ddd382988d476d9536a6f1c3a5498d",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1162
-    },
-    {
-      "model": "business",
-      "measure": "Provider QA flagged homes",
-      "container": "_Report Journey Measures",
-      "classification": "Business metric",
-      "reason": "Action metric, scoring evidence component or catalogue count",
-      "kpi_ids": [
-        "GOLD-KPI-270"
-      ],
-      "dax_sha256": "536a3cf8a6516d49acff4434d0285eb764c1fcc68b3fbc52f8183d5d2687d338",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
-      "line": 43
-    },
-    {
-      "model": "business",
-      "measure": "Provider Qualifying Responses",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-271"
-      ],
-      "dax_sha256": "3685934237ae98f41163d6e24eb3f27340b493e2476ada214f67cdc61fb0d469",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1652
-    },
-    {
-      "model": "business",
       "measure": "Provider response durations recorded",
       "container": "_Report Journey Measures",
       "classification": "Business metric",
@@ -10256,32 +10431,6 @@
       "dax_sha256": "8514a5c543580d6fb8410322650096edb815e72b720298f2383abad01e72b57d",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
       "line": 21
-    },
-    {
-      "model": "business",
-      "measure": "Provider Response Opportunities",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-273"
-      ],
-      "dax_sha256": "4fffe81bf22f0d9d3b0673d0fe5d01cd35e8b300ca0dd600486c306c389b751e",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1647
-    },
-    {
-      "model": "business",
-      "measure": "Provider Response Rate",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-137"
-      ],
-      "dax_sha256": "78148df2a8f3c36e2bb674bfa610be380a49d172e58ba43e3bc29f945d67809c",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1657
     },
     {
       "model": "business",
@@ -10400,32 +10549,6 @@
       "dax_sha256": "578af7937df51edc816dec12185c00042d6b70bd232fde70156f271083913bd8",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
       "line": 231
-    },
-    {
-      "model": "business",
-      "measure": "Provider Submission Documents",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-091"
-      ],
-      "dax_sha256": "0cd146ca7e8232b89e044acb11721a0042b77bff28f0c72973025a2a4e285a6b",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1473
-    },
-    {
-      "model": "business",
-      "measure": "Provider Target Placement Rate",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-140"
-      ],
-      "dax_sha256": "aa89513b990e496a721f12201d01060404e4bacb484e0fdc4270027fd4126cd8",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1671
     },
     {
       "model": "business",
@@ -10840,6 +10963,58 @@
     },
     {
       "model": "business",
+      "measure": "Referral IPAs awaiting signatures",
+      "container": "_Report Journey Measures",
+      "classification": "Business metric",
+      "reason": "Action metric, scoring evidence component or catalogue count",
+      "kpi_ids": [
+        "GOLD-KPI-281"
+      ],
+      "dax_sha256": "ed17e083306ddaf96d60d780c135180449b980e3ce11d86195bd86254ac52af2",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
+      "line": 139
+    },
+    {
+      "model": "business",
+      "measure": "Referral Lifecycle Events",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-113"
+      ],
+      "dax_sha256": "22eee3d5d2a9fcd1265e88194566b221a85ed3a9b3512e8b11cf53296e07760a",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1514
+    },
+    {
+      "model": "business",
+      "measure": "Referral Volume Month on Month",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-038"
+      ],
+      "dax_sha256": "6a9dc43a358b0553ca0cb75ace32b4585652cbad28779ed3537fdcad8114e929",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1014
+    },
+    {
+      "model": "business",
+      "measure": "Referral Volume Month on Month %",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-039"
+      ],
+      "dax_sha256": "bc31dcb7996b0fee74170c86cfbb90d6b205fb051ac56ef77f71b9b7da814687",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1018
+    },
+    {
+      "model": "business",
       "measure": "Referral accepted without IPA",
       "container": "_Report Journey Measures",
       "classification": "Business metric",
@@ -10850,6 +11025,17 @@
       "dax_sha256": "0b65f81153dfbec9b31294e029ede6706d6e0d901d5c69c9939fb2d8779617a9",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
       "line": 115
+    },
+    {
+      "model": "business",
+      "measure": "Referral detail KPI value",
+      "container": "_Explorer KPI Measures",
+      "classification": "Filter/context helper",
+      "reason": "Dynamic KPI selector, eligibility, table cap or title",
+      "kpi_ids": [],
+      "dax_sha256": "7826c787124aeb0e7cf14ce31409f79a8c4e6699705a7e281f2063a0cbeefe6c",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 846
     },
     {
       "model": "business",
@@ -10897,17 +11083,6 @@
     },
     {
       "model": "business",
-      "measure": "Referral detail KPI value",
-      "container": "_Explorer KPI Measures",
-      "classification": "Filter/context helper",
-      "reason": "Dynamic KPI selector, eligibility, table cap or title",
-      "kpi_ids": [],
-      "dax_sha256": "7826c787124aeb0e7cf14ce31409f79a8c4e6699705a7e281f2063a0cbeefe6c",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 840
-    },
-    {
-      "model": "business",
       "measure": "Referral explorer KPI value",
       "container": "_Explorer KPI Measures",
       "classification": "Filter/context helper",
@@ -10915,33 +11090,7 @@
       "kpi_ids": [],
       "dax_sha256": "893d45df94386c693214f94d2a80b16f3c2221ec545a30fc9bd38e175b95840d",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
-      "line": 817
-    },
-    {
-      "model": "business",
-      "measure": "Referral IPAs awaiting signatures",
-      "container": "_Report Journey Measures",
-      "classification": "Business metric",
-      "reason": "Action metric, scoring evidence component or catalogue count",
-      "kpi_ids": [
-        "GOLD-KPI-281"
-      ],
-      "dax_sha256": "ed17e083306ddaf96d60d780c135180449b980e3ce11d86195bd86254ac52af2",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
-      "line": 139
-    },
-    {
-      "model": "business",
-      "measure": "Referral Lifecycle Events",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-113"
-      ],
-      "dax_sha256": "22eee3d5d2a9fcd1265e88194566b221a85ed3a9b3512e8b11cf53296e07760a",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1514
+      "line": 823
     },
     {
       "model": "business",
@@ -10992,32 +11141,6 @@
       "dax_sha256": "094711fea5031338db77bd155d3023335f21c239de18cacf80a48f5ad86896df",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Report Journey Measures.tmdl",
       "line": 241
-    },
-    {
-      "model": "business",
-      "measure": "Referral Volume Month on Month",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-038"
-      ],
-      "dax_sha256": "6a9dc43a358b0553ca0cb75ace32b4585652cbad28779ed3537fdcad8114e929",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1014
-    },
-    {
-      "model": "business",
-      "measure": "Referral Volume Month on Month %",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-039"
-      ],
-      "dax_sha256": "bc31dcb7996b0fee74170c86cfbb90d6b205fb051ac56ef77f71b9b7da814687",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1018
     },
     {
       "model": "business",
@@ -11146,19 +11269,6 @@
     },
     {
       "model": "business",
-      "measure": "Referrals closed during month",
-      "container": "_Story Measures",
-      "classification": "Business metric",
-      "reason": "Saved detail count in the required record context",
-      "kpi_ids": [
-        "GOLD-KPI-121"
-      ],
-      "dax_sha256": "62e30a0e1e155e624f72768939f52b26a46cd969a95fce9fcfea6a3f816fd1dc",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl",
-      "line": 19
-    },
-    {
-      "model": "business",
       "measure": "Referrals Created Previous Month",
       "container": "_Measures",
       "classification": "Business metric",
@@ -11272,19 +11382,6 @@
     },
     {
       "model": "business",
-      "measure": "Referrals Due in Reporting Period",
-      "container": "_Design Measures",
-      "classification": "Business metric",
-      "reason": "Saved target, demand, time or cost metric",
-      "kpi_ids": [
-        "GOLD-KPI-294"
-      ],
-      "dax_sha256": "42f29665847acf076235b33be39302efee8c3cc8666f75a48c048181295c997b",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 45
-    },
-    {
-      "model": "business",
       "measure": "Referrals Due This As Of Month",
       "container": "_Design Measures",
       "classification": "Business metric",
@@ -11295,6 +11392,19 @@
       "dax_sha256": "2a1229e28b414ab6baaa70c69ca2fa36948d3630d7c2b73d70f6e287d25728c3",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
       "line": 53
+    },
+    {
+      "model": "business",
+      "measure": "Referrals Due in Reporting Period",
+      "container": "_Design Measures",
+      "classification": "Business metric",
+      "reason": "Saved target, demand, time or cost metric",
+      "kpi_ids": [
+        "GOLD-KPI-294"
+      ],
+      "dax_sha256": "42f29665847acf076235b33be39302efee8c3cc8666f75a48c048181295c997b",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 45
     },
     {
       "model": "business",
@@ -11411,6 +11521,97 @@
     },
     {
       "model": "business",
+      "measure": "Referrals With Fully Signed IPA",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-103"
+      ],
+      "dax_sha256": "99354e0fd12f99b95a2dfc3b448d5ebb5abf09e52f15840926c69c40044d4dfd",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1204
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With IPA",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-305"
+      ],
+      "dax_sha256": "905fc4d5d0ccc1aeb3ab56a34fd4cbe8633b952e4066fb07783076e495d727a4",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1211
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With IPA Pending Signature",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-306"
+      ],
+      "dax_sha256": "83bcbd111ec6a84718db30ae2298d847888c0e43518cc6c894019be27295488f",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1395
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With Lifecycle Activity",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-106"
+      ],
+      "dax_sha256": "237a05d8067f20915065bd4b425805f9b7cc50213e13cf27c434b850ae7798cf",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1518
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With Multiple Provider Assignments",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "KPI-90"
+      ],
+      "dax_sha256": "5e418802cb303688fe1daf2faa6755db3bd73c25bb29f7d29035169115583877",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1428
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With Offers",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-308"
+      ],
+      "dax_sha256": "30275bbe5c9c38facea56552d0a5155bff87b273e94f54619343847c7744dbc3",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 312
+    },
+    {
+      "model": "business",
+      "measure": "Referrals With Offers %",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-309"
+      ],
+      "dax_sha256": "a2cfa7e6355adce1769d8c632e8497558c77b2d92a5026f6a84327401cd4d946",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1732
+    },
+    {
+      "model": "business",
       "measure": "Referrals With an Offer",
       "container": "_Measures",
       "classification": "Business metric",
@@ -11423,19 +11624,6 @@
       "dax_sha256": "30275bbe5c9c38facea56552d0a5155bff87b273e94f54619343847c7744dbc3",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 900
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With an Offer at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-301"
-      ],
-      "dax_sha256": "60524f46c4af1e545e739db05cc73e1efb2c81f6d1b4f4f6eb1ead868398e892",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 744
     },
     {
       "model": "business",
@@ -11500,120 +11688,16 @@
     },
     {
       "model": "business",
-      "measure": "Referrals With Fully Signed IPA",
+      "measure": "Referrals With an Offer at Snapshot",
       "container": "_Measures",
       "classification": "Business metric",
       "reason": "Saved business count, rate, duration, cost or comparison",
       "kpi_ids": [
-        "GOLD-KPI-103"
+        "GOLD-KPI-301"
       ],
-      "dax_sha256": "99354e0fd12f99b95a2dfc3b448d5ebb5abf09e52f15840926c69c40044d4dfd",
+      "dax_sha256": "60524f46c4af1e545e739db05cc73e1efb2c81f6d1b4f4f6eb1ead868398e892",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1204
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With IPA",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-305"
-      ],
-      "dax_sha256": "905fc4d5d0ccc1aeb3ab56a34fd4cbe8633b952e4066fb07783076e495d727a4",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1211
-    },
-    {
-      "model": "business",
-      "measure": "Referrals with IPA at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-031"
-      ],
-      "dax_sha256": "fd926a35e2c790458ecb4eaa703b9632648cabeee4b27719c85d0bff3f0392d0",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 883
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With IPA Pending Signature",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-306"
-      ],
-      "dax_sha256": "83bcbd111ec6a84718db30ae2298d847888c0e43518cc6c894019be27295488f",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1395
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With Lifecycle Activity",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-106"
-      ],
-      "dax_sha256": "237a05d8067f20915065bd4b425805f9b7cc50213e13cf27c434b850ae7798cf",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1518
-    },
-    {
-      "model": "business",
-      "measure": "Referrals with Missed Response Date",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-307"
-      ],
-      "dax_sha256": "fd7df1e4139007818cb05bec0852c38a6a07567e5e00f6ea826f2cfc7a915e86",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1760
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With Multiple Provider Assignments",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "KPI-90"
-      ],
-      "dax_sha256": "5e418802cb303688fe1daf2faa6755db3bd73c25bb29f7d29035169115583877",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1428
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With Offers",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-308"
-      ],
-      "dax_sha256": "30275bbe5c9c38facea56552d0a5155bff87b273e94f54619343847c7744dbc3",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 312
-    },
-    {
-      "model": "business",
-      "measure": "Referrals With Offers %",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-309"
-      ],
-      "dax_sha256": "a2cfa7e6355adce1769d8c632e8497558c77b2d92a5026f6a84327401cd4d946",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1732
+      "line": 744
     },
     {
       "model": "business",
@@ -11630,6 +11714,45 @@
     },
     {
       "model": "business",
+      "measure": "Referrals closed during month",
+      "container": "_Story Measures",
+      "classification": "Business metric",
+      "reason": "Saved detail count in the required record context",
+      "kpi_ids": [
+        "GOLD-KPI-121"
+      ],
+      "dax_sha256": "62e30a0e1e155e624f72768939f52b26a46cd969a95fce9fcfea6a3f816fd1dc",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl",
+      "line": 19
+    },
+    {
+      "model": "business",
+      "measure": "Referrals with IPA at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-031"
+      ],
+      "dax_sha256": "fd926a35e2c790458ecb4eaa703b9632648cabeee4b27719c85d0bff3f0392d0",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 883
+    },
+    {
+      "model": "business",
+      "measure": "Referrals with Missed Response Date",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-307"
+      ],
+      "dax_sha256": "fd7df1e4139007818cb05bec0852c38a6a07567e5e00f6ea826f2cfc7a915e86",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1760
+    },
+    {
+      "model": "business",
       "measure": "Report Version Label",
       "container": "Report Settings",
       "classification": "Display/filter/context helper",
@@ -11638,6 +11761,28 @@
       "dax_sha256": "c0d5dec3462db3fddaa4948c4b3cdfb395ca371925587bcd87620001cf84cc68",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Report Settings.tmdl",
       "line": 6
+    },
+    {
+      "model": "business",
+      "measure": "Requirement KPI row visible",
+      "container": "Requirement KPI Monitor",
+      "classification": "Display/filter helper",
+      "reason": "Local requirement presentation helper; reuses existing business calculations.",
+      "kpi_ids": [],
+      "dax_sha256": "938df3991f07c9c9720a14299e6976ac28e4d5a6de9cc238c3a0b2694c01948b",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Requirement KPI Monitor.tmdl",
+      "line": 44
+    },
+    {
+      "model": "business",
+      "measure": "Requirement KPI value",
+      "container": "Requirement KPI Monitor",
+      "classification": "Display/filter helper",
+      "reason": "Local requirement presentation helper; reuses existing business calculations.",
+      "kpi_ids": [],
+      "dax_sha256": "7f87719e4a63c40e2bfd6c3aeb8b5ebf84ebc7d1c22cd97d67a085133a3076e8",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/Requirement KPI Monitor.tmdl",
+      "line": 55
     },
     {
       "model": "business",
@@ -11717,6 +11862,41 @@
     },
     {
       "model": "business",
+      "measure": "Snapshot Referrals Placed by Required Date",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-313"
+      ],
+      "dax_sha256": "aaf589b8b8af83a748f58bb015c25053fb33f44de58178e16667e624475d3dc5",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 1755
+    },
+    {
+      "model": "business",
+      "measure": "Snapshot Window Anchor",
+      "container": "_Design Measures",
+      "classification": "Filter/context helper",
+      "reason": "Reporting window, anchor or dynamic selector",
+      "kpi_ids": [],
+      "dax_sha256": "aa324696ecba6f1e7745ecbf2841c45a1e35dae27e7e420c2da15ffefcbbc58a",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 9
+    },
+    {
+      "model": "business",
+      "measure": "Snapshot Window Months",
+      "container": "_Design Measures",
+      "classification": "Filter/context helper",
+      "reason": "Reporting window, anchor or dynamic selector",
+      "kpi_ids": [],
+      "dax_sha256": "7c55bdec25282d9b436077d3cd0205a5800a9f43389013c7ed7ecf8cafec2a61",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
+      "line": 4
+    },
+    {
+      "model": "business",
       "measure": "Snapshot referrals MoM change",
       "container": "_Story Measures",
       "classification": "Business metric",
@@ -11743,19 +11923,6 @@
     },
     {
       "model": "business",
-      "measure": "Snapshot Referrals Placed by Required Date",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-313"
-      ],
-      "dax_sha256": "aaf589b8b8af83a748f58bb015c25053fb33f44de58178e16667e624475d3dc5",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 1755
-    },
-    {
-      "model": "business",
       "measure": "Snapshot referrals previous month",
       "container": "_Story Measures",
       "classification": "Business metric",
@@ -11766,28 +11933,6 @@
       "dax_sha256": "3b55a1c2f21022598260e09d287713d243bdadd11fad0920168fd307f727dcf1",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Story Measures.tmdl",
       "line": 24
-    },
-    {
-      "model": "business",
-      "measure": "Snapshot Window Anchor",
-      "container": "_Design Measures",
-      "classification": "Filter/context helper",
-      "reason": "Reporting window, anchor or dynamic selector",
-      "kpi_ids": [],
-      "dax_sha256": "aa324696ecba6f1e7745ecbf2841c45a1e35dae27e7e420c2da15ffefcbbc58a",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 9
-    },
-    {
-      "model": "business",
-      "measure": "Snapshot Window Months",
-      "container": "_Design Measures",
-      "classification": "Filter/context helper",
-      "reason": "Reporting window, anchor or dynamic selector",
-      "kpi_ids": [],
-      "dax_sha256": "7c55bdec25282d9b436077d3cd0205a5800a9f43389013c7ed7ecf8cafec2a61",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Design Measures.tmdl",
-      "line": 4
     },
     {
       "model": "business",
@@ -11922,19 +12067,6 @@
     },
     {
       "model": "business",
-      "measure": "Total Offers at Snapshot",
-      "container": "_Measures",
-      "classification": "Business metric",
-      "reason": "Saved business count, rate, duration, cost or comparison",
-      "kpi_ids": [
-        "GOLD-KPI-316"
-      ],
-      "dax_sha256": "4425d18d442cc056002a9e2c63d498e5d8db8cfc04abcb165d79f653df35dee8",
-      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
-      "line": 749
-    },
-    {
-      "model": "business",
       "measure": "Total Offers Made Previous Month",
       "container": "_Measures",
       "classification": "Business metric",
@@ -11980,6 +12112,19 @@
       "dax_sha256": "47b1761c58c32258cb404c5adb10708ddc9bf1c0e371e34584643367ce94cb91",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 596
+    },
+    {
+      "model": "business",
+      "measure": "Total Offers at Snapshot",
+      "container": "_Measures",
+      "classification": "Business metric",
+      "reason": "Saved business count, rate, duration, cost or comparison",
+      "kpi_ids": [
+        "GOLD-KPI-316"
+      ],
+      "dax_sha256": "4425d18d442cc056002a9e2c63d498e5d8db8cfc04abcb165d79f653df35dee8",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
+      "line": 749
     },
     {
       "model": "business",
@@ -12168,6 +12313,17 @@
       "dax_sha256": "ca7cf4d7c4e926a28051fb751433f0bf2f084711c16c3fc4902601cbcbd35114",
       "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Measures.tmdl",
       "line": 1772
+    },
+    {
+      "model": "business",
+      "measure": "expired_docs",
+      "container": "_Explorer KPI Measures",
+      "classification": "Display/filter helper",
+      "reason": "Per-document expiry flag: 1 expired, 0 dated and not expired; blank for unknown date or non-document totals.",
+      "kpi_ids": [],
+      "dax_sha256": "2c8000426c38b1f34cc4d27c59dbc36b1e6e0978f90e8153f6e18fa2855ef441",
+      "source": "project X/reports/WIP/SM WMPP v16 updated WIP/SM_WMPP_v16.SemanticModel/definition/tables/_Explorer KPI Measures.tmdl",
+      "line": 992
     },
     {
       "model": "mission",
@@ -12535,6 +12691,97 @@
     },
     {
       "model": "mission",
+      "measure": "DQ Checked Rows",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-090"
+      ],
+      "dax_sha256": "4cd689103913c887e7fca34d76d2e750c08f1f92f67f48a0371591dcd7f36b26",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 419
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Checks",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-091"
+      ],
+      "dax_sha256": "c4407eb47c5b681251fb642a67ae25f1eeca1b590f0b90fa55d7d967b4cdb94b",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 383
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Evaluated Checks",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-092"
+      ],
+      "dax_sha256": "d531b7c020a5d1b6b80b47d6d4f9016570b628c2a4df1d0aebd648684e4977cf",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 392
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Failed Checks",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-093"
+      ],
+      "dax_sha256": "f3dff5bebf58d4ae134e3d37e791f8874f2eccaa7ddca5cededa24414b5e3c6e",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 401
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Failed Rows",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-094"
+      ],
+      "dax_sha256": "d944d4a718bb531fa890eda9e3d3d0af177b15472ad76f28fbec8dee9803fa72",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 428
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Failure Rate",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-095"
+      ],
+      "dax_sha256": "dea23fadf9d62effa2b6cb458c2633cda6cf8e2043cd8cc0704ccefa49fa8d67",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 410
+    },
+    {
+      "model": "mission",
+      "measure": "DQ Failures With Sample Keys",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-096"
+      ],
+      "dax_sha256": "b4fe5fae8d7d5ca0417901843ce3a38c50db66543c7790c15b125a1cb5cbe02c",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 464
+    },
+    {
+      "model": "mission",
       "measure": "Dashboard Last Refreshed",
       "container": "_MissionControl_Measures",
       "classification": "Display/context helper",
@@ -12546,17 +12793,6 @@
     },
     {
       "model": "mission",
-      "measure": "Day colour",
-      "container": "_Load Experience",
-      "classification": "Display/context helper",
-      "reason": "Text, SVG or context expression; full definition retained separately",
-      "kpi_ids": [],
-      "dax_sha256": "5fafc50b1ab94d2a88e8e07e254e8427d5f692939681af259c3ecfab2d05c5b6",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Load Experience.tmdl",
-      "line": 46
-    },
-    {
-      "model": "mission",
       "measure": "Day Explorer Job Visible",
       "container": "_MissionControl_Measures",
       "classification": "Filter/context helper",
@@ -12565,6 +12801,17 @@
       "dax_sha256": "cff0ed12229ba75235d63fc70bc629cf84fd889ebb08570fd8c410f851ec29e8",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
       "line": 930
+    },
+    {
+      "model": "mission",
+      "measure": "Day colour",
+      "container": "_Load Experience",
+      "classification": "Display/context helper",
+      "reason": "Text, SVG or context expression; full definition retained separately",
+      "kpi_ids": [],
+      "dax_sha256": "5fafc50b1ab94d2a88e8e07e254e8427d5f692939681af259c3ecfab2d05c5b6",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Load Experience.tmdl",
+      "line": 46
     },
     {
       "model": "mission",
@@ -14516,97 +14763,6 @@
     },
     {
       "model": "mission",
-      "measure": "DQ Checked Rows",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-090"
-      ],
-      "dax_sha256": "4cd689103913c887e7fca34d76d2e750c08f1f92f67f48a0371591dcd7f36b26",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 419
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Checks",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-091"
-      ],
-      "dax_sha256": "c4407eb47c5b681251fb642a67ae25f1eeca1b590f0b90fa55d7d967b4cdb94b",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 383
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Evaluated Checks",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-092"
-      ],
-      "dax_sha256": "d531b7c020a5d1b6b80b47d6d4f9016570b628c2a4df1d0aebd648684e4977cf",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 392
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Failed Checks",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-093"
-      ],
-      "dax_sha256": "f3dff5bebf58d4ae134e3d37e791f8874f2eccaa7ddca5cededa24414b5e3c6e",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 401
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Failed Rows",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-094"
-      ],
-      "dax_sha256": "d944d4a718bb531fa890eda9e3d3d0af177b15472ad76f28fbec8dee9803fa72",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 428
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Failure Rate",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-095"
-      ],
-      "dax_sha256": "dea23fadf9d62effa2b6cb458c2633cda6cf8e2043cd8cc0704ccefa49fa8d67",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 410
-    },
-    {
-      "model": "mission",
-      "measure": "DQ Failures With Sample Keys",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-096"
-      ],
-      "dax_sha256": "b4fe5fae8d7d5ca0417901843ce3a38c50db66543c7790c15b125a1cb5cbe02c",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 464
-    },
-    {
-      "model": "mission",
       "measure": "Failed Archive Table Exports",
       "container": "_MissionControl_Measures",
       "classification": "Operational metric",
@@ -14763,6 +14919,58 @@
     },
     {
       "model": "mission",
+      "measure": "Job Runs",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-115"
+      ],
+      "dax_sha256": "f9b03a7124f4726191258b96cf4679c1b00fd2d32dae9dc78412146de421618b",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 607
+    },
+    {
+      "model": "mission",
+      "measure": "Job Steps",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-116"
+      ],
+      "dax_sha256": "e5aaae4e8064c511bf8438e4927bb54e1c8eac75eb39af1aad7e2941aa655c2f",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 716
+    },
+    {
+      "model": "mission",
+      "measure": "Job Steps With Error",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-117"
+      ],
+      "dax_sha256": "184afa14ed57c012982795166696b400eb0e740826fedb86b82bc8db204969e3",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 743
+    },
+    {
+      "model": "mission",
+      "measure": "Job Success Rate",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-118"
+      ],
+      "dax_sha256": "566a155d430603cecba8cda8aa294c4d9f79d5bbda87189cb3004e7f238c1751",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 634
+    },
+    {
+      "model": "mission",
       "measure": "Job actual min",
       "container": "_Run Benchmarks",
       "classification": "Operational metric",
@@ -14849,58 +15057,6 @@
       "dax_sha256": "ed83b76b652568c63b824bff793f4b5d0c272675240434c828865b88ce0af208",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Run Benchmarks.tmdl",
       "line": 64
-    },
-    {
-      "model": "mission",
-      "measure": "Job Runs",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-115"
-      ],
-      "dax_sha256": "f9b03a7124f4726191258b96cf4679c1b00fd2d32dae9dc78412146de421618b",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 607
-    },
-    {
-      "model": "mission",
-      "measure": "Job Steps",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-116"
-      ],
-      "dax_sha256": "e5aaae4e8064c511bf8438e4927bb54e1c8eac75eb39af1aad7e2941aa655c2f",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 716
-    },
-    {
-      "model": "mission",
-      "measure": "Job Steps With Error",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-117"
-      ],
-      "dax_sha256": "184afa14ed57c012982795166696b400eb0e740826fedb86b82bc8db204969e3",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 743
-    },
-    {
-      "model": "mission",
-      "measure": "Job Success Rate",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-118"
-      ],
-      "dax_sha256": "566a155d430603cecba8cda8aa294c4d9f79d5bbda87189cb3004e7f238c1751",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 634
     },
     {
       "model": "mission",
@@ -15052,6 +15208,41 @@
     },
     {
       "model": "mission",
+      "measure": "Latest Pipeline End",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-131"
+      ],
+      "dax_sha256": "7c66417be4c2591c4f0bad97a5b9d986cc07222b8023579a5fad27e097ad245c",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 175
+    },
+    {
+      "model": "mission",
+      "measure": "Latest Pipeline Row Visible",
+      "container": "_MissionControl_Measures",
+      "classification": "Filter/context helper",
+      "reason": "Selection, visibility, latest-batch or flag control",
+      "kpi_ids": [],
+      "dax_sha256": "7dd96c72004749feeb1aa8e2df99b8d8376137c367675d3b442d87cc4a3bb016",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 1902
+    },
+    {
+      "model": "mission",
+      "measure": "Latest Pipeline Status",
+      "container": "_MissionControl_Measures",
+      "classification": "Display/context helper",
+      "reason": "Text, SVG or context expression; full definition retained separately",
+      "kpi_ids": [],
+      "dax_sha256": "e8df78da7805f1a76b474c31eac7f8238c4364f975845698e62b803d5784c9da",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 184
+    },
+    {
+      "model": "mission",
       "measure": "Latest matching Archive ZIP Batches",
       "container": "_MissionControl_Measures",
       "classification": "Operational metric",
@@ -15156,41 +15347,6 @@
       "dax_sha256": "3961f96a710959c66ecc31425ae726fd31d8f9f39436712337bc4838c36d5c14",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
       "line": 1927
-    },
-    {
-      "model": "mission",
-      "measure": "Latest Pipeline End",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-131"
-      ],
-      "dax_sha256": "7c66417be4c2591c4f0bad97a5b9d986cc07222b8023579a5fad27e097ad245c",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 175
-    },
-    {
-      "model": "mission",
-      "measure": "Latest Pipeline Row Visible",
-      "container": "_MissionControl_Measures",
-      "classification": "Filter/context helper",
-      "reason": "Selection, visibility, latest-batch or flag control",
-      "kpi_ids": [],
-      "dax_sha256": "7dd96c72004749feeb1aa8e2df99b8d8376137c367675d3b442d87cc4a3bb016",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 1902
-    },
-    {
-      "model": "mission",
-      "measure": "Latest Pipeline Status",
-      "container": "_MissionControl_Measures",
-      "classification": "Display/context helper",
-      "reason": "Text, SVG or context expression; full definition retained separately",
-      "kpi_ids": [],
-      "dax_sha256": "e8df78da7805f1a76b474c31eac7f8238c4364f975845698e62b803d5784c9da",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 184
     },
     {
       "model": "mission",
@@ -15346,19 +15502,6 @@
     },
     {
       "model": "mission",
-      "measure": "P95 duration min",
-      "container": "_Load Experience",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-142"
-      ],
-      "dax_sha256": "a78b3aae64c6803e7f3003604d448772be7b0b1246d51b5ac8a315973ed5994b",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Load Experience.tmdl",
-      "line": 29
-    },
-    {
-      "model": "mission",
       "measure": "P95 Pipeline Duration (min)",
       "container": "_MissionControl_Measures",
       "classification": "Operational metric",
@@ -15372,16 +15515,16 @@
     },
     {
       "model": "mission",
-      "measure": "Pipeline Rows per Minute",
-      "container": "_MissionControl_Measures",
+      "measure": "P95 duration min",
+      "container": "_Load Experience",
       "classification": "Operational metric",
       "reason": "Numeric/date operational definition in the latest saved model",
       "kpi_ids": [
-        "MC-KPI-144"
+        "MC-KPI-142"
       ],
-      "dax_sha256": "4bf6272e4883bba60f523bc9db774f0f675402a36f36b738e5864cf2f7156c58",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 166
+      "dax_sha256": "a78b3aae64c6803e7f3003604d448772be7b0b1246d51b5ac8a315973ed5994b",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Load Experience.tmdl",
+      "line": 29
     },
     {
       "model": "mission",
@@ -15408,6 +15551,19 @@
       "dax_sha256": "5195ec4a6eb9647ea280a631a94790cbe5c7af7d58dbd6d8cb02dc8d9569b5c6",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
       "line": 121
+    },
+    {
+      "model": "mission",
+      "measure": "Pipeline Rows per Minute",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-144"
+      ],
+      "dax_sha256": "4bf6272e4883bba60f523bc9db774f0f675402a36f36b738e5864cf2f7156c58",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 166
     },
     {
       "model": "mission",
@@ -15476,19 +15632,6 @@
     },
     {
       "model": "mission",
-      "measure": "Reload Requests",
-      "container": "_MissionControl_Measures",
-      "classification": "Operational metric",
-      "reason": "Numeric/date operational definition in the latest saved model",
-      "kpi_ids": [
-        "MC-KPI-152"
-      ],
-      "dax_sha256": "5b9173a589a3591cb9f3397e3f5c98e82f6be39cf73c4123a8dfbb31bb111907",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 572
-    },
-    {
-      "model": "mission",
       "measure": "RI Checked Rows",
       "container": "_MissionControl_Measures",
       "classification": "Operational metric",
@@ -15541,6 +15684,19 @@
     },
     {
       "model": "mission",
+      "measure": "Reload Requests",
+      "container": "_MissionControl_Measures",
+      "classification": "Operational metric",
+      "reason": "Numeric/date operational definition in the latest saved model",
+      "kpi_ids": [
+        "MC-KPI-152"
+      ],
+      "dax_sha256": "5b9173a589a3591cb9f3397e3f5c98e82f6be39cf73c4123a8dfbb31bb111907",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 572
+    },
+    {
+      "model": "mission",
       "measure": "Rows written",
       "container": "_Load Experience",
       "classification": "Operational metric",
@@ -15577,6 +15733,17 @@
       "dax_sha256": "c69f43c9d7dad119e076ed66b7acbb7b415f8dd243da471a4f8276c1348b581d",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_Load Experience.tmdl",
       "line": 4
+    },
+    {
+      "model": "mission",
+      "measure": "Selected Step Error Detail",
+      "container": "_MissionControl_Measures",
+      "classification": "Display/context helper",
+      "reason": "Text, SVG or context expression; full definition retained separately",
+      "kpi_ids": [],
+      "dax_sha256": "222110873df42750d9847648ca05e7877856f39baac8ec313e51ad5f43bc97e7",
+      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
+      "line": 814
     },
     {
       "model": "mission",
@@ -15643,17 +15810,6 @@
       "dax_sha256": "348cc7374d73a78b2373decfdfec1f8503c887307fff3226dad4cef2a8c81f6f",
       "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
       "line": 752
-    },
-    {
-      "model": "mission",
-      "measure": "Selected Step Error Detail",
-      "container": "_MissionControl_Measures",
-      "classification": "Display/context helper",
-      "reason": "Text, SVG or context expression; full definition retained separately",
-      "kpi_ids": [],
-      "dax_sha256": "222110873df42750d9847648ca05e7877856f39baac8ec313e51ad5f43bc97e7",
-      "source": "project X/reports/WIP/SM WMPP Mission Control/SM WMPP Mission Control.SemanticModel/definition/tables/_MissionControl_Measures.tmdl",
-      "line": 814
     },
     {
       "model": "mission",
@@ -16399,6 +16555,6 @@
       "line": 437
     }
   ],
-  "date_meaning": "First dictionary/catalogue registration. Original 117: 26 Aug; existing Gold IDs retain 26/27 Aug or 30 Sep provenance; newly registered current metrics: 17 Oct. Does not assert original model implementation or approval dates.",
-  "validation_scope": "Static reconciliation only; local source changes are captured as calculation documentation, not committed model changes or deployment evidence."
+  "date_meaning": "First dictionary/catalogue registration. Original 117: 26 Aug; existing Gold IDs retain 26/27 Aug or 30 Sep provenance; newly registered current metrics: 17 Oct. Does not assert original model implementation or approval dates. Four provider-scoped document definitions first registered 18 Oct 2026.",
+  "validation_scope": "Saved TMDL/PBIR and catalogue consistency; native TMDL parsing. Refreshed DAX, rendering, roles and client acceptance remain pending."
 }

@@ -22,7 +22,9 @@ def test_validates_active_notebooks_without_client_snapshots(
     tmp_path, validator, required_notebook
 ):
     project = tmp_path / "project X"
-    inputs = list(PROJECT.glob("[0-9]*.py")) + [
+    inputs = (list(PROJECT.glob("[0-9]*.py")) or list(
+        (PROJECT / "notebooks").glob("[0-9]*.Notebook")
+    )) + [
         PROJECT / "tests" / validator,
         PROJECT / "tests/notebook_loader.py",
         PROJECT / "tests/_gold_sim_test.py",
@@ -35,7 +37,10 @@ def test_validates_active_notebooks_without_client_snapshots(
     for original in inputs:
         destination = project / original.relative_to(PROJECT)
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(original, destination)
+        if original.is_dir():
+            shutil.copytree(original, destination)
+        else:
+            shutil.copy2(original, destination)
     assert not (project / "reports").exists()
 
     def run_validator():
@@ -47,8 +52,11 @@ def test_validates_active_notebooks_without_client_snapshots(
     result = run_validator()
     assert result.returncode == 0, result.stdout + result.stderr
     # A missing active input must still fail, rather than silently skip checks.
-    (project / required_notebook).rename(project / f"{required_notebook}.unavailable")
+    required = project / required_notebook
+    if not required.exists():
+        required = project / "notebooks" / f"{Path(required_notebook).stem}.Notebook"
+    required.rename(required.with_name(required.name + ".unavailable"))
     result = run_validator()
     assert result.returncode != 0
     assert "FileNotFoundError" in result.stderr
-    assert required_notebook in result.stderr
+    assert Path(required_notebook).stem in result.stderr
