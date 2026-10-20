@@ -3809,3 +3809,877 @@ scrolling and navigation layering require a post-reopen acceptance check.
   without saving the older open session to load it. Native visual clicking and
   rendering remain a post-reopen check. No live-model write, refresh, ZIP update
   or publication was performed.
+
+## TEST-001 - running pytest
+tests\test_pipeline_utc_timestamps.py:56: in clock_values
+    return [eval(compile(ast.Expression(call), name, "eval"), scope) for call in calls]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+>   ???
+E   DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+00_archive_load.py:21: DeprecationWarning
+___________________________ test_validator[validate_archive_framework_fallback] ___________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_archive_framework_fallback.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_archive_framework_fallback.py failed:
+E         STDOUT:
+E         PASS Fabric notebook cells and Python syntax
+E         PASS fallback reader validates input and stamps monthly provenance
+E         PASS archived framework wins and fallback-only mode covers physical absence
+E         PASS fallback enters normal Silver conformance without inventing archive data
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_archive_framework_fallback.py", line 119, in <module>
+E             ).read_text(encoding="utf-8", errors="replace")
+E               ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_archive_framework_fallback.py
+________________________ test_validator[validate_archive_snapshot_and_enrichment] _________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_archive_snapshot_and_enrichment.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_archive_snapshot_and_enrichment.py failed:
+E         STDOUT:
+E         PASS Fabric notebook cells and Python syntax
+E         PASS ARCH-ETL-001 runner allows 9,200 seconds; nested DQ/Gold allow two hours
+E         PASS ARCH-ETL-002 and LIVE-ETL-001 replace, rather than accumulate, the active month
+E         PASS SI-018/SI-019 derived Silver enrichment and Gold promotion are present
+E         PASS GLD-009/011/012/014 open, awaiting-offer, provider-derived spot and is_engaged logic is present
+E         PASS GLD-013 provider-count, emergency, overdue, draft-age and IPA flags are present
+E         PASS full fact_referral shape, snapshot promotion and Offer/IPA facts are present
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_archive_snapshot_and_enrichment.py", line 219, in <module>
+E             with DQ_CONFIG.open(encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\dq_rule_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\dq_rule_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_archive_snapshot_and_enrichment.py
+__________________________ test_validator[validate_cfg005_contract_source_rows] ___________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_cfg005_contract_source_rows.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_cfg005_contract_source_rows.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_cfg005_contract_source_rows.py", line 14, in <module>
+E             with CONTRACT_CSV.open(encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_cfg005_contract_source_rows.py
+___________________________________ test_validator[validate_cfg_setup] ____________________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_cfg_setup.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_cfg_setup.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_cfg_setup.py", line 171, in <module>
+E             issue_log = (PROJECT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8")
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_cfg_setup.py
+_________________________________ test_validator[validate_core_pipeline] __________________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_core_pipeline.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_core_pipeline.py failed:
+E         STDOUT:
+E         PASS notebook JSON/Python: 00_archive_load.py
+E         PASS notebook JSON/Python: 00a_rehydrate_archive_cfg.py
+E         PASS notebook JSON/Python: 01_bronze_get_latest.py
+E         PASS notebook JSON/Python: 02_silver_formatter.py
+E         PASS notebook JSON/Python: 02a_archive_silver.py
+E         PASS notebook JSON/Python: 03_silver_business_rules.py
+E         PASS notebook JSON/Python: 04_gold_model.py
+E         PASS fractional timestamp regression: 02_silver_formatter.py
+E         PASS fractional timestamp regression: 02a_archive_silver.py
+E         PASS archive strategy: month-end-only batches, PK deduplication, date gate, diagnostics, and Goldhand-off
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_core_pipeline.py", line 105, in <module>
+E             with (ROOT / "configuration" / "schema_definition.csv").open(encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_core_pipeline.py
+_________________________ test_validator[validate_gld015_reject_reason_dimension] _________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gld015_reject_reason_dimension.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_gld015_reject_reason_dimension.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_gld015_reject_reason_dimension.py", line 60, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_gld015_reject_reason_dimension.py
+_________________________ test_validator[validate_gld016_provider_kpi_offer_keys] _________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gld016_provider_kpi_offer_keys.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_gld016_provider_kpi_offer_keys.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_gld016_provider_kpi_offer_keys.py", line 47, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_gld016_provider_kpi_offer_keys.py
+______________________________ test_validator[validate_gold_referral_schema] ______________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_gold_referral_schema.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_gold_referral_schema.py failed:
+E         STDOUT:
+E         PASS Fabric notebook cells and Python syntax
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_gold_referral_schema.py", line 30, in <module>
+E             with SCHEMA.open("r", encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_gold_referral_schema.py
+________________________________ test_validator[validate_job_run_lineage] _________________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_job_run_lineage.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_job_run_lineage.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_job_run_lineage.py", line 83, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_job_run_lineage.py
+____________________________ test_validator[validate_live_pipeline_monitoring] ____________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_live_pipeline_monitoring.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_live_pipeline_monitoring.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_live_pipeline_monitoring.py", line 48, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8", errors="replace"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_live_pipeline_monitoring.py
+______________________________ test_validator[validate_notebook_integration] ______________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_notebook_integration.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_notebook_integration.py failed:
+E         STDOUT:
+E         PASS Fabric notebook cells and Python syntax
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_notebook_integration.py", line 48, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_notebook_integration.py
+_________________________________ test_validator[validate_ref_exclusions] _________________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_ref_exclusions.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_ref_exclusions.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_ref_exclusions.py", line 69, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(encoding="utf-8", errors="replace")
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_ref_exclusions.py
+____________________________ test_validator[validate_referral_provider_rollup] ____________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_referral_provider_rollup.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_referral_provider_rollup.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_referral_provider_rollup.py", line 40, in <module>
+E             issue_log = (ROOT / "change tracking" / "ETL_ISSUE_LOG.md").read_text(
+E                 encoding="utf-8"
+E             )
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 787, in read_text
+E             with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+E                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\change tracking\\ETL_ISSUE_LOG.md'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...ndError: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\change tracking\\\\ETL_ISSUE_LOG.md\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_referral_provider_rollup.py
+__________________________________ test_validator[validate_schema_drift] __________________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_schema_drift.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_schema_drift.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_schema_drift.py", line 20, in <module>
+E             with (ROOT / "configuration" / "schema_definition.csv").open(encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_schema_drift.py
+____________________________ test_validator[validate_schema_drift_dimensions] _____________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_schema_drift_dimensions.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_schema_drift_dimensions.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_schema_drift_dimensions.py", line 54, in <module>
+E             with (PROJECT / "configuration" / "schema_definition.csv").open(
+E                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+E                 newline="", encoding="utf-8-sig"
+E                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E             ) as handle:
+E             ^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_schema_drift_dimensions.py
+_____________________________ test_validator[validate_si007_materialisations] _____________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_si007_materialisations.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_si007_materialisations.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_si007_materialisations.py", line 12, in <module>
+E             with SCHEMA.open(encoding="utf-8-sig", newline="") as handle:
+E                  ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_si007_materialisations.py
+__________________________ test_validator[validate_si022_source_schema_contract] __________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_si022_source_schema_contract.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_si022_source_schema_contract.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_si022_source_schema_contract.py", line 36, in <module>
+E             contract_rows = read_csv(CONTRACT)
+E           File "C:\repo\WMPP\WMPP\tests\validate_si022_source_schema_contract.py", line 31, in read_csv
+E             raise FileNotFoundError(
+E                 f"Missing {path}; provide the extracted CSV or {EXTRACT_ZIP.name}"
+E             )
+E         FileNotFoundError: Missing C:\repo\WMPP\WMPP\configuration\schema_definition.csv; provide the extracted CSV or cfg_extracts.zip
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...: Missing C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv; provide the extracted CSV or cfg_extracts.zip\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_si022_source_schema_contract.py
+____________________________ test_validator[validate_silver_required_columns] _____________________________
+
+validator = WindowsPath('C:/repo/WMPP/WMPP/tests/validate_silver_required_columns.py')
+
+    @pytest.mark.parametrize("validator", VALIDATORS, ids=lambda path: path.stem)
+    def test_validator(validator):
+        """Each opted-in Python validator must pass from the repository root."""
+        result = subprocess.run(
+            [sys.executable, str(validator)],
+            cwd=REPOSITORY_ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode == 0:
+            print(f"PASS: {validator.name}")
+            return
+    
+        print(f"FAIL: {validator.name}")
+>       assert result.returncode == 0, (
+            f"{validator.name} failed:\nSTDOUT:\n{result.stdout}\nSTDERR:\n{result.stderr}"
+        )
+E       AssertionError: validate_silver_required_columns.py failed:
+E         STDOUT:
+E         
+E         STDERR:
+E         Traceback (most recent call last):
+E           File "C:\repo\WMPP\WMPP\tests\validate_silver_required_columns.py", line 92, in <module>
+E             main()
+E             ~~~~^^
+E           File "C:\repo\WMPP\WMPP\tests\validate_silver_required_columns.py", line 33, in main
+E             with CONTRACT.open(newline="", encoding="utf-8-sig") as handle:
+E                  ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           File "C:\Users\tmpaarmh\AppData\Local\Python\pythoncore-3.14-64\Lib\pathlib\__init__.py", line 771, in open
+E             return io.open(self, mode, buffering, encoding, errors, newline)
+E                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E         FileNotFoundError: [Errno 2] No such file or directory: 'C:\\repo\\WMPP\\WMPP\\configuration\\schema_definition.csv'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['C:\\Users\\tmpaarmh\\AppData\\Local\\Python\\pythoncore-3.14-64\\python.exe', 'C:\\repo\\WMPP\...rror: [Errno 2] No such file or directory: \'C:\\\\repo\\\\WMPP\\\\WMPP\\\\configuration\\\\schema_definition.csv\'\n').returncode
+
+tests\test_validation_scripts.py:60: AssertionError
+------------------------------------------ Captured stdout call -------------------------------------------
+FAIL: validate_silver_required_columns.py
+========================================= short test summary info =========================================
+FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_gld015_reject_reason_dimension.py-05_gold_dimensions.py] - FileNotFoundError: [WinError 3] The system cannot find the path specified
+FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_gold_referral_schema.py-04_gold_model.py] - FileNotFoundError: [WinError 3] The system cannot find the path specified
+FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_job_run_lineage.py-90_run_live_pipeline.py] - FileNotFoundError: [WinError 3] The system cannot findthe path specified
+FAILED tests/test_active_notebook_validation.py::test_validates_active_notebooks_without_client_snapshots[validate_silver_required_columns.py-99_common_library.py] - FileNotFoundError: [WinError 3] The system cannotfind the path specified
+FAILED tests/test_archive_pipeline_modes.py::test_archive_children_do_not_repeat_setup_with_injected_parent[00_archive_load] - assert 'IS_ORCHESTRATED_RUN' not in {'__builtins__': {'__name__': 'builtins', '__doc__':"Built-in func...
+FAILED tests/test_category_location_etl.py::test_referral_etl_simulation_sql_matches_current_notebook - AssertionError: assert 'CREATE OR RE...rence_profile' == 'CREATE OR RE...rence_profile'
+FAILED tests/test_gold_ipa_signature_contract.py::test_gold_ipa_signature_and_closed_state[1-1-0-1-0] - assert (1, 1, 0, 1) == (1, 1, 1, 0)
+FAILED tests/test_gold_ipa_signature_contract.py::test_gold_ipa_signature_and_closed_state[1-0-1-0-0] - assert (1, 0, 1, 0) == (1, 0, 0, 0)
+FAILED tests/test_gold_ipa_signature_contract.py::test_gold_ipa_signature_and_closed_state[0-0-1-0-0] - assert (0, 0, 1, 0) == (0, 0, 0, 0)
+FAILED tests/test_gold_ipa_signature_contract.py::test_multiple_ipas_do_not_collapse_signature_counts_to_one_offer - assert 2 == 1
+FAILED tests/test_gold_referral_journey_status.py::test_all_journey_stages[6] - assert 5 == 6
+FAILED tests/test_gold_referral_journey_status.py::test_terminal_status_overrides_signed_ipa_and_unknown_offer[ cancelled ] - assert 5 == 7
+FAILED tests/test_gold_referral_journey_status.py::test_accepted_offer_aliases_override_pending_and_unknown[ selected ] - assert 3 == 4
+FAILED tests/test_gold_referral_journey_status.py::test_missing_source_status_requires_review_without_stronger_evidence[  ] - assert 2 == 8
+FAILED tests/test_gold_referral_journey_status.py::test_active_ipa_and_signature_precedence[1-1-0-6] - assert 5 == 6
+FAILED tests/test_gold_referral_journey_status.py::test_active_ipa_and_signature_precedence[1-1-None-6] - assert 5 == 6
+FAILED tests/test_gold_referral_journey_status.py::test_active_ipa_and_signature_precedence[1-1-1-4] - assert 6 == 4
+FAILED tests/test_gold_referral_journey_status.py::test_signatures_on_different_ipas_are_not_combined - assert 6 == 5
+FAILED tests/test_gold_referral_journey_status.py::test_unknown_offer_with_missing_date_requires_review - assert 2 == 8
+FAILED tests/test_gold_referral_source_status.py::test_separate_gold_journey_classifier_and_fixture_matches_production - AssertionError: assert 'CREATE OR RE...rence_profile' == 'CREATE OR RE...rence_profile'
+FAILED tests/test_location_reference_loader.py::test_external_or_escaping_paths_rejected[https://example.com/postcodes.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_external_or_escaping_paths_rejected[abfss://external/coordinates.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_external_or_escaping_paths_rejected[Files/cfg_files/location_reference/../../private.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_external_or_escaping_paths_rejected[C:/temp/reference.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_external_or_escaping_paths_rejected[Files/cfg_files/location_reference/..\\private.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_local_reference_path_and_string_false -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords0] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords1] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords2] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords3] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_bad_grid_points_rejected[coords4] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_conversion_axis_order_and_range_guards -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_projection_network_disabled_and_no_ballpark_fallback -  File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_preview_merge_and_source_contract -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_zip_extracts_only_data_and_preserves_source[code_point-codepo_gb.zip-delivery/Data/CSV/b.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_zip_extracts_only_data_and_preserves_source[open_names-opname_csv_gb.zip-Data/SP00.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[../escape.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[/escape.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[Data/../bad.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_unsafe_zip_members_rejected[C:/bad.csv] -   File "<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_zip_missing_data_and_duplicate_tiles_rejected -   File"<unknown>", line 1
+FAILED tests/test_location_reference_loader.py::test_existing_extracted_directory_still_supported -   File "<unknown>", line 1
+FAILED tests/test_pipeline_utc_timestamps.py::test_notebook_clocks_are_warning_free_and_explicit_utc[00_archive_load.py] - DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future vers...
+FAILED tests/test_validation_scripts.py::test_validator[validate_archive_framework_fallback] - AssertionError: validate_archive_framework_fallback.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_archive_snapshot_and_enrichment] - AssertionError: validate_archive_snapshot_and_enrichment.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_cfg005_contract_source_rows] - AssertionError: validate_cfg005_contract_source_rows.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_cfg_setup] - AssertionError: validate_cfg_setup.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_core_pipeline] - AssertionError: validate_core_pipeline.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_gld015_reject_reason_dimension] - AssertionError: validate_gld015_reject_reason_dimension.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_gld016_provider_kpi_offer_keys] - AssertionError: validate_gld016_provider_kpi_offer_keys.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_gold_referral_schema] - AssertionError: validate_gold_referral_schema.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_job_run_lineage] - AssertionError: validate_job_run_lineage.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_live_pipeline_monitoring] - AssertionError: validate_live_pipeline_monitoring.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_notebook_integration] - AssertionError: validate_notebook_integration.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_ref_exclusions] - AssertionError: validate_ref_exclusions.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_referral_provider_rollup] - AssertionError: validate_referral_provider_rollup.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_schema_drift] - AssertionError: validate_schema_drift.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_schema_drift_dimensions] - AssertionError:validate_schema_drift_dimensions.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_si007_materialisations] - AssertionError: validate_si007_materialisations.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_si022_source_schema_contract] - AssertionError: validate_si022_source_schema_contract.py failed:
+FAILED tests/test_validation_scripts.py::test_validator[validate_silver_required_columns] - AssertionError:validate_silver_required_columns.py failed:
+=============================== 61 failed, 291 passed, 1 skipped in 12.80s ================================
+PS C:\repo\WMPP\wmpp> 
