@@ -1,5 +1,9 @@
 # Project State
 
+## 27 October 2026 — Fabric high level solution summary
+
+Replaced Fabric_Data_Solution.docx with a concise two-page architecture summary covering the live and archive flows, governed Silver processing, materialised Gold tables, WMPP_v16 reporting, Mission Control, security and recovery responsibilities. The summary was reconciled with the architecture archive and current notebook/model definitions, contains no links to other documents or sites, and was rendered in Word for visual review. Branding uses `reports/templates/WMPP_Theme.json` and the unchanged logo from `reports/current/WMPP/SM_WMPP.Report`, with matching Word heading and table styles. The previous Word file is retained in the task backup. This is a documentation update; deployment, refreshed results and client acceptance remain separate.
+
 ## 19 October 2026 — Client documentation wording and synchronisation
 
 The client-edited Phase 3 documents and project README have been reconciled with the pending WMPP_v16 report updates and copied back to their original documentation locations. Current model references use WMPP_v16; earlier delivery references use v15 or earlier. Per-expression hashes and repetitive audit commentary have been removed, while business calculations, outstanding decisions, client links and Markdown structure are retained. Prose paragraphs use a single source line. This update changes documentation only. The current reporting inventory is 73 tables and 502 measure definitions; the concurrent linked-referral status display update is included in the documentation.

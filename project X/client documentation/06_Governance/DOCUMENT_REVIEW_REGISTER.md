@@ -1,5 +1,9 @@
 # Client document review register
 
+## 27 October 2026 — Fabric high level solution summary
+
+Replaced Fabric_Data_Solution.docx with a concise two-page architecture summary covering the live and archive flows, governed Silver processing, materialised Gold tables, WMPP_v16 reporting, Mission Control, security and recovery responsibilities. The summary was reconciled with the architecture archive and current notebook/model definitions, contains no links to other documents or sites, and was rendered in Word for visual review. Branding uses `reports/templates/WMPP_Theme.json` and the unchanged logo from `reports/current/WMPP/SM_WMPP.Report`, with matching Word heading and table styles. The previous Word file is retained in the task backup. This is a documentation update; deployment, refreshed results and client acceptance remain separate.
+
 ## 19 October 2026 — Client-edited documentation review
 
 The Phase 3 documentation and project README have been reconciled with the pending report additions. Current model references use WMPP_v16, with earlier delivery links labelled v15 or earlier. Expression hashes and repetitive audit notes have been removed from the client calculation reference; DAX, Python logic, requirement decisions and client SharePoint links are retained. Unnecessary source-line wrapping has been removed while preserving headings, lists, tables and code blocks. The revised copies are held in Client modified docs and their original repository locations.
