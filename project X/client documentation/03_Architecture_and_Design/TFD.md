@@ -1,5 +1,15 @@
 # Technical/Functional Design (TFD)
 
+## 27 October 2026 — Referral creator (GLD-026)
+
+Lineage: `bronze.referral.referral_created_by` → same-name contracted `silver.referral.referral_created_by` → `gold.fact_referral.referral_created_by`. Contract ordinal 16 is nullable `character varying(100)` and becomes a Silver string. Gold copies that string without trimming, lookup, default, or renaming to `created_by`. The base CTE selects `r.referral_created_by AS referral_created_by`; the final fact projection explicitly retains it.
+
+The value comes from `referral_current`, selected by the existing descending `COALESCE(referral_modified_date, referral_created_date, export_date)` and export-date ordering. It is not taken from the earliest creation-date aggregation or `referral_updated_by`. NULLs and one-row-per-referral grain are preserved. Gold source preflight now rejects a missing creator column before creating facts, using the existing actionable recovery error. A present column containing NULL values is valid.
+
+Scope is the current fact only: `fact_referral_snapshot`, retained months and snapshot migrations are unchanged. No key, relationship, KPI, scoring, or semantic-model definition changes are required by this request.
+
+Portable validation executes the complete production fact SQL with synthetic Silver data using SQLite date/timestamp adaptations. It covers exact text/leading zeros/Unicode/100-character values, blanks, NULLs, current-row selection, export-date tie-breaking, empty inputs, missing-column preflight and snapshot exclusion. The mirrored SQL fixture must match production. The Spark simulation also asserts a known synthetic creator and NULL at every simulated month, but requires a compatible Spark/Delta runtime. Fabric Delta materialisation, SQL endpoint discovery and consuming-model refresh remain deployment checks.
+
 ## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
 
 Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.

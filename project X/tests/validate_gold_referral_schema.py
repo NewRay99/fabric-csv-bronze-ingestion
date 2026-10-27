@@ -108,7 +108,7 @@ assert "GOLD_JOB_RUN_ID = JOB_RUN_ID or str(uuid.uuid4())" in source
 print("PASS all Gold facts and the referral snapshot publish export_date and job_run_id")
 
 for required_field in [
-    "referral_id", "referral_created_date", "first_action_date",
+    "referral_id", "referral_created_date", "referral_created_by", "first_action_date",
     "ipa_issued_date", "estimated_weekly_cost", "is_open",
     "is_awaiting_offer", "is_spot",
     "provider_assignment_count", "is_emergency_placement", "is_open_overdue",
@@ -132,6 +132,17 @@ for source_table in [
     "silver.referral_lifecycle_event",
 ]:
     assert source_table in source, f"preflight does not cover {source_table}"
+requirements = next(
+    ast.literal_eval(node.value)
+    for cell in notebook["cells"]
+    if cell["cell_type"] == "code" and not "".join(cell["source"]).lstrip().startswith("%")
+    for node in ast.parse("".join(cell["source"])).body
+    if isinstance(node, ast.Assign)
+    and any(isinstance(target, ast.Name) and target.id == "GOLD_SOURCE_REQUIREMENTS"
+            for target in node.targets)
+)
+assert "referral_created_by" in requirements["silver.referral"]
+assert "r.referral_created_by AS referral_created_by" in fact_cell
 assert "Gold source validation failed" in source
 print("PASS Gold fails early with one actionable source-schema message")
 
@@ -188,6 +199,7 @@ assert "referral_aud" not in simulation
 for required_name in [
     "referral_created_date",
     "referral_modified_date",
+    "referral_created_by",
     "referral_status",
     "placement_type",
 ]:
@@ -274,6 +286,7 @@ snapshot_fields = {
     if isinstance(argument, ast.Constant) and isinstance(argument.value, str)
 }
 assert {"is_open", "is_spot", "has_offer"} <= snapshot_fields
+assert "referral_created_by" not in snapshot_fields, "GLD-026 is current-fact only"
 print("PASS GLD-014 provider-derived spot logic is present in active notebooks")
 
 print("VALIDATION PASSED")

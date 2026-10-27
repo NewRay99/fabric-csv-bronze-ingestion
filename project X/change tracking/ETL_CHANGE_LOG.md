@@ -1,5 +1,13 @@
 # ETL change log
 
+## 27 October 2026 — Current referral creator (GLD-026)
+
+Added the existing contracted `silver.referral.referral_created_by` to Gold source preflight and both projections into `gold.fact_referral.referral_created_by`. Current-row ordering, NULLs, keys and row grain are preserved. The SQL fixture, schema validator, portable synthetic regression tests and Spark simulation assertions are updated. `fact_referral_snapshot` is unchanged.
+
+Verification: **171 passed**: 15 creator tests, 105 existing source-status/reference/journey tests, 26 Fabric notebook-format tests and all 25 maintained Python/ETL validators. Run selection: `test_gold_referral_created_by.py`, `test_gold_referral_source_status.py`, `test_gold_referral_source_reference.py`, `test_gold_referral_journey_status.py`, `test_fabric_notebooks.py` and `test_validation_scripts.py`. The initial notebook-format run hit an existing `.pytest_tmp` permission error; rerunning the selection with a fresh writable `--basetemp` passed. `git diff --check` passed. Optional Ruff lint was unavailable (`No module named ruff`). Spark/Delta simulation and Fabric deployment, SQL endpoint discovery and consuming-model refresh have not been performed. Source baseline is local `master` at `0f0bf4797d32372ecbaecfd7419834cbb169cef0`; GitHub default branch was verified as `master`. All edits remain unstaged and uncommitted.
+
+Updated project/tests READMEs, TFD, notebook runbook, ETL issue/change logs and `skills/PROJECT_STATE.md`. HLD, functional specification, KPI catalogue and semantic changelog were reviewed; this field propagation does not change their architecture, workflow, KPI or model definitions.
+
 ## 19 October 2026 — Client documentation presentation (DOC-005)
 
 Reconciled the client-edited documentation and project README with the pending report changes, then synchronised them with the original repository locations. Standardised the current model name to WMPP_v16 and earlier delivery labels to v15 or earlier, removed per-expression hashes and repetitive audit notes, and joined unnecessary prose line breaks. DAX/Python calculations, client links, requirement decisions and the original workbook structure are retained. No ETL or report behaviour changes in this documentation update.

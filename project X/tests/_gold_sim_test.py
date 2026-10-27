@@ -150,6 +150,13 @@ referrals.append(dict(
     referral_status="cancelled", export_date=ts(date(2025,3,10), 14)))
 closures.append(dict(referral_id=r9, closed_referral_reason_bucket="Cancelled"))
 
+# GLD-026: known synthetic values must survive the complete Gold projection.
+for row in referrals:
+    if row["referral_id"] == r1:
+        row["referral_created_by"] = "synthetic-placement-officer-001"
+    elif row["referral_id"] == r2:
+        row["referral_created_by"] = None
+
 print(f"Fabricated: {len(referrals)} flattened referral rows, {len(providers)} providers, "
       f"{len(offers)} offers, {len(ipas)} ipas")
 
@@ -301,6 +308,10 @@ results = {}
 for me in MONTHS:
     df = run_gold(me)
     results[me] = df
+    creators = {row.referral_id: row.referral_created_by
+                for row in df.select("referral_id", "referral_created_by").collect()}
+    assert creators[r1] == "synthetic-placement-officer-001", f"creator lost at {me}"
+    assert creators[r2] is None, f"NULL creator changed at {me}"
     n = df.count()
     print(f"\n=== Gold as-of {me}: {n} referrals ===")
     df.groupBy("required_placement_date_outcome").count().orderBy("required_placement_date_outcome").show(truncate=False)
@@ -366,6 +377,7 @@ check(out_m[r12].is_open == True, "r12 open under GLD-009 rule (inside response 
 check(out_m[r12].is_awaiting_offer == True, "r12 awaiting offer (open, inside response window)")
 
 snap = spark.table("gold.fact_referral_snapshot")
+check("referral_created_by" not in snap.columns, "creator remains current-fact only")
 snap_dates = sorted(row.snapshot_date for row in snap.select("snapshot_date").distinct().collect())
 check(snap_dates == MONTHS, f"snapshot has 3 month-end dates {snap_dates}")
 check(snap.count() == 5 + 9 + 12, f"snapshot total rows {snap.count()} == 26")

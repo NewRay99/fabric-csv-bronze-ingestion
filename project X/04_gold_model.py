@@ -106,7 +106,7 @@ GOLD_SOURCE_REQUIREMENTS = {
     "silver.referral": {
         "referral_id", "required_start_date", "response_required_by_date",
         "placement_type", "referral_created_date", "referral_modified_date",
-        "referral_status", "export_date",
+        "referral_created_by", "referral_status", "export_date",
         "is_sibling_placement", "sibling_count",
     },
     "silver.offer": {
@@ -386,6 +386,7 @@ journey_ipa_evidence AS (
 base AS (
   SELECT r.referral_id AS referral_id, child.person_id, child.source_reference_id,
     c.referral_created_date,
+    r.referral_created_by AS referral_created_by,
     category.framework_category_id,
     COALESCE(category.framework_category_count, 0) AS framework_category_count,
     loc.location, loc.location_match_status, loc.location_is_default, loc.location_requires_review,
@@ -483,7 +484,7 @@ reference_profile AS (
 SELECT {AS_OF_SQL} AS as_of_date,
   export_date, referral_id, person_id, source_reference_id,
   source_reference_referral_count, source_reference_referral_count > 1 AS has_multiple_referrals,
-  order_dupe, referral_created_date, required_placement_date,
+  order_dupe, referral_created_date, referral_created_by, required_placement_date,
   framework_category_id, framework_category_count,
   location, location_match_status, location_is_default, location_requires_review,
   response_required_date, first_action_date, first_offer_date,

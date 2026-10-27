@@ -1,5 +1,16 @@
 # Notebook regression checks
 
+## GLD-026 — Referral creator regression
+
+Run from the repository root:
+
+```powershell
+python -m pytest "project X/tests/test_gold_referral_created_by.py" "project X/tests/test_gold_referral_source_status.py" "project X/tests/test_gold_referral_source_reference.py" "project X/tests/test_gold_referral_journey_status.py"
+python -m pytest "project X/tests/test_validation_scripts.py"
+```
+
+These checks execute complete production referral SQL against synthetic Silver data with SQLite date/timestamp adaptations, test exact creator/NULL preservation and current-row ordering, exercise the production preflight and assert snapshot exclusion. Existing coverage also requires the SQL fixture to match production. The Spark simulation asserts a known creator and NULL each month; it remains a separate Spark/Delta runtime check, not part of portable pytest or Fabric acceptance.
+
 To build a separate test project in the Fabric Git folder format used by
 `reports/Notebooks v16.zip`, run from the repository root:
 

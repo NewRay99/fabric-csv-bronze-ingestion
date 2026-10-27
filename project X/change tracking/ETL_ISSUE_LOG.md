@@ -1,5 +1,14 @@
 # ETL issue log
 
+## GLD-026 — Referral creator missing from current referral fact
+
+- **Request (2026-10-27):** publish `silver.referral.referral_created_by` in `gold.fact_referral` under the same name; keep the snapshot unchanged.
+- **Cause:** the approved nullable string already exists in `configuration/schema_definition.csv` at ordinal 16, but Gold omitted it from source preflight, the base CTE and the final fact SELECT.
+- **Fix:** require the source column and project the selected current Silver value through both SELECTs. Preserve NULLs and existing grain/version ordering; no joins or creator inference. Mirror production SQL in `_gold_fact_sql.sql`.
+- **Validation:** `test_gold_referral_created_by.py` exercises exact synthetic values, NULLs, latest versions/export-date tie-break, empty sources, production preflight failure and snapshot exclusion. Existing source-status/reference/journey tests verify fixture equality and neighbouring behaviour. `validate_gold_referral_schema.py` now requires the field in mapping/preflight/fixture. `_gold_sim_test.py` asserts a known creator and NULL each month; Spark/Delta execution remains separate from portable evidence.
+- **Documentation reviewed/updated:** project README, tests README, TFD, notebook runbook, ETL issue/change logs and `skills/PROJECT_STATE.md`. Reviewed HLD, functional specification, KPI catalogue and semantic changelog: no architecture, functional workflow, KPI, model or report definition changes, so those documents retain their existing scope. Client copies and notebook snapshots are reference assets, not active code targets.
+- **Status:** local implementation; portable verification recorded in the change log. Fabric deployment/materialisation, SQL endpoint discovery and refreshed-model checks remain pending.
+
 ## 18 October 2026 — Provider documents and missing requirement KPI visibility (SEM-004)
 
 Both provider pages now show home-level document metadata, recorded expiry dates and a document-level `expired_docs` flag (1 expired, 0 dated/not expired, blank unknown). Removed the unrelated monthly-performance row filter. Four scoped document summaries extend the provider KPI list; 33 already implemented requirement-linked calculations are now surfaced on Requirement Matrix with explicit proxy labels.
@@ -29,12 +38,12 @@ Add new issues here with a unique ID and the observed behaviour. Append dated ca
 | `AR`, `AR-SL`, `AR-GL`, `ARCH-ETL` | Archive loading, replay and downstream issues | 15 |
 | `LIVE-ETL` | Live ETL pipeline issues | 5 |
 | `SI`, `SIL`, `SLV` | Silver-layer issues | 27 |
-| `GLD` | Gold-layer issues | 25 |
+| `GLD` | Gold-layer issues | 26 |
 | `CFG`, `DQ`, `LIN` | Configuration, data quality and lineage issues | 12 |
 | `PERF` | Performance issues | 1 |
 | `RG` | Repository issues | 1 |
 | `SEM` | Semantic-model issues | 1 |
-| **Total classified issues** | | **87** |
+| **Total classified issues** | | **88** |
 
 Each resolved issue uses **Symptom**, **Cause**, **Fix**, and **Validation** where applicable. `Status` records whether the source change is complete; a Fabric replay remains a separate deployment verification unless stated.
 

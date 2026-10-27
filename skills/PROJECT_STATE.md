@@ -1,5 +1,11 @@
 # Project State
 
+## 27 October 2026 — Current referral creator (GLD-026)
+
+Local `master` source baseline: `0f0bf4797d32372ecbaecfd7419834cbb169cef0`; GitHub default branch verified as `master`. The working tree was clean before this work item. `04_gold_model.py` now requires and publishes the existing Silver `referral_created_by` string in `gold.fact_referral`, preserving the selected current row's value and NULLs. The fixture, validator and synthetic tests are updated. Snapshot projection/history and Power BI definitions are unchanged.
+
+Verification: **171 portable checks passed**, including 15 creator regressions, 105 neighbouring referral tests, 26 notebook-format tests and 25 maintained validators. Used a fresh writable pytest temporary folder after an existing `.pytest_tmp` permission error. `git diff --check` passed; optional Ruff was unavailable. Next: deploy the notebook, verify current Silver schema, rerun Gold, reconcile creator values and referral grain without logging identifiers, check SQL endpoint discovery and refresh/review the consuming model. Spark/Delta simulation, Fabric runtime and client acceptance remain unverified. This change is unstaged and uncommitted.
+
 ## 27 October 2026 — Fabric high level solution summary
 
 Replaced Fabric_Data_Solution.docx with a concise two-page architecture summary covering the live and archive flows, governed Silver processing, materialised Gold tables, WMPP_v16 reporting, Mission Control, security and recovery responsibilities. The summary was reconciled with the architecture archive and current notebook/model definitions, contains no links to other documents or sites, and was rendered in Word for visual review. Branding uses `reports/templates/WMPP_Theme.json` and the unchanged logo from `reports/current/WMPP/SM_WMPP.Report`, with matching Word heading and table styles. The previous Word file is retained in the task backup. This is a documentation update; deployment, refreshed results and client acceptance remain separate.

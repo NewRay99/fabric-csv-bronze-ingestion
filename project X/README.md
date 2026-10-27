@@ -1,5 +1,9 @@
 # WMPP data platform — Birmingham Children's Trust
 
+## 27 October 2026 — Referral creator in Gold (GLD-026)
+
+`04_gold_model.py` now requires `silver.referral.referral_created_by` in source preflight and publishes it unchanged as `gold.fact_referral.referral_created_by`, using the selected current referral row. NULLs remain NULL. The monthly snapshot projection is unchanged. This is a local source change; Fabric deployment and consuming-model refresh remain pending. See the [TFD](client%20documentation/03_Architecture_and_Design/TFD.md#27-october-2026--referral-creator-gld-026) and [ETL issue](change%20tracking/ETL_ISSUE_LOG.md#gld-026--referral-creator-missing-from-current-referral-fact).
+
 ## 19 October 2026 — WMPP_v16 linked referral status
 
 Provider Explorer now shows Referral current status immediately after Offer statuses in the linked-provider results. The value uses referral UUIDs from the visible linked pairs and the current referral status; source reference IDs remain display labels. The current WMPP_v16 model contains 73 tables, 502 measure definitions and 35 report pages. This adds a display helper, not an additional business KPI. Refresh and visual acceptance remain pending.

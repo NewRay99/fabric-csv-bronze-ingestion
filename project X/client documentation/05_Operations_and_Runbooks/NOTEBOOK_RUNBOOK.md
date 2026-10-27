@@ -1,5 +1,11 @@
 # Fabric notebook runbook
 
+## 27 October 2026 — Deploy referral creator (GLD-026)
+
+Deploy the updated primary `04_gold_model.py` to its existing Fabric notebook item. The approved referral contract already contains nullable `referral_created_by`; no contract addition or historical snapshot backfill is needed. Verify that the current `silver.referral` has this column before rerunning Gold for the intended `AS_OF_DATE`. If preflight reports it missing, deploy the current setup/contract and rebuild Silver through the appropriate live or archive route before retrying Gold. A present but NULL creator is valid.
+
+After the Gold run, verify that `gold.fact_referral.referral_created_by` exists and matches the selected current Silver row, including NULL preservation and unchanged referral row counts. Reconcile values without exporting creator identifiers into logs. Confirm `fact_referral_snapshot` has received no creator-column addition from this change. Check the Lakehouse SQL endpoint schema, then refresh/review the consuming model as appropriate; exposing this field in a report is a separate model/report change. Local portable tests do not establish Fabric deployment or refreshed-model acceptance.
+
 ## 17 October 2026 - KPI Definition reconciled to latest saved WMPP_v16
 
 The KPI dictionary now references the current saved-WMPP_v16 calculations and 45 static notebook producer/reference spans. No notebook sequence, parameter, contract, replay or runtime behaviour changed. Deploy sources and refresh/reconcile the consuming models separately.
